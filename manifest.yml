@@ -1,0 +1,13 @@
+---
+  applications:
+  - name: SelfAccouting
+    memory: 128M
+    buildpacks:
+    - https://github.com/cloudfoundry/php-buildpack.git#v4.4.13
+    routes:
+    - route: selfaccounting.mybluemix.net
+    env:
+      CF_STAGING_TIMEOUT: 15
+      CF_STARTUP_TIMEOUT: 15
+      APP_NAME: SelfAccounting
+      APP_DEBUG: false
