@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use App\User;
+use App\Method;
+use App\Category;
+use App\Currency;
 
 class Income extends Model
 {
@@ -17,5 +20,20 @@ class Income extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function method()
+    {
+        return $this->hasOne(Method::class);
+    }
+
+    public function category()
+    {
+        return $this->hasOne(Category::class);
+    }
+
+    public function currency()
+    {
+        return $this->hasOne(Currency::class);
     }
 }

@@ -4,6 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\User;
+use App\Method;
+use App\Category;
+use App\Currency;
+
 class Outcome extends Model
 {
     protected $dateFormat = 'Y-m-d H:i:s.u';
@@ -15,5 +20,20 @@ class Outcome extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function method()
+    {
+        return $this->hasOne(Method::class);
+    }
+
+    public function category()
+    {
+        return $this->hasOne(Category::class);
+    }
+
+    public function currency()
+    {
+        return $this->hasOne(Currency::class);
     }
 }

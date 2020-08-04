@@ -4,6 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\User;
+use App\Income;
+use App\Outcome;
+
 class Category extends Model
 {
     protected $dateFormat = 'Y-m-d H:i:s.u';
@@ -15,5 +19,15 @@ class Category extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function income()
+    {
+        return $this->belongsToMany(Income::class);
+    }
+
+    public function outcome()
+    {
+        return $this->belongsToMany(Outcome::class);
     }
 }
