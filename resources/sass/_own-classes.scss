@@ -1,0 +1,25 @@
+.card-header-text {
+    @extend .h4;
+    @extend .mr-auto;
+    @extend .my-auto;
+}
+
+.card-header-flex {
+    @extend .card-header;
+    @extend .d-flex;
+}
+
+.card-body-centered {
+    @extend .card-body;
+    @extend .w-100;
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+}
+
+.responsive-table {
+    @extend .table;
+    @extend .table-hover;
+    @extend .text-center;
+    @extend .text-nowrap;
+}
