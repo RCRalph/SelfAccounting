@@ -18,7 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->foreignId('user_id')->onDelete('cascade');
             $table->string('name', 32);
             $table->boolean('show_on_charts')->default(true);
-            $table->boolean('count_to_resume')->default(false);
+            $table->boolean('count_to_summary')->default(false);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps(6);

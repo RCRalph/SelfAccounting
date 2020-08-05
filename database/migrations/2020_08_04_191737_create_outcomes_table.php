@@ -27,7 +27,7 @@ class CreateOutcomesTable extends Migration
         });
 
         App\User::create([
-            "username" => "SelfAccountingAdmin",
+            "username" => "Admin",
             "email" => "admin@selfaccounting.com",
             "password" => Illuminate\Support\Facades\Hash::make("h3r3c0m3sth3m0n3y"),
             "admin" => true,
