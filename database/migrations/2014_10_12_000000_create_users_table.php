@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email', 64)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 64);
-            $table->enum('user_type', [0, 1, 2, 3])->default(3);
+            $table->boolean('admin')->default(false);
             $table->boolean('darkmode')->default(false);
             $table->string('profile_picture')->nullable();
             $table->rememberToken();
