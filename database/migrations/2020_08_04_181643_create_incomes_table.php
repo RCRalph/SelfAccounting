@@ -19,7 +19,7 @@ class CreateIncomesTable extends Migration
             $table->date('date');
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 13, 2);
             $table->foreignId('category_id')->nullable();
             $table->foreignId('method_id')->nullable();
             $table->foreignId('currency_id');

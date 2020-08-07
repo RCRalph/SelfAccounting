@@ -17,6 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->onDelete('cascade');
             $table->string('name', 32);
+            $table->boolean('income_category')->default(true);
+            $table->boolean('outcome_category')->default(true);
             $table->boolean('show_on_charts')->default(true);
             $table->boolean('count_to_summary')->default(false);
             $table->date('start_date')->nullable();

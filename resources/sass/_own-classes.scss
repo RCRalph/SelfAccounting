@@ -23,3 +23,48 @@
     @extend .text-center;
     @extend .text-nowrap;
 }
+
+.big-button {
+    @extend .btn;
+    @extend .font-weight-bold;
+    @extend .btn-block;
+
+    &-danger {
+        @extend .big-button;
+        @extend .btn-danger;
+    }
+
+    &-success {
+        @extend .big-button;
+        @extend .btn-success;
+    }
+
+    &-primary {
+        @extend .big-button;
+        @extend .btn-primary;
+    }
+}
+
+.td-settings {
+    @extend .text-center;
+    vertical-align: middle!important;
+}
+
+.form-date {
+    @extend .form-control;
+    @extend .m-auto;
+    max-width: 160px;
+}
+
+.times-delete {
+    @extend .h3;
+    @extend .m-auto;
+    @extend .text-danger;
+}
+
+.form-text {
+    @extend .form-control;
+    @extend .m-auto;
+    @extend .text-center;
+    min-width: 100px;
+}

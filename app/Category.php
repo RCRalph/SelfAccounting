@@ -13,7 +13,7 @@ class Category extends Model
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $fillable = [
-        'user_id', 'name', 'show_on_charts', 'count_to_resume', 'start_date', 'end_date'
+        'user_id', 'name', 'income_category', 'outcome_category', 'show_on_charts', 'count_to_summary', 'start_date', 'end_date'
     ];
 
     public function user()

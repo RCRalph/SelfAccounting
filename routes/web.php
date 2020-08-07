@@ -20,3 +20,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/summary', 'SummaryController@index')->name('summary');
+
+Route::get('/settings', 'SettingsController@index')->name('settings');

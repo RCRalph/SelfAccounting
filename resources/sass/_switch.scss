@@ -1,0 +1,63 @@
+$height: 25px;
+$padding: 4px;
+$width: 50px;
+$color: $primary;
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: $width;
+    height: $height;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: $height - ($padding * 2);
+    width: $height - ($padding * 2);
+    left: $padding;
+    bottom: $padding;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: $color;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px $color;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX($width - $height);
+    -ms-transform: translateX($width - $height);
+    transform: translateX($width - $height);
+}
+
+.slider.round {
+    border-radius: $height;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
