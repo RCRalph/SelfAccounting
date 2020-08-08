@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps(6);
 
-            $table->index('id');
+            $table->index(['id']);
         });
     }
 

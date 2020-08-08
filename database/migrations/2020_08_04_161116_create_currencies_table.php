@@ -19,6 +19,8 @@ class CreateCurrenciesTable extends Migration
             $table->id();
             $table->string("ISO", 3)->unique();
             $table->string("name", 65)->unique();
+
+            $table->index(['id']);
         });
 
         Currency::insert([

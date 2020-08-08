@@ -16,6 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->onDelete('cascade');
+            $table->foreignId('currency_id');
             $table->string('name', 32);
             $table->boolean('income_category')->default(true);
             $table->boolean('outcome_category')->default(true);
@@ -24,6 +25,8 @@ class CreateCategoriesTable extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps(6);
+
+            $table->index(['id', 'user_id']);
         });
     }
 

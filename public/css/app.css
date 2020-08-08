@@ -2155,6 +2155,7 @@ pre code {
 }
 
 .form-control,
+.form-number,
 .form-text,
 .form-date {
   display: block;
@@ -2174,6 +2175,7 @@ pre code {
 
 @media (prefers-reduced-motion: reduce) {
   .form-control,
+  .form-number,
   .form-text,
   .form-date {
     transition: none;
@@ -2181,6 +2183,7 @@ pre code {
 }
 
 .form-control::-ms-expand,
+.form-number::-ms-expand,
 .form-text::-ms-expand,
 .form-date::-ms-expand {
   background-color: transparent;
@@ -2188,6 +2191,7 @@ pre code {
 }
 
 .form-control:-moz-focusring,
+.form-number:-moz-focusring,
 .form-text:-moz-focusring,
 .form-date:-moz-focusring {
   color: transparent;
@@ -2195,6 +2199,7 @@ pre code {
 }
 
 .form-control:focus,
+.form-number:focus,
 .form-text:focus,
 .form-date:focus {
   color: #495057;
@@ -2204,22 +2209,23 @@ pre code {
   box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
 }
 
-.form-control::-moz-placeholder, .form-text::-moz-placeholder, .form-date::-moz-placeholder {
+.form-control::-moz-placeholder, .form-number::-moz-placeholder, .form-text::-moz-placeholder, .form-date::-moz-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
-.form-control:-ms-input-placeholder, .form-text:-ms-input-placeholder, .form-date:-ms-input-placeholder {
+.form-control:-ms-input-placeholder, .form-number:-ms-input-placeholder, .form-text:-ms-input-placeholder, .form-date:-ms-input-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
-.form-control::-ms-input-placeholder, .form-text::-ms-input-placeholder, .form-date::-ms-input-placeholder {
+.form-control::-ms-input-placeholder, .form-number::-ms-input-placeholder, .form-text::-ms-input-placeholder, .form-date::-ms-input-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
 .form-control::placeholder,
+.form-number::placeholder,
 .form-text::placeholder,
 .form-date::placeholder {
   color: #6c757d;
@@ -2227,9 +2233,11 @@ pre code {
 }
 
 .form-control:disabled,
+.form-number:disabled,
 .form-text:disabled,
 .form-date:disabled,
 .form-control[readonly],
+[readonly].form-number,
 [readonly].form-text,
 [readonly].form-date {
   background-color: #e9ecef;
@@ -2237,15 +2245,19 @@ pre code {
 }
 
 input[type=date].form-control,
+input[type=date].form-number,
 input[type=date].form-text,
 input[type=date].form-date,
 input[type=time].form-control,
+input[type=time].form-number,
 input[type=time].form-text,
 input[type=time].form-date,
 input[type=datetime-local].form-control,
+input[type=datetime-local].form-number,
 input[type=datetime-local].form-text,
 input[type=datetime-local].form-date,
 input[type=month].form-control,
+input[type=month].form-number,
 input[type=month].form-text,
 input[type=month].form-date {
   -webkit-appearance: none;
@@ -2254,6 +2266,7 @@ input[type=month].form-date {
 }
 
 select.form-control:focus::-ms-value,
+select.form-number:focus::-ms-value,
 select.form-text:focus::-ms-value,
 select.form-date:focus::-ms-value {
   color: #495057;
@@ -2324,15 +2337,18 @@ select.form-date:focus::-ms-value {
 }
 
 select.form-control[size],
+select[size].form-number,
 select[size].form-text,
 select[size].form-date,
 select.form-control[multiple],
+select[multiple].form-number,
 select[multiple].form-text,
 select[multiple].form-date {
   height: auto;
 }
 
 textarea.form-control,
+textarea.form-number,
 textarea.form-text,
 textarea.form-date {
   height: auto;
@@ -2427,9 +2443,11 @@ textarea.form-date {
 }
 
 .was-validated .form-control:valid,
+.was-validated .form-number:valid,
 .was-validated .form-text:valid,
 .was-validated .form-date:valid,
 .form-control.is-valid,
+.is-valid.form-number,
 .is-valid.form-text,
 .is-valid.form-date {
   border-color: #38c172;
@@ -2441,9 +2459,11 @@ textarea.form-date {
 }
 
 .was-validated .form-control:valid:focus,
+.was-validated .form-number:valid:focus,
 .was-validated .form-text:valid:focus,
 .was-validated .form-date:valid:focus,
 .form-control.is-valid:focus,
+.is-valid.form-number:focus,
 .is-valid.form-text:focus,
 .is-valid.form-date:focus {
   border-color: #38c172;
@@ -2451,9 +2471,11 @@ textarea.form-date {
 }
 
 .was-validated textarea.form-control:valid,
+.was-validated textarea.form-number:valid,
 .was-validated textarea.form-text:valid,
 .was-validated textarea.form-date:valid,
 textarea.form-control.is-valid,
+textarea.is-valid.form-number,
 textarea.is-valid.form-text,
 textarea.is-valid.form-date {
   padding-right: calc(1.6em + 0.75rem);
@@ -2554,9 +2576,11 @@ textarea.is-valid.form-date {
 }
 
 .was-validated .form-control:invalid,
+.was-validated .form-number:invalid,
 .was-validated .form-text:invalid,
 .was-validated .form-date:invalid,
 .form-control.is-invalid,
+.is-invalid.form-number,
 .is-invalid.form-text,
 .is-invalid.form-date {
   border-color: #e3342f;
@@ -2568,9 +2592,11 @@ textarea.is-valid.form-date {
 }
 
 .was-validated .form-control:invalid:focus,
+.was-validated .form-number:invalid:focus,
 .was-validated .form-text:invalid:focus,
 .was-validated .form-date:invalid:focus,
 .form-control.is-invalid:focus,
+.is-invalid.form-number:focus,
 .is-invalid.form-text:focus,
 .is-invalid.form-date:focus {
   border-color: #e3342f;
@@ -2578,9 +2604,11 @@ textarea.is-valid.form-date {
 }
 
 .was-validated textarea.form-control:invalid,
+.was-validated textarea.form-number:invalid,
 .was-validated textarea.form-text:invalid,
 .was-validated textarea.form-date:invalid,
 textarea.form-control.is-invalid,
+textarea.is-invalid.form-number,
 textarea.is-invalid.form-text,
 textarea.is-invalid.form-date {
   padding-right: calc(1.6em + 0.75rem);
@@ -2676,6 +2704,7 @@ textarea.is-invalid.form-date {
   }
 
   .form-inline .form-control,
+  .form-inline .form-number,
   .form-inline .form-text,
   .form-inline .form-date {
     display: inline-block;
@@ -4090,6 +4119,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control,
+.input-group > .form-number,
 .input-group > .form-text,
 .input-group > .form-date,
 .input-group > .form-control-plaintext,
@@ -4103,31 +4133,43 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control + .form-control,
+.input-group > .form-number + .form-control,
+.input-group > .form-control + .form-number,
+.input-group > .form-number + .form-number,
 .input-group > .form-text + .form-control,
+.input-group > .form-text + .form-number,
 .input-group > .form-control + .form-text,
+.input-group > .form-number + .form-text,
 .input-group > .form-text + .form-text,
 .input-group > .form-date + .form-control,
+.input-group > .form-date + .form-number,
 .input-group > .form-date + .form-text,
 .input-group > .form-control + .form-date,
+.input-group > .form-number + .form-date,
 .input-group > .form-text + .form-date,
 .input-group > .form-date + .form-date,
 .input-group > .form-control + .custom-select,
+.input-group > .form-number + .custom-select,
 .input-group > .form-text + .custom-select,
 .input-group > .form-date + .custom-select,
 .input-group > .form-control + .custom-file,
+.input-group > .form-number + .custom-file,
 .input-group > .form-text + .custom-file,
 .input-group > .form-date + .custom-file,
 .input-group > .form-control-plaintext + .form-control,
+.input-group > .form-control-plaintext + .form-number,
 .input-group > .form-control-plaintext + .form-text,
 .input-group > .form-control-plaintext + .form-date,
 .input-group > .form-control-plaintext + .custom-select,
 .input-group > .form-control-plaintext + .custom-file,
 .input-group > .custom-select + .form-control,
+.input-group > .custom-select + .form-number,
 .input-group > .custom-select + .form-text,
 .input-group > .custom-select + .form-date,
 .input-group > .custom-select + .custom-select,
 .input-group > .custom-select + .custom-file,
 .input-group > .custom-file + .form-control,
+.input-group > .custom-file + .form-number,
 .input-group > .custom-file + .form-text,
 .input-group > .custom-file + .form-date,
 .input-group > .custom-file + .custom-select,
@@ -4136,6 +4178,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control:focus,
+.input-group > .form-number:focus,
 .input-group > .form-text:focus,
 .input-group > .form-date:focus,
 .input-group > .custom-select:focus,
@@ -4148,6 +4191,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control:not(:last-child),
+.input-group > .form-number:not(:last-child),
 .input-group > .form-text:not(:last-child),
 .input-group > .form-date:not(:last-child),
 .input-group > .custom-select:not(:last-child) {
@@ -4156,6 +4200,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control:not(:first-child),
+.input-group > .form-number:not(:first-child),
 .input-group > .form-text:not(:first-child),
 .input-group > .form-date:not(:first-child),
 .input-group > .custom-select:not(:first-child) {
@@ -4316,6 +4361,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-lg > .form-control:not(textarea),
+.input-group-lg > .form-number:not(textarea),
 .input-group-lg > .form-text:not(textarea),
 .input-group-lg > .form-date:not(textarea),
 .input-group-lg > .custom-select {
@@ -4323,6 +4369,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-lg > .form-control,
+.input-group-lg > .form-number,
 .input-group-lg > .form-text,
 .input-group-lg > .form-date,
 .input-group-lg > .custom-select,
@@ -4345,6 +4392,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-sm > .form-control:not(textarea),
+.input-group-sm > .form-number:not(textarea),
 .input-group-sm > .form-text:not(textarea),
 .input-group-sm > .form-date:not(textarea),
 .input-group-sm > .custom-select {
@@ -4352,6 +4400,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-sm > .form-control,
+.input-group-sm > .form-number,
 .input-group-sm > .form-text,
 .input-group-sm > .form-date,
 .input-group-sm > .custom-select,
@@ -9288,6 +9337,7 @@ button.bg-dark:focus {
 }
 
 .m-auto,
+.form-number,
 .form-text,
 .times-delete,
 .form-date {
@@ -11088,7 +11138,9 @@ button.bg-dark:focus {
   white-space: nowrap;
 }
 
-.text-left {
+.text-left,
+.form-number,
+.form-text {
   text-align: left !important;
 }
 
@@ -11097,7 +11149,6 @@ button.bg-dark:focus {
 }
 
 .text-center,
-.form-text,
 .td-settings,
 .responsive-table {
   text-align: center !important;
@@ -11430,11 +11481,15 @@ a.text-dark:focus {
 }
 
 .form-date {
-  max-width: 160px;
+  width: 170px;
 }
 
 .form-text {
-  min-width: 100px;
+  width: 170px;
+}
+
+.form-number {
+  width: 170px;
 }
 
 .switch {

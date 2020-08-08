@@ -53,7 +53,7 @@
 .form-date {
     @extend .form-control;
     @extend .m-auto;
-    max-width: 160px;
+    width: 170px;
 }
 
 .times-delete {
@@ -65,6 +65,13 @@
 .form-text {
     @extend .form-control;
     @extend .m-auto;
-    @extend .text-center;
-    min-width: 100px;
+    @extend .text-left;
+    width: 170px;
+}
+
+.form-number {
+    @extend .form-control;
+    @extend .m-auto;
+    @extend .text-left;
+    width: 170px;
 }

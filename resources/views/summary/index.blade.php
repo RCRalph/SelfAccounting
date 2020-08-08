@@ -6,7 +6,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header-flex">
-                    <div class="card-header-text">{{ __('Summary') }}</div>
+                    <div class="card-header-text">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        {{ __('Summary') }}
+                    </div>
                     <div class="d-flex">
                         <div class="h4 my-auto mr-3">{{ __('Currency:') }}</div>
                         <select class="form-control">
