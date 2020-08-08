@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Income;
 use App\Outcome;
+use App\Currency;
 
 class Category extends Model
 {
@@ -21,13 +22,18 @@ class Category extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
     public function income()
     {
-        return $this->belongsToMany(Income::class);
+        return $this->belongsTo(Income::class);
     }
 
     public function outcome()
     {
-        return $this->belongsToMany(Outcome::class);
+        return $this->belongsTo(Outcome::class);
     }
 }

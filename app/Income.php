@@ -8,6 +8,7 @@ use App\User;
 use App\Method;
 use App\Category;
 use App\Currency;
+use App\MeanOfPayment;
 
 class Income extends Model
 {
@@ -30,5 +31,15 @@ class Income extends Model
     public function currency()
     {
         return $this->hasOne(Currency::class);
+    }
+
+    public function firstEntry()
+    {
+        return $this->hasOne(MeanOfPayment::class, 'first_entry_income_id');
+    }
+
+    public function mean()
+    {
+        return $this->hasOne(MeanOfPayment::class);
     }
 }

@@ -309,7 +309,7 @@
                                             </td>
 
                                             <td class="td-settings">
-                                                <input type="number" class="form-number" value="123.54">
+                                                <input type="number" class="form-number" value="123.54" step=".01">
                                             </td>
 
                                             <td class="td-settings times-delete">
@@ -355,7 +355,7 @@
                                             </td>
 
                                             <td class="td-settings">
-                                                <input type="number" class="form-number" value="665.30">
+                                                <input type="number" class="form-number" value="665.30" step=".01">
                                             </td>
 
                                             <td class="td-settings times-delete">
@@ -401,7 +401,7 @@
                                             </td>
 
                                             <td class="td-settings">
-                                                <input type="number" class="form-number" value="5000.00">
+                                                <input type="number" class="form-number" value="5000.00" step=".01">
                                             </td>
 
                                             <td class="td-settings times-delete">

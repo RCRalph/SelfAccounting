@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Method;
 use App\Category;
 use App\Income;
+use App\MeanOfPayment;
 
 class User extends Authenticatable
 {
@@ -56,5 +57,10 @@ class User extends Authenticatable
     public function outcome()
     {
         return $this->hasMany(Outcome::class);
+    }
+
+    public function meansOfPayment()
+    {
+        return $this->hasMany(MeanOfPayment::class);
     }
 }
