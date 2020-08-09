@@ -24,6 +24,8 @@ class CreateMeanOfPaymentsTable extends Migration
             $table->boolean('count_to_summary');
             $table->foreignId('first_entry_income_id')->onDelete('cascade');
             $table->timestamps(6);
+
+            $table->index(['id', 'user_id']);
         });
 
         App\User::create([

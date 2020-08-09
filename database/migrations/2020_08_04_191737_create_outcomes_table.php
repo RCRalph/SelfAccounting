@@ -16,7 +16,7 @@ class CreateOutcomesTable extends Migration
         Schema::create('outcomes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->onDelete('cascade');
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);

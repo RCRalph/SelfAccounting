@@ -19,9 +19,14 @@
 
 .responsive-table {
     @extend .table;
-    @extend .table-hover;
     @extend .text-center;
     @extend .text-nowrap;
+    @extend .table-hover;
+
+    &-bordered {
+        @extend .responsive-table;
+        @extend .table-bordered;
+    }
 }
 
 .big-button {
@@ -45,7 +50,7 @@
     }
 }
 
-.td-settings {
+.td-centered {
     @extend .text-center;
     vertical-align: middle!important;
 }

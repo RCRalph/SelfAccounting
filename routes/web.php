@@ -22,3 +22,7 @@ Auth::routes();
 Route::get('/summary', 'SummaryController@index')->name('summary');
 
 Route::get('/settings', 'SettingsController@index')->name('settings');
+
+Route::get('/income', 'IncomeController@index')->name('income');
+
+Route::get('/outcome', 'OutcomeController@index')->name('outcome');
