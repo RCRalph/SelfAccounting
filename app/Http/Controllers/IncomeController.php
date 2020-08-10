@@ -15,4 +15,9 @@ class IncomeController extends Controller
     {
         return view('income.index');
     }
+
+    public function createOne()
+    {
+        return view('income.create.one');
+    }
 }

@@ -24,7 +24,9 @@
     @extend .table-hover;
 
     &-bordered {
-        @extend .responsive-table;
+        @extend .table;
+        @extend .text-center;
+        @extend .text-nowrap;
         @extend .table-bordered;
     }
 }
@@ -59,6 +61,11 @@
     @extend .form-control;
     @extend .m-auto;
     width: 170px;
+
+    &-min {
+        @extend .form-control;
+        min-width: 170px;
+    }
 }
 
 .times-delete {

@@ -15,4 +15,9 @@ class OutcomeController extends Controller
     {
         return view('outcome.index');
     }
+
+    public function createOne()
+    {
+        return view('outcome.create.one');
+    }
 }

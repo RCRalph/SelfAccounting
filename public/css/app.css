@@ -1772,34 +1772,34 @@ pre code {
 }
 
 .table,
-.responsive-table,
-.responsive-table-bordered {
+.responsive-table-bordered,
+.responsive-table {
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
 }
 
 .table th,
-.responsive-table th,
 .responsive-table-bordered th,
+.responsive-table th,
 .table td,
-.responsive-table td,
-.responsive-table-bordered td {
+.responsive-table-bordered td,
+.responsive-table td {
   padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
 }
 
 .table thead th,
-.responsive-table thead th,
-.responsive-table-bordered thead th {
+.responsive-table-bordered thead th,
+.responsive-table thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #dee2e6;
 }
 
 .table tbody + tbody,
-.responsive-table tbody + tbody,
-.responsive-table-bordered tbody + tbody {
+.responsive-table-bordered tbody + tbody,
+.responsive-table tbody + tbody {
   border-top: 2px solid #dee2e6;
 }
 
@@ -1839,8 +1839,7 @@ pre code {
 }
 
 .table-hover tbody tr:hover,
-.responsive-table tbody tr:hover,
-.responsive-table-bordered tbody tr:hover {
+.responsive-table tbody tr:hover {
   color: #212529;
   background-color: rgba(0, 0, 0, 0.075);
 }
@@ -1859,17 +1858,14 @@ pre code {
 }
 
 .table-hover .table-primary:hover,
-.responsive-table .table-primary:hover,
-.responsive-table-bordered .table-primary:hover {
+.responsive-table .table-primary:hover {
   background-color: #b0d4f1;
 }
 
 .table-hover .table-primary:hover > td,
 .responsive-table .table-primary:hover > td,
-.responsive-table-bordered .table-primary:hover > td,
 .table-hover .table-primary:hover > th,
-.responsive-table .table-primary:hover > th,
-.responsive-table-bordered .table-primary:hover > th {
+.responsive-table .table-primary:hover > th {
   background-color: #b0d4f1;
 }
 
@@ -1887,17 +1883,14 @@ pre code {
 }
 
 .table-hover .table-secondary:hover,
-.responsive-table .table-secondary:hover,
-.responsive-table-bordered .table-secondary:hover {
+.responsive-table .table-secondary:hover {
   background-color: #c8cbcf;
 }
 
 .table-hover .table-secondary:hover > td,
 .responsive-table .table-secondary:hover > td,
-.responsive-table-bordered .table-secondary:hover > td,
 .table-hover .table-secondary:hover > th,
-.responsive-table .table-secondary:hover > th,
-.responsive-table-bordered .table-secondary:hover > th {
+.responsive-table .table-secondary:hover > th {
   background-color: #c8cbcf;
 }
 
@@ -1915,17 +1908,14 @@ pre code {
 }
 
 .table-hover .table-success:hover,
-.responsive-table .table-success:hover,
-.responsive-table-bordered .table-success:hover {
+.responsive-table .table-success:hover {
   background-color: #b3e8ca;
 }
 
 .table-hover .table-success:hover > td,
 .responsive-table .table-success:hover > td,
-.responsive-table-bordered .table-success:hover > td,
 .table-hover .table-success:hover > th,
-.responsive-table .table-success:hover > th,
-.responsive-table-bordered .table-success:hover > th {
+.responsive-table .table-success:hover > th {
   background-color: #b3e8ca;
 }
 
@@ -1943,17 +1933,14 @@ pre code {
 }
 
 .table-hover .table-info:hover,
-.responsive-table .table-info:hover,
-.responsive-table-bordered .table-info:hover {
+.responsive-table .table-info:hover {
   background-color: #c0ddf6;
 }
 
 .table-hover .table-info:hover > td,
 .responsive-table .table-info:hover > td,
-.responsive-table-bordered .table-info:hover > td,
 .table-hover .table-info:hover > th,
-.responsive-table .table-info:hover > th,
-.responsive-table-bordered .table-info:hover > th {
+.responsive-table .table-info:hover > th {
   background-color: #c0ddf6;
 }
 
@@ -1971,17 +1958,14 @@ pre code {
 }
 
 .table-hover .table-warning:hover,
-.responsive-table .table-warning:hover,
-.responsive-table-bordered .table-warning:hover {
+.responsive-table .table-warning:hover {
   background-color: #fff8b3;
 }
 
 .table-hover .table-warning:hover > td,
 .responsive-table .table-warning:hover > td,
-.responsive-table-bordered .table-warning:hover > td,
 .table-hover .table-warning:hover > th,
-.responsive-table .table-warning:hover > th,
-.responsive-table-bordered .table-warning:hover > th {
+.responsive-table .table-warning:hover > th {
   background-color: #fff8b3;
 }
 
@@ -1999,17 +1983,14 @@ pre code {
 }
 
 .table-hover .table-danger:hover,
-.responsive-table .table-danger:hover,
-.responsive-table-bordered .table-danger:hover {
+.responsive-table .table-danger:hover {
   background-color: #f4b0af;
 }
 
 .table-hover .table-danger:hover > td,
 .responsive-table .table-danger:hover > td,
-.responsive-table-bordered .table-danger:hover > td,
 .table-hover .table-danger:hover > th,
-.responsive-table .table-danger:hover > th,
-.responsive-table-bordered .table-danger:hover > th {
+.responsive-table .table-danger:hover > th {
   background-color: #f4b0af;
 }
 
@@ -2027,17 +2008,14 @@ pre code {
 }
 
 .table-hover .table-light:hover,
-.responsive-table .table-light:hover,
-.responsive-table-bordered .table-light:hover {
+.responsive-table .table-light:hover {
   background-color: #ececf6;
 }
 
 .table-hover .table-light:hover > td,
 .responsive-table .table-light:hover > td,
-.responsive-table-bordered .table-light:hover > td,
 .table-hover .table-light:hover > th,
-.responsive-table .table-light:hover > th,
-.responsive-table-bordered .table-light:hover > th {
+.responsive-table .table-light:hover > th {
   background-color: #ececf6;
 }
 
@@ -2055,17 +2033,14 @@ pre code {
 }
 
 .table-hover .table-dark:hover,
-.responsive-table .table-dark:hover,
-.responsive-table-bordered .table-dark:hover {
+.responsive-table .table-dark:hover {
   background-color: #b9bbbe;
 }
 
 .table-hover .table-dark:hover > td,
 .responsive-table .table-dark:hover > td,
-.responsive-table-bordered .table-dark:hover > td,
 .table-hover .table-dark:hover > th,
-.responsive-table .table-dark:hover > th,
-.responsive-table-bordered .table-dark:hover > th {
+.responsive-table .table-dark:hover > th {
   background-color: #b9bbbe;
 }
 
@@ -2076,31 +2051,28 @@ pre code {
 }
 
 .table-hover .table-active:hover,
-.responsive-table .table-active:hover,
-.responsive-table-bordered .table-active:hover {
+.responsive-table .table-active:hover {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
 .table-hover .table-active:hover > td,
 .responsive-table .table-active:hover > td,
-.responsive-table-bordered .table-active:hover > td,
 .table-hover .table-active:hover > th,
-.responsive-table .table-active:hover > th,
-.responsive-table-bordered .table-active:hover > th {
+.responsive-table .table-active:hover > th {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
 .table .thead-dark th,
-.responsive-table .thead-dark th,
-.responsive-table-bordered .thead-dark th {
+.responsive-table-bordered .thead-dark th,
+.responsive-table .thead-dark th {
   color: #fff;
   background-color: #343a40;
   border-color: #454d55;
 }
 
 .table .thead-light th,
-.responsive-table .thead-light th,
-.responsive-table-bordered .thead-light th {
+.responsive-table-bordered .thead-light th,
+.responsive-table .thead-light th {
   color: #495057;
   background-color: #e9ecef;
   border-color: #dee2e6;
@@ -2127,8 +2099,7 @@ pre code {
 }
 
 .table-dark.table-hover tbody tr:hover,
-.table-dark.responsive-table tbody tr:hover,
-.table-dark.responsive-table-bordered tbody tr:hover {
+.table-dark.responsive-table tbody tr:hover {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.075);
 }
@@ -2204,6 +2175,7 @@ pre code {
 .form-control,
 .form-number,
 .form-text,
+.form-date-min,
 .form-date {
   display: block;
   width: 100%;
@@ -2224,6 +2196,7 @@ pre code {
   .form-control,
   .form-number,
   .form-text,
+  .form-date-min,
   .form-date {
     transition: none;
   }
@@ -2232,6 +2205,7 @@ pre code {
 .form-control::-ms-expand,
 .form-number::-ms-expand,
 .form-text::-ms-expand,
+.form-date-min::-ms-expand,
 .form-date::-ms-expand {
   background-color: transparent;
   border: 0;
@@ -2240,6 +2214,7 @@ pre code {
 .form-control:-moz-focusring,
 .form-number:-moz-focusring,
 .form-text:-moz-focusring,
+.form-date-min:-moz-focusring,
 .form-date:-moz-focusring {
   color: transparent;
   text-shadow: 0 0 0 #495057;
@@ -2248,6 +2223,7 @@ pre code {
 .form-control:focus,
 .form-number:focus,
 .form-text:focus,
+.form-date-min:focus,
 .form-date:focus {
   color: #495057;
   background-color: #fff;
@@ -2256,17 +2232,17 @@ pre code {
   box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
 }
 
-.form-control::-moz-placeholder, .form-number::-moz-placeholder, .form-text::-moz-placeholder, .form-date::-moz-placeholder {
+.form-control::-moz-placeholder, .form-number::-moz-placeholder, .form-text::-moz-placeholder, .form-date-min::-moz-placeholder, .form-date::-moz-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
-.form-control:-ms-input-placeholder, .form-number:-ms-input-placeholder, .form-text:-ms-input-placeholder, .form-date:-ms-input-placeholder {
+.form-control:-ms-input-placeholder, .form-number:-ms-input-placeholder, .form-text:-ms-input-placeholder, .form-date-min:-ms-input-placeholder, .form-date:-ms-input-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
-.form-control::-ms-input-placeholder, .form-number::-ms-input-placeholder, .form-text::-ms-input-placeholder, .form-date::-ms-input-placeholder {
+.form-control::-ms-input-placeholder, .form-number::-ms-input-placeholder, .form-text::-ms-input-placeholder, .form-date-min::-ms-input-placeholder, .form-date::-ms-input-placeholder {
   color: #6c757d;
   opacity: 1;
 }
@@ -2274,6 +2250,7 @@ pre code {
 .form-control::placeholder,
 .form-number::placeholder,
 .form-text::placeholder,
+.form-date-min::placeholder,
 .form-date::placeholder {
   color: #6c757d;
   opacity: 1;
@@ -2282,10 +2259,12 @@ pre code {
 .form-control:disabled,
 .form-number:disabled,
 .form-text:disabled,
+.form-date-min:disabled,
 .form-date:disabled,
 .form-control[readonly],
 [readonly].form-number,
 [readonly].form-text,
+[readonly].form-date-min,
 [readonly].form-date {
   background-color: #e9ecef;
   opacity: 1;
@@ -2294,18 +2273,22 @@ pre code {
 input[type=date].form-control,
 input[type=date].form-number,
 input[type=date].form-text,
+input[type=date].form-date-min,
 input[type=date].form-date,
 input[type=time].form-control,
 input[type=time].form-number,
 input[type=time].form-text,
+input[type=time].form-date-min,
 input[type=time].form-date,
 input[type=datetime-local].form-control,
 input[type=datetime-local].form-number,
 input[type=datetime-local].form-text,
+input[type=datetime-local].form-date-min,
 input[type=datetime-local].form-date,
 input[type=month].form-control,
 input[type=month].form-number,
 input[type=month].form-text,
+input[type=month].form-date-min,
 input[type=month].form-date {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -2315,6 +2298,7 @@ input[type=month].form-date {
 select.form-control:focus::-ms-value,
 select.form-number:focus::-ms-value,
 select.form-text:focus::-ms-value,
+select.form-date-min:focus::-ms-value,
 select.form-date:focus::-ms-value {
   color: #495057;
   background-color: #fff;
@@ -2386,10 +2370,12 @@ select.form-date:focus::-ms-value {
 select.form-control[size],
 select[size].form-number,
 select[size].form-text,
+select[size].form-date-min,
 select[size].form-date,
 select.form-control[multiple],
 select[multiple].form-number,
 select[multiple].form-text,
+select[multiple].form-date-min,
 select[multiple].form-date {
   height: auto;
 }
@@ -2397,6 +2383,7 @@ select[multiple].form-date {
 textarea.form-control,
 textarea.form-number,
 textarea.form-text,
+textarea.form-date-min,
 textarea.form-date {
   height: auto;
 }
@@ -2492,10 +2479,12 @@ textarea.form-date {
 .was-validated .form-control:valid,
 .was-validated .form-number:valid,
 .was-validated .form-text:valid,
+.was-validated .form-date-min:valid,
 .was-validated .form-date:valid,
 .form-control.is-valid,
 .is-valid.form-number,
 .is-valid.form-text,
+.is-valid.form-date-min,
 .is-valid.form-date {
   border-color: #38c172;
   padding-right: calc(1.6em + 0.75rem);
@@ -2508,10 +2497,12 @@ textarea.form-date {
 .was-validated .form-control:valid:focus,
 .was-validated .form-number:valid:focus,
 .was-validated .form-text:valid:focus,
+.was-validated .form-date-min:valid:focus,
 .was-validated .form-date:valid:focus,
 .form-control.is-valid:focus,
 .is-valid.form-number:focus,
 .is-valid.form-text:focus,
+.is-valid.form-date-min:focus,
 .is-valid.form-date:focus {
   border-color: #38c172;
   box-shadow: 0 0 0 0.2rem rgba(56, 193, 114, 0.25);
@@ -2520,10 +2511,12 @@ textarea.form-date {
 .was-validated textarea.form-control:valid,
 .was-validated textarea.form-number:valid,
 .was-validated textarea.form-text:valid,
+.was-validated textarea.form-date-min:valid,
 .was-validated textarea.form-date:valid,
 textarea.form-control.is-valid,
 textarea.is-valid.form-number,
 textarea.is-valid.form-text,
+textarea.is-valid.form-date-min,
 textarea.is-valid.form-date {
   padding-right: calc(1.6em + 0.75rem);
   background-position: top calc(0.4em + 0.1875rem) right calc(0.4em + 0.1875rem);
@@ -2625,10 +2618,12 @@ textarea.is-valid.form-date {
 .was-validated .form-control:invalid,
 .was-validated .form-number:invalid,
 .was-validated .form-text:invalid,
+.was-validated .form-date-min:invalid,
 .was-validated .form-date:invalid,
 .form-control.is-invalid,
 .is-invalid.form-number,
 .is-invalid.form-text,
+.is-invalid.form-date-min,
 .is-invalid.form-date {
   border-color: #e3342f;
   padding-right: calc(1.6em + 0.75rem);
@@ -2641,10 +2636,12 @@ textarea.is-valid.form-date {
 .was-validated .form-control:invalid:focus,
 .was-validated .form-number:invalid:focus,
 .was-validated .form-text:invalid:focus,
+.was-validated .form-date-min:invalid:focus,
 .was-validated .form-date:invalid:focus,
 .form-control.is-invalid:focus,
 .is-invalid.form-number:focus,
 .is-invalid.form-text:focus,
+.is-invalid.form-date-min:focus,
 .is-invalid.form-date:focus {
   border-color: #e3342f;
   box-shadow: 0 0 0 0.2rem rgba(227, 52, 47, 0.25);
@@ -2653,10 +2650,12 @@ textarea.is-valid.form-date {
 .was-validated textarea.form-control:invalid,
 .was-validated textarea.form-number:invalid,
 .was-validated textarea.form-text:invalid,
+.was-validated textarea.form-date-min:invalid,
 .was-validated textarea.form-date:invalid,
 textarea.form-control.is-invalid,
 textarea.is-invalid.form-number,
 textarea.is-invalid.form-text,
+textarea.is-invalid.form-date-min,
 textarea.is-invalid.form-date {
   padding-right: calc(1.6em + 0.75rem);
   background-position: top calc(0.4em + 0.1875rem) right calc(0.4em + 0.1875rem);
@@ -2753,6 +2752,7 @@ textarea.is-invalid.form-date {
   .form-inline .form-control,
   .form-inline .form-number,
   .form-inline .form-text,
+  .form-inline .form-date-min,
   .form-inline .form-date {
     display: inline-block;
     width: auto;
@@ -4168,6 +4168,7 @@ input[type=button].big-button-danger {
 .input-group > .form-control,
 .input-group > .form-number,
 .input-group > .form-text,
+.input-group > .form-date-min,
 .input-group > .form-date,
 .input-group > .form-control-plaintext,
 .input-group > .custom-select,
@@ -4188,36 +4189,50 @@ input[type=button].big-button-danger {
 .input-group > .form-control + .form-text,
 .input-group > .form-number + .form-text,
 .input-group > .form-text + .form-text,
+.input-group > .form-date-min + .form-control,
+.input-group > .form-date-min + .form-number,
+.input-group > .form-date-min + .form-text,
+.input-group > .form-control + .form-date-min,
+.input-group > .form-number + .form-date-min,
+.input-group > .form-text + .form-date-min,
+.input-group > .form-date-min + .form-date-min,
 .input-group > .form-date + .form-control,
 .input-group > .form-date + .form-number,
 .input-group > .form-date + .form-text,
+.input-group > .form-date + .form-date-min,
 .input-group > .form-control + .form-date,
 .input-group > .form-number + .form-date,
 .input-group > .form-text + .form-date,
+.input-group > .form-date-min + .form-date,
 .input-group > .form-date + .form-date,
 .input-group > .form-control + .custom-select,
 .input-group > .form-number + .custom-select,
 .input-group > .form-text + .custom-select,
+.input-group > .form-date-min + .custom-select,
 .input-group > .form-date + .custom-select,
 .input-group > .form-control + .custom-file,
 .input-group > .form-number + .custom-file,
 .input-group > .form-text + .custom-file,
+.input-group > .form-date-min + .custom-file,
 .input-group > .form-date + .custom-file,
 .input-group > .form-control-plaintext + .form-control,
 .input-group > .form-control-plaintext + .form-number,
 .input-group > .form-control-plaintext + .form-text,
+.input-group > .form-control-plaintext + .form-date-min,
 .input-group > .form-control-plaintext + .form-date,
 .input-group > .form-control-plaintext + .custom-select,
 .input-group > .form-control-plaintext + .custom-file,
 .input-group > .custom-select + .form-control,
 .input-group > .custom-select + .form-number,
 .input-group > .custom-select + .form-text,
+.input-group > .custom-select + .form-date-min,
 .input-group > .custom-select + .form-date,
 .input-group > .custom-select + .custom-select,
 .input-group > .custom-select + .custom-file,
 .input-group > .custom-file + .form-control,
 .input-group > .custom-file + .form-number,
 .input-group > .custom-file + .form-text,
+.input-group > .custom-file + .form-date-min,
 .input-group > .custom-file + .form-date,
 .input-group > .custom-file + .custom-select,
 .input-group > .custom-file + .custom-file {
@@ -4227,6 +4242,7 @@ input[type=button].big-button-danger {
 .input-group > .form-control:focus,
 .input-group > .form-number:focus,
 .input-group > .form-text:focus,
+.input-group > .form-date-min:focus,
 .input-group > .form-date:focus,
 .input-group > .custom-select:focus,
 .input-group > .custom-file .custom-file-input:focus ~ .custom-file-label {
@@ -4240,6 +4256,7 @@ input[type=button].big-button-danger {
 .input-group > .form-control:not(:last-child),
 .input-group > .form-number:not(:last-child),
 .input-group > .form-text:not(:last-child),
+.input-group > .form-date-min:not(:last-child),
 .input-group > .form-date:not(:last-child),
 .input-group > .custom-select:not(:last-child) {
   border-top-right-radius: 0;
@@ -4249,6 +4266,7 @@ input[type=button].big-button-danger {
 .input-group > .form-control:not(:first-child),
 .input-group > .form-number:not(:first-child),
 .input-group > .form-text:not(:first-child),
+.input-group > .form-date-min:not(:first-child),
 .input-group > .form-date:not(:first-child),
 .input-group > .custom-select:not(:first-child) {
   border-top-left-radius: 0;
@@ -4410,6 +4428,7 @@ input[type=button].big-button-danger {
 .input-group-lg > .form-control:not(textarea),
 .input-group-lg > .form-number:not(textarea),
 .input-group-lg > .form-text:not(textarea),
+.input-group-lg > .form-date-min:not(textarea),
 .input-group-lg > .form-date:not(textarea),
 .input-group-lg > .custom-select {
   height: calc(1.5em + 1rem + 2px);
@@ -4418,6 +4437,7 @@ input[type=button].big-button-danger {
 .input-group-lg > .form-control,
 .input-group-lg > .form-number,
 .input-group-lg > .form-text,
+.input-group-lg > .form-date-min,
 .input-group-lg > .form-date,
 .input-group-lg > .custom-select,
 .input-group-lg > .input-group-prepend > .input-group-text,
@@ -4441,6 +4461,7 @@ input[type=button].big-button-danger {
 .input-group-sm > .form-control:not(textarea),
 .input-group-sm > .form-number:not(textarea),
 .input-group-sm > .form-text:not(textarea),
+.input-group-sm > .form-date-min:not(textarea),
 .input-group-sm > .form-date:not(textarea),
 .input-group-sm > .custom-select {
   height: calc(1.5em + 0.5rem + 2px);
@@ -4449,6 +4470,7 @@ input[type=button].big-button-danger {
 .input-group-sm > .form-control,
 .input-group-sm > .form-number,
 .input-group-sm > .form-text,
+.input-group-sm > .form-date-min,
 .input-group-sm > .form-date,
 .input-group-sm > .custom-select,
 .input-group-sm > .input-group-prepend > .input-group-text,
@@ -11175,8 +11197,8 @@ button.bg-dark:focus {
 }
 
 .text-nowrap,
-.responsive-table,
-.responsive-table-bordered {
+.responsive-table-bordered,
+.responsive-table {
   white-space: nowrap !important;
 }
 
@@ -11198,8 +11220,8 @@ button.bg-dark:focus {
 
 .text-center,
 .td-centered,
-.responsive-table,
-.responsive-table-bordered {
+.responsive-table-bordered,
+.responsive-table {
   text-align: center !important;
 }
 
@@ -11491,17 +11513,17 @@ a.text-dark:focus {
   }
 
   .table,
-  .responsive-table,
-  .responsive-table-bordered {
+  .responsive-table-bordered,
+  .responsive-table {
     border-collapse: collapse !important;
   }
 
   .table td,
-  .responsive-table td,
   .responsive-table-bordered td,
+  .responsive-table td,
   .table th,
-  .responsive-table th,
-  .responsive-table-bordered th {
+  .responsive-table-bordered th,
+  .responsive-table th {
     background-color: #fff !important;
   }
 
@@ -11524,8 +11546,8 @@ a.text-dark:focus {
   }
 
   .table .thead-dark th,
-  .responsive-table .thead-dark th,
-  .responsive-table-bordered .thead-dark th {
+  .responsive-table-bordered .thead-dark th,
+  .responsive-table .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
   }
@@ -11537,6 +11559,10 @@ a.text-dark:focus {
 
 .form-date {
   width: 170px;
+}
+
+.form-date-min {
+  min-width: 170px;
 }
 
 .form-text {
