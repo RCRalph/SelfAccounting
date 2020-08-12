@@ -4,8 +4,8 @@
 <div class="card">
     <div class="card-header-flex">
         <div class="card-header-text">
-            <i class="fas fa-sign-in-alt"></i>
-            {{ __('Income') }}
+            <i class="fas fa-sign-{{ $viewType == 'income' ? 'in' : 'out' }}-alt"></i>
+            {{ __(ucfirst($viewType)) }}
         </div>
         <div class="d-flex">
             <div class="h4 my-auto mr-3">{{ __('Currency:') }}</div>
@@ -20,12 +20,12 @@
         <div class="row mb-3">
             <div class="col-md-4 col-6 offset-md-2">
                 <button class="big-button-primary">
-                    {{ __('Add multiple incomes') }}
+                    {{ __('Add multiple ' . $viewType . 's') }}
                 </button>
             </div>
             <div class="col-md-4 col-6">
                 <a type="button" href="/income/create/one" class="big-button-primary">
-                    {{ __('Add single income') }}
+                    {{ __('Add single ' . $viewType) }}
                 </a>
             </div>
         </div>

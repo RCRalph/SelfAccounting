@@ -13,11 +13,22 @@ class OutcomeController extends Controller
 
     public function index()
     {
-        return view('outcome.index');
+        $viewType = "outcome";
+
+        return view('income-outcome.index', compact('viewType'));
+    }
+
+    public function show($id)
+    {
+        $viewType = "outcome";
+
+        return view('income-outcome.show', compact('viewType'));
     }
 
     public function createOne()
     {
-        return view('outcome.create.one');
+        $viewType = "outcome";
+
+        return view('income-outcome.create.one', compact('viewType'));
     }
 }

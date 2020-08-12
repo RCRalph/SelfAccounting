@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
+    <div class="card-header-flex">
         <div class="card-header-text">
-            <i class="fas fa-sign-in-alt"></i>
-            {{ __('Add single outcome') }}
+            <i class="fas fa-sign-{{ $viewType == 'income' ? 'in' : 'out' }}-alt"></i>
+            {{ __('Add single ' . $viewType) }}
         </div>
     </div>
 
     <div class="card-body">
-        <form method="POST" action="/outcome/create/one" enctype="multipart/form-data">
+        <form method="POST" action="/{{ $viewType }}/create/one" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group row">

@@ -13,11 +13,22 @@ class IncomeController extends Controller
 
     public function index()
     {
-        return view('income.index');
+        $viewType = "income";
+
+        return view('income-outcome.index', compact('viewType'));
+    }
+
+    public function show($id)
+    {
+        $viewType = "income";
+
+        return view('income-outcome.show', compact('viewType'));
     }
 
     public function createOne()
     {
-        return view('income.create.one');
+        $viewType = "income";
+
+        return view('income-outcome.create.one', compact('viewType'));
     }
 }

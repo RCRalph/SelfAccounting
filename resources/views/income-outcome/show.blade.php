@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
+    <div class="card-header-flex">
         <div class="card-header-text">
-            <i class="fas fa-sign-in-alt"></i>
-            {{ __('Add single income') }}
+            <i class="fas fa-sign-{{ $viewType == 'income' ? 'in' : 'out' }}-alt"></i>
+            {{ __('Edit ' . $viewType) }}
         </div>
     </div>
 
     <div class="card-body">
-        <form method="POST" action="/income/create/one" enctype="multipart/form-data">
+        <form method="POST" action="/{{ $viewType }}/create/one" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group row">
@@ -117,15 +117,29 @@
                     @enderror
                 </div>
             </div>
-
-            <div class="form-group row mb-0">
-                <div class="col-lg-7 offset-lg-3">
-                    <button type="submit" class="btn btn-primary">
-                        {{ __('Submit') }}
-                    </button>
-                </div>
-            </div>
         </form>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-4">
+                <button class="big-button-primary">
+                    {{ __('Reset changes') }}
+                </button>
+            </div>
+
+            <div class="col-4">
+                <button class="big-button-success">
+                    {{ __('Save changes') }}
+                </button>
+            </div>
+
+            <div class="col-4">
+                <button class="big-button-danger">
+                    {{ __('Delete') }}
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
