@@ -19,9 +19,9 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body style="background-color: {{ $darkmode ?? false ? 'hsl(210, 60%, 2%)' : 'hsl(210, 40%, 98%)' }};">
     <div id="app">
-        @include('layouts.navbar', ["darkmode" => $darkmode ?? false])
+        @include('layouts.navbar', ["darkmode" => $darkmode ?? '' ?? false])
 
         <main class="py-4">
             @yield('wrapper')

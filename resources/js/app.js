@@ -31,10 +31,6 @@ const app = new Vue({
     el: '#app',
 });
 
-if ($('#sun-moon').html() == '<i class="fas fa-sun"></i>') {
-    $('body').css('background-color', 'hsl(210, 60%, 2%)');
-}
-
 jQuery(() => {
     $('[data-toggle="tooltip"]').tooltip();
 
