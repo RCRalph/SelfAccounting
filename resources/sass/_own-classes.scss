@@ -1,3 +1,9 @@
+.dark-card {
+    @extend .card;
+    @extend .bg-dark;
+    @extend .text-white;
+}
+
 .card-header-text {
     @extend .h4;
     @extend .mr-auto;
@@ -21,13 +27,15 @@
     @extend .table;
     @extend .text-center;
     @extend .text-nowrap;
-    @extend .table-hover;
 
     &-bordered {
-        @extend .table;
-        @extend .text-center;
-        @extend .text-nowrap;
+        @extend .responsive-table;
         @extend .table-bordered;
+    }
+
+    &-hover {
+        @extend .responsive-table;
+        @extend .table-hover;
     }
 }
 
@@ -50,11 +58,6 @@
         @extend .big-button;
         @extend .btn-primary;
     }
-}
-
-.td-centered {
-    @extend .text-center;
-    vertical-align: middle!important;
 }
 
 .form-date {
@@ -86,4 +89,16 @@
     @extend .m-auto;
     @extend .text-left;
     width: 170px;
+}
+
+.hover-bg {
+    background-color: #43494e;
+}
+
+.table-lightmode {
+    @extend .table;
+}
+
+.table-darkmode {
+    @extend .table-dark;
 }

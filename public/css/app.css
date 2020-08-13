@@ -1772,34 +1772,44 @@ pre code {
 }
 
 .table,
-.responsive-table-bordered,
-.responsive-table {
+.table-lightmode,
+.responsive-table,
+.responsive-table-hover,
+.responsive-table-bordered {
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
 }
 
 .table th,
-.responsive-table-bordered th,
+.table-lightmode th,
 .responsive-table th,
+.responsive-table-hover th,
+.responsive-table-bordered th,
 .table td,
-.responsive-table-bordered td,
-.responsive-table td {
+.table-lightmode td,
+.responsive-table td,
+.responsive-table-hover td,
+.responsive-table-bordered td {
   padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
 }
 
 .table thead th,
-.responsive-table-bordered thead th,
-.responsive-table thead th {
+.table-lightmode thead th,
+.responsive-table thead th,
+.responsive-table-hover thead th,
+.responsive-table-bordered thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #dee2e6;
 }
 
 .table tbody + tbody,
-.responsive-table-bordered tbody + tbody,
-.responsive-table tbody + tbody {
+.table-lightmode tbody + tbody,
+.responsive-table tbody + tbody,
+.responsive-table-hover tbody + tbody,
+.responsive-table-bordered tbody + tbody {
   border-top: 2px solid #dee2e6;
 }
 
@@ -1839,7 +1849,7 @@ pre code {
 }
 
 .table-hover tbody tr:hover,
-.responsive-table tbody tr:hover {
+.responsive-table-hover tbody tr:hover {
   color: #212529;
   background-color: rgba(0, 0, 0, 0.075);
 }
@@ -1858,14 +1868,14 @@ pre code {
 }
 
 .table-hover .table-primary:hover,
-.responsive-table .table-primary:hover {
+.responsive-table-hover .table-primary:hover {
   background-color: #b0d4f1;
 }
 
 .table-hover .table-primary:hover > td,
-.responsive-table .table-primary:hover > td,
+.responsive-table-hover .table-primary:hover > td,
 .table-hover .table-primary:hover > th,
-.responsive-table .table-primary:hover > th {
+.responsive-table-hover .table-primary:hover > th {
   background-color: #b0d4f1;
 }
 
@@ -1883,14 +1893,14 @@ pre code {
 }
 
 .table-hover .table-secondary:hover,
-.responsive-table .table-secondary:hover {
+.responsive-table-hover .table-secondary:hover {
   background-color: #c8cbcf;
 }
 
 .table-hover .table-secondary:hover > td,
-.responsive-table .table-secondary:hover > td,
+.responsive-table-hover .table-secondary:hover > td,
 .table-hover .table-secondary:hover > th,
-.responsive-table .table-secondary:hover > th {
+.responsive-table-hover .table-secondary:hover > th {
   background-color: #c8cbcf;
 }
 
@@ -1908,14 +1918,14 @@ pre code {
 }
 
 .table-hover .table-success:hover,
-.responsive-table .table-success:hover {
+.responsive-table-hover .table-success:hover {
   background-color: #b3e8ca;
 }
 
 .table-hover .table-success:hover > td,
-.responsive-table .table-success:hover > td,
+.responsive-table-hover .table-success:hover > td,
 .table-hover .table-success:hover > th,
-.responsive-table .table-success:hover > th {
+.responsive-table-hover .table-success:hover > th {
   background-color: #b3e8ca;
 }
 
@@ -1933,14 +1943,14 @@ pre code {
 }
 
 .table-hover .table-info:hover,
-.responsive-table .table-info:hover {
+.responsive-table-hover .table-info:hover {
   background-color: #c0ddf6;
 }
 
 .table-hover .table-info:hover > td,
-.responsive-table .table-info:hover > td,
+.responsive-table-hover .table-info:hover > td,
 .table-hover .table-info:hover > th,
-.responsive-table .table-info:hover > th {
+.responsive-table-hover .table-info:hover > th {
   background-color: #c0ddf6;
 }
 
@@ -1958,14 +1968,14 @@ pre code {
 }
 
 .table-hover .table-warning:hover,
-.responsive-table .table-warning:hover {
+.responsive-table-hover .table-warning:hover {
   background-color: #fff8b3;
 }
 
 .table-hover .table-warning:hover > td,
-.responsive-table .table-warning:hover > td,
+.responsive-table-hover .table-warning:hover > td,
 .table-hover .table-warning:hover > th,
-.responsive-table .table-warning:hover > th {
+.responsive-table-hover .table-warning:hover > th {
   background-color: #fff8b3;
 }
 
@@ -1983,14 +1993,14 @@ pre code {
 }
 
 .table-hover .table-danger:hover,
-.responsive-table .table-danger:hover {
+.responsive-table-hover .table-danger:hover {
   background-color: #f4b0af;
 }
 
 .table-hover .table-danger:hover > td,
-.responsive-table .table-danger:hover > td,
+.responsive-table-hover .table-danger:hover > td,
 .table-hover .table-danger:hover > th,
-.responsive-table .table-danger:hover > th {
+.responsive-table-hover .table-danger:hover > th {
   background-color: #f4b0af;
 }
 
@@ -2008,39 +2018,51 @@ pre code {
 }
 
 .table-hover .table-light:hover,
-.responsive-table .table-light:hover {
+.responsive-table-hover .table-light:hover {
   background-color: #ececf6;
 }
 
 .table-hover .table-light:hover > td,
-.responsive-table .table-light:hover > td,
+.responsive-table-hover .table-light:hover > td,
 .table-hover .table-light:hover > th,
-.responsive-table .table-light:hover > th {
+.responsive-table-hover .table-light:hover > th {
   background-color: #ececf6;
 }
 
 .table-dark,
+.table-darkmode,
 .table-dark > th,
-.table-dark > td {
+.table-darkmode > th,
+.table-dark > td,
+.table-darkmode > td {
   background-color: #c6c8ca;
 }
 
 .table-dark th,
+.table-darkmode th,
 .table-dark td,
+.table-darkmode td,
 .table-dark thead th,
-.table-dark tbody + tbody {
+.table-dark tbody + tbody,
+.table-darkmode tbody + tbody {
   border-color: #95999c;
 }
 
 .table-hover .table-dark:hover,
-.responsive-table .table-dark:hover {
+.table-hover .table-darkmode:hover,
+.responsive-table-hover .table-dark:hover,
+.responsive-table-hover .table-darkmode:hover {
   background-color: #b9bbbe;
 }
 
 .table-hover .table-dark:hover > td,
-.responsive-table .table-dark:hover > td,
+.table-hover .table-darkmode:hover > td,
+.responsive-table-hover .table-dark:hover > td,
+.responsive-table-hover .table-darkmode:hover > td,
 .table-hover .table-dark:hover > th,
-.responsive-table .table-dark:hover > th {
+.table-hover .table-darkmode:hover > th,
+.responsive-table-hover .table-dark:hover > th,
+.responsive-table-hover .table-darkmode:hover > th {
   background-color: #b9bbbe;
 }
 
@@ -2051,55 +2073,67 @@ pre code {
 }
 
 .table-hover .table-active:hover,
-.responsive-table .table-active:hover {
+.responsive-table-hover .table-active:hover {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
 .table-hover .table-active:hover > td,
-.responsive-table .table-active:hover > td,
+.responsive-table-hover .table-active:hover > td,
 .table-hover .table-active:hover > th,
-.responsive-table .table-active:hover > th {
+.responsive-table-hover .table-active:hover > th {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
 .table .thead-dark th,
-.responsive-table-bordered .thead-dark th,
-.responsive-table .thead-dark th {
+.table-lightmode .thead-dark th,
+.responsive-table .thead-dark th,
+.responsive-table-hover .thead-dark th,
+.responsive-table-bordered .thead-dark th {
   color: #fff;
   background-color: #343a40;
   border-color: #454d55;
 }
 
 .table .thead-light th,
-.responsive-table-bordered .thead-light th,
-.responsive-table .thead-light th {
+.table-lightmode .thead-light th,
+.responsive-table .thead-light th,
+.responsive-table-hover .thead-light th,
+.responsive-table-bordered .thead-light th {
   color: #495057;
   background-color: #e9ecef;
   border-color: #dee2e6;
 }
 
-.table-dark {
+.table-dark,
+.table-darkmode {
   color: #fff;
   background-color: #343a40;
 }
 
 .table-dark th,
+.table-darkmode th,
 .table-dark td,
+.table-darkmode td,
 .table-dark thead th {
   border-color: #454d55;
 }
 
 .table-dark.table-bordered,
-.table-dark.responsive-table-bordered {
+.table-bordered.table-darkmode,
+.table-dark.responsive-table-bordered,
+.responsive-table-bordered.table-darkmode {
   border: 0;
 }
 
-.table-dark.table-striped tbody tr:nth-of-type(odd) {
+.table-dark.table-striped tbody tr:nth-of-type(odd),
+.table-striped.table-darkmode tbody tr:nth-of-type(odd) {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
 .table-dark.table-hover tbody tr:hover,
-.table-dark.responsive-table tbody tr:hover {
+.table-hover.table-darkmode tbody tr:hover,
+.table-dark.responsive-table-hover tbody tr:hover,
+.responsive-table-hover.table-darkmode tbody tr:hover {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.075);
 }
@@ -5537,7 +5571,8 @@ input[type=button].big-button-danger {
   color: #fff;
 }
 
-.card {
+.card,
+.dark-card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -5549,23 +5584,27 @@ input[type=button].big-button-danger {
   border-radius: 0.25rem;
 }
 
-.card > hr {
+.card > hr,
+.dark-card > hr {
   margin-right: 0;
   margin-left: 0;
 }
 
-.card > .list-group {
+.card > .list-group,
+.dark-card > .list-group {
   border-top: inherit;
   border-bottom: inherit;
 }
 
-.card > .list-group:first-child {
+.card > .list-group:first-child,
+.dark-card > .list-group:first-child {
   border-top-width: 0;
   border-top-left-radius: calc(0.25rem - 1px);
   border-top-right-radius: calc(0.25rem - 1px);
 }
 
-.card > .list-group:last-child {
+.card > .list-group:last-child,
+.dark-card > .list-group:last-child {
   border-bottom-width: 0;
   border-bottom-right-radius: calc(0.25rem - 1px);
   border-bottom-left-radius: calc(0.25rem - 1px);
@@ -5573,7 +5612,10 @@ input[type=button].big-button-danger {
 
 .card > .card-header + .list-group,
 .card > .card-header-flex + .list-group,
-.card > .list-group + .card-footer {
+.dark-card > .card-header + .list-group,
+.dark-card > .card-header-flex + .list-group,
+.card > .list-group + .card-footer,
+.dark-card > .list-group + .card-footer {
   border-top: 0;
 }
 
@@ -5669,7 +5711,8 @@ input[type=button].big-button-danger {
   border-bottom-left-radius: calc(0.25rem - 1px);
 }
 
-.card-deck .card {
+.card-deck .card,
+.card-deck .dark-card {
   margin-bottom: 15px;
 }
 
@@ -5681,7 +5724,8 @@ input[type=button].big-button-danger {
     margin-left: -15px;
   }
 
-  .card-deck .card {
+  .card-deck .card,
+  .card-deck .dark-card {
     flex: 1 0 0%;
     margin-right: 15px;
     margin-bottom: 0;
@@ -5689,7 +5733,8 @@ input[type=button].big-button-danger {
   }
 }
 
-.card-group > .card {
+.card-group > .card,
+.card-group > .dark-card {
   margin-bottom: 15px;
 }
 
@@ -5699,50 +5744,67 @@ input[type=button].big-button-danger {
     flex-flow: row wrap;
   }
 
-  .card-group > .card {
+  .card-group > .card,
+  .card-group > .dark-card {
     flex: 1 0 0%;
     margin-bottom: 0;
   }
 
-  .card-group > .card + .card {
+  .card-group > .card + .card,
+  .card-group > .dark-card + .card,
+  .card-group > .card + .dark-card,
+  .card-group > .dark-card + .dark-card {
     margin-left: 0;
     border-left: 0;
   }
 
-  .card-group > .card:not(:last-child) {
+  .card-group > .card:not(:last-child),
+  .card-group > .dark-card:not(:last-child) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
 
   .card-group > .card:not(:last-child) .card-img-top,
+  .card-group > .dark-card:not(:last-child) .card-img-top,
   .card-group > .card:not(:last-child) .card-header,
-  .card-group > .card:not(:last-child) .card-header-flex {
+  .card-group > .card:not(:last-child) .card-header-flex,
+  .card-group > .dark-card:not(:last-child) .card-header,
+  .card-group > .dark-card:not(:last-child) .card-header-flex {
     border-top-right-radius: 0;
   }
 
   .card-group > .card:not(:last-child) .card-img-bottom,
-  .card-group > .card:not(:last-child) .card-footer {
+  .card-group > .dark-card:not(:last-child) .card-img-bottom,
+  .card-group > .card:not(:last-child) .card-footer,
+  .card-group > .dark-card:not(:last-child) .card-footer {
     border-bottom-right-radius: 0;
   }
 
-  .card-group > .card:not(:first-child) {
+  .card-group > .card:not(:first-child),
+  .card-group > .dark-card:not(:first-child) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
 
   .card-group > .card:not(:first-child) .card-img-top,
+  .card-group > .dark-card:not(:first-child) .card-img-top,
   .card-group > .card:not(:first-child) .card-header,
-  .card-group > .card:not(:first-child) .card-header-flex {
+  .card-group > .card:not(:first-child) .card-header-flex,
+  .card-group > .dark-card:not(:first-child) .card-header,
+  .card-group > .dark-card:not(:first-child) .card-header-flex {
     border-top-left-radius: 0;
   }
 
   .card-group > .card:not(:first-child) .card-img-bottom,
-  .card-group > .card:not(:first-child) .card-footer {
+  .card-group > .dark-card:not(:first-child) .card-img-bottom,
+  .card-group > .card:not(:first-child) .card-footer,
+  .card-group > .dark-card:not(:first-child) .card-footer {
     border-bottom-left-radius: 0;
   }
 }
 
-.card-columns .card {
+.card-columns .card,
+.card-columns .dark-card {
   margin-bottom: 0.75rem;
 }
 
@@ -5756,7 +5818,8 @@ input[type=button].big-button-danger {
     widows: 1;
   }
 
-  .card-columns .card {
+  .card-columns .card,
+  .card-columns .dark-card {
     display: inline-block;
     width: 100%;
   }
@@ -5766,23 +5829,28 @@ input[type=button].big-button-danger {
   overflow-anchor: none;
 }
 
-.accordion > .card {
+.accordion > .card,
+.accordion > .dark-card {
   overflow: hidden;
 }
 
-.accordion > .card:not(:last-of-type) {
+.accordion > .card:not(:last-of-type),
+.accordion > .dark-card:not(:last-of-type) {
   border-bottom: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.accordion > .card:not(:first-of-type) {
+.accordion > .card:not(:first-of-type),
+.accordion > .dark-card:not(:first-of-type) {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
 .accordion > .card > .card-header,
-.accordion > .card > .card-header-flex {
+.accordion > .card > .card-header-flex,
+.accordion > .dark-card > .card-header,
+.accordion > .dark-card > .card-header-flex {
   border-radius: 0;
   margin-bottom: -1px;
 }
@@ -7645,14 +7713,19 @@ button.bg-light:focus {
   background-color: #dae0e5 !important;
 }
 
-.bg-dark {
+.bg-dark,
+.dark-card {
   background-color: #343a40 !important;
 }
 
 a.bg-dark:hover,
+a.dark-card:hover,
 a.bg-dark:focus,
+a.dark-card:focus,
 button.bg-dark:hover,
-button.bg-dark:focus {
+button.dark-card:hover,
+button.bg-dark:focus,
+button.dark-card:focus {
   background-color: #1d2124 !important;
 }
 
@@ -11197,8 +11270,9 @@ button.bg-dark:focus {
 }
 
 .text-nowrap,
-.responsive-table-bordered,
-.responsive-table {
+.responsive-table,
+.responsive-table-hover,
+.responsive-table-bordered {
   white-space: nowrap !important;
 }
 
@@ -11219,9 +11293,9 @@ button.bg-dark:focus {
 }
 
 .text-center,
-.td-centered,
-.responsive-table-bordered,
-.responsive-table {
+.responsive-table,
+.responsive-table-hover,
+.responsive-table-bordered {
   text-align: center !important;
 }
 
@@ -11321,7 +11395,8 @@ button.bg-dark:focus {
   font-style: italic !important;
 }
 
-.text-white {
+.text-white,
+.dark-card {
   color: #fff !important;
 }
 
@@ -11513,17 +11588,23 @@ a.text-dark:focus {
   }
 
   .table,
-  .responsive-table-bordered,
-  .responsive-table {
+  .table-lightmode,
+  .responsive-table,
+  .responsive-table-hover,
+  .responsive-table-bordered {
     border-collapse: collapse !important;
   }
 
   .table td,
-  .responsive-table-bordered td,
+  .table-lightmode td,
   .responsive-table td,
+  .responsive-table-hover td,
+  .responsive-table-bordered td,
   .table th,
-  .responsive-table-bordered th,
-  .responsive-table th {
+  .table-lightmode th,
+  .responsive-table th,
+  .responsive-table-hover th,
+  .responsive-table-bordered th {
     background-color: #fff !important;
   }
 
@@ -11534,27 +11615,29 @@ a.text-dark:focus {
     border: 1px solid #dee2e6 !important;
   }
 
-  .table-dark {
+  .table-dark,
+  .table-darkmode {
     color: inherit;
   }
 
   .table-dark th,
+  .table-darkmode th,
   .table-dark td,
+  .table-darkmode td,
   .table-dark thead th,
-  .table-dark tbody + tbody {
+  .table-dark tbody + tbody,
+  .table-darkmode tbody + tbody {
     border-color: #dee2e6;
   }
 
   .table .thead-dark th,
-  .responsive-table-bordered .thead-dark th,
-  .responsive-table .thead-dark th {
+  .table-lightmode .thead-dark th,
+  .responsive-table .thead-dark th,
+  .responsive-table-hover .thead-dark th,
+  .responsive-table-bordered .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
   }
-}
-
-.td-centered {
-  vertical-align: middle !important;
 }
 
 .form-date {
@@ -11571,6 +11654,16 @@ a.text-dark:focus {
 
 .form-number {
   width: 170px;
+}
+
+.hover-bg {
+  background-color: #43494e;
+}
+
+td,
+th {
+  text-align: center;
+  vertical-align: middle !important;
 }
 
 .switch {

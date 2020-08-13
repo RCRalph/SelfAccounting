@@ -31,7 +31,7 @@
         </div>
 
         <div class="table-responsive-xl w-100">
-            <table class="responsive-table-bordered">
+            <table class="responsive-table-bordered table-lightmode" id="table-multi-hover">
                 <thead>
                     <tr>
                         <th scope="col" class="h5 font-weight-bold">
@@ -55,39 +55,45 @@
                         <th scope="col" class="h5 font-weight-bold">
                             {{ __('Mean') }}
                         </th>
+                        <th scope="col" class="h5 font-weight-bold">
+                            {{ __('Edit') }}
+                        </th>
                     </tr>
                 </thead>
 
                 <tbody>
-                <tr>
-                        <th scope="row" class="td-centered" rowspan="3">2020-06-25</td>
-                        <td class="td-centered" rowspan="2">Some name 1</td>
-                        <td class="td-centered">2</td>
-                        <td class="td-centered">30.00 PLN</td>
-                        <td class="td-centered">60.00 PLN</td>
-                        <td class="td-centered" rowspan="3">Own</td>
-                        <td class="td-centered">Cash</td>
+                    <tr i="0">
+                        <th scope="row" rowspan="2" rep="date">2020-06-25</th>
+                        <td rowspan="2" rep="title">Some name 1</td>
+                        <td rep="amount">2</td>
+                        <td rep="price">30.00 PLN</td>
+                        <td rep="value">60.00 PLN</td>
+                        <td rowspan="2" rep="category">Own</td>
+                        <td rep="mean">Cash</td>
+                        <td class="py-0 h4" onclick="window.document.location='/{{ $viewType }}/1'" rep="edit">
+							<i class="fas fa-edit"></i>
+						</td>
                     </tr>
-                    <tr>
-                        <td class="td-centered">1</td>
-                        <td class="td-centered" rowspan="2">20.00 PLN</td>
-                        <td class="td-centered">20.00 PLN</td>
-                        <td class="td-centered">Bank Account</td>
+                    <tr i="1">
+                        <td rep="amount">1</td>
+                        <td rep="price">20.00 PLN</td>
+                        <td rep="value">20.00 PLN</td>
+                        <td rep="mean">Bank Account</td>
+                        <td class="py-0 h4" onclick="window.document.location='/{{ $viewType }}/1'" rep="edit">
+							<i class="fas fa-edit"></i>
+						</td>
                     </tr>
-                    <tr>
-                        <td class="td-centered">Some name 2</td>
-                        <td class="td-centered">2</td>
-                        <td class="td-centered">40.00 PLN</td>
-                        <td class="td-centered">PayPal</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="td-centered">2020-06-24</td>
-                        <td class="td-centered">Some name 2</td>
-                        <td class="td-centered">2</td>
-                        <td class="td-centered">20.00 PLN</td>
-                        <td class="td-centered">40.00 PLN</td>
-                        <td class="td-centered">Own</td>
-                        <td class="td-centered">Bank Account</td>
+                    <tr i="2">
+                        <th scope="row" rep="date">2020-06-24</th>
+                        <td rep="title">Some name 2</td>
+                        <td rep="amount">2</td>
+                        <td rep="price">20.00 PLN</td>
+                        <td rep="value">40.00 PLN</td>
+                        <td rep="category">Own</td>
+                        <td rep="mean">PayPal</td>
+                        <td class="py-0 h4" onclick="window.document.location='/{{ $viewType }}/1'" rep="edit">
+							<i class="fas fa-edit"></i>
+						</td>
                     </tr>
                 </tbody>
             </table>

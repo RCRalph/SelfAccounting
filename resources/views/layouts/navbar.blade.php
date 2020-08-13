@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
@@ -69,6 +69,12 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
+                        </div>
+                    </li>
+
+                    <li class="nav-item my-auto" id="darkmode-switcher">
+                        <div class="nav-link h5 my-auto" id="sun-moon">
+                            <i class="fas fa-moon"></i>
                         </div>
                     </li>
                 @endguest

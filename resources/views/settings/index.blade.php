@@ -28,7 +28,7 @@
 
             <div class="card-body">
                 <div class="table-responsive-xl w-100">
-                    <table class="responsive-table">
+                    <table class="responsive-table-hover table-lightmode">
                         <thead>
                             <tr>
                                 <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('The name of your category') }}">
@@ -62,43 +62,43 @@
                                     <input type="text" value="Refunds" class="form-text">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" value="2020-07-01">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" value="2020-08-31">
                                 </td>
 
-                                <td class="td-centered times-delete">
+                                <td class="times-delete">
                                     <i class="fas fa-times-circle" style="cursor: pointer;"></i>
                                 </td>
                             </tr>
@@ -108,43 +108,43 @@
                                     <input type="text" value="Own" class="form-text">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" disabled>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" disabled>
                                 </td>
 
-                                <td class="td-centered times-delete">
+                                <td class="times-delete">
                                     <i class="fas fa-times-circle" style="cursor: pointer;"></i>
                                 </td>
                             </tr>
@@ -154,43 +154,43 @@
                                     <input type="text" value="Presents" class="form-text">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" disabled>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" disabled>
                                 </td>
 
-                                <td class="td-centered times-delete">
+                                <td class="times-delete">
                                     <i class="fas fa-times-circle" style="cursor: pointer;"></i>
                                 </td>
                             </tr>
@@ -231,7 +231,7 @@
 
             <div class="card-body">
                 <div class="table-responsive-xl w-100">
-                    <table class="responsive-table">
+                    <table class="responsive-table-hover table-lightmode">
                         <thead>
                             <tr>
                                 <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('The name of your mean of payment') }}">
@@ -267,43 +267,43 @@
                                     <input type="text" value="Bank Account" class="form-text">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" value="2019-06-17">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="number" class="form-number" value="123.54" step=".01">
                                 </td>
 
-                                <td class="td-centered times-delete">
+                                <td class="times-delete">
                                     <i class="fas fa-times-circle" style="cursor: pointer;"></i>
                                 </td>
                             </tr>
@@ -313,43 +313,43 @@
                                     <input type="text" value="Cash" class="form-text">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" value="2019-06-17">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="number" class="form-number" value="665.30" step=".01">
                                 </td>
 
-                                <td class="td-centered times-delete">
+                                <td class="times-delete">
                                     <i class="fas fa-times-circle" style="cursor: pointer;"></i>
                                 </td>
                             </tr>
@@ -359,43 +359,43 @@
                                     <input type="text" value="Savings" class="form-text">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <label class="switch m-0">
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="date" class="form-date" value="2019-06-17">
                                 </td>
 
-                                <td class="td-centered">
+                                <td>
                                     <input type="number" class="form-number" value="5000.00" step=".01">
                                 </td>
 
-                                <td class="td-centered times-delete">
+                                <td class="times-delete">
                                     <i class="fas fa-times-circle" style="cursor: pointer;"></i>
                                 </td>
                             </tr>

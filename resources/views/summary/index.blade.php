@@ -32,7 +32,7 @@
         </div>
 
         <div class="table-responsive-xl w-100">
-            <table class="responsive-table">
+            <table class="responsive-table-hover table-lightmode">
                 <thead>
                     <tr>
                         <th scope="col" class="h3 font-weight-bold">{{ __('Category') }}</th>

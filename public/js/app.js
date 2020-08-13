@@ -49743,8 +49743,82 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app'
 });
-$(document).ready(function () {
-  $('[data-toggle="tooltip"]').tooltip();
+jQuery(function () {
+  // Tooltip
+  $('[data-toggle="tooltip"]').tooltip(); // Darkmode switcher
+
+  $('#darkmode-switcher').on('click', function () {
+    function replaceAttributes(source, target) {
+      $("." + source).removeClass(source).addClass(target);
+    }
+
+    if ($('#sun-moon').html() == '<i class="fas fa-sun"></i>') {
+      // Set lightmode
+      $('#sun-moon').html('<i class="fas fa-moon"></i>');
+      $('nav').removeClass('navbar-dark bg-dark').addClass('navbar-light bg-light');
+      $('body').css('background-color', 'hsl(210, 40%, 98%)');
+      replaceAttributes("dark-card", "card");
+      replaceAttributes("table-darkmode", "table-lightmode");
+    } else {
+      // Set darkmode
+      $('#sun-moon').html('<i class="fas fa-sun"></i>');
+      $('nav').removeClass('navbar-light bg-light').addClass('navbar-dark bg-dark');
+      $('body').css('background-color', 'hsl(210, 60%, 2%)');
+      replaceAttributes("card", "dark-card");
+      replaceAttributes("table-lightmode", "table-darkmode");
+    }
+  }); // Special table hovering
+
+  if ($("#table-multi-hover").length) {
+    var headerValues = Array.from($("thead")[0].children[0].children).map(function (item) {
+      return item.innerText.toLowerCase();
+    });
+    var table = [];
+    var tableCells = Array.from($("tbody")[0].children).map(function (item) {
+      return item.children;
+    }).map(function (item) {
+      return Array.from(item);
+    });
+
+    for (var i = 0; i < tableCells.length; i++) {
+      var tempObj = {};
+
+      for (var j = 0; j < tableCells[i].length; j++) {
+        tempObj[tableCells[i][j].attributes.rep.value] = tableCells[i][j];
+      }
+
+      for (var _j = 0; _j < headerValues.length; _j++) {
+        if (i != 0 && tempObj[headerValues[_j]] == undefined) {
+          tempObj[headerValues[_j]] = table[i - 1][headerValues[_j]];
+        }
+      }
+
+      table.push(Object.assign({}, tempObj));
+    }
+
+    $("tbody td, tbody th").on("mouseover", function (event) {
+      var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
+      var rep = event.currentTarget.attributes.rep.value;
+      var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
+
+      for (var _i = 0; _i < rowspan; _i++) {
+        for (var _j2 in table[rowIndex + _i]) {
+          $(table[rowIndex + _i][_j2]).addClass("hover-bg");
+        }
+      }
+    });
+    $("tbody td, tbody th").on("mouseleave", function (event) {
+      var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
+      var rep = event.currentTarget.attributes.rep.value;
+      var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
+
+      for (var _i2 = 0; _i2 < rowspan; _i2++) {
+        for (var _j3 in table[rowIndex + _i2]) {
+          $(table[rowIndex + _i2][_j3]).removeClass("hover-bg");
+        }
+      }
+    });
+  }
 });
 
 /***/ }),
