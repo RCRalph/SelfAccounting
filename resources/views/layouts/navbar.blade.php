@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
+<nav class="navbar navbar-expand-md navbar-{{ ($darkmode ?? false) ? 'dark' : 'light' }} bg-{{ ($darkmode ?? false) ? 'dark' : 'light' }} shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
@@ -74,7 +74,7 @@
 
                     <li class="nav-item my-auto" id="darkmode-switcher">
                         <div class="nav-link h5 my-auto" id="sun-moon">
-                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-{{ ($darkmode ?? false) ? 'sun' : 'moon' }}"></i>
                         </div>
                     </li>
                 @endguest

@@ -11656,7 +11656,11 @@ a.text-dark:focus {
   width: 170px;
 }
 
-.hover-bg {
+.hover-bg-light {
+  background-color: #ececec;
+}
+
+.hover-bg-dark {
   background-color: #43494e;
 }
 

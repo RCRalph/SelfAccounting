@@ -92,7 +92,13 @@
 }
 
 .hover-bg {
-    background-color: #43494e;
+    &-light {
+        background-color: #ececec;
+    }
+
+    &-dark {
+        background-color: #43494e;
+    }
 }
 
 .table-lightmode {

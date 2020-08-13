@@ -49743,8 +49743,12 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app'
 });
+
+if ($('#sun-moon').html() == '<i class="fas fa-sun"></i>') {
+  $('body').css('background-color', 'hsl(210, 60%, 2%)');
+}
+
 jQuery(function () {
-  // Tooltip
   $('[data-toggle="tooltip"]').tooltip(); // Darkmode switcher
 
   $('#darkmode-switcher').on('click', function () {
@@ -49767,6 +49771,11 @@ jQuery(function () {
       replaceAttributes("card", "dark-card");
       replaceAttributes("table-lightmode", "table-darkmode");
     }
+
+    var isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
+    axios.post("/user/darkmode", {
+      darkmode: isDarkmode
+    });
   }); // Special table hovering
 
   if ($("#table-multi-hover").length) {
@@ -49797,24 +49806,26 @@ jQuery(function () {
     }
 
     $("tbody td, tbody th").on("mouseover", function (event) {
+      var isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
       var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
       var rep = event.currentTarget.attributes.rep.value;
       var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
 
       for (var _i = 0; _i < rowspan; _i++) {
         for (var _j2 in table[rowIndex + _i]) {
-          $(table[rowIndex + _i][_j2]).addClass("hover-bg");
+          $(table[rowIndex + _i][_j2]).addClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
         }
       }
     });
     $("tbody td, tbody th").on("mouseleave", function (event) {
+      var isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
       var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
       var rep = event.currentTarget.attributes.rep.value;
       var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
 
       for (var _i2 = 0; _i2 < rowspan; _i2++) {
         for (var _j3 in table[rowIndex + _i2]) {
-          $(table[rowIndex + _i2][_j3]).removeClass("hover-bg");
+          $(table[rowIndex + _i2][_j3]).removeClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
         }
       }
     });

@@ -31,8 +31,11 @@ const app = new Vue({
     el: '#app',
 });
 
+if ($('#sun-moon').html() == '<i class="fas fa-sun"></i>') {
+    $('body').css('background-color', 'hsl(210, 60%, 2%)');
+}
+
 jQuery(() => {
-    // Tooltip
     $('[data-toggle="tooltip"]').tooltip();
 
     // Darkmode switcher
@@ -57,6 +60,12 @@ jQuery(() => {
             replaceAttributes("card", "dark-card");
             replaceAttributes("table-lightmode", "table-darkmode");
         }
+
+        const isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
+
+        axios.post("/user/darkmode", {
+            darkmode: isDarkmode
+        });
     })
 
     // Special table hovering
@@ -85,6 +94,7 @@ jQuery(() => {
         }
 
         $("tbody td, tbody th").on("mouseover", event => {
+            const isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>'
             const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
             const rep = event.currentTarget.attributes.rep.value;
             const rowspan = event.currentTarget.attributes.rowspan != undefined ?
@@ -92,12 +102,13 @@ jQuery(() => {
 
             for (let i = 0; i < rowspan; i++) {
                 for (let j in table[rowIndex + i]) {
-                    $(table[rowIndex + i][j]).addClass("hover-bg");
+                    $(table[rowIndex + i][j]).addClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
                 }
             }
         });
 
         $("tbody td, tbody th").on("mouseleave", event => {
+            const isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>'
             const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
             const rep = event.currentTarget.attributes.rep.value;
             const rowspan = event.currentTarget.attributes.rowspan != undefined ?
@@ -105,7 +116,7 @@ jQuery(() => {
 
             for (let i = 0; i < rowspan; i++) {
                 for (let j in table[rowIndex + i]) {
-                    $(table[rowIndex + i][j]).removeClass("hover-bg");
+                    $(table[rowIndex + i][j]).removeClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
                 }
             }
         });

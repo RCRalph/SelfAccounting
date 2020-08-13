@@ -1,7 +1,7 @@
 @extends('layouts.fullwidth')
 
 @section('content')
-<div class="card">
+<div class="{{ $darkmode ? 'dark-card' : 'card'}}">
     <div class="card-header-flex">
         <div class="card-header-text">
             <i class="fas fa-cog"></i>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="card-body">
-        <div class="card mb-3">
+        <div class="{{ $darkmode ? 'dark-card' : 'card'}} mb-3">
             <div class="card-header-flex">
                 <div class="card-header-text">
                     <i class="fab fa-buffer"></i>
@@ -28,7 +28,7 @@
 
             <div class="card-body">
                 <div class="table-responsive-xl w-100">
-                    <table class="responsive-table-hover table-lightmode">
+                    <table class="responsive-table-hover table-{{ $darkmode ? 'dark' : 'light'}}mode">
                         <thead>
                             <tr>
                                 <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('The name of your category') }}">
@@ -221,7 +221,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="{{ $darkmode ? 'dark-card' : 'card'}}">
             <div class="card-header-flex">
                 <div class="card-header-text">
                     <i class="fas fa-coins"></i>
@@ -231,7 +231,7 @@
 
             <div class="card-body">
                 <div class="table-responsive-xl w-100">
-                    <table class="responsive-table-hover table-lightmode">
+                    <table class="responsive-table-hover table-{{ $darkmode ? 'dark' : 'light'}}mode">
                         <thead>
                             <tr>
                                 <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('The name of your mean of payment') }}">

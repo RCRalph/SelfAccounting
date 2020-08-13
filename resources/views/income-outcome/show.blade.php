@@ -1,7 +1,7 @@
 @extends('layouts.midwidth')
 
 @section('content')
-<div class="card">
+<div class="{{ $darkmode ? 'dark-card' : 'card'}}">
     <div class="card-header-flex">
         <div class="card-header-text">
             <i class="fas fa-sign-{{ $viewType == 'income' ? 'in' : 'out' }}-alt"></i>

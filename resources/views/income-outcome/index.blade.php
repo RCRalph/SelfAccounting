@@ -1,7 +1,7 @@
 @extends('layouts.fullwidth')
 
 @section('content')
-<div class="card">
+<div class="{{ $darkmode ? 'dark-card' : 'card'}}">
     <div class="card-header-flex">
         <div class="card-header-text">
             <i class="fas fa-sign-{{ $viewType == 'income' ? 'in' : 'out' }}-alt"></i>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="table-responsive-xl w-100">
-            <table class="responsive-table-bordered table-lightmode" id="table-multi-hover">
+            <table id="table-multi-hover" class="responsive-table-bordered table-{{ $darkmode ? 'dark' : 'light'}}mode">
                 <thead>
                     <tr>
                         <th scope="col" class="h5 font-weight-bold">

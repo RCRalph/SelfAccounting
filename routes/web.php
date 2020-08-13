@@ -31,3 +31,4 @@ Route::get('/outcome', 'OutcomeController@index')->name('outcome');
 Route::get('/outcome/{id}', 'OutcomeController@show')->name('outcome.show');
 Route::get('/outcome/create/one', 'OutcomeController@createOne')->name('outcome.create.one');
 
+Route::post('/user/darkmode', 'UsersController@darkmode')->name('user.darkmode');

@@ -14,21 +14,24 @@ class OutcomeController extends Controller
     public function index()
     {
         $viewType = "outcome";
+        $darkmode = auth()->user()->darkmode;
 
-        return view('income-outcome.index', compact('viewType'));
+        return view('income-outcome.index', compact('viewType', 'darkmode'));
     }
 
     public function show($id)
     {
         $viewType = "outcome";
+        $darkmode = auth()->user()->darkmode;
 
-        return view('income-outcome.show', compact('viewType'));
+        return view('income-outcome.show', compact('viewType', 'darkmode'));
     }
 
     public function createOne()
     {
         $viewType = "outcome";
+        $darkmode = auth()->user()->darkmode;
 
-        return view('income-outcome.create.one', compact('viewType'));
+        return view('income-outcome.create.one', compact('viewType', 'darkmode'));
     }
 }

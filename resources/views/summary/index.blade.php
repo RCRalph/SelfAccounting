@@ -1,7 +1,7 @@
 @extends('layouts.fullwidth')
 
 @section('content')
-<div class="card">
+<div class="{{ $darkmode ? 'dark-card' : 'card'}}">
     <div class="card-header-flex">
         <div class="card-header-text">
             <i class="fas fa-file-invoice-dollar"></i>
@@ -19,7 +19,7 @@
     <div class="card-body">
         <div class="row">
             <div class="mx-auto mb-3 col-md-12 col-lg-6 offset-lg-3">
-                <div class="card">
+                <div class="{{ $darkmode ? 'dark-card' : 'card' }}">
                     <div class="card-header">
                         <div class="m-auto text-center font-weight-bold h2">
                             {{ __('Sum') }}
@@ -32,7 +32,7 @@
         </div>
 
         <div class="table-responsive-xl w-100">
-            <table class="responsive-table-hover table-lightmode">
+            <table class="responsive-table-hover table-{{ $darkmode ? 'dark' : 'light'}}mode">
                 <thead>
                     <tr>
                         <th scope="col" class="h3 font-weight-bold">{{ __('Category') }}</th>

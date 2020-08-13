@@ -21,7 +21,7 @@
 </head>
 <body>
     <div id="app">
-        @include('layouts.navbar')
+        @include('layouts.navbar', ["darkmode" => $darkmode ?? false])
 
         <main class="py-4">
             @yield('wrapper')

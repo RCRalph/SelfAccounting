@@ -13,6 +13,7 @@ class SettingsController extends Controller
 
     public function index()
     {
-        return view('settings.index');
+        $darkmode = auth()->user()->darkmode;
+        return view('settings.index', compact('darkmode'));
     }
 }
