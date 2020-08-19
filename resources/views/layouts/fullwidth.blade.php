@@ -9,3 +9,7 @@
         </div>
     </div>
 @endsection
+
+@section('script')
+    @yield('script')
+@endsection

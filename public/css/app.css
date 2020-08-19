@@ -379,7 +379,7 @@ h6,
 .h1,
 .h2,
 .h3,
-.times-delete,
+.trashbin,
 .h4,
 .card-header-text,
 .h5,
@@ -401,7 +401,7 @@ h2,
 
 h3,
 .h3,
-.times-delete {
+.trashbin {
   font-size: 1.575rem;
 }
 
@@ -9481,7 +9481,7 @@ button.dark-card:focus {
 .m-auto,
 .form-number,
 .form-text,
-.times-delete,
+.trashbin,
 .form-date {
   margin: auto !important;
 }
@@ -11445,15 +11445,12 @@ a.text-warning:focus {
   color: #fde300 !important;
 }
 
-.text-danger,
-.times-delete {
+.text-danger {
   color: #e3342f !important;
 }
 
 a.text-danger:hover,
-a.times-delete:hover,
-a.text-danger:focus,
-a.times-delete:focus {
+a.text-danger:focus {
   color: #ae1c17 !important;
 }
 
@@ -11648,6 +11645,10 @@ a.text-dark:focus {
   min-width: 170px;
 }
 
+.trashbin {
+  cursor: pointer;
+}
+
 .form-text {
   width: 170px;
 }
@@ -11668,6 +11669,10 @@ td,
 th {
   text-align: center;
   vertical-align: middle !important;
+}
+
+#sun-moon {
+  cursor: pointer;
 }
 
 .switch {

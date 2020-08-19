@@ -1,61 +1,13 @@
 @extends('layouts.fullwidth')
 
+@section('script')
+<script src="{{ asset('js/settings.js') }}" defer></script>
+@endsection
+
 @section('content')
-<div class="{{ $darkmode ? 'dark-card' : 'card'}}">
-    <div class="card-header-flex">
-        <div class="card-header-text">
-            <i class="fas fa-cog"></i>
-            {{ __('Settings') }}
-        </div>
-        <div class="d-flex">
-            <div class="h4 my-auto mr-3">{{ __('Currency:') }}</div>
-            <select class="form-control">
-                <option>PLN</option>
-                <option>EUR</option>
-            </select>
-        </div>
-    </div>
+<settings-component darkmode="{{ $darkmode }}"></settings-component>
 
-    <div class="card-body">
-        <div class="{{ $darkmode ? 'dark-card' : 'card'}} mb-3">
-            <div class="card-header-flex">
-                <div class="card-header-text">
-                    <i class="fab fa-buffer"></i>
-                    {{ __('Categories') }}
-                </div>
-
-            </div>
-
-            <div class="card-body">
-                <div class="table-responsive-xl w-100">
-                    <table class="responsive-table-hover table-{{ $darkmode ? 'dark' : 'light'}}mode">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('The name of your category') }}">
-                                    {{ __('Name') }}
-                                </th>
-                                <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('Use in income') }}">
-                                    {{ __('Income') }}
-                                </th>
-                                <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('Use in outcome') }}">
-                                    {{ __('Outcome') }}
-                                </th>
-                                <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('Display on charts') }}">
-                                    {{ __('Charts') }}
-                                </th>
-                                <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('Count to summary') }}">
-                                    {{ __('Summary') }}
-                                </th>
-                                <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('Count from this date') }}">
-                                    {{ __('Start date') }}
-                                </th>
-                                <th scope="col" class="h5 font-weight-bold" data-toggle="tooltip" data-placement="bottom" title="{{ __('Count to this date') }}">
-                                    {{ __('End date') }}
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-
+<!--<div class="{{ $darkmode ? 'dark-card' : 'card'}}">
                         <tbody>
                             <tr>
                                 <td>
@@ -426,5 +378,5 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 @endsection

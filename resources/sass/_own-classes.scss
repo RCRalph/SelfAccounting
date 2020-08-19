@@ -71,10 +71,10 @@
     }
 }
 
-.times-delete {
+.trashbin {
     @extend .h3;
     @extend .m-auto;
-    @extend .text-danger;
+    cursor: pointer;
 }
 
 .form-text {

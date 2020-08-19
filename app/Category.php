@@ -13,6 +13,8 @@ class Category extends Model
 {
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
+    protected $guarded = [];
+
     protected $fillable = [
         'user_id', 'currency_id', 'name', 'income_category', 'outcome_category', 'show_on_charts', 'count_to_summary', 'start_date', 'end_date'
     ];

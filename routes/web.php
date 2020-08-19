@@ -21,8 +21,6 @@ Auth::routes();
 
 Route::get('/summary', 'SummaryController@index')->name('summary');
 
-Route::get('/settings', 'SettingsController@index')->name('settings');
-
 Route::get('/income', 'IncomeController@index')->name('income');
 Route::get('/income/{id}', 'IncomeController@show')->name('income.show');
 Route::get('/income/create/one', 'IncomeController@createOne')->name('income.create.one');
@@ -31,4 +29,11 @@ Route::get('/outcome', 'OutcomeController@index')->name('outcome');
 Route::get('/outcome/{id}', 'OutcomeController@show')->name('outcome.show');
 Route::get('/outcome/create/one', 'OutcomeController@createOne')->name('outcome.create.one');
 
+Route::get('/settings', 'SettingsController@index')->name('settings');
+
 Route::post('/user/darkmode', 'UsersController@darkmode')->name('user.darkmode');
+
+// WebAPI
+
+Route::get('/webapi/settings', 'WebApi\SettingsController@getSettings')->name('settings.get');
+Route::post('/webapi/settings/categories', 'WebApi\SettingsController@saveCategories')->name('settings.categories');

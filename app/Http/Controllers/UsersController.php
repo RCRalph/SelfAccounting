@@ -16,8 +16,6 @@ class UsersController extends Controller
             "darkmode" => $data["darkmode"]
         ]);
 
-        return response()->json([
-            "user" => auth()->user()
-        ]);
+        return response()->json([]);
     }
 }

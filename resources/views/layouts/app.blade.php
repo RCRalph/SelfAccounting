@@ -27,5 +27,6 @@
             @yield('wrapper')
         </main>
     </div>
+    @yield('script')
 </body>
 </html>

@@ -1,35 +1,4 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
-
-window.Vue = require('vue');
-
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-const app = new Vue({
-    el: '#app',
-});
 
 jQuery(() => {
     $('[data-toggle="tooltip"]').tooltip();
@@ -40,28 +9,35 @@ jQuery(() => {
             $("." + source).removeClass(source).addClass(target);
         }
 
-        if ($('#sun-moon').html() == '<i class="fas fa-sun"></i>') {
-            // Set lightmode
-            $('#sun-moon').html('<i class="fas fa-moon"></i>');
-            $('nav').removeClass('navbar-dark bg-dark').addClass('navbar-light bg-light');
-            $('body').css('background-color', 'hsl(210, 40%, 98%)');
-            replaceAttributes("dark-card", "card");
-            replaceAttributes("table-darkmode", "table-lightmode");
-        }
-        else {
-            // Set darkmode
-            $('#sun-moon').html('<i class="fas fa-sun"></i>');
-            $('nav').removeClass('navbar-light bg-light').addClass('navbar-dark bg-dark');
-            $('body').css('background-color', 'hsl(210, 60%, 2%)');
-            replaceAttributes("card", "dark-card");
-            replaceAttributes("table-lightmode", "table-darkmode");
-        }
-
         const isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
+        $('#sun-moon').html('<i class="fas fa-clock"></i>');
 
         axios.post("/user/darkmode", {
-            darkmode: isDarkmode
-        });
+            darkmode: !isDarkmode
+        })
+        .then(response => {
+            if (response.status == 200) {
+                if (isDarkmode) {
+                    // Set lightmode
+                    $('nav').removeClass('navbar-dark bg-dark').addClass('navbar-light bg-light');
+                    $('body').css('background-color', 'hsl(210, 40%, 98%)');
+                    replaceAttributes("dark-card", "card");
+                    replaceAttributes("table-darkmode", "table-lightmode");
+                }
+                else {
+                    // Set darkmode
+                    $('nav').removeClass('navbar-light bg-light').addClass('navbar-dark bg-dark');
+                    $('body').css('background-color', 'hsl(210, 60%, 2%)');
+                    replaceAttributes("card", "dark-card");
+                    replaceAttributes("table-lightmode", "table-darkmode");
+                }
+
+                $('#sun-moon').html(isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>');
+            }
+            else {
+                $('#sun-moon').html(!isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>')
+            }
+        })
     })
 
     // Special table hovering
