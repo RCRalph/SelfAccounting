@@ -27,6 +27,7 @@
                             :content="item"
                             :index="index"
                             @delete="$emit('data-delete', index)"
+                            @update="updateData"
                         ></TableBody>
                     </tbody>
                 </table>
@@ -41,7 +42,7 @@
                 <div class="col-4">
                     <button
                         class="big-button-primary"
-                        :disabled="!canSave || !axiosStatus"
+                        :disabled="!buttonsEnabled"
                         @click="$emit('data-add')"
                     >
                         New category
@@ -50,7 +51,7 @@
                 <div class="col-4">
                     <button
                         class="big-button-danger"
-                        :disabled="!canSave || !axiosStatus"
+                        :disabled="!buttonsEnabled"
                         @click="$emit('data-reset')"
                     >
                         Reset changes
@@ -60,7 +61,7 @@
                 <div class="col-4">
                     <button
                         class="big-button-success"
-                        :disabled="!canSave || !axiosStatus"
+                        :disabled="!buttonsEnabled"
                         @click="dataSave"
                         v-html="saveButton"
                     >
@@ -82,7 +83,7 @@ export default {
     },
     props: {
         darkmode: Boolean,
-        axiosStatus: Boolean,
+        buttonsEnabled: Boolean,
         content: Array
     },
     data() {
@@ -118,31 +119,16 @@ export default {
                 },
                 {}
             ],
-            saveButton: 'Save changes'
+            saveButton: 'Save changes',
         };
     },
     methods: {
         dataSave: function() {
             this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
             this.$emit('data-save');
-        }
-    },
-    computed: {
-        canSave: function() {
-            if (!this.content) {
-                return true;
-            }
-
-            for (let i = 0; i < this.content.length; i++) {
-                const item = this.content[i];
-                const dateEmpty = !item.start_date || !item.end_date;
-                const validDates = dateEmpty ? true : new Date(item.start_date).getTime() <= new Date(item.end_date).getTime();
-                if (item.name.length > 32 || !item.name.length || !validDates) {
-                    return false;
-                }
-            }
-
-            return true;
+        },
+        updateData: function() {
+            this.$emit("data-change")
         }
     }
 };

@@ -25,24 +25,26 @@
                 <Categories
                     :content="categories[currentCurrency]"
                     :darkmode="darkmode"
-                    :axiosStatus="axiosCategories"
+                    :buttonsEnabled="axiosCategories && categoriesCanSave"
                     :key="componentKey"
                     @data-reset="categoriesReset"
                     @data-add="categoriesAdd"
                     @data-delete="categoriesDelete"
                     @data-save="categoriesSave"
+                    @data-change="updateKey"
                 ></Categories>
 
                 <Means
                     class="mt-4"
                     :content="means[currentCurrency]"
                     :darkmode="darkmode"
-                    :axiosStatus="axiosMeans"
+                    :buttonsEnabled="axiosMeans && meansCanSave"
                     :key="componentKey + 1"
                     @data-reset="meansReset"
                     @data-add="meansAdd"
                     @data-delete="meansDelete"
                     @data-save="meansSave"
+                    @data-change="updateKey"
                 ></Means>
             </div>
 
@@ -86,6 +88,38 @@ export default {
             meansCopy: {},
             axiosMeans: true
         };
+    },
+    computed: {
+        categoriesCanSave: function() {
+            this.componentKey;
+
+            for (let currency in this.categories) {
+                for (let i = 0; i < this.categories[currency].length; i++) {
+                    const item = this.categories[currency][i];
+                    const dateEmpty = !item.start_date || !item.end_date;
+                    const validDates = dateEmpty ? true : new Date(item.start_date).getTime() <= new Date(item.end_date).getTime();
+                    if (item.name.length > 32 || !item.name.length || !validDates) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        },
+        meansCanSave: function() {
+            this.componentKey;
+
+            for (let currency in this.means) {
+                for (let i = 0; i < this.means[currency].length; i++) {
+                    const item = this.means[currency][i];
+                    if (item.name.length > 32 || !item.name.length || !item.first_entry_date || parseFloat(item.first_entry_amount) != item.first_entry_amount) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
     },
     methods: {
         categoriesReset: function() {
@@ -173,6 +207,9 @@ export default {
                     this.axiosMeans = true;
                     this.componentKey++;
                 })
+        },
+        updateKey: function() {
+            this.componentKey++;
         }
     },
     beforeMount() {

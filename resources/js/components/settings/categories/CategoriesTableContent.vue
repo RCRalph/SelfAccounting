@@ -11,6 +11,8 @@
                 placeholder="Name"
                 v-model="content.name"
                 maxlength="32"
+                :key="componentKey"
+                @change="updateComponentKey"
             />
         </td>
         <td>
@@ -35,7 +37,7 @@
             <Slider
                 :checked="content.count_to_summary"
                 v-model="content.count_to_summary"
-                @input="updateDates"
+                @input="updateComponentKey"
             ></Slider>
         </td>
         <td>
@@ -48,7 +50,8 @@
                 ]"
                 :disabled="!content.count_to_summary"
                 v-model="content.start_date"
-                :key="dateKey"
+                :key="componentKey"
+                @change="updateComponentKey"
             />
         </td>
         <td>
@@ -61,7 +64,8 @@
                 ]"
                 :disabled="!content.count_to_summary"
                 v-model="content.end_date"
-                :key="dateKey"
+                :key="componentKey"
+                @change="updateComponentKey"
             />
         </td>
         <td class="trashbin" @click="$emit('delete', index)">
@@ -83,16 +87,18 @@ export default {
     },
     data() {
         return {
-            dateKey: 0
+            componentKey: 0
         };
     },
     methods: {
-        updateDates: function() {
-            this.dateKey++;
+        updateComponentKey: function() {
+            this.componentKey++;
+            this.$emit("update");
         }
     },
     computed: {
         correctDates: function() {
+            this.componentKey;
             const dateEmpty = !this.content.start_date || !this.content.end_date;
             return dateEmpty ? true : new Date(this.content.start_date).getTime() <= new Date(this.content.end_date).getTime();
         }

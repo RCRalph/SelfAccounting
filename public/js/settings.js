@@ -164,6 +164,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -187,6 +189,40 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       meansCopy: {},
       axiosMeans: true
     };
+  },
+  computed: {
+    categoriesCanSave: function categoriesCanSave() {
+      this.componentKey;
+
+      for (var currency in this.categories) {
+        for (var i = 0; i < this.categories[currency].length; i++) {
+          var item = this.categories[currency][i];
+          var dateEmpty = !item.start_date || !item.end_date;
+          var validDates = dateEmpty ? true : new Date(item.start_date).getTime() <= new Date(item.end_date).getTime();
+
+          if (item.name.length > 32 || !item.name.length || !validDates) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    },
+    meansCanSave: function meansCanSave() {
+      this.componentKey;
+
+      for (var currency in this.means) {
+        for (var i = 0; i < this.means[currency].length; i++) {
+          var item = this.means[currency][i];
+
+          if (item.name.length > 32 || !item.name.length || !item.first_entry_date || parseFloat(item.first_entry_amount) != item.first_entry_amount) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
   },
   methods: {
     categoriesReset: function categoriesReset() {
@@ -272,6 +308,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.axiosMeans = true;
         _this2.componentKey++;
       });
+    },
+    updateKey: function updateKey() {
+      this.componentKey++;
     }
   },
   beforeMount: function beforeMount() {
@@ -449,6 +488,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -458,7 +498,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     darkmode: Boolean,
-    axiosStatus: Boolean,
+    buttonsEnabled: Boolean,
     content: Array
   },
   data: function data() {
@@ -492,25 +532,9 @@ __webpack_require__.r(__webpack_exports__);
     dataSave: function dataSave() {
       this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
       this.$emit('data-save');
-    }
-  },
-  computed: {
-    canSave: function canSave() {
-      if (!this.content) {
-        return true;
-      }
-
-      for (var i = 0; i < this.content.length; i++) {
-        var item = this.content[i];
-        var dateEmpty = !item.start_date || !item.end_date;
-        var validDates = dateEmpty ? true : new Date(item.start_date).getTime() <= new Date(item.end_date).getTime();
-
-        if (item.name.length > 32 || !item.name.length || !validDates) {
-          return false;
-        }
-      }
-
-      return true;
+    },
+    updateData: function updateData() {
+      this.$emit("data-change");
     }
   }
 });
@@ -599,6 +623,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -610,16 +638,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      dateKey: 0
+      componentKey: 0
     };
   },
   methods: {
-    updateDates: function updateDates() {
-      this.dateKey++;
+    updateComponentKey: function updateComponentKey() {
+      this.componentKey++;
+      this.$emit("update");
     }
   },
   computed: {
     correctDates: function correctDates() {
+      this.componentKey;
       var dateEmpty = !this.content.start_date || !this.content.end_date;
       return dateEmpty ? true : new Date(this.content.start_date).getTime() <= new Date(this.content.end_date).getTime();
     }
@@ -712,6 +742,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -721,7 +752,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     darkmode: Boolean,
-    axiosStatus: Boolean,
+    buttonsEnabled: Boolean,
     content: Array
   },
   data: function data() {
@@ -755,23 +786,9 @@ __webpack_require__.r(__webpack_exports__);
     dataSave: function dataSave() {
       this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
       this.$emit('data-save');
-    }
-  },
-  computed: {
-    canSave: function canSave() {
-      if (!this.content) {
-        return true;
-      }
-
-      for (var i = 0; i < this.content.length; i++) {
-        var item = this.content[i];
-
-        if (item.name.length > 32 || !item.name.length || !item.first_entry_date || parseFloat(item.first_entry_amount) != item.first_entry_amount) {
-          return false;
-        }
-      }
-
-      return true;
+    },
+    updateData: function updateData() {
+      this.$emit("data-change");
     }
   }
 });
@@ -857,6 +874,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -868,12 +889,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      dateKey: 0
+      componentKey: 0
     };
   },
   methods: {
-    updateDates: function updateDates() {
-      this.dateKey++;
+    updateComponentKey: function updateComponentKey() {
+      this.componentKey++;
+      this.$emit("update");
     }
   }
 });
@@ -1430,13 +1452,14 @@ var render = function() {
                 attrs: {
                   content: _vm.categories[_vm.currentCurrency],
                   darkmode: _vm.darkmode,
-                  axiosStatus: _vm.axiosCategories
+                  buttonsEnabled: _vm.axiosCategories && _vm.categoriesCanSave
                 },
                 on: {
                   "data-reset": _vm.categoriesReset,
                   "data-add": _vm.categoriesAdd,
                   "data-delete": _vm.categoriesDelete,
-                  "data-save": _vm.categoriesSave
+                  "data-save": _vm.categoriesSave,
+                  "data-change": _vm.updateKey
                 }
               }),
               _vm._v(" "),
@@ -1446,13 +1469,14 @@ var render = function() {
                 attrs: {
                   content: _vm.means[_vm.currentCurrency],
                   darkmode: _vm.darkmode,
-                  axiosStatus: _vm.axiosMeans
+                  buttonsEnabled: _vm.axiosMeans && _vm.meansCanSave
                 },
                 on: {
                   "data-reset": _vm.meansReset,
                   "data-add": _vm.meansAdd,
                   "data-delete": _vm.meansDelete,
-                  "data-save": _vm.meansSave
+                  "data-save": _vm.meansSave,
+                  "data-change": _vm.updateKey
                 }
               })
             ],
@@ -1617,7 +1641,8 @@ var render = function() {
                       on: {
                         delete: function($event) {
                           return _vm.$emit("data-delete", index)
-                        }
+                        },
+                        update: _vm.updateData
                       }
                     })
                   }),
@@ -1639,7 +1664,7 @@ var render = function() {
             "button",
             {
               staticClass: "big-button-primary",
-              attrs: { disabled: !_vm.canSave || !_vm.axiosStatus },
+              attrs: { disabled: !_vm.buttonsEnabled },
               on: {
                 click: function($event) {
                   return _vm.$emit("data-add")
@@ -1655,7 +1680,7 @@ var render = function() {
             "button",
             {
               staticClass: "big-button-danger",
-              attrs: { disabled: !_vm.canSave || !_vm.axiosStatus },
+              attrs: { disabled: !_vm.buttonsEnabled },
               on: {
                 click: function($event) {
                   return _vm.$emit("data-reset")
@@ -1669,7 +1694,7 @@ var render = function() {
         _c("div", { staticClass: "col-4" }, [
           _c("button", {
             staticClass: "big-button-success",
-            attrs: { disabled: !_vm.canSave || !_vm.axiosStatus },
+            attrs: { disabled: !_vm.buttonsEnabled },
             domProps: { innerHTML: _vm._s(_vm.saveButton) },
             on: { click: _vm.dataSave }
           })
@@ -1723,6 +1748,7 @@ var render = function() {
             expression: "content.name"
           }
         ],
+        key: _vm.componentKey,
         class: [
           "form-text",
           (!_vm.content.name.length || _vm.content.name.length > 32) &&
@@ -1733,6 +1759,7 @@ var render = function() {
         attrs: { type: "text", placeholder: "Name", maxlength: "32" },
         domProps: { value: _vm.content.name },
         on: {
+          change: _vm.updateComponentKey,
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -1799,7 +1826,7 @@ var render = function() {
       [
         _c("Slider", {
           attrs: { checked: _vm.content.count_to_summary },
-          on: { input: _vm.updateDates },
+          on: { input: _vm.updateComponentKey },
           model: {
             value: _vm.content.count_to_summary,
             callback: function($$v) {
@@ -1822,7 +1849,7 @@ var render = function() {
             expression: "content.start_date"
           }
         ],
-        key: _vm.dateKey,
+        key: _vm.componentKey,
         class: [
           "form-date",
           !_vm.correctDates && "border-danger",
@@ -1831,6 +1858,7 @@ var render = function() {
         attrs: { type: "date", disabled: !_vm.content.count_to_summary },
         domProps: { value: _vm.content.start_date },
         on: {
+          change: _vm.updateComponentKey,
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -1851,7 +1879,7 @@ var render = function() {
             expression: "content.end_date"
           }
         ],
-        key: _vm.dateKey,
+        key: _vm.componentKey,
         class: [
           "form-date",
           !_vm.correctDates && "border-danger",
@@ -1860,6 +1888,7 @@ var render = function() {
         attrs: { type: "date", disabled: !_vm.content.count_to_summary },
         domProps: { value: _vm.content.end_date },
         on: {
+          change: _vm.updateComponentKey,
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -1932,7 +1961,8 @@ var render = function() {
                       on: {
                         delete: function($event) {
                           return _vm.$emit("data-delete", index)
-                        }
+                        },
+                        update: _vm.updateData
                       }
                     })
                   }),
@@ -1954,7 +1984,7 @@ var render = function() {
             "button",
             {
               staticClass: "big-button-primary",
-              attrs: { disabled: !_vm.canSave || !_vm.axiosStatus },
+              attrs: { disabled: !_vm.buttonsEnabled },
               on: {
                 click: function($event) {
                   return _vm.$emit("data-add")
@@ -1974,7 +2004,7 @@ var render = function() {
             "button",
             {
               staticClass: "big-button-danger",
-              attrs: { disabled: !_vm.canSave || !_vm.axiosStatus },
+              attrs: { disabled: !_vm.buttonsEnabled },
               on: {
                 click: function($event) {
                   return _vm.$emit("data-reset")
@@ -1988,7 +2018,7 @@ var render = function() {
         _c("div", { staticClass: "col-4" }, [
           _c("button", {
             staticClass: "big-button-success",
-            attrs: { disabled: !_vm.canSave || !_vm.axiosStatus },
+            attrs: { disabled: !_vm.buttonsEnabled },
             domProps: { innerHTML: _vm._s(_vm.saveButton) },
             on: { click: _vm.dataSave }
           })
@@ -2042,6 +2072,7 @@ var render = function() {
             expression: "content.name"
           }
         ],
+        key: _vm.componentKey,
         class: [
           "form-text",
           (!_vm.content.name.length || _vm.content.name.length > 32) &&
@@ -2052,6 +2083,7 @@ var render = function() {
         attrs: { type: "text", placeholder: "Name", maxlength: "32" },
         domProps: { value: _vm.content.name },
         on: {
+          change: _vm.updateComponentKey,
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -2117,7 +2149,6 @@ var render = function() {
       [
         _c("Slider", {
           attrs: { checked: _vm.content.count_to_summary },
-          on: { input: _vm.updateDates },
           model: {
             value: _vm.content.count_to_summary,
             callback: function($$v) {
@@ -2140,6 +2171,7 @@ var render = function() {
             expression: "content.first_entry_date"
           }
         ],
+        key: _vm.componentKey,
         class: [
           "form-date",
           !_vm.content.first_entry_date && "border-danger",
@@ -2148,6 +2180,7 @@ var render = function() {
         attrs: { type: "date" },
         domProps: { value: _vm.content.first_entry_date },
         on: {
+          change: _vm.updateComponentKey,
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -2168,6 +2201,7 @@ var render = function() {
             expression: "content.first_entry_amount"
           }
         ],
+        key: _vm.componentKey,
         class: [
           "form-text",
           parseFloat(_vm.content.first_entry_amount) !=
@@ -2175,9 +2209,10 @@ var render = function() {
           parseFloat(_vm.content.first_entry_amount) !=
             _vm.content.first_entry_amount && "border-large"
         ],
-        attrs: { type: "number", step: ".01", placeholder: "0.00" },
+        attrs: { type: "number", step: ".01" },
         domProps: { value: _vm.content.first_entry_amount },
         on: {
+          change: _vm.updateComponentKey,
           input: function($event) {
             if ($event.target.composing) {
               return

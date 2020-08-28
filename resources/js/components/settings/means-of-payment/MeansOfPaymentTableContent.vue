@@ -11,6 +11,8 @@
                 placeholder="Name"
                 v-model="content.name"
                 maxlength="32"
+                :key="componentKey"
+                @change="updateComponentKey"
             >
         <td>
             <Slider
@@ -34,7 +36,6 @@
             <Slider
                 :checked="content.count_to_summary"
                 v-model="content.count_to_summary"
-                @input="updateDates"
             ></Slider>
         </td>
         <td>
@@ -46,6 +47,8 @@
                     !content.first_entry_date && 'border-large'
                 ]"
                 v-model="content.first_entry_date"
+                :key="componentKey"
+				@change="updateComponentKey"
             >
         </td>
         <td>
@@ -57,8 +60,9 @@
                     parseFloat(content.first_entry_amount) != content.first_entry_amount && 'border-large'
                 ]"
                 step=".01"
-                placeholder="0.00"
                 v-model="content.first_entry_amount"
+                :key="componentKey"
+                @change="updateComponentKey"
             >
         </td>
         <td class="trashbin" @click="$emit('delete', index)">
@@ -80,12 +84,13 @@ export default {
     },
     data() {
         return {
-            dateKey: 0
+            componentKey: 0
         };
     },
     methods: {
-        updateDates: function() {
-            this.dateKey++;
+        updateComponentKey: function() {
+            this.componentKey++;
+            this.$emit("update");
         }
     }
 };
