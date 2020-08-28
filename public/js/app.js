@@ -37274,7 +37274,7 @@ jQuery(function () {
       $("." + source).removeClass(source).addClass(target);
     }
 
-    var isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
+    var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
     $('#sun-moon').html('<i class="fas fa-clock"></i>');
     axios.post("/user/darkmode", {
       darkmode: !isDarkmode
@@ -37329,7 +37329,7 @@ jQuery(function () {
     }
 
     $("tbody td, tbody th").on("mouseover", function (event) {
-      var isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
+      var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
       var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
       var rep = event.currentTarget.attributes.rep.value;
       var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
@@ -37341,7 +37341,7 @@ jQuery(function () {
       }
     });
     $("tbody td, tbody th").on("mouseleave", function (event) {
-      var isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
+      var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
       var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
       var rep = event.currentTarget.attributes.rep.value;
       var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;

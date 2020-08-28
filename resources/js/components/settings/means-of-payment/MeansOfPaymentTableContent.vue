@@ -11,18 +11,17 @@
                 placeholder="Name"
                 v-model="content.name"
                 maxlength="32"
-            />
-        </td>
+            >
         <td>
             <Slider
-                :checked="content.income_category"
-                v-model="content.income_category"
+                :checked="content.income_mean"
+                v-model="content.income_mean"
             ></Slider>
         </td>
         <td>
             <Slider
-                :checked="content.outcome_category"
-                v-model="content.outcome_category"
+                :checked="content.outcome_mean"
+                v-model="content.outcome_mean"
             ></Slider>
         </td>
         <td>
@@ -43,26 +42,24 @@
                 type="date"
                 :class="[
                     'form-date',
-                    !correctDates && 'border-danger',
-                    !correctDates && 'border-large'
+                    !content.first_entry_date && 'border-danger',
+                    !content.first_entry_date && 'border-large'
                 ]"
-                :disabled="!content.count_to_summary"
-                v-model="content.start_date"
-                :key="dateKey"
-            />
+                v-model="content.first_entry_date"
+            >
         </td>
         <td>
             <input
-                type="date"
+                type="number"
                 :class="[
-                    'form-date',
-                    !correctDates && 'border-danger',
-                    !correctDates && 'border-large'
+                    'form-text',
+                    parseFloat(content.first_entry_amount) != content.first_entry_amount && 'border-danger',
+                    parseFloat(content.first_entry_amount) != content.first_entry_amount && 'border-large'
                 ]"
-                :disabled="!content.count_to_summary"
-                v-model="content.end_date"
-                :key="dateKey"
-            />
+                step=".01"
+                placeholder="0.00"
+                v-model="content.first_entry_amount"
+            >
         </td>
         <td class="trashbin" @click="$emit('delete', index)">
             <i class="fas fa-trash"></i>
@@ -89,12 +86,6 @@ export default {
     methods: {
         updateDates: function() {
             this.dateKey++;
-        }
-    },
-    computed: {
-        correctDates: function() {
-            const dateEmpty = !this.content.start_date || !this.content.end_date;
-            return dateEmpty ? true : new Date(this.content.start_date).getTime() <= new Date(this.content.end_date).getTime();
         }
     }
 };

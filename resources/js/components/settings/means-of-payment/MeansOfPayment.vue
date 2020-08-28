@@ -2,8 +2,8 @@
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
             <div class="card-header-text">
-                <i class="fab fa-buffer"></i>
-                Categories
+                <i class="fas fa-coins"></i>
+                Means of Payment
             </div>
         </div>
 
@@ -44,7 +44,7 @@
                         :disabled="!canSave || !axiosStatus"
                         @click="$emit('data-add')"
                     >
-                        New category
+                        New mean of payment
                     </button>
                 </div>
                 <div class="col-4">
@@ -61,8 +61,8 @@
                     <button
                         class="big-button-success"
                         :disabled="!canSave || !axiosStatus"
-                        @click="dataSave"
                         v-html="saveButton"
+                        @click="dataSave"
                     >
                     </button>
                 </div>
@@ -73,7 +73,7 @@
 
 <script>
 import TableHeader from "../../TableHeader.vue";
-import TableBody from "./CategoriesTableContent.vue";
+import TableBody from "./MeansOfPaymentTableContent.vue"
 
 export default {
     components: {
@@ -90,7 +90,7 @@ export default {
             headerCells: [
                 {
                     text: "Name",
-                    tooltip: "The name of your category"
+                    tooltip: "The name of your mean of payment"
                 },
                 {
                     text: "Income",
@@ -109,17 +109,17 @@ export default {
                     tooltip: "Count to summary"
                 },
                 {
-                    text: "Start date",
-                    tooltip: "Count from this date"
+                    text: "First entry",
+                    tooltip: "Date from which to add the starting balance"
                 },
                 {
-                    text: "End date",
-                    tooltip: "Count to this date"
+                    text: "Starting balance",
+                    tooltip: "Amount which to use for the first entry"
                 },
                 {}
             ],
             saveButton: 'Save changes'
-        };
+        }
     },
     methods: {
         dataSave: function() {
@@ -135,9 +135,7 @@ export default {
 
             for (let i = 0; i < this.content.length; i++) {
                 const item = this.content[i];
-                const dateEmpty = !item.start_date || !item.end_date;
-                const validDates = dateEmpty ? true : new Date(item.start_date).getTime() <= new Date(item.end_date).getTime();
-                if (item.name.length > 32 || !item.name.length || !validDates) {
+                if (item.name.length > 32 || !item.name.length || !item.first_entry_date || parseFloat(item.first_entry_amount) != item.first_entry_amount) {
                     return false;
                 }
             }
@@ -145,5 +143,5 @@ export default {
             return true;
         }
     }
-};
+}
 </script>

@@ -9,7 +9,7 @@ jQuery(() => {
             $("." + source).removeClass(source).addClass(target);
         }
 
-        const isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>';
+        const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
         $('#sun-moon').html('<i class="fas fa-clock"></i>');
 
         axios.post("/user/darkmode", {
@@ -66,7 +66,7 @@ jQuery(() => {
         }
 
         $("tbody td, tbody th").on("mouseover", event => {
-            const isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>'
+            const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
             const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
             const rep = event.currentTarget.attributes.rep.value;
             const rowspan = event.currentTarget.attributes.rowspan != undefined ?
@@ -80,7 +80,7 @@ jQuery(() => {
         });
 
         $("tbody td, tbody th").on("mouseleave", event => {
-            const isDarkmode = $('#sun-moon').html() == '<i class="fas fa-sun"></i>'
+            const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
             const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
             const rep = event.currentTarget.attributes.rep.value;
             const rowspan = event.currentTarget.attributes.rowspan != undefined ?

@@ -14,7 +14,7 @@ class MeanOfPayment extends Model
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $fillable = [
-        'user_id', 'currency_id', 'name', 'income_mean', 'outcome_mean', 'show_on_charts', 'count_to_summary', 'first_entry_income_id'
+        'user_id', 'currency_id', 'name', 'income_mean', 'outcome_mean', 'show_on_charts', 'count_to_summary', 'first_entry_date', 'first_entry_amount'
     ];
 
     public function user()
@@ -24,7 +24,7 @@ class MeanOfPayment extends Model
 
     public function currency()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->hasMany(Currency::class);
     }
 
     public function income()
@@ -35,10 +35,5 @@ class MeanOfPayment extends Model
     public function outcome()
     {
         return $this->belongsTo(Outcome::class);
-    }
-
-    public function firstEntry()
-    {
-        return $this->belongsTo(Income::class, 'first_entry_income_id');
     }
 }

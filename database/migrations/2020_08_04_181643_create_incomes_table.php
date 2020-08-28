@@ -16,7 +16,7 @@ class CreateIncomesTable extends Migration
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->onDelete('cascade');
-            $table->dateTime('date');
+            $table->date('date');
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);

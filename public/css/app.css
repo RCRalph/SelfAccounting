@@ -11665,6 +11665,10 @@ a.text-dark:focus {
   background-color: #43494e;
 }
 
+.border-large {
+  border-width: 3px !important;
+}
+
 td,
 th {
   text-align: center;
