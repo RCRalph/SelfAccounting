@@ -11666,7 +11666,11 @@ a.text-dark:focus {
 }
 
 .border-large {
-  border-width: 3px !important;
+  border-width: 1.5px !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 td,

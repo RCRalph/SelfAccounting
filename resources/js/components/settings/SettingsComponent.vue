@@ -62,8 +62,8 @@
 </template>
 
 <script>
-import Categories from "./settings/categories/Categories.vue";
-import Means from "./settings/means-of-payment/MeansOfPayment.vue";
+import Categories from "./categories/Categories.vue";
+import Means from "./means-of-payment/MeansOfPayment.vue";
 
 export default {
     components: {
@@ -112,7 +112,7 @@ export default {
             for (let currency in this.means) {
                 for (let i = 0; i < this.means[currency].length; i++) {
                     const item = this.means[currency][i];
-                    if (item.name.length > 32 || !item.name.length || !item.first_entry_date || parseFloat(item.first_entry_amount) != item.first_entry_amount) {
+                    if (item.name.length > 32 || !item.name.length || !item.first_entry_date || (new Date(item.first_entry_date) > new Date(item.date_limit) && item.date_limit != null) || parseFloat(item.first_entry_amount) != item.first_entry_amount) {
                         return false;
                     }
                 }
@@ -220,6 +220,7 @@ export default {
             .get("/webapi/settings", {})
             .then(response => {
                 this.currencies = response.data.currencies;
+                this.currentCurrency = response.data.lastCurrency;
 
                 // Categories
                 this.categories = {...response.data.categories};

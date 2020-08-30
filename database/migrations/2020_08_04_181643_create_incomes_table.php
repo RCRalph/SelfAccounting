@@ -21,11 +21,11 @@ class CreateIncomesTable extends Migration
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);
             $table->foreignId('category_id')->nullable()->onDelete('set null');
-            $table->foreignId('method_id')->nullable()->onDelete('set null');
+            $table->foreignId('mean_id')->nullable()->onDelete('set null');
             $table->foreignId('currency_id');
             $table->timestamps(6);
 
-            $table->index(['id', 'user_id', 'category_id', 'method_id', 'currency_id']);
+            $table->index(['id', 'user_id', 'category_id', 'mean_id', 'currency_id']);
         });
     }
 

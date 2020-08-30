@@ -43,8 +43,8 @@
                 type="date"
                 :class="[
                     'form-date',
-                    !content.first_entry_date && 'border-danger',
-                    !content.first_entry_date && 'border-large'
+                    !correctDate && 'border-danger',
+                    !correctDate && 'border-large'
                 ]"
                 v-model="content.first_entry_date"
                 :key="componentKey"
@@ -91,6 +91,17 @@ export default {
         updateComponentKey: function() {
             this.componentKey++;
             this.$emit("update");
+        }
+    },
+    computed: {
+        correctDate: function() {
+            this.componentKey;
+
+            const dateEmpty = !this.content.first_entry_date;
+            if (this.content.date_limit == null && !dateEmpty) {
+                return true;
+            }
+            return dateEmpty ? false : new Date(this.content.first_entry_date) <= new Date(this.content.date_limit);
         }
     }
 };

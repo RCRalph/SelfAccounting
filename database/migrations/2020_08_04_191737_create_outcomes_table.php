@@ -16,16 +16,16 @@ class CreateOutcomesTable extends Migration
         Schema::create('outcomes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->onDelete('cascade');
-            $table->dateTime('date');
+            $table->date('date');
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);
             $table->foreignId('category_id')->nullable();
-            $table->foreignId('method_id')->nullable();
+            $table->foreignId('mean_id')->nullable();
             $table->foreignId('currency_id');
             $table->timestamps(6);
 
-            $table->index(['id', 'user_id', 'category_id', 'method_id', 'currency_id']);
+            $table->index(['id', 'user_id', 'category_id', 'mean_id', 'currency_id']);
         });
     }
 

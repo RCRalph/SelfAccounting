@@ -10,6 +10,8 @@ use App\Category;
 use App\MeanOfPayment;
 use App\Income;
 
+use App\Rules\CorrectDateMeans;
+
 class SettingsController extends Controller
 {
     public function __construct()
@@ -36,9 +38,22 @@ class SettingsController extends Controller
             unset($item["created_at"]);
             unset($item["updated_at"]);
             return $item;
-        })->groupBy("currency_id");
+        })->toArray();
 
-        return response()->json(compact("currencies", "categories", "means"));
+        $income_outcome = auth()->user()->income->concat(auth()->user()->outcome);
+
+        foreach ($means as $key => $mean) {
+            $date = $income_outcome->where("mean_id", $mean["id"])->sortBy("date")->last();
+            $means[$key]["date_limit"] = $date == null ? null : $date->date;
+        }
+
+        $means = collect($means)->groupBy("currency_id");
+
+        // Get last currency
+        $lastCurrency = auth()->user()->income->concat(auth()->user()->outcome)->sortBy("date")->last();
+        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
+
+        return response()->json(compact("currencies", "categories", "means", "lastCurrency"));
     }
 
     public function saveCategories()
@@ -140,7 +155,7 @@ class SettingsController extends Controller
             $dataDirectory . "count_to_summary" => ["required", "boolean"],
             $dataDirectory . "currency_id" => ["required", "exists:currencies,id"],
             $dataDirectory . "first_entry_amount" => ["required", "numeric"],
-            $dataDirectory . "first_entry_date" => ["required", "date"], // Validate income things, u know
+            $dataDirectory . "first_entry_date" => ["required", "date", new CorrectDateMeans],
             $dataDirectory . "id" => ["present", "integer", "min:0", "not_in:0", "nullable"],
             $dataDirectory . "income_mean" => ["required", "boolean"],
             $dataDirectory . "name" => ["required", "string", "max:32"],
@@ -212,13 +227,22 @@ class SettingsController extends Controller
             }
         }
 
+        $userMeans = $userMeans->map(function($item) {
+            unset($item["user_id"]);
+            unset($item["created_at"]);
+            unset($item["updated_at"]);
+            return $item;
+        })->toArray();
+
+        $income_outcome = auth()->user()->income->concat(auth()->user()->outcome);
+
+        foreach ($userMeans as $key => $mean) {
+            $date = $income_outcome->where("mean_id", $mean["id"])->sortBy("date")->last();
+            $userMeans[$key]["date_limit"] = $date == null ? null : $date->date;
+        }
+
         return response()->json([
-            "means" => $userMeans->map(function($item) {
-                unset($item["user_id"]);
-                unset($item["created_at"]);
-                unset($item["updated_at"]);
-                return $item;
-            })->groupBy("currency_id")
+            "means" => collect($userMeans)->groupBy("currency_id")
         ]);
     }
 }
