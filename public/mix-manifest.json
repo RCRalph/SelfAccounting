@@ -2,5 +2,6 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/js/income-outcome.js": "/js/income-outcome.js",
+    "/js/income-outcome-create-one.js": "/js/income-outcome-create-one.js",
     "/js/settings.js": "/js/settings.js"
 }

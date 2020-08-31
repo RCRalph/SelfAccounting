@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Currency;
-use App\Income;
+use App\Outcome;
 
-class IncomeController extends Controller
+class OutcomeController extends Controller
 {
     public function __construct()
     {
@@ -45,13 +45,13 @@ class IncomeController extends Controller
         return response()->json(compact('currencies', 'means', 'categories'));
     }
 
-    public function getIncome()
+    public function getOutcome()
     {
         $currency_id = request()->validate([
             "currency_id" => ["required", "exists:currencies,id"]
         ])["currency_id"];
 
-        $data = Income::where([
+        $data = Outcome::where([
             "user_id" => auth()->user()->id,
             "currency_id" => $currency_id
             ])

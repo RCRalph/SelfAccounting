@@ -24,6 +24,7 @@ Route::get('/summary', 'SummaryController@index')->name('summary');
 Route::get('/income', 'IncomeController@index')->name('income');
 Route::get('/income/{id}', 'IncomeController@show')->name('income.show');
 Route::get('/income/create/one', 'IncomeController@createOne')->name('income.create.one');
+Route::post('/income/store/one', 'IncomeController@storeOne')->name('income.store.one');
 
 Route::get('/outcome', 'OutcomeController@index')->name('outcome');
 Route::get('/outcome/{id}', 'OutcomeController@show')->name('outcome.show');
@@ -41,3 +42,6 @@ Route::post('/webapi/settings/means', 'WebApi\SettingsController@saveMeans')->na
 
 Route::get('/webapi/income/start', 'WebApi\IncomeController@start')->name('income.start');
 Route::get('/webapi/income', 'WebApi\IncomeController@getIncome')->name('income.getIncome');
+
+Route::get('/webapi/outcome/start', 'WebApi\OutcomeController@start')->name('outcome.start');
+Route::get('/webapi/outcome', 'WebApi\OutcomeController@getOutcome')->name('outcome.getOutcome');

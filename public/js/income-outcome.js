@@ -132,6 +132,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TableHeader_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../TableHeader.vue */ "./resources/js/components/TableHeader.vue");
 /* harmony import */ var vue_infinite_loading__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-infinite-loading */ "./node_modules/vue-infinite-loading/dist/vue-infinite-loading.js");
 /* harmony import */ var vue_infinite_loading__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_infinite_loading__WEBPACK_IMPORTED_MODULE_1__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -238,6 +275,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       currencies: [],
+      means: {},
+      categories: {},
       rows: [],
       page: 1,
       dataReady: false,
@@ -263,6 +302,82 @@ __webpack_require__.r(__webpack_exports__);
         text: "Edit"
       }]
     };
+  },
+  computed: {
+    tableRowsSpanned: function tableRowsSpanned() {
+      var rowspaned = [],
+          lastValues = {};
+      var spanSet1 = {
+        date: 1,
+        title: 1,
+        amount: 1,
+        price: 1,
+        value: 1,
+        category_id: 1,
+        mean_id: 1,
+        currency_id: 1
+      };
+      this.rows.forEach(function (item, i) {
+        item.value = item.amount * item.price;
+
+        if (!rowspaned.length) {
+          rowspaned.push(_objectSpread(_objectSpread({}, item), {}, {
+            span: _objectSpread({}, spanSet1)
+          }));
+          lastValues = _objectSpread(_objectSpread({}, item), {}, {
+            span: _objectSpread({}, spanSet1),
+            indeces: {
+              date: 0,
+              title: 0,
+              amount: 0,
+              price: 0,
+              value: 0,
+              category_id: 0,
+              mean_id: 0,
+              currency_id: 0
+            }
+          });
+          return;
+        }
+
+        if (item.date != lastValues.date) {
+          rowspaned.push(_objectSpread(_objectSpread({}, item), {}, {
+            span: _objectSpread({}, spanSet1)
+          }));
+          lastValues = _objectSpread(_objectSpread({}, item), {}, {
+            span: _objectSpread({}, spanSet1),
+            indeces: {
+              date: i,
+              title: i,
+              amount: i,
+              price: i,
+              value: i,
+              category_id: i,
+              mean_id: i,
+              currency_id: i
+            }
+          });
+        } else {
+          var pushObj = {
+            span: {}
+          };
+
+          for (var j in item) {
+            if (item[j] == lastValues[j]) {
+              rowspaned[lastValues.indeces[j]].span[j]++;
+            } else {
+              pushObj[j] = item[j];
+              pushObj.span[j] = 1;
+              lastValues[j] = item[j];
+              lastValues.indeces[j] = i;
+            }
+          }
+
+          rowspaned.push(pushObj);
+        }
+      });
+      return rowspaned;
+    }
   },
   methods: {
     getData: function getData($state) {
@@ -303,6 +418,8 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('/webapi/' + this.type + '/start', {}).then(function (response) {
       _this2.currencies = response.data.currencies;
+      _this2.means = response.data.means;
+      _this2.categories = response.data.categories;
       _this2.data = response.data.data;
       _this2.ready = true;
     });
@@ -313,6 +430,59 @@ __webpack_require__.r(__webpack_exports__);
   updated: function updated() {
     this.$nextTick(function () {
       $('[data-toggle="tooltip"]').tooltip();
+
+      if ($("#table-multi-hover").length) {
+        var headerValues = Array.from($("thead")[0].children[0].children).map(function (item) {
+          return item.innerText.toLowerCase();
+        });
+        var table = [];
+        var tableCells = Array.from($("tbody")[0].children).map(function (item) {
+          return item.children;
+        }).map(function (item) {
+          return Array.from(item);
+        });
+
+        for (var i = 0; i < tableCells.length; i++) {
+          var tempObj = {};
+
+          for (var j = 0; j < tableCells[i].length; j++) {
+            tempObj[tableCells[i][j].attributes.rep.value] = tableCells[i][j];
+          }
+
+          for (var _j = 0; _j < headerValues.length; _j++) {
+            if (i != 0 && tempObj[headerValues[_j]] == undefined) {
+              tempObj[headerValues[_j]] = table[i - 1][headerValues[_j]];
+            }
+          }
+
+          table.push(Object.assign({}, tempObj));
+        }
+
+        $("tbody td, tbody th").on("mouseover", function (event) {
+          var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
+          var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
+          var rep = event.currentTarget.attributes.rep.value;
+          var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
+
+          for (var _i = 0; _i < rowspan; _i++) {
+            for (var _j2 in table[rowIndex + _i]) {
+              $(table[rowIndex + _i][_j2]).addClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
+            }
+          }
+        });
+        $("tbody td, tbody th").on("mouseleave", function (event) {
+          var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
+          var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
+          var rep = event.currentTarget.attributes.rep.value;
+          var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
+
+          for (var _i2 = 0; _i2 < rowspan; _i2++) {
+            for (var _j3 in table[rowIndex + _i2]) {
+              $(table[rowIndex + _i2][_j3]).removeClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
+            }
+          }
+        });
+      }
     });
   }
 });
@@ -999,53 +1169,158 @@ var render = function() {
                           attrs: { cells: _vm.headerCells }
                         }),
                         _vm._v(" "),
-                        _vm._l(_vm.rows, function(row, index) {
-                          return _c("tr", { key: index, attrs: { i: index } }, [
-                            _c("th", { attrs: { scope: "row", rep: "date" } }, [
-                              _vm._v(_vm._s(row.date))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { attrs: { rep: "title" } }, [
-                              _vm._v(_vm._s(row.title))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { attrs: { rep: "amount" } }, [
-                              _vm._v(_vm._s(Number(row.amount)))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { attrs: { rep: "price" } }, [
-                              _vm._v(_vm._s(Number(row.price)))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { attrs: { rep: "value" } }, [
-                              _vm._v(_vm._s(row.price * row.amount))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { attrs: { rep: "category" } }, [
-                              _vm._v(_vm._s(row.category))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { attrs: { rep: "mean" } }, [
-                              _vm._v(_vm._s(row.mean))
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass: "py-0 h4 cursor-pointer",
-                                attrs: { rep: "edit" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.redirectToShow(row.id)
-                                  }
-                                }
-                              },
-                              [_c("i", { staticClass: "fas fa-edit" })]
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.tableRowsSpanned, function(row, index) {
+                            return _c(
+                              "tr",
+                              { key: index, attrs: { i: index } },
+                              [
+                                row.date
+                                  ? _c(
+                                      "th",
+                                      {
+                                        attrs: {
+                                          scope: "row",
+                                          rep: "date",
+                                          rowspan: row.span.date
+                                        }
+                                      },
+                                      [_vm._v(_vm._s(row.date))]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                row.title
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: {
+                                          rep: "title",
+                                          rowspan: row.span.title
+                                        }
+                                      },
+                                      [_vm._v(_vm._s(row.title))]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                row.amount
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: {
+                                          rep: "amount",
+                                          rowspan: row.span.amount
+                                        }
+                                      },
+                                      [_vm._v(_vm._s(Number(row.amount)))]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                row.price
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: {
+                                          rep: "price",
+                                          rowspan: row.span.price
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            Number(row.price) +
+                                              " " +
+                                              _vm.currencies[
+                                                _vm.currentCurrency - 1
+                                              ].ISO
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                row.value
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: {
+                                          rep: "value",
+                                          rowspan: row.span.value
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            row.value +
+                                              " " +
+                                              _vm.currencies[
+                                                _vm.currentCurrency - 1
+                                              ].ISO
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                row.category_id
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: {
+                                          rep: "category",
+                                          rowspan: row.span.category_id
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.categories[row.category_id] ||
+                                              "N / A"
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                row.mean_id
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: {
+                                          rep: "mean",
+                                          rowspan: row.span.mean_id
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.means[row.mean_id] || "N / A"
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    staticClass: "py-0 h4 cursor-pointer",
+                                    attrs: { rep: "edit" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.redirectToShow(row.id)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "fas fa-edit" })]
+                                )
+                              ]
                             )
-                          ])
-                        })
+                          }),
+                          0
+                        )
                       ],
-                      2
+                      1
                     )
                   : !_vm.rows.length && _vm.dataReady
                   ? _c("div", [

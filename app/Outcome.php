@@ -14,7 +14,7 @@ class Outcome extends Model
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $fillable = [
-        'user_id', 'date', 'title', 'amount', 'price', 'category_id', 'method_id', 'currency_id'
+        'user_id', 'date', 'title', 'amount', 'price', 'category_id', 'mean_id', 'currency_id'
     ];
 
     public function user()
@@ -30,5 +30,10 @@ class Outcome extends Model
     public function currency()
     {
         return $this->hasOne(Currency::class);
+    }
+
+    public function mean()
+    {
+        return $this->hasOne(MeanOfPayment::class, "mean_id");
     }
 }
