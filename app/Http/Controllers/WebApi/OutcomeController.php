@@ -56,7 +56,7 @@ class OutcomeController extends Controller
             "currency_id" => $currency_id
             ])
             ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", "currency_id")
-            ->latest()
+            ->orderBy("date", "DESC")
             ->orderBy("title")
             ->paginate(20);
 

@@ -71,12 +71,12 @@
                                     rep="amount"
                                     v-if="row.amount"
                                     :rowspan="row.span.amount"
-                                    >{{ Number(row.amount) }}</td>
+                                    >{{ row.amount }}</td>
                                 <td
                                     rep="price"
                                     v-if="row.price"
                                     :rowspan="row.span.price"
-                                    >{{ Number(row.price) + " " + currencies[currentCurrency - 1].ISO }}</td>
+                                    >{{ row.price + " " + currencies[currentCurrency - 1].ISO }}</td>
                                 <td
                                     rep="value"
                                     v-if="row.value"
@@ -84,12 +84,12 @@
                                     >{{ row.value + " " + currencies[currentCurrency - 1].ISO }}</td>
                                 <td
                                     rep="category"
-                                    v-if="row.category_id"
+                                    v-if="row.category_id !== undefined"
                                     :rowspan="row.span.category_id"
                                     >{{ categories[row.category_id] || "N / A" }}</td>
                                 <td
                                     rep="mean"
-                                    v-if="row.mean_id"
+                                    v-if="row.mean_id !== undefined"
                                     :rowspan="row.span.mean_id"
                                     >{{ means[row.mean_id] || "N / A" }}</td>
                                 <td class="py-0 h4 cursor-pointer" @click="redirectToShow(row.id)" rep="edit">
@@ -173,7 +173,9 @@ export default {
             };
 
             this.rows.forEach((item, i) => {
-                item.value = item.amount * item.price;
+                item.value = (Math.round(item.amount * item.price * 100) / 100).toLocaleString('en').split(",").join(" ");
+                item.amount = Number(item.amount).toLocaleString('en').split(",").join(" ");
+                item.price = Number(item.price).toLocaleString('en').split(",").join(" ");
 
                 if (!rowspaned.length) {
                     rowspaned.push({

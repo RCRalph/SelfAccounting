@@ -38,20 +38,32 @@ class IncomeController extends Controller
         $viewType = "income";
         $darkmode = auth()->user()->darkmode;
         $currencies = Currency::all();
-        $categories = auth()->user()->categories->where("income_category", true);
-        $means = auth()->user()->meansOfPayment->where("income_mean", true);
+
+        $categories = auth()->user()->categories->where("income_category", true)->map(function($item) {
+            return collect($item)->only(["id", "name", "currency_id"])->toArray();
+        })->groupBy("currency_id")->toArray();
+
+        $means = auth()->user()->meansOfPayment->where("income_mean", true)->map(function($item) {
+            return collect($item)->only(["id", "name", "currency_id"])->toArray();
+        })->groupBy("currency_id")->toArray();
+
+        //dd($categories, $means);
 
         $income = auth()->user()->income;
 
-        $lastCurrency = $income->concat(auth()->user()->outcome)->sortBy("date")->last();
+        $titles = $income->unique("title")->values()->map(function($item) {
+            return $item["title"];
+        });
+
+        $lastCurrency = $income->concat(auth()->user()->outcome)->sortBy("created_at")->last();
         $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
 
-        $income = $income->sortBy("date")->last();
-        $lastMean = $income == null ? 0 : $income->mean_id;
-        $lastCategory = $income == null ? 0 : $income->category_id;
+        $lastIncome = $income->sortBy("date")->last();
+        $lastMean = $lastIncome == null ? 0 : $lastIncome->mean_id;
+        $lastCategory = $lastIncome == null ? 0 : $lastIncome->category_id;
 
         return view('income-outcome.create.one', compact(
-            'viewType', 'darkmode', 'currencies', 'categories', 'means', 'lastCurrency', 'lastCategory', 'lastMean'
+            'viewType', 'darkmode', 'currencies', 'categories', 'means', 'lastCurrency', 'lastCategory', 'lastMean', 'titles'
         ));
 	}
 
@@ -69,7 +81,11 @@ class IncomeController extends Controller
 
         Income::create(array_merge(
             $data,
-            ["user_id" => auth()->user()->id]
+            [
+                "user_id" => auth()->user()->id,
+                "category_id" => $data["category_id"] == "null" ? null : $data["category_id"],
+                "mean_id" => $data["mean_id"] == "null" ? null : $data["mean_id"]
+            ]
         ));
 
         return redirect("/income");

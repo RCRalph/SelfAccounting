@@ -318,7 +318,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         currency_id: 1
       };
       this.rows.forEach(function (item, i) {
-        item.value = item.amount * item.price;
+        item.value = (Math.round(item.amount * item.price * 100) / 100).toLocaleString('en').split(",").join(" ");
+        item.amount = Number(item.amount).toLocaleString('en').split(",").join(" ");
+        item.price = Number(item.price).toLocaleString('en').split(",").join(" ");
 
         if (!rowspaned.length) {
           rowspaned.push(_objectSpread(_objectSpread({}, item), {}, {
@@ -1212,7 +1214,7 @@ var render = function() {
                                           rowspan: row.span.amount
                                         }
                                       },
-                                      [_vm._v(_vm._s(Number(row.amount)))]
+                                      [_vm._v(_vm._s(row.amount))]
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
@@ -1228,7 +1230,7 @@ var render = function() {
                                       [
                                         _vm._v(
                                           _vm._s(
-                                            Number(row.price) +
+                                            row.price +
                                               " " +
                                               _vm.currencies[
                                                 _vm.currentCurrency - 1
@@ -1262,7 +1264,7 @@ var render = function() {
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
-                                row.category_id
+                                row.category_id !== undefined
                                   ? _c(
                                       "td",
                                       {
@@ -1282,7 +1284,7 @@ var render = function() {
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
-                                row.mean_id
+                                row.mean_id !== undefined
                                   ? _c(
                                       "td",
                                       {
