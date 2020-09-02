@@ -1,0 +1,11 @@
+---
+  applications:
+  - name: //
+    memory: 128M
+    buildpacks:
+    - //
+    routes:
+    - route: //
+    env:
+      CF_STAGING_TIMEOUT: 15
+      CF_STARTUP_TIMEOUT: 15

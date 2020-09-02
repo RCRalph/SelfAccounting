@@ -12,7 +12,7 @@ jQuery(() => {
         const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
         $('#sun-moon').html('<i class="fas fa-clock"></i>');
 
-        axios.post("/user/darkmode", {
+        axios.post("/webapi/darkmode", {
             darkmode: !isDarkmode
         })
         .then(response => {

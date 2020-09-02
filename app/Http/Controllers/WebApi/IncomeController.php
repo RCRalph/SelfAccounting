@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Currency;
 use App\Income;
+use App\MeanOfPayment;
 
 class IncomeController extends Controller
 {
@@ -61,5 +62,36 @@ class IncomeController extends Controller
             ->paginate(20);
 
         return response()->json(compact("data"));
+    }
+
+    public function getEditData(Income $income)
+    {
+        $this->authorize("view", $income);
+
+        $income = collect($income)->except(["user_id", "created_at", "updated_at"]);
+        $currencies = Currency::all();
+
+        $categories = auth()->user()->categories->where("income_category", true)->map(function($item) {
+            return collect($item)->only(["id", "name", "currency_id"])->toArray();
+        })->groupBy("currency_id");
+
+        $means = auth()->user()->meansOfPayment->where("income_mean", true)->map(function($item) {
+            return collect($item)->only(["id", "name", "currency_id"])->toArray();
+        })->groupBy("currency_id")->toArray();
+
+        $titles = auth()->user()->income->unique("title")->values()->map(function($item) {
+            return $item["title"];
+        });
+
+        $mean = MeanOfPayment::find($income["mean_id"]);
+
+        if (!$mean) {
+            $income["mean_id"] = null;
+        }
+
+        $firstEntryDate = !$mean ? null
+            : $mean->first_entry_date;
+
+        return response()->json(compact("income", "currencies", "categories", "means", "titles", "firstEntryDate"));
     }
 }

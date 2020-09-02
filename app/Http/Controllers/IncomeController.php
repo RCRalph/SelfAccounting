@@ -25,12 +25,15 @@ class IncomeController extends Controller
         return view('income-outcome.index', compact('viewType', 'darkmode'));
     }
 
-    public function show($id)
+    public function show(Income $income)
     {
+        $this->authorize("view", $income);
+
         $viewType = "income";
         $darkmode = auth()->user()->darkmode;
+        $id = $income->id;
 
-        return view('income-outcome.show', compact('viewType', 'darkmode'));
+        return view('income-outcome.show', compact('viewType', 'darkmode', 'id'));
     }
 
     public function createOne()
@@ -46,8 +49,6 @@ class IncomeController extends Controller
         $means = auth()->user()->meansOfPayment->where("income_mean", true)->map(function($item) {
             return collect($item)->only(["id", "name", "currency_id"])->toArray();
         })->groupBy("currency_id")->toArray();
-
-        //dd($categories, $means);
 
         $income = auth()->user()->income;
 
@@ -89,5 +90,5 @@ class IncomeController extends Controller
         ));
 
         return redirect("/income");
-	}
+    }
 }

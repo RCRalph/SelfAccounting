@@ -3,7 +3,6 @@
 /public/storage
 /storage/*.key
 /vendor
-/.bp-config
 /.vscode
 .env
 .env.backup

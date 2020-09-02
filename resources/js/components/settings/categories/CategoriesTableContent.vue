@@ -5,8 +5,7 @@
                 type="text"
                 :class="[
                     'form-text',
-                    (!content.name.length || content.name.length > 32) && 'border-danger',
-                    (!content.name.length || content.name.length > 32) && 'border-large'
+                    (!content.name.length || content.name.length > 32) && 'is-invalid',
                 ]"
                 placeholder="Name"
                 v-model="content.name"
@@ -45,8 +44,7 @@
                 type="date"
                 :class="[
                     'form-date',
-                    !correctDates && 'border-danger',
-                    !correctDates && 'border-large'
+                    !correctDates && 'is-invalid',
                 ]"
                 :disabled="!content.count_to_summary"
                 v-model="content.start_date"
@@ -59,8 +57,7 @@
                 type="date"
                 :class="[
                     'form-date',
-                    !correctDates && 'border-danger',
-                    !correctDates && 'border-large'
+                    !correctDates && 'is-invalid'
                 ]"
                 :disabled="!content.count_to_summary"
                 v-model="content.end_date"

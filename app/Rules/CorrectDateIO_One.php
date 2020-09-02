@@ -30,8 +30,6 @@ class CorrectDateIO_One implements Rule
         $date = request()->input("date");
         $id = request()->input("mean_id");
 
-        //dd($date, $id);
-
         if ($id == "null") {
             return true;
         }

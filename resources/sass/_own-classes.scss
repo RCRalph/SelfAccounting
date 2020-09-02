@@ -13,6 +13,7 @@
 .card-header-flex {
     @extend .card-header;
     @extend .d-flex;
+    flex-wrap: wrap;
 }
 
 .card-body-centered {

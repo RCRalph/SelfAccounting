@@ -39,7 +39,7 @@
             <hr>
 
             <div class="row">
-                <div class="col-4">
+                <div class="col-md-4">
                     <button
                         class="big-button-primary"
                         :disabled="!buttonsEnabled"
@@ -48,7 +48,7 @@
                         New mean of payment
                     </button>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4">
                     <button
                         class="big-button-danger"
                         :disabled="!buttonsEnabled"
@@ -58,7 +58,7 @@
                     </button>
                 </div>
 
-                <div class="col-4">
+                <div class="col-md-4">
                     <button
                         class="big-button-success"
                         :disabled="!buttonsEnabled"

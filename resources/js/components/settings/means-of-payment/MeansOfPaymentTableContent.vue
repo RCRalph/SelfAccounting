@@ -5,8 +5,7 @@
                 type="text"
                 :class="[
                     'form-text',
-                    (!content.name.length || content.name.length > 32) && 'border-danger',
-                    (!content.name.length || content.name.length > 32) && 'border-large'
+                    (!content.name.length || content.name.length > 32) && 'is-invalid',
                 ]"
                 placeholder="Name"
                 v-model="content.name"
@@ -43,8 +42,7 @@
                 type="date"
                 :class="[
                     'form-date',
-                    !correctDate && 'border-danger',
-                    !correctDate && 'border-large'
+                    !correctDate && 'is-invalid'
                 ]"
                 v-model="content.first_entry_date"
                 :key="componentKey"
@@ -56,8 +54,7 @@
                 type="number"
                 :class="[
                     'form-text',
-                    parseFloat(content.first_entry_amount) != content.first_entry_amount && 'border-danger',
-                    parseFloat(content.first_entry_amount) != content.first_entry_amount && 'border-large'
+                    parseFloat(content.first_entry_amount) != content.first_entry_amount && 'is-invalid',
                 ]"
                 step=".01"
                 v-model="content.first_entry_amount"
