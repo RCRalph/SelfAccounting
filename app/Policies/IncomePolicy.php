@@ -53,7 +53,7 @@ class IncomePolicy
      */
     public function update(User $user, Income $income)
     {
-        //
+        return collect($user->income)->where("id", $income["id"]);
     }
 
     /**

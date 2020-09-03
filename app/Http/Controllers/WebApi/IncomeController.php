@@ -9,6 +9,9 @@ use App\Currency;
 use App\Income;
 use App\MeanOfPayment;
 
+use App\Rules\CorrectDateIO_One;
+use App\Rules\ValidCategoryMean;
+
 class IncomeController extends Controller
 {
     public function __construct()
@@ -93,5 +96,39 @@ class IncomeController extends Controller
             : $mean->first_entry_date;
 
         return response()->json(compact("income", "currencies", "categories", "means", "titles", "firstEntryDate"));
+    }
+
+    public function updateIncome()
+    {
+        $data = request()->validate([
+            "date" => ["required", "date", new CorrectDateIO_One],
+            "title" => ["required", "string", "max:64"],
+            "amount" => ["required", "numeric"],
+            "price" => ["required", "numeric"],
+            "currency_id" => ["required", "exists:currencies,id"],
+            "category_id" => ["present", "nullable", new ValidCategoryMean],
+            "mean_id" => ["present", "nullable", new ValidCategoryMean],
+            "id" => ["required", "exists:incomes,id"]
+        ]);
+
+        $this->authorize("update", $data);
+
+        $income = Income::find($data["id"]);
+        $income->update($data);
+
+        return response()->json([
+            "data" => collect($income)->except(["user_id", "created_at", "updated_at"])
+        ]);
+    }
+
+    public function deleteIncome(Income $income)
+    {
+        $this->authorize("view", $income);
+
+        Income::find($income->id)->delete();
+
+        return response()->json([
+            "status" => "success"
+        ]);
     }
 }

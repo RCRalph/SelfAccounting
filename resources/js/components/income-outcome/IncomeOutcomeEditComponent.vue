@@ -152,19 +152,19 @@
 
                 <div class="row">
                     <div class="col-4">
-                        <button class="big-button-primary">
+                        <button class="big-button-primary" @click="reset">
                             Reset changes
                         </button>
                     </div>
 
                     <div class="col-4">
-                        <button class="big-button-success">
+                        <button class="big-button-success" @click="save">
                             Save changes
                         </button>
                     </div>
 
                     <div class="col-4">
-                        <button class="big-button-danger">
+                        <button class="big-button-danger" @click="destroy">
                             Delete
                         </button>
                     </div>
@@ -195,6 +195,7 @@ export default {
             darkmode: false,
             ready: false,
             ioAttributes: {},
+			ioAttributesCopy: {},
             currencies: [],
             categories: {},
             means: {},
@@ -220,6 +221,35 @@ export default {
             return parseFloat(this.ioAttributes.price) != this.ioAttributes.price
         },
     },
+    methods: {
+        reset: function() {
+            this.ioAttributes = _.cloneDeep(this.ioAttributesCopy);
+        },
+        save: function() {
+            axios
+                .patch(`/webapi/${this.type}/edit`, this.ioAttributes)
+                .then(response => {
+                    this.ioAttributes = response.data.data;
+                    this.ioAttributes.amount = Number(this.ioAttributes.amount);
+                    this.ioAttributes.price = Number(this.ioAttributes.price);
+
+                    console.table([this.ioAttributes, response.data.data])
+
+                    this.ioAttributesCopy = _.cloneDeep(response.data.data);
+                    this.ioAttributesCopy.amount = Number(this.ioAttributesCopy.amount);
+                    this.ioAttributesCopy.price = Number(this.ioAttributesCopy.price);
+                })
+        },
+        destroy: function() {
+            axios
+                .delete(`/webapi/${this.type}/delete/${this.ioid}`)
+                .then(response => {
+                    if (response.data.status == "success") {
+                        window.location.href = "/income";
+                    }
+                });
+        }
+    },
     beforeMount() {
         this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
     },
@@ -228,6 +258,12 @@ export default {
             .get(`/webapi/${this.type}/${this.ioid}`)
             .then(response => {
                 this.ioAttributes = response.data.income;
+                this.ioAttributes.amount = Number(this.ioAttributes.amount);
+                this.ioAttributes.price = Number(this.ioAttributes.price);
+
+                this.ioAttributesCopy = _.cloneDeep(response.data.income);
+                this.ioAttributesCopy.amount = Number(this.ioAttributesCopy.amount);
+                this.ioAttributesCopy.price = Number(this.ioAttributesCopy.price);
                 this.currencies = response.data.currencies;
                 this.categories = response.data.categories;
                 this.means = response.data.means;
