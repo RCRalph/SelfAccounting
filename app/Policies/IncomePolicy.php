@@ -48,12 +48,12 @@ class IncomePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Income  $income
+     * @param  \App\Income  $income_id
      * @return mixed
      */
     public function update(User $user, Income $income)
     {
-        return collect($user->income)->where("id", $income["id"]);
+        return $user->id == $income->user_id;
     }
 
     /**

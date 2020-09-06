@@ -9,6 +9,7 @@ use App\Currency;
 use App\Category;
 use App\MeanOfPayment;
 use App\Income;
+use App\Outcome;
 
 use App\Rules\CorrectDateMeans;
 
@@ -74,6 +75,8 @@ class SettingsController extends Controller
 
         if (count($data) == 0) {
             Category::where("user_id", auth()->user()->id)->delete();
+            Income::whereIn("category_id", $toDelete)->update(["category_id" => null]);
+            Outcome::whereIn("category_id", $toDelete)->update(["category_id" => null]);
             return response()->json([
                 "categories" => []
             ]);
@@ -109,6 +112,9 @@ class SettingsController extends Controller
 
         if (count($toDelete)) {
             Category::destroy($toDelete);
+            Income::whereIn("category_id", $toDelete)->update(["category_id" => null]);
+            Outcome::whereIn("category_id", $toDelete)->update(["category_id" => null]);
+
             $userCategories = $userCategories->whereNotIn("id", $toDelete);
         }
 
@@ -165,6 +171,8 @@ class SettingsController extends Controller
 
         if (count($data) == 0) {
             MeanOfPayment::where("user_id", auth()->user()->id)->delete();
+            Income::where("user_id", auth()->user()->id)->update(["mean_id" => null]);
+            Outcome::where("user_id", auth()->user()->id)->update(["mean_id" => null]);
             return response()->json([
                 "means" => []
             ]);
@@ -199,6 +207,9 @@ class SettingsController extends Controller
 
         if (count($toDelete)) {
             MeanOfPayment::destroy($toDelete);
+            Income::whereIn("mean_id", $toDelete)->update(["mean_id" => null]);
+            Outcome::whereIn("mean_id", $toDelete)->update(["mean_id" => null]);
+
             $userMeans = $userMeans->whereNotIn("id", $toDelete);
         }
 

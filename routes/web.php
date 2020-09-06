@@ -43,6 +43,7 @@ Route::post('/webapi/settings/means', 'WebApi\SettingsController@saveMeans')->na
 Route::get('/webapi/income', 'WebApi\IncomeController@getIncome')->name('income.getIncome');
 Route::get('/webapi/income/start', 'WebApi\IncomeController@start')->name('income.start');
 Route::patch('/webapi/income/edit', 'WebApi\IncomeController@updateIncome')->name('income.update');
+Route::Get('/webapi/income/create/getData', 'WebApi\IncomeController@getCreateData')->name('income.getCreateData');
 Route::delete('/webapi/income/delete/{income}', 'WebApi\IncomeController@deleteIncome')->name('income.delete');
 Route::get('/webapi/income/{income}', 'WebApi\IncomeController@getEditData')->name('income.getEditData');
 

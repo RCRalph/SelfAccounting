@@ -1,4 +1,5 @@
 require('./bootstrap');
+window.Vue = require('vue');
 
 jQuery(() => {
     $('[data-toggle="tooltip"]').tooltip();

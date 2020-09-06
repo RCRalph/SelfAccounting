@@ -40,32 +40,7 @@ class IncomeController extends Controller
     {
         $viewType = "income";
         $darkmode = auth()->user()->darkmode;
-        $currencies = Currency::all();
-
-        $categories = auth()->user()->categories->where("income_category", true)->map(function($item) {
-            return collect($item)->only(["id", "name", "currency_id"])->toArray();
-        })->groupBy("currency_id")->toArray();
-
-        $means = auth()->user()->meansOfPayment->where("income_mean", true)->map(function($item) {
-            return collect($item)->only(["id", "name", "currency_id"])->toArray();
-        })->groupBy("currency_id")->toArray();
-
-        $income = auth()->user()->income;
-
-        $titles = $income->unique("title")->values()->map(function($item) {
-            return $item["title"];
-        });
-
-        $lastCurrency = $income->concat(auth()->user()->outcome)->sortBy("created_at")->last();
-        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
-
-        $lastIncome = $income->sortBy("date")->last();
-        $lastMean = $lastIncome == null ? 0 : $lastIncome->mean_id;
-        $lastCategory = $lastIncome == null ? 0 : $lastIncome->category_id;
-
-        return view('income-outcome.create.one', compact(
-            'viewType', 'darkmode', 'currencies', 'categories', 'means', 'lastCurrency', 'lastCategory', 'lastMean', 'titles'
-        ));
+        return view("income-outcome.create.one", compact("viewType", "darkmode"));
 	}
 
 	public function storeOne()

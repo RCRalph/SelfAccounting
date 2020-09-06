@@ -48,7 +48,7 @@
                         New category
                     </button>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 my-2 my-md-0">
                     <button
                         class="big-button-danger"
                         :disabled="!buttonsEnabled"

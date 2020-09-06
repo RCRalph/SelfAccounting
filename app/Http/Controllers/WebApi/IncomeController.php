@@ -67,6 +67,36 @@ class IncomeController extends Controller
         return response()->json(compact("data"));
     }
 
+    public function getCreateData()
+    {
+        $currencies = Currency::all();
+
+        $categories = auth()->user()->categories->where("income_category", true)->map(function($item) {
+            return collect($item)->only(["id", "name", "currency_id"])->toArray();
+        })->groupBy("currency_id")->toArray();
+
+        $means = auth()->user()->meansOfPayment->where("income_mean", true)->map(function($item) {
+            return collect($item)->only(["id", "name", "currency_id", "first_entry_date"])->toArray();
+        })->groupBy("currency_id")->toArray();
+
+        $income = auth()->user()->income;
+
+        $titles = $income->unique("title")->values()->map(function($item) {
+            return $item["title"];
+        });
+
+        $lastCurrency = $income->concat(auth()->user()->outcome)->sortBy("created_at")->last();
+        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
+
+        $lastIncome = $income->sortBy("date")->last();
+        $lastMean = $lastIncome == null ? 0 : $lastIncome->mean_id;
+        $lastCategory = $lastIncome == null ? 0 : $lastIncome->category_id;
+
+        return response()->json(compact(
+            "currencies", "categories", "means", "lastCurrency", "lastCategory", "lastMean", "titles"
+        ));
+    }
+
     public function getEditData(Income $income)
     {
         $this->authorize("view", $income);
@@ -79,23 +109,14 @@ class IncomeController extends Controller
         })->groupBy("currency_id");
 
         $means = auth()->user()->meansOfPayment->where("income_mean", true)->map(function($item) {
-            return collect($item)->only(["id", "name", "currency_id"])->toArray();
+            return collect($item)->only(["id", "name", "currency_id", "first_entry_date"])->toArray();
         })->groupBy("currency_id")->toArray();
 
         $titles = auth()->user()->income->unique("title")->values()->map(function($item) {
             return $item["title"];
         });
 
-        $mean = MeanOfPayment::find($income["mean_id"]);
-
-        if (!$mean) {
-            $income["mean_id"] = null;
-        }
-
-        $firstEntryDate = !$mean ? null
-            : $mean->first_entry_date;
-
-        return response()->json(compact("income", "currencies", "categories", "means", "titles", "firstEntryDate"));
+        return response()->json(compact("income", "currencies", "categories", "means", "titles"));
     }
 
     public function updateIncome()
@@ -111,9 +132,9 @@ class IncomeController extends Controller
             "id" => ["required", "exists:incomes,id"]
         ]);
 
-        $this->authorize("update", $data);
-
         $income = Income::find($data["id"]);
+
+        $this->authorize("update", $income);
         $income->update($data);
 
         return response()->json([

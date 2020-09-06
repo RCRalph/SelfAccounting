@@ -8,7 +8,7 @@
                         type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
                     ]"
                 ></i>
-                Edit {{ type.charAt(0).toUpperCase() + type.slice(1) }}
+                Add single {{ type.charAt(0).toUpperCase() + type.slice(1) }}
             </div>
         </div>
 
@@ -42,18 +42,19 @@
                             type="text"
                             :class="[
                                 'form-control',
-                                invalidTitle && 'is-invalid'
+                                invalidTitle && titleChanged && 'is-invalid'
                             ]"
                             v-model="attributes.title"
                             autocomplete="off"
                             placeholder="Your title here"
                             list="titleList"
+                            @input="titleChanged = true"
                         >
                         <datalist id="titleList">
                             <option v-for="(title, i) in titles" :key="i">{{ title }}</option>
                         </datalist>
 
-                        <span class="invalid-feedback" role="alert" v-if="invalidTitle">
+                        <span class="invalid-feedback" role="alert" v-if="invalidTitle && titleChanged">
                             <strong>This title is invalid</strong>
                         </span>
                     </div>
@@ -89,13 +90,14 @@
                             step="0.01"
                             :class="[
                                 'form-control',
-                                invalidPrice && 'is-invalid'
+                                invalidPrice && priceChanged && 'is-invalid'
                             ]"
                             placeholder="Your price here"
                             v-model="attributes.price"
+                            @input="priceChanged = true"
                         >
 
-                        <span class="invalid-feedback" role="alert" v-if="invalidPrice">
+                        <span class="invalid-feedback" role="alert" v-if="invalidPrice && priceChanged">
                             <strong>This price is invalid</strong>
                         </span>
                     </div>
@@ -152,18 +154,8 @@
                 <hr>
 
                 <div class="row">
-                    <div class="col-4">
-                        <button class="big-button-primary" @click="reset" :disabled="buttonsDisabled">
-                            Reset changes
-                        </button>
-                    </div>
-
-                    <div class="col-4">
-                        <button class="big-button-success" @click="saveChanges" v-html="saveButton" :disabled="buttonsDisabled || invalidData"></button>
-                    </div>
-
-                    <div class="col-4">
-                        <button class="big-button-danger" @click="destroy" v-html="deleteButton" :disabled="buttonsDisabled || invalidData"></button>
+                    <div class="col-sm-4 col-12 offset-sm-4">
+                        <button class="big-button-primary" @click="saveChanges" v-html="saveButton" :disabled="buttonsDisabled || invalidData"></button>
                     </div>
                 </div>
             </div>
@@ -184,22 +176,21 @@
 <script>
 export default {
     props: {
-        type: String,
-        ioid: String
+        type: String
     },
     data() {
         return {
             darkmode: false,
             ready: false,
             attributes: {},
-			attributesCopy: {},
             currencies: [],
             categories: {},
             means: {},
             titles: [],
-            deleteButton: 'Delete',
-            saveButton: 'Save changes',
-            buttonsDisabled: false
+            saveButton: 'Submit',
+            buttonsDisabled: false,
+            titleChanged: false,
+            priceChanged: false
         }
     },
     computed: {
@@ -213,10 +204,10 @@ export default {
                     return item.id == this.attributes.mean_id
                 })[0].first_entry_date;
 
-            return this.attributes.date && new Date(minDate).getTime() > currentDate;
+            return !this.attributes.date || new Date(minDate).getTime() > currentDate;
         },
         invalidTitle: function() {
-            return this.attributes.title.length == 0 || this.attributes.title.length > 32;
+            return !this.attributes.title || this.attributes.title.length > 32;
         },
         invalidAmount: function() {
             return parseFloat(this.attributes.amount) != this.attributes.amount;
@@ -238,50 +229,9 @@ export default {
         }
     },
     methods: {
-        reset: function() {
-            this.attributes = _.cloneDeep(this.attributesCopy);
-        },
         saveChanges: function() {
             this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
             this.buttonsDisabled = true;
-            axios
-                .patch(`/webapi/${this.type}/edit`, this.attributes)
-                .then(response => {
-                    this.attributes = response.data.data;
-                    this.attributes.amount = Number(this.attributes.amount);
-                    this.attributes.price = Number(this.attributes.price);
-
-                    this.attributesCopy = _.cloneDeep(response.data.data);
-                    this.attributesCopy.amount = Number(this.attributesCopy.amount);
-                    this.attributesCopy.price = Number(this.attributesCopy.price);
-
-                    this.saveButton = 'Save changes'
-                    this.buttonsDisabled = false;
-                })
-                .catch(() => {
-                    this.saveButton = 'Save changes'
-                    this.buttonsDisabled = false;
-                })
-        },
-        destroy: function() {
-            this.deleteButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-            this.buttonsDisabled = true;
-
-            axios
-                .delete(`/webapi/${this.type}/delete/${this.ioid}`)
-                .then(response => {
-                    if (response.data.status == "success") {
-                        window.location.href = "/income";
-                    }
-                    else {
-                        this.deleteButton = 'Delete'
-                        this.buttonsDisabled = false;
-                    }
-                })
-                .catch(() => {
-                    this.deleteButton = 'Delete'
-                    this.buttonsDisabled = false;
-                })
         }
     },
     beforeMount() {
@@ -289,20 +239,31 @@ export default {
     },
     mounted() {
         axios
-            .get(`/webapi/${this.type}/${this.ioid}`)
+            .get(`/webapi/${this.type}/create/getData`)
             .then(response => {
-                this.attributes = response.data.income;
-                this.attributes.amount = Number(this.attributes.amount);
-                this.attributes.price = Number(this.attributes.price);
-
-                this.attributesCopy = _.cloneDeep(response.data.income);
-                this.attributesCopy.amount = Number(this.attributesCopy.amount);
-                this.attributesCopy.price = Number(this.attributesCopy.price);
-                this.currencies = response.data.currencies;
                 this.categories = response.data.categories;
+                this.currencies = response.data.currencies;
                 this.means = response.data.means;
                 this.titles = response.data.titles;
 
+                let attrs = {}
+
+                attrs.currency_id = response.data.lastCurrency;
+                attrs.category_id = response.data.lastCategory;
+                attrs.mean_id = response.data.lastMean;
+                attrs.amount = 1;
+                attrs.price = "";
+
+                // Set correct date
+                const minDate = attrs.mean_id ?
+                    this.means[attrs.currency_id][attrs.mean_id].first_entry_date : false;
+
+                const dateToSet = new Date(minDate).getTime() > new Date().getTime() ?
+                    new Date(minDate) : new Date();
+
+                attrs.date = dateToSet.toLocaleDateString('en-ZA').split("/").join("-");
+
+                this.attributes = attrs;
                 this.ready = true;
             });
     },
