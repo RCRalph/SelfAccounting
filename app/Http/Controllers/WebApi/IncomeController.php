@@ -45,8 +45,11 @@ class IncomeController extends Controller
                 $categories[$key] = $val;
             }
         }
+        
+        $lastCurrency = auth()->user()->income->concat(auth()->user()->outcome)->sortBy("updated_at")->last();
+        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
 
-        return response()->json(compact('currencies', 'means', 'categories'));
+        return response()->json(compact('currencies', 'means', 'categories', 'lastCurrency'));
     }
 
     public function getIncome()
@@ -85,7 +88,7 @@ class IncomeController extends Controller
             return $item["title"];
         });
 
-        $lastCurrency = $income->concat(auth()->user()->outcome)->sortBy("created_at")->last();
+        $lastCurrency = $income->concat(auth()->user()->outcome)->sortBy("updated_at")->last();
         $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
 
         $lastIncome = $income->sortBy("date")->last();
