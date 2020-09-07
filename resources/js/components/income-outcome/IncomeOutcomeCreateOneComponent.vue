@@ -8,7 +8,7 @@
                         type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
                     ]"
                 ></i>
-                Add single {{ type.charAt(0).toUpperCase() + type.slice(1) }}
+                Add single {{ type }}
             </div>
         </div>
 
@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-12 mt-2 mt-md-0">
-                        <select class="form-control" v-model="attributes.currency_id">
+                        <select class="form-control" v-model="attributes.currency_id" @change="currencyChange">
                             <option
                                 v-for="(currency, i) in currencies"
                                 :key="i"
@@ -232,6 +232,26 @@ export default {
         saveChanges: function() {
             this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
             this.buttonsDisabled = true;
+
+            axios
+                .post(`/webapi/${this.type}/store/one`, this.attributes)
+                .then(response => {
+                    if (response.data.status == "success") {
+                        window.location.href = "/" + this.type;
+                    }
+                    else {
+                        this.saveButton = 'Save';
+                        this.buttonsDisabled = false;
+                    }
+                })
+                .catch(() => {
+                    this.saveButton = 'Save';
+                    this.buttonsDisabled = false;
+                })
+        },
+        currencyChange: function() {
+            this.attributes.mean_id = null;
+            this.attributes.category_id = null;
         }
     },
     beforeMount() {

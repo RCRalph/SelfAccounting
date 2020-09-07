@@ -423,6 +423,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this2.means = response.data.means;
       _this2.categories = response.data.categories;
       _this2.data = response.data.data;
+      _this2.currentCurrency = response.data.lastCurrency;
       _this2.ready = true;
     });
   },

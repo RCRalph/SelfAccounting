@@ -329,21 +329,38 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     saveChanges: function saveChanges() {
+      var _this3 = this;
+
       this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
       this.buttonsDisabled = true;
+      axios.post("/webapi/".concat(this.type, "/store/one"), this.attributes).then(function (response) {
+        if (response.data.status == "success") {
+          window.location.href = "/" + _this3.type;
+        } else {
+          _this3.saveButton = 'Save';
+          _this3.buttonsDisabled = false;
+        }
+      })["catch"](function () {
+        _this3.saveButton = 'Save';
+        _this3.buttonsDisabled = false;
+      });
+    },
+    currencyChange: function currencyChange() {
+      this.attributes.mean_id = null;
+      this.attributes.category_id = null;
     }
   },
   beforeMount: function beforeMount() {
     this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
   },
   mounted: function mounted() {
-    var _this3 = this;
+    var _this4 = this;
 
     axios.get("/webapi/".concat(this.type, "/create/getData")).then(function (response) {
-      _this3.categories = response.data.categories;
-      _this3.currencies = response.data.currencies;
-      _this3.means = response.data.means;
-      _this3.titles = response.data.titles;
+      _this4.categories = response.data.categories;
+      _this4.currencies = response.data.currencies;
+      _this4.means = response.data.means;
+      _this4.titles = response.data.titles;
       var attrs = {};
       attrs.currency_id = response.data.lastCurrency;
       attrs.category_id = response.data.lastCategory;
@@ -351,11 +368,11 @@ __webpack_require__.r(__webpack_exports__);
       attrs.amount = 1;
       attrs.price = ""; // Set correct date
 
-      var minDate = attrs.mean_id ? _this3.means[attrs.currency_id][attrs.mean_id].first_entry_date : false;
+      var minDate = attrs.mean_id ? _this4.means[attrs.currency_id][attrs.mean_id].first_entry_date : false;
       var dateToSet = new Date(minDate).getTime() > new Date().getTime() ? new Date(minDate) : new Date();
       attrs.date = dateToSet.toLocaleDateString('en-ZA').split("/").join("-");
-      _this3.attributes = attrs;
-      _this3.ready = true;
+      _this4.attributes = attrs;
+      _this4.ready = true;
     });
   },
   beforeUpdate: function beforeUpdate() {
@@ -394,11 +411,7 @@ var render = function() {
             _vm.type == "income" ? "fa-sign-in-alt" : "fa-sign-out-alt"
           ]
         }),
-        _vm._v(
-          "\n            Add single " +
-            _vm._s(_vm.type.charAt(0).toUpperCase() + _vm.type.slice(1)) +
-            "\n        "
-        )
+        _vm._v("\n            Add single " + _vm._s(_vm.type) + "\n        ")
       ])
     ]),
     _vm._v(" "),
@@ -640,23 +653,26 @@ var render = function() {
                     ],
                     staticClass: "form-control",
                     on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.attributes,
-                          "currency_id",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.attributes,
+                            "currency_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                        _vm.currencyChange
+                      ]
                     }
                   },
                   _vm._l(_vm.currencies, function(currency, i) {

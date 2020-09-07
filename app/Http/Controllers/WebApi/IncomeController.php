@@ -45,7 +45,7 @@ class IncomeController extends Controller
                 $categories[$key] = $val;
             }
         }
-        
+
         $lastCurrency = auth()->user()->income->concat(auth()->user()->outcome)->sortBy("updated_at")->last();
         $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
 
@@ -91,13 +91,39 @@ class IncomeController extends Controller
         $lastCurrency = $income->concat(auth()->user()->outcome)->sortBy("updated_at")->last();
         $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
 
-        $lastIncome = $income->sortBy("date")->last();
-        $lastMean = $lastIncome == null ? 0 : $lastIncome->mean_id;
-        $lastCategory = $lastIncome == null ? 0 : $lastIncome->category_id;
+        $lastIncome = $income->sortBy("updated_at")->last();
+        $lastMean = $lastIncome == null ? null : $lastIncome->mean_id;
+        $lastCategory = $lastIncome == null ? null : $lastIncome->category_id;
 
         return response()->json(compact(
             "currencies", "categories", "means", "lastCurrency", "lastCategory", "lastMean", "titles"
         ));
+    }
+
+    public function storeOne()
+	{
+		$data = request()->validate([
+            "date" => ["required", "date", new CorrectDateIO_One],
+            "title" => ["required", "string", "max:64"],
+            "amount" => ["required", "numeric"],
+            "price" => ["required", "numeric"],
+            "currency_id" => ["required", "exists:currencies,id"],
+            "category_id" => ["present", "nullable", new ValidCategoryMean],
+            "mean_id" => ["present", "nullable", new ValidCategoryMean]
+        ]);
+
+        Income::create(array_merge(
+            $data,
+            [
+                "user_id" => auth()->user()->id,
+                "category_id" => $data["category_id"] == "null" ? null : $data["category_id"],
+                "mean_id" => $data["mean_id"] == "null" ? null : $data["mean_id"]
+            ]
+        ));
+
+        return response()->json([
+            "status" => "success"
+        ]);
     }
 
     public function getEditData(Income $income)
@@ -138,7 +164,13 @@ class IncomeController extends Controller
         $income = Income::find($data["id"]);
 
         $this->authorize("update", $income);
-        $income->update($data);
+        $income->update(array_merge(
+            $data,
+            [
+                "category_id" => $data["category_id"] == "null" ? null : $data["category_id"],
+                "mean_id" => $data["mean_id"] == "null" ? null : $data["mean_id"]
+            ]
+        ));
 
         return response()->json([
             "data" => collect($income)->except(["user_id", "created_at", "updated_at"])

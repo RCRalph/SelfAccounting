@@ -302,7 +302,7 @@ __webpack_require__.r(__webpack_exports__);
     invalidDate: function invalidDate() {
       var _this = this;
 
-      if (!this.attributes.mean_id || this.attributes.mean_id == "null") {
+      if (!this.attributes.mean_id || this.attributes.mean_id == "null" || !this.means[this.attributes.currency_id]) {
         return !this.attributes.date;
       }
 
@@ -366,7 +366,7 @@ __webpack_require__.r(__webpack_exports__);
       this.buttonsDisabled = true;
       axios["delete"]("/webapi/".concat(this.type, "/delete/").concat(this.ioid)).then(function (response) {
         if (response.data.status == "success") {
-          window.location.href = "/income";
+          window.location.href = "/" + _this4.type;
         } else {
           _this4.deleteButton = 'Delete';
           _this4.buttonsDisabled = false;
@@ -375,6 +375,10 @@ __webpack_require__.r(__webpack_exports__);
         _this4.deleteButton = 'Delete';
         _this4.buttonsDisabled = false;
       });
+    },
+    currencyChange: function currencyChange() {
+      this.attributes.mean_id = null;
+      this.attributes.category_id = null;
     }
   },
   beforeMount: function beforeMount() {
@@ -384,10 +388,10 @@ __webpack_require__.r(__webpack_exports__);
     var _this5 = this;
 
     axios.get("/webapi/".concat(this.type, "/").concat(this.ioid)).then(function (response) {
-      _this5.attributes = response.data.income;
+      _this5.attributes = response.data[_this5.type];
       _this5.attributes.amount = Number(_this5.attributes.amount);
       _this5.attributes.price = Number(_this5.attributes.price);
-      _this5.attributesCopy = _.cloneDeep(response.data.income);
+      _this5.attributesCopy = _.cloneDeep(response.data[_this5.type]);
       _this5.attributesCopy.amount = Number(_this5.attributesCopy.amount);
       _this5.attributesCopy.price = Number(_this5.attributesCopy.price);
       _this5.currencies = response.data.currencies;
@@ -663,23 +667,26 @@ var render = function() {
                     ],
                     staticClass: "form-control",
                     on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.attributes,
-                          "currency_id",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.attributes,
+                            "currency_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                        _vm.currencyChange
+                      ]
                     }
                   },
                   _vm._l(_vm.currencies, function(currency, i) {

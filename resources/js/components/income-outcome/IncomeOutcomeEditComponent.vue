@@ -101,7 +101,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-12 mt-2 mt-md-0">
-                        <select class="form-control" v-model="attributes.currency_id">
+                        <select class="form-control" v-model="attributes.currency_id" @change="currencyChange">
                             <option
                                 v-for="(currency, i) in currencies"
                                 :key="i"
@@ -204,7 +204,7 @@ export default {
     },
     computed: {
         invalidDate: function() {
-            if (!this.attributes.mean_id || this.attributes.mean_id == "null") {
+            if (!this.attributes.mean_id || this.attributes.mean_id == "null" || !this.means[this.attributes.currency_id]) {
                 return !this.attributes.date;
             }
 
@@ -271,7 +271,7 @@ export default {
                 .delete(`/webapi/${this.type}/delete/${this.ioid}`)
                 .then(response => {
                     if (response.data.status == "success") {
-                        window.location.href = "/income";
+                        window.location.href = "/" + this.type;
                     }
                     else {
                         this.deleteButton = 'Delete'
@@ -282,6 +282,10 @@ export default {
                     this.deleteButton = 'Delete'
                     this.buttonsDisabled = false;
                 })
+        },
+        currencyChange: function() {
+            this.attributes.mean_id = null;
+            this.attributes.category_id = null;
         }
     },
     beforeMount() {
@@ -291,11 +295,11 @@ export default {
         axios
             .get(`/webapi/${this.type}/${this.ioid}`)
             .then(response => {
-                this.attributes = response.data.income;
+                this.attributes = response.data[this.type];
                 this.attributes.amount = Number(this.attributes.amount);
                 this.attributes.price = Number(this.attributes.price);
 
-                this.attributesCopy = _.cloneDeep(response.data.income);
+                this.attributesCopy = _.cloneDeep(response.data[this.type]);
                 this.attributesCopy.amount = Number(this.attributesCopy.amount);
                 this.attributesCopy.price = Number(this.attributesCopy.price);
                 this.currencies = response.data.currencies;

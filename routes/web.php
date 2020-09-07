@@ -23,12 +23,11 @@ Route::get('/summary', 'SummaryController@index')->name('summary');
 
 Route::get('/income', 'IncomeController@index')->name('income');
 Route::get('/income/create/one', 'IncomeController@createOne')->name('income.create.one');
-Route::post('/income/store/one', 'IncomeController@storeOne')->name('income.store.one');
 Route::get('/income/{income}', 'IncomeController@show')->name('income.show');
 
 Route::get('/outcome', 'OutcomeController@index')->name('outcome');
 Route::get('/outcome/create/one', 'OutcomeController@createOne')->name('outcome.create.one');
-Route::get('/outcome/{income}', 'OutcomeController@show')->name('outcome.show');
+Route::get('/outcome/{outcome}', 'OutcomeController@show')->name('outcome.show');
 
 Route::get('/settings', 'SettingsController@index')->name('settings');
 
@@ -43,9 +42,15 @@ Route::post('/webapi/settings/means', 'WebApi\SettingsController@saveMeans')->na
 Route::get('/webapi/income', 'WebApi\IncomeController@getIncome')->name('income.getIncome');
 Route::get('/webapi/income/start', 'WebApi\IncomeController@start')->name('income.start');
 Route::patch('/webapi/income/edit', 'WebApi\IncomeController@updateIncome')->name('income.update');
-Route::Get('/webapi/income/create/getData', 'WebApi\IncomeController@getCreateData')->name('income.getCreateData');
+Route::get('/webapi/income/create/getData', 'WebApi\IncomeController@getCreateData')->name('income.getCreateData');
+Route::post('/webapi/income/store/one', 'WebApi\IncomeController@storeOne')->name('income.store.one');
 Route::delete('/webapi/income/delete/{income}', 'WebApi\IncomeController@deleteIncome')->name('income.delete');
 Route::get('/webapi/income/{income}', 'WebApi\IncomeController@getEditData')->name('income.getEditData');
 
 Route::get('/webapi/outcome', 'WebApi\OutcomeController@getOutcome')->name('outcome.getOutcome');
 Route::get('/webapi/outcome/start', 'WebApi\OutcomeController@start')->name('outcome.start');
+Route::patch('/webapi/outcome/edit', 'WebApi\OutcomeController@updateOutcome')->name('outcome.update');
+Route::get('/webapi/outcome/create/getData', 'WebApi\OutcomeController@getCreateData')->name('outcome.getCreateData');
+Route::post('/webapi/outcome/store/one', 'WebApi\OutcomeController@storeOne')->name('outcome.store.one');
+Route::delete('/webapi/outcome/delete/{outcome}', 'WebApi\OutcomeController@deleteOutcome')->name('outcome.delete');
+Route::get('/webapi/outcome/{outcome}', 'WebApi\OutcomeController@getEditData')->name('outcome.getEditData');

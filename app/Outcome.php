@@ -8,6 +8,7 @@ use App\User;
 use App\Method;
 use App\Category;
 use App\Currency;
+use App\MeanOfPayment;
 
 class Outcome extends Model
 {
@@ -34,6 +35,6 @@ class Outcome extends Model
 
     public function mean()
     {
-        return $this->hasOne(MeanOfPayment::class, "mean_id");
+        return $this->hasOne(MeanOfPayment::class);
     }
 }
