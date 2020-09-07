@@ -278,6 +278,7 @@ export default {
                 this.means = response.data.means;
                 this.categories = response.data.categories;
                 this.data = response.data.data;
+                this.currentCurrency = response.data.lastCurrency;
                 this.ready = true;
             });
     },
