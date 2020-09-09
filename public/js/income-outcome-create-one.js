@@ -368,7 +368,14 @@ __webpack_require__.r(__webpack_exports__);
       attrs.amount = 1;
       attrs.price = ""; // Set correct date
 
-      var minDate = attrs.mean_id ? _this4.means[attrs.currency_id][attrs.mean_id].first_entry_date : false;
+      var minDate = false;
+
+      if (attrs.mean_id) {
+        minDate = _this4.means[attrs.currency_id].filter(function (item) {
+          return item.id == attrs.mean_id;
+        })[0].first_entry_date;
+      }
+
       var dateToSet = new Date(minDate).getTime() > new Date().getTime() ? new Date(minDate) : new Date();
       attrs.date = dateToSet.toLocaleDateString('en-ZA').split("/").join("-");
       _this4.attributes = attrs;

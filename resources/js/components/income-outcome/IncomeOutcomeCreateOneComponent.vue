@@ -275,8 +275,13 @@ export default {
                 attrs.price = "";
 
                 // Set correct date
-                const minDate = attrs.mean_id ?
-                    this.means[attrs.currency_id][attrs.mean_id].first_entry_date : false;
+                let minDate = false;
+
+                if (attrs.mean_id) {
+                    minDate = this.means[attrs.currency_id].filter(item => {
+                        return item.id == attrs.mean_id
+                    })[0].first_entry_date
+                }
 
                 const dateToSet = new Date(minDate).getTime() > new Date().getTime() ?
                     new Date(minDate) : new Date();

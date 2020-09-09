@@ -17,3 +17,4 @@ mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/income-outcome.js', 'public/js')
     .js('resources/js/income-outcome-edit.js', 'public/js')
     .js('resources/js/income-outcome-create-one.js', 'public/js')
+    .js('resources/js/summary.js', 'public/js');

@@ -35,6 +35,8 @@ Route::get('/settings', 'SettingsController@index')->name('settings');
 
 Route::post('/webapi/darkmode', 'UsersController@darkmode')->name('user.darkmode');
 
+Route::get('/webapi/summary', 'WebApi\SummaryController@getData')->name('summary.getData');
+
 Route::get('/webapi/settings', 'WebApi\SettingsController@getSettings')->name('settings.get');
 Route::post('/webapi/settings/categories', 'WebApi\SettingsController@saveCategories')->name('settings.categories');
 Route::post('/webapi/settings/means', 'WebApi\SettingsController@saveMeans')->name('settings.means');

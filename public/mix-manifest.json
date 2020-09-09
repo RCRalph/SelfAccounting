@@ -4,5 +4,6 @@
     "/js/income-outcome.js": "/js/income-outcome.js",
     "/js/income-outcome-create-one.js": "/js/income-outcome-create-one.js",
     "/js/income-outcome-edit.js": "/js/income-outcome-edit.js",
-    "/js/settings.js": "/js/settings.js"
+    "/js/settings.js": "/js/settings.js",
+    "/js/summary.js": "/js/summary.js"
 }

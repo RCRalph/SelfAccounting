@@ -1,7 +1,12 @@
 @extends('layouts.fullwidth')
 
+@section('script')
+<script src="{{ asset('js/summary.js') }}" defer></script>
+@endsection
+
 @section('content')
-<div class="{{ $darkmode ? 'dark-card' : 'card'}}">
+<summary-component></summary-component>
+{{-- <divclass="$darkmode?'dark-card':'card'">
     <div class="card-header-flex">
         <div class="card-header-text">
             <i class="fas fa-file-invoice-dollar"></i>
@@ -69,5 +74,5 @@
             </table>
         </div>
     </div>
-</div>
+</div>--}}
 @endsection
