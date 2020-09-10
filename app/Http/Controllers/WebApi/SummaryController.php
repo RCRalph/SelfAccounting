@@ -109,7 +109,7 @@ class SummaryController extends Controller
             array_push($finalData, [
                 "name" => $foundMean->name,
                 "currency_id" => $foundMean->currency_id,
-                "balance" => $balance
+                "balance" => $balance + $foundMean->first_entry_amount;
             ]);
         }
 
