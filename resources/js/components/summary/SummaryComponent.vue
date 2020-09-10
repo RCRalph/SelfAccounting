@@ -30,7 +30,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-body text-center h2 my-auto">125.00 EUR</div>
+                            <div class="card-body text-center h2 my-auto">{{ sum }}</div>
                         </div>
                     </div>
                 </div>
@@ -82,6 +82,11 @@ export default {
             currencies: [],
             currentCurrency: 1
         };
+    },
+    computed: {
+        sum: function() {
+            return this.content[this.currentCurrency].reduce(item => item.amount);
+        }
     },
     beforeMount() {
         this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
