@@ -52,7 +52,7 @@
                         <tbody>
                             <tr v-for="(item, i) in content[currentCurrency]" :key="i">
                                 <th scole="row" class="h5 my-auto font-weight-bold">{{ item.name }}</th>
-                                <td class="h5 my-auto">{{ item.balance + " " + currencies[currentCurrency].ISO }}</td>
+                                <td class="h5 my-auto">{{ item.balance + " " + currencies[currentCurrency - 1].ISO }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -92,6 +92,7 @@ export default {
             .then(response => {
                 this.content = response.data.finalData;
                 this.currencies = response.data.currencies;
+                this.currentCurrency = response.data.lastCurrency;
 
                 this.ready = true;
             });
