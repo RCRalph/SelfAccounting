@@ -52,7 +52,7 @@
                         <tbody>
                             <tr v-for="(item, i) in content[currentCurrency]" :key="i">
                                 <th scole="row" class="h5 my-auto font-weight-bold">{{ item.name }}</th>
-                                <td class="h5 my-auto">{{ item.balance + " " + currencies[currentCurrency - 1].ISO }}</td>
+                                <td class="h5 my-auto">{{ (Math.round(item.balance * 100) / 100) }} {{ currencies[currentCurrency - 1].ISO }}</td>
                             </tr>
                         </tbody>
                     </table>
