@@ -71,7 +71,7 @@ header.masthead {
             @extend .align-items-center;
 
             height: 7rem;
-            color: $background;
+            color: darken($background, 15%);
 
             i {
                 font-size: 5rem;

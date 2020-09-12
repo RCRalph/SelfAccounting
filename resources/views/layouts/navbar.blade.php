@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-{{ ($darkmode ?? false) ? 'dark' : 'light' }} bg-{{ ($darkmode ?? false) ? 'dark' : 'light' }} shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
+            <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
             {{ config('app.name', 'Laravel') }}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
