@@ -24,6 +24,8 @@ jQuery(() => {
                     $('body').css('background-color', 'hsl(210, 40%, 98%)');
                     replaceAttributes("dark-card", "card");
                     replaceAttributes("table-darkmode", "table-lightmode");
+                    $('.welcome-bg-change').removeClass('bg-dark text-light').addClass('bg-light text-dark');
+                    $('.showcase').removeClass('welcome-bg-dark').addClass('welcome-bg-light');
                 }
                 else {
                     // Set darkmode
@@ -31,6 +33,8 @@ jQuery(() => {
                     $('body').css('background-color', 'hsl(210, 60%, 2%)');
                     replaceAttributes("card", "dark-card");
                     replaceAttributes("table-lightmode", "table-darkmode");
+                    $('.welcome-bg-change').removeClass('bg-light text-dark').addClass('bg-dark text-light');
+                    $('.showcase').removeClass('welcome-bg-light').addClass('welcome-bg-dark');
                 }
 
                 $('#sun-moon').html(isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>');

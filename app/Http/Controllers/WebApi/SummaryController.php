@@ -109,7 +109,7 @@ class SummaryController extends Controller
             array_push($finalData, [
                 "name" => $foundMean->name,
                 "currency_id" => $foundMean->currency_id,
-                "balance" => $balance + $foundMean->first_entry_amount;
+                "balance" => $balance + $foundMean->first_entry_amount
             ]);
         }
 
@@ -123,9 +123,9 @@ class SummaryController extends Controller
         }
 
         $finalData = collect($finalData)->groupBy("currency_id");
-        
+
         $lastCurrency = $income->concat($outcome)->sortBy("updated_at")->last();
-        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
+        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency["currency_id"];
 
         return response()->json(compact('currencies', 'finalData', 'lastCurrency'));
     }

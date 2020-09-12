@@ -1,0 +1,132 @@
+@mixin background-cover {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+$background: hsl(140, 90%, 60%);
+
+header.masthead {
+    @include background-cover;
+
+    position: relative;
+    background: $background;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+
+    .overlay {
+        position: absolute;
+        background-color: $gray-900;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        padding-top: 12rem;
+        padding-bottom: 12rem;
+
+        h1 {
+            font-size: 3rem;
+        }
+    }
+}
+
+.call-to-action {
+    @include background-cover;
+
+    position: relative;
+    background: $background;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+
+    .overlay {
+        position: absolute;
+        background-color: $gray-900;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+    }
+}
+
+.features-icons {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+
+    .features-icons-item {
+        max-width: 20rem;
+
+        .features-icons-icon {
+            @extend .d-flex;
+            @extend .justify-content-center;
+            @extend .align-items-center;
+
+            height: 7rem;
+            color: $background;
+
+            i {
+                font-size: 5rem;
+            }
+        }
+
+        &:hover {
+            .features-icons-icon {
+                i {
+                    font-size: 6rem;
+                }
+            }
+        }
+    }
+}
+
+.testimonials {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+
+    .testimonial-item {
+        max-width: 18rem;
+
+        img {
+            max-width: 12rem;
+            box-shadow: 0px 5px 5px 0px $gray-500;
+        }
+    }
+}
+
+.showcase {
+    .showcase-text {
+      padding: 3rem;
+    }
+
+    .showcase-img {
+        min-height: 30rem;
+        background-size: cover;
+    }
+
+    @media (min-width: 768px) {
+        .showcase-text {
+            padding: 7rem;
+        }
+    }
+}
+
+.welcome-bg {
+    &-light {
+        background-color: white;
+        color: black;
+    }
+
+    &-dark {
+        background-color: #1a1d20;
+        color: white;
+    }
+}

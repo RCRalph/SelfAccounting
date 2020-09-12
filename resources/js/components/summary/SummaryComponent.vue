@@ -20,7 +20,7 @@
         </div>
 
         <div class="card-body">
-            <div v-if="ready">
+            <div v-if="ready && content[currentCurrency]">
                 <div class="row">
                     <div class="mx-auto mb-3 col-md-12 col-lg-6 offset-lg-3">
                         <div :class="darkmode ? 'dark-card' : 'card'">
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-body text-center h2 my-auto">{{ sum }}</div>
+                            <div class="card-body text-center h2 my-auto">{{ sum | addSpaces }} {{ currencies[currentCurrency - 1].ISO }}</div>
                         </div>
                     </div>
                 </div>
@@ -52,11 +52,15 @@
                         <tbody>
                             <tr v-for="(item, i) in content[currentCurrency]" :key="i">
                                 <th scole="row" class="h5 my-auto font-weight-bold">{{ item.name }}</th>
-                                <td class="h5 my-auto">{{ (Math.round(item.balance * 100) / 100) }} {{ currencies[currentCurrency - 1].ISO }}</td>
+                                <td class="h5 my-auto">{{ (Math.round(item.balance * 100) / 100) | addSpaces }} {{ currencies[currentCurrency - 1].ISO }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <div v-else-if="ready && !content[currentCurrency]">
+                <h1 class="text-center">Not found</h1>
             </div>
 
             <div class="d-flex justify-content-center my-2" v-else>
@@ -85,7 +89,18 @@ export default {
     },
     computed: {
         sum: function() {
-            return this.content[this.currentCurrency].reduce(item => item.amount);
+
+            return this.content[this.currentCurrency]
+                .map(item => item.balance)
+                .reduce((item1, item2) => item1 + item2);
+        },
+    },
+    filters: {
+        addSpaces: function(value) {
+            return value
+                .toLocaleString('en')
+                .split(",")
+                .join(" ");
         }
     },
     beforeMount() {
