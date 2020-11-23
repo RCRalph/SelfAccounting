@@ -22,7 +22,7 @@
         <div class="card-body">
             <div v-if="ready && content[currentCurrency]">
                 <div class="row">
-                    <div class="mx-auto mb-3 col-md-12 col-lg-6 offset-lg-3">
+                    <div class="mx-auto mb-3 col-md-12 col-lg-8 offset-lg-2">
                         <div :class="darkmode ? 'dark-card' : 'card'">
                             <div class="card-header">
                                 <div class="m-auto text-center font-weight-bold h2">
@@ -44,14 +44,14 @@
                     >
                         <thead>
                             <tr>
-                                <th scope="col" class="h3 font-weight-bold">Something</th>
+                                <th scope="col" class="h3 font-weight-bold">Type</th>
                                 <th scope="col" class="h3 font-weight-bold">Balance</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr v-for="(item, i) in content[currentCurrency]" :key="i">
-                                <th scole="row" class="h5 my-auto font-weight-bold">{{ item.name }}</th>
+                                <th scope="row" class="h5 my-auto font-weight-bold">{{ item.name }}</th>
                                 <td class="h5 my-auto">{{ (Math.round(item.balance * 100) / 100) | addSpaces }} {{ currencies[currentCurrency - 1].ISO }}</td>
                             </tr>
                         </tbody>
@@ -60,7 +60,7 @@
             </div>
 
             <div v-else-if="ready && !content[currentCurrency]">
-                <h1 class="text-center">Not found</h1>
+                <h1 class="text-center">Nothing to see here, for now...</h1>
             </div>
 
             <div class="d-flex justify-content-center my-2" v-else>
@@ -89,11 +89,10 @@ export default {
     },
     computed: {
         sum: function() {
-
             return this.content[this.currentCurrency]
                 .map(item => item.balance)
                 .reduce((item1, item2) => item1 + item2);
-        },
+        }
     },
     filters: {
         addSpaces: function(value) {
@@ -104,7 +103,7 @@ export default {
         }
     },
     beforeMount() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         axios
@@ -118,7 +117,7 @@ export default {
             });
     },
     beforeUpdate() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

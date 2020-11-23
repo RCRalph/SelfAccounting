@@ -49534,35 +49534,40 @@ jQuery(function () {
       $("." + source).removeClass(source).addClass(target);
     }
 
-    var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
-    $('#sun-moon').html('<i class="fas fa-clock"></i>');
-    axios.post("/webapi/darkmode", {
-      darkmode: !isDarkmode
-    }).then(function (response) {
-      if (response.status == 200) {
-        if (isDarkmode) {
-          // Set lightmode
-          $('nav').removeClass('navbar-dark bg-dark').addClass('navbar-light bg-light');
-          $('body').css('background-color', 'hsl(210, 40%, 98%)');
-          replaceAttributes("dark-card", "card");
-          replaceAttributes("table-darkmode", "table-lightmode");
-          $('.welcome-bg-change').removeClass('bg-dark text-light').addClass('bg-light text-dark');
-          $('.showcase').removeClass('welcome-bg-dark').addClass('welcome-bg-light');
-        } else {
-          // Set darkmode
-          $('nav').removeClass('navbar-light bg-light').addClass('navbar-dark bg-dark');
-          $('body').css('background-color', 'hsl(210, 60%, 2%)');
-          replaceAttributes("card", "dark-card");
-          replaceAttributes("table-lightmode", "table-darkmode");
-          $('.welcome-bg-change').removeClass('bg-light text-dark').addClass('bg-dark text-light');
-          $('.showcase').removeClass('welcome-bg-light').addClass('welcome-bg-dark');
-        }
+    var sunMoon = $('#sun-moon');
 
-        $('#sun-moon').html(isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>');
+    if (sunMoon.html().includes('<i class="fas fa-sun"></i>') || sunMoon.html().includes('<i class="fas fa-moon"></i>')) {
+      var isDarkmode = sunMoon.html().includes('<i class="fas fa-sun"></i>');
+
+      if (isDarkmode) {
+        // Set lightmode
+        $('nav').removeClass('navbar-dark bg-dark').addClass('navbar-light bg-light');
+        $('body').css('background-color', 'hsl(210, 40%, 98%)');
+        replaceAttributes("dark-card", "card");
+        replaceAttributes("table-darkmode", "table-lightmode");
+        $('.welcome-bg-change').removeClass('bg-dark text-light').addClass('bg-light text-dark');
+        $('.showcase').removeClass('welcome-bg-dark').addClass('welcome-bg-light');
+        $("#darkmode-status").html("0");
       } else {
-        $('#sun-moon').html(!isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>');
+        // Set darkmode
+        $('nav').removeClass('navbar-light bg-light').addClass('navbar-dark bg-dark');
+        $('body').css('background-color', 'hsl(210, 60%, 2%)');
+        replaceAttributes("card", "dark-card");
+        replaceAttributes("table-lightmode", "table-darkmode");
+        $('.welcome-bg-change').removeClass('bg-light text-dark').addClass('bg-dark text-light');
+        $('.showcase').removeClass('welcome-bg-light').addClass('welcome-bg-dark');
+        $("#darkmode-status").html("1");
       }
-    });
+
+      sunMoon.html('<i class="far fa-clock"></i>');
+      axios.post("/webapi/settings/darkmode", {
+        darkmode: !isDarkmode
+      }).then(function () {
+        sunMoon.html(isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>');
+      })["catch"](function () {
+        sunMoon.html(isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>');
+      });
+    }
   }); // Special table hovering
 
   if ($("#table-multi-hover").length) {
@@ -49595,7 +49600,6 @@ jQuery(function () {
     $("tbody td, tbody th").on("mouseover", function (event) {
       var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
       var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
-      var rep = event.currentTarget.attributes.rep.value;
       var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
 
       for (var _i = 0; _i < rowspan; _i++) {
@@ -49607,7 +49611,6 @@ jQuery(function () {
     $("tbody td, tbody th").on("mouseleave", function (event) {
       var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
       var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
-      var rep = event.currentTarget.attributes.rep.value;
       var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
 
       for (var _i2 = 0; _i2 < rowspan; _i2++) {

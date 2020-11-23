@@ -117,7 +117,7 @@
                     <label for="value" class="col-md-3 col-form-label text-md-right">Value</label>
 
                     <div class="col-md-7">
-                        <input type="number" class="form-control" disabled :value="Math.round(attributes.price * attributes.amount * 100) / 100">
+                        <input type="text" class="form-control" disabled :value="Math.round(attributes.price * attributes.amount * 100) / 100">
                     </div>
                 </div>
 
@@ -255,7 +255,7 @@ export default {
         }
     },
     beforeMount() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         axios
@@ -293,7 +293,7 @@ export default {
             });
     },
     beforeUpdate() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     updated() {
         this.$nextTick(() => {

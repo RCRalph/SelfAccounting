@@ -382,7 +382,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeMount: function beforeMount() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   mounted: function mounted() {
     var _this5 = this;
@@ -402,7 +402,7 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   beforeUpdate: function beforeUpdate() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   updated: function updated() {
     this.$nextTick(function () {

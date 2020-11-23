@@ -3,7 +3,7 @@
 @section('wrapper')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-12">
+            <div class="col-lg-10">
                 @yield('content')
             </div>
         </div>

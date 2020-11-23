@@ -34,7 +34,8 @@ class CreateMeanOfPaymentsTable extends Migration
             "email" => "admin@selfaccounting.com",
             "password" => Illuminate\Support\Facades\Hash::make("h3r3c0m3sth3m0n3y"),
             "admin" => true,
-            "darkmode" => false
+            "darkmode" => false,
+            "premium_expiration" => null
         ]);
     }
 

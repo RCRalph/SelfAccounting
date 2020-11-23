@@ -1,14 +1,23 @@
 <template>
-    <label class="switch m-0">
-        <input type="checkbox" :checked="checked" @change="$emit('input', $event.currentTarget.checked)">
-        <span class="slider round"></span>
-    </label>
+    <div class="slider-checkbox">
+        <label class="switch m-0">
+            <input type="checkbox" :checked="checked" @change="emitEvents" :disabled="disabled">
+            <span class="slider round"></span>
+        </label>
+    </div>
 </template>
 
 <script>
     export default {
         props: {
-            checked: Boolean
+            checked: Boolean,
+            disabled: Boolean
+        },
+        methods: {
+            emitEvents: function(event) {
+                this.$emit('input', event.currentTarget.checked);
+                this.$emit('htmlElement', event.currentTarget);
+            }
         }
     }
 </script>

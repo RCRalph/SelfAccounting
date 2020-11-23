@@ -413,7 +413,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   beforeMount: function beforeMount() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   mounted: function mounted() {
     var _this2 = this;
@@ -428,7 +428,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   beforeUpdate: function beforeUpdate() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   updated: function updated() {
     this.$nextTick(function () {
@@ -860,7 +860,7 @@ var render = function() {
                   : !_vm.rows.length && _vm.dataReady
                   ? _c("div", [
                       _c("h1", { staticClass: "text-center" }, [
-                        _vm._v("Not found")
+                        _vm._v("Nothing to see here, for now...")
                       ])
                     ])
                   : _vm._e(),

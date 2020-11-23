@@ -23,16 +23,18 @@ class CreateCurrenciesTable extends Migration
             $table->index(['id']);
         });
 
-        Currency::insert([
+        $currencies = [
             ["ISO" => "USD", "name" => "United States Dollar"],
             ["ISO" => "EUR", "name" => "European Euro"],
+            ["ISO" => "JPY", "name" => "Japanese Yen"],
+            ["ISO" => "GBP", "name" => "Pound Sterling"],
+            ["ISO" => "AUD", "name" => "Australian Dollar"],
+            ["ISO" => "CAD", "name" => "Canadian Dollar"],
             ["ISO" => "CHF", "name" => "Swiss Franc"],
             ["ISO" => "PLN", "name" => "Polish Zloty"],
-            ["ISO" => "GBP", "name" => "Pound Sterling"],
-            ["ISO" => "CAD", "name" => "Canadian Dollar"],
-            ["ISO" => "JPY", "name" => "Japanese Yen"],
-            ["ISO" => "AUD", "name" => "Australian Dollar"]
-        ]);
+        ];
+
+        Currency::insert($currencies);
     }
 
     /**

@@ -9,8 +9,11 @@ class WelcomePageController extends Controller
 {
     public function index()
     {
-        $darkmode = Auth::check() ? auth()->user()->darkmode : false;
+        if (Auth::check()) {
+            return redirect()->route("summary");
+        }
 
+        $darkmode = false;
         return view('welcome', compact('darkmode'));
     }
 }

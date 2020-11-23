@@ -33,7 +33,7 @@
                 </table>
             </div>
             <div v-else>
-                <div class="h1 text-center">Not found</div>
+                <div class="h1 text-center">Nothing to see here, for now...</div>
             </div>
 
             <hr>

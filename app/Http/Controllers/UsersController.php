@@ -4,18 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+
 class UsersController extends Controller
 {
-    public function darkmode()
+    public function __construct()
     {
-        $data = request()->validate([
-            "darkmode" => ["boolean"]
-        ]);
-
-        auth()->user()->update([
-            "darkmode" => $data["darkmode"]
-        ]);
-
-        return response()->json([]);
+        $this->middleware('auth');
     }
 }

@@ -102,9 +102,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    checked: Boolean
+    checked: Boolean,
+    disabled: Boolean
+  },
+  methods: {
+    emitEvents: function emitEvents(event) {
+      this.$emit('input', event.currentTarget.checked);
+      this.$emit('htmlElement', event.currentTarget);
+    }
   }
 });
 
@@ -372,7 +381,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   beforeMount: function beforeMount() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   mounted: function mounted() {
     var _this3 = this;
@@ -394,7 +403,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   beforeUpdate: function beforeUpdate() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   updated: function updated() {
     this.$nextTick(function () {
@@ -924,18 +933,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("label", { staticClass: "switch m-0" }, [
-    _c("input", {
-      attrs: { type: "checkbox" },
-      domProps: { checked: _vm.checked },
-      on: {
-        change: function($event) {
-          return _vm.$emit("input", $event.currentTarget.checked)
-        }
-      }
-    }),
-    _vm._v(" "),
-    _c("span", { staticClass: "slider round" })
+  return _c("div", { staticClass: "slider-checkbox" }, [
+    _c("label", { staticClass: "switch m-0" }, [
+      _c("input", {
+        attrs: { type: "checkbox", disabled: _vm.disabled },
+        domProps: { checked: _vm.checked },
+        on: { change: _vm.emitEvents }
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "slider round" })
+    ])
   ])
 }
 var staticRenderFns = []
@@ -1192,7 +1199,9 @@ var render = function() {
             )
           ])
         : _c("div", [
-            _c("div", { staticClass: "h1 text-center" }, [_vm._v("Not found")])
+            _c("div", { staticClass: "h1 text-center" }, [
+              _vm._v("Nothing to see here, for now...")
+            ])
           ]),
       _vm._v(" "),
       _c("hr"),
@@ -1502,7 +1511,9 @@ var render = function() {
             )
           ])
         : _c("div", [
-            _c("div", { staticClass: "h1 text-center" }, [_vm._v("Not found")])
+            _c("div", { staticClass: "h1 text-center" }, [
+              _vm._v("Nothing to see here, for now...")
+            ])
           ]),
       _vm._v(" "),
       _c("hr"),

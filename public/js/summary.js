@@ -198,7 +198,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeMount: function beforeMount() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   mounted: function mounted() {
     var _this = this;
@@ -211,7 +211,7 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   beforeUpdate: function beforeUpdate() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   }
 });
 
@@ -295,7 +295,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c(
                 "div",
-                { staticClass: "mx-auto mb-3 col-md-12 col-lg-6 offset-lg-3" },
+                { staticClass: "mx-auto mb-3 col-md-12 col-lg-8 offset-lg-2" },
                 [
                   _c("div", { class: _vm.darkmode ? "dark-card" : "card" }, [
                     _vm._m(1),
@@ -336,7 +336,7 @@ var render = function() {
                           "th",
                           {
                             staticClass: "h5 my-auto font-weight-bold",
-                            attrs: { scole: "row" }
+                            attrs: { scope: "row" }
                           },
                           [_vm._v(_vm._s(item.name))]
                         ),
@@ -364,7 +364,9 @@ var render = function() {
           ])
         : _vm.ready && !_vm.content[_vm.currentCurrency]
         ? _c("div", [
-            _c("h1", { staticClass: "text-center" }, [_vm._v("Not found")])
+            _c("h1", { staticClass: "text-center" }, [
+              _vm._v("Nothing to see here, for now...")
+            ])
           ])
         : _c("div", { staticClass: "d-flex justify-content-center my-2" }, [
             _vm._m(3)
@@ -403,7 +405,7 @@ var staticRenderFns = [
         _c(
           "th",
           { staticClass: "h3 font-weight-bold", attrs: { scope: "col" } },
-          [_vm._v("Something")]
+          [_vm._v("Type")]
         ),
         _vm._v(" "),
         _c(

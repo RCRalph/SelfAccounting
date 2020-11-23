@@ -100,7 +100,7 @@
                     </table>
 
                     <div v-else-if="!rows.length && dataReady">
-                        <h1 class="text-center">Not found</h1>
+                        <h1 class="text-center">Nothing to see here, for now...</h1>
                     </div>
 
                     <InfiniteLoading @infinite="getData" :key="currentCurrency">
@@ -268,7 +268,7 @@ export default {
         }
     },
     beforeMount() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         axios
@@ -283,7 +283,7 @@ export default {
             });
     },
     beforeUpdate() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     updated() {
         this.$nextTick(() => {

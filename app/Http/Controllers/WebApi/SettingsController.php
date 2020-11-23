@@ -20,6 +20,19 @@ class SettingsController extends Controller
         $this->middleware("auth");
     }
 
+    public function darkmode()
+    {
+        $data = request()->validate([
+            "darkmode" => ["boolean"]
+        ]);
+
+        auth()->user()->update([
+            "darkmode" => $data["darkmode"]
+        ]);
+
+        return response()->json([]);
+    }
+
     public function getSettings()
     {
         // Get currencies

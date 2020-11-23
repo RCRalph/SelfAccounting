@@ -289,7 +289,7 @@ export default {
         }
     },
     beforeMount() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         axios
@@ -311,7 +311,7 @@ export default {
             });
     },
     beforeUpdate() {
-        this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     updated() {
         this.$nextTick(() => {

@@ -351,7 +351,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeMount: function beforeMount() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   mounted: function mounted() {
     var _this4 = this;
@@ -383,7 +383,7 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   beforeUpdate: function beforeUpdate() {
-    this.darkmode = document.getElementById("sun-moon").innerHTML.includes("<i class=\"fas fa-sun\"></i>");
+    this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
   },
   updated: function updated() {
     this.$nextTick(function () {
@@ -707,7 +707,7 @@ var render = function() {
               _c("div", { staticClass: "col-md-7" }, [
                 _c("input", {
                   staticClass: "form-control",
-                  attrs: { type: "number", disabled: "" },
+                  attrs: { type: "text", disabled: "" },
                   domProps: {
                     value:
                       Math.round(

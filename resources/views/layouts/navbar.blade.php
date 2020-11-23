@@ -1,9 +1,17 @@
 <nav class="navbar navbar-expand-md navbar-{{ ($darkmode ?? false) ? 'dark' : 'light' }} bg-{{ ($darkmode ?? false) ? 'dark' : 'light' }} shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
-            {{ config('app.name', 'Laravel') }}
-        </a>
+        @guest
+            <a class="navbar-brand" href="/">
+                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                {{ config('app.name', 'SelfAccounting') }}
+            </a>
+        @else
+            <a class="navbar-brand" href="/summary">
+                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                {{ config('app.name', 'SelfAccounting') }}
+            </a>
+        @endguest
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -12,33 +20,26 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
                 @auth
-                <li class="nav-item">
-                    <a class="nav-link" href="/summary">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                        {{ __('Summary') }}
-                    </a>
-                </li>
+                    <li>
+                        <a class="nav-link" href="/income">
+                            <i class="fas fa-sign-in-alt"></i>
+                            {{ __('Income') }}
+                        </a>
+                    </li>
 
-                <li>
-                    <a class="nav-link" href="/income">
-                        <i class="fas fa-sign-in-alt"></i>
-                        {{ __('Income') }}
-                    </a>
-                </li>
+                    <li>
+                        <a class="nav-link" href="/outcome">
+                            <i class="fas fa-sign-out-alt"></i>
+                            {{ __('Outcome') }}
+                        </a>
+                    </li>
 
-                <li>
-                    <a class="nav-link" href="/outcome">
-                        <i class="fas fa-sign-out-alt"></i>
-                        {{ __('Outcome') }}
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/settings">
-                        <i class="fas fa-cog"></i>
-                        {{ __('Settings') }}
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">
+                            <i class="fas fa-cog"></i>
+                            {{ __('Settings') }}
+                        </a>
+                    </li>
                 @endauth
             </ul>
 
@@ -72,13 +73,13 @@
                             </form>
                         </div>
                     </li>
-
-                    <li class="nav-item my-auto" id="darkmode-switcher">
-                        <div class="nav-link h5 my-auto" id="sun-moon">
-                            <i class="fas fa-{{ ($darkmode ?? false) ? 'sun' : 'moon' }}"></i>
-                        </div>
-                    </li>
                 @endguest
+
+                <li class="nav-item my-auto" id="darkmode-switcher">
+                    <div class="nav-link h5 my-auto" id="sun-moon">
+                        <i class="fas fa-{{ ($darkmode ?? false) ? 'sun' : 'moon' }}"></i>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
