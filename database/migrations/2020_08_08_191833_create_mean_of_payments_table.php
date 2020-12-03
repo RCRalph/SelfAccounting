@@ -32,11 +32,11 @@ class CreateMeanOfPaymentsTable extends Migration
         App\User::create([
             "username" => "Admin",
             "email" => "admin@selfaccounting.com",
-            "password" => Illuminate\Support\Facades\Hash::make("h3r3c0m3sth3m0n3y"),
+            "password" => Illuminate\Support\Facades\Hash::make(env("ADMIN_PASSWORD")),
             "admin" => true,
             "darkmode" => false,
             "premium_expiration" => null,
-            'profile_picture' => 'Emoji' . rand(1, 6) . '.png'
+            'profile_picture' => 'EmojiAdmin.png'
         ]);
     }
 

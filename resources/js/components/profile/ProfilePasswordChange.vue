@@ -24,14 +24,16 @@
                 </div>
             </div>
 
-            <div class="row">
-                <button type="submit" class="big-button-success col-md-6 offset-md-3" @click="submit = true" :disabled="!canSubmit || !validPasswords">
-                    <div v-if="!submit">
-                        Save changes
-                    </div>
+            <div class="form-group row">
+                <div class="col-xl-7 offset-xl-4">
+                    <button type="submit" class="big-button-success" @click="submit = true" :disabled="!canSubmit || !validPasswords">
+                        <div v-if="!submit">
+                            Save changes
+                        </div>
 
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
-                </button>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
+                    </button>
+                </div>
             </div>
         </form>
     </div>
