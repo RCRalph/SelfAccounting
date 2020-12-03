@@ -44,7 +44,8 @@ Route::prefix('/admin')->group(function() {
 
 Route::prefix('/profile')->group(function() {
     Route::get('/', 'ProfileController@index')->name('profile');
-    Route::patch('/update', 'ProfileController@update')->name('profile.update');
+    Route::patch('/update', 'ProfileController@updateData')->name('profile.updateData');
+    Route::patch('/password', 'ProfileController@updatePassword')->name('profile.updatePassword');
 });
 
 Route::prefix('/webapi')->group(function() {

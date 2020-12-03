@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 use App\User;
 
@@ -24,7 +25,7 @@ class ProfileController extends Controller
         return view("profile.index", compact("darkmode"));
     }
 
-    public function update()
+    public function updateData()
     {
         $data = request()->validate([
             "username" => ["required", "string", "max:32"],
@@ -54,6 +55,19 @@ class ProfileController extends Controller
                 "email" => $data["email"]
             ]);
         }
+
+        return redirect("/profile");
+    }
+
+    public function updatePassword()
+    {
+        $data = request()->validate([
+            "password" => ["required", "string", "min:8", "confirmed"]
+        ]);
+
+        auth()->user()->update([
+            "password" => Hash::make($data["password"])
+        ]);
 
         return redirect("/profile");
     }

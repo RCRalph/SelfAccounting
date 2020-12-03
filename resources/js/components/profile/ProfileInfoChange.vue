@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form id="changeInfoForm" action="/profile/update" method="POST" enctype="multipart/form-data">
+        <form action="/profile/update" method="POST" enctype="multipart/form-data">
 			<input type="hidden" name="_token" :value="CSRF_TOKEN">
             <input type="hidden" name="_method" value="PATCH">
 

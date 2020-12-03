@@ -26,7 +26,7 @@
                             'my-3'
                         ]">
 
-
+                        <ProfilePasswordChange></ProfilePasswordChange>
                     </div>
                 </div>
             </div>
@@ -47,11 +47,13 @@
 <script>
 import ProfileShowcase from "./ProfileShowcase.vue";
 import ProfileInfoChange from "./ProfileInfoChange.vue";
+import ProfilePasswordChange from "./ProfilePasswordChange.vue";
 
 export default {
     components: {
         ProfileShowcase,
-        ProfileInfoChange
+        ProfileInfoChange,
+        ProfilePasswordChange
     },
     data() {
         return {
