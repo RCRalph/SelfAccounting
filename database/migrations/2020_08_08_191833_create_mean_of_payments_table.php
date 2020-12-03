@@ -35,7 +35,8 @@ class CreateMeanOfPaymentsTable extends Migration
             "password" => Illuminate\Support\Facades\Hash::make("h3r3c0m3sth3m0n3y"),
             "admin" => true,
             "darkmode" => false,
-            "premium_expiration" => null
+            "premium_expiration" => null,
+            'profile_picture' => 'Emoji' . rand(1, 6) . '.png'
         ]);
     }
 

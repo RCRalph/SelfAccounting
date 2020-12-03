@@ -40,6 +40,22 @@
                             {{ __('Settings') }}
                         </a>
                     </li>
+
+                    @can("isAdmin", auth()->user())
+                    <li class="nav-item dropdown">
+                        <a id="admin-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-lock"></i>
+                            Admin
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="admin-dropdown">
+                            <a class="dropdown-item" href="/admin/users">
+                                <i class="fas fa-users"></i>
+                                Users
+                            </a>
+                        </div>
+                    </li>
+                    @endcan
                 @endauth
             </ul>
 
@@ -62,9 +78,17 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/profile">
+                                <i class="fas fa-user"></i>
+                                View Profile
+                            </a>
+
+                            <hr class="my-2">
+
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
+                                <i class="fas fa-key"></i>
                                 {{ __('Logout') }}
                             </a>
 

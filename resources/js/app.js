@@ -22,6 +22,9 @@ jQuery(() => {
                 replaceAttributes("table-darkmode", "table-lightmode");
                 $('.welcome-bg-change').removeClass('bg-dark text-light').addClass('bg-light text-dark');
                 $('.showcase').removeClass('welcome-bg-dark').addClass('welcome-bg-light');
+                replaceAttributes("profile-wrapper-dark", "profile-wrapper-light");
+                replaceAttributes("hr-darkmode", "hr-lightmode");
+
                 $("#darkmode-status").html("0");
             }
             else {
@@ -32,6 +35,9 @@ jQuery(() => {
                 replaceAttributes("table-lightmode", "table-darkmode");
                 $('.welcome-bg-change').removeClass('bg-light text-dark').addClass('bg-dark text-light');
                 $('.showcase').removeClass('welcome-bg-light').addClass('welcome-bg-dark');
+                replaceAttributes("profile-wrapper-light", "profile-wrapper-dark");
+                replaceAttributes("hr-lightmode", "hr-darkmode");
+
                 $("#darkmode-status").html("1");
             }
 

@@ -379,10 +379,16 @@ h6,
 .h1,
 .h2,
 .h3,
+.profile-wrapper-dark .username,
+.profile-wrapper-light .username,
 .trashbin,
 .h4,
 .card-header-text,
 .h5,
+.profile-wrapper-dark .sa-since,
+.profile-wrapper-dark .account-type,
+.profile-wrapper-light .sa-since,
+.profile-wrapper-light .account-type,
 .h6 {
   margin-bottom: 0.5rem;
   font-weight: 500;
@@ -401,6 +407,8 @@ h2,
 
 h3,
 .h3,
+.profile-wrapper-dark .username,
+.profile-wrapper-light .username,
 .trashbin {
   font-size: 1.575rem;
 }
@@ -412,7 +420,11 @@ h4,
 }
 
 h5,
-.h5 {
+.h5,
+.profile-wrapper-dark .sa-since,
+.profile-wrapper-dark .account-type,
+.profile-wrapper-light .sa-since,
+.profile-wrapper-light .account-type {
   font-size: 1.125rem;
 }
 
@@ -7840,7 +7852,11 @@ button.dark-card:focus {
   border-radius: 0.3rem !important;
 }
 
-.rounded-circle {
+.rounded-circle,
+.profile-wrapper-dark .profile-picture img,
+.profile-wrapper-dark .profile-picture,
+.profile-wrapper-light .profile-picture img,
+.profile-wrapper-light .profile-picture {
   border-radius: 50% !important;
 }
 
@@ -9016,6 +9032,8 @@ button.dark-card:focus {
 }
 
 .w-100,
+.profile-wrapper-dark .profile-picture img,
+.profile-wrapper-light .profile-picture img,
 .card-body-centered {
   width: 100% !important;
 }
@@ -9036,7 +9054,9 @@ button.dark-card:focus {
   height: 75% !important;
 }
 
-.h-100 {
+.h-100,
+.profile-wrapper-dark,
+.profile-wrapper-light {
   height: 100% !important;
 }
 
@@ -9169,6 +9189,8 @@ button.dark-card:focus {
 }
 
 .mt-4,
+.profile-wrapper-dark .username,
+.profile-wrapper-light .username,
 .my-4 {
   margin-top: 1.5rem !important;
 }
@@ -9284,7 +9306,9 @@ button.dark-card:focus {
   padding-left: 0.5rem !important;
 }
 
-.p-3 {
+.p-3,
+.profile-wrapper-dark,
+.profile-wrapper-light {
   padding: 1rem !important;
 }
 
@@ -11291,6 +11315,12 @@ button.dark-card:focus {
 }
 
 .text-center,
+.profile-wrapper-dark .sa-since,
+.profile-wrapper-dark .account-type,
+.profile-wrapper-dark .username,
+.profile-wrapper-light .sa-since,
+.profile-wrapper-light .account-type,
+.profile-wrapper-light .username,
 .responsive-table,
 .responsive-table-hover,
 .responsive-table-bordered {
@@ -11378,6 +11408,12 @@ button.dark-card:focus {
 }
 
 .font-weight-bold,
+.profile-wrapper-dark .sa-since,
+.profile-wrapper-dark .account-type,
+.profile-wrapper-dark .username,
+.profile-wrapper-light .sa-since,
+.profile-wrapper-light .account-type,
+.profile-wrapper-light .username,
 .big-button,
 .big-button-primary,
 .big-button-success,
@@ -11679,6 +11715,20 @@ a.text-dark:focus {
   color: #ffd500;
 }
 
+.hr,
+.hr-lightmode,
+.hr-darkmode {
+  border-width: 2px;
+}
+
+.hr-darkmode {
+  background-color: white;
+}
+
+.hr-lightmode {
+  background-color: #e6e6e6;
+}
+
 td,
 th {
   text-align: center;
@@ -11862,6 +11912,94 @@ header.masthead h1 {
 .welcome-bg-dark {
   background-color: #1a1d20;
   color: white;
+}
+
+.profile-wrapper-light {
+  border-radius: 1rem;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #e6e6e6;
+  background-color: white;
+}
+
+.profile-wrapper-light .profile-picture img {
+  border: solid 4px black;
+}
+
+@-webkit-keyframes lighten-premium {
+  0% {
+    color: black;
+  }
+
+  50% {
+    color: black;
+  }
+
+  100% {
+    color: black;
+  }
+}
+
+@keyframes lighten-premium {
+  0% {
+    color: black;
+  }
+
+  50% {
+    color: black;
+  }
+
+  100% {
+    color: black;
+  }
+}
+
+.profile-wrapper-light .premium {
+  -webkit-animation: lighten-premium 3s infinite;
+          animation: lighten-premium 3s infinite;
+}
+
+.profile-wrapper-light hr {
+  background-color: #e6e6e6;
+  border-width: 2px;
+  border-radius: 1px;
+}
+
+.profile-wrapper-dark {
+  border-radius: 1rem;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1d2124;
+  background-color: #1d2124;
+}
+
+.profile-wrapper-dark .profile-picture img {
+  border: solid 4px white;
+}
+
+@keyframes lighten-premium {
+  0% {
+    color: #ffd500;
+  }
+
+  50% {
+    color: #ffdd33;
+  }
+
+  100% {
+    color: #ffd500;
+  }
+}
+
+.profile-wrapper-dark .premium {
+  -webkit-animation: lighten-premium 3s infinite;
+          animation: lighten-premium 3s infinite;
+}
+
+.profile-wrapper-dark hr {
+  background-color: white;
+  border-width: 2px;
+  border-radius: 1px;
 }
 
 /*!

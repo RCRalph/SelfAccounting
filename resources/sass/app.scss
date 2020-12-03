@@ -7,6 +7,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Mixins
+@import 'own-mixins';
+
 // Own classes and customization
 @import 'own-classes';
 @import 'own-customization';
@@ -16,6 +19,9 @@
 
 // Welcome page
 @import 'welcome-page';
+
+// Profile
+@import 'profile-page';
 
 // Font Awesome
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';

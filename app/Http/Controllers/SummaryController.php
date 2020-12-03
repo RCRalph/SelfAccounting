@@ -8,12 +8,12 @@ class SummaryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware("auth");
     }
 
     public function index()
     {
         $darkmode = auth()->user()->darkmode;
-        return view('summary.index', compact('darkmode'));
+        return view("summary.index", compact("darkmode"));
     }
 }

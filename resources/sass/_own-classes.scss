@@ -119,5 +119,19 @@
 }
 
 .gold-stars {
-    color: hsl(50, 100%, 50%);
+    color: $gold-star-color;
+}
+
+.hr {
+    border-width: 2px;
+
+    &-darkmode {
+        @extend .hr;
+        background-color: white;
+    }
+
+    &-lightmode {
+        @extend .hr;
+        background-color: darken(white, 10%);
+    }
 }

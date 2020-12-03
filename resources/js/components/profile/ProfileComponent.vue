@@ -1,0 +1,76 @@
+<template>
+    <div :class="darkmode ? 'dark-card' : 'card'">
+        <div class="card-header-flex">
+            <div class="card-header-text">
+                <i class="fas fa-user"></i>
+                Profile
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div v-if="ready">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <ProfileShowcase
+                            :darkmode="darkmode"
+                            :userData="userData"
+                        ></ProfileShowcase>
+                    </div>
+                    <div class="col-lg-7 mt-sm-3">
+                        <ProfileInfoChange
+                            :userData="userData"
+                        ></ProfileInfoChange>
+
+						<hr :class="[
+                            darkmode ? 'hr-darkmode' : 'hr-lightmode',
+                            'my-3'
+                        ]">
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center my-2" v-else>
+                <div
+                    class="spinner-grow"
+                    role="status"
+                    style="width: 3rem; height: 3rem;"
+                >
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import ProfileShowcase from "./ProfileShowcase.vue";
+import ProfileInfoChange from "./ProfileInfoChange.vue";
+
+export default {
+    components: {
+        ProfileShowcase,
+        ProfileInfoChange
+    },
+    data() {
+        return {
+            ready: false,
+            userData: {},
+        }
+    },
+    beforeMount() {
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
+    },
+    mounted() {
+        axios.get("/webapi/profile", {})
+            .then(response => {
+                this.userData = response.data.user;
+                this.ready = true;
+            })
+    },
+    beforeUpdate() {
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
+    }
+}
+</script>

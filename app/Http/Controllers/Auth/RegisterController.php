@@ -68,6 +68,7 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'profile_picture' => 'Emoji' . rand(1, 6) . '.png'
         ]);
     }
 }

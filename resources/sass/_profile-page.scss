@@ -1,0 +1,9 @@
+.profile-wrapper {
+    &-light {
+        @include profile-wrapper-mixin(white, darken(white, 10%), black, darken($gold-star-color, 100%), darken($gold-star-color, 90%), darken(white, 10%));
+    }
+
+	&-dark {
+        @include profile-wrapper-mixin(darken($dark, 10%), darken($dark, 10%), white, $gold-star-color, lighten($gold-star-color, 10%), white);
+	}
+}

@@ -1,0 +1,64 @@
+@mixin change-text-brightness($name, $color1, $color2) {
+    @keyframes #{ $name } {
+        0% {
+            color: $color1;
+        }
+        50% {
+            color: $color2;
+        }
+        100% {
+            color: $color1;
+        }
+    }
+}
+
+@mixin profile-wrapper-mixin($background, $border, $color, $color1, $color2, $hr-color) {
+    @extend .p-3;
+    @extend .h-100;
+    border-radius: 1rem;
+    border-width: 5px;
+    border-style: solid;
+    border-color: $border;
+    background-color: $background;
+
+    .profile-picture {
+        @extend .rounded-circle;
+
+        img {
+            @extend .w-100;
+            @extend .rounded-circle;
+            border: solid 4px $color;
+        }
+    }
+
+    @include change-text-brightness(lighten-premium, $color1, $color2);
+
+    .premium {
+        animation: lighten-premium 3s infinite;
+    }
+
+    .username {
+        @extend .h3;
+        @extend .text-center;
+        @extend .font-weight-bold;
+        @extend .mt-4;
+    }
+
+    hr {
+        background-color: $hr-color;
+        border-width: 2px;
+        border-radius: 1px;
+    }
+
+    .account-type {
+        @extend .h5;
+        @extend .font-weight-bold;
+        @extend .text-center;
+    }
+
+    .sa-since {
+        @extend .h5;
+        @extend .font-weight-bold;
+        @extend .text-center;
+	}
+}

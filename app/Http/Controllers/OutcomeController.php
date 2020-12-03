@@ -14,7 +14,7 @@ class OutcomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware("auth");
     }
 
     public function index()
@@ -22,7 +22,7 @@ class OutcomeController extends Controller
         $viewType = "outcome";
         $darkmode = auth()->user()->darkmode;
 
-        return view('income-outcome.index', compact('viewType', 'darkmode'));
+        return view("income-outcome.index", compact("viewType", "darkmode"));
     }
 
     public function show(Outcome $outcome)
@@ -33,7 +33,7 @@ class OutcomeController extends Controller
         $darkmode = auth()->user()->darkmode;
         $id = $outcome->id;
 
-        return view('income-outcome.show', compact('viewType', 'darkmode', 'id'));
+        return view("income-outcome.show", compact("viewType", "darkmode", "id"));
     }
 
     public function createOne()

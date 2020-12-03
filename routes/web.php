@@ -42,6 +42,11 @@ Route::prefix('/admin')->group(function() {
     Route::get('/users', 'AdminController@users')->name('admin.users');
 });
 
+Route::prefix('/profile')->group(function() {
+    Route::get('/', 'ProfileController@index')->name('profile');
+    Route::patch('/update', 'ProfileController@update')->name('profile.update');
+});
+
 Route::prefix('/webapi')->group(function() {
     Route::prefix('/summary')->group(function() {
         Route::get('/', 'WebApi\SummaryController@getData')->name('summary.getData');
@@ -80,5 +85,9 @@ Route::prefix('/webapi')->group(function() {
             Route::patch('/admin', 'WebApi\AdminController@changeAdmin')->name('webapi.admin.users.changeAdmin');
             Route::patch('/premium', 'WebApi\AdminController@changePremium')->name('webapi.admin.users.changePremium');
         });
+    });
+
+    Route::prefix('/profile')->group(function() {
+        Route::get('/', 'WebApi\ProfileController@index')->name('webapi.profile.index');
     });
 });
