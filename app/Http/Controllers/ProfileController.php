@@ -20,9 +20,9 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $darkmode = auth()->user()->darkmode;
+        $pageData = $this->getDataForPageRender();
 
-        return view("profile.index", compact("darkmode"));
+        return view("profile.index", compact("pageData"));
     }
 
     public function updateData()

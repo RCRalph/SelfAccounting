@@ -49549,6 +49549,7 @@ jQuery(function () {
         $('.showcase').removeClass('welcome-bg-dark').addClass('welcome-bg-light');
         replaceAttributes("profile-wrapper-dark", "profile-wrapper-light");
         replaceAttributes("hr-darkmode", "hr-lightmode");
+        replaceAttributes("profile-img-darkmode", "profile-img-lightmode");
         $("#darkmode-status").html("0");
       } else {
         // Set darkmode
@@ -49560,6 +49561,7 @@ jQuery(function () {
         $('.showcase').removeClass('welcome-bg-light').addClass('welcome-bg-dark');
         replaceAttributes("profile-wrapper-light", "profile-wrapper-dark");
         replaceAttributes("hr-lightmode", "hr-darkmode");
+        replaceAttributes("profile-img-lightmode", "profile-img-darkmode");
         $("#darkmode-status").html("1");
       }
 

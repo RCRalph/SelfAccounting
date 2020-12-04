@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-{{ ($darkmode ?? false) ? 'dark' : 'light' }} bg-{{ ($darkmode ?? false) ? 'dark' : 'light' }} shadow-sm">
+<nav class="navbar navbar-expand-md navbar-{{ ($pageData["darkmode"] ?? false) ? 'dark' : 'light' }} bg-{{ ($pageData["darkmode"] ?? false) ? 'dark' : 'light' }} shadow-sm">
     <div class="container">
         @guest
             <a class="navbar-brand" href="/">
@@ -73,8 +73,9 @@
                     @endif
                 @else
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->username }} <span class="caret"></span>
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle py-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <img class="profile-img-{{ $pageData["darkmode"] ? 'darkmode' : 'lightmode' }}" src="{{ $pageData["profile_picture"] }}" alt="{{ auth()->user()->username }}">
+                            <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -101,7 +102,7 @@
 
                 <li class="nav-item my-auto" id="darkmode-switcher">
                     <div class="nav-link h5 my-auto" id="sun-moon">
-                        <i class="fas fa-{{ ($darkmode ?? false) ? 'sun' : 'moon' }}"></i>
+                        <i class="fas fa-{{ ($pageData["darkmode"] ?? false) ? 'sun' : 'moon' }}"></i>
                     </div>
                 </li>
             </ul>

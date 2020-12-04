@@ -20,9 +20,9 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
 
-    <body style="background-color: {{ $darkmode ? 'hsl(210, 60%, 2%)' : 'hsl(210, 40%, 98%)' }};">
+    <body style="background-color: hsl(210, 40%, 98%);">
         <div id="app">
-            @include('layouts.navbar', ["darkmode" => $darkmode])
+            @include('layouts.navbar', ["darkmode" => false])
 
             <!-- Header -->
             <header class="masthead text-white text-center">
@@ -42,7 +42,7 @@
             </header>
 
             <!-- Icons Grid -->
-            <section class="welcome-bg-change features-icons text-center bg-{{ $darkmode ? 'dark' : 'light' }} text-{{ $darkmode ? 'light' : 'dark' }}">
+            <section class="welcome-bg-change features-icons text-center bg-light text-dark">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-4">
@@ -80,7 +80,7 @@
             </section>
 
             <!-- Image Showcases -->
-            <section class="showcase {{ $darkmode ? 'welcome-bg-dark' : 'welcome-bg-light' }}">
+            <section class="showcase welcome-bg-light">
                 <div class="container-fluid p-0">
                     <div class="row no-gutters">
                         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://github.com/StartBootstrap/startbootstrap-landing-page/blob/master/img/bg-showcase-3.jpg?raw=true');"></div>
@@ -115,7 +115,7 @@
             </section>
 
             <!-- Testimonials -->
-            <section class="welcome-bg-change testimonials text-center bg-{{ $darkmode ? 'dark' : 'light' }} text-{{ $darkmode ? 'light' : 'dark' }}">
+            <section class="welcome-bg-change testimonials text-center bg-light text-dark">
                 <div class="container">
                     <h2 class="mb-5">What people are saying...</h2>
 

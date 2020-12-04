@@ -17,6 +17,7 @@ class ProfileController extends Controller
     public function index()
     {
         $user = auth()->user()->only("profile_picture", "username", "premium_expiration", "created_at", "admin", "email");
+
         if (preg_match("/Emoji[1-6].png/", $user["profile_picture"])) {
             $user["profile_picture"] = "/avatars/" . $user["profile_picture"];
         }

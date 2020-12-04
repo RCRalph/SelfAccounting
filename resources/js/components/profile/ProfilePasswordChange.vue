@@ -1,13 +1,13 @@
 <template>
     <div>
-        <form action="/profile/password" method="POST" enctype="multipart/form-data">
+        <form id="password-form" action="/profile/password" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_token" :value="CSRF_TOKEN">
             <input type="hidden" name="_method" value="PATCH">
 
             <div class="form-group row">
                 <label class="col-xl-4 col-form-label text-xl-right">New password</label>
                 <div class="col-xl-7">
-                    <input type="password" v-model="passwords[0]" name="password" :class="[
+                    <input type="password" v-model="passwords[0]" name="password" autofill="none" :class="[
                         'form-control',
                         !validPasswords && 'is-invalid'
                     ]">
@@ -17,7 +17,7 @@
             <div class="form-group row">
                 <label class="col-xl-4 col-form-label text-xl-right">Confirm password</label>
                 <div class="col-xl-7">
-                    <input type="password" v-model="passwords[1]" name="password_confirmation" :class="[
+                    <input type="password" v-model="passwords[1]" name="password_confirmation" autofill="none" :class="[
                         'form-control',
                         !validPasswords && 'is-invalid'
                     ]">
@@ -26,7 +26,7 @@
 
             <div class="form-group row">
                 <div class="col-xl-7 offset-xl-4">
-                    <button type="submit" class="big-button-success" @click="submit = true" :disabled="!canSubmit || !validPasswords">
+                    <button type="button" class="big-button-success" @click="submitForm" :disabled="!canSubmit || !validPasswords">
                         <div v-if="!submit">
                             Save changes
                         </div>
@@ -45,6 +45,12 @@ export default {
         return {
             passwords: ["", ""],
             submit: false
+        }
+    },
+    methods: {
+        submitForm: function() {
+            document.getElementById("password-form").submit();
+            this.submit = true;
         }
     },
     computed: {

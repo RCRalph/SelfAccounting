@@ -10,4 +10,18 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function getDataForPageRender()
+    {
+        $user = auth()->user()->only("darkmode", "profile_picture");
+
+        if (preg_match("/Emoji[1-6].png/", $user["profile_picture"])) {
+            $user["profile_picture"] = "/avatars/" . $user["profile_picture"];
+        }
+        else {
+            $user["profile_picture"] = env("IBM_COS_ENDPOINT") . "/" . env("IBM_COS_BUCKET") . "/profile_pictures/" . $user["profile_picture"];
+        }
+
+        return $user;
+    }
 }

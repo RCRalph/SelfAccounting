@@ -135,3 +135,21 @@
         background-color: darken(white, 10%);
     }
 }
+
+.profile-img {
+    @extend .rounded-circle;
+    border: solid 1px white;
+    height: 39px;
+    width: 39px;
+    background-color: white;
+
+    &-lightmode {
+        @extend .profile-img;
+        border-color: black;
+    }
+
+    &-darkmode {
+        @extend .profile-img;
+        border-color: white;
+    }
+}

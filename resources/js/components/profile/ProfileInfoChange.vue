@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form action="/profile/update" method="POST" enctype="multipart/form-data">
+        <form id="data-form" action="/profile/update" method="POST" enctype="multipart/form-data">
 			<input type="hidden" name="_token" :value="CSRF_TOKEN">
             <input type="hidden" name="_method" value="PATCH">
 
@@ -37,7 +37,7 @@
 
             <div class="row">
                 <div class="col-sm-6 my-2 my-sm-0">
-                    <button type="submit" class="big-button-success" @click="submit = true" :disabled="disableSubmit || submit">
+                    <button type="button" class="big-button-success" @click="submitForm" :disabled="disableSubmit || submit">
                         <div v-if="!submit">
                             Save changes
                         </div>
@@ -73,7 +73,10 @@ export default {
         checkFile: function() {
             const fileType = document.getElementById("picture").files[0].type;
             this.correctFile = fileType.includes("image");
-            this.disableSubmit = !this.correctFile || this.disableSubmit;
+        },
+        submitForm: function() {
+            document.getElementById("data-form").submit();
+            this.submit = true;
         }
     },
     beforeMount() {

@@ -20,9 +20,9 @@ class IncomeController extends Controller
     public function index()
     {
         $viewType = "income";
-        $darkmode = auth()->user()->darkmode;
+        $pageData = $this->getDataForPageRender();
 
-        return view("income-outcome.index", compact("viewType", "darkmode"));
+        return view("income-outcome.index", compact("viewType", "pageData"));
     }
 
     public function show(Income $income)
@@ -30,16 +30,16 @@ class IncomeController extends Controller
         $this->authorize("view", $income);
 
         $viewType = "income";
-        $darkmode = auth()->user()->darkmode;
+        $pageData = $this->getDataForPageRender();
         $id = $income->id;
 
-        return view("income-outcome.show", compact("viewType", "darkmode", "id"));
+        return view("income-outcome.show", compact("viewType", "pageData", "id"));
     }
 
     public function createOne()
     {
         $viewType = "income";
-        $darkmode = auth()->user()->darkmode;
-        return view("income-outcome.create.one", compact("viewType", "darkmode"));
+        $pageData = $this->getDataForPageRender();
+        return view("income-outcome.create.one", compact("viewType", "pageData"));
 	}
 }

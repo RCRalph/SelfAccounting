@@ -260,7 +260,10 @@ __webpack_require__.r(__webpack_exports__);
     checkFile: function checkFile() {
       var fileType = document.getElementById("picture").files[0].type;
       this.correctFile = fileType.includes("image");
-      this.disableSubmit = !this.correctFile || this.disableSubmit;
+    },
+    submitForm: function submitForm() {
+      document.getElementById("data-form").submit();
+      this.submit = true;
     }
   },
   beforeMount: function beforeMount() {
@@ -341,6 +344,12 @@ __webpack_require__.r(__webpack_exports__);
       passwords: ["", ""],
       submit: false
     };
+  },
+  methods: {
+    submitForm: function submitForm() {
+      document.getElementById("password-form").submit();
+      this.submit = true;
+    }
   },
   computed: {
     CSRF_TOKEN: function CSRF_TOKEN() {
@@ -478,7 +487,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c(
                 "div",
-                { staticClass: "col-lg-5" },
+                { staticClass: "col-lg-6 col-xl-5" },
                 [
                   _c("ProfileShowcase", {
                     attrs: { darkmode: _vm.darkmode, userData: _vm.userData }
@@ -489,7 +498,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "col-lg-7 mt-sm-3" },
+                { staticClass: "col-lg-6 col-xl-7 mt-sm-3" },
                 [
                   _c("ProfileInfoChange", {
                     attrs: { userData: _vm.userData }
@@ -567,6 +576,7 @@ var render = function() {
       "form",
       {
         attrs: {
+          id: "data-form",
           action: "/profile/update",
           method: "POST",
           enctype: "multipart/form-data"
@@ -691,14 +701,10 @@ var render = function() {
               {
                 staticClass: "big-button-success",
                 attrs: {
-                  type: "submit",
+                  type: "button",
                   disabled: _vm.disableSubmit || _vm.submit
                 },
-                on: {
-                  click: function($event) {
-                    _vm.submit = true
-                  }
-                }
+                on: { click: _vm.submitForm }
               },
               [
                 !_vm.submit
@@ -758,6 +764,7 @@ var render = function() {
       "form",
       {
         attrs: {
+          id: "password-form",
           action: "/profile/password",
           method: "POST",
           enctype: "multipart/form-data"
@@ -791,7 +798,7 @@ var render = function() {
                 }
               ],
               class: ["form-control", !_vm.validPasswords && "is-invalid"],
-              attrs: { type: "password", name: "password" },
+              attrs: { type: "password", name: "password", autofill: "none" },
               domProps: { value: _vm.passwords[0] },
               on: {
                 input: function($event) {
@@ -823,7 +830,11 @@ var render = function() {
                 }
               ],
               class: ["form-control", !_vm.validPasswords && "is-invalid"],
-              attrs: { type: "password", name: "password_confirmation" },
+              attrs: {
+                type: "password",
+                name: "password_confirmation",
+                autofill: "none"
+              },
               domProps: { value: _vm.passwords[1] },
               on: {
                 input: function($event) {
@@ -844,14 +855,10 @@ var render = function() {
               {
                 staticClass: "big-button-success",
                 attrs: {
-                  type: "submit",
+                  type: "button",
                   disabled: !_vm.canSubmit || !_vm.validPasswords
                 },
-                on: {
-                  click: function($event) {
-                    _vm.submit = true
-                  }
-                }
+                on: { click: _vm.submitForm }
               },
               [
                 !_vm.submit

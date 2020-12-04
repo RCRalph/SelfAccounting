@@ -16,7 +16,7 @@ class SettingsController extends Controller
 
     public function index()
     {
-        $darkmode = auth()->user()->darkmode;
-        return view("settings.index", compact("darkmode"));
+        $pageData = $this->getDataForPageRender();
+        return view("settings.index", compact("pageData"));
     }
 }

@@ -13,7 +13,7 @@ class SummaryController extends Controller
 
     public function index()
     {
-        $darkmode = auth()->user()->darkmode;
-        return view("summary.index", compact("darkmode"));
+        $pageData = $this->getDataForPageRender();
+        return view("summary.index", compact("pageData"));
     }
 }

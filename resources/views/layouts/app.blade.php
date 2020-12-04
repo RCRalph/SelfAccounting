@@ -18,10 +18,10 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
 
-    <body style="background-color: {{ $darkmode  ? 'hsl(210, 60%, 2%)' : 'hsl(210, 40%, 98%)' }};">
-        <div id="darkmode-status" style="display: none;">{{ $darkmode }}</div>
+    <body style="background-color: {{ $pageData["darkmode"]  ? 'hsl(210, 60%, 2%)' : 'hsl(210, 40%, 98%)' }};">
+        <div id="darkmode-status" style="display: none;">{{ $pageData["darkmode"] }}</div>
         <div id="app">
-            @include('layouts.navbar', ["darkmode" => $darkmode ])
+            @include('layouts.navbar', compact("pageData"))
 
             <main class="py-4">
                 @yield('wrapper')

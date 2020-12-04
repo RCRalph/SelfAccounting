@@ -13,8 +13,6 @@ class WelcomePageController extends Controller
             return redirect()->route("summary");
         }
 
-        return view("welcome", [
-            "darkmode" => false
-        ]);
+        return view("welcome");
     }
 }

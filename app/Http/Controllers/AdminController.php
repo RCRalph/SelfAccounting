@@ -16,8 +16,8 @@ class AdminController extends Controller
 
     public function users()
     {
-        $darkmode = auth()->user()->darkmode;
+        $pageData = $this->getDataForPageRender();
 
-        return view("admin.users", compact("darkmode"));
+        return view("admin.users", compact("pageData"));
     }
 }

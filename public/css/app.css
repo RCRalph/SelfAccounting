@@ -7856,7 +7856,10 @@ button.dark-card:focus {
 .profile-wrapper-dark .profile-picture img,
 .profile-wrapper-dark .profile-picture,
 .profile-wrapper-light .profile-picture img,
-.profile-wrapper-light .profile-picture {
+.profile-wrapper-light .profile-picture,
+.profile-img,
+.profile-img-darkmode,
+.profile-img-lightmode {
   border-radius: 50% !important;
 }
 
@@ -11727,6 +11730,23 @@ a.text-dark:focus {
 
 .hr-lightmode {
   background-color: #e6e6e6;
+}
+
+.profile-img,
+.profile-img-darkmode,
+.profile-img-lightmode {
+  border: solid 1px white;
+  height: 39px;
+  width: 39px;
+  background-color: white;
+}
+
+.profile-img-lightmode {
+  border-color: black;
+}
+
+.profile-img-darkmode {
+  border-color: white;
 }
 
 td,
