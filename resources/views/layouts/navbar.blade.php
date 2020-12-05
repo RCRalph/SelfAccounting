@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-{{ ($pageData["darkmode"] ?? false) ? 'dark' : 'light' }} bg-{{ ($pageData["darkmode"] ?? false) ? 'dark' : 'light' }} shadow-sm">
+<nav class="navbar navbar-expand-md navbar-{{ ($pageData["darkmode"] ?? false)  ? 'dark' : 'light' }}mode shadow-sm">
     <div class="container">
         @guest
             <a class="navbar-brand" href="/">
@@ -31,6 +31,13 @@
                         <a class="nav-link" href="/outcome">
                             <i class="fas fa-sign-out-alt"></i>
                             {{ __('Outcome') }}
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/bundles">
+                            <i class="fas fa-box-open"></i>
+                            {{ __('Bundles') }}
                         </a>
                     </li>
 

@@ -377,6 +377,8 @@ h4,
 h5,
 h6,
 .h1,
+.bundle-wrapper-dark .title,
+.bundle-wrapper-light .title,
 .h2,
 .h3,
 .profile-wrapper-dark .username,
@@ -396,7 +398,9 @@ h6,
 }
 
 h1,
-.h1 {
+.h1,
+.bundle-wrapper-dark .title,
+.bundle-wrapper-light .title {
   font-size: 2.25rem;
 }
 
@@ -5476,105 +5480,139 @@ input[type=button].big-button-danger {
   display: none;
 }
 
-.navbar-light .navbar-brand {
+.navbar-light .navbar-brand,
+.navbar-lightmode .navbar-brand {
   color: rgba(0, 0, 0, 0.9);
 }
 
 .navbar-light .navbar-brand:hover,
-.navbar-light .navbar-brand:focus {
+.navbar-lightmode .navbar-brand:hover,
+.navbar-light .navbar-brand:focus,
+.navbar-lightmode .navbar-brand:focus {
   color: rgba(0, 0, 0, 0.9);
 }
 
-.navbar-light .navbar-nav .nav-link {
+.navbar-light .navbar-nav .nav-link,
+.navbar-lightmode .navbar-nav .nav-link {
   color: rgba(0, 0, 0, 0.5);
 }
 
 .navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link:focus {
+.navbar-lightmode .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-lightmode .navbar-nav .nav-link:focus {
   color: rgba(0, 0, 0, 0.7);
 }
 
-.navbar-light .navbar-nav .nav-link.disabled {
+.navbar-light .navbar-nav .nav-link.disabled,
+.navbar-lightmode .navbar-nav .nav-link.disabled {
   color: rgba(0, 0, 0, 0.3);
 }
 
 .navbar-light .navbar-nav .show > .nav-link,
+.navbar-lightmode .navbar-nav .show > .nav-link,
 .navbar-light .navbar-nav .active > .nav-link,
+.navbar-lightmode .navbar-nav .active > .nav-link,
 .navbar-light .navbar-nav .nav-link.show,
-.navbar-light .navbar-nav .nav-link.active {
+.navbar-lightmode .navbar-nav .nav-link.show,
+.navbar-light .navbar-nav .nav-link.active,
+.navbar-lightmode .navbar-nav .nav-link.active {
   color: rgba(0, 0, 0, 0.9);
 }
 
-.navbar-light .navbar-toggler {
+.navbar-light .navbar-toggler,
+.navbar-lightmode .navbar-toggler {
   color: rgba(0, 0, 0, 0.5);
   border-color: rgba(0, 0, 0, 0.1);
 }
 
-.navbar-light .navbar-toggler-icon {
+.navbar-light .navbar-toggler-icon,
+.navbar-lightmode .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-.navbar-light .navbar-text {
+.navbar-light .navbar-text,
+.navbar-lightmode .navbar-text {
   color: rgba(0, 0, 0, 0.5);
 }
 
-.navbar-light .navbar-text a {
+.navbar-light .navbar-text a,
+.navbar-lightmode .navbar-text a {
   color: rgba(0, 0, 0, 0.9);
 }
 
 .navbar-light .navbar-text a:hover,
-.navbar-light .navbar-text a:focus {
+.navbar-lightmode .navbar-text a:hover,
+.navbar-light .navbar-text a:focus,
+.navbar-lightmode .navbar-text a:focus {
   color: rgba(0, 0, 0, 0.9);
 }
 
-.navbar-dark .navbar-brand {
+.navbar-dark .navbar-brand,
+.navbar-darkmode .navbar-brand {
   color: #fff;
 }
 
 .navbar-dark .navbar-brand:hover,
-.navbar-dark .navbar-brand:focus {
+.navbar-darkmode .navbar-brand:hover,
+.navbar-dark .navbar-brand:focus,
+.navbar-darkmode .navbar-brand:focus {
   color: #fff;
 }
 
-.navbar-dark .navbar-nav .nav-link {
+.navbar-dark .navbar-nav .nav-link,
+.navbar-darkmode .navbar-nav .nav-link {
   color: rgba(255, 255, 255, 0.5);
 }
 
 .navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus {
+.navbar-darkmode .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus,
+.navbar-darkmode .navbar-nav .nav-link:focus {
   color: rgba(255, 255, 255, 0.75);
 }
 
-.navbar-dark .navbar-nav .nav-link.disabled {
+.navbar-dark .navbar-nav .nav-link.disabled,
+.navbar-darkmode .navbar-nav .nav-link.disabled {
   color: rgba(255, 255, 255, 0.25);
 }
 
 .navbar-dark .navbar-nav .show > .nav-link,
+.navbar-darkmode .navbar-nav .show > .nav-link,
 .navbar-dark .navbar-nav .active > .nav-link,
+.navbar-darkmode .navbar-nav .active > .nav-link,
 .navbar-dark .navbar-nav .nav-link.show,
-.navbar-dark .navbar-nav .nav-link.active {
+.navbar-darkmode .navbar-nav .nav-link.show,
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-darkmode .navbar-nav .nav-link.active {
   color: #fff;
 }
 
-.navbar-dark .navbar-toggler {
+.navbar-dark .navbar-toggler,
+.navbar-darkmode .navbar-toggler {
   color: rgba(255, 255, 255, 0.5);
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-.navbar-dark .navbar-toggler-icon {
+.navbar-dark .navbar-toggler-icon,
+.navbar-darkmode .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-.navbar-dark .navbar-text {
+.navbar-dark .navbar-text,
+.navbar-darkmode .navbar-text {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.navbar-dark .navbar-text a {
+.navbar-dark .navbar-text a,
+.navbar-darkmode .navbar-text a {
   color: #fff;
 }
 
 .navbar-dark .navbar-text a:hover,
-.navbar-dark .navbar-text a:focus {
+.navbar-darkmode .navbar-text a:hover,
+.navbar-dark .navbar-text a:focus,
+.navbar-darkmode .navbar-text a:focus {
   color: #fff;
 }
 
@@ -7709,29 +7747,49 @@ button.bg-danger:focus {
   background-color: #c51f1a !important;
 }
 
-.bg-light {
+.bg-light,
+.welcome-bg-change-lightmode,
+.navbar-lightmode {
   background-color: #f8f9fa !important;
 }
 
 a.bg-light:hover,
+a.welcome-bg-change-lightmode:hover,
+a.navbar-lightmode:hover,
 a.bg-light:focus,
+a.welcome-bg-change-lightmode:focus,
+a.navbar-lightmode:focus,
 button.bg-light:hover,
-button.bg-light:focus {
+button.welcome-bg-change-lightmode:hover,
+button.navbar-lightmode:hover,
+button.bg-light:focus,
+button.welcome-bg-change-lightmode:focus,
+button.navbar-lightmode:focus {
   background-color: #dae0e5 !important;
 }
 
 .bg-dark,
+.welcome-bg-change-darkmode,
+.navbar-darkmode,
 .dark-card {
   background-color: #343a40 !important;
 }
 
 a.bg-dark:hover,
+a.welcome-bg-change-darkmode:hover,
+a.navbar-darkmode:hover,
 a.dark-card:hover,
 a.bg-dark:focus,
+a.welcome-bg-change-darkmode:focus,
+a.navbar-darkmode:focus,
 a.dark-card:focus,
 button.bg-dark:hover,
+button.welcome-bg-change-darkmode:hover,
+button.navbar-darkmode:hover,
 button.dark-card:hover,
 button.bg-dark:focus,
+button.welcome-bg-change-darkmode:focus,
+button.navbar-darkmode:focus,
 button.dark-card:focus {
   background-color: #1d2124 !important;
 }
@@ -9035,6 +9093,8 @@ button.dark-card:focus {
 }
 
 .w-100,
+.bundle-wrapper-dark,
+.bundle-wrapper-light,
 .profile-wrapper-dark .profile-picture img,
 .profile-wrapper-light .profile-picture img,
 .card-body-centered {
@@ -9058,6 +9118,8 @@ button.dark-card:focus {
 }
 
 .h-100,
+.bundle-wrapper-dark,
+.bundle-wrapper-light,
 .profile-wrapper-dark,
 .profile-wrapper-light {
   height: 100% !important;
@@ -9154,6 +9216,8 @@ button.dark-card:focus {
 }
 
 .mb-2,
+.bundle-wrapper-dark .title,
+.bundle-wrapper-light .title,
 .my-2 {
   margin-bottom: 0.5rem !important;
 }
@@ -9163,11 +9227,15 @@ button.dark-card:focus {
   margin-left: 0.5rem !important;
 }
 
-.m-3 {
+.m-3,
+.bundle-wrapper-dark .image,
+.bundle-wrapper-light .image {
   margin: 1rem !important;
 }
 
 .mt-3,
+.bundle-wrapper-dark .title,
+.bundle-wrapper-light .title,
 .my-3 {
   margin-top: 1rem !important;
 }
@@ -9178,6 +9246,8 @@ button.dark-card:focus {
 }
 
 .mb-3,
+.bundle-wrapper-dark .description,
+.bundle-wrapper-light .description,
 .my-3 {
   margin-bottom: 1rem !important;
 }
@@ -9295,7 +9365,9 @@ button.dark-card:focus {
 }
 
 .pr-2,
-.px-2 {
+.px-2,
+.bundle-wrapper-dark .description,
+.bundle-wrapper-light .description {
   padding-right: 0.5rem !important;
 }
 
@@ -9305,7 +9377,9 @@ button.dark-card:focus {
 }
 
 .pl-2,
-.px-2 {
+.px-2,
+.bundle-wrapper-dark .description,
+.bundle-wrapper-light .description {
   padding-left: 0.5rem !important;
 }
 
@@ -11318,6 +11392,8 @@ button.dark-card:focus {
 }
 
 .text-center,
+.bundle-wrapper-dark .title,
+.bundle-wrapper-light .title,
 .profile-wrapper-dark .sa-since,
 .profile-wrapper-dark .account-type,
 .profile-wrapper-dark .username,
@@ -11411,6 +11487,8 @@ button.dark-card:focus {
 }
 
 .font-weight-bold,
+.bundle-wrapper-dark .title,
+.bundle-wrapper-light .title,
 .profile-wrapper-dark .sa-since,
 .profile-wrapper-dark .account-type,
 .profile-wrapper-dark .username,
@@ -11491,21 +11569,27 @@ a.text-danger:focus {
   color: #ae1c17 !important;
 }
 
-.text-light {
+.text-light,
+.welcome-bg-change-darkmode {
   color: #f8f9fa !important;
 }
 
 a.text-light:hover,
-a.text-light:focus {
+a.welcome-bg-change-darkmode:hover,
+a.text-light:focus,
+a.welcome-bg-change-darkmode:focus {
   color: #cbd3da !important;
 }
 
-.text-dark {
+.text-dark,
+.welcome-bg-change-lightmode {
   color: #343a40 !important;
 }
 
 a.text-dark:hover,
-a.text-dark:focus {
+a.welcome-bg-change-lightmode:hover,
+a.text-dark:focus,
+a.welcome-bg-change-lightmode:focus {
   color: #121416 !important;
 }
 
@@ -11889,10 +11973,12 @@ header.masthead h1 {
 
 .features-icons .features-icons-item .features-icons-icon i {
   font-size: 5rem;
+  transition: font-size 0.5s;
 }
 
 .features-icons .features-icons-item:hover .features-icons-icon i {
   font-size: 6rem;
+  transition: font-size 0.5s;
 }
 
 .testimonials {
@@ -11909,29 +11995,37 @@ header.masthead h1 {
   border: solid 2px #7f7f7f;
 }
 
-.showcase .showcase-text {
+.welcome-bg-light,
+.showcase-light {
+  background-color: white;
+  color: black;
+}
+
+.welcome-bg-dark,
+.showcase-dark {
+  background-color: #1a1d20;
+  color: white;
+}
+
+.showcase .showcase-text,
+.showcase-light .showcase-text,
+.showcase-dark .showcase-text {
   padding: 3rem;
 }
 
-.showcase .showcase-img {
+.showcase .showcase-img,
+.showcase-light .showcase-img,
+.showcase-dark .showcase-img {
   min-height: 30rem;
   background-size: cover;
 }
 
 @media (min-width: 768px) {
-  .showcase .showcase-text {
+  .showcase .showcase-text,
+  .showcase-light .showcase-text,
+  .showcase-dark .showcase-text {
     padding: 7rem;
   }
-}
-
-.welcome-bg-light {
-  background-color: white;
-  color: black;
-}
-
-.welcome-bg-dark {
-  background-color: #1a1d20;
-  color: white;
 }
 
 .profile-wrapper-light {
@@ -12020,6 +12114,62 @@ header.masthead h1 {
   background-color: white;
   border-width: 2px;
   border-radius: 1px;
+}
+
+.bundle-wrapper-light {
+  border-radius: 1rem;
+  border-width: 5px;
+  border-style: solid;
+  color: black;
+  border-color: #e6e6e6;
+  background-color: white;
+  transition: background-color 0.5s;
+}
+
+.bundle-wrapper-light .image {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 1rem;
+  border: solid 4px #e6e6e6;
+}
+
+.bundle-wrapper-light .description {
+  font-size: 20px;
+  text-align: center;
+}
+
+.bundle-wrapper-light:hover {
+  background-color: #f9f9f9;
+  transition: background-color 0.5s;
+}
+
+.bundle-wrapper-dark {
+  border-radius: 1rem;
+  border-width: 5px;
+  border-style: solid;
+  color: white;
+  border-color: #1d2124;
+  background-color: #1d2124;
+  transition: background-color 0.5s;
+}
+
+.bundle-wrapper-dark .image {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 1rem;
+  border: solid 4px #1d2124;
+}
+
+.bundle-wrapper-dark .description {
+  font-size: 20px;
+  text-align: center;
+}
+
+.bundle-wrapper-dark:hover {
+  background-color: #23272b;
+  transition: background-color 0.5s;
 }
 
 /*!

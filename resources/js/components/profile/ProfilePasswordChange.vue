@@ -7,7 +7,7 @@
             <div class="form-group row">
                 <label class="col-xl-4 col-form-label text-xl-right">New password</label>
                 <div class="col-xl-7">
-                    <input type="password" v-model="passwords[0]" name="password" autofill="none" :class="[
+                    <input type="password" v-model="passwords[0]" name="password" autocomplete="off" :class="[
                         'form-control',
                         !validPasswords && 'is-invalid'
                     ]">
@@ -17,7 +17,7 @@
             <div class="form-group row">
                 <label class="col-xl-4 col-form-label text-xl-right">Confirm password</label>
                 <div class="col-xl-7">
-                    <input type="password" v-model="passwords[1]" name="password_confirmation" autofill="none" :class="[
+                    <input type="password" v-model="passwords[1]" name="password_confirmation" autocomplete="off" :class="[
                         'form-control',
                         !validPasswords && 'is-invalid'
                     ]">

@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -798,7 +798,11 @@ var render = function() {
                 }
               ],
               class: ["form-control", !_vm.validPasswords && "is-invalid"],
-              attrs: { type: "password", name: "password", autofill: "none" },
+              attrs: {
+                type: "password",
+                name: "password",
+                autocomplete: "off"
+              },
               domProps: { value: _vm.passwords[0] },
               on: {
                 input: function($event) {
@@ -833,7 +837,7 @@ var render = function() {
               attrs: {
                 type: "password",
                 name: "password_confirmation",
-                autofill: "none"
+                autocomplete: "off"
               },
               domProps: { value: _vm.passwords[1] },
               on: {
@@ -1367,7 +1371,7 @@ var app = new Vue({
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /*!***************************************!*\
   !*** multi ./resources/js/profile.js ***!
   \***************************************/

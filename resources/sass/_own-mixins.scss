@@ -62,3 +62,46 @@
         @extend .text-center;
 	}
 }
+
+@mixin bundle-wrapper-mixin($background-color, $border-color, $text-color, $hover-color) {
+    @extend .w-100;
+    @extend .h-100;
+
+    border-radius: 1rem;
+    border-width: 5px;
+    border-style: solid;
+    color: $text-color;
+
+    border-color: $border-color;
+    background-color: $background-color;
+    transition: background-color 0.5s;
+
+    .image {
+        @extend .m-3;
+        height: 300px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 1rem;
+        border: solid 4px $border-color;
+    }
+
+    .title {
+        @extend .h1;
+        @extend .font-weight-bold;
+        @extend .text-center;
+        @extend .mt-3;
+        @extend .mb-2;
+    }
+
+    .description {
+        @extend .px-2;
+        @extend .mb-3;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    &:hover {
+        background-color: $hover-color;
+        transition: background-color 0.5s;
+    }
+}

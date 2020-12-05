@@ -75,6 +75,7 @@ header.masthead {
 
             i {
                 font-size: 5rem;
+                transition: font-size 0.5s;
             }
         }
 
@@ -82,6 +83,7 @@ header.masthead {
             .features-icons-icon {
                 i {
                     font-size: 6rem;
+                    transition: font-size 0.5s;
                 }
             }
         }
@@ -102,7 +104,29 @@ header.masthead {
     }
 }
 
+.welcome-bg {
+    &-light {
+        background-color: white;
+        color: black;
+    }
+
+    &-dark {
+        background-color: #1a1d20;
+        color: white;
+    }
+}
+
 .showcase {
+    &-light {
+        @extend .showcase;
+        @extend .welcome-bg-light;
+    }
+
+    &-dark {
+        @extend .showcase;
+        @extend .welcome-bg-dark;
+    }
+
     .showcase-text {
       padding: 3rem;
     }
@@ -119,14 +143,14 @@ header.masthead {
     }
 }
 
-.welcome-bg {
-    &-light {
-        background-color: white;
-        color: black;
+.welcome-bg-change {
+    &-lightmode {
+        @extend .bg-light;
+        @extend .text-dark;
     }
 
-    &-dark {
-        background-color: #1a1d20;
-        color: white;
+    &-darkmode {
+        @extend .bg-dark;
+        @extend .text-light;
     }
 }

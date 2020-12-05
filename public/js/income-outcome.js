@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2117,7 +2117,7 @@ function xhrClient (request) {
 
 function nodeClient (request) {
 
-    var client = __webpack_require__(/*! got */ 3);
+    var client = __webpack_require__(/*! got */ 4);
 
     return new PromiseObj(function (resolve) {
 
@@ -2739,7 +2739,7 @@ var app = new Vue({
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /*!**********************************************!*\
   !*** multi ./resources/js/income-outcome.js ***!
   \**********************************************/
@@ -2751,7 +2751,7 @@ module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Progra
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!*********************!*\
   !*** got (ignored) ***!
   \*********************/

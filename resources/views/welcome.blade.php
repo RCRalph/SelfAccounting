@@ -42,7 +42,7 @@
             </header>
 
             <!-- Icons Grid -->
-            <section class="welcome-bg-change features-icons text-center bg-light text-dark">
+            <section class="welcome-bg-change-lightmode features-icons text-center">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-4">
@@ -80,7 +80,7 @@
             </section>
 
             <!-- Image Showcases -->
-            <section class="showcase welcome-bg-light">
+            <section class="showcase-light">
                 <div class="container-fluid p-0">
                     <div class="row no-gutters">
                         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://github.com/StartBootstrap/startbootstrap-landing-page/blob/master/img/bg-showcase-3.jpg?raw=true');"></div>
@@ -115,7 +115,7 @@
             </section>
 
             <!-- Testimonials -->
-            <section class="welcome-bg-change testimonials text-center bg-light text-dark">
+            <section class="welcome-bg-change-lightmode testimonials text-center">
                 <div class="container">
                     <h2 class="mb-5">What people are saying...</h2>
 

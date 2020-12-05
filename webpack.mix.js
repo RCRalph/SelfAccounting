@@ -13,6 +13,7 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
+    .js('resources/js/table-hovering.js', 'public/js')
     .js('resources/js/settings.js', 'public/js')
     .js('resources/js/income-outcome.js', 'public/js')
     .js('resources/js/income-outcome-edit.js', 'public/js')

@@ -7,3 +7,13 @@
         @include profile-wrapper-mixin(darken($dark, 10%), darken($dark, 10%), white, $gold-star-color, lighten($gold-star-color, 10%), white);
 	}
 }
+
+.bundle-wrapper {
+    &-light {
+        @include bundle-wrapper-mixin(white, darken(white, 10%), black, darken(white, 2.5%));
+    }
+
+    &-dark {
+        @include bundle-wrapper-mixin(darken($dark, 10%), darken($dark, 10%), white, darken($dark, 7.5%));
+    }
+}

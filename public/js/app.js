@@ -49530,38 +49530,52 @@ jQuery(function () {
   $('[data-toggle="tooltip"]').tooltip(); // Darkmode switcher
 
   $('#darkmode-switcher').on('click', function () {
-    function replaceAttributes(source, target) {
-      $("." + source).removeClass(source).addClass(target);
-    }
-
     var sunMoon = $('#sun-moon');
 
     if (sunMoon.html().includes('<i class="fas fa-sun"></i>') || sunMoon.html().includes('<i class="fas fa-moon"></i>')) {
-      var isDarkmode = sunMoon.html().includes('<i class="fas fa-sun"></i>');
+      var isDarkmode = sunMoon.html().includes('<i class="fas fa-sun"></i>'),
+          switchAttributes = [{
+        light: "navbar-lightmode",
+        dark: "navbar-darkmode"
+      }, {
+        light: "card",
+        dark: "dark-card"
+      }, {
+        light: "table-lightmode",
+        dark: "table-darkmode"
+      }, {
+        light: "welcome-bg-change-lightmode",
+        dark: "welcome-bg-change-darkmode"
+      }, {
+        light: "showcase-light",
+        dark: "showcase-dark"
+      }, {
+        light: "profile-wrapper-light",
+        dark: "profile-wrapper-dark"
+      }, {
+        light: "hr-lightmode",
+        dark: "hr-darkmode"
+      }, {
+        light: "profile-img-lightmode",
+        dark: "profile-img-darkmode"
+      }, {
+        light: "bundle-wrapper-light",
+        dark: "bundle-wrapper-dark"
+      }];
 
       if (isDarkmode) {
         // Set lightmode
-        $('nav').removeClass('navbar-dark bg-dark').addClass('navbar-light bg-light');
         $('body').css('background-color', 'hsl(210, 40%, 98%)');
-        replaceAttributes("dark-card", "card");
-        replaceAttributes("table-darkmode", "table-lightmode");
-        $('.welcome-bg-change').removeClass('bg-dark text-light').addClass('bg-light text-dark');
-        $('.showcase').removeClass('welcome-bg-dark').addClass('welcome-bg-light');
-        replaceAttributes("profile-wrapper-dark", "profile-wrapper-light");
-        replaceAttributes("hr-darkmode", "hr-lightmode");
-        replaceAttributes("profile-img-darkmode", "profile-img-lightmode");
+        switchAttributes.forEach(function (item) {
+          $("." + item.dark).removeClass(item.dark).addClass(item.light);
+        });
         $("#darkmode-status").html("0");
       } else {
         // Set darkmode
-        $('nav').removeClass('navbar-light bg-light').addClass('navbar-dark bg-dark');
         $('body').css('background-color', 'hsl(210, 60%, 2%)');
-        replaceAttributes("card", "dark-card");
-        replaceAttributes("table-lightmode", "table-darkmode");
-        $('.welcome-bg-change').removeClass('bg-light text-dark').addClass('bg-dark text-light');
-        $('.showcase').removeClass('welcome-bg-light').addClass('welcome-bg-dark');
-        replaceAttributes("profile-wrapper-light", "profile-wrapper-dark");
-        replaceAttributes("hr-lightmode", "hr-darkmode");
-        replaceAttributes("profile-img-lightmode", "profile-img-darkmode");
+        switchAttributes.forEach(function (item) {
+          $("." + item.light).removeClass(item.light).addClass(item.dark);
+        });
         $("#darkmode-status").html("1");
       }
 
@@ -49574,58 +49588,7 @@ jQuery(function () {
         sunMoon.html(isDarkmode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>');
       });
     }
-  }); // Special table hovering
-
-  if ($("#table-multi-hover").length) {
-    var headerValues = Array.from($("thead")[0].children[0].children).map(function (item) {
-      return item.innerText.toLowerCase();
-    });
-    var table = [];
-    var tableCells = Array.from($("tbody")[0].children).map(function (item) {
-      return item.children;
-    }).map(function (item) {
-      return Array.from(item);
-    });
-
-    for (var i = 0; i < tableCells.length; i++) {
-      var tempObj = {};
-
-      for (var j = 0; j < tableCells[i].length; j++) {
-        tempObj[tableCells[i][j].attributes.rep.value] = tableCells[i][j];
-      }
-
-      for (var _j = 0; _j < headerValues.length; _j++) {
-        if (i != 0 && tempObj[headerValues[_j]] == undefined) {
-          tempObj[headerValues[_j]] = table[i - 1][headerValues[_j]];
-        }
-      }
-
-      table.push(Object.assign({}, tempObj));
-    }
-
-    $("tbody td, tbody th").on("mouseover", function (event) {
-      var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
-      var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
-      var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
-
-      for (var _i = 0; _i < rowspan; _i++) {
-        for (var _j2 in table[rowIndex + _i]) {
-          $(table[rowIndex + _i][_j2]).addClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
-        }
-      }
-    });
-    $("tbody td, tbody th").on("mouseleave", function (event) {
-      var isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
-      var rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
-      var rowspan = event.currentTarget.attributes.rowspan != undefined ? parseInt(event.currentTarget.attributes.rowspan.value) : 1;
-
-      for (var _i2 = 0; _i2 < rowspan; _i2++) {
-        for (var _j3 in table[rowIndex + _i2]) {
-          $(table[rowIndex + _i2][_j3]).removeClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
-        }
-      }
-    });
-  }
+  });
 });
 
 /***/ }),

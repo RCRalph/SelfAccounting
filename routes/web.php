@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +45,10 @@ Route::prefix('/profile')->group(function() {
     Route::get('/', 'ProfileController@index')->name('profile');
     Route::patch('/update', 'ProfileController@updateData')->name('profile.updateData');
     Route::patch('/password', 'ProfileController@updatePassword')->name('profile.updatePassword');
+});
+
+Route::prefix('/bundles')->group(function() {
+    Route::get('/', 'BundleController@index')->name('bundles');
 });
 
 Route::prefix('/webapi')->group(function() {
