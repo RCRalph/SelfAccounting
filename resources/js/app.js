@@ -45,6 +45,10 @@ jQuery(() => {
                 {
                     light: "bundle-wrapper-light",
                     dark: "bundle-wrapper-dark"
+                },
+                {
+                    light: "carousel-lightmode",
+                    dark: "carousel-darkmode"
                 }
             ]
 

@@ -59,6 +59,15 @@
         @extend .big-button;
         @extend .btn-primary;
     }
+
+    &-golden {
+        @extend .big-button;
+        background-color: $gold-star-color;
+
+        &:hover {
+            background-color: darken($gold-star-color, 10%);
+        }
+    }
 }
 
 .form-date {
@@ -164,4 +173,36 @@
 		@extend .navbar-dark;
 		@extend .bg-dark;
 	}
+}
+
+.bundle-image {
+    @extend .d-block;
+    @extend .mx-auto;
+
+    max-width: 100%;
+    height: 100%;
+    border-radius: 2rem;
+}
+
+.carousel-control-prev {
+    margin-left: -65px;
+}
+
+.carousel-control-next {
+    margin-right: -65px;
+}
+
+.carousel-indicators {
+    margin-bottom: -35px;
+}
+
+.carousel-lightmode {
+    filter: invert(100%);
+}
+
+.description-long {
+    @extend .mt-4;
+    @extend .w-100;
+
+    text-align: center;
 }

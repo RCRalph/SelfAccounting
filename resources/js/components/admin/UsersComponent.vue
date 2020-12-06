@@ -70,6 +70,7 @@ export default {
     },
     data() {
         return {
+            darkmode: false,
             ready: false,
             disabled: false,
             paginationData: {}

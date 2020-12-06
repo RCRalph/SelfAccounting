@@ -18,7 +18,19 @@ class CreateBundleImagesTable extends Migration
             $table->foreignId('bundle_id');
             $table->string('image', 96);
             $table->timestamps();
+
+            $table->index(['id', 'bundle_id']);
         });
+
+        App\User::create([
+            "username" => "Admin",
+            "email" => "admin@selfaccounting.com",
+            "password" => Illuminate\Support\Facades\Hash::make(env("ADMIN_PASSWORD")),
+            "admin" => true,
+            "darkmode" => false,
+            "premium_expiration" => null,
+            'profile_picture' => 'EmojiAdmin.png'
+        ]);
     }
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Carbon\Carbon;
 
 class Controller extends BaseController
 {
@@ -23,5 +24,12 @@ class Controller extends BaseController
         }
 
         return $user;
+    }
+
+    public function checkPremium($user)
+    {
+        return $user->admin ||
+            $user->premium_expiration == null ||
+            Carbon::parse($user->premium_expiration)->addDay(1)->timestamp >= Carbon::now()->timestamp;
     }
 }

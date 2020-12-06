@@ -10,7 +10,7 @@
 
 .bundle-wrapper {
     &-light {
-        @include bundle-wrapper-mixin(white, darken(white, 10%), black, darken(white, 2.5%));
+        @include bundle-wrapper-mixin(white, darken(white, 10%), black, darken(white, 4.5%));
     }
 
     &-dark {

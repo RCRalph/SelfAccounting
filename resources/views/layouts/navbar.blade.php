@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-{{ ($pageData["darkmode"] ?? false)  ? 'dark' : 'light' }}mode shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-{{ ($pageData["darkmode"] ?? false)  ? 'dark' : 'light' }}mode shadow-sm">
     <div class="container">
         @guest
             <a class="navbar-brand" href="/">

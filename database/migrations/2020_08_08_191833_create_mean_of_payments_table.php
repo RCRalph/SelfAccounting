@@ -28,16 +28,6 @@ class CreateMeanOfPaymentsTable extends Migration
 
             $table->index(['id', 'user_id']);
         });
-
-        App\User::create([
-            "username" => "Admin",
-            "email" => "admin@selfaccounting.com",
-            "password" => Illuminate\Support\Facades\Hash::make(env("ADMIN_PASSWORD")),
-            "admin" => true,
-            "darkmode" => false,
-            "premium_expiration" => null,
-            'profile_picture' => 'EmojiAdmin.png'
-        ]);
     }
 
     /**

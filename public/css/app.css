@@ -2841,6 +2841,7 @@ textarea.is-invalid.form-date {
 
 .btn,
 .big-button,
+.big-button-golden,
 .big-button-primary,
 .big-button-success,
 .big-button-danger {
@@ -2865,6 +2866,7 @@ textarea.is-invalid.form-date {
 @media (prefers-reduced-motion: reduce) {
   .btn,
   .big-button,
+  .big-button-golden,
   .big-button-primary,
   .big-button-success,
   .big-button-danger {
@@ -2874,6 +2876,7 @@ textarea.is-invalid.form-date {
 
 .btn:hover,
 .big-button:hover,
+.big-button-golden:hover,
 .big-button-primary:hover,
 .big-button-success:hover,
 .big-button-danger:hover {
@@ -2883,11 +2886,13 @@ textarea.is-invalid.form-date {
 
 .btn:focus,
 .big-button:focus,
+.big-button-golden:focus,
 .big-button-primary:focus,
 .big-button-success:focus,
 .big-button-danger:focus,
 .btn.focus,
 .focus.big-button,
+.focus.big-button-golden,
 .focus.big-button-primary,
 .focus.big-button-success,
 .focus.big-button-danger {
@@ -2897,11 +2902,13 @@ textarea.is-invalid.form-date {
 
 .btn.disabled,
 .disabled.big-button,
+.disabled.big-button-golden,
 .disabled.big-button-primary,
 .disabled.big-button-success,
 .disabled.big-button-danger,
 .btn:disabled,
 .big-button:disabled,
+.big-button-golden:disabled,
 .big-button-primary:disabled,
 .big-button-success:disabled,
 .big-button-danger:disabled {
@@ -2910,6 +2917,7 @@ textarea.is-invalid.form-date {
 
 .btn:not(:disabled):not(.disabled),
 .big-button:not(:disabled):not(.disabled),
+.big-button-golden:not(:disabled):not(.disabled),
 .big-button-primary:not(:disabled):not(.disabled),
 .big-button-success:not(:disabled):not(.disabled),
 .big-button-danger:not(:disabled):not(.disabled) {
@@ -2918,11 +2926,13 @@ textarea.is-invalid.form-date {
 
 a.btn.disabled,
 a.disabled.big-button,
+a.disabled.big-button-golden,
 a.disabled.big-button-primary,
 a.disabled.big-button-success,
 a.disabled.big-button-danger,
 fieldset:disabled a.btn,
 fieldset:disabled a.big-button,
+fieldset:disabled a.big-button-golden,
 fieldset:disabled a.big-button-primary,
 fieldset:disabled a.big-button-success,
 fieldset:disabled a.big-button-danger {
@@ -3606,6 +3616,7 @@ fieldset:disabled a.big-button-danger {
 .btn-lg,
 .btn-group-lg > .btn,
 .btn-group-lg > .big-button,
+.btn-group-lg > .big-button-golden,
 .btn-group-lg > .big-button-primary,
 .btn-group-lg > .big-button-success,
 .btn-group-lg > .big-button-danger {
@@ -3618,6 +3629,7 @@ fieldset:disabled a.big-button-danger {
 .btn-sm,
 .btn-group-sm > .btn,
 .btn-group-sm > .big-button,
+.btn-group-sm > .big-button-golden,
 .btn-group-sm > .big-button-primary,
 .btn-group-sm > .big-button-success,
 .btn-group-sm > .big-button-danger {
@@ -3629,6 +3641,7 @@ fieldset:disabled a.big-button-danger {
 
 .btn-block,
 .big-button,
+.big-button-golden,
 .big-button-primary,
 .big-button-success,
 .big-button-danger {
@@ -3638,26 +3651,37 @@ fieldset:disabled a.big-button-danger {
 
 .btn-block + .btn-block,
 .big-button + .btn-block,
+.big-button-golden + .btn-block,
 .big-button-primary + .btn-block,
 .big-button-success + .btn-block,
 .big-button-danger + .btn-block,
 .btn-block + .big-button,
+.btn-block + .big-button-golden,
 .btn-block + .big-button-primary,
 .btn-block + .big-button-success,
 .btn-block + .big-button-danger,
 .big-button + .big-button,
+.big-button-golden + .big-button,
+.big-button + .big-button-golden,
+.big-button-golden + .big-button-golden,
 .big-button-primary + .big-button,
+.big-button-primary + .big-button-golden,
 .big-button + .big-button-primary,
+.big-button-golden + .big-button-primary,
 .big-button-primary + .big-button-primary,
 .big-button-success + .big-button,
+.big-button-success + .big-button-golden,
 .big-button-success + .big-button-primary,
 .big-button + .big-button-success,
+.big-button-golden + .big-button-success,
 .big-button-primary + .big-button-success,
 .big-button-success + .big-button-success,
 .big-button-danger + .big-button,
+.big-button-danger + .big-button-golden,
 .big-button-danger + .big-button-primary,
 .big-button-danger + .big-button-success,
 .big-button + .big-button-danger,
+.big-button-golden + .big-button-danger,
 .big-button-primary + .big-button-danger,
 .big-button-success + .big-button-danger,
 .big-button-danger + .big-button-danger {
@@ -3666,16 +3690,19 @@ fieldset:disabled a.big-button-danger {
 
 input[type=submit].btn-block,
 input[type=submit].big-button,
+input[type=submit].big-button-golden,
 input[type=submit].big-button-primary,
 input[type=submit].big-button-success,
 input[type=submit].big-button-danger,
 input[type=reset].btn-block,
 input[type=reset].big-button,
+input[type=reset].big-button-golden,
 input[type=reset].big-button-primary,
 input[type=reset].big-button-success,
 input[type=reset].big-button-danger,
 input[type=button].btn-block,
 input[type=button].big-button,
+input[type=button].big-button-golden,
 input[type=button].big-button-primary,
 input[type=button].big-button-success,
 input[type=button].big-button-danger {
@@ -3980,11 +4007,13 @@ input[type=button].big-button-danger {
 
 .btn-group > .btn,
 .btn-group > .big-button,
+.btn-group > .big-button-golden,
 .btn-group > .big-button-primary,
 .btn-group > .big-button-success,
 .btn-group > .big-button-danger,
 .btn-group-vertical > .btn,
 .btn-group-vertical > .big-button,
+.btn-group-vertical > .big-button-golden,
 .btn-group-vertical > .big-button-primary,
 .btn-group-vertical > .big-button-success,
 .btn-group-vertical > .big-button-danger {
@@ -3994,11 +4023,13 @@ input[type=button].big-button-danger {
 
 .btn-group > .btn:hover,
 .btn-group > .big-button:hover,
+.btn-group > .big-button-golden:hover,
 .btn-group > .big-button-primary:hover,
 .btn-group > .big-button-success:hover,
 .btn-group > .big-button-danger:hover,
 .btn-group-vertical > .btn:hover,
 .btn-group-vertical > .big-button:hover,
+.btn-group-vertical > .big-button-golden:hover,
 .btn-group-vertical > .big-button-primary:hover,
 .btn-group-vertical > .big-button-success:hover,
 .btn-group-vertical > .big-button-danger:hover {
@@ -4007,31 +4038,37 @@ input[type=button].big-button-danger {
 
 .btn-group > .btn:focus,
 .btn-group > .big-button:focus,
+.btn-group > .big-button-golden:focus,
 .btn-group > .big-button-primary:focus,
 .btn-group > .big-button-success:focus,
 .btn-group > .big-button-danger:focus,
 .btn-group > .btn:active,
 .btn-group > .big-button:active,
+.btn-group > .big-button-golden:active,
 .btn-group > .big-button-primary:active,
 .btn-group > .big-button-success:active,
 .btn-group > .big-button-danger:active,
 .btn-group > .btn.active,
 .btn-group > .active.big-button,
+.btn-group > .active.big-button-golden,
 .btn-group > .active.big-button-primary,
 .btn-group > .active.big-button-success,
 .btn-group > .active.big-button-danger,
 .btn-group-vertical > .btn:focus,
 .btn-group-vertical > .big-button:focus,
+.btn-group-vertical > .big-button-golden:focus,
 .btn-group-vertical > .big-button-primary:focus,
 .btn-group-vertical > .big-button-success:focus,
 .btn-group-vertical > .big-button-danger:focus,
 .btn-group-vertical > .btn:active,
 .btn-group-vertical > .big-button:active,
+.btn-group-vertical > .big-button-golden:active,
 .btn-group-vertical > .big-button-primary:active,
 .btn-group-vertical > .big-button-success:active,
 .btn-group-vertical > .big-button-danger:active,
 .btn-group-vertical > .btn.active,
 .btn-group-vertical > .active.big-button,
+.btn-group-vertical > .active.big-button-golden,
 .btn-group-vertical > .active.big-button-primary,
 .btn-group-vertical > .active.big-button-success,
 .btn-group-vertical > .active.big-button-danger {
@@ -4050,6 +4087,7 @@ input[type=button].big-button-danger {
 
 .btn-group > .btn:not(:first-child),
 .btn-group > .big-button:not(:first-child),
+.btn-group > .big-button-golden:not(:first-child),
 .btn-group > .big-button-primary:not(:first-child),
 .btn-group > .big-button-success:not(:first-child),
 .btn-group > .big-button-danger:not(:first-child),
@@ -4059,11 +4097,13 @@ input[type=button].big-button-danger {
 
 .btn-group > .btn:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button:not(:last-child):not(.dropdown-toggle),
+.btn-group > .big-button-golden:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button-primary:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button-success:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button-danger:not(:last-child):not(.dropdown-toggle),
 .btn-group > .btn-group:not(:last-child) > .btn,
 .btn-group > .btn-group:not(:last-child) > .big-button,
+.btn-group > .btn-group:not(:last-child) > .big-button-golden,
 .btn-group > .btn-group:not(:last-child) > .big-button-primary,
 .btn-group > .btn-group:not(:last-child) > .big-button-success,
 .btn-group > .btn-group:not(:last-child) > .big-button-danger {
@@ -4073,11 +4113,13 @@ input[type=button].big-button-danger {
 
 .btn-group > .btn:not(:first-child),
 .btn-group > .big-button:not(:first-child),
+.btn-group > .big-button-golden:not(:first-child),
 .btn-group > .big-button-primary:not(:first-child),
 .btn-group > .big-button-success:not(:first-child),
 .btn-group > .big-button-danger:not(:first-child),
 .btn-group > .btn-group:not(:first-child) > .btn,
 .btn-group > .btn-group:not(:first-child) > .big-button,
+.btn-group > .btn-group:not(:first-child) > .big-button-golden,
 .btn-group > .btn-group:not(:first-child) > .big-button-primary,
 .btn-group > .btn-group:not(:first-child) > .big-button-success,
 .btn-group > .btn-group:not(:first-child) > .big-button-danger {
@@ -4103,6 +4145,7 @@ input[type=button].big-button-danger {
 .btn-sm + .dropdown-toggle-split,
 .btn-group-sm > .btn + .dropdown-toggle-split,
 .btn-group-sm > .big-button + .dropdown-toggle-split,
+.btn-group-sm > .big-button-golden + .dropdown-toggle-split,
 .btn-group-sm > .big-button-primary + .dropdown-toggle-split,
 .btn-group-sm > .big-button-success + .dropdown-toggle-split,
 .btn-group-sm > .big-button-danger + .dropdown-toggle-split {
@@ -4113,6 +4156,7 @@ input[type=button].big-button-danger {
 .btn-lg + .dropdown-toggle-split,
 .btn-group-lg > .btn + .dropdown-toggle-split,
 .btn-group-lg > .big-button + .dropdown-toggle-split,
+.btn-group-lg > .big-button-golden + .dropdown-toggle-split,
 .btn-group-lg > .big-button-primary + .dropdown-toggle-split,
 .btn-group-lg > .big-button-success + .dropdown-toggle-split,
 .btn-group-lg > .big-button-danger + .dropdown-toggle-split {
@@ -4128,6 +4172,7 @@ input[type=button].big-button-danger {
 
 .btn-group-vertical > .btn,
 .btn-group-vertical > .big-button,
+.btn-group-vertical > .big-button-golden,
 .btn-group-vertical > .big-button-primary,
 .btn-group-vertical > .big-button-success,
 .btn-group-vertical > .big-button-danger,
@@ -4137,6 +4182,7 @@ input[type=button].big-button-danger {
 
 .btn-group-vertical > .btn:not(:first-child),
 .btn-group-vertical > .big-button:not(:first-child),
+.btn-group-vertical > .big-button-golden:not(:first-child),
 .btn-group-vertical > .big-button-primary:not(:first-child),
 .btn-group-vertical > .big-button-success:not(:first-child),
 .btn-group-vertical > .big-button-danger:not(:first-child),
@@ -4146,11 +4192,13 @@ input[type=button].big-button-danger {
 
 .btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button:not(:last-child):not(.dropdown-toggle),
+.btn-group-vertical > .big-button-golden:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button-primary:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button-success:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button-danger:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .btn-group:not(:last-child) > .btn,
 .btn-group-vertical > .btn-group:not(:last-child) > .big-button,
+.btn-group-vertical > .btn-group:not(:last-child) > .big-button-golden,
 .btn-group-vertical > .btn-group:not(:last-child) > .big-button-primary,
 .btn-group-vertical > .btn-group:not(:last-child) > .big-button-success,
 .btn-group-vertical > .btn-group:not(:last-child) > .big-button-danger {
@@ -4160,11 +4208,13 @@ input[type=button].big-button-danger {
 
 .btn-group-vertical > .btn:not(:first-child),
 .btn-group-vertical > .big-button:not(:first-child),
+.btn-group-vertical > .big-button-golden:not(:first-child),
 .btn-group-vertical > .big-button-primary:not(:first-child),
 .btn-group-vertical > .big-button-success:not(:first-child),
 .btn-group-vertical > .big-button-danger:not(:first-child),
 .btn-group-vertical > .btn-group:not(:first-child) > .btn,
 .btn-group-vertical > .btn-group:not(:first-child) > .big-button,
+.btn-group-vertical > .btn-group:not(:first-child) > .big-button-golden,
 .btn-group-vertical > .btn-group:not(:first-child) > .big-button-primary,
 .btn-group-vertical > .btn-group:not(:first-child) > .big-button-success,
 .btn-group-vertical > .btn-group:not(:first-child) > .big-button-danger {
@@ -4174,11 +4224,13 @@ input[type=button].big-button-danger {
 
 .btn-group-toggle > .btn,
 .btn-group-toggle > .big-button,
+.btn-group-toggle > .big-button-golden,
 .btn-group-toggle > .big-button-primary,
 .btn-group-toggle > .big-button-success,
 .btn-group-toggle > .big-button-danger,
 .btn-group-toggle > .btn-group > .btn,
 .btn-group-toggle > .btn-group > .big-button,
+.btn-group-toggle > .btn-group > .big-button-golden,
 .btn-group-toggle > .btn-group > .big-button-primary,
 .btn-group-toggle > .btn-group > .big-button-success,
 .btn-group-toggle > .btn-group > .big-button-danger {
@@ -4187,11 +4239,13 @@ input[type=button].big-button-danger {
 
 .btn-group-toggle > .btn input[type=radio],
 .btn-group-toggle > .big-button input[type=radio],
+.btn-group-toggle > .big-button-golden input[type=radio],
 .btn-group-toggle > .big-button-primary input[type=radio],
 .btn-group-toggle > .big-button-success input[type=radio],
 .btn-group-toggle > .big-button-danger input[type=radio],
 .btn-group-toggle > .btn input[type=checkbox],
 .btn-group-toggle > .big-button input[type=checkbox],
+.btn-group-toggle > .big-button-golden input[type=checkbox],
 .btn-group-toggle > .big-button-primary input[type=checkbox],
 .btn-group-toggle > .big-button-success input[type=checkbox],
 .btn-group-toggle > .big-button-danger input[type=checkbox],
@@ -4341,11 +4395,13 @@ input[type=button].big-button-danger {
 
 .input-group-prepend .btn,
 .input-group-prepend .big-button,
+.input-group-prepend .big-button-golden,
 .input-group-prepend .big-button-primary,
 .input-group-prepend .big-button-success,
 .input-group-prepend .big-button-danger,
 .input-group-append .btn,
 .input-group-append .big-button,
+.input-group-append .big-button-golden,
 .input-group-append .big-button-primary,
 .input-group-append .big-button-success,
 .input-group-append .big-button-danger {
@@ -4355,11 +4411,13 @@ input[type=button].big-button-danger {
 
 .input-group-prepend .btn:focus,
 .input-group-prepend .big-button:focus,
+.input-group-prepend .big-button-golden:focus,
 .input-group-prepend .big-button-primary:focus,
 .input-group-prepend .big-button-success:focus,
 .input-group-prepend .big-button-danger:focus,
 .input-group-append .btn:focus,
 .input-group-append .big-button:focus,
+.input-group-append .big-button-golden:focus,
 .input-group-append .big-button-primary:focus,
 .input-group-append .big-button-success:focus,
 .input-group-append .big-button-danger:focus {
@@ -4368,73 +4426,99 @@ input[type=button].big-button-danger {
 
 .input-group-prepend .btn + .btn,
 .input-group-prepend .big-button + .btn,
+.input-group-prepend .big-button-golden + .btn,
 .input-group-prepend .big-button-primary + .btn,
 .input-group-prepend .big-button-success + .btn,
 .input-group-prepend .big-button-danger + .btn,
 .input-group-prepend .btn + .big-button,
+.input-group-prepend .btn + .big-button-golden,
 .input-group-prepend .btn + .big-button-primary,
 .input-group-prepend .btn + .big-button-success,
 .input-group-prepend .btn + .big-button-danger,
 .input-group-prepend .big-button + .big-button,
+.input-group-prepend .big-button-golden + .big-button,
+.input-group-prepend .big-button + .big-button-golden,
+.input-group-prepend .big-button-golden + .big-button-golden,
 .input-group-prepend .big-button-primary + .big-button,
+.input-group-prepend .big-button-primary + .big-button-golden,
 .input-group-prepend .big-button + .big-button-primary,
+.input-group-prepend .big-button-golden + .big-button-primary,
 .input-group-prepend .big-button-primary + .big-button-primary,
 .input-group-prepend .big-button-success + .big-button,
+.input-group-prepend .big-button-success + .big-button-golden,
 .input-group-prepend .big-button-success + .big-button-primary,
 .input-group-prepend .big-button + .big-button-success,
+.input-group-prepend .big-button-golden + .big-button-success,
 .input-group-prepend .big-button-primary + .big-button-success,
 .input-group-prepend .big-button-success + .big-button-success,
 .input-group-prepend .big-button-danger + .big-button,
+.input-group-prepend .big-button-danger + .big-button-golden,
 .input-group-prepend .big-button-danger + .big-button-primary,
 .input-group-prepend .big-button-danger + .big-button-success,
 .input-group-prepend .big-button + .big-button-danger,
+.input-group-prepend .big-button-golden + .big-button-danger,
 .input-group-prepend .big-button-primary + .big-button-danger,
 .input-group-prepend .big-button-success + .big-button-danger,
 .input-group-prepend .big-button-danger + .big-button-danger,
 .input-group-prepend .btn + .input-group-text,
 .input-group-prepend .big-button + .input-group-text,
+.input-group-prepend .big-button-golden + .input-group-text,
 .input-group-prepend .big-button-primary + .input-group-text,
 .input-group-prepend .big-button-success + .input-group-text,
 .input-group-prepend .big-button-danger + .input-group-text,
 .input-group-prepend .input-group-text + .input-group-text,
 .input-group-prepend .input-group-text + .btn,
 .input-group-prepend .input-group-text + .big-button,
+.input-group-prepend .input-group-text + .big-button-golden,
 .input-group-prepend .input-group-text + .big-button-primary,
 .input-group-prepend .input-group-text + .big-button-success,
 .input-group-prepend .input-group-text + .big-button-danger,
 .input-group-append .btn + .btn,
 .input-group-append .big-button + .btn,
+.input-group-append .big-button-golden + .btn,
 .input-group-append .big-button-primary + .btn,
 .input-group-append .big-button-success + .btn,
 .input-group-append .big-button-danger + .btn,
 .input-group-append .btn + .big-button,
+.input-group-append .btn + .big-button-golden,
 .input-group-append .btn + .big-button-primary,
 .input-group-append .btn + .big-button-success,
 .input-group-append .btn + .big-button-danger,
 .input-group-append .big-button + .big-button,
+.input-group-append .big-button-golden + .big-button,
+.input-group-append .big-button + .big-button-golden,
+.input-group-append .big-button-golden + .big-button-golden,
 .input-group-append .big-button-primary + .big-button,
+.input-group-append .big-button-primary + .big-button-golden,
 .input-group-append .big-button + .big-button-primary,
+.input-group-append .big-button-golden + .big-button-primary,
 .input-group-append .big-button-primary + .big-button-primary,
 .input-group-append .big-button-success + .big-button,
+.input-group-append .big-button-success + .big-button-golden,
 .input-group-append .big-button-success + .big-button-primary,
 .input-group-append .big-button + .big-button-success,
+.input-group-append .big-button-golden + .big-button-success,
 .input-group-append .big-button-primary + .big-button-success,
 .input-group-append .big-button-success + .big-button-success,
 .input-group-append .big-button-danger + .big-button,
+.input-group-append .big-button-danger + .big-button-golden,
 .input-group-append .big-button-danger + .big-button-primary,
 .input-group-append .big-button-danger + .big-button-success,
 .input-group-append .big-button + .big-button-danger,
+.input-group-append .big-button-golden + .big-button-danger,
 .input-group-append .big-button-primary + .big-button-danger,
 .input-group-append .big-button-success + .big-button-danger,
 .input-group-append .big-button-danger + .big-button-danger,
 .input-group-append .btn + .input-group-text,
 .input-group-append .big-button + .input-group-text,
+.input-group-append .big-button-golden + .input-group-text,
 .input-group-append .big-button-primary + .input-group-text,
 .input-group-append .big-button-success + .input-group-text,
 .input-group-append .big-button-danger + .input-group-text,
 .input-group-append .input-group-text + .input-group-text,
 .input-group-append .input-group-text + .btn,
 .input-group-append .input-group-text + .big-button,
+.input-group-append .input-group-text + .big-button-golden,
 .input-group-append .input-group-text + .big-button-primary,
 .input-group-append .input-group-text + .big-button-success,
 .input-group-append .input-group-text + .big-button-danger {
@@ -4489,11 +4573,13 @@ input[type=button].big-button-danger {
 .input-group-lg > .input-group-append > .input-group-text,
 .input-group-lg > .input-group-prepend > .btn,
 .input-group-lg > .input-group-prepend > .big-button,
+.input-group-lg > .input-group-prepend > .big-button-golden,
 .input-group-lg > .input-group-prepend > .big-button-primary,
 .input-group-lg > .input-group-prepend > .big-button-success,
 .input-group-lg > .input-group-prepend > .big-button-danger,
 .input-group-lg > .input-group-append > .btn,
 .input-group-lg > .input-group-append > .big-button,
+.input-group-lg > .input-group-append > .big-button-golden,
 .input-group-lg > .input-group-append > .big-button-primary,
 .input-group-lg > .input-group-append > .big-button-success,
 .input-group-lg > .input-group-append > .big-button-danger {
@@ -4522,11 +4608,13 @@ input[type=button].big-button-danger {
 .input-group-sm > .input-group-append > .input-group-text,
 .input-group-sm > .input-group-prepend > .btn,
 .input-group-sm > .input-group-prepend > .big-button,
+.input-group-sm > .input-group-prepend > .big-button-golden,
 .input-group-sm > .input-group-prepend > .big-button-primary,
 .input-group-sm > .input-group-prepend > .big-button-success,
 .input-group-sm > .input-group-prepend > .big-button-danger,
 .input-group-sm > .input-group-append > .btn,
 .input-group-sm > .input-group-append > .big-button,
+.input-group-sm > .input-group-append > .big-button-golden,
 .input-group-sm > .input-group-append > .big-button-primary,
 .input-group-sm > .input-group-append > .big-button-success,
 .input-group-sm > .input-group-append > .big-button-danger {
@@ -4543,18 +4631,21 @@ input[type=button].big-button-danger {
 
 .input-group > .input-group-prepend > .btn,
 .input-group > .input-group-prepend > .big-button,
+.input-group > .input-group-prepend > .big-button-golden,
 .input-group > .input-group-prepend > .big-button-primary,
 .input-group > .input-group-prepend > .big-button-success,
 .input-group > .input-group-prepend > .big-button-danger,
 .input-group > .input-group-prepend > .input-group-text,
 .input-group > .input-group-append:not(:last-child) > .btn,
 .input-group > .input-group-append:not(:last-child) > .big-button,
+.input-group > .input-group-append:not(:last-child) > .big-button-golden,
 .input-group > .input-group-append:not(:last-child) > .big-button-primary,
 .input-group > .input-group-append:not(:last-child) > .big-button-success,
 .input-group > .input-group-append:not(:last-child) > .big-button-danger,
 .input-group > .input-group-append:not(:last-child) > .input-group-text,
 .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .big-button:not(:last-child):not(.dropdown-toggle),
+.input-group > .input-group-append:last-child > .big-button-golden:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .big-button-primary:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .big-button-success:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .big-button-danger:not(:last-child):not(.dropdown-toggle),
@@ -4565,18 +4656,21 @@ input[type=button].big-button-danger {
 
 .input-group > .input-group-append > .btn,
 .input-group > .input-group-append > .big-button,
+.input-group > .input-group-append > .big-button-golden,
 .input-group > .input-group-append > .big-button-primary,
 .input-group > .input-group-append > .big-button-success,
 .input-group > .input-group-append > .big-button-danger,
 .input-group > .input-group-append > .input-group-text,
 .input-group > .input-group-prepend:not(:first-child) > .btn,
 .input-group > .input-group-prepend:not(:first-child) > .big-button,
+.input-group > .input-group-prepend:not(:first-child) > .big-button-golden,
 .input-group > .input-group-prepend:not(:first-child) > .big-button-primary,
 .input-group > .input-group-prepend:not(:first-child) > .big-button-success,
 .input-group > .input-group-prepend:not(:first-child) > .big-button-danger,
 .input-group > .input-group-prepend:not(:first-child) > .input-group-text,
 .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
 .input-group > .input-group-prepend:first-child > .big-button:not(:first-child),
+.input-group > .input-group-prepend:first-child > .big-button-golden:not(:first-child),
 .input-group > .input-group-prepend:first-child > .big-button-primary:not(:first-child),
 .input-group > .input-group-prepend:first-child > .big-button-success:not(:first-child),
 .input-group > .input-group-prepend:first-child > .big-button-danger:not(:first-child),
@@ -6057,6 +6151,7 @@ a.badge:focus {
 
 .btn .badge,
 .big-button .badge,
+.big-button-golden .badge,
 .big-button-primary .badge,
 .big-button-success .badge,
 .big-button-danger .badge {
@@ -7947,7 +8042,8 @@ button.dark-card:focus {
   display: inline-block !important;
 }
 
-.d-block {
+.d-block,
+.bundle-image {
   display: block !important;
 }
 
@@ -9097,6 +9193,7 @@ button.dark-card:focus {
 .bundle-wrapper-light,
 .profile-wrapper-dark .profile-picture img,
 .profile-wrapper-light .profile-picture img,
+.description-long,
 .card-body-centered {
   width: 100% !important;
 }
@@ -9264,6 +9361,7 @@ button.dark-card:focus {
 .mt-4,
 .profile-wrapper-dark .username,
 .profile-wrapper-light .username,
+.description-long,
 .my-4 {
   margin-top: 1.5rem !important;
 }
@@ -9593,7 +9691,8 @@ button.dark-card:focus {
 
 .mr-auto,
 .card-header-text,
-.mx-auto {
+.mx-auto,
+.bundle-image {
   margin-right: auto !important;
 }
 
@@ -9604,7 +9703,8 @@ button.dark-card:focus {
 }
 
 .ml-auto,
-.mx-auto {
+.mx-auto,
+.bundle-image {
   margin-left: auto !important;
 }
 
@@ -11496,6 +11596,7 @@ button.dark-card:focus {
 .profile-wrapper-light .account-type,
 .profile-wrapper-light .username,
 .big-button,
+.big-button-golden,
 .big-button-primary,
 .big-button-success,
 .big-button-danger {
@@ -11646,7 +11747,7 @@ a.welcome-bg-change-lightmode:focus {
     box-shadow: none !important;
   }
 
-  a:not(.btn):not(.big-button):not(.big-button-primary):not(.big-button-success):not(.big-button-danger) {
+  a:not(.btn):not(.big-button):not(.big-button-golden):not(.big-button-primary):not(.big-button-success):not(.big-button-danger) {
     text-decoration: underline;
   }
 
@@ -11762,6 +11863,14 @@ a.welcome-bg-change-lightmode:focus {
   flex-wrap: wrap;
 }
 
+.big-button-golden {
+  background-color: #ffd500;
+}
+
+.big-button-golden:hover {
+  background-color: #ccaa00;
+}
+
 .form-date {
   width: 170px;
 }
@@ -11831,6 +11940,32 @@ a.welcome-bg-change-lightmode:focus {
 
 .profile-img-darkmode {
   border-color: white;
+}
+
+.bundle-image {
+  max-width: 100%;
+  height: 100%;
+  border-radius: 2rem;
+}
+
+.carousel-control-prev {
+  margin-left: -65px;
+}
+
+.carousel-control-next {
+  margin-right: -65px;
+}
+
+.carousel-indicators {
+  margin-bottom: -35px;
+}
+
+.carousel-lightmode {
+  filter: invert(100%);
+}
+
+.description-long {
+  text-align: center;
 }
 
 td,
@@ -12123,7 +12258,7 @@ header.masthead h1 {
   color: black;
   border-color: #e6e6e6;
   background-color: white;
-  transition: background-color 0.5s;
+  transition: border-color 0.5s, background-color 0.5s;
 }
 
 .bundle-wrapper-light .image {
@@ -12140,8 +12275,9 @@ header.masthead h1 {
 }
 
 .bundle-wrapper-light:hover {
-  background-color: #f9f9f9;
-  transition: background-color 0.5s;
+  background-color: #f4f4f4;
+  border-color: #f4f4f4;
+  transition: border-color 0.5s, background-color 0.5s;
 }
 
 .bundle-wrapper-dark {
@@ -12151,7 +12287,7 @@ header.masthead h1 {
   color: white;
   border-color: #1d2124;
   background-color: #1d2124;
-  transition: background-color 0.5s;
+  transition: border-color 0.5s, background-color 0.5s;
 }
 
 .bundle-wrapper-dark .image {
@@ -12169,7 +12305,8 @@ header.masthead h1 {
 
 .bundle-wrapper-dark:hover {
   background-color: #23272b;
-  transition: background-color 0.5s;
+  border-color: #23272b;
+  transition: border-color 0.5s, background-color 0.5s;
 }
 
 /*!

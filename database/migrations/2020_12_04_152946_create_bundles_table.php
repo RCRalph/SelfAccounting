@@ -21,6 +21,8 @@ class CreateBundlesTable extends Migration
             $table->text('short_description');
             $table->text('description');
             $table->timestamps();
+
+            $table->index(['id']);
         });
     }
 

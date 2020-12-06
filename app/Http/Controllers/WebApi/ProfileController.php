@@ -16,7 +16,7 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $user = auth()->user()->only("profile_picture", "username", "premium_expiration", "created_at", "admin", "email");
+        $user = auth()->user()->only("profile_picture", "username", "created_at", "premium_expiration", "admin", "email");
 
         if (preg_match("/Emoji[1-6].png/", $user["profile_picture"])) {
             $user["profile_picture"] = "/avatars/" . $user["profile_picture"];
@@ -24,6 +24,8 @@ class ProfileController extends Controller
         else {
             $user["profile_picture"] = env("IBM_COS_ENDPOINT") . "/" . env("IBM_COS_BUCKET") . "/profile_pictures/" . $user["profile_picture"];
         }
+
+        $user["premium"] = $this->checkPremium(auth()->user());
 
         return response()->json(compact("user"));
     }

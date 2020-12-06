@@ -74,7 +74,7 @@
 
     border-color: $border-color;
     background-color: $background-color;
-    transition: background-color 0.5s;
+    transition: border-color 0.5s, background-color 0.5s;
 
     .image {
         @extend .m-3;
@@ -102,6 +102,7 @@
 
     &:hover {
         background-color: $hover-color;
-        transition: background-color 0.5s;
+        border-color: $hover-color;
+        transition: border-color 0.5s, background-color 0.5s;
     }
 }

@@ -155,6 +155,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      darkmode: false,
       ready: false,
       userData: {}
     };
@@ -437,18 +438,17 @@ __webpack_require__.r(__webpack_exports__);
         };
       }
 
-      if (this.userData.premium_expiration === null) {
+      if (this.userData.premium == true && this.userData.premium_expiration === null) {
         return {
           expiration: false,
           type: 1
         };
       } else {
-        var MILISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
-        var date = new Date(this.userData.premium_expiration);
-
-        if (new Date().getTime() - MILISECONDS_IN_DAY < date.getTime()) {
+        if (this.userData.premium) {
+          var MILISECONDS_IN_DAY = 24 * 60 * 60 * 1000,
+              daysLeft = Math.ceil((new Date(this.userData.premium_expiration).getTime() - new Date().getTime()) / MILISECONDS_IN_DAY);
           return {
-            expiration: Math.ceil((date.getTime() - new Date().getTime()) / MILISECONDS_IN_DAY) + 1,
+            expiration: daysLeft + 1,
             type: 1
           };
         } else {

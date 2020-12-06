@@ -49,6 +49,7 @@ Route::prefix('/profile')->group(function() {
 
 Route::prefix('/bundles')->group(function() {
     Route::get('/', 'BundleController@index')->name('bundles');
+    Route::get('/{bundle}', 'BundleController@show')->name('bundles.show');
 });
 
 Route::prefix('/webapi')->group(function() {
