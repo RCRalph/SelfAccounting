@@ -10,6 +10,7 @@ use App\Method;
 use App\Category;
 use App\Income;
 use App\MeanOfPayment;
+use App\Bundle;
 
 class User extends Authenticatable
 {
@@ -49,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany(Category::class);
     }
 
+    public function meansOfPayment()
+    {
+        return $this->hasMany(MeanOfPayment::class);
+    }
+
     public function income()
     {
         return $this->hasMany(Income::class);
@@ -59,8 +65,13 @@ class User extends Authenticatable
         return $this->hasMany(Outcome::class);
     }
 
-    public function meansOfPayment()
+    public function bundles()
     {
-        return $this->hasMany(MeanOfPayment::class);
+        return $this->belongsToMany(Bundle::class)->withPivot('enabled');
+    }
+
+    public function premium_bundles()
+    {
+        return $this->belongsToMany(Bundle::class, "bundle_user_premium", "user_id", "bundle_id");
     }
 }

@@ -90,7 +90,7 @@ export default {
         };
     },
     computed: {
-        categoriesCanSave: function() {
+        categoriesCanSave() {
             this.componentKey;
 
             for (let currency in this.categories) {
@@ -106,7 +106,7 @@ export default {
 
             return true;
         },
-        meansCanSave: function() {
+        meansCanSave() {
             this.componentKey;
 
             for (let currency in this.means) {
@@ -122,11 +122,11 @@ export default {
         }
     },
     methods: {
-        categoriesReset: function() {
+        categoriesReset() {
             this.categories = _.cloneDeep(this.categoriesCopy);
             this.componentKey++;
         },
-        categoriesAdd: function() {
+        categoriesAdd() {
             if (!(this.currentCurrency in this.categories)) {
                 this.categories[this.currentCurrency] = [];
             }
@@ -144,11 +144,11 @@ export default {
             });
             this.componentKey++;
         },
-        categoriesDelete: function(index) {
+        categoriesDelete(index) {
             this.categories[this.currentCurrency].splice(index, 1);
             this.componentKey++;
         },
-        categoriesSave: function() {
+        categoriesSave() {
             this.axiosCategories = false;
             axios
                 .post("/webapi/settings/categories", {
@@ -165,11 +165,11 @@ export default {
                     this.componentKey++;
                 })
         },
-        meansReset: function() {
+        meansReset() {
             this.means = _.cloneDeep(this.meansCopy);
             this.componentKey++;
         },
-        meansAdd: function() {
+        meansAdd() {
             if (!(this.currentCurrency in this.means)) {
                 this.means[this.currentCurrency] = [];
             }
@@ -187,11 +187,11 @@ export default {
             });
             this.componentKey++;
         },
-        meansDelete: function(index) {
+        meansDelete(index) {
             this.means[this.currentCurrency].splice(index, 1);
             this.componentKey++;
         },
-        meansSave: function() {
+        meansSave() {
             this.axiosMeans = false;
             axios
                 .post("/webapi/settings/means", {
@@ -208,7 +208,7 @@ export default {
                     this.componentKey++;
                 })
         },
-        updateKey: function() {
+        updateKey() {
             this.componentKey++;
         }
     },

@@ -16,7 +16,7 @@ class Controller extends BaseController
     {
         $user = auth()->user()->only("darkmode", "profile_picture");
 
-        if (preg_match("/Emoji[1-6].png/", $user["profile_picture"])) {
+        if (preg_match("/Emoji[1-6].png/", $user["profile_picture"]) || $user["profile_picture"] == "EmojiAdmin.png") {
             $user["profile_picture"] = "/img/avatars/" . $user["profile_picture"];
         }
         else {

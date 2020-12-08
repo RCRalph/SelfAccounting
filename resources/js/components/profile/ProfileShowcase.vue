@@ -50,11 +50,11 @@ export default {
         }
     },
     computed: {
-        createDate: function() {
+        createDate() {
             const date = new Date(this.userData.created_at);
             return `${date.getFullYear()}-${(date.getMonth() + 1) < 10 ? '0' : ''}${date.getMonth() + 1}-${date.getDate() < 10 ? '0' : ''}${date.getDate()}`;
         },
-        premiumObject: function() {
+        premiumObject() {
             if (this.userData.admin) {
                 return {
                     type: 2

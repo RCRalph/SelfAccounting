@@ -95,4 +95,12 @@ Route::prefix('/webapi')->group(function() {
     Route::prefix('/profile')->group(function() {
         Route::get('/', 'WebApi\ProfileController@index')->name('webapi.profile.index');
     });
+
+    Route::prefix('/bundles')->group(function() {
+        Route::post('/toggle', 'WebApi\BundleController@toggle');
+
+        Route::prefix('/premium')->group(function() {
+            Route::post('/toggle', 'WebApi\BundleController@togglePremium');
+        });
+    });
 });

@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/js/bundle-show.js": "/js/bundle-show.js",
     "/js/income-outcome.js": "/js/income-outcome.js",
     "/js/income-outcome-create-one.js": "/js/income-outcome-create-one.js",
     "/js/income-outcome-edit.js": "/js/income-outcome-edit.js",

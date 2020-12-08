@@ -980,7 +980,7 @@ var render = function() {
               scope: cell.text && "col",
               "data-toggle": cell.tooltip && "tooltip",
               "data-placement": cell.tooltip && "bottom",
-              title: cell.tooltip && cell.tooltip
+              title: cell.tooltip
             }
           },
           [_vm._v("\n            " + _vm._s(cell.text) + "\n        ")]

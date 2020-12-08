@@ -48,19 +48,19 @@ export default {
         }
     },
     methods: {
-        submitForm: function() {
+        submitForm() {
             document.getElementById("password-form").submit();
             this.submit = true;
         }
     },
     computed: {
-		CSRF_TOKEN: function() {
+		CSRF_TOKEN() {
 			return document.head.querySelectorAll("meta[name=csrf-token]")[0].attributes.content.value;
         },
-        validPasswords: function() {
+        validPasswords() {
             return (this.passwords[0].length >= 8 && this.passwords[1].length >= 8 && this.passwords[0] === this.passwords[1]) || (this.passwords[0] == "" && this.passwords[1] == "");
         },
-        canSubmit: function() {
+        canSubmit() {
             return this.passwords[0].length > 0 && this.passwords[1].length > 0;
         }
     }

@@ -66,15 +66,15 @@ export default {
         }
     },
     methods: {
-        dataReset: function() {
+        dataReset() {
             document.getElementById("picture").value = "";
             this.userDataCopy = this.userData;
         },
-        checkFile: function() {
+        checkFile() {
             const fileType = document.getElementById("picture").files[0].type;
             this.correctFile = fileType.includes("image");
         },
-        submitForm: function() {
+        submitForm() {
             document.getElementById("data-form").submit();
             this.submit = true;
         }
@@ -83,17 +83,17 @@ export default {
         this.userDataCopy = _.cloneDeep(this.userData);
     },
 	computed: {
-		CSRF_TOKEN: function() {
+		CSRF_TOKEN() {
 			return document.head.querySelectorAll("meta[name=csrf-token]")[0].attributes.content.value;
         },
-        validEmail: function() {
+        validEmail() {
             const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
             return emailRegex.test(this.userDataCopy.email) && this.userDataCopy.email.length <= 64;
         },
-        validUsername: function() {
+        validUsername() {
             return this.userDataCopy.username.length <= 32 && this.userDataCopy.username.length > 0;
         },
-        disableSubmit: function() {
+        disableSubmit() {
             return !(this.validUsername && this.validEmail && this.correctFile)
         }
     }

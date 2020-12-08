@@ -2,23 +2,16 @@
 
 namespace App\Policies;
 
+use App\Bundle;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class BundlePolicy
 {
     use HandlesAuthorization;
 
-    public function isAdmin(User $user)
-    {
-        return $user->admin;
-    }
-
-    public function isPremium(User $user)
-    {
-        return $user->admin ||
-            $user->premium_expiration == null ||
-            Carbon::parse($user->premium_expiration)->addDay(1)->timestamp >= Carbon::now()->timestamp;
+    public function hasBundle(User $user, Bundle $bundle) {
+        return $user->bundles->contains($bundle);
     }
 
     /**
@@ -36,10 +29,10 @@ class UserPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Bundle  $bundle
      * @return mixed
      */
-    public function view(User $user, User $model)
+    public function view(User $user, Bundle $bundle)
     {
         //
     }
@@ -59,10 +52,10 @@ class UserPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Bundle  $bundle
      * @return mixed
      */
-    public function update(User $user, User $model)
+    public function update(User $user, Bundle $bundle)
     {
         //
     }
@@ -71,10 +64,10 @@ class UserPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Bundle  $bundle
      * @return mixed
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, Bundle $bundle)
     {
         //
     }
@@ -83,10 +76,10 @@ class UserPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Bundle  $bundle
      * @return mixed
      */
-    public function restore(User $user, User $model)
+    public function restore(User $user, Bundle $bundle)
     {
         //
     }
@@ -95,10 +88,10 @@ class UserPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Bundle  $bundle
      * @return mixed
      */
-    public function forceDelete(User $user, User $model)
+    public function forceDelete(User $user, Bundle $bundle)
     {
         //
     }

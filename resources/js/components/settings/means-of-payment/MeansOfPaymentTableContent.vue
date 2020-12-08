@@ -85,13 +85,13 @@ export default {
         };
     },
     methods: {
-        updateComponentKey: function() {
+        updateComponentKey() {
             this.componentKey++;
             this.$emit("update");
         }
     },
     computed: {
-        correctDate: function() {
+        correctDate() {
             this.componentKey;
 
             const dateEmpty = !this.content.first_entry_date;

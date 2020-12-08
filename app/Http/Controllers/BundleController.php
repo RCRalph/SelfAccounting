@@ -25,12 +25,22 @@ class BundleController extends Controller
     public function show(Bundle $bundle) {
         $pageData = $this->getDataForPageRender();
 
+        $hasBundle = auth()->user()->bundles->contains($bundle);
+        $hasBundlePremium = auth()->user()->premium_bundles->contains($bundle);
+
+        $bundleEnabled = false;
+        if ($hasBundle) {
+            $bundleEnabled = auth()->user()->bundles
+                ->where("id", $bundle->id)
+                ->first()->pivot->enabled;
+        }
+
         $images = $bundle->images->map(function($item) {
             return "/img/bundles/galleries/" . $item->image;
         });
 
         $isPremium = $this->checkPremium(auth()->user());
 
-        return view("bundles.show", compact("pageData", "isPremium", "bundle", "images"));
+        return view("bundles.show", compact("pageData", "isPremium", "bundle", "images", "hasBundle", "bundleEnabled", "hasBundlePremium"));
     }
 }

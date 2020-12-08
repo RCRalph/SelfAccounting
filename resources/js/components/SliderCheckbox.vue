@@ -14,7 +14,7 @@
             disabled: Boolean
         },
         methods: {
-            emitEvents: function(event) {
+            emitEvents(event) {
                 this.$emit('input', event.currentTarget.checked);
                 this.$emit('htmlElement', event.currentTarget);
             }

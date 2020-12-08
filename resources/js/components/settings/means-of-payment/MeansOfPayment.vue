@@ -123,11 +123,11 @@ export default {
         }
     },
     methods: {
-        dataSave: function() {
+        dataSave() {
             this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
             this.$emit('data-save');
         },
-        updateData: function() {
+        updateData() {
             this.$emit("data-change")
         }
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBundleImagesTable extends Migration
+class BundleUserPivotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateBundleImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('bundle_images', function (Blueprint $table) {
+        Schema::create('bundle_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bundle_id');
-            $table->string('image', 96);
+            $table->foreignId('user_id');
+            $table->boolean('enabled')->default(true);
             $table->timestamps();
 
-            $table->index(['id', 'bundle_id']);
+            $table->index(['id', 'bundle_id', 'user_id']);
         });
     }
 
@@ -30,6 +31,6 @@ class CreateBundleImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bundle_images');
+        Schema::dropIfExists('bundle_user');
     }
 }

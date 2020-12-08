@@ -88,13 +88,13 @@ export default {
         };
     },
     methods: {
-        updateComponentKey: function() {
+        updateComponentKey() {
             this.componentKey++;
             this.$emit("update");
         }
     },
     computed: {
-        correctDates: function() {
+        correctDates() {
             this.componentKey;
             const dateEmpty = !this.content.start_date || !this.content.end_date;
             return dateEmpty ? true : new Date(this.content.start_date).getTime() <= new Date(this.content.end_date).getTime();

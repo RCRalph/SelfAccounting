@@ -203,7 +203,7 @@ export default {
         }
     },
     computed: {
-        invalidDate: function() {
+        invalidDate() {
             if (!this.attributes.mean_id || this.attributes.mean_id == "null" || !this.means[this.attributes.currency_id]) {
                 return !this.attributes.date;
             }
@@ -215,16 +215,16 @@ export default {
 
             return this.attributes.date && new Date(minDate).getTime() > currentDate;
         },
-        invalidTitle: function() {
+        invalidTitle() {
             return this.attributes.title.length == 0 || this.attributes.title.length > 32;
         },
-        invalidAmount: function() {
+        invalidAmount() {
             return parseFloat(this.attributes.amount) != this.attributes.amount;
         },
-        invalidPrice: function() {
+        invalidPrice() {
             return parseFloat(this.attributes.price) != this.attributes.price;
         },
-        minDate: function() {
+        minDate() {
             if (!this.attributes.mean_id || this.attributes.mean_id == "null") {
                 return false;
             }
@@ -233,15 +233,15 @@ export default {
                     return item.id == this.attributes.mean_id
                 })[0].first_entry_date;
         },
-        invalidData: function() {
+        invalidData() {
             return this.invalidDate || this.invalidTitle || this.invalidAmount || this.invalidPrice;
         }
     },
     methods: {
-        reset: function() {
+        reset() {
             this.attributes = _.cloneDeep(this.attributesCopy);
         },
-        saveChanges: function() {
+        saveChanges() {
             this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
             this.buttonsDisabled = true;
             axios
@@ -263,7 +263,7 @@ export default {
                     this.buttonsDisabled = false;
                 })
         },
-        destroy: function() {
+        destroy() {
             this.deleteButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
             this.buttonsDisabled = true;
 
@@ -283,7 +283,7 @@ export default {
                     this.buttonsDisabled = false;
                 })
         },
-        currencyChange: function() {
+        currencyChange() {
             this.attributes.mean_id = null;
             this.attributes.category_id = null;
         }

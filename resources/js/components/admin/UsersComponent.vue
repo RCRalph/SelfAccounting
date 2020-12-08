@@ -77,7 +77,7 @@ export default {
         };
     },
     methods: {
-        getPaginationData: function(pageNumber = 1) {
+        getPaginationData(pageNumber = 1) {
             this.ready = false;
             axios
                 .get("/webapi/admin/users", {
@@ -90,7 +90,7 @@ export default {
                     this.ready = true;
                 });
         },
-        changeAdmin: function(target) {
+        changeAdmin(target) {
             const attributes = target.parentElement.parentElement.parentElement.parentElement.attributes;
             if (attributes.id.value != "1") {
                 this.disabled = true;
@@ -113,7 +113,7 @@ export default {
                 target.checked = true;
             }
         },
-        changeDate: function(event) {
+        changeDate(event) {
             this.disabled = true;
             const attributes = event.currentTarget.parentElement.parentElement.attributes;
 

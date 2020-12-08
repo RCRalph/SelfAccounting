@@ -159,7 +159,7 @@ export default {
         }
     },
     computed: {
-        tableRowsSpanned: function() {
+        tableRowsSpanned() {
             let rowspaned = [], lastValues = {};
             const spanSet1 = {
                 date: 1,
@@ -239,7 +239,7 @@ export default {
         }
     },
     methods: {
-        getData: function($state) {
+        getData($state) {
             axios
                 .get("/webapi/" + this.type, {
                     params: {
@@ -257,10 +257,10 @@ export default {
                     $state.loaded();
                 });
         },
-        redirectToShow: function(id) {
+        redirectToShow(id) {
             window.document.location = "/" + this.type + "/" + id;
         },
-        resetRows: function() {
+        resetRows() {
             this.dataReady = false;
             this.rows = [];
             this.page = 1;

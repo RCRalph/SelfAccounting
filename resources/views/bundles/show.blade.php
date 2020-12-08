@@ -52,17 +52,28 @@
             @endif
 
             <div class="row">
-                <div class="col-sm-4 offset-sm-2">
-                    <a href="#" type="button" class="big-button-primary">
-                        Buy now - €{{ $bundle->price }}
-                    </a>
-                </div>
+                @if ($hasBundle)
+                    <div class="col-sm-4 offset-sm-4">
+                        <bundle-toggle
+                            enable="{{ $bundleEnabled }}"
+                            id="{{ $bundle->id }}"
+                        ></bundle-toggle>
+                    </div>
+                @else
+                    <div class="col-sm-4 offset-sm-2">
+                        <a href="#" type="button" class="big-button-primary">
+                            Buy now - €{{ $bundle->price }}
+                        </a>
+                    </div>
 
-                <div class="col-sm-4">
-                    <button id="premium-button" class="big-button-golden" {{ !$isPremium ? "disabled" : "" }}>
-                        Use with Premium
-                    </button>
-                </div>
+                    <div class="col-sm-4">
+                        <premium-bundle-toggle
+                            premium="{{ $isPremium }}"
+                            enable="{{ $hasBundlePremium }}"
+                            id="{{ $bundle->id }}"
+                        ></premium-bundle-toggle>
+                    </div>
+                @endif
             </div>
 
             <div class="description-long">
@@ -70,4 +81,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script src="{{ asset('js/bundle-show.js') }}" defer></script>
 @endsection

@@ -18,8 +18,8 @@ class ProfileController extends Controller
     {
         $user = auth()->user()->only("profile_picture", "username", "created_at", "premium_expiration", "admin", "email");
 
-        if (preg_match("/Emoji[1-6].png/", $user["profile_picture"])) {
-            $user["profile_picture"] = "/avatars/" . $user["profile_picture"];
+        if (preg_match("/Emoji[1-6].png/", $user["profile_picture"]) || $user["profile_picture"] == "EmojiAdmin.png") {
+            $user["profile_picture"] = "/img/avatars/" . $user["profile_picture"];
         }
         else {
             $user["profile_picture"] = env("IBM_COS_ENDPOINT") . "/" . env("IBM_COS_BUCKET") . "/profile_pictures/" . $user["profile_picture"];

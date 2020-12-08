@@ -88,14 +88,14 @@ export default {
         };
     },
     computed: {
-        sum: function() {
+        sum() {
             return this.content[this.currentCurrency]
                 .map(item => item.balance)
                 .reduce((item1, item2) => item1 + item2);
         }
     },
     filters: {
-        addSpaces: function(value) {
+        addSpaces(value) {
             return value
                 .toLocaleString('en')
                 .split(",")
