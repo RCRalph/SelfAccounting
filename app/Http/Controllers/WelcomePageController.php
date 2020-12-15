@@ -9,6 +9,7 @@ class WelcomePageController extends Controller
 {
     public function index()
     {
+        // Redirect if authenticated
         if (Auth::check()) {
             return redirect()->route("summary");
         }

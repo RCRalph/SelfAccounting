@@ -20,10 +20,10 @@ class SettingsController extends Controller
         $this->middleware("auth");
     }
 
-    public function darkmode()
+    public function darkmode() // Change darkmode
     {
         $data = request()->validate([
-            "darkmode" => ["boolean"]
+            "darkmode" => ["required", "boolean"]
         ]);
 
         auth()->user()->update([

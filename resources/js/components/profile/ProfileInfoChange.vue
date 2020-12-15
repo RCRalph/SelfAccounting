@@ -68,6 +68,7 @@ export default {
     methods: {
         dataReset() {
             document.getElementById("picture").value = "";
+            this.validFile = true;
             this.userDataCopy = this.userData;
         },
         checkFile() {

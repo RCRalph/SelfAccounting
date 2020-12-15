@@ -139,7 +139,7 @@ class IncomeController extends Controller
 
         $means = auth()->user()->meansOfPayment->where("income_mean", true)->map(function($item) {
             return collect($item)->only(["id", "name", "currency_id", "first_entry_date"])->toArray();
-        })->groupBy("currency_id")->toArray();
+        })->groupBy("currency_id");
 
         $titles = auth()->user()->income->unique("title")->values()->map(function($item) {
             return $item["title"];

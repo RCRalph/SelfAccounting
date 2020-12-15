@@ -26,13 +26,14 @@ class ProfileController extends Controller
     }
 
     public function updateData()
-    {
+{
         $data = request()->validate([
             "username" => ["required", "string", "max:32"],
             "email" => ["required", "string", "email", "max:64", Rule::unique('users', 'email')->ignore(auth()->user()->id)],
             "picture" => ["nullable", "image"]
         ]);
 
+        // Update picture
         if (array_key_exists("picture", $data)) {
             $img = Image::make($data["picture"])->fit(512, 512);
 
@@ -43,18 +44,11 @@ class ProfileController extends Controller
 			Storage::disk("ibm-cos")->delete("profile_pictures/" . auth()->user()->profile_picture);
             Storage::disk("ibm-cos")->put("profile_pictures/" . $fileName, $img->stream());
 
-            auth()->user()->update([
-                "username" => $data["username"],
-                "email" => $data["email"],
-                "profile_picture" => $fileName
-            ]);
+            unset($data["picture"]);
+            $data["profile_picture"] = $fileName;
         }
-        else {
-            auth()->user()->update([
-                "username" => $data["username"],
-                "email" => $data["email"]
-            ]);
-        }
+
+        auth()->user()->update($data);
 
         return redirect("/profile");
     }

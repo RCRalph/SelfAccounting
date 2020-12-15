@@ -136,12 +136,16 @@
 
     &-darkmode {
         @extend .hr;
-        background-color: white;
+        $border-color: white;
+        background-color: $border-color;
+        border-color: $border-color;
     }
 
     &-lightmode {
         @extend .hr;
-        background-color: darken(white, 10%);
+        $border-color: darken(white, 10%);
+        background-color: $border-color;
+        border-color: $border-color;
     }
 }
 

@@ -14,7 +14,7 @@ class BundleController extends Controller
         $this->middleware("auth");
     }
 
-    public function toggle()
+    public function toggle() // Change bundle between enabled / disabled
     {
         $data = request()->validate([
             "id" => ["required", "exists:bundles"]
@@ -31,7 +31,7 @@ class BundleController extends Controller
         return response("", 200);
     }
 
-    public function togglePremium()
+    public function togglePremium() // Add or remove bundle from premium
     {
         $this->authorize("isPremium", auth()->user());
         $data = request()->validate([

@@ -2,8 +2,8 @@
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
             <div class="card-header-text">
-                <i class="fas fa-users"></i>
-                Users
+                <i class="fas fa-list"></i>
+                User - List
             </div>
         </div>
 
@@ -19,8 +19,7 @@
                         <thead>
                             <th scope="col" class="h3 font-weight-bold">ID</th>
                             <th scope="col" class="h3 font-weight-bold">Email Address</th>
-                            <th scope="col" class="h3 font-weight-bold">Admin</th>
-                            <th scope="col" class="h3 font-weight-bold">Premium expiration</th>
+                            <th scope="col" class="h3 font-weight-bold">Details</th>
                         </thead>
 
                         <tbody>
@@ -28,15 +27,7 @@
                                 <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
                                 <td class="h5 my-auto">{{ item.email }}</td>
                                 <td class="h5 my-auto">
-                                    <Slider
-                                        :checked="item.admin"
-                                        v-model="item.admin"
-                                        @htmlElement="changeAdmin"
-                                        :disabled="disabled"
-                                    ></Slider>
-                                </td>
-                                <td class="h5 my-auto">
-                                    <input class="form-date" type="date" v-model="item.premium_expiration" :disabled="disabled" @change="changeDate">
+                                    <a role="button" class="big-button-primary" :href="'/admin/user/details?id=' + item.id">View user details</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -66,21 +57,21 @@ import Slider from "../SliderCheckbox.vue";
 
 export default {
     components: {
-        Slider
+        Slider,
     },
     data() {
         return {
             darkmode: false,
             ready: false,
             disabled: false,
-            paginationData: {}
+            paginationData: {},
         };
     },
     methods: {
         getPaginationData(pageNumber = 1) {
             this.ready = false;
             axios
-                .get("/webapi/admin/users", {
+                .get("/webapi/admin/user/list", {
                     params: {
                         page: pageNumber
                     }

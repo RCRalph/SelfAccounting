@@ -11919,10 +11919,12 @@ a.welcome-bg-change-lightmode:focus {
 
 .hr-darkmode {
   background-color: white;
+  border-color: white;
 }
 
 .hr-lightmode {
   background-color: #e6e6e6;
+  border-color: #e6e6e6;
 }
 
 .profile-img,

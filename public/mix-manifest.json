@@ -1,13 +1,15 @@
 {
+    "/js/admin/user-details.js": "/js/admin/user-details.js",
+    "/js/admin/user-list.js": "/js/admin/user-list.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/js/bundle-show.js": "/js/bundle-show.js",
     "/js/income-outcome.js": "/js/income-outcome.js",
     "/js/income-outcome-create-one.js": "/js/income-outcome-create-one.js",
     "/js/income-outcome-edit.js": "/js/income-outcome-edit.js",
+    "/js/popper.js": "/js/popper.js",
     "/js/profile.js": "/js/profile.js",
     "/js/settings.js": "/js/settings.js",
     "/js/summary.js": "/js/summary.js",
-    "/js/table-hovering.js": "/js/table-hovering.js",
-    "/js/users.js": "/js/users.js"
+    "/js/table-hovering.js": "/js/table-hovering.js"
 }

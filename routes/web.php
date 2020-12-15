@@ -38,7 +38,11 @@ Route::prefix('/settings')->group(function() {
 });
 
 Route::prefix('/admin')->group(function() {
-    Route::get('/users', 'AdminController@users')->name('admin.users');
+    Route::prefix('/user')->group(function() {
+        Route::get('/list', 'AdminController@userList')->name('admin.user.list');
+        Route::get('/details', 'AdminController@userDetails')->name('admin.user.details');
+        Route::patch('/update', 'AdminController@updateUser')->name('admin.user.update');
+    });
 });
 
 Route::prefix('/profile')->group(function() {
@@ -85,10 +89,15 @@ Route::prefix('/webapi')->group(function() {
     });
 
     Route::prefix('/admin')->group(function() {
-        Route::prefix('/users')->group(function() {
-            Route::get('/', 'WebApi\AdminController@users')->name('webapi.admin.users');
-            Route::patch('/admin', 'WebApi\AdminController@changeAdmin')->name('webapi.admin.users.changeAdmin');
-            Route::patch('/premium', 'WebApi\AdminController@changePremium')->name('webapi.admin.users.changePremium');
+        Route::prefix('/user')->group(function() {
+            Route::prefix('/list')->group(function() {
+                Route::get('/', 'WebApi\AdminController@users')->name('webapi.admin.user');
+            });
+
+            Route::prefix('/details')->group(function() {
+                Route::get('/', 'WebApi\AdminController@details')->name('webapi.admin.user.details');
+                Route::patch('/update', 'WebApi\AdminController@update')->name('webapi.admin.user.details.update');
+            });
         });
     });
 
