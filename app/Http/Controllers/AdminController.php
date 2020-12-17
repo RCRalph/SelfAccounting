@@ -46,7 +46,7 @@ class AdminController extends Controller
     public function updateUser()
     {
         $data = request()->validate([
-            "id" => ["required", "exists:users"],
+            "id" => ["required", "integer", "exists:users"],
             "username" => ["required", "string", "max:32"],
             "email" => ["required", "string", "email", "max:64", Rule::unique('users', 'email')->ignore(request("id"))],
             "picture" => ["nullable", "image"],
@@ -77,5 +77,25 @@ class AdminController extends Controller
         $user->update($data);
 
         return redirect("/admin/user/details?id=" . $data["id"]);
+    }
+
+    public function confirmDeletion()
+    {
+        $id = request()->validate([
+            "id" => ["required", "integer", "exists:users", "not_in:1"]
+        ])["id"];
+
+        $pageData = $this->getDataForPageRender();
+        return view("profile.delete", compact("pageData", "id"));
+    }
+
+    public function delete()
+    {
+        $id = request()->validate([
+            "id" => ["required", "integer", "exists:users", "not_in:1"]
+        ])["id"];
+
+        User::find($id)->delete();
+        return redirect("/admin/user/list");
     }
 }

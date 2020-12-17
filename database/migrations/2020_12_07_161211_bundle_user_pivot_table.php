@@ -15,8 +15,8 @@ class BundleUserPivotTable extends Migration
     {
         Schema::create('bundle_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bundle_id');
-            $table->foreignId('user_id');
+            $table->foreignId('bundle_id')->onDelete('cascade');
+            $table->foreignId('user_id')->onDelete('cascade');
             $table->boolean('enabled')->default(true);
             $table->timestamps();
 

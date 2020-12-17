@@ -45,7 +45,7 @@
                     @userDataReset="userDataReset"
                 ></UserDataChange>
 
-                <hr v-if="ready && !error" :class="[
+                <hr :class="[
                     darkmode ? 'hr-darkmode' : 'hr-lightmode',
                     'my-4'
                 ]">
@@ -100,6 +100,22 @@
 						<button type="button" class="big-button-danger" @click="dataReset" :disabled="dataSubmit">Reset changes</button>
 					</div>
 				</div>
+
+                <div v-if="userData.id != 1">
+                    <hr :class="[
+                        darkmode ? 'hr-darkmode' : 'hr-lightmode',
+                        'my-4'
+                    ]">
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6 offset-sm-3">
+                            <a :href="'/admin/user/delete?id=' + userData.id" role="button" class="big-button-danger">
+                                <i class="fas fa-trash"></i>
+                                Delete this profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="d-flex justify-content-center mt-4 my-2" v-if="startedSearch">

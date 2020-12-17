@@ -65,4 +65,24 @@ class ProfileController extends Controller
 
         return redirect("/profile");
     }
+
+    public function confirmDeletion()
+    {
+        if (auth()->user()->id == 1) {
+            return redirect("/profile");
+        }
+
+        $pageData = $this->getDataForPageRender();
+        return view("profile.delete", compact("pageData"));
+    }
+
+    public function delete()
+    {
+        if (auth()->user()->id == 1) {
+            return redirect("/profile");
+        }
+
+        auth()->user()->delete();
+        return redirect("/");
+    }
 }

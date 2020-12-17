@@ -7,7 +7,7 @@
             <div class="form-group row">
                 <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Username</label>
                 <div class="col-xl-7">
-                    <input type="text" id="username" maxlength="32" v-model="userDataCopy.username" name="username" required :class="[
+                    <input type="text" id="username" maxlength="32" v-model="userData.username" name="username" required :class="[
                         'form-control',
                         !validUsername && 'is-invalid'
                     ]">
@@ -17,7 +17,7 @@
             <div class="form-group row">
                 <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Email</label>
                 <div class="col-xl-7">
-                    <input type="text" id="email" maxlength="64" v-model="userDataCopy.email" name="email" required :class="[
+                    <input type="text" id="email" maxlength="64" v-model="userData.email" name="email" required :class="[
                         'form-control',
                         !validEmail && 'is-invalid'
                     ]">
@@ -56,12 +56,12 @@
 <script>
 export default {
     props: {
-        userData: Object
+        userDataCopy: Object
     },
     data() {
         return {
             correctFile: true,
-            userDataCopy: {},
+            userData: {},
             submit: false
         }
     },
@@ -69,7 +69,7 @@ export default {
         dataReset() {
             document.getElementById("picture").value = "";
             this.validFile = true;
-            this.userDataCopy = this.userData;
+            this.userData = this.userDataCopy;
         },
         checkFile() {
             const fileType = document.getElementById("picture").files[0].type;
@@ -81,7 +81,7 @@ export default {
         }
     },
     beforeMount() {
-        this.userDataCopy = _.cloneDeep(this.userData);
+        this.userData = _.cloneDeep(this.userDataCopy);
     },
 	computed: {
 		CSRF_TOKEN() {
@@ -89,10 +89,10 @@ export default {
         },
         validEmail() {
             const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            return emailRegex.test(this.userDataCopy.email) && this.userDataCopy.email.length <= 64;
+            return emailRegex.test(this.userData.email) && this.userData.email.length <= 64;
         },
         validUsername() {
-            return this.userDataCopy.username.length <= 32 && this.userDataCopy.username.length > 0;
+            return this.userData.username.length <= 32 && this.userData.username.length > 0;
         },
         disableSubmit() {
             return !(this.validUsername && this.validEmail && this.correctFile)

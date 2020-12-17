@@ -16,7 +16,7 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $user = auth()->user()->only("profile_picture", "username", "created_at", "premium_expiration", "admin", "email");
+        $user = auth()->user()->only("id", "profile_picture", "username", "created_at", "premium_expiration", "admin", "email");
 
         $user["profile_picture"] = $this->getProfilePictureLink($user["profile_picture"]);
         $user["premium"] = $this->checkPremium(auth()->user());

@@ -1,4 +1,4 @@
-@extends('layouts.midwidth')
+@extends('layouts.fullmidwidth')
 
 @section('script')
     <script src="{{ asset('js/admin/user-list.js') }}" defer></script>

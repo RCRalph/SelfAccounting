@@ -29,7 +29,7 @@ class AdminController extends Controller
     public function details() // Get user's details
     {
         $id = request()->validate([
-            "id" => ["required", "exists:users"]
+            "id" => ["required", "integer", "exists:users"]
         ])["id"];
 
         $bundles = Bundle::all()->map(function($item) {
@@ -50,8 +50,8 @@ class AdminController extends Controller
     public function update() // Update user's details
     {
         $data = request()->validate([
-            "id" => ["required", "exists:users"],
-            "bundleIDs.*" => ["required", "exists:bundles,id"]
+            "id" => ["required", "integer", "exists:users"],
+            "bundleIDs.*" => ["required", "integer", "exists:bundles,id"]
 		]);
 
 		$user = User::find($data["id"]);

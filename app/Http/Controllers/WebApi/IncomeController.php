@@ -55,7 +55,7 @@ class IncomeController extends Controller
     public function getIncome()
     {
         $currency_id = request()->validate([
-            "currency_id" => ["required", "exists:currencies,id"]
+            "currency_id" => ["required", "integer", "exists:currencies,id"]
         ])["currency_id"];
 
         $data = Income::where([
@@ -107,7 +107,7 @@ class IncomeController extends Controller
             "title" => ["required", "string", "max:64"],
             "amount" => ["required", "numeric"],
             "price" => ["required", "numeric"],
-            "currency_id" => ["required", "exists:currencies,id"],
+            "currency_id" => ["required", "integer", "exists:currencies,id"],
             "category_id" => ["present", "nullable", new ValidCategoryMean],
             "mean_id" => ["present", "nullable", new ValidCategoryMean]
         ]);
@@ -155,10 +155,10 @@ class IncomeController extends Controller
             "title" => ["required", "string", "max:64"],
             "amount" => ["required", "numeric"],
             "price" => ["required", "numeric"],
-            "currency_id" => ["required", "exists:currencies,id"],
+            "currency_id" => ["required", "integer", "exists:currencies,id"],
             "category_id" => ["present", "nullable", new ValidCategoryMean],
             "mean_id" => ["present", "nullable", new ValidCategoryMean],
-            "id" => ["required", "exists:incomes,id"]
+            "id" => ["required", "integer", "exists:incomes,id"]
         ]);
 
         $income = Income::find($data["id"]);

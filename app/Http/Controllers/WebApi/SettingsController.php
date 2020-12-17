@@ -76,7 +76,7 @@ class SettingsController extends Controller
         $dataDirectory = "categories.*.*.";
         $data = request()->validate([
             $dataDirectory . "count_to_summary" => ["required", "boolean"],
-            $dataDirectory . "currency_id" => ["required", "exists:currencies,id"],
+            $dataDirectory . "currency_id" => ["required", "integer", "exists:currencies,id"],
             $dataDirectory . "end_date" => ["present", "date", "nullable", "after_or_equal:" . $dataDirectory . "start_date"],
             $dataDirectory . "id" => ["present", "integer", "min:0", "not_in:0", "nullable"],
             $dataDirectory . "income_category" => ["required", "boolean"],
@@ -172,7 +172,7 @@ class SettingsController extends Controller
         $dataDirectory = "means.*.*.";
         $data = request()->validate([
             $dataDirectory . "count_to_summary" => ["required", "boolean"],
-            $dataDirectory . "currency_id" => ["required", "exists:currencies,id"],
+            $dataDirectory . "currency_id" => ["required", "integer", "exists:currencies,id"],
             $dataDirectory . "first_entry_amount" => ["required", "numeric"],
             $dataDirectory . "first_entry_date" => ["required", "date", new CorrectDateMeans],
             $dataDirectory . "id" => ["present", "integer", "min:0", "not_in:0", "nullable"],

@@ -42,13 +42,22 @@ Route::prefix('/admin')->group(function() {
         Route::get('/list', 'AdminController@userList')->name('admin.user.list');
         Route::get('/details', 'AdminController@userDetails')->name('admin.user.details');
         Route::patch('/update', 'AdminController@updateUser')->name('admin.user.update');
+        Route::prefix('/delete')->group(function(){
+            Route::get('/', 'AdminController@confirmDeletion')->name('admin.delete');
+            Route::get('/confirmed', 'AdminController@delete')->name('admin.delete.confirmed');
+        });
     });
 });
 
 Route::prefix('/profile')->group(function() {
     Route::get('/', 'ProfileController@index')->name('profile');
-    Route::patch('/update', 'ProfileController@updateData')->name('profile.updateData');
-    Route::patch('/password', 'ProfileController@updatePassword')->name('profile.updatePassword');
+    Route::patch('/update', 'ProfileController@updateData')->name('profile.update');
+    Route::patch('/password', 'ProfileController@updatePassword')->name('profile.password');
+
+    Route::prefix('/delete')->group(function(){
+        Route::get('/', 'ProfileController@confirmDeletion')->name('profile.delete');
+        Route::get('/confirmed', 'ProfileController@delete')->name('profile.delete.confirmed');
+    });
 });
 
 Route::prefix('/bundles')->group(function() {

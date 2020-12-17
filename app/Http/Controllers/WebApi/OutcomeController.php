@@ -55,7 +55,7 @@ class OutcomeController extends Controller
     public function getOutcome()
     {
         $currency_id = request()->validate([
-            "currency_id" => ["required", "exists:currencies,id"]
+            "currency_id" => ["required", "integer", "exists:currencies,id"]
         ])["currency_id"];
 
         $data = Outcome::where([
@@ -107,7 +107,7 @@ class OutcomeController extends Controller
             "title" => ["required", "string", "max:64"],
             "amount" => ["required", "numeric"],
             "price" => ["required", "numeric"],
-            "currency_id" => ["required", "exists:currencies,id"],
+            "currency_id" => ["required", "integer", "exists:currencies,id"],
             "category_id" => ["present", "nullable", new ValidCategoryMean],
             "mean_id" => ["present", "nullable", new ValidCategoryMean]
         ]);
@@ -155,10 +155,10 @@ class OutcomeController extends Controller
             "title" => ["required", "string", "max:64"],
             "amount" => ["required", "numeric"],
             "price" => ["required", "numeric"],
-            "currency_id" => ["required", "exists:currencies,id"],
+            "currency_id" => ["required", "integer", "exists:currencies,id"],
             "category_id" => ["present", "nullable", new ValidCategoryMean],
             "mean_id" => ["present", "nullable", new ValidCategoryMean],
-            "id" => ["required", "exists:outcomes,id"]
+            "id" => ["required", "integer", "exists:outcomes,id"]
         ]);
 
         $outcome = Outcome::find($data["id"]);

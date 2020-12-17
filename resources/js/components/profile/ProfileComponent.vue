@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-lg-6 col-xl-7 mt-sm-3">
                         <ProfileInfoChange
-                            :userData="userData"
+                            :userDataCopy="userData"
                         ></ProfileInfoChange>
 
 						<hr :class="[
@@ -27,6 +27,22 @@
                         ]">
 
                         <ProfilePasswordChange></ProfilePasswordChange>
+
+                        <div v-if="userData.id != 1">
+                            <hr :class="[
+                                darkmode ? 'hr-darkmode' : 'hr-lightmode',
+                                'my-3'
+                            ]">
+
+                            <div class="row">
+                                <div class="col-12 col-xl-6 offset-xl-3">
+                                    <a href="/profile/delete" role="button" class="big-button-danger">
+                                        <i class="fas fa-trash"></i>
+                                        Delete my profile
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
