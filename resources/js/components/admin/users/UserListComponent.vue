@@ -27,7 +27,7 @@
                                 <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
                                 <td class="h5 my-auto">{{ item.email }}</td>
                                 <td class="h5 my-auto">
-                                    <a role="button" class="big-button-primary" :href="'/admin/user/details?id=' + item.id">View user details</a>
+                                    <a role="button" class="big-button-primary" :href="'/admin/users/details?id=' + item.id">View user details</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -53,17 +53,11 @@
 </template>
 
 <script>
-import Slider from "../SliderCheckbox.vue";
-
 export default {
-    components: {
-        Slider,
-    },
     data() {
         return {
             darkmode: false,
             ready: false,
-            disabled: false,
             paginationData: {},
         };
     },
@@ -71,7 +65,7 @@ export default {
         getPaginationData(pageNumber = 1) {
             this.ready = false;
             axios
-                .get("/webapi/admin/user/list", {
+                .get("/webapi/admin/users", {
                     params: {
                         page: pageNumber
                     }
@@ -80,47 +74,6 @@ export default {
                     this.paginationData = response.data.users;
                     this.ready = true;
                 });
-        },
-        changeAdmin(target) {
-            const attributes = target.parentElement.parentElement.parentElement.parentElement.attributes;
-            if (attributes.id.value != "1") {
-                this.disabled = true;
-                axios
-                    .patch("/webapi/admin/users/admin", {
-                        id: attributes.id.value,
-                        status: this.paginationData.data[attributes.index.value].admin
-                    })
-                    .then(() => {
-                        this.disabled = false;
-                    })
-                    .catch(() => {
-                        this.paginationData.data[attributes.index.value].admin = true;
-                        target.checked = true;
-                        this.disabled = false;
-                    })
-            }
-            else {
-                this.paginationData.data[attributes.index.value].admin = true;
-                target.checked = true;
-            }
-        },
-        changeDate(event) {
-            this.disabled = true;
-            const attributes = event.currentTarget.parentElement.parentElement.attributes;
-
-            axios
-                .patch("/webapi/admin/users/premium", {
-                    id: attributes.id.value,
-                    date: this.paginationData.data[attributes.index.value].premium_expiration
-                })
-                .then(() => {
-                    this.disabled = false;
-                })
-                .catch(() => {
-                    this.paginationData.data[attributes.index.value].admin = true;
-                    event.target.value = null;
-                    this.disabled = false;
-                })
         }
     },
     beforeMount() {

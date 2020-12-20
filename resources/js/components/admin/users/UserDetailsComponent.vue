@@ -109,7 +109,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-6 offset-sm-3">
-                            <a :href="'/admin/user/delete?id=' + userData.id" role="button" class="big-button-danger">
+                            <a :href="'/admin/users/delete?id=' + userData.id" role="button" class="big-button-danger">
                                 <i class="fas fa-trash"></i>
                                 Delete this profile
                             </a>
@@ -168,7 +168,7 @@ export default {
             this.startedSearch = true;
             this.ready = false;
             axios
-                .get("/webapi/admin/user/details", {
+                .get("/webapi/admin/users/details", {
                     params: {
                         id: Number(this.enteredId)
                     }
@@ -200,7 +200,7 @@ export default {
             this.dataSubmit = true;
 
             axios
-                .patch("/webapi/admin/user/details/update", {
+                .patch("/webapi/admin/users/details/update", {
                     id: this.userData.id,
                     bundleIDs: this.userData.bundles.map(item => item.id)
                 })

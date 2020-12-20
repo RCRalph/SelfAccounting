@@ -56,13 +56,14 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="admin-dropdown">
-                            <a class="dropdown-item" href="/admin/user/list">
-                                <i class="fas fa-list"></i>
-                                User - list
+                            <a class="dropdown-item" href="/admin/users">
+                                <i class="fas fa-users"></i>
+                                Users
                             </a>
-                            <a class="dropdown-item" href="/admin/user/details">
-                                <i class="fas fa-info-circle"></i>
-                                User - details
+
+                            <a class="dropdown-item" href="/admin/bundles">
+                                <i class="fas fa-box-open"></i>
+                                Bundles
                             </a>
                         </div>
                     </li>

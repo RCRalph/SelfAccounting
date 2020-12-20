@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import Slider from "../SliderCheckbox.vue";
+import Slider from "../../SliderCheckbox.vue";
 
 export default {
     components: {

@@ -17,6 +17,18 @@ Route::get('/', 'WelcomePageController@index')->name('welcome');
 
 Auth::routes();
 
+Route::prefix('/admin')->group(function() {
+    Route::prefix('/users')->group(function() {
+        Route::get('/', 'Admin\UsersController@userList')->name('admin.user.list');
+        Route::get('/details', 'Admin\UsersController@userDetails')->name('admin.user.details');
+        Route::patch('/update', 'Admin\UsersController@updateUser')->name('admin.user.update');
+        Route::prefix('/delete')->group(function(){
+            Route::get('/', 'Admin\UsersController@confirmDeletion')->name('admin.delete');
+            Route::get('/confirmed', 'Admin\UsersController@delete')->name('admin.delete.confirmed');
+        });
+    });
+});
+
 Route::prefix('/summary')->group(function() {
     Route::get('/', 'SummaryController@index')->name('summary');
 });
@@ -37,18 +49,6 @@ Route::prefix('/settings')->group(function() {
     Route::get('/', 'SettingsController@index')->name('settings');
 });
 
-Route::prefix('/admin')->group(function() {
-    Route::prefix('/user')->group(function() {
-        Route::get('/list', 'AdminController@userList')->name('admin.user.list');
-        Route::get('/details', 'AdminController@userDetails')->name('admin.user.details');
-        Route::patch('/update', 'AdminController@updateUser')->name('admin.user.update');
-        Route::prefix('/delete')->group(function(){
-            Route::get('/', 'AdminController@confirmDeletion')->name('admin.delete');
-            Route::get('/confirmed', 'AdminController@delete')->name('admin.delete.confirmed');
-        });
-    });
-});
-
 Route::prefix('/profile')->group(function() {
     Route::get('/', 'ProfileController@index')->name('profile');
     Route::patch('/update', 'ProfileController@updateData')->name('profile.update');
@@ -66,6 +66,17 @@ Route::prefix('/bundles')->group(function() {
 });
 
 Route::prefix('/webapi')->group(function() {
+    Route::prefix('/admin')->group(function() {
+        Route::prefix('/users')->group(function() {
+            Route::get('/', 'Admin\WebApi\UsersController@users')->name('webapi.admin.user');
+
+            Route::prefix('/details')->group(function() {
+                Route::get('/', 'Admin\WebApi\UsersController@details')->name('webapi.admin.user.details');
+                Route::patch('/update', 'Admin\WebApi\UsersController@update')->name('webapi.admin.user.details.update');
+            });
+        });
+    });
+
     Route::prefix('/summary')->group(function() {
         Route::get('/', 'WebApi\SummaryController@getData')->name('summary.getData');
     });
@@ -95,19 +106,6 @@ Route::prefix('/webapi')->group(function() {
         Route::post('/store/one', 'WebApi\OutcomeController@storeOne')->name('outcome.store.one');
         Route::delete('/delete/{outcome}', 'WebApi\OutcomeController@deleteOutcome')->name('outcome.delete');
         Route::get('/{outcome}', 'WebApi\OutcomeController@getEditData')->name('outcome.getEditData');
-    });
-
-    Route::prefix('/admin')->group(function() {
-        Route::prefix('/user')->group(function() {
-            Route::prefix('/list')->group(function() {
-                Route::get('/', 'WebApi\AdminController@users')->name('webapi.admin.user');
-            });
-
-            Route::prefix('/details')->group(function() {
-                Route::get('/', 'WebApi\AdminController@details')->name('webapi.admin.user.details');
-                Route::patch('/update', 'WebApi\AdminController@update')->name('webapi.admin.user.details.update');
-            });
-        });
     });
 
     Route::prefix('/profile')->group(function() {

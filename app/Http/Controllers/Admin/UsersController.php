@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Middleware\Admin;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Str;
 
 use App\User;
 
-class AdminController extends Controller
+class UsersController extends Controller
 {
     public function __construct()
     {
@@ -22,7 +19,7 @@ class AdminController extends Controller
     {
         $pageData = $this->getDataForPageRender();
 
-        return view("admin.user-list", compact("pageData"));
+        return view("admin.users.list", compact("pageData"));
     }
 
     public function userDetails()
@@ -40,7 +37,7 @@ class AdminController extends Controller
             ]);
         }
 
-        return view("admin.user-details", $retArr);
+        return view("admin.users.details", $retArr);
     }
 
     public function updateUser()
@@ -76,7 +73,7 @@ class AdminController extends Controller
 
         $user->update($data);
 
-        return redirect("/admin/user/details?id=" . $data["id"]);
+        return redirect("/admin/users/details?id=" . $data["id"]);
     }
 
     public function confirmDeletion()
@@ -96,6 +93,6 @@ class AdminController extends Controller
         ])["id"];
 
         User::find($id)->delete();
-        return redirect("/admin/user/list");
+        return redirect("/admin/users");
     }
 }

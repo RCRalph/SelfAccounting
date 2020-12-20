@@ -73,7 +73,7 @@ class ProfileController extends Controller
         }
 
         $pageData = $this->getDataForPageRender();
-        return view("profile.delete", compact("pageData"));
+        return view("shared.confirm-delete", compact("pageData"));
     }
 
     public function delete()
