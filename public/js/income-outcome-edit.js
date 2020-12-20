@@ -158,25 +158,25 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/income-outcome-edit.js":
-/*!*********************************************!*\
-  !*** ./resources/js/income-outcome-edit.js ***!
-  \*********************************************/
+/***/ "./resources/js/scripts/income-outcome-edit.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/scripts/income-outcome-edit.js ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("Vue.component('income-outcome-edit-component', __webpack_require__(/*! ./components/income-outcome/IncomeOutcomeEditComponent.vue */ \"./resources/js/components/income-outcome/IncomeOutcomeEditComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvaW5jb21lLW91dGNvbWUtZWRpdC5qcz9lYjMxIl0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLCtCQUFkLEVBQStDQyxtQkFBTyxDQUFDLDJJQUFELENBQVAsV0FBL0M7QUFFQSxJQUFNQyxHQUFHLEdBQUcsSUFBSUgsR0FBSixDQUFRO0FBQ2hCSSxJQUFFLEVBQUU7QUFEWSxDQUFSLENBQVoiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvaW5jb21lLW91dGNvbWUtZWRpdC5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ2luY29tZS1vdXRjb21lLWVkaXQtY29tcG9uZW50JywgcmVxdWlyZSgnLi9jb21wb25lbnRzL2luY29tZS1vdXRjb21lL0luY29tZU91dGNvbWVFZGl0Q29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/income-outcome-edit.js\n");
+eval("Vue.component('income-outcome-edit-component', __webpack_require__(/*! ../components/income-outcome/IncomeOutcomeEditComponent.vue */ \"./resources/js/components/income-outcome/IncomeOutcomeEditComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvc2NyaXB0cy9pbmNvbWUtb3V0Y29tZS1lZGl0LmpzPzY5YjUiXSwibmFtZXMiOlsiVnVlIiwiY29tcG9uZW50IiwicmVxdWlyZSIsImFwcCIsImVsIl0sIm1hcHBpbmdzIjoiQUFBQUEsR0FBRyxDQUFDQyxTQUFKLENBQWMsK0JBQWQsRUFBK0NDLG1CQUFPLENBQUMsNElBQUQsQ0FBUCxXQUEvQztBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9zY3JpcHRzL2luY29tZS1vdXRjb21lLWVkaXQuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUuY29tcG9uZW50KCdpbmNvbWUtb3V0Y29tZS1lZGl0LWNvbXBvbmVudCcsIHJlcXVpcmUoJy4uL2NvbXBvbmVudHMvaW5jb21lLW91dGNvbWUvSW5jb21lT3V0Y29tZUVkaXRDb21wb25lbnQudnVlJykuZGVmYXVsdCk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/scripts/income-outcome-edit.js\n");
 
 /***/ }),
 
 /***/ 6:
-/*!***************************************************!*\
-  !*** multi ./resources/js/income-outcome-edit.js ***!
-  \***************************************************/
+/*!***********************************************************!*\
+  !*** multi ./resources/js/scripts/income-outcome-edit.js ***!
+  \***********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\income-outcome-edit.js */"./resources/js/income-outcome-edit.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\scripts\income-outcome-edit.js */"./resources/js/scripts/income-outcome-edit.js");
 
 
 /***/ })

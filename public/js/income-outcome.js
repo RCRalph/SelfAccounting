@@ -241,25 +241,25 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/income-outcome.js":
-/*!****************************************!*\
-  !*** ./resources/js/income-outcome.js ***!
-  \****************************************/
+/***/ "./resources/js/scripts/income-outcome.js":
+/*!************************************************!*\
+  !*** ./resources/js/scripts/income-outcome.js ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("Vue.use(__webpack_require__(/*! vue-resource */ \"./node_modules/vue-resource/dist/vue-resource.esm.js\"));\nVue.component('income-outcome-component', __webpack_require__(/*! ./components/income-outcome/IncomeOutcomeComponent.vue */ \"./resources/js/components/income-outcome/IncomeOutcomeComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvaW5jb21lLW91dGNvbWUuanM/MDVjNyJdLCJuYW1lcyI6WyJWdWUiLCJ1c2UiLCJyZXF1aXJlIiwiY29tcG9uZW50IiwiYXBwIiwiZWwiXSwibWFwcGluZ3MiOiJBQUFBQSxHQUFHLENBQUNDLEdBQUosQ0FBUUMsbUJBQU8sQ0FBQywwRUFBRCxDQUFmO0FBRUFGLEdBQUcsQ0FBQ0csU0FBSixDQUFjLDBCQUFkLEVBQTBDRCxtQkFBTyxDQUFDLG1JQUFELENBQVAsV0FBMUM7QUFFQSxJQUFNRSxHQUFHLEdBQUcsSUFBSUosR0FBSixDQUFRO0FBQ2hCSyxJQUFFLEVBQUU7QUFEWSxDQUFSLENBQVoiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvaW5jb21lLW91dGNvbWUuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUudXNlKHJlcXVpcmUoXCJ2dWUtcmVzb3VyY2VcIikpO1xuXG5WdWUuY29tcG9uZW50KCdpbmNvbWUtb3V0Y29tZS1jb21wb25lbnQnLCByZXF1aXJlKCcuL2NvbXBvbmVudHMvaW5jb21lLW91dGNvbWUvSW5jb21lT3V0Y29tZUNvbXBvbmVudC52dWUnKS5kZWZhdWx0KTtcblxuY29uc3QgYXBwID0gbmV3IFZ1ZSh7XG4gICAgZWw6ICcjYXBwJ1xufSk7XG4iXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./resources/js/income-outcome.js\n");
+eval("Vue.use(__webpack_require__(/*! vue-resource */ \"./node_modules/vue-resource/dist/vue-resource.esm.js\"));\nVue.component('income-outcome-component', __webpack_require__(/*! ../components/income-outcome/IncomeOutcomeComponent.vue */ \"./resources/js/components/income-outcome/IncomeOutcomeComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvc2NyaXB0cy9pbmNvbWUtb3V0Y29tZS5qcz8wYjRmIl0sIm5hbWVzIjpbIlZ1ZSIsInVzZSIsInJlcXVpcmUiLCJjb21wb25lbnQiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsR0FBSixDQUFRQyxtQkFBTyxDQUFDLDBFQUFELENBQWY7QUFFQUYsR0FBRyxDQUFDRyxTQUFKLENBQWMsMEJBQWQsRUFBMENELG1CQUFPLENBQUMsb0lBQUQsQ0FBUCxXQUExQztBQUVBLElBQU1FLEdBQUcsR0FBRyxJQUFJSixHQUFKLENBQVE7QUFDaEJLLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9zY3JpcHRzL2luY29tZS1vdXRjb21lLmpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiVnVlLnVzZShyZXF1aXJlKFwidnVlLXJlc291cmNlXCIpKTtcblxuVnVlLmNvbXBvbmVudCgnaW5jb21lLW91dGNvbWUtY29tcG9uZW50JywgcmVxdWlyZSgnLi4vY29tcG9uZW50cy9pbmNvbWUtb3V0Y29tZS9JbmNvbWVPdXRjb21lQ29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/scripts/income-outcome.js\n");
 
 /***/ }),
 
 /***/ 4:
-/*!**********************************************!*\
-  !*** multi ./resources/js/income-outcome.js ***!
-  \**********************************************/
+/*!******************************************************!*\
+  !*** multi ./resources/js/scripts/income-outcome.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\income-outcome.js */"./resources/js/income-outcome.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\scripts\income-outcome.js */"./resources/js/scripts/income-outcome.js");
 
 
 /***/ }),

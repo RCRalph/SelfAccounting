@@ -19,13 +19,21 @@ Auth::routes();
 
 Route::prefix('/admin')->group(function() {
     Route::prefix('/users')->group(function() {
-        Route::get('/', 'Admin\UsersController@userList')->name('admin.user.list');
-        Route::get('/details', 'Admin\UsersController@userDetails')->name('admin.user.details');
-        Route::patch('/update', 'Admin\UsersController@updateUser')->name('admin.user.update');
-        Route::prefix('/delete')->group(function(){
-            Route::get('/', 'Admin\UsersController@confirmDeletion')->name('admin.delete');
-            Route::get('/confirmed', 'Admin\UsersController@delete')->name('admin.delete.confirmed');
+        Route::get('/', 'Admin\UsersController@list')->name('admin.users.list');
+
+        Route::prefix('/{user}')->group(function() {
+            Route::get('/', 'Admin\UsersController@details')->name('admin.users.details');
+            Route::patch('/update', 'Admin\UsersController@update')->name('admin.users.update');
+
+            Route::prefix('/delete')->group(function(){
+                Route::get('/', 'Admin\UsersController@confirmDeletion')->name('admin.users.delete');
+                Route::get('/confirmed', 'Admin\UsersController@delete')->name('admin.users.delete.confirmed');
+            });
         });
+    });
+
+    Route::prefix('/bundles')->group(function() {
+        Route::get('/', 'Admin\BundlesController@list')->name('admin.bundle.list');
     });
 });
 
@@ -70,10 +78,14 @@ Route::prefix('/webapi')->group(function() {
         Route::prefix('/users')->group(function() {
             Route::get('/', 'Admin\WebApi\UsersController@users')->name('webapi.admin.user');
 
-            Route::prefix('/details')->group(function() {
+            Route::prefix('/{user}')->group(function() {
                 Route::get('/', 'Admin\WebApi\UsersController@details')->name('webapi.admin.user.details');
                 Route::patch('/update', 'Admin\WebApi\UsersController@update')->name('webapi.admin.user.details.update');
             });
+        });
+
+        Route::prefix('/bundles')->group(function() {
+            Route::get('/', 'Admin\WebApi\BundlesController@bundles')->name('webapi.admin.bundles');
         });
     });
 

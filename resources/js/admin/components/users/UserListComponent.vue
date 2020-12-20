@@ -3,35 +3,41 @@
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-list"></i>
-                User - List
+                Users - List
             </div>
         </div>
 
         <div class="card-body">
             <div v-if="ready">
-                <div class="table-responsive-xl w-100">
-                    <table
-                        :class="[
-                            'responsive-table-hover',
-                            darkmode ? 'table-darkmode' : 'table-lightmode'
-                        ]"
-                    >
-                        <thead>
-                            <th scope="col" class="h3 font-weight-bold">ID</th>
-                            <th scope="col" class="h3 font-weight-bold">Email Address</th>
-                            <th scope="col" class="h3 font-weight-bold">Details</th>
-                        </thead>
+                <div v-if="paginationData.data.length">
+                    <div class="table-responsive-xl w-100">
+                        <table
+                            :class="[
+                                'responsive-table-hover',
+                                darkmode ? 'table-darkmode' : 'table-lightmode'
+                            ]"
+                        >
+                            <thead>
+                                <th scope="col" class="h3 font-weight-bold">ID</th>
+                                <th scope="col" class="h3 font-weight-bold">Email Address</th>
+                                <th scope="col" class="h3 font-weight-bold">Details</th>
+                            </thead>
 
-                        <tbody>
-                            <tr v-for="(item, i) in paginationData.data" :key="item.id" :id="item.id" :index="i">
-                                <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
-                                <td class="h5 my-auto">{{ item.email }}</td>
-                                <td class="h5 my-auto">
-                                    <a role="button" class="big-button-primary" :href="'/admin/users/details?id=' + item.id">View user details</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            <tbody>
+                                <tr v-for="(item, i) in paginationData.data" :key="item.id" :id="item.id" :index="i">
+                                    <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
+                                    <td class="h5 my-auto">{{ item.email }}</td>
+                                    <td class="h5 my-auto">
+                                        <a role="button" class="big-button-primary" :href="'/admin/users/' + item.id">View details</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div v-else>
+                    <div class="h1 text-center">Nothing to see here, for now...</div>
                 </div>
 
                 <div class="d-flex justify-content-center">

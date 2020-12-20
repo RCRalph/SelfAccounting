@@ -158,25 +158,25 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/income-outcome-create-one.js":
-/*!***************************************************!*\
-  !*** ./resources/js/income-outcome-create-one.js ***!
-  \***************************************************/
+/***/ "./resources/js/scripts/income-outcome-create-one.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/scripts/income-outcome-create-one.js ***!
+  \***********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("Vue.component('income-outcome-create-one-component', __webpack_require__(/*! ./components/income-outcome/IncomeOutcomeCreateOneComponent.vue */ \"./resources/js/components/income-outcome/IncomeOutcomeCreateOneComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvaW5jb21lLW91dGNvbWUtY3JlYXRlLW9uZS5qcz9mM2IzIl0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLHFDQUFkLEVBQXFEQyxtQkFBTyxDQUFDLHFKQUFELENBQVAsV0FBckQ7QUFFQSxJQUFNQyxHQUFHLEdBQUcsSUFBSUgsR0FBSixDQUFRO0FBQ2hCSSxJQUFFLEVBQUU7QUFEWSxDQUFSLENBQVoiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvaW5jb21lLW91dGNvbWUtY3JlYXRlLW9uZS5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ2luY29tZS1vdXRjb21lLWNyZWF0ZS1vbmUtY29tcG9uZW50JywgcmVxdWlyZSgnLi9jb21wb25lbnRzL2luY29tZS1vdXRjb21lL0luY29tZU91dGNvbWVDcmVhdGVPbmVDb21wb25lbnQudnVlJykuZGVmYXVsdCk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/income-outcome-create-one.js\n");
+eval("Vue.component('income-outcome-create-one-component', __webpack_require__(/*! ../components/income-outcome/IncomeOutcomeCreateOneComponent.vue */ \"./resources/js/components/income-outcome/IncomeOutcomeCreateOneComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvc2NyaXB0cy9pbmNvbWUtb3V0Y29tZS1jcmVhdGUtb25lLmpzP2Y4M2YiXSwibmFtZXMiOlsiVnVlIiwiY29tcG9uZW50IiwicmVxdWlyZSIsImFwcCIsImVsIl0sIm1hcHBpbmdzIjoiQUFBQUEsR0FBRyxDQUFDQyxTQUFKLENBQWMscUNBQWQsRUFBcURDLG1CQUFPLENBQUMsc0pBQUQsQ0FBUCxXQUFyRDtBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9zY3JpcHRzL2luY29tZS1vdXRjb21lLWNyZWF0ZS1vbmUuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUuY29tcG9uZW50KCdpbmNvbWUtb3V0Y29tZS1jcmVhdGUtb25lLWNvbXBvbmVudCcsIHJlcXVpcmUoJy4uL2NvbXBvbmVudHMvaW5jb21lLW91dGNvbWUvSW5jb21lT3V0Y29tZUNyZWF0ZU9uZUNvbXBvbmVudC52dWUnKS5kZWZhdWx0KTtcblxuY29uc3QgYXBwID0gbmV3IFZ1ZSh7XG4gICAgZWw6ICcjYXBwJ1xufSk7XG4iXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./resources/js/scripts/income-outcome-create-one.js\n");
 
 /***/ }),
 
 /***/ 7:
-/*!*********************************************************!*\
-  !*** multi ./resources/js/income-outcome-create-one.js ***!
-  \*********************************************************/
+/*!*****************************************************************!*\
+  !*** multi ./resources/js/scripts/income-outcome-create-one.js ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\income-outcome-create-one.js */"./resources/js/income-outcome-create-one.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\scripts\income-outcome-create-one.js */"./resources/js/scripts/income-outcome-create-one.js");
 
 
 /***/ })

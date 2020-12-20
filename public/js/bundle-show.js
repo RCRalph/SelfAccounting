@@ -146,17 +146,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
-/***/ "./resources/js/bundle-show.js":
-/*!*************************************!*\
-  !*** ./resources/js/bundle-show.js ***!
-  \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("Vue.component('bundle-toggle', __webpack_require__(/*! ./components/bundle-show/BundleToggle.vue */ \"./resources/js/components/bundle-show/BundleToggle.vue\")[\"default\"]);\nVue.component('premium-bundle-toggle', __webpack_require__(/*! ./components/bundle-show/PremiumBundleToggle.vue */ \"./resources/js/components/bundle-show/PremiumBundleToggle.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlLXNob3cuanM/MWU5MSJdLCJuYW1lcyI6WyJWdWUiLCJjb21wb25lbnQiLCJyZXF1aXJlIiwiYXBwIiwiZWwiXSwibWFwcGluZ3MiOiJBQUFBQSxHQUFHLENBQUNDLFNBQUosQ0FBYyxlQUFkLEVBQStCQyxtQkFBTyxDQUFDLHlHQUFELENBQVAsV0FBL0I7QUFDQUYsR0FBRyxDQUFDQyxTQUFKLENBQWMsdUJBQWQsRUFBdUNDLG1CQUFPLENBQUMsdUhBQUQsQ0FBUCxXQUF2QztBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9idW5kbGUtc2hvdy5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ2J1bmRsZS10b2dnbGUnLCByZXF1aXJlKCcuL2NvbXBvbmVudHMvYnVuZGxlLXNob3cvQnVuZGxlVG9nZ2xlLnZ1ZScpLmRlZmF1bHQpO1xuVnVlLmNvbXBvbmVudCgncHJlbWl1bS1idW5kbGUtdG9nZ2xlJywgcmVxdWlyZSgnLi9jb21wb25lbnRzL2J1bmRsZS1zaG93L1ByZW1pdW1CdW5kbGVUb2dnbGUudnVlJykuZGVmYXVsdCk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/bundle-show.js\n");
-
-/***/ }),
-
 /***/ "./resources/js/components/bundle-show/BundleToggle.vue":
 /*!**************************************************************!*\
   !*** ./resources/js/components/bundle-show/BundleToggle.vue ***!
@@ -229,14 +218,25 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ 10:
-/*!*******************************************!*\
-  !*** multi ./resources/js/bundle-show.js ***!
-  \*******************************************/
+/***/ "./resources/js/scripts/bundle-show.js":
+/*!*********************************************!*\
+  !*** ./resources/js/scripts/bundle-show.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundle-show.js */"./resources/js/bundle-show.js");
+eval("Vue.component('bundle-toggle', __webpack_require__(/*! ../components/bundle-show/BundleToggle.vue */ \"./resources/js/components/bundle-show/BundleToggle.vue\")[\"default\"]);\nVue.component('premium-bundle-toggle', __webpack_require__(/*! ../components/bundle-show/PremiumBundleToggle.vue */ \"./resources/js/components/bundle-show/PremiumBundleToggle.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvc2NyaXB0cy9idW5kbGUtc2hvdy5qcz85ZTYzIl0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLGVBQWQsRUFBK0JDLG1CQUFPLENBQUMsMEdBQUQsQ0FBUCxXQUEvQjtBQUNBRixHQUFHLENBQUNDLFNBQUosQ0FBYyx1QkFBZCxFQUF1Q0MsbUJBQU8sQ0FBQyx3SEFBRCxDQUFQLFdBQXZDO0FBRUEsSUFBTUMsR0FBRyxHQUFHLElBQUlILEdBQUosQ0FBUTtBQUNoQkksSUFBRSxFQUFFO0FBRFksQ0FBUixDQUFaIiwiZmlsZSI6Ii4vcmVzb3VyY2VzL2pzL3NjcmlwdHMvYnVuZGxlLXNob3cuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUuY29tcG9uZW50KCdidW5kbGUtdG9nZ2xlJywgcmVxdWlyZSgnLi4vY29tcG9uZW50cy9idW5kbGUtc2hvdy9CdW5kbGVUb2dnbGUudnVlJykuZGVmYXVsdCk7XG5WdWUuY29tcG9uZW50KCdwcmVtaXVtLWJ1bmRsZS10b2dnbGUnLCByZXF1aXJlKCcuLi9jb21wb25lbnRzL2J1bmRsZS1zaG93L1ByZW1pdW1CdW5kbGVUb2dnbGUudnVlJykuZGVmYXVsdCk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/scripts/bundle-show.js\n");
+
+/***/ }),
+
+/***/ 10:
+/*!***************************************************!*\
+  !*** multi ./resources/js/scripts/bundle-show.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\scripts\bundle-show.js */"./resources/js/scripts/bundle-show.js");
 
 
 /***/ })

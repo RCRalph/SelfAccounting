@@ -1,8 +1,7 @@
 <template>
-    <form id="info-form" action="/admin/user/update" method="POST" enctype="multipart/form-data">
+    <form id="info-form" :action="`/admin/users/${userData.id}/update`" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_token" :value="CSRF_TOKEN">
         <input type="hidden" name="_method" value="PATCH">
-        <input type="hidden" name="id" :value="userData.id">
 
         <div class="h1 font-weight-bold text-center mb-0">Main info</div>
 
@@ -109,7 +108,7 @@
 </template>
 
 <script>
-import Slider from "../../SliderCheckbox.vue";
+import Slider from "../../../components/SliderCheckbox.vue";
 
 export default {
     components: {

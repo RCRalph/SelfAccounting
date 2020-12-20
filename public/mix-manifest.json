@@ -1,6 +1,7 @@
 {
-    "/js/admin/user-details.js": "/js/admin/user-details.js",
-    "/js/admin/user-list.js": "/js/admin/user-list.js",
+    "/js/admin/bundles/list.js": "/js/admin/bundles/list.js",
+    "/js/admin/users/details.js": "/js/admin/users/details.js",
+    "/js/admin/users/list.js": "/js/admin/users/list.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/js/bundle-show.js": "/js/bundle-show.js",

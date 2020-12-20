@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Admin;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 use App\User;
 
@@ -15,46 +19,33 @@ class UsersController extends Controller
         $this->middleware(["auth", Admin::class]);
     }
 
-    public function userList()
+    public function list()
     {
         $pageData = $this->getDataForPageRender();
 
         return view("admin.users.list", compact("pageData"));
     }
 
-    public function userDetails()
+    public function details(User $user)
     {
-        $data = request()->validate([
-            "id" => ["nullable"]
-        ]);
-
         $pageData = $this->getDataForPageRender();
-        $retArr = compact("pageData");
 
-        if (array_key_exists("id", $data)) {
-            $retArr = array_merge($retArr, [
-                "start" => $data["id"]
-            ]);
-        }
-
-        return view("admin.users.details", $retArr);
+        return view("admin.users.details", compact("pageData", "user"));
     }
 
-    public function updateUser()
+    public function update(User $user)
     {
         $data = request()->validate([
-            "id" => ["required", "integer", "exists:users"],
             "username" => ["required", "string", "max:32"],
-            "email" => ["required", "string", "email", "max:64", Rule::unique('users', 'email')->ignore(request("id"))],
+            "email" => ["required", "string", "email", "max:64", Rule::unique('users', 'email')->ignore($user->id)],
             "picture" => ["nullable", "image"],
             "premium_expiration" => ["nullable", "date"],
             "darkmode" => ["nullable"],
             "admin" => ["nullable"]
         ]);
 
-        $user = User::find($data["id"]);
         $data["darkmode"] = array_key_exists("darkmode", $data);
-        $data["admin"] = $data["id"] != 1 ? array_key_exists("admin", $data) : true;
+        $data["admin"] = $user->id != 1 ? array_key_exists("admin", $data) : true;
 
         // Update picture
         if (array_key_exists("picture", $data)) {
@@ -73,26 +64,29 @@ class UsersController extends Controller
 
         $user->update($data);
 
-        return redirect("/admin/users/details?id=" . $data["id"]);
+        return redirect("/admin/users/$user->id");
     }
 
-    public function confirmDeletion()
+    public function confirmDeletion(User $user)
     {
-        $id = request()->validate([
-            "id" => ["required", "integer", "exists:users", "not_in:1"]
-        ])["id"];
+        if ($user->id == 1) {
+            return redirect("/admin/users/1");
+        }
 
         $pageData = $this->getDataForPageRender();
-        return view("shared.confirm-delete", compact("pageData", "id"));
+        $links = [
+            "yes" => "/admin/user/$user->id/delete/confirmed",
+            "no" => "/admin/user/$user->id"
+        ];
+
+        return view("shared.confirm-delete", compact("pageData", "links"));
     }
 
-    public function delete()
+    public function delete(User $user)
     {
-        $id = request()->validate([
-            "id" => ["required", "integer", "exists:users", "not_in:1"]
-        ])["id"];
-
-        User::find($id)->delete();
+        if ($user->id != 1) {
+            $user->delete();
+        }
         return redirect("/admin/users");
     }
 }

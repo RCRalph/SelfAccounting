@@ -1,7 +1,7 @@
 @extends('layouts.fullmidwidth')
 
 @section('script')
-    <script src="{{ asset('js/admin/user-list.js') }}" defer></script>
+    <script src="{{ asset('js/admin/users/list.js') }}" defer></script>
 @endsection
 
 @section('content')

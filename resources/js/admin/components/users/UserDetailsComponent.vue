@@ -3,42 +3,12 @@
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-info-circle"></i>
-                User - Details
+                Users - Details
             </div>
         </div>
 
         <div class="card-body">
-            <div class="form-group row">
-                <label class="col-md-4 col-form-label text-md-right form-control-lg">
-                    Enter the user's ID:
-                </label>
-
-                <div class="col-md-4">
-                    <input type="text" v-model="enteredId" @keyup.enter="getUserData" :class="[
-                        'form-control',
-                        'form-control-lg',
-                        'text-center',
-                        !correctNumber && 'is-invalid'
-                    ]">
-                </div>
-
-                <div class="col-md-4 mt-3 mt-md-0">
-                    <button class="big-button-primary h-100 btn-lg" @click="getUserData" :disabled="!correctNumber || enteredId === ''">
-                        <i class="fas fa-search"></i> Search
-                    </button>
-                </div>
-
-                <div v-if="error" class="text-center col-12 mt-2 text-danger h5 font-weight-bold">
-                    User not found
-                </div>
-            </div>
-
-            <hr v-if="ready && !error" :class="[
-                darkmode ? 'hr-darkmode' : 'hr-lightmode',
-                'my-4'
-            ]">
-
-            <div v-if="ready && !error">
+            <div v-if="ready">
                 <UserDataChange
                     :darkmode="darkmode"
                     :userData="userData"
@@ -109,7 +79,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-6 offset-sm-3">
-                            <a :href="'/admin/users/delete?id=' + userData.id" role="button" class="big-button-danger">
+                            <a :href="`/admin/users/${userData.id}/delete`" role="button" class="big-button-danger">
                                 <i class="fas fa-trash"></i>
                                 Delete this profile
                             </a>
@@ -118,7 +88,7 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center mt-4 my-2" v-if="startedSearch">
+            <div class="d-flex justify-content-center mt-4 my-2" v-else>
                 <div
                     class="spinner-grow"
                     role="status"
@@ -136,7 +106,7 @@ import Multiselect from 'vue-multiselect';
 import UserDataChange from "./UserDataChangeComponent.vue";
 
 export default {
-    props: ["start"],
+    props: ["id"],
     components: {
         Multiselect,
         UserDataChange
@@ -144,50 +114,16 @@ export default {
     data() {
         return {
             darkmode: false,
-            enteredId: "",
 
             userData: {},
 			userDataCopy: {},
             bundles: [],
 
             ready: false,
-            startedSearch: false,
-            error: false,
-
             dataSubmit: false
         }
     },
-    computed: {
-        correctNumber() {
-            const numberToCheck = Number(this.enteredId);
-            return this.enteredId === "" || (!isNaN(numberToCheck) && numberToCheck == Math.floor(numberToCheck) && numberToCheck > 0);
-        }
-    },
     methods: {
-        getUserData() {
-            this.startedSearch = true;
-            this.ready = false;
-            axios
-                .get("/webapi/admin/users/details", {
-                    params: {
-                        id: Number(this.enteredId)
-                    }
-                })
-                .then(response => {
-					this.userData = response.data.user;
-                    this.userDataCopy = _.cloneDeep(response.data.user);
-                    this.bundles = response.data.bundles;
-
-                    this.startedSearch = false;
-                    this.ready = true;
-                    this.error = false;
-                })
-                .catch(() => {
-                    this.error = true;
-                    this.startedSearch = false;
-                    this.ready = true;
-                })
-        },
         userDataReset() {
             const bundles = _.cloneDeep(this.userData.bundles);
             this.userData = _.cloneDeep(this.userDataCopy)
@@ -200,8 +136,7 @@ export default {
             this.dataSubmit = true;
 
             axios
-                .patch("/webapi/admin/users/details/update", {
-                    id: this.userData.id,
+                .patch(`/webapi/admin/users/${this.userData.id}/update`, {
                     bundleIDs: this.userData.bundles.map(item => item.id)
                 })
                 .then(response => {
@@ -218,10 +153,15 @@ export default {
         this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
-        if (this.start) {
-            this.enteredId = Number(this.start);
-            this.getUserData();
-        }
+        axios
+            .get(`/webapi/admin/users/${this.id}`, {})
+            .then(response => {
+                this.userData = response.data.user;
+                this.userDataCopy = _.cloneDeep(response.data.user);
+                this.bundles = response.data.bundles;
+
+                this.ready = true;
+            })
     },
     beforeUpdate() {
         this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
