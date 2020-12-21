@@ -67,9 +67,7 @@ class UsersController extends Controller
 			}
 		}
 
-		foreach ($bundlesToToggle as $bundleID) {
-			$user->bundles()->toggle(Bundle::find($bundleID));
-        }
+		$user->bundles()->toggle(Bundle::whereIn("id", $bundlesToToggle)->get());
 
         $bundlesToReturn = $user->fresh()->bundles->map(function($item) {
             return ["id" => $item->id, "title" => $item->title];

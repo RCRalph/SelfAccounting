@@ -2,8 +2,14 @@
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
             <div class="card-header-text">
-                <i class="fas fa-list"></i>
-                Bundles - List
+                <i class="fas fa-box-open"></i>
+                Bundles
+            </div>
+
+            <div class="d-flex" v-if="ready">
+                <a role="button" class="big-button-primary" href="/admin/bundles/create">
+                    New Bundle
+                </a>
             </div>
         </div>
 

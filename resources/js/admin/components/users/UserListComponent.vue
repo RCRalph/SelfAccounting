@@ -2,8 +2,8 @@
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
             <div class="card-header-text">
-                <i class="fas fa-list"></i>
-                Users - List
+                <i class="fas fa-users"></i>
+                Users
             </div>
         </div>
 

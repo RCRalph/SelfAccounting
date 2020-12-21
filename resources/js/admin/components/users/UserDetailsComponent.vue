@@ -2,8 +2,8 @@
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
             <div class="card-header-text">
-                <i class="fas fa-info-circle"></i>
-                Users - Details
+                <i class="fas fa-users"></i>
+                Edit User
             </div>
         </div>
 

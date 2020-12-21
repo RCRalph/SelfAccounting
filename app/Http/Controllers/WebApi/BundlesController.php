@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Bundle;
 
-class BundleController extends Controller
+class BundlesController extends Controller
 {
     public function __construct()
     {

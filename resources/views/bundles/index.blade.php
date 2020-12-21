@@ -15,7 +15,7 @@
                     <div class="col-12 col-lg-6 my-2">
                         <a href="/bundles/{{ $bundle->id }}" class="text-decoration-none">
                             <div class="bundle-wrapper-{{ $pageData["darkmode"] ? "dark" : "light" }}">
-                                <div class="image" style="background-image: url(/img/bundles/thumbnails/{{ $bundle->thumbnail }});"></div>
+                                <div class="image" style="background-image: url({{ $bundle->thumbnail }});"></div>
 
                                 <div class="title">
                                     {{ $bundle->title }}

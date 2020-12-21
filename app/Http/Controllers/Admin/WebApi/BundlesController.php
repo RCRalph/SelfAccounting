@@ -25,4 +25,17 @@ class BundlesController extends Controller
 
         return response()->json(compact("users"));
     }
+
+    public function getCreateData()
+    {
+        $titles = Bundle::all()->map(function($item) {
+            return $item->only("title");
+        });
+
+        foreach ($titles as $key => $value) {
+            $titles[$key] = strtolower($value["title"]);
+        }
+
+        return response()->json(compact("titles"));
+    }
 }

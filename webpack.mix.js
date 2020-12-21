@@ -13,7 +13,8 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/scripts/app.js', 'public/js')
 	.sass('resources/sass/app.scss', 'public/css')
-	.js('node_modules/popper.js/dist/popper.js', 'public/js')
+    .js('node_modules/popper.js/dist/popper.js', 'public/js')
+
     .js('resources/js/scripts/table-hovering.js', 'public/js')
     .js('resources/js/scripts/settings.js', 'public/js')
     .js('resources/js/scripts/income-outcome.js', 'public/js')
@@ -27,5 +28,6 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/admin/scripts/users/list.js', 'public/js/admin/users')
     .js('resources/js/admin/scripts/users/details.js', 'public/js/admin/users')
     .js('resources/js/admin/scripts/bundles/list.js', 'public/js/admin/bundles')
+    .js('resources/js/admin/scripts/bundles/create.js', 'public/js/admin/bundles')
 
     .sourceMaps();

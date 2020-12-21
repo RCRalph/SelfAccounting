@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Bundle;
 use App\BundleImage;
 
-class BundleController extends Controller
+class BundlesController extends Controller
 {
     public function __construct()
     {
@@ -17,7 +17,12 @@ class BundleController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
-        $bundles = Bundle::all();
+        $bundles = Bundle::all()->map(function($item) {
+            $endpoint = env('IBM_COS_ENDPOINT');
+            $bucket = env('IBM_COS_BUCKET');
+            $item->thumbnail = "$endpoint/$bucket/bundles/thumbnails/$item->thumbnail";
+            return $item;
+        });
 
         return view("bundles.index", compact("pageData", "bundles"));
     }

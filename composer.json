@@ -17,6 +17,7 @@
         "laravel/telescope": "^4.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
+        "mews/purifier": "^3.3",
         "tavux/laravel-ibm-cos": "^1.0"
     },
     "require-dev": {

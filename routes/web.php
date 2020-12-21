@@ -34,6 +34,11 @@ Route::prefix('/admin')->group(function() {
 
     Route::prefix('/bundles')->group(function() {
         Route::get('/', 'Admin\BundlesController@list')->name('admin.bundle.list');
+
+        Route::prefix('/create')->group(function() {
+            Route::get('/', 'Admin\BundlesController@create')->name('admin.bundle.create.page');
+            Route::post('/', 'Admin\BundlesController@store')->name('admin.bundle.create.store');
+        });
     });
 });
 
@@ -69,8 +74,8 @@ Route::prefix('/profile')->group(function() {
 });
 
 Route::prefix('/bundles')->group(function() {
-    Route::get('/', 'BundleController@index')->name('bundles');
-    Route::get('/{bundle}', 'BundleController@show')->name('bundles.show');
+    Route::get('/', 'BundlesController@index')->name('bundles');
+    Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 
 Route::prefix('/webapi')->group(function() {
@@ -86,6 +91,7 @@ Route::prefix('/webapi')->group(function() {
 
         Route::prefix('/bundles')->group(function() {
             Route::get('/', 'Admin\WebApi\BundlesController@bundles')->name('webapi.admin.bundles');
+            Route::get('/create', 'Admin\WebApi\BundlesController@getCreateData')->name('webapi.admin.bundles.create');
         });
     });
 
@@ -125,10 +131,10 @@ Route::prefix('/webapi')->group(function() {
     });
 
     Route::prefix('/bundles')->group(function() {
-        Route::post('/toggle', 'WebApi\BundleController@toggle');
+        Route::post('/toggle', 'WebApi\BundlesController@toggle');
 
         Route::prefix('/premium')->group(function() {
-            Route::post('/toggle', 'WebApi\BundleController@togglePremium');
+            Route::post('/toggle', 'WebApi\BundlesController@togglePremium');
         });
     });
 });
