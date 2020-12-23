@@ -35,28 +35,26 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-6 my-2 my-sm-0">
-                    <button type="button" class="big-button-success" @click="submitForm" :disabled="disableSubmit || submit">
-                        <div v-if="!submit">
-                            Save changes
-                        </div>
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
-                    </button>
-                </div>
-
-                <div class="col-sm-6 my-2 my-sm-0">
-                    <button type="button" class="big-button-danger" @click="dataReset" :disabled="submit">Reset changes</button>
-                </div>
-            </div>
+            <SaveResetChanges
+                :disableAll="submit"
+                :disableSave="disableSubmit"
+                :spinner="submit"
+                @save="submitForm"
+                @reset="resetData"
+            ></SaveResetChanges>
         </form>
     </div>
 </template>
 
 <script>
+import SaveResetChanges from "../SaveResetChanges.vue";
+
 export default {
     props: {
         userDataCopy: Object
+    },
+    components: {
+        SaveResetChanges
     },
     data() {
         return {
@@ -66,7 +64,7 @@ export default {
         }
     },
     methods: {
-        dataReset() {
+        resetData() {
             document.getElementById("picture").value = "";
             this.validFile = true;
             this.userData = this.userDataCopy;

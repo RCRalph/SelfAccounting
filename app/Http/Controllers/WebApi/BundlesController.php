@@ -14,16 +14,11 @@ class BundlesController extends Controller
         $this->middleware("auth");
     }
 
-    public function toggle() // Change bundle between enabled / disabled
+    public function toggle(Bundle $bundle) // Change bundle between enabled / disabled
     {
-        $data = request()->validate([
-            "id" => ["required", "exists:bundles"]
-        ]);
-
-        $this->authorize("hasBundle", Bundle::find($data["id"]));
-
+        $this->authorize("hasBundle", $bundle);
         $pivot = auth()->user()->bundles
-            ->where("id", $data["id"])
+            ->where("id", $bundle->id)
             ->first()->pivot;
 
         $pivot->update(["enabled" => !$pivot->enabled]);
@@ -31,14 +26,10 @@ class BundlesController extends Controller
         return response("", 200);
     }
 
-    public function togglePremium() // Add or remove bundle from premium
+    public function togglePremium(Bundle $bundle) // Add or remove bundle from premium
     {
         $this->authorize("isPremium", auth()->user());
-        $data = request()->validate([
-            "id" => ["required", "exists:bundles"]
-        ]);
-
-        auth()->user()->premium_bundles()->toggle(Bundle::find($data["id"]));
+        auth()->user()->premium_bundles()->toggle($bundle);
 
         return response("", 200);
     }

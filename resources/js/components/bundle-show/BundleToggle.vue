@@ -32,9 +32,7 @@ export default {
                 this.ready = false;
 
                 axios
-                    .post("/webapi/bundles/toggle", {
-                        id: Number(this.id)
-                    })
+                    .post(`/webapi/bundles/${this.id}/toggle`, {})
                     .then(response => {
                         this.enabled = !this.enabled;
                         this.ready = true;

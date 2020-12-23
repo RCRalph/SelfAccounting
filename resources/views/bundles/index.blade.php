@@ -22,7 +22,7 @@
                                 </div>
 
                                 <div class="description">
-                                    {{ Markdown::parse($bundle->short_description) }}
+                                    {!! clean(Markdown::parse($bundle->short_description)) !!}
                                 </div>
                             </div>
                         </a>

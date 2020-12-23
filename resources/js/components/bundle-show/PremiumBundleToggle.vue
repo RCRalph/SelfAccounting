@@ -26,7 +26,11 @@ export default {
     },
     computed: {
         buttonText() {
-            return (this.enabled || this.premium) ? "Stop using with Premium" : "Start using with Premium";
+            if (!this.premium) {
+                return "Start using with premium";
+            }
+
+            return this.enabled ? "Stop using with Premium" : "Start using with Premium";
         }
     },
     methods: {
@@ -35,9 +39,7 @@ export default {
                 this.ready = false;
 
                 axios
-                    .post("/webapi/bundles/premium/toggle", {
-                        id: Number(this.id)
-                    })
+                    .post(`/webapi/bundles/${this.id}/toggle-premium`, {})
                     .then(response => {
                         this.enabled = !this.enabled;
                         this.ready = true;

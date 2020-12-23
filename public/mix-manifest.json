@@ -1,5 +1,6 @@
 {
     "/js/admin/bundles/create.js": "/js/admin/bundles/create.js",
+    "/js/admin/bundles/edit.js": "/js/admin/bundles/edit.js",
     "/js/admin/bundles/list.js": "/js/admin/bundles/list.js",
     "/js/admin/users/details.js": "/js/admin/users/details.js",
     "/js/admin/users/list.js": "/js/admin/users/list.js",

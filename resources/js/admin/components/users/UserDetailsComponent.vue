@@ -56,20 +56,12 @@
 
 				<hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
 
-				<div class="row">
-					<div class="col-sm-6 my-2 my-sm-0">
-						<button type="button" class="big-button-success" @click="submitData" :disabled="dataSubmit">
-							<div v-if="!dataSubmit">
-								Save changes
-							</div>
-							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
-						</button>
-					</div>
-
-					<div class="col-sm-6 my-2 my-sm-0">
-						<button type="button" class="big-button-danger" @click="dataReset" :disabled="dataSubmit">Reset changes</button>
-					</div>
-				</div>
+                <SaveResetChanges
+                    :disableAll="dataSubmit"
+                    :spinner="dataSubmit"
+                    @save="submitData"
+                    @reset="resetData"
+                ></SaveResetChanges>
 
                 <div v-if="userData.id != 1">
                     <hr :class="[
@@ -104,12 +96,14 @@
 <script>
 import Multiselect from 'vue-multiselect';
 import UserDataChange from "./UserDataChangeComponent.vue";
+import SaveResetChanges from "../../../components/SaveResetChanges.vue";
 
 export default {
     props: ["id"],
     components: {
         Multiselect,
-        UserDataChange
+        UserDataChange,
+        SaveResetChanges
     },
     data() {
         return {
@@ -129,7 +123,7 @@ export default {
             this.userData = _.cloneDeep(this.userDataCopy)
             this.userData.bundles = bundles;
         },
-        dataReset() {
+        resetData() {
             this.userData.bundles = _.cloneDeep(this.userDataCopy.bundles);
         },
         submitData() {

@@ -90,29 +90,24 @@
 
         <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
 
-        <div class="row">
-            <div class="col-sm-6 my-2 my-sm-0">
-                <button type="button" class="big-button-success" @click="submitForm" :disabled="disableSubmit || submit">
-                    <div v-if="!submit">
-                        Save changes
-                    </div>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
-                </button>
-            </div>
-
-            <div class="col-sm-6 my-2 my-sm-0">
-                <button type="button" class="big-button-danger" @click="dataReset" :disabled="submit">Reset changes</button>
-            </div>
-        </div>
+        <SaveResetChanges
+            :disableAll="submit"
+            :disableSave="disableSubmit"
+            :spinner="submit"
+            @save="submitForm"
+            @reset="resetData"
+        ></SaveResetChanges>
     </form>
 </template>
 
 <script>
 import Slider from "../../../components/SliderCheckbox.vue";
+import SaveResetChanges from "../../../components/SaveResetChanges.vue";
 
 export default {
     components: {
-        Slider
+        Slider,
+        SaveResetChanges
     },
     props: {
         darkmode: Boolean,
@@ -144,7 +139,7 @@ export default {
             this.submit = true;
             document.getElementById("info-form").submit();
         },
-        dataReset() {
+        resetData() {
             this.$emit("userDataReset");
             this.validFile = true;
             document.getElementById("picture").value = "";

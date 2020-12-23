@@ -29,7 +29,7 @@ class ProfileController extends Controller
 {
         $data = request()->validate([
             "username" => ["required", "string", "max:32"],
-            "email" => ["required", "string", "email", "max:64", Rule::unique('users', 'email')->ignore(auth()->user()->id)],
+            "email" => ["required", "string", "email", "max:64", Rule::unique("users", "email")->ignore(auth()->user()->id)],
             "picture" => ["nullable", "image"]
         ]);
 

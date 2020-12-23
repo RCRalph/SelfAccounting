@@ -29,5 +29,6 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/admin/scripts/users/details.js', 'public/js/admin/users')
     .js('resources/js/admin/scripts/bundles/list.js', 'public/js/admin/bundles')
     .js('resources/js/admin/scripts/bundles/create.js', 'public/js/admin/bundles')
+    .js('resources/js/admin/scripts/bundles/edit.js', 'public/js/admin/bundles')
 
     .sourceMaps();

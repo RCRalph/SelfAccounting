@@ -169,17 +169,17 @@ class SettingsController extends Controller
     public function saveMeans()
     {
         // Validate
-        $dataDirectory = "means.*.*.";
+        $dataDirectory = "means.*.*";
         $data = request()->validate([
-            $dataDirectory . "count_to_summary" => ["required", "boolean"],
-            $dataDirectory . "currency_id" => ["required", "integer", "exists:currencies,id"],
-            $dataDirectory . "first_entry_amount" => ["required", "numeric"],
-            $dataDirectory . "first_entry_date" => ["required", "date", new CorrectDateMeans],
-            $dataDirectory . "id" => ["present", "integer", "min:0", "not_in:0", "nullable"],
-            $dataDirectory . "income_mean" => ["required", "boolean"],
-            $dataDirectory . "name" => ["required", "string", "max:32"],
-            $dataDirectory . "outcome_mean" => ["required", "boolean"],
-            $dataDirectory . "show_on_charts" => ["required", "boolean"]
+            "$dataDirectory.count_to_summary" => ["required", "boolean"],
+            "$dataDirectory.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "$dataDirectory.first_entry_amount" => ["required", "numeric"],
+            "$dataDirectory.first_entry_date" => ["required", "date", new CorrectDateMeans],
+            "$dataDirectory.id" => ["present", "integer", "min:0", "not_in:0", "nullable"],
+            "$dataDirectory.income_mean" => ["required", "boolean"],
+            "$dataDirectory.name" => ["required", "string", "max:32"],
+            "$dataDirectory.outcome_mean" => ["required", "boolean"],
+            "$dataDirectory.show_on_charts" => ["required", "boolean"]
         ]);
 
         if (count($data) == 0) {

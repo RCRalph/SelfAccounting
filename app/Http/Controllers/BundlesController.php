@@ -17,7 +17,7 @@ class BundlesController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
-        $bundles = Bundle::all()->map(function($item) {
+        $bundles = Bundle::all()->sortBy("created_at")->map(function($item) {
             $endpoint = env('IBM_COS_ENDPOINT');
             $bucket = env('IBM_COS_BUCKET');
             $item->thumbnail = "$endpoint/$bucket/bundles/thumbnails/$item->thumbnail";
