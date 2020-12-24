@@ -93,6 +93,10 @@ Route::prefix('/bundles')->group(function() {
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 
+Route::prefix('/payment')->group(function() {
+    Route::get('/', 'PaymentController@index')->name('payment');
+});
+
 Route::prefix('/webapi')->group(function() {
     Route::prefix('/admin')->group(function() {
         Route::prefix('/users')->group(function() {
@@ -152,8 +156,12 @@ Route::prefix('/webapi')->group(function() {
 
     Route::prefix('/bundles')->group(function() {
         Route::prefix('/{bundle}')->group(function() {
-            Route::post('/toggle', 'WebApi\BundlesController@toggle');
-            Route::post('/toggle-premium', 'WebApi\BundlesController@togglePremium');
+            Route::post('/toggle', 'WebApi\BundlesController@toggle')->name('bundle.toggle');
+            Route::post('/toggle-premium', 'WebApi\BundlesController@togglePremium')->name('bundle.toggle-premium');
         });
+    });
+
+    Route::prefix('/payment')->group(function() {
+        Route::get('/', 'WebApi\PaymentController@index')->name('payment.index');
     });
 });

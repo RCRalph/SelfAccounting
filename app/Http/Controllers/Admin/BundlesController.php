@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Admin;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 use App\User;
@@ -45,14 +42,7 @@ class BundlesController extends Controller
             "description" => ["required", "string"]
         ]);
 
-        $img = Image::make($data["thumbnail"]);
-        do {
-            $fileName = Str::random(50) . "." . $data["thumbnail"]->extension();
-        } while (Storage::disk("ibm-cos")->has("bundles/thumbnails/" . $fileName));
-
-        Storage::disk("ibm-cos")->put("bundles/thumbnails/" . $fileName, $img->stream());
-        $data["thumbnail"] = $fileName;
-
+        $data["thumbnail"] = $this->uploadImage($data["thumbnail"], $this->directories["bundle-thumbnails"]);
         $bundle = Bundle::create($data);
 
         return redirect("/admin/bundles/$bundle->id");
@@ -74,15 +64,11 @@ class BundlesController extends Controller
         ]);
 
         if (array_key_exists("thumbnail", $data)) {
-            $img = Image::make($data["thumbnail"]);
-            do {
-                $fileName = Str::random(50) . "." . $data["thumbnail"]->extension();
-            } while (Storage::disk("ibm-cos")->has("bundles/thumbnails/" . $fileName));
-
-			Storage::disk("ibm-cos")->delete("bundles/thumbnails/" . $bundle->thumbnail);
-            Storage::disk("ibm-cos")->put("bundles/thumbnails/" . $fileName, $img->stream());
-
-            $data["thumbnail"] = $fileName;
+            $data["thumbnail"] = $this->uploadImage(
+                $data["thumbnail"],
+                $this->directories["bundle-thumbnails"],
+                $bundle->thumbnail
+            );
         }
 
         $bundle->update($data);
@@ -102,16 +88,12 @@ class BundlesController extends Controller
         $image = request()->validate([
             "image" => ["required", "image"]
         ])["image"];
-        $img = Image::make($image);
 
-        do {
-            $fileName = Str::random(50) . "." . $image->extension();
-        } while (Storage::disk("ibm-cos")->has("bundles/gallery/$fileName"));
+        $image = $this->uploadImage($image, $this->directories["bundle-gallery"]);
 
-        Storage::disk("ibm-cos")->put("bundles/gallery/$fileName", $img->stream());
         BundleImage::create([
             "bundle_id" => $bundle->id,
-            "image" => $fileName
+            "image" => $image
         ]);
 
         return redirect("/admin/bundles/$bundle->id");

@@ -10,6 +10,7 @@
     "/js/income-outcome.js": "/js/income-outcome.js",
     "/js/income-outcome-create-one.js": "/js/income-outcome-create-one.js",
     "/js/income-outcome-edit.js": "/js/income-outcome-edit.js",
+    "/js/payment.js": "/js/payment.js",
     "/js/popper.js": "/js/popper.js",
     "/js/profile.js": "/js/profile.js",
     "/js/settings.js": "/js/settings.js",

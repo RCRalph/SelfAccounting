@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Admin;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 use App\User;
@@ -49,17 +46,13 @@ class UsersController extends Controller
 
         // Update picture
         if (array_key_exists("picture", $data)) {
-            $img = Image::make($data["picture"])->fit(512, 512);
-
-            do {
-                $fileName = Str::random(50) . "." . $data["picture"]->extension();
-            } while (Storage::disk("ibm-cos")->has("profile_pictures/" . $fileName));
-
-			Storage::disk("ibm-cos")->delete("profile_pictures/" . $user->profile_picture);
-            Storage::disk("ibm-cos")->put("profile_pictures/" . $fileName, $img->stream());
-
+            $data["profile_picture"] = $this->uploadImage(
+                $data["picture"],
+                $this->directories["profile-pictures"],
+                $user->profile_picture,
+                [512, 512]
+            );
             unset($data["picture"]);
-            $data["profile_picture"] = $fileName;
         }
 
         $user->update($data);

@@ -18,9 +18,10 @@ class BundlesController extends Controller
     {
         $pageData = $this->getDataForPageRender();
         $bundles = Bundle::all()->sortBy("created_at")->map(function($item) {
-            $endpoint = env('IBM_COS_ENDPOINT');
-            $bucket = env('IBM_COS_BUCKET');
-            $item->thumbnail = "$endpoint/$bucket/bundles/thumbnails/$item->thumbnail";
+            $item->thumbnail = $this->getImageLink(
+                $this->directories["bundle-thumbnails"],
+                $item->thumbnail
+            );
             return $item;
         });
 
@@ -41,9 +42,10 @@ class BundlesController extends Controller
         }
 
         $gallery = $bundle->gallery->map(function($item) {
-            $endpoint = env('IBM_COS_ENDPOINT');
-            $bucket = env('IBM_COS_BUCKET');
-            return "$endpoint/$bucket/bundles/gallery/$item->image";
+            return $this->getImageLink(
+                $this->directories["bundle-gallery"],
+                $item->image
+            );
         });
 
         $isPremium = $this->checkPremium(auth()->user());

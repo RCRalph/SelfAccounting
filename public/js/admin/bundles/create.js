@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -191,7 +191,7 @@ eval("Vue.component('create-bundle-component', __webpack_require__(/*! ../../com
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /*!************************************************************!*\
   !*** multi ./resources/js/admin/scripts/bundles/create.js ***!
   \************************************************************/

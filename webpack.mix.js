@@ -23,6 +23,7 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/scripts/summary.js', 'public/js')
     .js('resources/js/scripts/profile.js', 'public/js')
     .js('resources/js/scripts/bundle-show.js', 'public/js')
+    .js('resources/js/scripts/payment.js', 'public/js')
 
     // Admin scripts
     .js('resources/js/admin/scripts/users/list.js', 'public/js/admin/users')

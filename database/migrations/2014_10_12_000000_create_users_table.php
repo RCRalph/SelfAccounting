@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 64);
             $table->boolean('admin')->default(false);
             $table->boolean('darkmode')->default(false);
-            $table->string('profile_picture', 64)->nullable();
+            $table->string('profile_picture', 64);
             $table->date("premium_expiration")->nullable();
             $table->rememberToken();
             $table->timestamps(6);

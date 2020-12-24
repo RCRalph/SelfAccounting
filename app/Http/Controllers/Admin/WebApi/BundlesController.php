@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\WebApi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Admin;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\Bundle;
@@ -56,9 +57,10 @@ class BundlesController extends Controller
     {
         $titles = $this->getBundleTitles($bundle->title);
         $gallery = $bundle->gallery->map(function($item) {
-            $endpoint = env('IBM_COS_ENDPOINT');
-            $bucket = env('IBM_COS_BUCKET');
-            $item->image = "$endpoint/$bucket/bundles/gallery/$item->image";
+            $item->image = $this->getImageLink(
+                $this->directories["bundles-gallery"],
+                $item->image
+            );
             return collect($item)->only("id", "image");
         });
         $bundle = collect($bundle)->forget(["created_at", "updated_at", "thumbnail", "gallery"]);
@@ -72,20 +74,31 @@ class BundlesController extends Controller
             "gallery.*" => ["required", "integer", "exists:bundle_images,id"]
         ]);
 
+        // Get IDs of images that belong to this bundle
         $ids = $bundle->gallery->map(function($item) {
             return $item->id;
         })->toArray();
 
+        // Get IDs of images to delete
         $toRemove = array_values(array_filter(
             $ids,
             fn ($item) => !in_array($item, $data["gallery"])
         ));
 
+        // Delete images from DB and storage
+        $images = BundleImage::whereIn("id", $toRemove)->get();
         BundleImage::whereIn("id", $toRemove)->delete();
+
+        foreach ($images as $image) {
+            Storage::disk("ibm-cos")->delete("bundles/gallery/$image->image");
+        }
+
+        // Get gallery as return object
         $gallery = $bundle->fresh()->gallery->map(function($item) {
-            $endpoint = env('IBM_COS_ENDPOINT');
-            $bucket = env('IBM_COS_BUCKET');
-            $item->image = "$endpoint/$bucket/bundles/gallery/$item->image";
+            $item->image = $this->getImageLink(
+                $this->directories["bundles-gallery"],
+                $item->image
+            );
             return collect($item)->only("id", "image");
         });
 

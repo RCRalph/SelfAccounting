@@ -61,7 +61,7 @@
                     </div>
                 @else
                     <div class="col-sm-4 offset-sm-2">
-                        <a href="#" type="button" class="big-button-primary">
+                        <a href="/payment?bundle={{ $bundle->id }}" type="button" class="big-button-primary">
                             Buy now - €{{ $bundle->price }}
                         </a>
                     </div>
