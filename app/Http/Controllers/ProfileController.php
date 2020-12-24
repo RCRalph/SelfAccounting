@@ -73,12 +73,13 @@ class ProfileController extends Controller
         }
 
         $pageData = $this->getDataForPageRender();
+        $heading = "Delete profile";
         $links = [
             "yes" => "/profile/delete/confirmed",
             "no" => "/profile"
         ];
 
-        return view("shared.confirm-delete", compact("pageData", "links"));
+        return view("shared.confirm-delete", compact("pageData", "heading", "links"));
     }
 
     public function delete()

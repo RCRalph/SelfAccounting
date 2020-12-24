@@ -74,12 +74,13 @@ class UsersController extends Controller
         }
 
         $pageData = $this->getDataForPageRender();
+        $heading = "Delete user";
         $links = [
             "yes" => "/admin/user/$user->id/delete/confirmed",
             "no" => "/admin/user/$user->id"
         ];
 
-        return view("shared.confirm-delete", compact("pageData", "links"));
+        return view("shared.confirm-delete", compact("pageData", "heading", "links"));
     }
 
     public function delete(User $user)

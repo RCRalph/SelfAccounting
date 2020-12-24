@@ -8,6 +8,7 @@ use App\Http\Middleware\Admin;
 
 use App\User;
 use App\Bundle;
+use App\BundleImage;
 
 class BundlesController extends Controller
 {
@@ -54,8 +55,40 @@ class BundlesController extends Controller
     public function details(Bundle $bundle)
     {
         $titles = $this->getBundleTitles($bundle->title);
-        $bundle = collect($bundle)->forget(["created_at", "updated_at", "thumbnail"]);
+        $gallery = $bundle->gallery->map(function($item) {
+            $endpoint = env('IBM_COS_ENDPOINT');
+            $bucket = env('IBM_COS_BUCKET');
+            $item->image = "$endpoint/$bucket/bundles/gallery/$item->image";
+            return collect($item)->only("id", "image");
+        });
+        $bundle = collect($bundle)->forget(["created_at", "updated_at", "thumbnail", "gallery"]);
 
-        return response()->json(compact("titles", "bundle"));
+        return response()->json(compact("titles", "bundle", "gallery"));
+    }
+
+    public function updateGallery(Bundle $bundle)
+    {
+        $data = request()->validate([
+            "gallery.*" => ["required", "integer", "exists:bundle_images,id"]
+        ]);
+
+        $ids = $bundle->gallery->map(function($item) {
+            return $item->id;
+        })->toArray();
+
+        $toRemove = array_values(array_filter(
+            $ids,
+            fn ($item) => !in_array($item, $data["gallery"])
+        ));
+
+        BundleImage::whereIn("id", $toRemove)->delete();
+        $gallery = $bundle->fresh()->gallery->map(function($item) {
+            $endpoint = env('IBM_COS_ENDPOINT');
+            $bucket = env('IBM_COS_BUCKET');
+            $item->image = "$endpoint/$bucket/bundles/gallery/$item->image";
+            return collect($item)->only("id", "image");
+        });
+
+        return response()->json(compact("gallery"));
     }
 }

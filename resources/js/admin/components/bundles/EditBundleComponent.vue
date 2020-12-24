@@ -9,113 +9,106 @@
 
         <div class="card-body">
             <div v-if="ready">
-                <form id="bundle-form" :action="`/admin/bundles/${bundleData.id}`" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="_token" :value="CSRF_TOKEN">
-                    <input type="hidden" name="_method" value="PATCH">
+                <BundleDataChange
+                    :data="bundleData"
+                    :titles="titles"
+                    :darkmode="darkmode"
+                    @reset-form="resetForm"
+                ></BundleDataChange>
 
-                    <div class="form-group row">
-                        <label class="col-lg-3 offset-lg-1 col-form-label text-lg-right">Title</label>
-                        <div class="col-lg-7">
-                            <input type="text" placeholder="Enter title here..." maxlength="64" v-model="bundleData.title" name="title" :class="[
-                                'form-control',
-                                !validTitle && 'is-invalid'
-                            ]">
+                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mx-xl-4 mb-3">
+                        <div class="h3 font-weight-bold m-xl-0">
+                            Gallery
+                        </div>
+
+                        <div>
+                            <a role="button" :href="`/admin/bundles/${bundleData.id}/add-image`" class="big-button-primary">
+                                Add Image
+                            </a>
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-lg-3 offset-lg-1 col-form-label text-lg-right">Price</label>
-                        <div class="col-lg-7 input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">€</div>
-                            </div>
+                    <div class="table-responsive-xl" v-if="gallery.length">
+                        <table :class="[
+                            'responsive-table-bordered',
+                            darkmode ? 'table-darkmode' : 'table-lightmode'
+                        ]">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="h3 font-weight-bold">ID</th>
+                                    <th scope="col" class="h3 font-weight-bold">Image</th>
+                                    <th scope="col" class="h3 font-weight-bold">Delete</th>
+                                </tr>
+                            </thead>
 
-                            <input type="number" step="0.01" placeholder="Enter price here..." v-model="bundleData.price" name="price" :class="[
-                                'form-control',
-                                !validPrice && 'is-invalid'
-                            ]">
-                        </div>
+                            <tbody>
+                                <tr v-for="(item, i) in gallery" :key="i">
+                                    <th scope="row" class="h5 my-auto font-weight-bold" style="min-width: 100px;">{{ item.id }}</th>
+
+                                    <td>
+                                        <div class="admin-bundle-gallery-image" :style="`background-image: url(${item.image})`"></div>
+                                    </td>
+
+                                    <td class="trashbin" @click="deleteImage(i)">
+                                        <i class="fas fa-trash"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-lg-3 offset-lg-1 col-form-label text-lg-right">Thumbnail</label>
-                        <div class="col-lg-7">
-                            <input @change="checkThumbnail" id="thumbnail" type="file" name="thumbnail" :class="[
-                                'form-control',
-                                'form-control-file',
-                                !validThumbnail && 'is-invalid'
-                            ]">
-                        </div>
-                    </div>
+                    <EmptyPlaceholder v-else></EmptyPlaceholder>
 
-                    <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
-
-                    <div>
-                        <div class="h3 text-center">Short Description</div>
-                        <div class="col-lg-8 offset-lg-2 my-3">
-                            <textarea v-model="bundleData.short_description" name="short_description" placeholder="Shortly describe this bundle..." :class="[
-                                'form-control',
-                                'mb-2',
-                                !validShortDescription && 'is-invalid'
-                            ]"></textarea>
-                            <div v-html="markdownToHTML(bundleData.short_description)"></div>
-                        </div>
-                    </div>
-
-                    <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
-
-                    <div>
-                        <div class="h3 text-center">Description</div>
-                        <div class="col-lg-8 offset-lg-2 my-3">
-                            <textarea v-model="bundleData.description" name="description" placeholder="Describe this bundle..." :class="[
-                                'form-control',
-                                'mb-2',
-                                !validDescription && 'is-invalid'
-                            ]"></textarea>
-                            <div v-html="markdownToHTML(bundleData.description)"></div>
-                        </div>
-                    </div>
-
-                    <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'">
 
                     <SaveResetChanges
-                        :disableAll="submitted"
-                        :spinner="submitted"
-                        :disableSave="!canSubmit"
-                        @save="submitForm"
-                        @reset="resetForm"
+                        :disableAll="imageSubmit"
+                        :spinner="imageSubmit"
+                        @save="saveImages"
+                        @reset="resetImages"
                     ></SaveResetChanges>
-                </form>
-            </div>
+                </div>
 
-            <div class="d-flex justify-content-center my-2" v-else>
-                <div
-                    class="spinner-grow"
-                    role="status"
-                    style="width: 3rem; height: 3rem;"
-                >
-                    <span class="sr-only">Loading...</span>
+                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+
+                <div class="row">
+                    <div class="col-12 col-sm-6 offset-sm-3">
+                        <a :href="`/admin/bundles/${bundleData.id}/delete`" role="button" class="big-button-danger">
+                            <i class="fas fa-trash"></i>
+                            Delete this bundle
+                        </a>
+                    </div>
                 </div>
             </div>
+
+            <Loading v-else></Loading>
         </div>
     </div>
 </template>
 
 <script>
-import marked from "marked";
-import DOMPurify from "dompurify";
-
 import SaveResetChanges from "../../../components/SaveResetChanges.vue";
+import EmptyPlaceholder from "../../../components/EmptyPlaceholder.vue";
+import Loading from "../../../components/Loading.vue";
+
+import BundleDataChange from "./BundleDataChangeComponent.vue";
 
 export default {
     props: ["id"],
     components: {
-        SaveResetChanges
+        SaveResetChanges,
+        BundleDataChange,
+        EmptyPlaceholder,
+        Loading
     },
     data() {
         return {
             darkmode: false,
             ready: false,
+
             bundleData: {
                 title: "",
                 price: "",
@@ -124,49 +117,37 @@ export default {
             },
             bundleDataCopy: {},
             titles: [],
-            validThumbnail: true,
-            submitted: false
+
+            gallery: [],
+            galleryCopy: [],
+            imageSubmit: false
         };
     },
-    computed: {
-        CSRF_TOKEN() {
-			return document.head.querySelectorAll("meta[name=csrf-token]")[0].attributes.content.value;
-        },
-        validTitle() {
-            const title = this.bundleData.title;
-            return !!title && title.length <= 64 && !this.titles.includes(title.toLowerCase());
-        },
-        validPrice() {
-            const price = Number(this.bundleData.price);
-            return this.bundleData.price !== "" && !isNaN(price) && price >= 0 && price < 1000;
-        },
-        validShortDescription() {
-            const text = this.bundleData.short_description;
-            return text.length > 0;
-        },
-        validDescription() {
-            const text = this.bundleData.description;
-            return text.length > 0;
-        },
-        canSubmit() {
-            return this.validTitle && this.validPrice && this.validThumbnail && this.validShortDescription && this.validDescription
-        }
-    },
     methods: {
-        checkThumbnail() {
-            this.validThumbnail = document.getElementById("thumbnail").files[0].type.includes("image");
-        },
-        markdownToHTML(markdown) {
-            return DOMPurify.sanitize(marked(markdown));
-        },
-        submitForm() {
-            this.submitted = true;
-            document.getElementById("bundle-form").submit();
-        },
         resetForm() {
             this.bundleData = _.cloneDeep(this.bundleDataCopy);
-            this.validThumbnail = true;
-            document.getElementById("thumbnail").value = "";
+        },
+        saveImages() {
+            this.imageSubmit = true;
+
+            axios
+                .patch(`/webapi/admin/bundles/${this.bundleData.id}/update-gallery`, {
+                    gallery: this.gallery.map(item => item.id)
+                })
+                .then(response => {
+                    this.gallery = response.data.gallery;
+                    this.gallery = _.cloneDeep(response.data.gallery);
+                    this.imageSubmit = false;
+                })
+                .catch(() => {
+                    this.imageSubmit = false;
+                })
+        },
+        resetImages() {
+            this.gallery = _.cloneDeep(this.galleryCopy);
+        },
+        deleteImage(index) {
+            this.gallery.splice(index, 1);
         }
     },
     beforeMount() {
@@ -179,6 +160,10 @@ export default {
                 this.bundleData = response.data.bundle;
                 this.bundleDataCopy = _.cloneDeep(response.data.bundle);
                 this.titles = response.data.titles;
+
+                this.gallery = response.data.gallery;
+                this.galleryCopy = _.cloneDeep(response.data.gallery);
+
                 this.ready = true;
             });
     },

@@ -39,6 +39,10 @@ jQuery(() => {
                     dark: "hr-darkmode",
                 },
                 {
+                    light: "hr-lightmode-dashed",
+                    dark: "hr-darkmode-dashed"
+                },
+                {
                     light: "profile-img-lightmode",
                     dark: "profile-img-darkmode"
                 },

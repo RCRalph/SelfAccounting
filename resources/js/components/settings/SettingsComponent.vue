@@ -48,15 +48,7 @@
                 ></Means>
             </div>
 
-            <div class="d-flex justify-content-center my-2" v-else>
-                <div
-                    class="spinner-grow"
-                    role="status"
-                    style="width: 3rem; height: 3rem;"
-                >
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
+            <Loading v-else></Loading>
         </div>
     </div>
 </template>
@@ -64,11 +56,13 @@
 <script>
 import Categories from "./categories/Categories.vue";
 import Means from "./means-of-payment/MeansOfPayment.vue";
+import Loading from "../Loading.vue";
 
 export default {
     components: {
         Categories,
-        Means
+        Means,
+        Loading
     },
     data() {
         return {

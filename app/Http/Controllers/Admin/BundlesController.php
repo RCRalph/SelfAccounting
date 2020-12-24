@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 
 use App\User;
 use App\Bundle;
+use App\BundleImage;
 
 class BundlesController extends Controller
 {
@@ -44,11 +45,6 @@ class BundlesController extends Controller
             "description" => ["required", "string"]
         ]);
 
-        // Wydupia się
-        $data["short_description"] = clean($data["short_description"]);
-        $data["description"] = clean($data["description"]);
-
-        // Upload image
         $img = Image::make($data["thumbnail"]);
         do {
             $fileName = Str::random(50) . "." . $data["thumbnail"]->extension();
@@ -92,5 +88,50 @@ class BundlesController extends Controller
         $bundle->update($data);
 
         return redirect("/admin/bundles/$bundle->id");
+    }
+
+    public function addImage(Bundle $bundle)
+    {
+        $pageData = $this->getDataForPageRender();
+
+        return view("admin.bundles.add-image", compact("pageData", "bundle"));
+    }
+
+    public function storeImage(Bundle $bundle)
+    {
+        $image = request()->validate([
+            "image" => ["required", "image"]
+        ])["image"];
+        $img = Image::make($image);
+
+        do {
+            $fileName = Str::random(50) . "." . $image->extension();
+        } while (Storage::disk("ibm-cos")->has("bundles/gallery/$fileName"));
+
+        Storage::disk("ibm-cos")->put("bundles/gallery/$fileName", $img->stream());
+        BundleImage::create([
+            "bundle_id" => $bundle->id,
+            "image" => $fileName
+        ]);
+
+        return redirect("/admin/bundles/$bundle->id");
+    }
+
+    public function confirmDeletion(Bundle $bundle)
+    {
+        $pageData = $this->getDataForPageRender();
+        $heading = "Delete bundle";
+        $links = [
+            "yes" => "/admin/bundles/$bundle->id/delete/confirmed",
+            "no" => "/admin/bundles/$bundle->id"
+        ];
+
+        return view("shared.confirm-delete", compact("pageData", "heading", "links"));
+    }
+
+    public function delete(Bundle $bundle)
+    {
+        $bundle->delete();
+        return redirect("/admin/bundles");
     }
 }

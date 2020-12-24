@@ -32,9 +32,8 @@
                     </tbody>
                 </table>
             </div>
-            <div v-else>
-                <div class="h1 text-center">Nothing to see here, for now...</div>
-            </div>
+
+            <EmptyPlaceholder v-else></EmptyPlaceholder>
 
             <hr>
 
@@ -75,11 +74,13 @@
 <script>
 import TableHeader from "../../TableHeader.vue";
 import TableBody from "./CategoriesTableContent.vue";
+import EmptyPlaceholder from "../../EmptyPlaceholder.vue";
 
 export default {
     components: {
         TableHeader,
-        TableBody
+        TableBody,
+        EmptyPlaceholder
     },
     props: {
         darkmode: Boolean,

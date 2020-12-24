@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-				<hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+				<hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
                 <SaveResetChanges
                     :disableAll="dataSubmit"
@@ -73,22 +73,14 @@
                         <div class="col-12 col-sm-6 offset-sm-3">
                             <a :href="`/admin/users/${userData.id}/delete`" role="button" class="big-button-danger">
                                 <i class="fas fa-trash"></i>
-                                Delete this profile
+                                Delete this user
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center mt-4 my-2" v-else>
-                <div
-                    class="spinner-grow"
-                    role="status"
-                    style="width: 3rem; height: 3rem;"
-                >
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
+            <Loading v-else></Loading>
         </div>
     </div>
 </template>
@@ -97,13 +89,15 @@
 import Multiselect from 'vue-multiselect';
 import UserDataChange from "./UserDataChangeComponent.vue";
 import SaveResetChanges from "../../../components/SaveResetChanges.vue";
+import Loading from "../../../components/Loading.vue";
 
 export default {
     props: ["id"],
     components: {
         Multiselect,
         UserDataChange,
-        SaveResetChanges
+        SaveResetChanges,
+        Loading
     },
     data() {
         return {

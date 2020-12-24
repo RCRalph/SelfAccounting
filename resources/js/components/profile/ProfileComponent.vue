@@ -47,15 +47,7 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center my-2" v-else>
-                <div
-                    class="spinner-grow"
-                    role="status"
-                    style="width: 3rem; height: 3rem;"
-                >
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
+            <Loading v-else></Loading>
         </div>
     </div>
 </template>
@@ -64,12 +56,14 @@
 import ProfileShowcase from "./ProfileShowcase.vue";
 import ProfileInfoChange from "./ProfileInfoChange.vue";
 import ProfilePasswordChange from "./ProfilePasswordChange.vue";
+import Loading from "../Loading.vue";
 
 export default {
     components: {
         ProfileShowcase,
         ProfileInfoChange,
-        ProfilePasswordChange
+        ProfilePasswordChange,
+        Loading
     },
     data() {
         return {

@@ -10,11 +10,11 @@
         </div>
 
         <div class="card-body">
-            @if (count($images))
+            @if (count($gallery))
                 <div class="d-flex justify-content-center align-items-center w-100" style="max-height: 400px;">
                     <div id="image-gallery" class="carousel slide w-75" data-ride="carousel">
                         <ol class="carousel-indicators carousel-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode">
-                            @foreach ($images as $index => $image)
+                            @foreach ($gallery as $index => $image)
                                 <li
                                     data-target="#image-gallery"
                                     data-slide-to="{{ $index }}"
@@ -24,7 +24,7 @@
                         </ol>
 
                         <div class="carousel-inner">
-                            @foreach ($images as $index => $image)
+                            @foreach ($gallery as $index => $image)
                                 <div style="height: 375px;" class="carousel-item {{ $index == 0 ? "active" : "" }}">
                                     <img
                                         class="bundle-image"

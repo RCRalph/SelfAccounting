@@ -9692,6 +9692,7 @@ button.dark-card:focus {
 .mr-auto,
 .card-header-text,
 .mx-auto,
+.admin-bundle-gallery-image,
 .bundle-image {
   margin-right: auto !important;
 }
@@ -9704,6 +9705,7 @@ button.dark-card:focus {
 
 .ml-auto,
 .mx-auto,
+.admin-bundle-gallery-image,
 .bundle-image {
   margin-left: auto !important;
 }
@@ -11913,18 +11915,34 @@ a.welcome-bg-change-lightmode:focus {
 
 .hr,
 .hr-lightmode,
-.hr-darkmode {
+.hr-lightmode-dashed,
+.hr-darkmode,
+.hr-darkmode-dashed {
   border-width: 2px;
 }
 
-.hr-darkmode {
+.hr-darkmode,
+.hr-darkmode-dashed {
   background-color: white;
   border-color: white;
 }
 
-.hr-lightmode {
+.hr-darkmode-dashed {
+  background-color: transparent !important;
+  border-top-style: dashed;
+  border-width: 1px;
+}
+
+.hr-lightmode,
+.hr-lightmode-dashed {
   background-color: #e6e6e6;
   border-color: #e6e6e6;
+}
+
+.hr-lightmode-dashed {
+  background-color: transparent !important;
+  border-top-style: dashed;
+  border-width: 1px;
 }
 
 .profile-img,
@@ -11968,6 +11986,15 @@ a.welcome-bg-change-lightmode:focus {
 
 .description-long {
   text-align: center;
+}
+
+.admin-bundle-gallery-image {
+  width: 400px;
+  height: 300px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 20px;
+  border: solid 5px #7f7f7f;
 }
 
 td,

@@ -59,25 +59,24 @@
                 </div>
             </div>
 
-            <div v-else-if="ready && !content[currentCurrency]">
-                <h1 class="text-center">Nothing to see here, for now...</h1>
-            </div>
+            <EmptyPlaceholder
+                v-else-if="ready && !content[currentCurrency]"
+            ></EmptyPlaceholder>
 
-            <div class="d-flex justify-content-center my-2" v-else>
-                <div
-                    class="spinner-grow"
-                    role="status"
-                    style="width: 3rem; height: 3rem;"
-                >
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
+            <Loading v-else></Loading>
         </div>
     </div>
 </template>
 
 <script>
+import EmptyPlaceholder from "../EmptyPlaceholder.vue";
+import Loading from "../Loading.vue";
+
 export default {
+    components: {
+        EmptyPlaceholder,
+        Loading
+    },
     data() {
         return {
             darkmode: false,

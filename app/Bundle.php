@@ -13,7 +13,7 @@ class Bundle extends Model
         "title", "price", "thumbnail", "short_description", "description"
     ];
 
-    public function images()
+    public function gallery()
     {
         return $this->hasMany(BundleImage::class);
     }

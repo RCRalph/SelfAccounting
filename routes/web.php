@@ -33,16 +33,26 @@ Route::prefix('/admin')->group(function() {
     });
 
     Route::prefix('/bundles')->group(function() {
-        Route::get('/', 'Admin\BundlesController@list')->name('admin.bundle.list');
+        Route::get('/', 'Admin\BundlesController@list')->name('admin.bundles.list');
 
         Route::prefix('/create')->group(function() {
-            Route::get('/', 'Admin\BundlesController@create')->name('admin.bundle.create.page');
-            Route::post('/', 'Admin\BundlesController@store')->name('admin.bundle.create.store');
+            Route::get('/', 'Admin\BundlesController@create')->name('admin.bundles.create.page');
+            Route::post('/', 'Admin\BundlesController@store')->name('admin.bundles.create.store');
         });
 
         Route::prefix('/{bundle}')->group(function() {
-            Route::get('/', 'Admin\BundlesController@edit')->name('admin.bundle.edit.page');
-            Route::patch('/', 'Admin\BundlesController@update')->name('admin.bundle.edit.update');
+            Route::get('/', 'Admin\BundlesController@edit')->name('admin.bundles.edit.page');
+            Route::patch('/', 'Admin\BundlesController@update')->name('admin.bundles.edit.update');
+
+            Route::prefix('/add-image')->group(function() {
+                Route::get('/', 'Admin\BundlesController@addImage')->name('admin.bundles.add-image');
+                Route::post('/', 'Admin\BundlesController@storeImage')->name('admin.bundles.store-image');
+            });
+
+            Route::prefix('/delete')->group(function() {
+                Route::get('/', 'Admin\BundlesController@confirmDeletion')->name('admin.bundles.delete');
+                Route::get('/confirmed', 'Admin\BundlesController@delete')->name('admin.bundles.delete.confirmed');
+            });
         });
     });
 });
@@ -100,6 +110,7 @@ Route::prefix('/webapi')->group(function() {
 
             Route::prefix('/{bundle}')->group(function() {
                 Route::get('/', 'Admin\WebApi\BundlesController@details')->name('webapi.admin.bundles.details');
+                Route::patch('/update-gallery', 'Admin\WebApi\BundlesController@updateGallery')->name('webapi.admin.bundles.update-gallery');
             });
         });
     });

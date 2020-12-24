@@ -36,30 +36,27 @@
                     </div>
                 </div>
 
-                <div v-else>
-                    <div class="h1 text-center">Nothing to see here, for now...</div>
-                </div>
+                <EmptyPlaceholder v-else></EmptyPlaceholder>
 
                 <div class="d-flex justify-content-center">
                     <pagination :data="paginationData" @pagination-change-page="getPaginationData"></pagination>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center my-2" v-else>
-                <div
-                    class="spinner-grow"
-                    role="status"
-                    style="width: 3rem; height: 3rem;"
-                >
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
+            <Loading v-else></Loading>
         </div>
     </div>
 </template>
 
 <script>
+import EmptyPlaceholder from "../../../components/EmptyPlaceholder.vue";
+import Loading from "../../../components/Loading.vue";
+
 export default {
+    components: {
+        EmptyPlaceholder,
+        Loading
+    },
     data() {
         return {
             darkmode: false,

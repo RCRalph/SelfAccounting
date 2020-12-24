@@ -5,7 +5,7 @@
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-trash"></i>
-                Delete profile
+                {{ $heading }}
             </div>
         </div>
 

@@ -139,6 +139,13 @@
         $border-color: white;
         background-color: $border-color;
         border-color: $border-color;
+
+        &-dashed {
+            @extend .hr-darkmode;
+            background-color: transparent !important;
+            border-top-style: dashed;
+            border-width: 1px;
+        }
     }
 
     &-lightmode {
@@ -146,6 +153,13 @@
         $border-color: darken(white, 10%);
         background-color: $border-color;
         border-color: $border-color;
+
+        &-dashed {
+            @extend .hr-lightmode;
+            background-color: transparent !important;
+            border-top-style: dashed;
+            border-width: 1px;
+        }
     }
 }
 
@@ -170,7 +184,7 @@
 .navbar {
 	&-lightmode {
 		@extend .navbar-light;
-		@extend .bg-light;
+        @extend .bg-light;
 	}
 
 	&-darkmode {
@@ -209,4 +223,14 @@
     @extend .w-100;
 
     text-align: center;
+}
+
+.admin-bundle-gallery-image {
+    @extend .mx-auto;
+    width: 400px;
+    height: 300px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 20px;
+    border: solid 5px rgb(127, 127, 127);
 }

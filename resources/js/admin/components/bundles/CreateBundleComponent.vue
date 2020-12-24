@@ -47,7 +47,7 @@
                         </div>
                     </div>
 
-                    <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
                     <div>
                         <div class="h3 text-center">Short Description</div>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
 
-                    <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
                     <div>
                         <div class="h3 text-center">Description</div>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
 
-                    <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
                     <div class="row">
                         <div class="col-md-4 offset-md-4">

@@ -38,22 +38,22 @@ export default {
     props: {
         disableAll: {
             type: Boolean,
-            required: true,
+            required: false,
             default: false
         },
         disableSave: {
             type: Boolean,
-            required: true,
+            required: false,
             default: false
         },
         disableReset: {
             type: Boolean,
-            required: true,
+            required: false,
             default: false
         },
         spinner: {
             type: Boolean,
-            required: true,
+            required: false,
             default: false
         }
     },

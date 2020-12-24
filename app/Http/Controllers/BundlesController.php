@@ -40,12 +40,14 @@ class BundlesController extends Controller
                 ->first()->pivot->enabled;
         }
 
-        $images = $bundle->images->map(function($item) {
-            return "/img/bundles/galleries/" . $item->image;
+        $gallery = $bundle->gallery->map(function($item) {
+            $endpoint = env('IBM_COS_ENDPOINT');
+            $bucket = env('IBM_COS_BUCKET');
+            return "$endpoint/$bucket/bundles/gallery/$item->image";
         });
 
         $isPremium = $this->checkPremium(auth()->user());
 
-        return view("bundles.show", compact("pageData", "isPremium", "bundle", "images", "hasBundle", "bundleEnabled", "hasBundlePremium"));
+        return view("bundles.show", compact("pageData", "isPremium", "bundle", "gallery", "hasBundle", "bundleEnabled", "hasBundlePremium"));
     }
 }

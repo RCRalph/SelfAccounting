@@ -5,7 +5,7 @@
 
         <div class="h1 font-weight-bold text-center mb-0">Main info</div>
 
-        <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+        <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
         <div>
             <div class="form-group row">
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+        <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
         <div class="row">
             <div class="table-responsive col-md-6 offset-md-3">
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'" style="background-color: transparent; border-top-style: dashed; border-width: 1px;">
+        <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
         <SaveResetChanges
             :disableAll="submit"
