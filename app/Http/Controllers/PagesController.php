@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class PaymentController extends Controller
+class PagesController extends Controller
 {
     public function __construct()
     {
         $this->middleware("auth");
     }
 
-    public function index()
+    public function payment()
     {
         $data = request()->validate([
             "bundle" => ["nullable", "integer", "exists:bundles,id"]
@@ -20,6 +21,12 @@ class PaymentController extends Controller
         $userId = auth()->user()->id;
 
         $pageData = $this->getDataForPageRender();
-        return view("payment.index", compact("pageData", "id", "userId"));
+        return view("payment", compact("pageData", "id", "userId"));
+    }
+
+    public function premium()
+    {
+        $pageData = $this->getDataForPageRender();
+        return view("premium", compact("pageData"));
     }
 }

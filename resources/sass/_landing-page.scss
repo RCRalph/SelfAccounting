@@ -7,6 +7,11 @@
 
 $background: hsl(140, 90%, 60%);
 
+.big-text-h1 {
+    @extend .mb-5;
+    font-weight: bold;
+}
+
 header.masthead {
     @include background-cover;
 
@@ -78,7 +83,6 @@ header.masthead {
                 transition: font-size 0.5s;
             }
         }
-
         &:hover {
             .features-icons-icon {
                 i {
@@ -86,6 +90,10 @@ header.masthead {
                     transition: font-size 0.5s;
                 }
             }
+        }
+
+        h3 {
+            font-weight: bold;
         }
     }
 }

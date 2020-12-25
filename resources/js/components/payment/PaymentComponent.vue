@@ -16,8 +16,8 @@
 
                     <div class="col-lg-5">
                         <select class="form-control" v-model="selectedBundle">
-                            <option value="premium-1">Premium - 1 month</option>
-                            <option value="premium-12">Premium - 12 months</option>
+                            <option value="p-1">Premium - 1 month</option>
+                            <option value="p-12">Premium - 12 months</option>
                             <option v-for="item in bundles" :key="item.id" :value="item.id">
                                 {{ item.title }}
                             </option>
@@ -82,13 +82,13 @@ export default {
             darkmode: false,
             ready: false,
             bundles: [],
-            selectedBundle: "premium-1"
+            selectedBundle: "p-1"
         }
     },
     computed: {
         price() {
             if (typeof this.selectedBundle == 'string') {
-                if (this.selectedBundle == "premium-1") {
+                if (this.selectedBundle == "p-12") {
                     return 15;
                 }
 
@@ -105,7 +105,7 @@ export default {
         this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
-        this.selectedBundle = Number(this.id) || "premium-1";
+        this.selectedBundle = Number(this.id) || "p-1";
         axios.get("/webapi/payment", {})
             .then(response => {
                 this.bundles = response.data.bundles;

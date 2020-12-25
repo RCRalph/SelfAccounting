@@ -13,9 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'WelcomePageController@index')->name('welcome');
-
 Auth::routes();
+
+Route::get('/', function() {
+    // Redirect if authenticated
+    if (Auth::check()) {
+        return redirect()->route("summary");
+    }
+
+    return view("welcome");
+})->name('welcome');
 
 Route::prefix('/admin')->group(function() {
     Route::prefix('/users')->group(function() {
@@ -93,9 +100,9 @@ Route::prefix('/bundles')->group(function() {
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 
-Route::prefix('/payment')->group(function() {
-    Route::get('/', 'PaymentController@index')->name('payment');
-});
+Route::get('/payment', 'PagesController@payment')->name('payment');
+
+Route::get('/premium', 'PagesController@premium')->name('premium');
 
 Route::prefix('/webapi')->group(function() {
     Route::prefix('/admin')->group(function() {
@@ -162,6 +169,6 @@ Route::prefix('/webapi')->group(function() {
     });
 
     Route::prefix('/payment')->group(function() {
-        Route::get('/', 'WebApi\PaymentController@index')->name('payment.index');
+        Route::get('/', 'WebApi\PagesController@payment')->name('payment.index');
     });
 });
