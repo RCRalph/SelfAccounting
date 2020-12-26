@@ -18,16 +18,17 @@ class Controller extends BaseController
     public $directories = [
         "bundle-thumbnails" => "bundles/thumbnails",
         "bundle-gallery" => "bundles/gallery",
-        "profile-pictures" => "profile_pictures"
+        "profile-picture" => "profile_pictures"
     ];
 
-    public function getProfilePictureLink($profile_picture) {
+    public function getProfilePictureLink($profile_picture)
+    {
         if (preg_match("/Emoji[1-6].png/", $profile_picture) || $profile_picture == "EmojiAdmin.png") {
             return "/img/avatars/$profile_picture";
         }
 
         return $this->getImageLink(
-            $this->directories["profile-pictures"],
+            $this->directories["profile-picture"],
             $profile_picture
         );
     }
@@ -66,7 +67,8 @@ class Controller extends BaseController
         return $filename;
     }
 
-    public function getImageLink($directory, $filename) {
+    public function getImageLink($directory, $filename)
+    {
         $endpoint = env('IBM_COS_ENDPOINT');
         $bucket = env('IBM_COS_BUCKET');
 

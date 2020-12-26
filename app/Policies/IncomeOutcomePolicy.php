@@ -6,7 +6,7 @@ use App\Income;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class IncomePolicy
+class IncomeOutcomePolicy
 {
     use HandlesAuthorization;
 
@@ -28,9 +28,9 @@ class IncomePolicy
      * @param  \App\Income  $income
      * @return mixed
      */
-    public function view(User $user, Income $income)
+    public function viewIncomeOutcome(User $user, $incomeOutcome)
     {
-        return $user->id == $income->user_id;
+        return $user->id == $incomeOutcome->user_id;
     }
 
     /**
@@ -51,9 +51,9 @@ class IncomePolicy
      * @param  \App\Income  $income_id
      * @return mixed
      */
-    public function update(User $user, Income $income)
+    public function update(User $user, $incomeOutcome)
     {
-        return $user->id == $income->user_id;
+        return $user->id == $incomeOutcome->user_id;
     }
 
     /**

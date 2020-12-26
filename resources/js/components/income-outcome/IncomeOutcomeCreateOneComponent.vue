@@ -256,7 +256,7 @@ export default {
     },
     mounted() {
         axios
-            .get(`/webapi/${this.type}/create/getData`)
+            .get(`/webapi/${this.type}/create/get`)
             .then(response => {
                 this.categories = response.data.categories;
                 this.currencies = response.data.currencies;

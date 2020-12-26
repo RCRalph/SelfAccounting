@@ -1,16 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-{{ ($pageData["darkmode"] ?? false)  ? 'dark' : 'light' }}mode shadow-sm">
+<nav class="navbar navbar-expand-xl navbar-{{ ($pageData["darkmode"] ?? false)  ? 'dark' : 'light' }}mode shadow-sm">
     <div class="container">
-        @guest
-            <a class="navbar-brand" href="/">
-                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
-                {{ config('app.name', 'SelfAccounting') }}
-            </a>
-        @else
-            <a class="navbar-brand" href="/summary">
-                <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
-                {{ config('app.name', 'SelfAccounting') }}
-            </a>
-        @endguest
+        <a class="navbar-brand" href="/@auth summary @endauth">
+            <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+            {{ config('app.name', 'SelfAccounting') }}
+        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
@@ -41,10 +34,26 @@
                         </a>
                     </li>
 
+                    @cannot("isPremium", auth()->user())
+                    <li class="nav-item">
+                        <a class="nav-link" href="/premium">
+                            <i class="fas fa-star"></i>
+                            {{ __('Premium') }}
+                        </a>
+                    </li>
+                    @endcannot
+
                     <li class="nav-item">
                         <a class="nav-link" href="/settings">
                             <i class="fas fa-cog"></i>
                             {{ __('Settings') }}
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/payment">
+                            <i class="fas fa-money-check"></i>
+                            {{ __('Payments') }}
                         </a>
                     </li>
 

@@ -1,8 +1,8 @@
 @extends('layouts.fullwidth')
 
 @section('script')
+    @include("scripts.tableHovering")
     <script src="{{ asset('js/income-outcome.js') }}" defer></script>
-    <script src="{{ asset('js/table-hovering.js') }}" defer></script>
 @endsection
 
 @section('content')

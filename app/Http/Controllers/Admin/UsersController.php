@@ -48,7 +48,7 @@ class UsersController extends Controller
         if (array_key_exists("picture", $data)) {
             $data["profile_picture"] = $this->uploadImage(
                 $data["picture"],
-                $this->directories["profile-pictures"],
+                $this->directories["profile-picture"],
                 $user->profile_picture,
                 [512, 512]
             );

@@ -1,4 +1,4 @@
-<template>
+<!--<template>
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
             <div class="card-header-text">
@@ -8,7 +8,7 @@
                         type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
                     ]"
                 ></i>
-                Edit {{ type.charAt(0).toUpperCase() + type.slice(1) }}
+                Add single {{ type }}
             </div>
         </div>
 
@@ -42,18 +42,19 @@
                             type="text"
                             :class="[
                                 'form-control',
-                                invalidTitle && 'is-invalid'
+                                invalidTitle && titleChanged && 'is-invalid'
                             ]"
                             v-model="attributes.title"
                             autocomplete="off"
                             placeholder="Your title here"
                             list="titleList"
+                            @input="titleChanged = true"
                         >
                         <datalist id="titleList">
                             <option v-for="(title, i) in titles" :key="i">{{ title }}</option>
                         </datalist>
 
-                        <span class="invalid-feedback" role="alert" v-if="invalidTitle">
+                        <span class="invalid-feedback" role="alert" v-if="invalidTitle && titleChanged">
                             <strong>This title is invalid</strong>
                         </span>
                     </div>
@@ -89,13 +90,14 @@
                             step="0.01"
                             :class="[
                                 'form-control',
-                                invalidPrice && 'is-invalid'
+                                invalidPrice && priceChanged && 'is-invalid'
                             ]"
                             placeholder="Your price here"
                             v-model="attributes.price"
+                            @input="priceChanged = true"
                         >
 
-                        <span class="invalid-feedback" role="alert" v-if="invalidPrice">
+                        <span class="invalid-feedback" role="alert" v-if="invalidPrice && priceChanged">
                             <strong>This price is invalid</strong>
                         </span>
                     </div>
@@ -115,7 +117,7 @@
                     <label for="value" class="col-md-3 col-form-label text-md-right">Value</label>
 
                     <div class="col-md-7">
-                        <input type="number" class="form-control" disabled :value="Math.round(attributes.price * attributes.amount * 100) / 100">
+                        <input type="text" class="form-control" disabled :value="Math.round(attributes.price * attributes.amount * 100) / 100">
                     </div>
                 </div>
 
@@ -152,18 +154,8 @@
                 <hr>
 
                 <div class="row">
-                    <div class="col-4">
-                        <button class="big-button-primary" @click="reset" :disabled="buttonsDisabled">
-                            Reset changes
-                        </button>
-                    </div>
-
-                    <div class="col-4">
-                        <button class="big-button-success" @click="saveChanges" v-html="saveButton" :disabled="buttonsDisabled || invalidData"></button>
-                    </div>
-
-                    <div class="col-4">
-                        <button class="big-button-danger" @click="destroy" v-html="deleteButton" :disabled="buttonsDisabled || invalidData"></button>
+                    <div class="col-sm-4 col-12 offset-sm-4">
+                        <button class="big-button-primary" @click="saveChanges" v-html="saveButton" :disabled="buttonsDisabled || invalidData"></button>
                     </div>
                 </div>
             </div>
@@ -178,8 +170,7 @@ import Loading from "../Loading.vue";
 
 export default {
     props: {
-        type: String,
-        ioid: String
+        type: String
     },
     components: {
         Loading
@@ -189,19 +180,19 @@ export default {
             darkmode: false,
             ready: false,
             attributes: {},
-			attributesCopy: {},
             currencies: [],
             categories: {},
             means: {},
             titles: [],
-            deleteButton: 'Delete',
-            saveButton: 'Save changes',
-            buttonsDisabled: false
+            saveButton: 'Submit',
+            buttonsDisabled: false,
+            titleChanged: false,
+            priceChanged: false
         }
     },
     computed: {
         invalidDate() {
-            if (!this.attributes.mean_id || this.attributes.mean_id == "null" || !this.means[this.attributes.currency_id]) {
+            if (!this.attributes.mean_id || this.attributes.mean_id == "null") {
                 return !this.attributes.date;
             }
 
@@ -210,10 +201,10 @@ export default {
                     return item.id == this.attributes.mean_id
                 })[0].first_entry_date;
 
-            return this.attributes.date && new Date(minDate).getTime() > currentDate;
+            return !this.attributes.date || new Date(minDate).getTime() > currentDate;
         },
         invalidTitle() {
-            return this.attributes.title.length == 0 || this.attributes.title.length > 32;
+            return !this.attributes.title || this.attributes.title.length > 32;
         },
         invalidAmount() {
             return parseFloat(this.attributes.amount) != this.attributes.amount;
@@ -235,48 +226,23 @@ export default {
         }
     },
     methods: {
-        reset() {
-            this.attributes = _.cloneDeep(this.attributesCopy);
-        },
         saveChanges() {
             this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
             this.buttonsDisabled = true;
-            axios
-                .patch(`/webapi/${this.type}/edit/${this.ioid}`, this.attributes)
-                .then(response => {
-                    this.attributes = response.data.data;
-                    this.attributes.amount = Number(this.attributes.amount);
-                    this.attributes.price = Number(this.attributes.price);
-
-                    this.attributesCopy = _.cloneDeep(response.data.data);
-                    this.attributesCopy.amount = Number(this.attributesCopy.amount);
-                    this.attributesCopy.price = Number(this.attributesCopy.price);
-
-                    this.saveButton = 'Save changes'
-                    this.buttonsDisabled = false;
-                })
-                .catch(() => {
-                    this.saveButton = 'Save changes'
-                    this.buttonsDisabled = false;
-                })
-        },
-        destroy() {
-            this.deleteButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-            this.buttonsDisabled = true;
 
             axios
-                .delete(`/webapi/${this.type}/delete/${this.ioid}`)
+                .post(`/webapi/${this.type}/store/one`, this.attributes)
                 .then(response => {
                     if (response.data.status == "success") {
                         window.location.href = "/" + this.type;
                     }
                     else {
-                        this.deleteButton = 'Delete'
+                        this.saveButton = 'Save';
                         this.buttonsDisabled = false;
                     }
                 })
                 .catch(() => {
-                    this.deleteButton = 'Delete'
+                    this.saveButton = 'Save';
                     this.buttonsDisabled = false;
                 })
         },
@@ -290,20 +256,36 @@ export default {
     },
     mounted() {
         axios
-            .get(`/webapi/${this.type}/${this.ioid}`)
+            .get(`/webapi/${this.type}/create/getData`)
             .then(response => {
-                this.attributes = response.data[this.type];
-                this.attributes.amount = Number(this.attributes.amount);
-                this.attributes.price = Number(this.attributes.price);
-
-                this.attributesCopy = _.cloneDeep(response.data[this.type]);
-                this.attributesCopy.amount = Number(this.attributesCopy.amount);
-                this.attributesCopy.price = Number(this.attributesCopy.price);
-                this.currencies = response.data.currencies;
                 this.categories = response.data.categories;
+                this.currencies = response.data.currencies;
                 this.means = response.data.means;
                 this.titles = response.data.titles;
 
+                let attrs = {}
+
+                attrs.currency_id = response.data.lastCurrency;
+                attrs.category_id = response.data.lastCategory;
+                attrs.mean_id = response.data.lastMean;
+                attrs.amount = 1;
+                attrs.price = "";
+
+                // Set correct date
+                let minDate = false;
+
+                if (attrs.mean_id) {
+                    minDate = this.means[attrs.currency_id].filter(item => {
+                        return item.id == attrs.mean_id
+                    })[0].first_entry_date
+                }
+
+                const dateToSet = new Date(minDate).getTime() > new Date().getTime() ?
+                    new Date(minDate) : new Date();
+
+                attrs.date = dateToSet.toLocaleDateString('en-ZA').split("/").join("-");
+
+                this.attributes = attrs;
                 this.ready = true;
             });
     },
@@ -317,3 +299,24 @@ export default {
     }
 }
 </script>
+-->
+
+<template>
+    <div :class="darkmode ? 'dark-card' : 'card'">
+        <div class="card-header-flex">
+            <div class="card-header-text">
+                <i
+                    :class="[
+                        'fas',
+                        type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
+                    ]"
+                ></i>
+                Add multiple {{ type }}
+            </div>
+        </div>
+
+        <div class="card-body">
+
+        </div>
+    </div>
+</template>

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+// ----- Pages ----- //
+
 Route::get('/', function() {
     // Redirect if authenticated
     if (Auth::check()) {
@@ -68,18 +70,6 @@ Route::prefix('/summary')->group(function() {
     Route::get('/', 'SummaryController@index')->name('summary');
 });
 
-Route::prefix('/income')->group(function() {
-    Route::get('/', 'IncomeController@index')->name('income');
-    Route::get('/create/one', 'IncomeController@createOne')->name('income.create.one');
-    Route::get('/{income}', 'IncomeController@show')->name('income.show');
-});
-
-Route::prefix('/outcome')->group(function() {
-    Route::get('/', 'OutcomeController@index')->name('outcome');
-    Route::get('/create/one', 'OutcomeController@createOne')->name('outcome.create.one');
-    Route::get('/{outcome}', 'OutcomeController@show')->name('outcome.show');
-});
-
 Route::prefix('/settings')->group(function() {
     Route::get('/', 'SettingsController@index')->name('settings');
 });
@@ -103,6 +93,8 @@ Route::prefix('/bundles')->group(function() {
 Route::get('/payment', 'PagesController@payment')->name('payment');
 
 Route::get('/premium', 'PagesController@premium')->name('premium');
+
+// ----- Web API ----- //
 
 Route::prefix('/webapi')->group(function() {
     Route::prefix('/admin')->group(function() {
@@ -137,26 +129,6 @@ Route::prefix('/webapi')->group(function() {
         Route::post('/darkmode', 'WebApi\SettingsController@darkmode')->name('settings.darkmode');
     });
 
-    Route::prefix('/income')->group(function() {
-        Route::get('/', 'WebApi\IncomeController@getIncome')->name('income.getIncome');
-        Route::get('/start', 'WebApi\IncomeController@start')->name('income.start');
-        Route::patch('/edit', 'WebApi\IncomeController@updateIncome')->name('income.update');
-        Route::get('/create/getData', 'WebApi\IncomeController@getCreateData')->name('income.getCreateData');
-        Route::post('/store/one', 'WebApi\IncomeController@storeOne')->name('income.store.one');
-        Route::delete('/delete/{income}', 'WebApi\IncomeController@deleteIncome')->name('income.delete');
-        Route::get('/{income}', 'WebApi\IncomeController@getEditData')->name('income.getEditData');
-    });
-
-    Route::prefix('/outcome')->group(function() {
-        Route::get('/', 'WebApi\OutcomeController@getOutcome')->name('outcome.getOutcome');
-        Route::get('/start', 'WebApi\OutcomeController@start')->name('outcome.start');
-        Route::patch('/edit', 'WebApi\OutcomeController@updateOutcome')->name('outcome.update');
-        Route::get('/create/getData', 'WebApi\OutcomeController@getCreateData')->name('outcome.getCreateData');
-        Route::post('/store/one', 'WebApi\OutcomeController@storeOne')->name('outcome.store.one');
-        Route::delete('/delete/{outcome}', 'WebApi\OutcomeController@deleteOutcome')->name('outcome.delete');
-        Route::get('/{outcome}', 'WebApi\OutcomeController@getEditData')->name('outcome.getEditData');
-    });
-
     Route::prefix('/profile')->group(function() {
         Route::get('/', 'WebApi\ProfileController@index')->name('webapi.profile.index');
     });
@@ -171,4 +143,37 @@ Route::prefix('/webapi')->group(function() {
     Route::prefix('/payment')->group(function() {
         Route::get('/', 'WebApi\PagesController@payment')->name('payment.index');
     });
+
+    // ----- Income / Outcome ----- //
+
+    Route::prefix('/{viewType}')->group(function() {
+        Route::get('/start', 'WebApi\IncomeOutcomeController@start')->name('income.start');
+        Route::get('/get/{currency}', 'WebApi\IncomeOutcomeController@get')->name('income-outcome.get');
+
+        Route::patch('/edit/{incomeOutcome}', 'WebApi\IncomeOutcomeController@update')->name('income-outcome.update');
+        Route::delete('/delete/{incomeOutcome}', 'WebApi\IncomeOutcomeController@delete')->name('income-outcome.delete');
+
+        Route::prefix('/create')->group(function() {
+            Route::get('/get', 'WebApi\IncomeOutcomeController@getCreate')->name('income-outcome.get-create');
+        });
+
+        Route::prefix('/store')->group(function() {
+            Route::post('/one', 'WebApi\IncomeOutcomeController@storeOne')->name('income-outcome.store-one');
+        });
+
+        Route::get('/{incomeOutcome}', 'WebApi\IncomeOutcomeController@getEdit')->name('income-outcome.get-edit');
+    });
+});
+
+// ----- Income / Outcome ----- //
+
+Route::prefix('/{viewType}')->group(function() {
+    Route::get('/', 'IncomeOutcomeController@index')->name('income-outcome');
+
+    Route::prefix('/create')->group(function() {
+        Route::get('/one', 'IncomeOutcomeController@createOne')->name('income-outcome.create.one');
+        Route::get('/multiple', 'IncomeOutcomeController@createMultiple')->name('income-outcome.create.multiple');
+    });
+
+    Route::get('/{incomeOutcome}', 'IncomeOutcomeController@show')->name('income-outcome.show');
 });

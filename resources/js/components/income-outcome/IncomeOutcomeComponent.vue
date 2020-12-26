@@ -29,12 +29,12 @@
                 <div class="row mb-3">
                     <div class="col-md-4 col-6 offset-md-2">
                         <a type="button" :href="'/' + type + '/create/many'" class="big-button-primary">
-                            {{ 'Add many ' + type + 's' }}
+                            {{ `Add multiple ${type}` }}
                         </a>
                     </div>
                     <div class="col-md-4 col-6">
                         <a type="button" :href="'/' + type + '/create/one'" class="big-button-primary">
-                            {{ 'Add single ' + type }}
+                            {{ `Add single ${type}` }}
                         </a>
                     </div>
                 </div>
@@ -121,9 +121,7 @@ import EmptyPlaceholder from "../EmptyPlaceholder.vue";
 import Loading from "../Loading.vue";
 
 export default {
-    props: {
-        type: String
-    },
+    props: ["type"],
     components: {
         TableHeader,
         InfiniteLoading,
@@ -237,16 +235,16 @@ export default {
     methods: {
         getData($state) {
             axios
-                .get("/webapi/" + this.type, {
+                .get("/webapi/" + this.type + "/get/" + this.currentCurrency, {
                     params: {
-                        page: this.page,
-                        currency_id: this.currentCurrency
+                        page: this.page
                     }
                 })
                 .then(response => {
                     this.dataReady = true;
                     this.rows = this.rows.concat(response.data.data.data);
                     this.page++;
+
 					if (response.data.data.current_page == response.data.data.last_page) {
 						$state.complete();
 					}
@@ -254,7 +252,7 @@ export default {
                 });
         },
         redirectToShow(id) {
-            window.document.location = "/" + this.type + "/" + id;
+            window.document.location = `/${this.type}/${id}`;
         },
         resetRows() {
             this.dataReady = false;
@@ -286,56 +284,7 @@ export default {
             $('[data-toggle="tooltip"]').tooltip()
 
             if ($("#table-multi-hover").length) {
-                const headerValues = Array.from($("thead")[0].children[0].children)
-                    .map(item => item.innerText.toLowerCase());
-
-                let table = [];
-
-                const tableCells = Array.from($("tbody")[0].children)
-                    .map(item => item.children)
-                    .map(item => Array.from(item));
-
-                for (let i = 0; i < tableCells.length; i++) {
-                    let tempObj = {};
-                    for (let j = 0; j < tableCells[i].length; j++) {
-                        tempObj[tableCells[i][j].attributes.rep.value] = tableCells[i][j];
-                    }
-
-                    for (let j = 0; j < headerValues.length; j++) {
-                        if (i != 0 && tempObj[headerValues[j]] == undefined) {
-                            tempObj[headerValues[j]] = table[i - 1][headerValues[j]];
-                        }
-                    }
-                    table.push(Object.assign({}, tempObj));
-                }
-
-                $("tbody td, tbody th").on("mouseover", event => {
-                    const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
-                    const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
-                    const rep = event.currentTarget.attributes.rep.value;
-                    const rowspan = event.currentTarget.attributes.rowspan != undefined ?
-                        parseInt(event.currentTarget.attributes.rowspan.value) : 1;
-
-                    for (let i = 0; i < rowspan; i++) {
-                        for (let j in table[rowIndex + i]) {
-                            $(table[rowIndex + i][j]).addClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
-                        }
-                    }
-                });
-
-                $("tbody td, tbody th").on("mouseleave", event => {
-                    const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
-                    const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
-                    const rep = event.currentTarget.attributes.rep.value;
-                    const rowspan = event.currentTarget.attributes.rowspan != undefined ?
-                        parseInt(event.currentTarget.attributes.rowspan.value) : 1;
-
-                    for (let i = 0; i < rowspan; i++) {
-                        for (let j in table[rowIndex + i]) {
-                            $(table[rowIndex + i][j]).removeClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
-                        }
-                    }
-                });
+                tableHoveringScript();
             }
         });
     }
