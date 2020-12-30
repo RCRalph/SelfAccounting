@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-xl navbar-{{ ($pageData["darkmode"] ?? false)  ? 'dark' : 'light' }}mode shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="/@auth summary @endauth">
+        <a class="navbar-brand" @auth href="/summary" @else href="/" @endauth>
             <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
             {{ config('app.name', 'SelfAccounting') }}
         </a>

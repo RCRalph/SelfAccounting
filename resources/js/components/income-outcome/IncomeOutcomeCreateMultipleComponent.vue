@@ -1,306 +1,3 @@
-<!--<template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
-        <div class="card-header-flex">
-            <div class="card-header-text">
-                <i
-                    :class="[
-                        'fas',
-                        type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
-                    ]"
-                ></i>
-                Add single {{ type }}
-            </div>
-        </div>
-
-        <div class="card-body">
-            <div v-if="ready">
-                <div class="form-group row">
-                    <label for="date" class="col-md-3 col-form-label text-md-right">Date</label>
-
-                    <div class="col-md-7">
-                        <input
-                            type="date"
-                            :class="[
-                                'form-control',
-                                invalidDate && 'is-invalid'
-                            ]"
-                            v-model="attributes.date"
-                            :min="minDate"
-                        >
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidDate">
-                            <strong>This date is invalid</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="title" class="col-md-3 col-form-label text-md-right">Title</label>
-
-                    <div class="col-md-7">
-                        <input
-                            type="text"
-                            :class="[
-                                'form-control',
-                                invalidTitle && titleChanged && 'is-invalid'
-                            ]"
-                            v-model="attributes.title"
-                            autocomplete="off"
-                            placeholder="Your title here"
-                            list="titleList"
-                            @input="titleChanged = true"
-                        >
-                        <datalist id="titleList">
-                            <option v-for="(title, i) in titles" :key="i">{{ title }}</option>
-                        </datalist>
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidTitle && titleChanged">
-                            <strong>This title is invalid</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="amount" class="col-md-3 col-form-label text-md-right">Amount</label>
-
-                    <div class="col-md-7">
-                        <input
-                            type="number"
-                            :class="[
-                                'form-control',
-                                invalidAmount && 'is-invalid'
-                            ]"
-                            step="0.001"
-                            v-model="attributes.amount"
-                            placeholder="Your amount here"
-                        >
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidAmount">
-                            <strong>This amount is invalid</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="price" class="col-md-3 col-form-label text-md-right">Price</label>
-
-                    <div class="col-md-4 col-sm-12">
-                        <input
-                            type="number"
-                            step="0.01"
-                            :class="[
-                                'form-control',
-                                invalidPrice && priceChanged && 'is-invalid'
-                            ]"
-                            placeholder="Your price here"
-                            v-model="attributes.price"
-                            @input="priceChanged = true"
-                        >
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidPrice && priceChanged">
-                            <strong>This price is invalid</strong>
-                        </span>
-                    </div>
-
-                    <div class="col-md-3 col-sm-12 mt-2 mt-md-0">
-                        <select class="form-control" v-model="attributes.currency_id" @change="currencyChange">
-                            <option
-                                v-for="(currency, i) in currencies"
-                                :key="i"
-                                :value="currency['id']"
-                            >{{ currency["ISO"] }}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="value" class="col-md-3 col-form-label text-md-right">Value</label>
-
-                    <div class="col-md-7">
-                        <input type="text" class="form-control" disabled :value="Math.round(attributes.price * attributes.amount * 100) / 100">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 col-form-label text-md-right">Category</label>
-
-                    <div class="col-md-7">
-                        <select class="form-control" v-model="attributes.category_id">
-                            <option
-                                v-for="(category, i) in categories[attributes.currency_id]"
-                                :key="i"
-                                :value="category['id']"
-                            >{{ category['name'] }}</option>
-                            <option value="null">N / A</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 col-form-label text-md-right">Mean of payment</label>
-
-                    <div class="col-md-7">
-                        <select class="form-control" v-model="attributes.mean_id">
-                            <option
-                                v-for="(mean, i) in means[attributes.currency_id]"
-                                :key="i"
-                                :value="mean['id']"
-                            >{{ mean['name'] }}</option>
-                            <option value="null">N / A</option>
-                        </select>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row">
-                    <div class="col-sm-4 col-12 offset-sm-4">
-                        <button class="big-button-primary" @click="saveChanges" v-html="saveButton" :disabled="buttonsDisabled || invalidData"></button>
-                    </div>
-                </div>
-            </div>
-
-            <Loading v-else></Loading>
-        </div>
-    </div>
-</template>
-
-<script>
-import Loading from "../Loading.vue";
-
-export default {
-    props: {
-        type: String
-    },
-    components: {
-        Loading
-    },
-    data() {
-        return {
-            darkmode: false,
-            ready: false,
-            attributes: {},
-            currencies: [],
-            categories: {},
-            means: {},
-            titles: [],
-            saveButton: 'Submit',
-            buttonsDisabled: false,
-            titleChanged: false,
-            priceChanged: false
-        }
-    },
-    computed: {
-        invalidDate() {
-            if (!this.attributes.mean_id || this.attributes.mean_id == "null") {
-                return !this.attributes.date;
-            }
-
-            const currentDate = new Date(this.attributes.date).getTime()
-            const minDate = this.means[this.attributes.currency_id].filter(item => {
-                    return item.id == this.attributes.mean_id
-                })[0].first_entry_date;
-
-            return !this.attributes.date || new Date(minDate).getTime() > currentDate;
-        },
-        invalidTitle() {
-            return !this.attributes.title || this.attributes.title.length > 32;
-        },
-        invalidAmount() {
-            return parseFloat(this.attributes.amount) != this.attributes.amount;
-        },
-        invalidPrice() {
-            return parseFloat(this.attributes.price) != this.attributes.price;
-        },
-        minDate() {
-            if (!this.attributes.mean_id || this.attributes.mean_id == "null") {
-                return false;
-            }
-
-            return this.means[this.attributes.currency_id].filter(item => {
-                    return item.id == this.attributes.mean_id
-                })[0].first_entry_date;
-        },
-        invalidData() {
-            return this.invalidDate || this.invalidTitle || this.invalidAmount || this.invalidPrice;
-        }
-    },
-    methods: {
-        saveChanges() {
-            this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-            this.buttonsDisabled = true;
-
-            axios
-                .post(`/webapi/${this.type}/store/one`, this.attributes)
-                .then(response => {
-                    if (response.data.status == "success") {
-                        window.location.href = "/" + this.type;
-                    }
-                    else {
-                        this.saveButton = 'Save';
-                        this.buttonsDisabled = false;
-                    }
-                })
-                .catch(() => {
-                    this.saveButton = 'Save';
-                    this.buttonsDisabled = false;
-                })
-        },
-        currencyChange() {
-            this.attributes.mean_id = null;
-            this.attributes.category_id = null;
-        }
-    },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
-    mounted() {
-        axios
-            .get(`/webapi/${this.type}/create/getData`)
-            .then(response => {
-                this.categories = response.data.categories;
-                this.currencies = response.data.currencies;
-                this.means = response.data.means;
-                this.titles = response.data.titles;
-
-                let attrs = {}
-
-                attrs.currency_id = response.data.lastCurrency;
-                attrs.category_id = response.data.lastCategory;
-                attrs.mean_id = response.data.lastMean;
-                attrs.amount = 1;
-                attrs.price = "";
-
-                // Set correct date
-                let minDate = false;
-
-                if (attrs.mean_id) {
-                    minDate = this.means[attrs.currency_id].filter(item => {
-                        return item.id == attrs.mean_id
-                    })[0].first_entry_date
-                }
-
-                const dateToSet = new Date(minDate).getTime() > new Date().getTime() ?
-                    new Date(minDate) : new Date();
-
-                attrs.date = dateToSet.toLocaleDateString('en-ZA').split("/").join("-");
-
-                this.attributes = attrs;
-                this.ready = true;
-            });
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
-    updated() {
-        this.$nextTick(() => {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-    }
-}
-</script>
--->
-
 <template>
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
@@ -316,7 +13,370 @@ export default {
         </div>
 
         <div class="card-body">
+            <div v-if="ready">
+                <div class="h1 font-weight-bold text-center mb-3">Common values</div>
 
+                <InputGroup
+                    name="date"
+                    type="date"
+                    v-model="common.date"
+                    :min="minDate"
+                    :invalid="!validDate"
+                    @input="updateData('date')"
+                ></InputGroup>
+
+                <InputGroup
+                    name="title"
+                    v-model="common.title"
+                    datalistName="titles"
+                    :datalist="titles"
+                    maxlength="64"
+                    placeholder="Your title here..."
+                    :invalid="!validTitle"
+                    @input="updateData('title')"
+                ></InputGroup>
+
+                <InputGroup
+                    name="amount"
+                    type="number"
+                    v-model="common.amount"
+                    step="0.001"
+                    placeholder="Your amount here..."
+                    :invalid="!validAmount"
+                    @input="updateData('amount')"
+                ></InputGroup>
+
+                <!-- Price and currency -->
+                <div class="form-group row">
+                    <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
+                        <div class="h5 font-weight-bold m-md-0">Price</div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                        <input
+                            type="number"
+                            step="0.01"
+                            :class="[
+                                'form-control',
+                                !validPrice && 'is-invalid'
+                            ]"
+                            placeholder="Your price here..."
+                            v-model="common.price"
+                            @input="updateData('price')"
+                        >
+
+                        <span class="invalid-feedback" role="alert" v-if="!validPrice">
+                            <strong>Price is invalid</strong>
+                        </span>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 mt-2 mt-md-0">
+                        <select
+                            class="form-control"
+                            @input="updateData('currency_id')"
+                            v-model="common.currency_id"
+                        >
+                            <option
+                                v-for="(currency, i) in currenciesWithNA"
+                                :key="i"
+                                :value="currency.id"
+                            >
+                                {{ currency.ISO }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <InputGroup
+                    type="select"
+                    name="category"
+                    :selectOptions="categories[common.currency_id]"
+                    optionValueKey="id"
+                    optionTextKey="name"
+                    v-model="common.category_id"
+                    @input="updateData('category_id')"
+                ></InputGroup>
+
+				<InputGroup
+					type="select"
+					name="mean of payment"
+					:selectOptions="means[common.currency_id]"
+					optionValueKey="id"
+					optionTextKey="name"
+					v-model="common.mean_id"
+                    @input="updateData('mean_id')"
+				></InputGroup>
+
+                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+
+                <div v-for="(item, i) in data" :key="i">
+                    <div class="h4 font-weight-bold ml-3 mb-3">Entry #{{ i + 1 }}</div>
+
+                    <CreateForm
+                        v-model="data[i]"
+                        :currencies="currencies"
+                        :categories="categories"
+                        :means="means"
+                        :titles="titles"
+                        :common="commonObject"
+                    ></CreateForm>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-4 offset-sm-4">
+                            <button class="big-button-danger" @click="deleteEntry(i)">
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr v-if="i + 1 < data.length" :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dash'">
+                </div>
+
+                <hr v-if="data.length" :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+
+                <div class="row">
+                    <div class="col-sm-6 my-2 my-sm-0">
+                        <button
+                            type="button"
+                            class="big-button-primary"
+                            @click="newEntry"
+                            :disabled="submitted"
+                        >
+                            New {{ type }}
+                        </button>
+                    </div>
+
+                    <div class="col-sm-6 my-2 my-sm-0">
+                        <button
+                            type="button"
+                            class="big-button-success"
+                            @click="submit"
+                            :disabled="submitted || !canSubmit"
+                        >
+                            <div v-if="!submitted">Submit</div>
+
+                            <span
+                                v-else
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                            ></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <Loading v-else></Loading>
         </div>
     </div>
 </template>
+
+<script>
+import Loading from "../Loading.vue";
+import InputGroup from "../InputGroup.vue";
+import CreateForm from "./CreateFormComponent.vue";
+
+export default {
+    props: ["type"],
+    components: {
+        Loading,
+        InputGroup,
+        CreateForm
+    },
+    data() {
+        return {
+            darkmode: false,
+            ready: false,
+            submitted: false,
+
+            currencies: {},
+            categories: {},
+            means: {},
+            titles: [],
+
+            common: {
+                date: "",
+                title: "",
+                amount: "",
+                price: "",
+                currency_id: 0,
+                category_id: 0,
+                mean_id: 0
+            },
+
+            data: []
+        }
+    },
+    computed: {
+        minDate() {
+			const currentMean = this.means[this.common.currency_id][this.common.mean_id];
+			return currentMean.first_entry_date || "1970-01-01";
+        },
+        validDate() {
+            const date = this.common.date;
+            return date === "" ||
+                !isNaN(Date.parse(date)) &&
+                new Date(date) >= new Date(this.minDate).getTime()
+        },
+        validTitle() {
+            const title = this.common.title;
+            return title.length <= 64;
+        },
+        validAmount() {
+            const amount = Number(this.common.amount);
+            return this.common.amount === "" ||
+                !isNaN(amount) &&
+                amount < 1e6 &&
+                amount > 0;
+        },
+        validPrice() {
+            const price = Number(this.common.price);
+            return this.common.price === "" ||
+                !isNaN(price) &&
+                price < 1e11 &&
+                price > 0;
+        },
+        commonObject() {
+            let retObj = {};
+
+            for (let i in this.common) {
+                if (this.common[i]) {
+                    retObj[i] = this.common[i];
+                }
+            }
+
+            return retObj;
+        },
+        currenciesWithNA() {
+            return [
+                {
+                    id: 0,
+                    ISO: "N / A"
+                },
+                ...this.currencies
+            ]
+        },
+        canSubmit() {
+            if (!(this.validDate && this.validTitle && this.validAmount && this.validPrice)) {
+                return false;
+            }
+
+            const validData = this.data.map(item => {
+                const minDate = this.means[item.currency_id][item.mean_id].first_entry_date || "1970-01-01";
+
+                const validDate = item.date !== "" &&
+                    !isNaN(Date.parse(item.date)) &&
+                    new Date(item.date) >= new Date(minDate).getTime();
+
+                const validTitle = item.title.length &&
+                    item.title.length <= 64;
+
+                const toNumber = {
+                    amount: Number(item.amount),
+                    price: Number(item.price)
+                }
+
+                const validAmount = !isNaN(toNumber.amount) &&
+                    toNumber.amount <= 1e6 &&
+                    toNumber.amount > 0;
+
+                const validPrice = !isNaN(toNumber.price) &&
+                    toNumber.price <= 1e11 &&
+                    toNumber.price > 0;
+
+                return validDate && validTitle && validAmount && validPrice;
+            })
+
+            if (validData.length == 0) {
+                return false;
+            }
+
+            return validData.reduce((item1, item2) => item1 && item2);
+        }
+    },
+    methods: {
+        newEntry() {
+            this.data.push({...this.common});
+        },
+        deleteEntry(index) {
+            this.data.splice(index, 1);
+        },
+        updateData(key) {
+            setTimeout(() => {
+                if (key == "currency_id") {
+                    this.common.category_id = 0;
+                    this.common.mean_id = 0;
+
+                    this.data.forEach((item, i) => {
+                        this.data[i].category_id = 0;
+                        this.data[i].mean_id = 0;
+                        this.data[i].currency_id = this.common.currency_id || 1;
+                    });
+                }
+                else {
+                    this.data.forEach((item, i) => {
+                        this.data[i][key] = this.common[key];
+                    });
+                }
+            }, key == "currency_id" && 10);
+        },
+        submit() {
+            this.submitted = true;
+            axios
+                .post(`/webapi/${this.type}/store`, {
+                    data: this.data
+                })
+                .then(response => {
+                    window.location.href = `/${this.type}`;
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.submitted = false;
+                });
+        }
+    },
+    beforeMount() {
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
+    },
+    mounted() {
+        axios
+            .get(`/webapi/${this.type}/create`, {})
+            .then(response => {
+                const data = response.data.data;
+
+                this.titles = data.titles;
+                this.common.currency_id = data.last.currency;
+
+                this.currencies = data.currencies;
+                this.categories = data.categories;
+                this.categories[0] = [{
+                    id: 0,
+                    name: "N / A"
+                }];
+
+                this.means = data.means;
+                this.means[0] = [{
+                    id: 0,
+                    name: "N / A",
+                    first_entry_date: null
+                }];
+
+                this.data.push({
+                    date: "",
+                    title: "",
+                    amount: "",
+                    price: "",
+                    currency_id: data.last.currency,
+                    category_id: data.last.category || 0,
+                    mean_id: data.last.mean || 0
+                });
+
+                this.ready = true;
+            });
+    },
+    beforeUpdate() {
+        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
+    }
+}
+</script>

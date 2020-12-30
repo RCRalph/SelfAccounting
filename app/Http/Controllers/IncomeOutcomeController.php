@@ -26,8 +26,12 @@ class IncomeOutcomeController extends Controller
         return view("income-outcome.index", compact("viewType", "pageData"));
     }
 
-    public function show($viewType, $incomeOutcome)
+    public function edit($viewType, $incomeOutcome)
     {
+        if (!intval($incomeOutcome)) {
+            return abort(404);
+        }
+
         $incomeOutcome = $viewType == "income" ?
             Income::findOrFail($incomeOutcome) :
             Outcome::findOrFail($incomeOutcome);
@@ -37,18 +41,18 @@ class IncomeOutcomeController extends Controller
         $pageData = $this->getDataForPageRender();
         $id = $incomeOutcome->id;
 
-        return view("income-outcome.show", compact("viewType", "pageData", "id"));
+        return view("income-outcome.edit", compact("viewType", "pageData", "id"));
     }
 
     public function createOne($viewType)
     {
         $pageData = $this->getDataForPageRender();
-        return view("income-outcome.create.one", compact("viewType", "pageData"));
+        return view("income-outcome.create-one", compact("viewType", "pageData"));
     }
 
     public function createMultiple($viewType)
     {
         $pageData = $this->getDataForPageRender();
-        return view("income-outcome.create.multiple", compact("viewType", "pageData"));
+        return view("income-outcome.create-multiple", compact("viewType", "pageData"));
     }
 }

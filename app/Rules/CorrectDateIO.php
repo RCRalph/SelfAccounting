@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 use App\MeanOfPayment;
 
-class CorrectDateIO_One implements Rule
+class CorrectDateIO implements Rule
 {
     /**
      * Create a new rule instance.
@@ -27,15 +27,15 @@ class CorrectDateIO_One implements Rule
      */
     public function passes($attribute, $value)
     {
-        $date = request()->input("date");
-        $id = request()->input("mean_id");
+        $index = explode(".", $attribute)[1];
+        $id = request("data.$index.mean_id");
 
-        if ($id == "null" || $id == null) {
+        if ($id == 0) {
             return true;
         }
 
         $firstEntryDate = MeanOfPayment::findOrFail($id)->first_entry_date;
-        return strtotime($firstEntryDate) <= strtotime($date);
+        return strtotime($firstEntryDate) <= strtotime($value);
     }
 
     /**

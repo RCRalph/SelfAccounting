@@ -8,162 +8,70 @@
                         type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
                     ]"
                 ></i>
-                Edit {{ type.charAt(0).toUpperCase() + type.slice(1) }}
+                Edit {{ type }}
             </div>
         </div>
 
         <div class="card-body">
             <div v-if="ready">
-                <div class="form-group row">
-                    <label for="date" class="col-md-3 col-form-label text-md-right">Date</label>
+                <CreateForm
+                    v-model="data"
+                    :currencies="currencies"
+                    :categories="categories"
+                    :means="means"
+                    :titles="titles"
+                ></CreateForm>
 
-                    <div class="col-md-7">
-                        <input
-                            type="date"
-                            :class="[
-                                'form-control',
-                                invalidDate && 'is-invalid'
-                            ]"
-                            v-model="attributes.date"
-                            :min="minDate"
-                        >
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidDate">
-                            <strong>This date is invalid</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="title" class="col-md-3 col-form-label text-md-right">Title</label>
-
-                    <div class="col-md-7">
-                        <input
-                            type="text"
-                            :class="[
-                                'form-control',
-                                invalidTitle && 'is-invalid'
-                            ]"
-                            v-model="attributes.title"
-                            autocomplete="off"
-                            placeholder="Your title here"
-                            list="titleList"
-                        >
-                        <datalist id="titleList">
-                            <option v-for="(title, i) in titles" :key="i">{{ title }}</option>
-                        </datalist>
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidTitle">
-                            <strong>This title is invalid</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="amount" class="col-md-3 col-form-label text-md-right">Amount</label>
-
-                    <div class="col-md-7">
-                        <input
-                            type="number"
-                            :class="[
-                                'form-control',
-                                invalidAmount && 'is-invalid'
-                            ]"
-                            step="0.001"
-                            v-model="attributes.amount"
-                            placeholder="Your amount here"
-                        >
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidAmount">
-                            <strong>This amount is invalid</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="price" class="col-md-3 col-form-label text-md-right">Price</label>
-
-                    <div class="col-md-4 col-sm-12">
-                        <input
-                            type="number"
-                            step="0.01"
-                            :class="[
-                                'form-control',
-                                invalidPrice && 'is-invalid'
-                            ]"
-                            placeholder="Your price here"
-                            v-model="attributes.price"
-                        >
-
-                        <span class="invalid-feedback" role="alert" v-if="invalidPrice">
-                            <strong>This price is invalid</strong>
-                        </span>
-                    </div>
-
-                    <div class="col-md-3 col-sm-12 mt-2 mt-md-0">
-                        <select class="form-control" v-model="attributes.currency_id" @change="currencyChange">
-                            <option
-                                v-for="(currency, i) in currencies"
-                                :key="i"
-                                :value="currency['id']"
-                            >{{ currency["ISO"] }}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="value" class="col-md-3 col-form-label text-md-right">Value</label>
-
-                    <div class="col-md-7">
-                        <input type="number" class="form-control" disabled :value="Math.round(attributes.price * attributes.amount * 100) / 100">
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 col-form-label text-md-right">Category</label>
-
-                    <div class="col-md-7">
-                        <select class="form-control" v-model="attributes.category_id">
-                            <option
-                                v-for="(category, i) in categories[attributes.currency_id]"
-                                :key="i"
-                                :value="category['id']"
-                            >{{ category['name'] }}</option>
-                            <option value="null">N / A</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-md-3 col-form-label text-md-right">Mean of payment</label>
-
-                    <div class="col-md-7">
-                        <select class="form-control" v-model="attributes.mean_id">
-                            <option
-                                v-for="(mean, i) in means[attributes.currency_id]"
-                                :key="i"
-                                :value="mean['id']"
-                            >{{ mean['name'] }}</option>
-                            <option value="null">N / A</option>
-                        </select>
-                    </div>
-                </div>
-
-                <hr>
+                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
 
                 <div class="row">
-                    <div class="col-4">
-                        <button class="big-button-primary" @click="reset" :disabled="buttonsDisabled">
+                    <div class="col-12 col-sm-4">
+                        <button
+                            type="button"
+                            class="big-button-danger"
+                            @click="destroy"
+                            :disabled="destroyed || submitted"
+                        >
+                            <div v-if="!destroyed">
+                                Delete {{ type }}
+                            </div>
+
+                            <span
+                                v-else
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                            ></span>
+                        </button>
+                    </div>
+
+                    <div class="col-12 col-sm-4">
+                        <button
+                            type="button"
+                            class="big-button-primary"
+                            @click="reset"
+                            :disabled="submitted || destroyed "
+                        >
                             Reset changes
                         </button>
                     </div>
 
-                    <div class="col-4">
-                        <button class="big-button-success" @click="saveChanges" v-html="saveButton" :disabled="buttonsDisabled || invalidData"></button>
-                    </div>
+                    <div class="col-12 col-sm-4">
+                        <button
+                            type="button"
+                            class="big-button-success"
+                            @click="submit"
+                            :disabled="submitted || destroyed || !canSave"
+                        >
+                            <div v-if="!submitted">Save changes</div>
 
-                    <div class="col-4">
-                        <button class="big-button-danger" @click="destroy" v-html="deleteButton" :disabled="buttonsDisabled || invalidData"></button>
+                            <span
+                                v-else
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                            ></span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -175,114 +83,109 @@
 
 <script>
 import Loading from "../Loading.vue";
+import CreateForm from "./CreateFormComponent.vue";
 
 export default {
-    props: {
-        type: String,
-        ioid: String
-    },
+    props: ["type", "id"],
     components: {
-        Loading
+        Loading,
+        CreateForm
     },
     data() {
         return {
             darkmode: false,
             ready: false,
-            attributes: {},
-			attributesCopy: {},
-            currencies: [],
+            submitted: false,
+            destroyed: false,
+
+            currencies: {},
             categories: {},
             means: {},
             titles: [],
-            deleteButton: 'Delete',
-            saveButton: 'Save changes',
-            buttonsDisabled: false
+
+            data: {
+                date: "",
+                title: "",
+                amount: "",
+                price: "",
+                currency_id: "",
+                category_id: "",
+                mean_id: ""
+            },
+            dataCopy: {}
         }
     },
     computed: {
-        invalidDate() {
-            if (!this.attributes.mean_id || this.attributes.mean_id == "null" || !this.means[this.attributes.currency_id]) {
-                return !this.attributes.date;
-            }
-
-            const currentDate = new Date(this.attributes.date).getTime()
-            const minDate = this.means[this.attributes.currency_id].filter(item => {
-                    return item.id == this.attributes.mean_id
-                })[0].first_entry_date;
-
-            return this.attributes.date && new Date(minDate).getTime() > currentDate;
-        },
-        invalidTitle() {
-            return this.attributes.title.length == 0 || this.attributes.title.length > 32;
-        },
-        invalidAmount() {
-            return parseFloat(this.attributes.amount) != this.attributes.amount;
-        },
-        invalidPrice() {
-            return parseFloat(this.attributes.price) != this.attributes.price;
-        },
         minDate() {
-            if (!this.attributes.mean_id || this.attributes.mean_id == "null") {
-                return false;
+			const currentMean = this.means[this.data.currency_id][this.data.mean_id];
+			return currentMean.first_entry_date || "1970-01-01";
+        },
+        canSave() {
+            const validDate = this.data.date !== "" &&
+                !isNaN(Date.parse(this.data.date)) &&
+                new Date(this.data.date) >= new Date(this.minDate).getTime();
+
+            const validTitle = this.data.title.length &&
+                this.data.title.length <= 64;
+
+            const toNumber = {
+                amount: Number(this.data.amount),
+                price: Number(this.data.price)
             }
 
-            return this.means[this.attributes.currency_id].filter(item => {
-                    return item.id == this.attributes.mean_id
-                })[0].first_entry_date;
-        },
-        invalidData() {
-            return this.invalidDate || this.invalidTitle || this.invalidAmount || this.invalidPrice;
+            const validAmount = !isNaN(toNumber.amount) &&
+                toNumber.amount <= 1e6 &&
+                toNumber.amount > 0;
+
+            const validPrice = !isNaN(toNumber.price) &&
+                toNumber.price <= 1e11 &&
+                toNumber.price > 0;
+
+            return validDate && validTitle && validAmount && validPrice;
         }
     },
     methods: {
-        reset() {
-            this.attributes = _.cloneDeep(this.attributesCopy);
-        },
-        saveChanges() {
-            this.saveButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-            this.buttonsDisabled = true;
+        submit() {
+            this.submitted = true;
+
             axios
-                .patch(`/webapi/${this.type}/edit/${this.ioid}`, this.attributes)
+                .patch(`/webapi/${this.type}/${this.id}/update`, {
+                    data: [this.data]
+                })
                 .then(response => {
-                    this.attributes = response.data.data;
-                    this.attributes.amount = Number(this.attributes.amount);
-                    this.attributes.price = Number(this.attributes.price);
+                    const data = response.data.data;
 
-                    this.attributesCopy = _.cloneDeep(response.data.data);
-                    this.attributesCopy.amount = Number(this.attributesCopy.amount);
-                    this.attributesCopy.price = Number(this.attributesCopy.price);
+                    this.data = {
+                        ...data,
+                        amount: Number(data.amount),
+                        price: Number(data.price),
+                        category_id: data.category_id || 0,
+                        mean_id: data.mean_id || 0
+                    };
+                    this.dataCopy = _.cloneDeep(this.data);
 
-                    this.saveButton = 'Save changes'
-                    this.buttonsDisabled = false;
+                    this.submitted = false;
                 })
-                .catch(() => {
-                    this.saveButton = 'Save changes'
-                    this.buttonsDisabled = false;
+                .catch(err => {
+                    console.log(err);
+                    this.submitted = false;
                 })
+        },
+        reset() {
+            this.data = _.cloneDeep(this.dataCopy);
         },
         destroy() {
-            this.deleteButton = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-            this.buttonsDisabled = true;
+            this.destroyed = true;
 
             axios
-                .delete(`/webapi/${this.type}/delete/${this.ioid}`)
+                .delete(`/webapi/${this.type}/${this.id}/delete`, {})
                 .then(response => {
-                    if (response.data.status == "success") {
-                        window.location.href = "/" + this.type;
-                    }
-                    else {
-                        this.deleteButton = 'Delete'
-                        this.buttonsDisabled = false;
-                    }
+                    window.location.href = `/${this.type}`;
                 })
-                .catch(() => {
-                    this.deleteButton = 'Delete'
-                    this.buttonsDisabled = false;
+                .catch(err => {
+                    console.log(err);
+                    this.destroyed = false;
                 })
-        },
-        currencyChange() {
-            this.attributes.mean_id = null;
-            this.attributes.category_id = null;
         }
     },
     beforeMount() {
@@ -290,30 +193,30 @@ export default {
     },
     mounted() {
         axios
-            .get(`/webapi/${this.type}/${this.ioid}`)
+            .get(`/webapi/${this.type}/${this.id}`, {})
             .then(response => {
-                this.attributes = response.data[this.type];
-                this.attributes.amount = Number(this.attributes.amount);
-                this.attributes.price = Number(this.attributes.price);
+                const data = response.data.data;
 
-                this.attributesCopy = _.cloneDeep(response.data[this.type]);
-                this.attributesCopy.amount = Number(this.attributesCopy.amount);
-                this.attributesCopy.price = Number(this.attributesCopy.price);
-                this.currencies = response.data.currencies;
-                this.categories = response.data.categories;
-                this.means = response.data.means;
-                this.titles = response.data.titles;
+                this.currencies = data.currencies;
+                this.categories = data.categories;
+                this.means = data.means;
+                this.titles = data.titles;
+
+                this.data = {
+                    ...data.data,
+                    amount: Number(data.data.amount),
+                    price: Number(data.data.price),
+                    category_id: data.data.category_id || 0,
+                    mean_id: data.data.mean_id || 0
+                };
+
+                this.dataCopy = _.cloneDeep(this.data);
 
                 this.ready = true;
             });
     },
     beforeUpdate() {
         this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
-    updated() {
-        this.$nextTick(() => {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
     }
 }
 </script>

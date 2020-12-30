@@ -36,7 +36,7 @@ class BundlesController extends Controller
     {
         $data = request()->validate([
             "title" => ["required", "string", "max:64", "unique:bundles,title"],
-            "price" => ["required", "numeric", "gte:0", "lt:1000"],
+            "price" => ["required", "numeric", "min:0", "max:1000", "not_in:1000"],
             "thumbnail" => ["required", "image"],
             "short_description" => ["required", "string"],
             "description" => ["required", "string"]
@@ -57,7 +57,7 @@ class BundlesController extends Controller
     public function update(Bundle $bundle) {
         $data = request()->validate([
             "title" => ["required", "string", "max:64", Rule::unique("bundles", "title")->ignore($bundle->id)],
-            "price" => ["required", "numeric", "gte:0", "lt:1000"],
+            "price" => ["required", "numeric", "min:0", "max:1000", "not_in:1000"],
             "thumbnail" => ["nullable", "image"],
             "short_description" => ["required", "string"],
             "description" => ["required", "string"]

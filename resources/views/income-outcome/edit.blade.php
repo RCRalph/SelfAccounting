@@ -1,7 +1,7 @@
 @extends('layouts.midwidth')
 
 @section('content')
-    <income-outcome-edit-component type="{{ $viewType }}" ioid="{{ $id }}"></income-outcome-edit-component>
+    <income-outcome-edit-component type="{{ $viewType }}" id="{{ $id }}"></income-outcome-edit-component>
 @endsection
 
 @section('script')

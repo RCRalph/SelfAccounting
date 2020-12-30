@@ -28,12 +28,12 @@
             <div v-if="ready">
                 <div class="row mb-3">
                     <div class="col-md-4 col-6 offset-md-2">
-                        <a type="button" :href="'/' + type + '/create/many'" class="big-button-primary">
+                        <a type="button" :href="'/' + type + '/create-multiple'" class="big-button-primary">
                             {{ `Add multiple ${type}` }}
                         </a>
                     </div>
                     <div class="col-md-4 col-6">
-                        <a type="button" :href="'/' + type + '/create/one'" class="big-button-primary">
+                        <a type="button" :href="'/' + type + '/create-one'" class="big-button-primary">
                             {{ `Add single ${type}` }}
                         </a>
                     </div>
@@ -93,7 +93,7 @@
                                     :rowspan="row.span.mean_id"
                                     >{{ means[row.mean_id] || "N / A" }}</td>
                                 <td class="py-0 h4 cursor-pointer" @click="redirectToShow(row.id)" rep="edit">
-                                    <i class="fas fa-edit"></i>
+                                    <i class="fas fa-edit p-2"></i>
                                 </td>
                             </tr>
                         </tbody>
@@ -235,7 +235,7 @@ export default {
     methods: {
         getData($state) {
             axios
-                .get("/webapi/" + this.type + "/get/" + this.currentCurrency, {
+                .get(`/webapi/${this.type}/all/${this.currentCurrency}`, {
                     params: {
                         page: this.page
                     }
@@ -252,7 +252,7 @@ export default {
                 });
         },
         redirectToShow(id) {
-            window.document.location = `/${this.type}/${id}`;
+            window.location.href = `/${this.type}/${id}`;
         },
         resetRows() {
             this.dataReady = false;
@@ -266,7 +266,7 @@ export default {
     },
     mounted() {
         axios
-            .get('/webapi/' + this.type + '/start', {})
+            .get(`/webapi/${this.type}/start`, {})
             .then(response => {
                 this.currencies = response.data.currencies;
                 this.means = response.data.means;
@@ -283,7 +283,7 @@ export default {
         this.$nextTick(() => {
             $('[data-toggle="tooltip"]').tooltip()
 
-            if ($("#table-multi-hover").length) {
+            if (document.getElementById("table-multi-hover")) {
                 tableHoveringScript();
             }
         });

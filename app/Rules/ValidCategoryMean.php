@@ -6,14 +6,15 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCategoryMean implements Rule
 {
+    private $viewType = [];
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($viewType)
     {
-        //
+        $this->viewType = $viewType;
     }
 
     /**
@@ -25,14 +26,20 @@ class ValidCategoryMean implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value == "null") {
+        if ($value == 0) {
             return true;
         }
 
         if ($attribute == "category_id") {
-            return !!auth()->user()->categories->where("id", $value)->count();
+            return !!auth()->user()->categories
+                ->where("id", $value)
+                ->where($this->viewType . "_category", true)
+                ->count();
         }
-        return !!auth()->user()->meansOfPayment->where("id", $value)->count();
+        return !!auth()->user()->meansOfPayment
+            ->where("id", $value)
+            ->where($this->viewType . "_mean", true)
+            ->count();
     }
 
     /**

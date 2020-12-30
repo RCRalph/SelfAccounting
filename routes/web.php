@@ -148,20 +148,16 @@ Route::prefix('/webapi')->group(function() {
 
     Route::prefix('/{viewType}')->group(function() {
         Route::get('/start', 'WebApi\IncomeOutcomeController@start')->name('income.start');
-        Route::get('/get/{currency}', 'WebApi\IncomeOutcomeController@get')->name('income-outcome.get');
+        Route::post('/store', 'WebApi\IncomeOutcomeController@store')->name('income-outcome.store');
+        Route::get('/create', 'WebApi\IncomeOutcomeController@create')->name('income-outcome.create');
 
-        Route::patch('/edit/{incomeOutcome}', 'WebApi\IncomeOutcomeController@update')->name('income-outcome.update');
-        Route::delete('/delete/{incomeOutcome}', 'WebApi\IncomeOutcomeController@delete')->name('income-outcome.delete');
+        Route::get('/all/{currency}', 'WebApi\IncomeOutcomeController@all')->name('income-outcome.all');
 
-        Route::prefix('/create')->group(function() {
-            Route::get('/get', 'WebApi\IncomeOutcomeController@getCreate')->name('income-outcome.get-create');
+        Route::prefix('/{incomeOutcome}')->group(function() {
+            Route::get('/', 'WebApi\IncomeOutcomeController@edit')->name('income-outcome.edit');
+            Route::patch('/update', 'WebApi\IncomeOutcomeController@update')->name('income-outcome.update');
+            Route::delete('/delete', 'WebApi\IncomeOutcomeController@delete')->name('income-outcome.delete');
         });
-
-        Route::prefix('/store')->group(function() {
-            Route::post('/one', 'WebApi\IncomeOutcomeController@storeOne')->name('income-outcome.store-one');
-        });
-
-        Route::get('/{incomeOutcome}', 'WebApi\IncomeOutcomeController@getEdit')->name('income-outcome.get-edit');
     });
 });
 
@@ -169,11 +165,7 @@ Route::prefix('/webapi')->group(function() {
 
 Route::prefix('/{viewType}')->group(function() {
     Route::get('/', 'IncomeOutcomeController@index')->name('income-outcome');
-
-    Route::prefix('/create')->group(function() {
-        Route::get('/one', 'IncomeOutcomeController@createOne')->name('income-outcome.create.one');
-        Route::get('/multiple', 'IncomeOutcomeController@createMultiple')->name('income-outcome.create.multiple');
-    });
-
-    Route::get('/{incomeOutcome}', 'IncomeOutcomeController@show')->name('income-outcome.show');
+    Route::get('/create-one', 'IncomeOutcomeController@createOne')->name('income-outcome.create-one');
+    Route::get('/create-multiple', 'IncomeOutcomeController@createMultiple')->name('income-outcome.create-multiple');
+    Route::get('/{incomeOutcome}', 'IncomeOutcomeController@edit')->name('income-outcome.edit');
 });

@@ -1,5 +1,7 @@
 <script>
     function tableHoveringScript() {
+        $("tbody td, tbody th").off();
+
         const headerValues = Array.from($("thead")[0].children[0].children)
             .map(item => item.innerText.toLowerCase());
 
