@@ -1,7 +1,7 @@
 <template>
     <div class="slider-checkbox">
         <label class="switch m-0">
-            <input type="checkbox" :checked="checked" @change="emitEvents" :disabled="disabled" :name="name">
+            <input type="checkbox" :checked="value" @change="emitEvents" :disabled="disabled" :name="name">
             <span class="slider round"></span>
         </label>
     </div>
@@ -10,14 +10,14 @@
 <script>
     export default {
         props: {
-            checked: Boolean,
+            value: Boolean,
             disabled: Boolean,
             name: String
         },
         methods: {
             emitEvents(event) {
-                this.$emit('input', event.currentTarget.checked);
-                this.$emit('htmlElement', event.currentTarget);
+                this.$emit("input", event.currentTarget.checked);
+                this.$emit("htmlElement", event.currentTarget);
             }
         }
     }

@@ -68,7 +68,6 @@
                             <td>
                                 <Slider
                                     name="darkmode"
-                                    :checked="userData.darkmode"
                                     v-model="userData.darkmode"
                                 ></Slider>
                             </td>
@@ -78,7 +77,6 @@
                             <td>
                                 <Slider
                                     name="admin"
-                                    :checked="userData.admin"
                                     v-model="userData.admin"
                                 ></Slider>
                             </td>

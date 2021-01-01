@@ -12,6 +12,7 @@ use App\Income;
 use App\Outcome;
 
 use App\Rules\CorrectDateMeans;
+use App\Rules\CorrectCategoryMeanID;
 
 class SettingsController extends Controller
 {
@@ -20,52 +21,197 @@ class SettingsController extends Controller
         $this->middleware("auth");
     }
 
+    private function getMeanDateLimits($sortedIO, $means) {
+        foreach ($means as $key => $mean) {
+            $lastIO = $sortedIO->where("mean_id", $mean["id"])->last();
+            $means[$key]["date_limit"] = $lastIO != null ?
+                $lastIO->date : null;
+        }
+
+        return $means;
+    }
+
+    private function saveCatsMeans($data, $type)
+    {
+        $TYPES = ["category", "mean"];
+        if (!in_array($type, $TYPES)) {
+            abort(500);
+        }
+
+        if (!isset($data["data"])) {
+            ($type == $TYPES[0] ?
+                Category::where("user_id", auth()->user()->id) :
+                MeanOfPayment::where("user_id", auth()->user()->id)
+            )->delete();
+
+            Income::where("user_id", auth()->user()->id)
+                ->update([$type . "_id" => null]);
+            Outcome::where("user_id", auth()->user()->id)
+                ->update([$type . "_id" => null]);
+
+            return response()->json([
+                "data" => []
+            ]);
+        }
+
+        $data = $data["data"];
+
+        // Gather into one-dimentional array
+        $entries = [];
+        $idsInData = [];
+        foreach ($data as $currency) {
+            foreach ($currency as $entry) {
+                $entry["user_id"] = auth()->user()->id;
+                array_push($entries, $entry);
+
+                if ($entry["id"] != 0) {
+                    array_push($idsInData, $entry["id"]);
+                }
+            }
+        }
+
+        // Get IDs from the database
+        $entriesInDB = collect(
+            $type == $TYPES[0] ?
+            auth()->user()->categories :
+            auth()->user()->meansOfPayment
+        );
+
+        $IDsInDB = [];
+        foreach ($entriesInDB as $entry) {
+            array_push($IDsInDB, $entry["id"]);
+        }
+
+        // Find IDs to delete
+        $toDelete = [];
+        foreach ($IDsInDB as $id) {
+            if (!in_array($id, $idsInData)) {
+                array_push($toDelete, $id);
+            }
+        }
+
+        // Delete entries
+        if ($toDelete) {
+            if ($type == $TYPES[0]) {
+                Category::destroy($toDelete);
+            }
+            else {
+                MeanOfPayment::destroy($toDelete);
+            }
+
+            Income::whereIn($type . "_id", $toDelete)
+                ->update([$type . "_id" => null]);
+            Outcome::whereIn($type . "_id", $toDelete)
+                ->update([$type . "_id" => null]);
+
+            $entriesInDB = $entriesInDB->whereNotIn("id", $toDelete);
+        }
+
+        // Enter into the database
+        $entriesInDB = $entriesInDB->toArray();
+
+        foreach ($entries as $entry) {
+            if (!$entry["id"]) {
+                unset($entry["id"]);
+                $created = [];
+
+                if ($type == $TYPES[0]) {
+                    $created = Category::create($entry);
+                }
+                else {
+                    $created = MeanOfPayment::create($entry);
+                }
+
+                array_push($entriesInDB, $created->toArray());
+            }
+            else {
+                if ($type == $TYPES[0]) {
+                    Category::findOrFail($entry["id"])->update($entry);
+                }
+                else {
+                    MeanOfPayment::findOrFail($entry["id"])->update($entry);
+                }
+
+                foreach ($entriesInDB as $key => $val) {
+                    if ($val["id"] == $entry["id"]) {
+                        $entriesInDB[$key] = $entry;
+                        break;
+                    }
+                }
+            }
+        }
+
+        $entriesInDB = array_map(
+            function($item) {
+                unset($item["user_id"], $item["created_at"], $item["updated_at"]);
+                return $item;
+            },
+            $entriesInDB
+        );
+
+        $data = $type == $TYPES[0] ?
+            $entriesInDB :
+            $this->getMeanDateLimits(
+                auth()->user()->income
+                    ->concat(auth()->user()->outcome)
+                    ->sortBy("date"),
+                $entriesInDB
+            );
+
+        return collect($data)->groupBy("currency_id");
+    }
+
     public function darkmode() // Change darkmode
     {
-        $data = request()->validate([
+        $darkmode = request()->validate([
             "darkmode" => ["required", "boolean"]
-        ]);
+        ])["darkmode"];
 
-        auth()->user()->update([
-            "darkmode" => $data["darkmode"]
-        ]);
+        auth()->user()->update(compact("darkmode"));
 
-        return response()->json([]);
+        return response("", 200);
     }
 
     public function getSettings()
     {
+        // Get all income and outcome
+        $incomeOutcome = auth()->user()->income
+            ->concat(auth()->user()->outcome)
+            ->sortBy("date");
+
         // Get currencies
-        $currencies = Currency::all();
+        $currencies = Currency::all()
+			->map(fn ($item) => $item->only("id", "ISO"));
 
         // Get categories
-        $categories = auth()->user()->categories->map(function($item) {
-            unset($item["user_id"]);
-            unset($item["created_at"]);
-            unset($item["updated_at"]);
-            return $item;
-        })->groupBy("currency_id");
+        $categories = auth()->user()->categories
+            ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at"))
+            ->groupBy("currency_id")
+            ->toArray();
 
         // Get means of payment
-        $means = auth()->user()->meansOfPayment->map(function($item) {
-            unset($item["user_id"]);
-            unset($item["created_at"]);
-            unset($item["updated_at"]);
-            return $item;
-        })->toArray();
+        $means = auth()->user()->meansOfPayment
+            ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at"))
+            ->toArray();
 
-        $income_outcome = auth()->user()->income->concat(auth()->user()->outcome);
+        $means = collect($this->getMeanDateLimits($incomeOutcome, $means))
+            ->groupBy("currency_id");
 
-        foreach ($means as $key => $mean) {
-            $date = $income_outcome->where("mean_id", $mean["id"])->sortBy("date")->last();
-            $means[$key]["date_limit"] = $date == null ? null : $date->date;
+        // Set empty arrays to currencies with no categories / means
+        foreach ($currencies as $currency) {
+            if (!isset($categories[$currency["id"]])) {
+                $categories[$currency["id"]] = [];
+            }
+
+            if (!isset($means[$currency["id"]])) {
+                $means[$currency["id"]] = [];
+            }
         }
 
-        $means = collect($means)->groupBy("currency_id");
-
         // Get last currency
-        $lastCurrency = auth()->user()->income->concat(auth()->user()->outcome)->sortBy("date")->last();
-        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
+        $lastIncomeOutcome = $incomeOutcome->last();
+		$lastCurrency = $lastIncomeOutcome != null ?
+            $lastIncomeOutcome->currency_id : 1;
 
         return response()->json(compact("currencies", "categories", "means", "lastCurrency"));
     }
@@ -73,132 +219,62 @@ class SettingsController extends Controller
     public function saveCategories()
     {
         // Validate
-        $dataDirectory = "categories.*.*.";
+        $dataDirectory = "data.*.*";
         $data = request()->validate([
-            $dataDirectory . "count_to_summary" => ["required", "boolean"],
-            $dataDirectory . "currency_id" => ["required", "integer", "exists:currencies,id"],
-            $dataDirectory . "end_date" => ["present", "date", "nullable", "after_or_equal:" . $dataDirectory . "start_date"],
-            $dataDirectory . "id" => ["present", "integer", "min:0", "not_in:0", "nullable"],
-            $dataDirectory . "income_category" => ["required", "boolean"],
-            $dataDirectory . "name" => ["required", "string", "max:32"],
-            $dataDirectory . "outcome_category" => ["required", "boolean"],
-            $dataDirectory . "show_on_charts" => ["required", "boolean"],
-            $dataDirectory . "start_date" => ["present", "date", "nullable"]
+            "$dataDirectory.id" => ["required", "integer", new CorrectCategoryMeanID("category")],
+            "$dataDirectory.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "$dataDirectory.name" => ["required", "string", "max:32"],
+            "$dataDirectory.income_category" => ["required", "boolean"],
+            "$dataDirectory.outcome_category" => ["required", "boolean"],
+            "$dataDirectory.count_to_summary" => ["required", "boolean"],
+            "$dataDirectory.start_date" => ["present", "date", "nullable"],
+            "$dataDirectory.end_date" => ["present", "date", "nullable", "after_or_equal:$dataDirectory.start_date"]
         ]);
 
-        if (count($data) == 0) {
-            Category::where("user_id", auth()->user()->id)->delete();
-            Income::whereIn("category_id", $toDelete)->update(["category_id" => null]);
-            Outcome::whereIn("category_id", $toDelete)->update(["category_id" => null]);
-            return response()->json([
-                "categories" => []
-            ]);
-        }
-
-        // Collect into one-dimentional array
-        $categories = [];
-        $idsInData = [];
-        foreach ($data["categories"] as $currency) {
-            foreach ($currency as $category) {
-                $category["user_id"] = auth()->user()->id;
-                array_push($categories, $category);
-                if ($category["id"] != null) {
-                    array_push($idsInData, $category["id"]);
-                }
-            }
-        }
-
-        // Get IDs from the database
-        $userCategories = collect(auth()->user()->categories);
-        $idsInDB = [];
-        foreach ($userCategories as $category) {
-            array_push($idsInDB, $category["id"]);
-        }
-
-        // Find IDs to delete and then delete them
-        $toDelete = [];
-        foreach ($idsInDB as $id) {
-            if (array_search($id, $idsInData) === false) {
-                array_push($toDelete, $id);
-            }
-        }
-
-        if (count($toDelete)) {
-            Category::destroy($toDelete);
-            Income::whereIn("category_id", $toDelete)->update(["category_id" => null]);
-            Outcome::whereIn("category_id", $toDelete)->update(["category_id" => null]);
-
-            $userCategories = $userCategories->whereNotIn("id", $toDelete);
-        }
-
-        // Enter into the database
-        foreach ($categories as $category) {
-            if ($category["id"] == null) {
-				unset($category["id"]);
-				$c = Category::create($category);
-				$userCategories = $userCategories->merge([array_merge(
-					$category,
-					["id" => $c->id]
-				)]);
-            }
-            else {
-                Category::findOrFail($category["id"])->update($category);
-                $userCategories = $userCategories->toArray();
-
-                foreach ($userCategories as $key => $val) {
-                    if ($val["id"] == $category["id"]) {
-                        $userCategories[$key] = $category;
-                        break;
-                    }
-                }
-
-                $userCategories = collect($userCategories);
-            }
-        }
-
-        return response()->json([
-            "categories" => $userCategories->map(function($item) {
-                unset($item["user_id"]);
-                unset($item["created_at"]);
-                unset($item["updated_at"]);
-                return $item;
-            })->groupBy("currency_id"),
-        ]);
+        $data = $this->saveCatsMeans($data, "category");
+        return response()->json(compact("data"));
     }
 
     public function saveMeans()
     {
         // Validate
-        $dataDirectory = "means.*.*";
+        $dataDirectory = "data.*.*";
         $data = request()->validate([
-            "$dataDirectory.count_to_summary" => ["required", "boolean"],
+            "$dataDirectory.id" => ["required", "integer", new CorrectCategoryMeanID("mean")],
             "$dataDirectory.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "$dataDirectory.first_entry_amount" => ["required", "numeric"],
-            "$dataDirectory.first_entry_date" => ["required", "date", new CorrectDateMeans],
-            "$dataDirectory.id" => ["present", "integer", "min:0", "not_in:0", "nullable"],
-            "$dataDirectory.income_mean" => ["required", "boolean"],
             "$dataDirectory.name" => ["required", "string", "max:32"],
+            "$dataDirectory.income_mean" => ["required", "boolean"],
             "$dataDirectory.outcome_mean" => ["required", "boolean"],
-            "$dataDirectory.show_on_charts" => ["required", "boolean"]
+            "$dataDirectory.count_to_summary" => ["required", "boolean"],
+            "$dataDirectory.first_entry_date" => ["required", "date", new CorrectDateMeans],
+            "$dataDirectory.first_entry_amount" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:-1e11,1e11"]
         ]);
 
-        if (count($data) == 0) {
+        $data = $this->saveCatsMeans($data, "mean");
+        return response()->json(compact("data"));
+        /*if (!isset($data["data"])) {
             MeanOfPayment::where("user_id", auth()->user()->id)->delete();
-            Income::where("user_id", auth()->user()->id)->update(["mean_id" => null]);
-            Outcome::where("user_id", auth()->user()->id)->update(["mean_id" => null]);
+
+            Income::where("user_id", auth()->user()->id)
+                ->update(["mean_id" => null]);
+            Outcome::where("user_id", auth()->user()->id)
+                ->update(["mean_id" => null]);
+
             return response()->json([
-                "means" => []
+                "data" => []
             ]);
         }
 
+        $data = $data["data"];
+
         // Collect into one-dimentional array
-        $means = [];
-        $idsInData = [];
-        foreach ($data["means"] as $currency) {
+        $means = []; $idsInData = [];
+        foreach ($data as $currency) {
             foreach ($currency as $mean) {
                 $mean["user_id"] = auth()->user()->id;
                 array_push($means, $mean);
-                if ($mean["id"] != null) {
+
+                if ($mean["id"] != 0) {
                     array_push($idsInData, $mean["id"]);
                 }
             }
@@ -206,14 +282,14 @@ class SettingsController extends Controller
 
         // Get IDs from the database
         $userMeans = collect(auth()->user()->meansOfPayment);
-        $idsInDB = [];
+        $IDsInDB = [];
         foreach ($userMeans as $mean) {
-            array_push($idsInDB, $mean["id"]);
+            array_push($IDsInDB, $mean["id"]);
         }
 
         $toDelete = [];
-        foreach ($idsInDB as $id) {
-            if (array_search($id, $idsInData) === false) {
+        foreach ($IDsInDB as $id) {
+            if (!in_array($id, $idsInData)) {
                 array_push($toDelete, $id);
             }
         }
@@ -226,19 +302,18 @@ class SettingsController extends Controller
             $userMeans = $userMeans->whereNotIn("id", $toDelete);
         }
 
+        $userMeans = $userMeans->toArray();
+
         // Enter into the database
         foreach ($means as $mean) {
-            if ($mean["id"] == null) {
+            if (!$mean["id"]) {
                 unset($mean["id"]);
-                $m = MeanOfPayment::create($mean);
-                $userMeans = $userMeans->merge([array_merge(
-                    $mean,
-                    ["id" => $m->id]
-                )]);
+                $mop = MeanOfPayment::create($mean);
+
+                array_push($userMeans, $mop->toArray());
             }
             else {
                 MeanOfPayment::findOrFail($mean["id"])->update($mean);
-                $userMeans = $userMeans->toArray();
 
                 foreach ($userMeans as $key => $val) {
                     if ($val["id"] == $mean["id"]) {
@@ -246,27 +321,19 @@ class SettingsController extends Controller
                         break;
                     }
                 }
-
-                $userMeans = collect($userMeans);
             }
         }
 
-        $userMeans = $userMeans->map(function($item) {
-            unset($item["user_id"]);
-            unset($item["created_at"]);
-            unset($item["updated_at"]);
-            return $item;
-        })->toArray();
+        $data = collect($this->getMeanDateLimits(
+            auth()->user()->income
+                ->concat(auth()->user()->outcome)
+                ->sortBy("date"),
+            array_map(
+                fn ($item) => collect($item)->forget(["user_id", "created_at", "updated_at"]),
+                $userMeans
+            )
+        ))->groupBy("currency_id");
 
-        $income_outcome = auth()->user()->income->concat(auth()->user()->outcome);
-
-        foreach ($userMeans as $key => $mean) {
-            $date = $income_outcome->where("mean_id", $mean["id"])->sortBy("date")->last();
-            $userMeans[$key]["date_limit"] = $date == null ? null : $date->date;
-        }
-
-        return response()->json([
-            "means" => collect($userMeans)->groupBy("currency_id")
-        ]);
+        return response()->json(compact("data"));*/
     }
 }

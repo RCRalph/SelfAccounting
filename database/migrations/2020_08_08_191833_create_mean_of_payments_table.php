@@ -20,7 +20,6 @@ class CreateMeanOfPaymentsTable extends Migration
             $table->string('name', 32);
             $table->boolean('income_mean');
             $table->boolean('outcome_mean');
-            $table->boolean('show_on_charts');
             $table->boolean('count_to_summary');
             $table->date('first_entry_date');
             $table->decimal('first_entry_amount', 13, 2);

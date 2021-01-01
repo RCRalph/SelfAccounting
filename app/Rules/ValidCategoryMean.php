@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCategoryMean implements Rule
 {
-    private $viewType = [];
+    private $viewType = "";
     /**
      * Create a new rule instance.
      *

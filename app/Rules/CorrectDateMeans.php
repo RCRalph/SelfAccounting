@@ -26,14 +26,18 @@ class CorrectDateMeans implements Rule
     public function passes($attribute, $value)
     {
         $indeces = explode(".", $attribute);
-        $date = request()->input("means.{$indeces[1]}.{$indeces[2]}.first_entry_date");
-        $id = request()->input("means.{$indeces[1]}.{$indeces[2]}.id");
+        $date = request()->input("data.$indeces[1].$indeces[2].first_entry_date");
+        $id = request()->input("data.$indeces[1].$indeces[2].id");
 
-        if ($id == null) {
+        if ($id == 0) {
             return true;
         }
 
-        $earliestIncomeDate = auth()->user()->income->concat(auth()->user()->outcome())->where("mean_id", $id)->sortBy("date")->last();
+        $earliestIncomeDate = auth()->user()->income
+            ->concat(auth()->user()->outcome)
+            ->where("mean_id", $id)
+            ->sortBy("date")->last();
+
         return $earliestIncomeDate == null ? true : strtotime($date) <= strtotime($earliestIncomeDate->date);
     }
 

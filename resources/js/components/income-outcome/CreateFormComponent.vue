@@ -95,6 +95,7 @@
             optionTextKey="name"
             v-model="value.mean_id"
             :disabled="common && common.hasOwnProperty('mean_id')"
+            @input="meanChange"
         ></InputGroup>
     </div>
 </template>
@@ -168,6 +169,14 @@ export default {
         currencyChange() {
             this.value.category_id = 0;
             this.value.mean_id = 0;
+        },
+        meanChange() {
+            const date = this.value.date;
+            this.value.date = (
+                date === "" ||
+                isNaN(Date.parse(date)) ||
+                new Date(date).getTime() < new Date(this.minDate).getTime()
+            ) ? this.minDate : date;
         }
     }
 }
