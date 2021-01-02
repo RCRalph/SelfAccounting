@@ -4,25 +4,23 @@
             <input type="hidden" name="_token" :value="CSRF_TOKEN">
             <input type="hidden" name="_method" value="PATCH">
 
-            <div class="form-group row">
-                <label class="col-xl-4 col-form-label text-xl-right">New password</label>
-                <div class="col-xl-7">
-                    <input type="password" v-model="passwords[0]" name="password" autocomplete="off" :class="[
-                        'form-control',
-                        !validPasswords && 'is-invalid'
-                    ]">
-                </div>
-            </div>
+            <InputGroup
+                type="password"
+                name="password"
+                v-model="passwords[0]"
+                :invalid="!validPasswords"
+                placeholder="Your password here..."
+                autocomplete="off"
+            ></InputGroup>
 
-            <div class="form-group row">
-                <label class="col-xl-4 col-form-label text-xl-right">Confirm password</label>
-                <div class="col-xl-7">
-                    <input type="password" v-model="passwords[1]" name="password_confirmation" autocomplete="off" :class="[
-                        'form-control',
-                        !validPasswords && 'is-invalid'
-                    ]">
-                </div>
-            </div>
+            <InputGroup
+                type="password"
+                name="password_confirmation"
+                v-model="passwords[1]"
+                :invalid="!validPasswords"
+                placeholder="Confirm your password here..."
+                autocomplete="off"
+            ></InputGroup>
 
             <div class="form-group row">
                 <div class="col-xl-7 offset-xl-4">
@@ -40,7 +38,12 @@
 </template>
 
 <script>
+import InputGroup from "../InputGroup.vue";
+
 export default {
+    components: {
+        InputGroup
+    },
     data() {
         return {
             passwords: ["", ""],

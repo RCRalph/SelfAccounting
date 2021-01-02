@@ -10,13 +10,13 @@
         <div class="card-body">
             <div v-if="ready">
                 <div class="row">
-                    <div class="col-lg-6 col-xl-5">
+                    <div class="col-lg-5">
                         <ProfileShowcase
                             :darkmode="darkmode"
                             :userData="userData"
                         ></ProfileShowcase>
                     </div>
-                    <div class="col-lg-6 col-xl-7 mt-sm-3">
+                    <div class="col-lg-7 mt-sm-3">
                         <ProfileInfoChange
                             :userDataCopy="userData"
                         ></ProfileInfoChange>

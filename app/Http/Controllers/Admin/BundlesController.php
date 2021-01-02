@@ -36,12 +36,14 @@ class BundlesController extends Controller
     {
         $data = request()->validate([
             "title" => ["required", "string", "max:64", "unique:bundles,title"],
+            "code" => ["required", "string", "min:6", "max:6", "unique:bundles,code"],
             "price" => ["required", "numeric", "min:0", "max:1000", "not_in:1000"],
             "thumbnail" => ["required", "image"],
             "short_description" => ["required", "string"],
             "description" => ["required", "string"]
         ]);
 
+        $data["code"] = strtolower($data["code"]);
         $data["thumbnail"] = $this->uploadImage($data["thumbnail"], $this->directories["bundle-thumbnails"]);
         $bundle = Bundle::create($data);
 
@@ -57,11 +59,14 @@ class BundlesController extends Controller
     public function update(Bundle $bundle) {
         $data = request()->validate([
             "title" => ["required", "string", "max:64", Rule::unique("bundles", "title")->ignore($bundle->id)],
+            "code" => ["required", "string", "min:6", "max:6", Rule::unique("bundles", "code")->ignore($bundle->id)],
             "price" => ["required", "numeric", "min:0", "max:1000", "not_in:1000"],
             "thumbnail" => ["nullable", "image"],
             "short_description" => ["required", "string"],
             "description" => ["required", "string"]
         ]);
+
+        $data["code"] = strtolower($data["code"]);
 
         if (array_key_exists("thumbnail", $data)) {
             $data["thumbnail"] = $this->uploadImage(

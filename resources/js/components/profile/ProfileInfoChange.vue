@@ -4,29 +4,30 @@
 			<input type="hidden" name="_token" :value="CSRF_TOKEN">
             <input type="hidden" name="_method" value="PATCH">
 
-            <div class="form-group row">
-                <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Username</label>
-                <div class="col-xl-7">
-                    <input type="text" id="username" maxlength="32" v-model="userData.username" name="username" required :class="[
-                        'form-control',
-                        !validUsername && 'is-invalid'
-                    ]">
-                </div>
-            </div>
+            <InputGroup
+                type="text"
+                name="username"
+                v-model="data.username"
+                maxlength="32"
+                :invalid="!validUsername"
+                placeholder="Your username here..."
+            ></InputGroup>
+
+            <InputGroup
+                type="email"
+                name="email"
+                v-model="data.email"
+                maxlength="64"
+                :invalid="!validEmail"
+                placeholder="Your email here..."
+            ></InputGroup>
 
             <div class="form-group row">
-                <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Email</label>
-                <div class="col-xl-7">
-                    <input type="text" id="email" maxlength="64" v-model="userData.email" name="email" required :class="[
-                        'form-control',
-                        !validEmail && 'is-invalid'
-                    ]">
+                <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
+                    <div class="h5 font-weight-bold m-md-0">Profile picture</div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Profile picture</label>
-                <div class="col-xl-7 my-auto">
+                <div class="col-md-7 my-auto">
                     <input type="file" id="picture" name="picture" @change="checkFile" :class="[
                         'form-control',
                         'form-control-file',
@@ -48,18 +49,20 @@
 
 <script>
 import SaveResetChanges from "../SaveResetChanges.vue";
+import InputGroup from "../InputGroup.vue";
 
 export default {
     props: {
         userDataCopy: Object
     },
     components: {
-        SaveResetChanges
+        SaveResetChanges,
+        InputGroup
     },
     data() {
         return {
             correctFile: true,
-            userData: {},
+            data: {},
             submit: false
         }
     },
@@ -67,7 +70,7 @@ export default {
         resetData() {
             document.getElementById("picture").value = "";
             this.validFile = true;
-            this.userData = this.userDataCopy;
+            this.data = this.userDataCopy;
         },
         checkFile() {
             const fileType = document.getElementById("picture").files[0].type;
@@ -79,7 +82,7 @@ export default {
         }
     },
     beforeMount() {
-        this.userData = _.cloneDeep(this.userDataCopy);
+        this.data = _.cloneDeep(this.userDataCopy);
     },
 	computed: {
 		CSRF_TOKEN() {
@@ -87,10 +90,10 @@ export default {
         },
         validEmail() {
             const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            return emailRegex.test(this.userData.email) && this.userData.email.length <= 64;
+            return emailRegex.test(this.data.email) && this.data.email.length <= 64;
         },
         validUsername() {
-            return this.userData.username.length <= 32 && this.userData.username.length > 0;
+            return this.data.username.length <= 32 && this.data.username.length > 0;
         },
         disableSubmit() {
             return !(this.validUsername && this.validEmail && this.correctFile)

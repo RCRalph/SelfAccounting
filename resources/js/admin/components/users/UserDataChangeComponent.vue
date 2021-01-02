@@ -8,29 +8,28 @@
         <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
 
         <div>
-            <div class="form-group row">
-                <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Username</label>
-                <div class="col-xl-7">
-                    <input type="text" maxlength="32" v-model="userData.username" name="username" required :class="[
-                        'form-control',
-                        !validUsername && 'is-invalid'
-                    ]">
-                </div>
-            </div>
+            <InputGroup
+                type="text"
+                name="username"
+                v-model="userData.username"
+                :invalid="!validUsername"
+                maxlength="32"
+                placeholder="Enter username here..."
+            ></InputGroup>
+
+            <InputGroup
+                type="email"
+                maxlength="64"
+                name="email"
+                v-model="userData.email"
+                :invalid="!validEmail"
+            ></InputGroup>
 
             <div class="form-group row">
-                <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Email</label>
-                <div class="col-xl-7">
-                    <input type="email" maxlength="64" v-model="userData.email" name="email" required :class="[
-                        'form-control',
-                        !validEmail && 'is-invalid'
-                    ]">
+                <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
+                    <div class="h5 font-weight-bold m-md-0">Profile picture</div>
                 </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Profile picture</label>
-                <div class="col-xl-7 my-auto d-flex">
+                <div class="col-md-7 my-auto d-flex">
                     <input type="file" id="picture" name="picture" @change="checkFile" :class="[
                         'form-control',
                         'form-control-file',
@@ -44,12 +43,11 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label class="col-xl-3 offset-xl-1 col-form-label text-xl-right">Premium expiration</label>
-                <div class="col-xl-7">
-                    <input type="date" class="form-control" v-model="userData.premium_expiration" name="premium_expiration">
-                </div>
-            </div>
+            <InputGroup
+                type="date"
+                name="premium_expiration"
+                v-model="userData.premium_expiration"
+            ></InputGroup>
         </div>
 
         <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
@@ -101,11 +99,13 @@
 <script>
 import Slider from "../../../components/SliderCheckbox.vue";
 import SaveResetChanges from "../../../components/SaveResetChanges.vue";
+import InputGroup from "../../../components/InputGroup.vue";
 
 export default {
     components: {
         Slider,
-        SaveResetChanges
+        SaveResetChanges,
+        InputGroup
     },
     props: {
         darkmode: Boolean,

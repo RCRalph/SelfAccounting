@@ -1,11 +1,25 @@
 <template>
     <div class="form-group row">
         <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
-            <div class="h5 font-weight-bold m-md-0">{{ name | capitalize }}</div>
+            <div class="h5 font-weight-bold m-md-0">{{ (name != 'password_confirmation' ? name : 'confirm') | capitalize }}</div>
+        </div>
+
+		<!-- Select field -->
+        <div v-if="type == 'select'" class="col-md-7">
+            <select class="form-control" v-model="value" :disabled="disabled">
+                <option
+                    v-for="(item, i) in selectOptions"
+                    :key="i"
+                    :value="item[optionValueKey]"
+                    :selected="value == item[optionValueKey] || selectOptions.length == 1"
+                >
+                    {{ item[optionTextKey] }}
+                </option>
+            </select>
         </div>
 
         <!-- Normal input field -->
-        <div v-if="type != 'select'" :class="[
+        <div v-else :class="[
             'col-md-7',
             (prepend || append) && 'input-group'
         ]">
@@ -43,20 +57,6 @@
             <span v-if="invalid" class="invalid-feedback" role="alert">
                 <strong>{{ name | capitalize }} is invalid</strong>
             </span>
-        </div>
-
-        <!-- Select field -->
-        <div v-else class="col-md-7">
-            <select class="form-control" v-model="value" :disabled="disabled">
-                <option
-                    v-for="(item, i) in selectOptions"
-                    :key="i"
-                    :value="item[optionValueKey]"
-                    :selected="value == item[optionValueKey] || selectOptions.length == 1"
-                >
-                    {{ item[optionTextKey] }}
-                </option>
-            </select>
         </div>
     </div>
 </template>
@@ -143,7 +143,7 @@ export default {
     },
     filters: {
         capitalize(text) {
-            return text.charAt(0).toUpperCase() + text.slice(1)
+            return (text.charAt(0).toUpperCase() + text.slice(1)).replace("_", " ")
         }
     },
     watch: {

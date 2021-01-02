@@ -15,6 +15,7 @@ class CreateBundlesTable extends Migration
     {
         Schema::create('bundles', function (Blueprint $table) {
             $table->id();
+            $table->string('code', 6);
             $table->string('title', 64);
             $table->decimal('price', 5, 2);
             $table->string('thumbnail', 96);

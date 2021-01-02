@@ -28,44 +28,55 @@ class BundlesController extends Controller
         return response()->json(compact("users"));
     }
 
-    private function getBundleTitles($toExclude = "")
+    private function getBundleDetails($toExclude = 0)
     {
-        $titles = Bundle::all()->map(function($item) {
-            return $item->only("title");
-        })->toArray();
+        $bundles = Bundle::where("id", "<>", $toExclude)
+            ->select("title", "code")
+            ->get()
+            ->toArray();
 
-        foreach ($titles as $key => $value) {
-            $titles[$key] = strtolower($value["title"]);
+        $retArr = [
+            "titles" => [],
+            "codes" => []
+        ];
+
+        foreach ($bundles as $key => $value) {
+            array_push($retArr["titles"], $value["title"]);
+            array_push($retArr["codes"], $value["code"]);
         }
 
-        $titles = array_values(array_filter(
-            $titles,
-            fn ($item) => $item != strtolower($toExclude)
-        ));
-
-        return $titles;
+        return $retArr;
     }
 
     public function getCreateData()
     {
-        $titles = $this->getBundleTitles();
+        $details = $this->getBundleDetails();
 
-        return response()->json(compact("titles"));
+        $titles = $details["titles"];
+        $codes = $details["codes"];
+
+        return response()->json(compact("titles", "codes"));
     }
 
     public function details(Bundle $bundle)
     {
-        $titles = $this->getBundleTitles($bundle->title);
-        $gallery = $bundle->gallery->map(function($item) {
-            $item->image = $this->getImageLink(
-                $this->directories["bundles-gallery"],
-                $item->image
-            );
-            return collect($item)->only("id", "image");
-        });
+        $details = $this->getBundleDetails($bundle->id);
+        $titles = $details["titles"];
+        $codes = $details["codes"];
+
+        $gallery = $bundle->gallery
+            ->map(function($item) {
+                $item->image = $this->getImageLink(
+                    $this->directories["bundles-gallery"],
+                    $item->image
+                );
+
+                return collect($item)->only("id", "image");
+            });
+
         $bundle = collect($bundle)->forget(["created_at", "updated_at", "thumbnail", "gallery"]);
 
-        return response()->json(compact("titles", "bundle", "gallery"));
+        return response()->json(compact("titles", "bundle", "gallery", "codes"));
     }
 
     public function updateGallery(Bundle $bundle)

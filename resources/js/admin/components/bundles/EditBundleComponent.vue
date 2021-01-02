@@ -12,6 +12,7 @@
                 <BundleDataChange
                     :data="bundleData"
                     :titles="titles"
+                    :codes="codes"
                     :darkmode="darkmode"
                     @reset-form="resetForm"
                 ></BundleDataChange>
@@ -111,12 +112,14 @@ export default {
 
             bundleData: {
                 title: "",
+                code: "",
                 price: "",
                 short_description: "",
                 description: ""
             },
             bundleDataCopy: {},
             titles: [],
+            codes: [],
 
             gallery: [],
             galleryCopy: [],
@@ -160,6 +163,7 @@ export default {
                 this.bundleData = response.data.bundle;
                 this.bundleDataCopy = _.cloneDeep(response.data.bundle);
                 this.titles = response.data.titles;
+                this.codes = response.data.codes;
 
                 this.gallery = response.data.gallery;
                 this.galleryCopy = _.cloneDeep(response.data.gallery);
