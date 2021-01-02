@@ -21,7 +21,8 @@ class SettingsController extends Controller
         $this->middleware("auth");
     }
 
-    private function getMeanDateLimits($sortedIO, $means) {
+    private function getMeanDateLimits($sortedIO, $means)
+    {
         foreach ($means as $key => $mean) {
             $lastIO = $sortedIO->where("mean_id", $mean["id"])->last();
             $means[$key]["date_limit"] = $lastIO != null ?
@@ -185,6 +186,7 @@ class SettingsController extends Controller
 
         // Get categories
         $categories = auth()->user()->categories
+            ->sortByDesc("updated_at")
             ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at"))
             ->groupBy("currency_id")
             ->toArray();
