@@ -9,13 +9,13 @@
         @extend .align-items-center;
         @extend .py-3;
         border-radius: 5px;
+        transition: filter 0.25s;
 
         .chart-gallery-element {
             @extend .text-center;
             @extend .my-auto;
             @extend .px-3;
             user-select: none;
-            transition: filter 0.25s;
 
             .chart-title {
                 @extend .h3;
@@ -28,11 +28,6 @@
                 font-size: 16px;
             }
 
-            &:hover {
-                filter: brightness(90%);
-                transition: filter 0.25s;
-            }
-
             &-black {
                 @extend .chart-gallery-element;
                 color: black;
@@ -43,5 +38,10 @@
                 color: white;
             }
         }
-}
+
+        &:hover {
+            filter: brightness(90%);
+            transition: filter 0.25s;
+        }
+    }
 }
