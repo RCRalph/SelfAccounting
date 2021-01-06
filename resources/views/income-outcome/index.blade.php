@@ -1,4 +1,4 @@
-@extends('layouts.fullwidth')
+@extends('layouts.width12')
 
 @section('script')
     @include("scripts.tableHovering")

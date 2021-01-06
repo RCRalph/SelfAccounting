@@ -1,4 +1,4 @@
-@extends('layouts.midwidth')
+@extends('layouts.width8')
 
 @section('content')
     <div class="{{ $pageData["darkmode"] ? "dark-card" : "card" }}">

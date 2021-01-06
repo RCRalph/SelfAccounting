@@ -1,0 +1,47 @@
+.chart-gallery-wrapper {
+    @extend .col-md-6;
+    @extend .my-2;
+
+    .chart-gallery-block {
+        @extend .h-100;
+        @extend .d-flex;
+        @extend .justify-content-center;
+        @extend .align-items-center;
+        @extend .py-3;
+        border-radius: 5px;
+
+        .chart-gallery-element {
+            @extend .text-center;
+            @extend .my-auto;
+            @extend .px-3;
+            user-select: none;
+            transition: filter 0.25s;
+
+            .chart-title {
+                @extend .h3;
+                @extend .mb-2;
+                @extend .font-weight-bold;
+                @extend .text-center;
+            }
+
+            .chart-description {
+                font-size: 16px;
+            }
+
+            &:hover {
+                filter: brightness(90%);
+                transition: filter 0.25s;
+            }
+
+            &-black {
+                @extend .chart-gallery-element;
+                color: black;
+            }
+
+            &-white {
+                @extend .chart-gallery-element;
+                color: white;
+            }
+        }
+}
+}

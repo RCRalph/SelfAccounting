@@ -35,23 +35,38 @@ class Controller extends BaseController
 
     public function getDataForPageRender()
     {
-        $user = auth()->user()->only("darkmode", "profile_picture");
-        $user["profile_picture"] = $this->getProfilePictureLink($user["profile_picture"]);
+        $auth = auth()->user();
+        $retArr = $auth->only("darkmode", "profile_picture");
+        $retArr["profile_picture"] = $this->getProfilePictureLink($auth->profile_picture);
 
-        return $user;
+        $retArr["bundle_info"] = [
+            "charts" => [
+                "icon" => "fas fa-chart-bar",
+                "directory" => "charts"
+            ]
+        ];
+
+        // Do the same but with collections
+		$retArr["bundles"] = $auth->premium_bundles->merge($auth->bundles)->filter(
+            fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
+        );
+
+        return $retArr;
     }
 
     public function checkPremium($user)
     {
         return $user->admin ||
             $user->premium_expiration == null ||
-            Carbon::parse($user->premium_expiration)->addDay(1)->timestamp >= Carbon::now()->timestamp;
+            Carbon::parse($user->premium_expiration)
+                ->addDay(1)
+                ->timestamp >= Carbon::now()->timestamp;
     }
 
-    public function uploadImage($image, $directory, $delete = false, $fit = false)
+    public function uploadImage($image, $directory, $delete = false, $fit = [])
     {
         $img = Image::make($image);
-        if ($fit !== false) {
+        if (count($fit) == 2) {
             $img->fit($fit[0], $fit[1]);
         }
 
@@ -73,5 +88,10 @@ class Controller extends BaseController
         $bucket = env('IBM_COS_BUCKET');
 
         return "$endpoint/$bucket/$directory/$filename";
+    }
+
+    public function getTextColorOnBackgroundRGB($rgb)
+    {
+        return $rgb[0] * 0.299 + $rgb[1] * 0.587 + $rgb[2] * 0.114 > 150 ? "black" : "white";
     }
 }

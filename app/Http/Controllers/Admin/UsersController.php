@@ -13,7 +13,7 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(["auth", Admin::class]);
+        $this->middleware(["auth", "admin"]);
     }
 
     public function list()

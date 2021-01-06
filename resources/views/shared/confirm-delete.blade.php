@@ -1,4 +1,4 @@
-@extends('layouts.midwidth')
+@extends('layouts.width8')
 
 @section('content')
     <div class="{{ $pageData["darkmode"] ? "dark-card" : "card" }}">
@@ -11,7 +11,7 @@
 
         <div class="card-body">
             <div class="h3 text-center font-weight-bold">
-                Are you sure you want to delete this&nbsp;profile?
+                Are you sure you want to delete&nbsp;this?
             </div>
 
             <div class="row mt-4">

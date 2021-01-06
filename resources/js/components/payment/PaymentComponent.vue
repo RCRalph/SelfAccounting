@@ -61,6 +61,10 @@
                     <div class="col-12 h5 font-weight-bold text-center my-2 text-danger">
                         Remember to enter the note given above!
                     </div>
+
+                    <div class="col-12 h5 text-center my-2">
+                        The transaction should be finished within 24 hours after receiving the payment.
+                    </div>
                 </div>
             </div>
 

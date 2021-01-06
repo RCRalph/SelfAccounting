@@ -87,6 +87,11 @@ Route::prefix('/profile')->group(function() {
 
 Route::prefix('/bundles')->group(function() {
     Route::get('/', 'BundlesController@index')->name('bundles');
+
+    Route::prefix('/charts')->group(function() {
+        Route::get('/', 'Bundles\ChartsController@index')->name('bundles.charts.index');
+    });
+
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 

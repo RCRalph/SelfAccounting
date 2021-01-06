@@ -27,12 +27,37 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/bundles">
-                            <i class="fas fa-box-open"></i>
-                            {{ __('Bundles') }}
-                        </a>
-                    </li>
+                    @if (!$pageData["bundles"]->count())
+                        <li class="nav-item">
+                            <a class="nav-link" href="/bundles">
+                                <i class="fas fa-box-open"></i>
+                                {{ __('Bundles') }}
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="bundles-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-box-open"></i>
+                                {{ __('Bundles') }}
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bundles-dropdown">
+                                <a class="dropdown-item" href="/bundles">
+                                    <i class="fas fa-box-open"></i>
+                                    View all
+                                </a>
+
+                                <hr class="my-2">
+
+                                @foreach($pageData["bundles"] as $bundle)
+                                    <a class="dropdown-item" href="/bundles/{{ $pageData["bundle_info"][$bundle->code]["directory"] }}">
+                                        <i class="{{ $pageData["bundle_info"][$bundle->code]["icon"] }}"></i>
+                                        {{ $bundle->title }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </li>
+                    @endif
 
                     @cannot("isPremium", auth()->user())
                     <li class="nav-item">

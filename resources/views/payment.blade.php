@@ -1,4 +1,4 @@
-@extends('layouts.midwidth')
+@extends('layouts.width8')
 
 @section('script')
     <script src="{{ asset('js/payment.js') }}" defer></script>

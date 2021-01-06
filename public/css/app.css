@@ -381,6 +381,9 @@ h6,
 .bundle-wrapper-light .title,
 .h2,
 .h3,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black .chart-title,
 .profile-wrapper-dark .username,
 .profile-wrapper-light .username,
 .trashbin,
@@ -411,6 +414,9 @@ h2,
 
 h3,
 .h3,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black .chart-title,
 .profile-wrapper-dark .username,
 .profile-wrapper-light .username,
 .trashbin {
@@ -694,6 +700,7 @@ pre code {
 .col-md-8,
 .col-md-7,
 .col-md-6,
+.chart-gallery-wrapper,
 .col-md-5,
 .col-md-4,
 .col-md-3,
@@ -1219,7 +1226,8 @@ pre code {
     max-width: 41.6666666667%;
   }
 
-  .col-md-6 {
+  .col-md-6,
+  .chart-gallery-wrapper {
     flex: 0 0 50%;
     max-width: 50%;
   }
@@ -8060,6 +8068,7 @@ button.dark-card:focus {
 }
 
 .d-flex,
+.chart-gallery-wrapper .chart-gallery-block,
 .features-icons .features-icons-item .features-icons-icon,
 .card-body-centered,
 .card-header-flex {
@@ -8360,6 +8369,7 @@ button.dark-card:focus {
 }
 
 .justify-content-center,
+.chart-gallery-wrapper .chart-gallery-block,
 .features-icons .features-icons-item .features-icons-icon,
 .card-body-centered {
   justify-content: center !important;
@@ -8382,6 +8392,7 @@ button.dark-card:focus {
 }
 
 .align-items-center,
+.chart-gallery-wrapper .chart-gallery-block,
 .features-icons .features-icons-item .features-icons-icon,
 .card-body-centered {
   align-items: center !important;
@@ -9215,6 +9226,7 @@ button.dark-card:focus {
 }
 
 .h-100,
+.chart-gallery-wrapper .chart-gallery-block,
 .bundle-wrapper-dark,
 .bundle-wrapper-light,
 .profile-wrapper-dark,
@@ -9303,7 +9315,8 @@ button.dark-card:focus {
 }
 
 .mt-2,
-.my-2 {
+.my-2,
+.chart-gallery-wrapper {
   margin-top: 0.5rem !important;
 }
 
@@ -9313,9 +9326,13 @@ button.dark-card:focus {
 }
 
 .mb-2,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black .chart-title,
 .bundle-wrapper-dark .title,
 .bundle-wrapper-light .title,
-.my-2 {
+.my-2,
+.chart-gallery-wrapper {
   margin-bottom: 0.5rem !important;
 }
 
@@ -9489,22 +9506,30 @@ button.dark-card:focus {
 }
 
 .pt-3,
-.py-3 {
+.py-3,
+.chart-gallery-wrapper .chart-gallery-block {
   padding-top: 1rem !important;
 }
 
 .pr-3,
-.px-3 {
+.px-3,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black {
   padding-right: 1rem !important;
 }
 
 .pb-3,
-.py-3 {
+.py-3,
+.chart-gallery-wrapper .chart-gallery-block {
   padding-bottom: 1rem !important;
 }
 
 .pl-3,
-.px-3 {
+.px-3,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black {
   padding-left: 1rem !important;
 }
 
@@ -9686,6 +9711,9 @@ button.dark-card:focus {
 
 .mt-auto,
 .my-auto,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black,
 .card-header-text {
   margin-top: auto !important;
 }
@@ -9700,6 +9728,9 @@ button.dark-card:focus {
 
 .mb-auto,
 .my-auto,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black,
 .card-header-text {
   margin-bottom: auto !important;
 }
@@ -11495,6 +11526,12 @@ button.dark-card:focus {
 }
 
 .text-center,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black,
 .bundle-wrapper-dark .title,
 .bundle-wrapper-light .title,
 .profile-wrapper-dark .sa-since,
@@ -11590,6 +11627,9 @@ button.dark-card:focus {
 }
 
 .font-weight-bold,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white .chart-title,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black .chart-title,
 .bundle-wrapper-dark .title,
 .bundle-wrapper-light .title,
 .profile-wrapper-dark .sa-since,
@@ -11985,10 +12025,6 @@ a.welcome-bg-change-lightmode:focus {
   filter: invert(100%);
 }
 
-.description-long {
-  text-align: center;
-}
-
 .admin-bundle-gallery-image {
   width: 400px;
   height: 300px;
@@ -12345,6 +12381,41 @@ header.masthead h1 {
   background-color: #23272b;
   border-color: #23272b;
   transition: border-color 0.5s, background-color 0.5s;
+}
+
+.chart-gallery-wrapper .chart-gallery-block {
+  border-radius: 5px;
+}
+
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  transition: filter 0.25s;
+}
+
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-description,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white .chart-description,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black .chart-description {
+  font-size: 16px;
+}
+
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element:hover,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white:hover,
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black:hover {
+  filter: brightness(90%);
+  transition: filter 0.25s;
+}
+
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-black {
+  color: black;
+}
+
+.chart-gallery-wrapper .chart-gallery-block .chart-gallery-element-white {
+  color: white;
 }
 
 /*!

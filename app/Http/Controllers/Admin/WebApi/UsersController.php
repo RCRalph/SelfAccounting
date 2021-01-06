@@ -13,7 +13,7 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(["auth", Admin::class]);
+        $this->middleware(["auth", "admin"]);
     }
 
     public function users() // Get list of users
@@ -49,9 +49,9 @@ class UsersController extends Controller
 		]);
 
 		$bundlesToSet = array_key_exists("bundleIDs", $data) ? $data["bundleIDs"] : []; // If there aren't any bundles, the key in $data won't exist and this will throw an error
-		$userBundleIDs = $user->bundles->map(function($item) { // Get only IDs, other properties are unnecesarry
-			return $item->id;
-		})->toArray();
+        $userBundleIDs = $user->bundles // Get only IDs, other properties are unnecesarry
+            ->map(fn ($item) => $item->id)
+			->toArray();
 
 		// Get bundles to toggle by removing common elements from these two arrays
 		$bundlesToToggle = [];
