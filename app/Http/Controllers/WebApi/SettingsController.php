@@ -144,7 +144,7 @@ class SettingsController extends Controller
 
         $entriesInDB = array_map(
             function($item) {
-                unset($item["user_id"], $item["created_at"], $item["updated_at"]);
+                unset($item["user_id"], $item["created_at"], $item["updated_at"], $item["show_on_charts"]);
                 return $item;
             },
             $entriesInDB
@@ -186,14 +186,13 @@ class SettingsController extends Controller
 
         // Get categories
         $categories = auth()->user()->categories
-            ->sortByDesc("updated_at")
-            ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at"))
+            ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at", "show_on_charts"))
             ->groupBy("currency_id")
             ->toArray();
 
         // Get means of payment
         $means = auth()->user()->meansOfPayment
-            ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at"))
+            ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at", "show_on_charts"))
             ->toArray();
 
         $means = collect($this->getMeanDateLimits($incomeOutcome, $means))

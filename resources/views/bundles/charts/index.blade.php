@@ -12,7 +12,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    <a role="button" href="/bundles/charts/presence" class="big-button-primary">
+                    <a role="button" href="/bundles/charts/presence" class="big-button-primary btn-lg">
                         Edit chart presence
                     </a>
                 </div>

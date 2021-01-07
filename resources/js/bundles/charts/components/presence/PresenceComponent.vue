@@ -2,21 +2,8 @@
     <div :class="darkmode ? 'dark-card' : 'card'">
         <div class="card-header-flex">
             <div class="card-header-text">
-                <i class="fas fa-cog"></i>
-                Settings
-            </div>
-
-            <div class="d-flex" v-if="ready">
-                <div class="h4 my-auto mr-3">Currency:</div>
-                <select class="form-control" v-model="currentCurrency">
-                    <option
-                        v-for="currency in currencies"
-                        :key="currency.id"
-                        :value="currency.id"
-                    >
-                        {{ currency.ISO }}
-                    </option>
-                </select>
+                <i class="fas fa-chart-bar"></i>
+                Chart presence
             </div>
         </div>
 
@@ -24,14 +11,16 @@
             <div v-if="ready">
                 <CategoriesComponent
                     :darkmode="darkmode"
-                    :categories="categories"
-                    :currency="currentCurrency"
+                    :content="categories"
+                    :currencies="currencies"
+                    :lastcurrency="currency"
                 ></CategoriesComponent>
 
                 <MeansOfPaymentComponent
                     :darkmode="darkmode"
-                    :means="means"
-                    :currency="currentCurrency"
+                    :content="means"
+                    :currencies="currencies"
+                    :currency="currency"
                     class="mt-3"
                 ></MeansOfPaymentComponent>
             </div>
@@ -42,7 +31,7 @@
 </template>
 
 <script>
-import Loading from "../Loading.vue"
+import Loading from "../../../../components/Loading.vue";
 import CategoriesComponent from "./CategoriesComponent.vue";
 import MeansOfPaymentComponent from "./MeansOfPaymentComponent.vue";
 
@@ -56,11 +45,12 @@ export default {
         return {
             darkmode: false,
             ready: false,
-            currentCurrency: 1,
 
             currencies: [],
             categories: {},
-            means: {}
+            means: {},
+
+            currency: 1
         }
     },
     beforeMount() {
@@ -68,14 +58,14 @@ export default {
     },
     mounted() {
         axios
-            .get("/webapi/settings", {})
+            .get("/webapi/bundles/charts/presence", {})
             .then(response => {
                 const data = response.data;
 
                 this.currencies = data.currencies;
                 this.categories = data.categories;
                 this.means = data.means;
-                this.currentCurrency = data.lastCurrency;
+                this.currency = data.lastCurrency;
 
                 this.ready = true;
             })

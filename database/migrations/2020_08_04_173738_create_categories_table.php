@@ -21,6 +21,7 @@ class CreateCategoriesTable extends Migration
             $table->boolean('income_category')->default(true);
             $table->boolean('outcome_category')->default(true);
             $table->boolean('count_to_summary')->default(false);
+            $table->boolean('show_on_charts')->default(true);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps(6);

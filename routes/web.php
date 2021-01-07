@@ -66,6 +66,17 @@ Route::prefix('/admin')->group(function() {
     });
 });
 
+Route::prefix('/bundles')->group(function() {
+    Route::get('/', 'BundlesController@index')->name('bundles');
+
+    Route::prefix('/charts')->group(function() {
+        Route::get('/', 'Bundles\ChartsController@index')->name('bundles.charts.index');
+        Route::get('/presence', 'Bundles\ChartsController@presence')->name('bundles.charts.presence');
+    });
+
+    Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
+});
+
 Route::prefix('/summary')->group(function() {
     Route::get('/', 'SummaryController@index')->name('summary');
 });
@@ -83,16 +94,6 @@ Route::prefix('/profile')->group(function() {
         Route::get('/', 'ProfileController@confirmDeletion')->name('profile.delete');
         Route::get('/confirmed', 'ProfileController@delete')->name('profile.delete.confirmed');
     });
-});
-
-Route::prefix('/bundles')->group(function() {
-    Route::get('/', 'BundlesController@index')->name('bundles');
-
-    Route::prefix('/charts')->group(function() {
-        Route::get('/', 'Bundles\ChartsController@index')->name('bundles.charts.index');
-    });
-
-    Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 
 Route::get('/payment', 'PagesController@payment')->name('payment');
@@ -123,6 +124,21 @@ Route::prefix('/webapi')->group(function() {
         });
     });
 
+    Route::prefix('/bundles')->group(function() {
+        Route::prefix('/charts')->group(function() {
+            Route::prefix('/presence')->group(function() {
+                Route::get('/', 'Bundles\WebApi\ChartsController@getPresence')->name('webapi.bundles.charts.presence.get');
+                Route::patch('/categories', 'Bundles\WebApi\ChartsController@updateCategories')->name('webapi.bundles.charts.presence.categories');
+                Route::patch('/means-of-payment', 'Bundles\WebApi\ChartsController@updateMeans')->name('webapi.bundles.charts.presence.means');
+            });
+        });
+
+        Route::prefix('/{bundle}')->group(function() {
+            Route::post('/toggle', 'WebApi\BundlesController@toggle')->name('bundle.toggle');
+            Route::post('/toggle-premium', 'WebApi\BundlesController@togglePremium')->name('bundle.toggle-premium');
+        });
+    });
+
     Route::prefix('/summary')->group(function() {
         Route::get('/', 'WebApi\SummaryController@getData')->name('summary.getData');
     });
@@ -136,13 +152,6 @@ Route::prefix('/webapi')->group(function() {
 
     Route::prefix('/profile')->group(function() {
         Route::get('/', 'WebApi\ProfileController@index')->name('webapi.profile.index');
-    });
-
-    Route::prefix('/bundles')->group(function() {
-        Route::prefix('/{bundle}')->group(function() {
-            Route::post('/toggle', 'WebApi\BundlesController@toggle')->name('bundle.toggle');
-            Route::post('/toggle-premium', 'WebApi\BundlesController@togglePremium')->name('bundle.toggle-premium');
-        });
     });
 
     Route::prefix('/payment')->group(function() {
