@@ -70,4 +70,11 @@ class ChartsController extends Controller
 
         return view("bundles.charts.presence", compact("pageData"));
     }
+
+    public function balanceMonitor()
+    {
+        $pageData = $this->getDataForPageRender();
+
+        return view("bundles.charts.balance-monitor", compact("pageData"));
+    }
 }

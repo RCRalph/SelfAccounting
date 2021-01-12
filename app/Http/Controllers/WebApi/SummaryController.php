@@ -124,8 +124,7 @@ class SummaryController extends Controller
 
         $finalData = collect($finalData)->groupBy("currency_id");
 
-        $lastCurrency = $income->concat($outcome)->sortBy("updated_at")->last();
-        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency["currency_id"];
+        $lastCurrency = $this->getLastCurrency();
 
         return response()->json(compact('currencies', 'finalData', 'lastCurrency'));
     }

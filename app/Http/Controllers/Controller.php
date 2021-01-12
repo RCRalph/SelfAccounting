@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class Controller extends BaseController
 {
@@ -97,11 +98,20 @@ class Controller extends BaseController
 
     public function getLastCurrency()
     {
-        $income = auth()->user()->income;
-        $outcome = auth()->user()->outcome;
-        $last = $income->merge($outcome)
-            ->sortBy("updated_at")->last();
+        $userId = auth()->user()->id;
 
-        return $last != null ? $last->currency_id : 1;
+        return Cache::remember(
+            "last-currency-$userId",
+            now()->addMinutes(15),
+            function() {
+                $income = auth()->user()->income;
+                $outcome = auth()->user()->outcome;
+
+                $last = $income->merge($outcome)
+                    ->sortBy("updated_at")->last();
+
+                return $last != null ? $last->currency_id : 1;
+            }
+        );
     }
 }

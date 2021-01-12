@@ -62,11 +62,10 @@ class IncomeOutcomeController extends Controller
                 array_unshift($means[$currency["id"]], $nullArray);
             }
             else {
-                $means[$currency["id"]] = [
-                    0 => $nullArray
-                ];
+                $means[$currency["id"]] = [$nullArray];
             }
         }
+        //dd($means);
 
         $incomeOutcome = auth()->user()->income
             ->merge(auth()->user()->outcome)
@@ -80,7 +79,7 @@ class IncomeOutcomeController extends Controller
         $incomeOutcome = $incomeOutcome->last();
 
         $last = [
-            "currency" => $incomeOutcome == null ? 1 : $incomeOutcome->currency_id,
+            "currency" => $this->getLastCurrency(),
             "category" => $incomeOutcome == null ? 0 : $incomeOutcome->category_id,
             "mean" => $incomeOutcome == null ? 0 : $incomeOutcome->mean_id
         ];
@@ -115,10 +114,7 @@ class IncomeOutcomeController extends Controller
             }
         }
 
-        $lastCurrency = auth()->user()->income
-            ->concat(auth()->user()->outcome)
-            ->sortBy("updated_at")->last();
-        $lastCurrency = $lastCurrency == null ? 1 : $lastCurrency->currency_id;
+        $lastCurrency = $this->getLastCurrency();
 
         return response()->json(compact('currencies', 'means', 'categories', 'lastCurrency'));
     }

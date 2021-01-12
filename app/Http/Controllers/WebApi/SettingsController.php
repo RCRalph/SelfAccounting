@@ -210,9 +210,7 @@ class SettingsController extends Controller
         }
 
         // Get last currency
-        $lastIncomeOutcome = $incomeOutcome->last();
-		$lastCurrency = $lastIncomeOutcome != null ?
-            $lastIncomeOutcome->currency_id : 1;
+        $lastCurrency = $this->getLastCurrency();
 
         return response()->json(compact("currencies", "categories", "means", "lastCurrency"));
     }

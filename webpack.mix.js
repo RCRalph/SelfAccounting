@@ -26,7 +26,9 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/scripts/payment.js', 'public/js')
 
     // Bundles scripts
-    .js('resources/js/bundles/charts/scripts/presence.js', 'public/js/bundles/charts')
+        // Charts
+        .js('resources/js/bundles/charts/scripts/presence.js', 'public/js/bundles/charts')
+        .js('resources/js/bundles/charts/scripts/balance-monitor.js', 'public/js/bundles/charts')
 
     // Admin scripts
     .js('resources/js/admin/scripts/users/list.js', 'public/js/admin/users')

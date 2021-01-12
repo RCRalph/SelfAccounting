@@ -72,6 +72,8 @@ Route::prefix('/bundles')->group(function() {
     Route::prefix('/charts')->group(function() {
         Route::get('/', 'Bundles\ChartsController@index')->name('bundles.charts.index');
         Route::get('/presence', 'Bundles\ChartsController@presence')->name('bundles.charts.presence');
+
+        Route::get('/balance-monitor', 'Bundles\ChartsController@balanceMonitor')->name('bundles.charts.balance-monitor');
     });
 
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
@@ -131,6 +133,8 @@ Route::prefix('/webapi')->group(function() {
                 Route::patch('/categories', 'Bundles\WebApi\ChartsController@updateCategories')->name('webapi.bundles.charts.presence.categories');
                 Route::patch('/means-of-payment', 'Bundles\WebApi\ChartsController@updateMeans')->name('webapi.bundles.charts.presence.means');
             });
+
+            Route::get('/balance-monitor', 'Bundles\WebApi\ChartsController@balanceMonitor')->name('webapi.bundles.charts.balance-monitor');
         });
 
         Route::prefix('/{bundle}')->group(function() {
