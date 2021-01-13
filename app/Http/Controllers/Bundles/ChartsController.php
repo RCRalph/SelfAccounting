@@ -77,4 +77,36 @@ class ChartsController extends Controller
 
         return view("bundles.charts.balance-monitor", compact("pageData"));
     }
+
+    public function incomeByCategories()
+    {
+        $pageData = $this->getDataForPageRender();
+        $title = "Income by categories";
+
+        return view("bundles.charts.io-by-type", compact("pageData", "title"));
+    }
+
+    public function outcomeByCategories()
+    {
+        $pageData = $this->getDataForPageRender();
+        $title = "Outcome by categories";
+
+        return view("bundles.charts.io-by-type", compact("pageData", "title"));
+    }
+
+    public function incomeByMeans()
+    {
+        $pageData = $this->getDataForPageRender();
+        $title = "Income by means of payment";
+
+        return view("bundles.charts.io-by-type", compact("pageData", "title"));
+    }
+
+    public function outcomeByMeans()
+    {
+        $pageData = $this->getDataForPageRender();
+        $title = "Outcome by means of payment";
+
+        return view("bundles.charts.io-by-type", compact("pageData", "title"));
+    }
 }

@@ -25,12 +25,119 @@ class ChartsController extends Controller
         $retArr = [];
         for ($i = 0; $i < $numberOfColors; $i++) {
             $h = ($circleShift + $i * $step) % 360;
-            $s = rand(40, 60);
+            $s = rand(80, 100);
             $l = rand(40, 60);
             array_push($retArr, "hsl($h, $s%, $l%)");
         }
 
         return $retArr;
+    }
+
+    private function getIOByType($io, $type)
+    {
+        // Check for valid parameters
+        if (!in_array($io, ["income", "outcome"]) ||
+            !in_array($type, ["category", "mean"])
+        ) {
+            abort(500);
+        }
+
+        // Get currency data
+        $currencies = Currency::all()
+            ->map(fn ($item) => $item->only("id", "ISO"));
+
+        $lastCurrency = $this->getLastCurrency();
+
+        // Get type data
+        $typeData = [];
+        if ($type == "category") {
+            $typeData = auth()->user()->categories;
+        }
+        else {
+            $typeData = auth()->user()->meansOfPayment;
+        }
+
+        $typeData = $typeData
+            ->where("show_on_charts", true)
+            ->where($io . "_". $type, true)
+            ->map(fn ($item) => $item->only("id", "name", "currency_id"));
+
+        // Get type IDs to get from io
+        $toShow = $typeData->pluck("id")->toArray();
+
+
+        $ioData = [];
+        if ($io == "income") {
+            $ioData = auth()->user()->income;
+        }
+        else {
+            $ioData = auth()->user()->outcome;
+        }
+
+        $ioData = $ioData
+            ->whereIn($type . "_id", $toShow)
+            ->map(function($item) use ($type) {
+                $item->value = $item->price * $item->amount;
+
+                return $item->only("value", "currency_id", ($type . "_id"));
+            })
+            ->groupBy("currency_id")
+            ->map(function($item) use ($type) {
+                $item = $item->groupBy($type . "_id");
+
+                return $item->map(
+                    fn ($item) => $item->sum("value")
+                );
+            });
+
+        $count = $typeData->count();
+        $colors = $this->getColors($count);
+        $data = [];
+
+        foreach ($ioData as $currencyID => $ioByType) {
+            $data[$currencyID] = [
+                "datasets" => [
+                    [
+                        "data" => [],
+                        "backgroundColor" => []
+                    ]
+                ],
+                "labels" => []
+            ];
+
+            foreach ($ioByType as $typeID => $amount) {
+                array_push(
+                    $data[$currencyID]["datasets"][0]["data"],
+                    $amount
+                );
+
+                $count--;
+                array_push(
+                    $data[$currencyID]["datasets"][0]["backgroundColor"],
+                    $colors[$count]
+                );
+
+                array_push(
+                    $data[$currencyID]["labels"],
+                    $typeData->where("id", $typeID)->first()["name"]
+                );
+            }
+        }
+
+        $options = [
+            "responsive" => true,
+            "maintainAspectRatio" => false,
+            "legend" => [
+                "display" => true,
+                "labels" => [
+                    "fontColor" => "#3490dc"
+                ]
+            ],
+            "circumference" => pi(),
+            "rotation" => -pi()
+        ];
+
+        return compact("currencies", "lastCurrency", "data", "options");
     }
 
     public function getPresence()
@@ -103,6 +210,26 @@ class ChartsController extends Controller
         ]);
 
         return response("", 200);
+    }
+
+    public function incomeByCategories()
+    {
+        return response()->json($this->getIObyType("income", "category"));
+    }
+
+    public function outcomeByCategories()
+    {
+        return response()->json($this->getIOByType("outcome", "category"));
+    }
+
+    public function incomeByMeans()
+    {
+        return response()->json($this->getIOByType("income", "mean"));
+    }
+
+    public function outcomeByMeans()
+    {
+        return response()->json($this->getIOByType("outcome", "mean"));
     }
 
     public function balanceMonitor()

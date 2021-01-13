@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +75,10 @@ Route::prefix('/bundles')->group(function() {
         Route::get('/presence', 'Bundles\ChartsController@presence')->name('bundles.charts.presence');
 
         Route::get('/balance-monitor', 'Bundles\ChartsController@balanceMonitor')->name('bundles.charts.balance-monitor');
+        Route::get('/income-by-categories', 'Bundles\ChartsController@incomeByCategories')->name('bundles.charts.income-by-categories');
+        Route::get('/outcome-by-categories', 'Bundles\ChartsController@outcomeByCategories')->name('bundles.charts.outcome-by-categories');
+        Route::get('/income-by-means-of-payment', 'Bundles\ChartsController@incomeByMeans')->name('bundles.charts.income-by-means');
+        Route::get('/outcome-by-means-of-payment', 'Bundles\ChartsController@outcomeByMeans')->name('bundles.charts.outcome-by-means');
     });
 
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
@@ -135,6 +140,10 @@ Route::prefix('/webapi')->group(function() {
             });
 
             Route::get('/balance-monitor', 'Bundles\WebApi\ChartsController@balanceMonitor')->name('webapi.bundles.charts.balance-monitor');
+            Route::get('/income-by-categories', 'Bundles\WebApi\ChartsController@incomeByCategories')->name('webapi.bundles.charts.income-by-categories');
+            Route::get('/outcome-by-categories', 'Bundles\WebApi\ChartsController@outcomeByCategories')->name('webapi.bundles.charts.outcome-by-categories');
+            Route::get('/income-by-means-of-payment', 'Bundles\WebApi\ChartsController@incomeByMeans')->name('webapi.bundles.charts.income-by-means');
+            Route::get('/outcome-by-means-of-payment', 'Bundles\WebApi\ChartsController@outcomeByMeans')->name('webapi.bundles.charts.outcome-by-means');
         });
 
         Route::prefix('/{bundle}')->group(function() {

@@ -60,7 +60,7 @@
 	<section class="showcase-{{ $pageData["darkmode"] ? 'dark' : 'light' }}">
 		<div class="container-fluid p-0">
 			<div class="row no-gutters">
-				<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://github.com/StartBootstrap/startbootstrap-landing-page/blob/master/img/bg-showcase-3.jpg?raw=true');"></div>
+				<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg');"></div>
 				<div class="col-lg-6 order-lg-1 my-auto showcase-text">
 					<h2>Unlimited bundles</h2>
 					<p class="lead mb-0">
@@ -70,17 +70,17 @@
 			</div>
 
 			<div class="row no-gutters">
-				<div class="col-lg-6 text-white showcase-img" style="background-image: url('https://i.kym-cdn.com/photos/images/newsfeed/001/499/826/2f0.png');"></div>
+				<div class="col-lg-6 text-white showcase-img" style="background-image: url('https://cdn.pixabay.com/photo/2018/01/19/07/57/shaking-hands-3091906_960_720.jpg');"></div>
 				<div class="col-lg-6 my-auto showcase-text">
 					<h2>Request own solutions</h2>
 					<p class="lead mb-0">
-						Premium users have the ability to request new bundles to be added. Need a way to manage your own specific field? I got you covered!
+						Premium users have the ability to request new bundles to be added. Need a way to manage your own specific thing? I got you covered!
 					</p>
 				</div>
 			</div>
 
 			<div class="row no-gutters">
-				<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://i.kym-cdn.com/photos/images/newsfeed/001/871/646/471.jpg');"></div>
+				<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://i.kym-cdn.com/entries/icons/facebook/000/032/559/cover1.jpg'); background-position-y: bottom;"></div>
 				<div class="col-lg-6 order-lg-1 my-auto showcase-text">
 					<h2>Support charity</h2>
 					<p class="lead mb-0">
