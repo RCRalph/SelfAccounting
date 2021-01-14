@@ -30,7 +30,7 @@ class ValidCategoryMean implements Rule
             return true;
         }
 
-        if ($attribute == "category_id") {
+        if (strpos($attribute, "category_id") !== false) {
             return !!auth()->user()->categories
                 ->where("id", $value)
                 ->where($this->viewType . "_category", true)

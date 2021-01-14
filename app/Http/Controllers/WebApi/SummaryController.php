@@ -23,41 +23,29 @@ class SummaryController extends Controller
         $meansToShow = $means->where("count_to_summary", true)->pluck("id")->toArray();
         $categoriesToShow = $categories->where("count_to_summary", true)->pluck("id")->toArray();
 
-        $income = auth()->user()->income->map(function($item) {
-            $item["value"] = $item["amount"] * $item["price"];
-            return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
-        });
+        $income = auth()->user()->income
+            ->map(function($item) {
+                $item["value"] = $item["amount"] * $item["price"];
+                return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
+            });
 
-        $outcome = auth()->user()->outcome->map(function($item) {
-            $item["value"] = $item["amount"] * $item["price"];
-            return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
-        });
+        $outcome = auth()->user()->outcome
+            ->map(function($item) {
+                $item["value"] = $item["amount"] * $item["price"];
+                return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
+            });
 
         $incomeByMeans = $income
             ->whereIn("mean_id", $meansToShow)
             ->groupBy("mean_id")
-            ->map(function($item) {
-                $sum = 0;
-
-                foreach ($item as $data) {
-                    $sum += $data["value"];
-                }
-
-                return $sum;
-            })->toArray();
+            ->map(fn ($item) => $item->sum("value"))
+            ->toArray();
 
         $outcomeByMeans = $outcome
             ->whereIn("mean_id", $meansToShow)
             ->groupBy("mean_id")
-            ->map(function($item) {
-                $sum = 0;
-
-                foreach ($item as $data) {
-                    $sum += $data["value"];
-                }
-
-                return $sum;
-            })->toArray();
+            ->map(fn ($item) => $item->sum("value"))
+            ->toArray();
 
         $balanceByMeans = $incomeByMeans;
         foreach ($outcomeByMeans as $mean => $balance) {
@@ -75,33 +63,20 @@ class SummaryController extends Controller
 
         foreach ($balanceByCategories as $categoryID => $i) {
             foreach ($balanceByCategories[$categoryID] as $key => $value) {
-                $toUnset = false;
-                if (strtotime($value["date"]) < strtotime($categories[$categoryID]["start_date"]) &&
-                    $categories[$categoryID]["start_date"] != null) {
+                $startTime = $categories->where("id", $categoryID)->first()["start_date"];
+                $endTime = $categories->where("id", $categoryID)->first()["end_date"];
 
-                    $toUnset = true;
-                }
-                if (strtotime($value["date"]) > strtotime($categories[$categoryID]["end_date"]) &&
-                    $categories[$categoryID]["end_date"] != null) {
-
-                    $toUnset = true;
-                }
-
-                if ($toUnset) {
-                    unset($balanceByCategories[$categoryID][$key]);
+                if (
+                    $startTime != null && strtotime($value["date"]) < $startTime ||
+                    $endTime != null && strtotime($value["date"]) > $endTime) {
+                        unset($balanceByCategories[$categoryID][$key]);
                 }
             }
         }
 
-        $balanceByCategories = $balanceByCategories->map(function($item) {
-            $sum = 0;
-
-            foreach ($item as $data) {
-                $sum += $data["value"];
-            }
-
-            return $sum;
-        })->toArray();
+        $balanceByCategories = $balanceByCategories
+            ->map(fn ($item) => $item->sum("value"))
+            ->toArray();
 
         $finalData = [];
         foreach ($balanceByMeans as $meanID => $balance) {

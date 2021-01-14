@@ -1,4 +1,5 @@
 {
     "COMPOSER_VENDOR_DIR": "vendor",
+    "LIBDIR": "vendor",
     "WEBDIR": "public"
 }

@@ -1,0 +1,6 @@
+cd app/public/ ; mkdir vendor ; cd vendor ; mkdir telescope ; cd telescope ;
+curl -L "https://raw.githubusercontent.com/laravel/telescope/4.x/public/app-dark.css" > app-dark.css ;
+curl -L "https://raw.githubusercontent.com/laravel/telescope/4.x/public/app.css" > app.css ;
+curl -L "https://raw.githubusercontent.com/laravel/telescope/4.x/public/app.js" > app.js ;
+curl -L "https://raw.githubusercontent.com/laravel/telescope/4.x/public/favicon.ico" > favicon.ico ;
+curl -L "https://raw.githubusercontent.com/laravel/telescope/4.x/public/mix-manifest.json" > mix-manifest.json

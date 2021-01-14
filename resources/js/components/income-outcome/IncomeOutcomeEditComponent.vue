@@ -117,7 +117,8 @@ export default {
     },
     computed: {
         minDate() {
-			const currentMean = this.means[this.data.currency_id][this.data.mean_id];
+			const currentMean = this.means[this.data.currency_id]
+                .filter(item => item.id == this.data.mean_id)[0];;
 			return currentMean.first_entry_date || "1970-01-01";
         },
         canSave() {
