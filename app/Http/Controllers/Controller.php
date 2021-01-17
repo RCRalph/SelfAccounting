@@ -17,9 +17,9 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public $directories = [
-        "bundle-thumbnails" => "bundles/thumbnails",
-        "bundle-gallery" => "bundles/gallery",
-        "profile-picture" => "profile_pictures"
+        "bundles/thumbnails",
+        "bundles/gallery",
+        "profile_pictures"
     ];
 
     public function getProfilePictureLink($profile_picture)
@@ -29,7 +29,7 @@ class Controller extends BaseController
         }
 
         return $this->getImageLink(
-            $this->directories["profile-picture"],
+            $this->directories[2],
             $profile_picture
         );
     }
@@ -64,6 +64,11 @@ class Controller extends BaseController
                 ->timestamp >= Carbon::now()->timestamp;
     }
 
+    public function deleteImage($directory, $name)
+    {
+        Storage::disk("ibm-cos")->delete("$directory/$name");
+    }
+
     public function uploadImage($image, $directory, $delete = false, $fit = [])
     {
         $img = Image::make($image);
@@ -76,7 +81,7 @@ class Controller extends BaseController
         } while (Storage::disk("ibm-cos")->has("$directory/$filename"));
 
         if ($delete) {
-            Storage::disk("ibm-cos")->delete("$directory/$delete");
+            $this->deleteImage($directory, $delete);
         }
         Storage::disk("ibm-cos")->put("$directory/$filename", $img->stream());
 

@@ -52,6 +52,7 @@
 					v-if="datasets"
                     :chart-data="datasets"
                     :options="options"
+                    style="position: relative; min-height: 70vh;"
                 ></Chart>
 
 				<EmptyPlaceholder v-else></EmptyPlaceholder>

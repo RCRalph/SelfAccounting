@@ -67,7 +67,7 @@ class BundlesController extends Controller
         $gallery = $bundle->gallery
             ->map(function($item) {
                 $item->image = $this->getImageLink(
-                    $this->directories["bundle-gallery"],
+                    $this->directories[1],
                     $item->image
                 );
 

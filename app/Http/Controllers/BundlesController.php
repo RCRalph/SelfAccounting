@@ -19,7 +19,7 @@ class BundlesController extends Controller
         $pageData = $this->getDataForPageRender();
         $bundles = Bundle::all()->sortBy("created_at")->map(function($item) {
             $item->thumbnail = $this->getImageLink(
-                $this->directories["bundle-thumbnails"],
+                $this->directories[0],
                 $item->thumbnail
             );
             return $item;
@@ -43,7 +43,7 @@ class BundlesController extends Controller
 
         $gallery = $bundle->gallery->map(function($item) {
             return $this->getImageLink(
-                $this->directories["bundle-gallery"],
+                $this->directories[1],
                 $item->image
             );
         });

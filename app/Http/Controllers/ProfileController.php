@@ -32,7 +32,7 @@ class ProfileController extends Controller
         if (array_key_exists("picture", $data)) {
             $data["profile_picture"] = $this->uploadImage(
                 $data["picture"],
-                $this->directories["profile-picture"],
+                $this->directories[2],
                 auth()->user()->profile_picture,
                 [512, 512]
             );
@@ -79,7 +79,9 @@ class ProfileController extends Controller
             return redirect("/profile");
         }
 
+        $this->deleteImage($this->directories[2], auth()->user()->profile_picture);
         auth()->user()->delete();
+
         return redirect("/");
     }
 }
