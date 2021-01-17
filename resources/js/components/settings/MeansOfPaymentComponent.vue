@@ -59,7 +59,10 @@
 
                 <div class="col-md-4">
                     <button
-                        class="big-button-success"
+                        :class="[
+                            'big-button-success',
+                            !equalContent && !submitted && 'text-stand-out'
+                        ]"
                         :disabled="!canSave || submitted"
                         @click="submit"
                     >
@@ -140,6 +143,9 @@ export default {
         }
     },
     computed: {
+        equalContent() {
+            return _.isEqual(this.content, this.contentCopy);
+        },
         canSave() {
             let validArray = [];
 

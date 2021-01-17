@@ -68,8 +68,9 @@ class SummaryController extends Controller
 
                 if (
                     $startTime != null && strtotime($value["date"]) < $startTime ||
-                    $endTime != null && strtotime($value["date"]) > $endTime) {
-                        unset($balanceByCategories[$categoryID][$key]);
+                    $endTime != null && strtotime($value["date"]) > $endTime
+                ) {
+                    unset($balanceByCategories[$categoryID][$key]);
                 }
             }
         }

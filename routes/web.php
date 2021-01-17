@@ -104,8 +104,8 @@ Route::prefix('/profile')->group(function() {
 });
 
 Route::get('/payment', 'PagesController@payment')->name('payment');
-
 Route::get('/premium', 'PagesController@premium')->name('premium');
+Route::get('/tutorial', 'PagesController@tutorial')->name('tutorial');
 
 // ----- Web API ----- //
 

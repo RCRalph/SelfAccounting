@@ -39,6 +39,9 @@ class SettingsController extends Controller
             abort(500);
         }
 
+        $currencies = Currency::all()
+            ->map(fn ($item) => $item->only("id", "ISO"));
+
         if (!isset($data["data"])) {
             ($type == $TYPES[0] ?
                 Category::where("user_id", auth()->user()->id) :
@@ -50,9 +53,13 @@ class SettingsController extends Controller
             Outcome::where("user_id", auth()->user()->id)
                 ->update([$type . "_id" => null]);
 
-            return response()->json([
-                "data" => []
-            ]);
+            $data = [];
+
+            foreach ($currencies as $currency) {
+                $data[$currency["id"]] = [];
+            }
+
+            return $data;
         }
 
         $data = $data["data"];
@@ -159,7 +166,15 @@ class SettingsController extends Controller
                 $entriesInDB
             );
 
-        return collect($data)->groupBy("currency_id");
+        $data = collect($data)->groupBy("currency_id");
+
+        foreach ($currencies as $currency) {
+            if (!isset($data[$currency["id"]])) {
+                $data[$currency["id"]] = [];
+            }
+        }
+
+        return $data;
     }
 
     public function darkmode() // Change darkmode

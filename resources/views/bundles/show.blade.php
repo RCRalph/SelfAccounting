@@ -77,7 +77,7 @@
             </div>
 
             <div class="description-long">
-                {!! clean(Markdown::parse($bundle->description)) !!}
+                {!! Markdown::parse($bundle->description) !!}
             </div>
         </div>
     </div>

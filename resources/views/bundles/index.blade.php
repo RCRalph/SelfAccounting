@@ -22,15 +22,15 @@
                                 </div>
 
                                 <div class="description">
-                                    {!! clean(Markdown::parse($bundle->short_description)) !!}
+                                    {!! Markdown::parse($bundle->short_description) !!}
                                 </div>
                             </div>
                         </a>
                     </div>
                 @empty
-                <div class="col-12">
-                    <h1 class="text-center">Nothing to see here, for now...</h1>
-                </div>
+                    <div class="col-12">
+                        <h1 class="text-center">Nothing to see here, for now...</h1>
+                    </div>
                 @endforelse
             </div>
         </div>

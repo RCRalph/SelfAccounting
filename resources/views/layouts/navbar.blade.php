@@ -82,6 +82,13 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="/tutorial">
+                            <i class="fas fa-graduation-cap"></i>
+                            {{ __('Tutorial') }}
+                        </a>
+                    </li>
+
                     @can("isAdmin", auth()->user())
                     <li class="nav-item dropdown">
                         <a id="admin-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

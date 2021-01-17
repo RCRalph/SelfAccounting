@@ -31,6 +31,19 @@ class BundleUserPremiumPivotTable extends Migration
             "premium_expiration" => null,
             'profile_picture' => 'EmojiAdmin.png'
         ]);
+
+        App\Bundle::create([
+            "title" => "Chart pack",
+            "code" => "charts",
+            "price" => 5,
+            "short_description" => "A pack of useful charts",
+            "description" => "This bundle consists of, well, charts. It includes visual representation of your data, which will help you with analysing what you spend on as well as will show you how your balance progressed overtime and so on. The currently available charts are:
+            - **Balance monitor** - see how your balance has progressed overtime
+            - **Income by categories** - see how your income splits into categories
+            - **Outcome by categories** - see how your outcome splits into categories
+            - **Income by means of payment** - see how your income splits into means of payment
+            - **Outcome by means of payment** - see how your outcome splits into means of payment"
+        ]);
     }
 
     /**

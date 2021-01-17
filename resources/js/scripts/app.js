@@ -53,6 +53,10 @@ jQuery(() => {
                 {
                     light: "carousel-lightmode",
                     dark: "carousel-darkmode"
+                },
+                {
+                    light: "tutorial-wrapper-light",
+                    dark: "tutorial-wrapper-dark"
                 }
             ]
 

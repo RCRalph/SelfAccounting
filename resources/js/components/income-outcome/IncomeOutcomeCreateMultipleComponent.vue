@@ -210,9 +210,12 @@ export default {
     },
     computed: {
         minDate() {
-			const currentMean = this.means[this.data.currency_id]
-                .filter(item => item.id == this.data.mean_id)[0];;
-			return currentMean.first_entry_date || "1970-01-01";
+            const meansForCurrency = this.means[this.data.currency_id];
+            if (meansForCurrency == undefined) {
+                return "1970-01-01";
+            }
+			const currentMean = meansForCurrency.filter(item => item.id == this.data.mean_id);
+			return currentMean.length ? currentMean[0].first_entry_date : "1970-01-01";
         },
         validDate() {
             const date = this.common.date;
@@ -264,8 +267,12 @@ export default {
             }
 
             const validData = this.data.map(item => {
-                const minDate = this.means[this.data.currency_id]
-                    .filter(item => item.id == this.data.mean_id)[0].first_entry_date || "1970-01-01";
+                const meansForCurrency = this.means[this.data.currency_id];
+                let minDate = "1970-01-01";
+                if (meansForCurrency != undefined) {
+                    const currentMean = meansForCurrency.filter(item => item.id == this.data.mean_id);
+                    minDate = currentMean.length ? currentMean[0].first_entry_date : "1970-01-01";
+                }
 
                 const validDate = item.date !== "" &&
                     !isNaN(Date.parse(item.date)) &&

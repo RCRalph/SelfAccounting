@@ -145,9 +145,12 @@ export default {
     },
     computed: {
         minDate() {
-			const currentMean = this.means[this.value.currency_id]
-                .filter(item => item.id == this.value.mean_id)[0];;
-			return currentMean.first_entry_date || "1970-01-01";
+			const meansForCurrency = this.means[this.value.currency_id];
+            if (meansForCurrency == undefined) {
+                return "1970-01-01";
+            }
+			const currentMean = meansForCurrency.filter(item => item.id == this.value.mean_id);
+			return currentMean.length ? currentMean[0].first_entry_date : "1970-01-01";
         },
         validDate() {
             const date = this.value.date;

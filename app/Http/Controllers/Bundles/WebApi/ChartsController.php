@@ -65,7 +65,6 @@ class ChartsController extends Controller
         // Get type IDs to get from io
         $toShow = $typeData->pluck("id")->toArray();
 
-
         $ioData = [];
         if ($io == "income") {
             $ioData = auth()->user()->income;
@@ -91,7 +90,7 @@ class ChartsController extends Controller
             });
 
         $count = $typeData->count();
-        $colors = $this->getColors($count);
+        $colors = $count ? $this->getColors($count) : [];
         $data = [];
 
         foreach ($ioData as $currencyID => $ioByType) {
@@ -362,7 +361,7 @@ class ChartsController extends Controller
 
         // Add proper chart colors
         $count = $balanceByMeans->count();
-        $colors = $this->getColors($count);
+        $colors = $count ? $this->getColors($count) : [];
 
         foreach ($balanceByMeans as $meanID => $balance) {
 			$mean = $means->where("id", $meanID)->first();

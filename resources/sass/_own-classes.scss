@@ -220,7 +220,10 @@
 
 .description-long {
     @extend .mt-4;
-    @extend .w-100;
+    @extend .mx-sm-4;
+
+    font-size: 16px;
+    text-align: justify;
 }
 
 .admin-bundle-gallery-image {
@@ -231,4 +234,61 @@
     background-size: cover;
     border-radius: 20px;
     border: solid 5px rgb(127, 127, 127);
+}
+
+.tutorial-wrapper {
+    @extend .px-5;
+    @extend .py-4;
+    border-radius: 10px;
+    text-align: justify;
+    font-size: 16px;
+
+    h1 {
+        @extend .mt-4;
+        @extend .pb-2;
+        text-align: center;
+        font-weight: bold;
+		border-bottom: rgb(127, 127, 127) solid 1px;
+    }
+
+    h2 {
+        @extend .h3;
+        font-weight: bold;
+        margin-top: 16px;
+    }
+
+    img {
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        display: block;
+        border-radius: 10px;
+        border: solid 2.5px rgb(127, 127, 127);
+    }
+
+    ul, ol {
+        margin-top: -16px;
+        margin-bottom: 4px;
+    }
+
+    &-light {
+        @extend .tutorial-wrapper;
+        @extend .text-dark;
+
+        background-color: #f1f1f1;
+    }
+
+    &-dark {
+        @extend .tutorial-wrapper;
+        @extend .text-white;
+
+        background-color: #30363b;
+    }
+}
+
+.text-stand-out {
+    @include change-text-brightness(text-stand-out-animation, #fff, #000);
+
+    font-weight: bolder;
+    animation: text-stand-out-animation 2s infinite;
 }

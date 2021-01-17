@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 
-use App\User;
-
 class ProfileController extends Controller
 {
     public function __construct()
@@ -23,7 +21,7 @@ class ProfileController extends Controller
     }
 
     public function updateData()
-{
+	{
         $data = request()->validate([
             "username" => ["required", "string", "max:32"],
             "email" => ["required", "string", "email", "max:64", Rule::unique("users", "email")->ignore(auth()->user()->id)],
