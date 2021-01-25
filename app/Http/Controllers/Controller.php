@@ -36,23 +36,31 @@ class Controller extends BaseController
 
     public function getDataForPageRender()
     {
-        $auth = auth()->user();
-        $retArr = $auth->only("darkmode", "profile_picture");
-        $retArr["profile_picture"] = $this->getProfilePictureLink($auth->profile_picture);
+        $id = auth()->user()->id;
+        return Cache::remember(
+            "page-render-data-$id",
+            now()->addMinutes(1),
+            function() {
+                $retArr = auth()->user()->only("darkmode", "profile_picture");
+                $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
 
-        $retArr["bundle_info"] = [
-            "charts" => [
-                "icon" => "fas fa-chart-bar",
-                "directory" => "charts"
-            ]
-        ];
+                $retArr["bundle_info"] = [
+                    "charts" => [
+                        "icon" => "fas fa-chart-bar",
+                        "directory" => "charts"
+                    ]
+                ];
 
-        // Do the same but with collections
-		$retArr["bundles"] = $auth->premium_bundles->merge($auth->bundles)->filter(
-            fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
+                // Do the same but with collections
+                $retArr["bundles"] = auth()->user()->premium_bundles
+                    ->merge(auth()->user()->bundles)
+                    ->filter(
+                        fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
+                    );
+
+                return $retArr;
+            }
         );
-
-        return $retArr;
     }
 
     public function checkPremium($user)
