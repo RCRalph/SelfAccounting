@@ -147,20 +147,20 @@ Route::prefix('/webapi')->group(function() {
         });
 
         Route::prefix('/{bundle}')->group(function() {
-            Route::post('/toggle', 'WebApi\BundlesController@toggle')->name('bundle.toggle');
-            Route::post('/toggle-premium', 'WebApi\BundlesController@togglePremium')->name('bundle.toggle-premium');
+            Route::post('/toggle', 'WebApi\BundlesController@toggle')->name('webapi.bundle.toggle');
+            Route::post('/toggle-premium', 'WebApi\BundlesController@togglePremium')->name('webapi.bundle.toggle-premium');
         });
     });
 
     Route::prefix('/summary')->group(function() {
-        Route::get('/', 'WebApi\SummaryController@getData')->name('summary.getData');
+        Route::get('/', 'WebApi\SummaryController@getData')->name('webapi.summary.getData');
     });
 
     Route::prefix('/settings')->group(function() {
-        Route::get('/', 'WebApi\SettingsController@getSettings')->name('settings.get');
-        Route::post('/categories', 'WebApi\SettingsController@saveCategories')->name('settings.categories');
-        Route::post('/means', 'WebApi\SettingsController@saveMeans')->name('settings.means');
-        Route::post('/darkmode', 'WebApi\SettingsController@darkmode')->name('settings.darkmode');
+        Route::get('/', 'WebApi\SettingsController@getSettings')->name('webapi.settings.get');
+        Route::post('/categories', 'WebApi\SettingsController@saveCategories')->name('webapi.settings.categories');
+        Route::post('/means', 'WebApi\SettingsController@saveMeans')->name('webapi.settings.means');
+        Route::post('/darkmode', 'WebApi\SettingsController@darkmode')->name('webapi.settings.darkmode');
     });
 
     Route::prefix('/profile')->group(function() {
@@ -168,22 +168,22 @@ Route::prefix('/webapi')->group(function() {
     });
 
     Route::prefix('/payment')->group(function() {
-        Route::get('/', 'WebApi\PagesController@payment')->name('payment.index');
+        Route::get('/', 'WebApi\PagesController@payment')->name('webapi.payment.index');
     });
 
     // ----- Income / Outcome ----- //
 
     Route::prefix('/{viewType}')->group(function() {
-        Route::get('/start', 'WebApi\IncomeOutcomeController@start')->name('income.start');
-        Route::post('/store', 'WebApi\IncomeOutcomeController@store')->name('income-outcome.store');
-        Route::get('/create', 'WebApi\IncomeOutcomeController@create')->name('income-outcome.create');
+        Route::get('/start', 'WebApi\IncomeOutcomeController@start')->name('webapi.income.start');
+        Route::post('/store', 'WebApi\IncomeOutcomeController@store')->name('webapi.income-outcome.store');
+        Route::get('/create', 'WebApi\IncomeOutcomeController@create')->name('webapi.income-outcome.create');
 
-        Route::get('/all/{currency}', 'WebApi\IncomeOutcomeController@all')->name('income-outcome.all');
+        Route::get('/all/{currency}', 'WebApi\IncomeOutcomeController@all')->name('webapi.income-outcome.all');
 
         Route::prefix('/{incomeOutcome}')->group(function() {
-            Route::get('/', 'WebApi\IncomeOutcomeController@edit')->name('income-outcome.edit');
-            Route::patch('/update', 'WebApi\IncomeOutcomeController@update')->name('income-outcome.update');
-            Route::delete('/delete', 'WebApi\IncomeOutcomeController@delete')->name('income-outcome.delete');
+            Route::get('/', 'WebApi\IncomeOutcomeController@edit')->name('webapi.income-outcome.edit');
+            Route::patch('/update', 'WebApi\IncomeOutcomeController@update')->name('webapi.income-outcome.update');
+            Route::delete('/delete', 'WebApi\IncomeOutcomeController@delete')->name('webapi.income-outcome.delete');
         });
     });
 });
