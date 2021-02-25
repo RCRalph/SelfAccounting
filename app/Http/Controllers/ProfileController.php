@@ -37,6 +37,8 @@ class ProfileController extends Controller
                 [512, 512]
             );
             unset($data["picture"]);
+            $id = auth()->user()->id;
+            Cache::forget("page-render-data-$id");
         }
 
         auth()->user()->update($data);
