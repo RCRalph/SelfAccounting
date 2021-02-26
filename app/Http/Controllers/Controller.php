@@ -98,8 +98,8 @@ class Controller extends BaseController
 
     public function getImageLink($directory, $filename)
     {
-        $endpoint = env("IBM_COS_ENDPOINT");
-        $bucket = env("IBM_COS_BUCKET");
+        $endpoint = config("object-storage.endpoint");
+        $bucket = config("object-storage.bucket");
 
         return "$endpoint/$bucket/$directory/$filename";
     }
