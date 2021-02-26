@@ -106,6 +106,11 @@
                                 <i class="fas fa-box-open"></i>
                                 Bundles
                             </a>
+
+                            <a class="dropdown-item" href="/telescope">
+                                <i class="fab fa-laravel"></i>
+                                Telescope
+                            </a>
                         </div>
                     </li>
                     @endcan
