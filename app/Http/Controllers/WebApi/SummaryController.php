@@ -80,12 +80,24 @@ class SummaryController extends Controller
             ->toArray();
 
         $finalData = [];
+        $foundIDs = [];
         foreach ($balanceByMeans as $meanID => $balance) {
             $foundMean = $means->where("id", $meanID)->first();
+
             array_push($finalData, [
                 "name" => $foundMean->name,
                 "currency_id" => $foundMean->currency_id,
                 "balance" => $balance + $foundMean->first_entry_amount
+            ]);
+
+            array_push($foundIDs, $foundMean->id);
+        }
+
+        foreach ($means->whereNotIn("id", $foundIDs) as $mean) {
+            array_push($finalData, [
+                "name" => $mean->name,
+                "currency_id" => $mean->currency_id,
+                "balance" => $mean->first_entry_amount * 1
             ]);
         }
 
