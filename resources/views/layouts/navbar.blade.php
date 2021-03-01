@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-xl navbar-{{ ($pageData["darkmode"] ?? false)  ? 'dark' : 'light' }}mode shadow-sm">
+<nav class="navbar navbar-expand-xl navbar-{{ ($pageData["darkmode"] ?? true) ? 'dark' : 'light' }}mode shadow-sm">
     <div class="container">
         <a class="navbar-brand" @auth href="/summary" @else href="/" @endauth>
             <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -160,7 +160,7 @@
 
                 <li class="nav-item my-auto" id="darkmode-switcher">
                     <div class="nav-link h5 my-auto" id="sun-moon">
-                        <i class="fas fa-{{ ($pageData["darkmode"] ?? false) ? 'sun' : 'moon' }}"></i>
+                        <i class="fas fa-{{ ($pageData["darkmode"] ?? true) ? 'sun' : 'moon' }}"></i>
                     </div>
                 </li>
             </ul>

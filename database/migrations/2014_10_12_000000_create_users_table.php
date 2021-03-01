@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 64);
             $table->boolean('admin')->default(false);
-            $table->boolean('darkmode')->default(false);
+            $table->boolean('darkmode')->default(true);
             $table->string('profile_picture', 64);
             $table->date("premium_expiration")->nullable();
             $table->rememberToken();
