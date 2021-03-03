@@ -35,7 +35,7 @@ Route::prefix('/admin')->group(function() {
             Route::get('/', 'Admin\UsersController@details')->name('admin.users.details');
             Route::patch('/update', 'Admin\UsersController@update')->name('admin.users.update');
 
-            Route::prefix('/delete')->group(function(){
+            Route::prefix('/delete')->group(function() {
                 Route::get('/', 'Admin\UsersController@confirmDeletion')->name('admin.users.delete');
                 Route::get('/confirmed', 'Admin\UsersController@delete')->name('admin.users.delete.confirmed');
             });

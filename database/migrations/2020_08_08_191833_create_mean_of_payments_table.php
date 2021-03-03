@@ -15,7 +15,7 @@ class CreateMeanOfPaymentsTable extends Migration
     {
         Schema::create('mean_of_payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('currency_id');
             $table->string('name', 32);
             $table->boolean('income_mean');
