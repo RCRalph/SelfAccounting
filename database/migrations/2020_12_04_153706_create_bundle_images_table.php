@@ -15,7 +15,7 @@ class CreateBundleImagesTable extends Migration
     {
         Schema::create('bundle_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bundle_id')->onDelete('cascade');
+            $table->foreignId('bundle_id')->constrained('bundles')->onDelete('cascade');
             $table->string('image', 64);
             $table->timestamps();
 

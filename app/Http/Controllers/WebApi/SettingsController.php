@@ -48,11 +48,6 @@ class SettingsController extends Controller
                 MeanOfPayment::where("user_id", auth()->user()->id)
             )->delete();
 
-            Income::where("user_id", auth()->user()->id)
-                ->update([$type . "_id" => null]);
-            Outcome::where("user_id", auth()->user()->id)
-                ->update([$type . "_id" => null]);
-
             $data = [];
 
             foreach ($currencies as $currency) {
@@ -107,17 +102,11 @@ class SettingsController extends Controller
                 MeanOfPayment::destroy($toDelete);
             }
 
-            Income::whereIn($type . "_id", $toDelete)
-                ->update([$type . "_id" => null]);
-            Outcome::whereIn($type . "_id", $toDelete)
-                ->update([$type . "_id" => null]);
-
             $entriesInDB = $entriesInDB->whereNotIn("id", $toDelete);
         }
 
         // Enter into the database
         $entriesInDB = $entriesInDB->toArray();
-
         foreach ($entries as $entry) {
             if (!$entry["id"]) {
                 unset($entry["id"]);
