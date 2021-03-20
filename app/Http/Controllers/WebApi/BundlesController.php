@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WebApi;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 use App\Bundle;
 
@@ -23,7 +24,10 @@ class BundlesController extends Controller
 
         $pivot->update(["enabled" => !$pivot->enabled]);
 
-        return response("", 200);
+        $id = auth()->user()->id;
+        Cache::forget("page-render-data-$id");
+
+        return response("Success", 200);
     }
 
     public function togglePremium(Bundle $bundle) // Add or remove bundle from premium
@@ -31,6 +35,9 @@ class BundlesController extends Controller
         $this->authorize("isPremium", auth()->user());
         auth()->user()->premium_bundles()->toggle($bundle);
 
-        return response("", 200);
+        $id = auth()->user()->id;
+        Cache::forget("page-render-data-$id");
+
+        return response("Success", 200);
     }
 }

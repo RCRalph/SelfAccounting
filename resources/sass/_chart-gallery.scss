@@ -8,6 +8,7 @@
         @extend .justify-content-center;
         @extend .align-items-center;
         @extend .py-3;
+        background-color: $primary;
         border-radius: 5px;
         transition: filter 0.25s;
 
@@ -16,6 +17,7 @@
             @extend .my-auto;
             @extend .px-3;
             user-select: none;
+            color: white;
 
             .chart-title {
                 @extend .h3;
@@ -26,16 +28,6 @@
 
             .chart-description {
                 font-size: 16px;
-            }
-
-            &-black {
-                @extend .chart-gallery-element;
-                color: black;
-            }
-
-            &-white {
-                @extend .chart-gallery-element;
-                color: white;
             }
         }
 

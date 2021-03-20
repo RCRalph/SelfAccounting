@@ -12,7 +12,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    <a role="button" href="/bundles/charts/presence" class="big-button-primary btn-lg">
+                    <a role="button" href="/bundles/charts/presence" class="big-button-opposite btn-lg">
                         Edit chart presence
                     </a>
                 </div>
@@ -27,9 +27,8 @@
                             <a href="/bundles/charts/{{ $chart["directory"] }}" class="text-decoration-none">
                                 <div
                                     class="chart-gallery-block"
-                                    style="background-color: rgb({{ implode(",", $chart["background"]) }})"
                                 >
-                                    <div class="chart-gallery-element-{{ $chart["color"] }}">
+                                    <div class="chart-gallery-element">
                                         <div class="chart-title">
                                             {{ $chart["title"] }}
                                         </div>

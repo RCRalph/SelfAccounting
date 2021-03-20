@@ -40,11 +40,11 @@ export default {
 
                 axios
                     .post(`/webapi/bundles/${this.id}/toggle-premium`, {})
-                    .then(response => {
+                    .then(() => {
                         this.enabled = !this.enabled;
-                        this.ready = true;
+                        location.reload();
                     })
-                    .catch(err => {
+                    .catch(() => {
                         this.ready = true;
                     })
             }

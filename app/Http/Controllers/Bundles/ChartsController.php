@@ -21,45 +21,34 @@ class ChartsController extends Controller
                 [
                     "title" => "Balance monitor",
                     "description" => "This chart shows how your balance has progressed overtime.",
-                    "directory" => "balance-monitor",
-                    "background" => [255, 213, 0]
+                    "directory" => "balance-monitor"
                 ]
             ],
             [
                 [
                     "title" => "Income by categories",
                     "description" => "See how your income splits into categories.",
-                    "directory" => "income-by-categories",
-                    "background" => [136, 3, 252]
+                    "directory" => "income-by-categories"
                 ],
                 [
                     "title" => "Outcome by categories",
                     "description" => "See how your outcome splits into categories.",
-                    "directory" => "outcome-by-categories",
-                    "background" => [252, 90, 3]
+                    "directory" => "outcome-by-categories"
                 ]
             ],
             [
                 [
                     "title" => "Income by means of payment",
                     "description" => "See how your income splits into means of payment.",
-                    "directory" => "income-by-means-of-payment",
-                    "background" => [3, 252, 111]
+                    "directory" => "income-by-means-of-payment"
                 ],
                 [
                     "title" => "Outcome by means of payment",
                     "description" => "See how your outcome splits into means of payment.",
-                    "directory" => "outcome-by-means-of-payment",
-                    "background" => [206, 252, 3]
+                    "directory" => "outcome-by-means-of-payment"
                 ]
             ]
 		];
-
-		foreach ($charts as $groupKey => $group) {
-            foreach ($group as $chartKey => $chart) {
-                $charts[$groupKey][$chartKey]["color"] = $this->getTextColorOnBackgroundRGB($chart["background"]);
-            }
-        }
 
         return view("bundles.charts.index", compact("pageData", "charts"));
     }
