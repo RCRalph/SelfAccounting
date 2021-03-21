@@ -44,7 +44,13 @@ class BundlesController extends Controller
         ]);
 
         $data["code"] = strtolower($data["code"]);
-        $data["thumbnail"] = $this->uploadImage($data["thumbnail"], $this->directories[0]);
+        $data["thumbnail"] = $this->uploadImage(
+            $data["thumbnail"],
+            $this->PUBLIC_DIRECTORIES[0],
+            false,
+            [],
+            "public"
+        );
         $bundle = Bundle::create($data);
 
         return redirect("/admin/bundles/$bundle->id");
@@ -71,8 +77,10 @@ class BundlesController extends Controller
         if (array_key_exists("thumbnail", $data)) {
             $data["thumbnail"] = $this->uploadImage(
                 $data["thumbnail"],
-                $this->directories[0],
-                $bundle->thumbnail
+                $this->PUBLIC_DIRECTORIES[0],
+                $bundle->thumbnail,
+                [],
+                "public"
             );
         }
 
@@ -94,7 +102,13 @@ class BundlesController extends Controller
             "image" => ["required", "image"]
         ])["image"];
 
-        $image = $this->uploadImage($image, $this->directories[1]);
+        $image = $this->uploadImage(
+            $image,
+            $this->PUBLIC_DIRECTORIES[1],
+            false,
+            [],
+            "public"
+        );
 
         BundleImage::create([
             "bundle_id" => $bundle->id,
@@ -119,10 +133,10 @@ class BundlesController extends Controller
     public function delete(Bundle $bundle)
     {
         foreach ($bundle->gallery as $bundleImage) {
-            $this->deleteImage($this->directories[1], $bundleImage->image);
+            $this->deleteImage($this->PUBLIC_DIRECTORIES[1], $bundleImage->image);
         }
 
-        $this->deleteImage($this->directories[0], $bundle->thumbnail);
+        $this->deleteImage($this->PUBLIC_DIRECTORIES[0], $bundle->thumbnail);
         $bundle->delete();
 
         return redirect("/admin/bundles");

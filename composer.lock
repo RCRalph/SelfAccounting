@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d0100197a9fe7a7f833a75af3d14d79",
+    "content-hash": "e06593ff99a7c6d9fc8bef008dbf1c9e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -64,16 +64,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.175.0",
+            "version": "3.173.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "31baa9e0c4330f01eb74b8a7ef086e9d34f8391e"
+                "reference": "e401bcb34e4ae88586a1f63bec6c0ddd12591e7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/31baa9e0c4330f01eb74b8a7ef086e9d34f8391e",
-                "reference": "31baa9e0c4330f01eb74b8a7ef086e9d34f8391e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e401bcb34e4ae88586a1f63bec6c0ddd12591e7a",
+                "reference": "e401bcb34e4ae88586a1f63bec6c0ddd12591e7a",
                 "shasum": ""
             },
             "require": {
@@ -81,9 +81,9 @@
                 "ext-pcre": "*",
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^5.3.3|^6.2.1|^7.0",
-                "guzzlehttp/promises": "^1.4.0",
-                "guzzlehttp/psr7": "^1.7.0",
-                "mtdowling/jmespath.php": "^2.6",
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.4.1",
+                "mtdowling/jmespath.php": "^2.5",
                 "php": ">=5.5"
             },
             "require-dev": {
@@ -148,9 +148,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.175.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.173.16"
             },
-            "time": "2021-03-19T18:13:22+00:00"
+            "time": "2021-02-24T19:43:19+00:00"
         },
         {
             "name": "brick/math",
@@ -963,16 +963,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3"
+                "reference": "043f17d447dc88045a13b5b1b6d9f902e2820685"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53330f47520498c0ae1f61f7e2c90f55690c06a3",
-                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/043f17d447dc88045a13b5b1b6d9f902e2820685",
+                "reference": "043f17d447dc88045a13b5b1b6d9f902e2820685",
                 "shasum": ""
             },
             "require": {
@@ -1032,9 +1032,9 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/1.7.0"
+                "source": "https://github.com/guzzle/psr7/tree/1.8.0"
             },
-            "time": "2020-09-30T07:37:11+00:00"
+            "time": "2021-03-21T12:38:22+00:00"
         },
         {
             "name": "intervention/image",

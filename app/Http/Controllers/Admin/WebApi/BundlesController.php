@@ -66,8 +66,8 @@ class BundlesController extends Controller
 
         $gallery = $bundle->gallery
             ->map(function($item) {
-                $item->image = $this->getImageLink(
-                    $this->directories[1],
+                $item->image = $this->getLocalImageLink(
+                    $this->PUBLIC_DIRECTORIES[1],
                     $item->image
                 );
 
@@ -101,13 +101,13 @@ class BundlesController extends Controller
         BundleImage::whereIn("id", $toRemove)->delete();
 
         foreach ($images as $image) {
-            Storage::disk("ibm-cos")->delete("bundles/gallery/$image->image");
+            $this->deleteImage($this->PUBLIC_DIRECTORIES[1], $image->image, "public");
         }
 
         // Get gallery as return object
         $gallery = $bundle->fresh()->gallery->map(function($item) {
-            $item->image = $this->getImageLink(
-                $this->directories["bundles-gallery"],
+            $item->image = $this->getLocalImageLink(
+                $this->PUBLIC_DIRECTORIES[1],
                 $item->image
             );
             return collect($item)->only("id", "image");

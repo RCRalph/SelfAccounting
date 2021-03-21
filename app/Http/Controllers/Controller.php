@@ -16,20 +16,23 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public $directories = [
-        "bundles/thumbnails",
-        "bundles/gallery",
+    public $COS_DIRECTORIES = [
         "profile_pictures"
+    ];
+
+    public $PUBLIC_DIRECTORIES = [
+        "bundles/thumbnails",
+        "bundles/gallery"
     ];
 
     public function getProfilePictureLink($profile_picture)
     {
-        if (preg_match("/Emoji[1-6].png/", $profile_picture) || $profile_picture == "EmojiAdmin.png") {
-            return "/img/avatars/$profile_picture";
+        if (preg_match("/Emoji([1-6]|Admin).png/", $profile_picture)) {
+            return "/storage/avatars/$profile_picture";
         }
 
-        return $this->getImageLink(
-            $this->directories[2],
+        return $this->getCosLink(
+            $this->COS_DIRECTORIES[0],
             $profile_picture
         );
     }
@@ -39,7 +42,7 @@ class Controller extends BaseController
         $id = auth()->user()->id;
         return Cache::remember(
             "page-render-data-$id",
-            now()->addMinutes(1),
+            now()->addMinutes(15),
             function() {
                 $retArr = auth()->user()->only("darkmode", "profile_picture");
                 $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
@@ -72,12 +75,12 @@ class Controller extends BaseController
                 ->timestamp >= Carbon::now()->timestamp;
     }
 
-    public function deleteImage($directory, $name)
+    public function deleteImage($directory, $name, $disk = "ibm-cos")
     {
-        Storage::disk("ibm-cos")->delete("$directory/$name");
+        Storage::disk($disk)->delete("$directory/$name");
     }
 
-    public function uploadImage($image, $directory, $delete = false, $fit = [])
+    public function uploadImage($image, $directory, $delete = false, $fit = [], $disk = "ibm-cos")
     {
         $img = Image::make($image);
         if (count($fit) == 2) {
@@ -86,22 +89,27 @@ class Controller extends BaseController
 
         do {
             $filename = Str::random(50) . "." . $image->extension();
-        } while (Storage::disk("ibm-cos")->has("$directory/$filename"));
+        } while (Storage::disk($disk)->has("$directory/$filename"));
 
         if ($delete) {
-            $this->deleteImage($directory, $delete);
+            $this->deleteImage($directory, $delete, $disk);
         }
-        Storage::disk("ibm-cos")->put("$directory/$filename", $img->stream());
+        Storage::disk($disk)->put("$directory/$filename", $img->stream());
 
         return $filename;
     }
 
-    public function getImageLink($directory, $filename)
+    public function getCosLink($directory, $filename)
     {
         $endpoint = config("object-storage.endpoint");
         $bucket = config("object-storage.bucket");
 
         return "$endpoint/$bucket/$directory/$filename";
+    }
+
+    public function getLocalImageLink($directory, $filename)
+    {
+        return "/storage/$directory/$filename";
     }
 
     public function getTextColorOnBackgroundRGB($rgb)
