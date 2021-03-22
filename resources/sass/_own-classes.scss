@@ -1,5 +1,4 @@
-.dark-card {
-    @extend .card;
+.card {
     @extend .bg-dark;
     @extend .text-white;
 }
@@ -60,6 +59,11 @@
         @extend .btn-primary;
     }
 
+    &-opposite {
+        @extend .big-button;
+        @include button-variant(#f8f9fa, #f8f9fa);
+    }
+
     &-golden {
         @extend .big-button;
         background-color: $gold-star-color;
@@ -101,21 +105,7 @@
     width: 170px;
 }
 
-.hover-bg {
-    &-light {
-        background-color: #ececec;
-    }
-
-    &-dark {
-        background-color: #43494e;
-    }
-}
-
-.table-lightmode {
-    @extend .table;
-}
-
-.table-darkmode {
+.table-themed {
     @extend .table-dark;
 }
 
@@ -133,33 +123,15 @@
 
 .hr {
     border-width: 2px;
+    $border-color: white;
+    background-color: $border-color;
+    border-color: $border-color;
 
-    &-darkmode {
+    &-dashed {
         @extend .hr;
-        $border-color: white;
-        background-color: $border-color;
-        border-color: $border-color;
-
-        &-dashed {
-            @extend .hr-darkmode;
-            background-color: transparent !important;
-            border-top-style: dashed;
-            border-width: 1px;
-        }
-    }
-
-    &-lightmode {
-        @extend .hr;
-        $border-color: darken(white, 10%);
-        background-color: $border-color;
-        border-color: $border-color;
-
-        &-dashed {
-            @extend .hr-lightmode;
-            background-color: transparent !important;
-            border-top-style: dashed;
-            border-width: 1px;
-        }
+        background-color: transparent !important;
+        border-top-style: dashed;
+        border-width: 1px;
     }
 }
 
@@ -169,28 +141,12 @@
     height: 39px;
     width: 39px;
     background-color: white;
-
-    &-lightmode {
-        @extend .profile-img;
-        border-color: black;
-    }
-
-    &-darkmode {
-        @extend .profile-img;
-        border-color: white;
-    }
+    border-color: white;
 }
 
 .navbar {
-	&-lightmode {
-		@extend .navbar-light;
-        @extend .bg-light;
-	}
-
-	&-darkmode {
-		@extend .navbar-dark;
-		@extend .bg-dark;
-	}
+    @extend .navbar-dark;
+    @extend .bg-dark;
 }
 
 .bundle-image {
@@ -214,10 +170,6 @@
     margin-bottom: -35px;
 }
 
-.carousel-lightmode {
-    filter: invert(100%);
-}
-
 .description-long {
     @extend .mt-4;
     @extend .mx-sm-4;
@@ -239,6 +191,9 @@
 .tutorial-wrapper {
     @extend .px-5;
     @extend .py-4;
+    @extend .text-white;
+
+    background-color: #30363b;
     border-radius: 10px;
     text-align: justify;
     font-size: 16px;
@@ -269,20 +224,6 @@
     ul, ol {
         margin-top: -16px;
         margin-bottom: 4px;
-    }
-
-    &-light {
-        @extend .tutorial-wrapper;
-        @extend .text-dark;
-
-        background-color: #fff;
-    }
-
-    &-dark {
-        @extend .tutorial-wrapper;
-        @extend .text-white;
-
-        background-color: #30363b;
     }
 }
 

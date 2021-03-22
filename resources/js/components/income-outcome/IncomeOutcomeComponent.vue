@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i :class="[
@@ -42,10 +42,7 @@
                 <div class="table-responsive-xl w-100" :key="tableKey">
                     <table
                         id="table-multi-hover"
-                        :class="[
-                            'responsive-table-bordered',
-                            darkmode ? 'table-darkmode' : 'table-lightmode'
-                        ]"
+                        class="responsive-table-bordered table-themed"
                         v-if="rows.length && dataReady"
                     >
                         <TableHeader :cells="headerCells"></TableHeader>

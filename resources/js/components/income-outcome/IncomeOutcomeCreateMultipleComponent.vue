@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i
@@ -107,7 +107,7 @@
                     @input="updateData('mean_id')"
 				></InputGroup>
 
-                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+                <hr class="hr">
 
                 <div v-for="(item, i) in data" :key="i">
                     <div class="h4 font-weight-bold ml-3 mb-3">Entry #{{ i + 1 }}</div>
@@ -130,10 +130,10 @@
                         </div>
                     </div>
 
-                    <hr v-if="i + 1 < data.length" :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dash'">
+                    <hr v-if="i + 1 < data.length" class="hr-dashed">
                 </div>
 
-                <hr v-if="data.length" :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+                <hr v-if="data.length" class="hr">
 
                 <div class="row">
                     <div class="col-sm-6 my-2 my-sm-0">

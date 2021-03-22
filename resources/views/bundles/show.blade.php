@@ -1,7 +1,7 @@
 @extends('layouts.width10')
 
 @section('content')
-    <div class="{{ $pageData["darkmode"] ? "dark-card" : "card" }}">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-box-open"></i>
@@ -37,18 +37,18 @@
                         </div>
 
                         <a class="carousel-control-prev" href="#image-gallery" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon carousel-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode" aria-hidden="true"></span>
+                            <span class="carousel-control-prev-icon carousel-control-color" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
                         </a>
 
                         <a class="carousel-control-next" href="#image-gallery" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon carousel-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode" aria-hidden="true"></span>
+                            <span class="carousel-control-next-icon carousel-control-color" aria-hidden="true"></span>
                             <span class="sr-only">Next</span>
                         </a>
                     </div>
                 </div>
 
-                <hr class="mt-5 hr-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode">
+                <hr class="mt-5 hr">
             @endif
 
             <div class="row">

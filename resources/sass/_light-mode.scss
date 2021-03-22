@@ -1,0 +1,71 @@
+.lightmode {
+    background-color: hsl(210, 40%, 98%);
+
+    .showcase {
+        background-color: white;
+        color: black;
+    }
+
+    .navbar {
+        @extend .navbar-light;
+        @extend .bg-light;
+    }
+
+    .card {
+        background-color: #fff !important;
+        color: #212529 !important;
+    }
+
+    .table-themed {
+        @extend .table;
+        background-color: unset;
+
+        th, td {
+            border-color: #dee2e6 !important;
+        }
+
+        tbody tr:hover {
+            background-color: #eeeeee;
+            color: #212529;
+        }
+    }
+
+    .welcome-bg-change {
+        @extend .bg-light;
+        @extend .text-dark;
+    }
+
+    .profile-wrapper {
+        @include profile-wrapper-mixin(white, darken(white, 10%), black, darken($gold-star-color, 2%), darken($gold-star-color, 4%), darken(white, 10%));
+    }
+
+    .hr {
+        $border-color: darken(white, 10%);
+        background-color: $border-color;
+        border-color: $border-color;
+
+        &-dashed {
+            @extend .hr;
+            background-color: transparent !important;
+            border-top-style: dashed;
+            border-width: 1px;
+        }
+    }
+
+    .profile-img {
+        border-color: black;
+    }
+
+    .bundle-wrapper {
+        @include bundle-wrapper-mixin(white, darken(white, 10%), black, darken(white, 4.5%));
+    }
+
+    .carousel-control-color {
+        filter: invert(100%);
+    }
+
+    .tutorial-wrapper {
+        @extend .text-dark;
+        background-color: #fff;
+    }
+}

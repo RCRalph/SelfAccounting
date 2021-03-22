@@ -18,8 +18,8 @@ class BundlesController extends Controller
     {
         $pageData = $this->getDataForPageRender();
         $bundles = Bundle::all()->sortBy("created_at")->map(function($item) {
-            $item->thumbnail = $this->getImageLink(
-                $this->directories[0],
+            $item->thumbnail = $this->getLocalImageLink(
+                $this->PUBLIC_DIRECTORIES[0],
                 $item->thumbnail
             );
             return $item;
@@ -41,13 +41,7 @@ class BundlesController extends Controller
                 ->first()->pivot->enabled;
         }
 
-        $gallery = $bundle->gallery->map(function($item) {
-            return $this->getImageLink(
-                $this->directories[1],
-                $item->image
-            );
-        });
-
+        $gallery = $bundle->gallery->map(fn ($item) => $this->getLocalImageLink($this->PUBLIC_DIRECTORIES[1], $item->image));
         $isPremium = $this->checkPremium(auth()->user());
 
         return view("bundles.show", compact("pageData", "isPremium", "bundle", "gallery", "hasBundle", "bundleEnabled", "hasBundlePremium"));

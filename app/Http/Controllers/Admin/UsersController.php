@@ -48,7 +48,7 @@ class UsersController extends Controller
         if (array_key_exists("picture", $data)) {
             $data["profile_picture"] = $this->uploadImage(
                 $data["picture"],
-                $this->directories[2],
+                $this->COS_DIRECTORIES[0],
                 $user->profile_picture,
                 [512, 512]
             );
@@ -79,7 +79,7 @@ class UsersController extends Controller
     public function delete(User $user)
     {
         if ($user->id != 1) {
-            $this->deleteImage($this->directories[2], $user->profile_picture);
+            $this->deleteImage($this->COS_DIRECTORIES[0], $user->profile_picture);
             $user->delete();
         }
 

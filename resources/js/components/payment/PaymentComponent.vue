@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-money-check"></i>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+                <hr class="hr">
 
                 <div class="form-group row">
                     <div class="col-lg-5 d-flex justify-content-lg-end justify-content-start align-items-center">

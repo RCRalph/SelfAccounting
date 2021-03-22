@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-users"></i>
@@ -15,10 +15,7 @@
                     @userDataReset="userDataReset"
                 ></UserDataChange>
 
-                <hr :class="[
-                    darkmode ? 'hr-darkmode' : 'hr-lightmode',
-                    'my-4'
-                ]">
+                <hr class="hr my-4">
 
                 <div class="row">
                     <div class="col-xl-4 d-flex justify-content-xl-end justify-content-start align-items-center">
@@ -54,7 +51,7 @@
                     </div>
                 </div>
 
-				<hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+				<hr class="hr-dashed">
 
                 <SaveResetChanges
                     :disableAll="dataSubmit"
@@ -64,10 +61,7 @@
                 ></SaveResetChanges>
 
                 <div v-if="userData.id != 1">
-                    <hr :class="[
-                        darkmode ? 'hr-darkmode' : 'hr-lightmode',
-                        'my-4'
-                    ]">
+                    <hr class="hr my-4">
 
                     <div class="row">
                         <div class="col-12 col-sm-6 offset-sm-3">

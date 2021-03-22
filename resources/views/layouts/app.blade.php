@@ -18,7 +18,7 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
 
-    <body style="background-color: {{ ($pageData["darkmode"] ?? true)  ? 'hsl(210, 60%, 2%)' : 'hsl(210, 40%, 98%)' }};">
+    <body class="{{ $pageData["darkmode"] ? "" : "lightmode" }}">
         <div id="darkmode-status" style="display: none;">{{ $pageData["darkmode"] ?? true }}</div>
         <div id="app">
             @include('layouts.navbar', compact("pageData"))

@@ -19,7 +19,7 @@
 	</header>
 
 	<!-- Icons Grid -->
-	<section class="welcome-bg-change-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode features-icons text-center">
+	<section class="welcome-bg-change features-icons text-center">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-4">
@@ -57,7 +57,7 @@
 	</section>
 
 	<!-- Image Showcases -->
-	<section class="showcase-{{ $pageData["darkmode"] ? 'dark' : 'light' }}">
+	<section class="showcase">
 		<div class="container-fluid p-0">
 			<div class="row no-gutters">
 				<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg');"></div>

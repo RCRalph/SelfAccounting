@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-user"></i>
@@ -21,18 +21,12 @@
                             :userDataCopy="userData"
                         ></ProfileInfoChange>
 
-						<hr :class="[
-                            darkmode ? 'hr-darkmode' : 'hr-lightmode',
-                            'my-3'
-                        ]">
+						<hr class="hr my-3">
 
                         <ProfilePasswordChange></ProfilePasswordChange>
 
                         <div v-if="userData.id != 1">
-                            <hr :class="[
-                                darkmode ? 'hr-darkmode' : 'hr-lightmode',
-                                'my-3'
-                            ]">
+                            <hr class="hr my-3">
 
                             <div class="row">
                                 <div class="col-12 col-xl-6 offset-xl-3">

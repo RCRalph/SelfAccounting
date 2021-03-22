@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-xl navbar-{{ ($pageData["darkmode"] ?? true) ? 'dark' : 'light' }}mode shadow-sm">
+<nav class="navbar navbar-expand-xl shadow-sm">
     <div class="container">
         <a class="navbar-brand" @auth href="/summary" @else href="/" @endauth>
             <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -11,7 +11,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto" id="navbar-left-side">
                 @auth
                     <li>
                         <a class="nav-link" href="/income">
@@ -132,7 +132,7 @@
                 @else
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle py-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <img class="profile-img-{{ $pageData["darkmode"] ? 'darkmode' : 'lightmode' }}" src="{{ $pageData["profile_picture"] }}" alt="{{ auth()->user()->username }}">
+                            <img class="profile-img" src="{{ $pageData["profile_picture"] }}" alt="{{ auth()->user()->username }}">
                             <span class="caret"></span>
                         </a>
 

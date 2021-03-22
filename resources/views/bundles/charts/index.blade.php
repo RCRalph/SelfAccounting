@@ -1,7 +1,7 @@
 @extends('layouts.width8')
 
 @section('content')
-    <div class="{{ $pageData["darkmode"] ? "dark-card" : "card" }}">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-chart-bar"></i>
@@ -12,13 +12,13 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    <a role="button" href="/bundles/charts/presence" class="big-button-primary btn-lg">
+                    <a role="button" href="/bundles/charts/presence" class="big-button-opposite btn-lg">
                         Edit chart presence
                     </a>
                 </div>
             </div>
 
-            <hr class="{{ $pageData["darkmode"] ? "hr-darkmode-dashed" : "hr-lightmode-dashed" }}">
+            <hr class="hr-dashed">
 
             @foreach ($charts as $groupIndex => $group)
                 <div class="row">
@@ -27,9 +27,8 @@
                             <a href="/bundles/charts/{{ $chart["directory"] }}" class="text-decoration-none">
                                 <div
                                     class="chart-gallery-block"
-                                    style="background-color: rgb({{ implode(",", $chart["background"]) }})"
                                 >
-                                    <div class="chart-gallery-element-{{ $chart["color"] }}">
+                                    <div class="chart-gallery-element">
                                         <div class="chart-title">
                                             {{ $chart["title"] }}
                                         </div>
@@ -45,7 +44,7 @@
                 </div>
 
                 @if ($groupIndex <= count($charts) - 2)
-                    <hr class="hr-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode-dashed">
+                    <hr class="hr-dashed">
                 @endif
             @endforeach
         </div>

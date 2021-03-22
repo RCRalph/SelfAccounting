@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i
@@ -22,7 +22,7 @@
                     :titles="titles"
                 ></CreateForm>
 
-                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+                <hr class="hr">
 
                 <div class="row">
                     <div class="col-12 col-sm-4 offset-sm-4">
