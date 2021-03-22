@@ -1,7 +1,7 @@
 @extends('layouts.width8')
 
 @section('content')
-    <div class="{{ $pageData["darkmode"] ? "dark-card" : "card" }}">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-chart-bar"></i>
@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <hr class="{{ $pageData["darkmode"] ? "hr-darkmode-dashed" : "hr-lightmode-dashed" }}">
+            <hr class="hr-dashed">
 
             @foreach ($charts as $groupIndex => $group)
                 <div class="row">
@@ -44,7 +44,7 @@
                 </div>
 
                 @if ($groupIndex <= count($charts) - 2)
-                    <hr class="hr-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode-dashed">
+                    <hr class="hr-dashed">
                 @endif
             @endforeach
         </div>

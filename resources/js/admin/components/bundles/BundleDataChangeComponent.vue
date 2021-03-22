@@ -46,7 +46,7 @@
                 </div>
             </div>
 
-            <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'">
+            <hr class="hr-dashed">
 
             <div>
                 <div class="h3 text-center font-weight-bold">Short Description</div>
@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-            <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'">
+            <hr class="hr-dashed">
 
             <div>
                 <div class="h3 text-center font-weight-bold">Description</div>
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+            <hr class="hr-dashed">
 
             <SaveResetChanges
                 :disableAll="submitted"

@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'profile-wrapper-dark' : 'profile-wrapper-light'">
+    <div class="profile-wrapper">
         <div class="profile-picture">
             <img :src="userData.profile_picture" :alt="userData.username">
         </div>

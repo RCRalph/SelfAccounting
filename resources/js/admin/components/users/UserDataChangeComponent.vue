@@ -5,7 +5,7 @@
 
         <div class="h1 font-weight-bold text-center mb-0">Main info</div>
 
-        <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+        <hr class="hr-dashed">
 
         <div>
             <InputGroup
@@ -36,10 +36,7 @@
                         !validFile && 'is-invalid'
                     ]">
 
-                    <img :src="userData.profile_picture" style="height: 37px; width: 37px;" alt="Profile picture" :class="[
-                        darkmode ? 'profile-img-darkmode' : 'profile-image-lightmode',
-                        'ml-2'
-                    ]">
+                    <img :src="userData.profile_picture" style="height: 37px; width: 37px;" alt="Profile picture" class="profile-img ml-2">
                 </div>
             </div>
 
@@ -50,16 +47,11 @@
             ></InputGroup>
         </div>
 
-        <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+        <hr class="hr-dashed">
 
         <div class="row">
             <div class="table-responsive col-md-6 offset-md-3">
-                <table :class="[
-                    'responsive-table-bordered',
-                    'table-hover',
-                    'mb-0',
-                    darkmode ? 'table-darkmode' : 'table-lightmode'
-                ]">
+                <table class="responsive-table-bordered table-hover mb-0 table-themed">
                     <tbody>
                         <tr>
                             <th scope="row">Darkmode</th>
@@ -84,7 +76,7 @@
             </div>
         </div>
 
-        <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+        <hr class="hr-dashed">
 
         <SaveResetChanges
             :disableAll="submit"

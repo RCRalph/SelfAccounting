@@ -31,10 +31,10 @@
         }
     }
 
-    @include change-text-brightness(lighten-premium, $color1, $color2);
+    @include change-text-brightness(#{"lighten-premium-" + $color}, $color1, $color2);
 
     .premium {
-        animation: lighten-premium 3s infinite;
+        animation: #{"lighten-premium-" + $color} 3s infinite;
     }
 
     .username {

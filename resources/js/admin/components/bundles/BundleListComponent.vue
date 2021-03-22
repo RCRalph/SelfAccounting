@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-box-open"></i>
@@ -18,10 +18,7 @@
                 <div v-if="paginationData.data.length">
                     <div class="table-responsive-xl w-100">
                         <table
-                            :class="[
-                                'responsive-table-hover',
-                                darkmode ? 'table-darkmode' : 'table-lightmode'
-                            ]"
+                            class="responsive-table-hover table-themed"
                         >
                             <thead>
                                 <th scope="col" class="h3 font-weight-bold">ID</th>

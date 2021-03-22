@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-box-open"></i>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
 
-                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+                    <hr class="hr-dashed">
 
                     <div>
                         <div class="h3 text-center font-weight-bold">Short Description</div>
@@ -71,7 +71,7 @@
                         </div>
                     </div>
 
-                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+                    <hr class="hr-dashed">
 
                     <div>
                         <div class="h3 text-center font-weight-bold">Description</div>
@@ -85,7 +85,7 @@
                         </div>
                     </div>
 
-                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'" >
+                    <hr class="hr-dashed">
 
                     <div class="row">
                         <div class="col-md-4 offset-md-4">

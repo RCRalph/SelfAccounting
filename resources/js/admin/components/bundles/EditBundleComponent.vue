@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-box-open"></i>
@@ -17,7 +17,7 @@
                     @reset-form="resetForm"
                 ></BundleDataChange>
 
-                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+                <hr class="hr">
 
                 <div>
                     <div class="d-flex justify-content-between align-items-center mx-xl-4 mb-3">
@@ -33,10 +33,7 @@
                     </div>
 
                     <div class="table-responsive-xl" v-if="gallery.length">
-                        <table :class="[
-                            'responsive-table-bordered',
-                            darkmode ? 'table-darkmode' : 'table-lightmode'
-                        ]">
+                        <table class="responsive-table-bordered table-themed">
                             <thead>
                                 <tr>
                                     <th scope="col" class="h3 font-weight-bold">ID</th>
@@ -63,7 +60,7 @@
 
                     <EmptyPlaceholder v-else></EmptyPlaceholder>
 
-                    <hr :class="darkmode ? 'hr-darkmode-dashed' : 'hr-lightmode-dashed'">
+                    <hr class="hr-dashed">
 
                     <SaveResetChanges
                         :disableAll="imageSubmit"
@@ -73,7 +70,7 @@
                     ></SaveResetChanges>
                 </div>
 
-                <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+                <hr class="hr">
 
                 <div class="row">
                     <div class="col-12 col-sm-6 offset-sm-3">

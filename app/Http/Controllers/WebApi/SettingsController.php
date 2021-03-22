@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WebApi;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 use App\Currency;
 use App\Category;
@@ -173,6 +174,8 @@ class SettingsController extends Controller
         ])["darkmode"];
 
         auth()->user()->update(compact("darkmode"));
+        $id = auth()->user()->id;
+        Cache::forget("page-render-data-$id");
 
         return response("", 200);
     }

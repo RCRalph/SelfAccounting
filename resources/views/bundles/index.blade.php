@@ -1,7 +1,7 @@
 @extends('layouts.width10')
 
 @section('content')
-    <div class="{{ $pageData["darkmode"] ? "dark-card" : "card" }}">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-box-open"></i>
@@ -14,7 +14,7 @@
                 @forelse($bundles as $bundle)
                     <div class="col-12 col-lg-6 my-2">
                         <a href="/bundles/{{ $bundle->id }}" class="text-decoration-none">
-                            <div class="bundle-wrapper-{{ $pageData["darkmode"] ? "dark" : "light" }}">
+                            <div class="bundle-wrapper">
                                 <div class="image" style="background-image: url({{ $bundle->thumbnail }});"></div>
 
                                 <div class="title">

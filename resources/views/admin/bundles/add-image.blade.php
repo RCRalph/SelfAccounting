@@ -1,7 +1,7 @@
 @extends('layouts.width8')
 
 @section('content')
-    <div class="{{ $pageData["darkmode"] ? "dark-card" : "card" }}">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-box-open"></i>

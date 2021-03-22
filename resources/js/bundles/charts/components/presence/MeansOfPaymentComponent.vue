@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fab fa-buffer"></i>
@@ -25,10 +25,7 @@
                 v-if="content[currentCurrency].length"
                 class="table-responsive-lg"
             >
-                <table :class="[
-                    'responsive-table-hover',
-                    darkmode ? 'table-darkmode' : 'table-lightmode'
-                ]">
+                <table class="responsive-table-hover table-themed">
                     <TableHeader
                         :cells="header"
                     ></TableHeader>
@@ -74,7 +71,7 @@
 
             <EmptyPlaceholder v-else></EmptyPlaceholder>
 
-            <hr :class="darkmode ? 'hr-darkmode' : 'hr-lightmode'">
+            <hr class="hr">
 
             <SaveResetChanges
                 @save="save"

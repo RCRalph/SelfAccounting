@@ -113,30 +113,16 @@ header.masthead {
 }
 
 .welcome-bg {
-    &-light {
-        background-color: white;
-        color: black;
-    }
-
-    &-dark {
-        background-color: #1a1d20;
-        color: white;
-    }
+    background-color: #1a1d20;
+    color: white;
 }
 
 .showcase {
-    &-light {
-        @extend .showcase;
-        @extend .welcome-bg-light;
-    }
-
-    &-dark {
-        @extend .showcase;
-        @extend .welcome-bg-dark;
-    }
+    background-color: #1a1d20;
+    color: white;
 
     .showcase-text {
-      padding: 3rem;
+        padding: 3rem;
     }
 
     .showcase-img {
@@ -153,13 +139,6 @@ header.masthead {
 }
 
 .welcome-bg-change {
-    &-lightmode {
-        @extend .bg-light;
-        @extend .text-dark;
-    }
-
-    &-darkmode {
-        @extend .bg-dark;
-        @extend .text-light;
-    }
+    @extend .bg-dark;
+    @extend .text-light;
 }

@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkmode ? 'dark-card' : 'card'">
+    <div class="card">
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-file-invoice-dollar"></i>
@@ -23,7 +23,7 @@
             <div v-if="ready && content[currentCurrency]">
                 <div class="row">
                     <div class="mx-auto mb-3 col-md-12 col-lg-8 offset-lg-2">
-                        <div :class="darkmode ? 'dark-card' : 'card'">
+                        <div class="card">
                             <div class="card-header">
                                 <div class="m-auto text-center font-weight-bold h2">
                                     Sum
@@ -36,12 +36,7 @@
                 </div>
 
                 <div class="table-responsive-xl w-100">
-                    <table
-                        :class="[
-                            'responsive-table-hover',
-                            darkmode ? 'table-darkmode' : 'table-lightmode'
-                        ]"
-                    >
+                    <table class="responsive-table-hover table-themed">
                         <thead>
                             <tr>
                                 <th scope="col" class="h3 font-weight-bold">Type</th>
