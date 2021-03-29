@@ -455,41 +455,6 @@ class ChartsController extends Controller
                 ]);
             }
 		}
-		/*
-        foreach ($dataByCurrency as $currencyId => $datasets) {
-            $dataByCurrency = [];
-            foreach ($datasets as $dataset) {
-                foreach ($dataset as $mean) {
-                    $dataByCurrency = array_merge($dataByCurrency, $mean["data"]);
-                }
-            }
-
-            usort($dataByCurrency, fn ($a, $b) => strtotime($a["t"]) > strtotime($b["t"]));
-            $retArr = [];
-            foreach ($dataByCurrency as $point) {
-                if (!isset($retArr[$point["t"]])) {
-                    $retArr[$point["t"]] = $point["y"];
-                }
-                else {
-                    $retArr[$point["t"]] += $point["y"];
-                }
-            }
-
-            $sumData = [];
-            foreach ($retArr as $t => $y) {
-                array_push($sumData, ["t" => $t, "y" => $y]);
-            }
-
-            $count--;
-            array_push($data[$currencyId]["datasets"], [
-                "label" => "Sum",
-                "steppedLine" => true,
-                "data" => $sumData,
-				"fill" => false,
-				"borderWidth" => 5,
-				"borderColor" => $colors[$count]
-            ]);
-        }*/
 
 		// Options for chart
         $options = [
