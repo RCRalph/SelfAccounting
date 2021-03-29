@@ -333,7 +333,10 @@ class ChartsController extends Controller
                 }
             }
 
-            $differenceByMeans->get($meanID)->sortKeys();
+            $differenceByMeans->put($meanID,
+                $differenceByMeans->get($meanID)
+                    ->sortBy(fn ($val, $key) => strtotime($key))
+            );
         }
 
         // Sum the differences to create collection of balance
@@ -345,10 +348,7 @@ class ChartsController extends Controller
             ]);
 
             foreach ($differences as $date => $difference) {
-                if ($date == $firstKey) {
-                    continue;
-                }
-
+                if ($date == $firstKey) continue;
                 $retArr->put($date, $retArr->last() + $difference);
             }
 
@@ -360,9 +360,13 @@ class ChartsController extends Controller
 		$lastDate = "1970-01-01";
 
         // Add proper chart colors
-        $count = $balanceByMeans->count();
+        $count = $balanceByMeans->count() + $means
+            ->map(fn ($item) => $item->currency_id)
+            ->unique()->count();
         $colors = $count ? $this->getColors($count) : [];
+		$differencesByCurrency = [];
 
+        // Create chart data
         foreach ($balanceByMeans as $meanID => $balance) {
 			$mean = $means->where("id", $meanID)->first();
 
@@ -393,8 +397,99 @@ class ChartsController extends Controller
 				}
             }
 
+            usort($retArr["data"], fn ($a, $b) => strtotime($a["t"]) > strtotime($b["t"]));
+
             array_push($data[$mean->currency_id]["datasets"], $retArr);
+
+			if (isset($differencesByCurrency[$mean->currency_id])) {
+				array_push($differencesByCurrency[$mean->currency_id], $differenceByMeans[$meanID]);
+			}
+			else {
+				$differencesByCurrency[$mean->currency_id] = [$differenceByMeans[$meanID]];
+			}
 		}
+
+		// Create sums by currency
+		foreach ($differencesByCurrency as $currencyId => $values) {
+            // Get array with "t" key as date and "y" key as value
+			$datesAndDifferences = [];
+			foreach ($values as $differencesByDate) {
+				foreach ($differencesByDate as $date => $value) {
+					array_push($datesAndDifferences, [
+						"t" => $date,
+						"y" => $value
+					]);
+				}
+			}
+
+			usort($datesAndDifferences, fn ($a, $b) => strtotime($a["t"]) > strtotime($b["t"]));
+            if (count($datesAndDifferences)) {
+                // Sum data by dates
+                $sumData = [$datesAndDifferences[0]["t"] => $datesAndDifferences[0]];
+                foreach ($datesAndDifferences as $i => $value) {
+                    if ($i == 0) continue;
+
+                    if ($value["t"] == array_key_last($sumData)) {
+                        $sumData[$value["t"]]["y"] += $value["y"];
+                    }
+                    else {
+                        $lastElement = $sumData[array_key_last($sumData)];
+                        $sumData[array_key_last($sumData)]["y"] = round($lastElement["y"], 2);
+                        $sumData[$value["t"]] = [
+                            "t" => $value["t"],
+                            "y" => $lastElement["y"] + $value["y"]
+                        ];
+                    }
+                }
+                $sumData[array_key_last($sumData)]["y"] = round($sumData[array_key_last($sumData)]["y"], 2);
+                $sumData = array_values($sumData);
+
+                $count--;
+                array_push($data[$currencyId]["datasets"], [
+                    "label" => "Sum",
+                    "steppedLine" => true,
+                    "data" => $sumData,
+                    "fill" => false,
+                    "borderWidth" => 5,
+                    "borderColor" => $colors[$count]
+                ]);
+            }
+		}
+		/*
+        foreach ($dataByCurrency as $currencyId => $datasets) {
+            $dataByCurrency = [];
+            foreach ($datasets as $dataset) {
+                foreach ($dataset as $mean) {
+                    $dataByCurrency = array_merge($dataByCurrency, $mean["data"]);
+                }
+            }
+
+            usort($dataByCurrency, fn ($a, $b) => strtotime($a["t"]) > strtotime($b["t"]));
+            $retArr = [];
+            foreach ($dataByCurrency as $point) {
+                if (!isset($retArr[$point["t"]])) {
+                    $retArr[$point["t"]] = $point["y"];
+                }
+                else {
+                    $retArr[$point["t"]] += $point["y"];
+                }
+            }
+
+            $sumData = [];
+            foreach ($retArr as $t => $y) {
+                array_push($sumData, ["t" => $t, "y" => $y]);
+            }
+
+            $count--;
+            array_push($data[$currencyId]["datasets"], [
+                "label" => "Sum",
+                "steppedLine" => true,
+                "data" => $sumData,
+				"fill" => false,
+				"borderWidth" => 5,
+				"borderColor" => $colors[$count]
+            ]);
+        }*/
 
 		// Options for chart
         $options = [

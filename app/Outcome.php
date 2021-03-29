@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use App\User;
 use App\Method;
@@ -12,6 +13,8 @@ use App\MeanOfPayment;
 
 class Outcome extends Model
 {
+    use HasFactory;
+
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $fillable = [

@@ -15,13 +15,13 @@ class CreateOutcomesTable extends Migration
     {
         Schema::create('outcomes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->date('date');
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);
-            $table->foreignId('category_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('mean_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->foreignId('mean_id')->nullable()->constrained('mean_of_payments')->onDelete('set null');
             $table->foreignId('currency_id');
             $table->timestamps(6);
 
