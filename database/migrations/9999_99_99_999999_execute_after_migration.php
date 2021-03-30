@@ -34,6 +34,17 @@ class ExecuteAfterMigration extends Migration
                     "u1EWxwhhvZyRKQLg7PKXOkyicZcys4mLk3zzPPKfJylRS5Fa2t.png",
                     "vxu6OFsLnzuuBgreyqR78fM9kYehIYqZlD9ZZcqi0iOw86Y9rZ.png"
                 ]
+            ],
+            [
+                "title" => "Backup data",
+                "code" => "backup",
+                "price" => 2.5,
+                "short_description" => "Create backups of your data",
+                "thumbnail" => "dsakjd.png",
+                "description" => "Dupa dupa ***123***.",
+                "gallery" => [
+
+                ]
             ]
         ];
 

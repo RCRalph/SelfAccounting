@@ -51,6 +51,10 @@ class Controller extends BaseController
                     "charts" => [
                         "icon" => "fas fa-chart-bar",
                         "directory" => "charts"
+                    ],
+                    "backup" => [
+                        "icon" => "fas fa-hdd",
+                        "directory" => "backup"
                     ]
                 ];
 

@@ -81,6 +81,10 @@ Route::prefix('/bundles')->group(function() {
         Route::get('/outcome-by-means-of-payment', 'Bundles\ChartsController@outcomeByMeans')->name('bundles.charts.outcome-by-means');
     });
 
+    Route::prefix('/backup')->group(function() {
+        Route::get('/', 'Bundles\BackupController@index')->name('bundles.backup.index');
+    });
+
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 
@@ -144,6 +148,11 @@ Route::prefix('/webapi')->group(function() {
             Route::get('/outcome-by-categories', 'Bundles\WebApi\ChartsController@outcomeByCategories')->name('webapi.bundles.charts.outcome-by-categories');
             Route::get('/income-by-means-of-payment', 'Bundles\WebApi\ChartsController@incomeByMeans')->name('webapi.bundles.charts.income-by-means');
             Route::get('/outcome-by-means-of-payment', 'Bundles\WebApi\ChartsController@outcomeByMeans')->name('webapi.bundles.charts.outcome-by-means');
+        });
+
+        Route::prefix('/backup')->group(function() {
+            Route::get('/', 'Bundles\WebApi\BackupController@index')->name('webapi.bundles.backup.index');
+            Route::get('/create', 'Bundles\WebApi\BackupController@createBackup')->name('webapi.bundles.backup.create');
         });
 
         Route::prefix('/{bundle}')->group(function() {

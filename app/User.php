@@ -12,6 +12,7 @@ use App\Category;
 use App\Income;
 use App\MeanOfPayment;
 use App\Bundle;
+use App\Backup;
 
 class User extends Authenticatable
 {
@@ -74,5 +75,10 @@ class User extends Authenticatable
     public function premium_bundles()
     {
         return $this->belongsToMany(Bundle::class, "bundle_user_premium", "user_id", "bundle_id");
+    }
+
+    public function backup()
+    {
+        return $this->hasOne(Backup::class);
     }
 }
