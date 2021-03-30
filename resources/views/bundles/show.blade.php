@@ -13,7 +13,7 @@
             @if (count($gallery))
                 <div class="d-flex justify-content-center align-items-center w-100" style="max-height: 400px;">
                     <div id="image-gallery" class="carousel slide w-75" data-ride="carousel">
-                        <ol class="carousel-indicators carousel-{{ $pageData["darkmode"] ? 'dark' : 'light' }}mode">
+                        <ol class="carousel-indicators carousel-control-color">
                             @foreach ($gallery as $index => $image)
                                 <li
                                     data-target="#image-gallery"

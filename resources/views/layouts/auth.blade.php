@@ -19,7 +19,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="{{ $pageData["darkmode"] ? "" : "lightmode" }}">
+<body class="{{ ($pageData["darkmode"] ?? true) ? "" : "lightmode" }}">
     <div id="darkmode-status" style="display: none;">{{ $pageData["darkmode"] ?? "1" }}</div>
 
     <div id="app">

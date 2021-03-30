@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use App\User;
 use App\Income;
@@ -11,6 +12,8 @@ use App\Currency;
 
 class Category extends Model
 {
+    use HasFactory;
+
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $guarded = [];

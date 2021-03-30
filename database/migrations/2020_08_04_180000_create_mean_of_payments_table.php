@@ -18,9 +18,9 @@ class CreateMeanOfPaymentsTable extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('currency_id');
             $table->string('name', 32);
-            $table->boolean('income_mean');
-            $table->boolean('outcome_mean');
-            $table->boolean('count_to_summary');
+            $table->boolean('income_mean')->default(true);
+            $table->boolean('outcome_mean')->default(true);
+            $table->boolean('count_to_summary')->default(true);
             $table->boolean('show_on_charts')->default(true);
             $table->date('first_entry_date');
             $table->decimal('first_entry_amount', 13, 2);
