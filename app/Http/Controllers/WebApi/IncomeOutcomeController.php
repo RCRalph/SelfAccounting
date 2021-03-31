@@ -65,7 +65,6 @@ class IncomeOutcomeController extends Controller
                 $means[$currency["id"]] = [$nullArray];
             }
         }
-        //dd($means);
 
         $incomeOutcome = auth()->user()->income
             ->merge(auth()->user()->outcome)

@@ -57,7 +57,11 @@ export default {
             axios
                 .get("/webapi/bundles/backup/create")
                 .then(response => {
-                    console.log(response);
+                    const data = response.data;
+
+                    // Download the file
+
+                    this.canCreate = false;
                 })
                 .catch(err => {
 

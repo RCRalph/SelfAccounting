@@ -40,6 +40,43 @@ class BackupController extends Controller
 
     public function createBackup()
     {
+        $this->authorize("createBackup", Backup::class);
 
+        // Gather categories
+        $categories = auth()->user()->categories
+            ->map(fn ($item) => collect($item)->except("user_id", "created_at", "updated_at"));
+        $categoriesIDs = [];
+        foreach ($categories as $i => $category) {
+            $categoriesIDs[$category["id"]] = $i + 1;
+            unset($category["id"]);
+        }
+
+        // Gather means of payment
+        $means = auth()->user()->meansOfPayment
+            ->map(fn ($item) => collect($item)->except("user_id", "created_at", "updated_at"));
+        $meansIDs = [];
+        foreach ($means as $i => $mean) {
+            $meansIDs[$mean["id"]] = $i + 1;
+            unset($mean["id"]);
+        }
+
+        // Gather income
+        $income = auth()->user()->income
+            ->map(function ($item) use ($categoriesIDs, $meansIDs) {
+                $item = collect($item)->except("id", "user_id", "created_at", "updated_at");
+                $item["category_id"] = $item["category_id"] == null ? 0 : $categoriesIDs[$item["category_id"]];
+                $item["mean_id"] = $item["mean_id"] == null ? 0 : $meansIDs[$item["mean_id"]];
+                return $item;
+            });
+
+        $outcome = auth()->user()->outcome
+        ->map(function ($item) use ($categoriesIDs, $meansIDs) {
+            $item = collect($item)->except("id", "user_id", "created_at", "updated_at");
+            $item["category_id"] = $item["category_id"] == null ? 0 : $categoriesIDs[$item["category_id"]];
+            $item["mean_id"] = $item["mean_id"] == null ? 0 : $meansIDs[$item["mean_id"]];
+            return $item;
+        });
+
+        return response()->json(compact("categories", "means", "income", "outcome"));
     }
 }
