@@ -59,12 +59,21 @@ export default {
                 .then(response => {
                     const data = response.data;
 
-                    // Download the file
+                    // Create file
+                    const download = document.createElement("a");
+                    download.style.display = "none";
+                    download.href = `data:application/octet-stream;charset:utf-8,${encodeURIComponent(JSON.stringify(data))}`;
+                    download.download = `${new Date().toISOString().split("T")[0]}.selfacc`;
+
+                    // Download file
+                    document.body.appendChild(download);
+                    download.click();
+                    download.body.removeChild(download);
 
                     this.canCreate = false;
                 })
                 .catch(err => {
-
+                    console.log(err);
                 })
                 .finally(() => {
                     this.createSpinner = false;
