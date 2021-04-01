@@ -20,8 +20,8 @@ class BackupController extends Controller
         if (!auth()->user()->backup) {
             Backup::insert([
                 "user_id" => auth()->user()->id,
-                "last_backup" => Carbon::now()->subDays(1),
-                "last_restoration" => Carbon::now()->subDays(1)
+                "last_backup" => now()->subDays(1),
+                "last_restoration" => now()->subDays(1)
             ]);
 
             return response()->json([
@@ -33,8 +33,8 @@ class BackupController extends Controller
         $lastRestoration = Carbon::parse(auth()->user()->backup->last_restoration);
 
         return response()->json([
-            "canCreate" => Carbon::now()->subDays(1)->gte($lastBackup),
-            "canRestore" => Carbon::now()->subDays(1)->gte($lastRestoration)
+            "canCreate" => now()->subDays(1)->gte($lastBackup),
+            "canRestore" => now()->subDays(1)->gte($lastRestoration)
         ]);
     }
 
@@ -70,12 +70,15 @@ class BackupController extends Controller
             });
 
         $outcome = auth()->user()->outcome
-        ->map(function ($item) use ($categoriesIDs, $meansIDs) {
-            $item = collect($item)->except("id", "user_id", "created_at", "updated_at");
-            $item["category_id"] = $item["category_id"] == null ? 0 : $categoriesIDs[$item["category_id"]];
-            $item["mean_id"] = $item["mean_id"] == null ? 0 : $meansIDs[$item["mean_id"]];
-            return $item;
-        });
+            ->map(function ($item) use ($categoriesIDs, $meansIDs) {
+                $item = collect($item)->except("id", "user_id", "created_at", "updated_at");
+                $item["category_id"] = $item["category_id"] == null ? 0 : $categoriesIDs[$item["category_id"]];
+                $item["mean_id"] = $item["mean_id"] == null ? 0 : $meansIDs[$item["mean_id"]];
+                return $item;
+            });
+
+        $backup = auth()->user()->backup
+            ->update(["last_backup" => now()]);
 
         return response()->json(compact("categories", "means", "income", "outcome"));
     }

@@ -12652,6 +12652,47 @@ header.masthead h1 {
   background-color: #fff;
 }
 
+.lightmode .big-button-opposite {
+  color: #fff;
+  background-color: #070605;
+  border-color: #070605;
+}
+
+.lightmode .big-button-opposite:hover {
+  color: #fff;
+  background-color: black;
+  border-color: black;
+}
+
+.lightmode .big-button-opposite:focus,
+.lightmode .big-button-opposite.focus {
+  color: #fff;
+  background-color: black;
+  border-color: black;
+  box-shadow: 0 0 0 0.2rem rgba(44, 43, 43, 0.5);
+}
+
+.lightmode .big-button-opposite.disabled,
+.lightmode .big-button-opposite:disabled {
+  color: #fff;
+  background-color: #070605;
+  border-color: #070605;
+}
+
+.lightmode .big-button-opposite:not(:disabled):not(.disabled):active,
+.lightmode .big-button-opposite:not(:disabled):not(.disabled).active,
+.show > .lightmode .big-button-opposite.dropdown-toggle {
+  color: #fff;
+  background-color: black;
+  border-color: black;
+}
+
+.lightmode .big-button-opposite:not(:disabled):not(.disabled):active:focus,
+.lightmode .big-button-opposite:not(:disabled):not(.disabled).active:focus,
+.show > .lightmode .big-button-opposite.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(44, 43, 43, 0.5);
+}
+
 /*!
  * Font Awesome Free 5.15.3 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)

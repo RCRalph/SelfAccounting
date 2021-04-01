@@ -285,7 +285,7 @@ class ChartsController extends Controller
             );
 
         // Add first entry amounts of means to income by means by dates
-        foreach ($means as $mean) {
+        foreach ($means->where("show_on_charts", true) as $mean) {
             if ($incomeByMeans->has($mean->id)) {
                 $incomeMean = $incomeByMeans->get($mean->id);
 

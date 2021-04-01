@@ -68,4 +68,8 @@
         @extend .text-dark;
         background-color: #fff;
     }
+
+    .big-button-opposite {
+        @include button-variant(#070605, #070605);
+    }
 }

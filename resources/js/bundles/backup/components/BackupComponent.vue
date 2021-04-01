@@ -9,9 +9,19 @@
 
         <div class="card-body">
             <div v-if="ready">
+                <div style="display: none;">
+                    <input id="file-input" type="file" @change="readFile" accept=".selfacc">
+                </div>
+
                 <div class="row">
-                    <div class="col-lg-4 offset-lg-2">
-                        <button class="big-button-primary" :disabled="!canCreate || createSpinner" @click="createBackup">
+                    <div class="col-lg-4 offset-lg-2 my-lg-0 my-2">
+                        <button class="big-button-primary"
+                            :disabled="!canCreate || createSpinner"
+                            @click="createBackup"
+                            :data-toggle="!canCreate && 'tooltip'"
+                            :data-placement="!canCreate && 'bottom'"
+                            :title="!canCreate && 'You can only create one backup per day'"
+                        >
                             <div v-if="!createSpinner">
                                 Create backup
                             </div>
@@ -24,8 +34,9 @@
                             ></span>
                         </button>
                     </div>
-                    <div class="col-lg-4">
-                        <button class="big-button-primary" :disabled="!canRestore">Restore from file</button>
+
+                    <div class="col-lg-4 my-lg-0 my-2">
+                        <button class="big-button-primary" :disabled="!canRestore" @click="restoreData">Restore from file</button>
                     </div>
                 </div>
             </div>
@@ -68,16 +79,29 @@ export default {
                     // Download file
                     document.body.appendChild(download);
                     download.click();
-                    download.body.removeChild(download);
+                    document.body.removeChild(download);
 
                     this.canCreate = false;
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     this.createSpinner = false;
                 })
+        },
+        restoreData() {
+            document.getElementById("file-input").click();
+        },
+        readFile() {
+            const file = document.getElementById("file-input").files[0];
+            const fileHandler = new File([file], { type: "application/json" });
+            fileHandler.text()
+                .then(data => JSON.parse(data))
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => console.error(err));
         }
     },
     beforeMount() {
@@ -97,6 +121,9 @@ export default {
     },
     beforeUpdate() {
         this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
+    },
+    updated() {
+        $('[data-toggle="tooltip"]').tooltip();
     }
 }
 </script>
