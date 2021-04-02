@@ -93,15 +93,150 @@ export default {
         restoreData() {
             document.getElementById("file-input").click();
         },
+		isValidString(str, min, max) {
+			return typeof str == "string" && str.length >= min && str.length <= max;
+		},
+		isBetweenNumbers(num, min, max) {
+			return typeof num == "number" && num >= min && num <= max;
+		},
+		isObject(obj) {
+			return typeof obj == "object" && !Array.isArray(obj) && obj !== null;
+		},
+        isDate(str) {
+            return typeof str == "string" && !isNaN(Date.parse(str));
+        },
+		checkCategories(categories) {
+			// Validate data
+            let validationResult = [];
+			categories.forEach(item => {
+                let validation = [
+                    this.isBetweenNumbers(item.currency_id, 1, 8) && Math.floor(item.currency_id) == item.currency_id,
+                    this.isValidString(item.name, 1, 32),
+                    typeof item.income_category == "boolean",
+                    typeof item.outcome_category == "boolean",
+                    typeof item.count_to_summary == "boolean",
+                    typeof item.show_on_charts == "boolean",
+                    item.start_date === null || this.isDate(item.start_date),
+                    item.end_date === null || this.isDate(item.end_date),
+                ];
+
+                validationResult.push(validation.reduce((item1, item2) => item1 && item2));
+			});
+
+            if (!validationResult.reduce((item1, item2) => item1 && item2)) {
+                return false;
+            }
+
+            // Map categories to their currencies if data is valid
+            let mappedCategories = {};
+            categories.forEach((item, index) => {
+                mappedCategories[index + 1] = item.currency_id;
+            });
+
+            return mappedCategories;
+		},
+        checkMeans(means) {
+            // Validate data
+            let validationResult = [];
+            means.forEach(item => {
+                let validation = [
+                    this.isBetweenNumbers(item.currency_id, 1, 8) && Math.floor(item.currency_id) == item.currency_id,
+                    this.isValidString(item.name, 1, 32),
+                    typeof item.income_mean == "boolean",
+                    typeof item.outcome_mean == "boolean",
+                    typeof item.count_to_summary == "boolean",
+                    typeof item.show_on_charts == "boolean",
+                    this.isDate(item.first_entry_date),
+                    this.isBetweenNumbers(item.first_entry_amount, -1e11 + 1, 1e11 - 1)
+                ];
+
+                validationResult.push(validation.reduce((item1, item2) => item1 && item2));
+            })
+
+            if (!validationResult.reduce((item1, item2) => item1 && item2)) {
+                return false;
+            }
+
+            // Map means to currencies and first entries if data is valid
+            let mappedMeans = {};
+            means.forEach((item, index) => {
+                mappedMeans[index + 1] = {
+                    currency: item.currency_id,
+                    first_entry: item.first_entry_date
+                };
+            });
+
+            return mappedMeans;
+        },
+		checkIncomeOutcomeData(data, categories, means) {
+			// Validate
+			let validationResult = [];
+			data.forEach(item => {
+				const validMean = item.mean_id == 0 || means[item.mean_id].currency == item.currency_id,
+					validCategory = item.category_id == 0 || categories[item.category_id] == item.currency_id;
+				if (validMean && validCategory) {
+					let validation = [
+						this.isDate(item.date) && Date.parse(item.date) >= Date.parse(item.mean_id == 0 ? "1970" : means[item.mean_id].first_entry),
+						this.isValidString(item.title, 1, 64),
+						this.isBetweenNumbers(item.currency_id, 1, 8),
+                        this.isBetweenNumbers(item.amount, 0.001, 1e6 - 0.001),
+                        this.isBetweenNumbers(item.price, 0.01, 1e11 - 0.01)
+					];
+					validationResult.push(validation.reduce((item1, item2) => item1 && item2));
+				}
+				else {
+					validationResult.push(false);
+				}
+			});
+
+			return validationResult.reduce((item1, item2) => item1 && item2);
+		},
         readFile() {
+            // Get file content
             const file = document.getElementById("file-input").files[0];
             const fileHandler = new File([file], { type: "application/json" });
             fileHandler.text()
                 .then(data => JSON.parse(data))
                 .then(data => {
+					if (!this.isObject(data)) {
+						throw new Error("Invalid data wrapper (wrapper not an object)");
+					}
+
+					const keys = ["categories", "means", "income", "outcome"];
+					// Check data types of wrappers
+					keys.forEach(item => {
+						if (data[item] === undefined || !Array.isArray(data[item])) {
+							throw new Error(`Invalid data type (${item} not an array)`);
+						}
+					});
+
+					// Check data inside wrappers
+					let results = {};
+					keys.forEach(item => {
+						switch (item) {
+							case "categories":
+								results[item] = this.checkCategories(data.categories);
+								break;
+							case "means":
+								results[item] = this.checkMeans(data.means);
+								break;
+							case "income":
+							case "outcome":
+								results[item] = this.checkIncomeOutcomeData(data[item], results.categories, results.means);
+								console.log(results[item]);
+								break;
+						}
+
+						if (results[item] === false) {
+							throw new Error(`Invalid ${item} data`);
+						}
+					});
+
                     console.log(data);
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err);
+                });
         }
     },
     beforeMount() {
