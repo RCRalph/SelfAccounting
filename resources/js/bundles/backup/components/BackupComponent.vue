@@ -39,6 +39,12 @@
                         <button class="big-button-primary" :disabled="!canRestore" @click="restoreData">Restore from file</button>
                     </div>
                 </div>
+
+                <div class="row" v-if="dataToDisplay === false">
+                    <div class="h3 w-100 mt-3 font-weight-bold text-danger text-center">
+                        This file is invalid. Please try a&nbsp;different file.
+                    </div>
+                </div>
             </div>
 
             <Loading v-else></Loading>
@@ -59,7 +65,8 @@ export default {
             ready: false,
             canCreate: false,
             canRestore: false,
-            createSpinner: false
+            createSpinner: false,
+            dataToDisplay: true
         }
     },
     methods: {
@@ -223,7 +230,6 @@ export default {
 							case "income":
 							case "outcome":
 								results[item] = this.checkIncomeOutcomeData(data[item], results.categories, results.means);
-								console.log(results[item]);
 								break;
 						}
 
@@ -232,9 +238,10 @@ export default {
 						}
 					});
 
-                    console.log(data);
+                    this.dataToDisplay = data;
                 })
                 .catch(err => {
+                    this.dataToDisplay = false;
                     console.error(err);
                 });
         }
