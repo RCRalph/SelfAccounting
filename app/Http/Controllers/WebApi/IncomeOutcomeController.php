@@ -23,8 +23,7 @@ class IncomeOutcomeController extends Controller
 
     private function getData($viewType)
     {
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = Currency::all();
 
         $nullArray = [
             "id" => 0,

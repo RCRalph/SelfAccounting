@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 
 use App\Backup;
+use App\Currency;
 
 class BackupController extends Controller
 {
@@ -29,13 +30,18 @@ class BackupController extends Controller
                 "canRestore" => true
             ]);
         }
+        $currencies = Currency::all();
+
         $lastBackup = Carbon::parse(auth()->user()->backup->last_backup);
         $lastRestoration = Carbon::parse(auth()->user()->backup->last_restoration);
 
-        return response()->json([
-            "canCreate" => now()->subDays(1)->gte($lastBackup),
-            "canRestore" => now()->subDays(1)->gte($lastRestoration)
-        ]);
+        return response()->json(array_merge(
+            compact("currencies"),
+            [
+                "canCreate" => now()->subDays(1)->gte($lastBackup),
+                "canRestore" => now()->subDays(1)->gte($lastRestoration)
+            ]
+        ));
     }
 
     public function createBackup()

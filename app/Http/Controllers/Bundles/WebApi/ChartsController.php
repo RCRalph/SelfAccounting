@@ -43,8 +43,7 @@ class ChartsController extends Controller
         }
 
         // Get currency data
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = Currency::all();
 
         $lastCurrency = $this->getLastCurrency();
 
@@ -141,8 +140,7 @@ class ChartsController extends Controller
 
     public function getPresence()
     {
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = Currency::all();
 
         $categories = auth()->user()->categories
             ->map(fn ($item) => $item->only(
@@ -233,8 +231,7 @@ class ChartsController extends Controller
 
     public function balanceMonitor()
     {
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = Currency::all();
 
         // Pick only means and categories that have to be shown
         $means = auth()->user()->meansOfPayment;

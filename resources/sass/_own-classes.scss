@@ -233,3 +233,32 @@
     font-weight: bolder;
     animation: text-stand-out-animation 2s infinite;
 }
+
+.restore-table {
+    @extend .my-3;
+
+    .header {
+        @extend .h1;
+        @extend .font-weight-bold;
+        @extend .text-center;
+    }
+
+    &-content {
+        @extend .table-responsive-xl;
+        @extend .w-100;
+
+        table {
+            @extend .table-themed;
+            @extend .responsive-table-hover;
+
+            thead > th {
+                @extend .h5;
+                @extend .font-weight-bold;
+            }
+        }
+    }
+}
+
+.row-hover-bg {
+    background-color: rgba(255, 255, 255, 0.075);
+}

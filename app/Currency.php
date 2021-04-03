@@ -11,6 +11,12 @@ use App\MeanOfPayment;
 
 class Currency extends Model
 {
+    protected $guarded = [];
+
+    protected $hidden = [
+        "created_at", "updated_at"
+    ];
+
     public function income()
     {
         return $this->belongsToMany(Income::class);

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\Bundle;
 use App\BundleImage;
+use App\Currency;
 
 class ExecuteAfterMigration extends Migration
 {
@@ -18,6 +19,9 @@ class ExecuteAfterMigration extends Migration
      */
     public function up()
     {
+        // Set currencies
+        $currencies = ["USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "PLN"];
+
         // Set data of bundles
         $bundles = [
             [
@@ -49,6 +53,12 @@ class ExecuteAfterMigration extends Migration
         ];
 
         // Add records to database (if they don't exits)
+        foreach ($currencies as $currency) {
+            if (!Currency::where("ISO", $currency)->count()) {
+                Currency::create(["ISO" => $currency]);
+            }
+        }
+
         if (!User::find(1)) {
             User::create([
                 "username" => "Admin",

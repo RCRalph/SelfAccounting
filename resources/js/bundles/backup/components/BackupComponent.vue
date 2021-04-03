@@ -45,6 +45,32 @@
                         This file is invalid. Please try a&nbsp;different file.
                     </div>
                 </div>
+
+                <div v-else-if="dataToDisplay !== true">
+                    <RestoreTablesComponent
+                        :data="dataToDisplay"
+                        :currencies="currencies"
+                    ></RestoreTablesComponent>
+
+                    <hr class="hr">
+
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">
+                            <button class="big-button-success" @click="submitData" :disabled="submitSpinner">
+                                <div v-if="!submitSpinner">
+                                    Restore data
+                                </div>
+
+                                <span
+                                    v-else
+                                    class="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <Loading v-else></Loading>
@@ -54,10 +80,12 @@
 
 <script>
 import Loading from "../../../components/Loading.vue";
+import RestoreTablesComponent from "./RestoreTablesComponent.vue";
 
 export default {
     components: {
-        Loading
+        Loading,
+        RestoreTablesComponent
     },
     data() {
         return {
@@ -66,7 +94,9 @@ export default {
             canCreate: false,
             canRestore: false,
             createSpinner: false,
-            dataToDisplay: true
+            submitSpinner: false,
+            dataToDisplay: true,
+            currencies: []
         }
     },
     methods: {
@@ -112,12 +142,15 @@ export default {
         isDate(str) {
             return typeof str == "string" && !isNaN(Date.parse(str));
         },
+        isCurrency(cur) {
+            return typeof cur == "number" && this.currencies.map(item => item.id).includes(cur);
+        },
 		checkCategories(categories) {
 			// Validate data
             let validationResult = [];
 			categories.forEach(item => {
                 let validation = [
-                    this.isBetweenNumbers(item.currency_id, 1, 8) && Math.floor(item.currency_id) == item.currency_id,
+                    this.isCurrency(item.currency_id),
                     this.isValidString(item.name, 1, 32),
                     typeof item.income_category == "boolean",
                     typeof item.outcome_category == "boolean",
@@ -147,7 +180,7 @@ export default {
             let validationResult = [];
             means.forEach(item => {
                 let validation = [
-                    this.isBetweenNumbers(item.currency_id, 1, 8) && Math.floor(item.currency_id) == item.currency_id,
+                    this.isCurrency(item.currency_id),
                     this.isValidString(item.name, 1, 32),
                     typeof item.income_mean == "boolean",
                     typeof item.outcome_mean == "boolean",
@@ -185,7 +218,7 @@ export default {
 					let validation = [
 						this.isDate(item.date) && Date.parse(item.date) >= Date.parse(item.mean_id == 0 ? "1970" : means[item.mean_id].first_entry),
 						this.isValidString(item.title, 1, 64),
-						this.isBetweenNumbers(item.currency_id, 1, 8),
+						this.isCurrency(item.currency_id),
                         this.isBetweenNumbers(item.amount, 0.001, 1e6 - 0.001),
                         this.isBetweenNumbers(item.price, 0.01, 1e11 - 0.01)
 					];
@@ -244,6 +277,18 @@ export default {
                     this.dataToDisplay = false;
                     console.error(err);
                 });
+        },
+        submitData() {
+            this.submitSpinner = true;
+
+            axios.post("/webapi/bundles/backup/restore", { data: this.data })
+                .then(() => {
+                    location.reload()
+                })
+                .catch(err => {
+                    console.error(err);
+                    this.submitSpinner = false;
+                })
         }
     },
     beforeMount() {
@@ -257,6 +302,7 @@ export default {
 
                 this.canCreate = data.canCreate;
                 this.canRestore = data.canRestore;
+                this.currencies = data.currencies;
 
                 this.ready = true;
             })

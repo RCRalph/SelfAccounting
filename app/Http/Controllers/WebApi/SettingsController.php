@@ -40,8 +40,7 @@ class SettingsController extends Controller
             abort(500);
         }
 
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = Currency::all();
 
         if (!isset($data["data"])) {
             ($type == $TYPES[0] ?
@@ -188,8 +187,7 @@ class SettingsController extends Controller
             ->sortBy("date");
 
         // Get currencies
-        $currencies = Currency::all()
-			->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = Currency::all();
 
         // Get categories
         $categories = auth()->user()->categories
