@@ -4,17 +4,17 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidCategoryMean implements Rule
+class BackupValidCategoryMean implements Rule
 {
-    private $viewType = "";
+    private $type = "";
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($viewType)
+    public function __construct($type)
     {
-        $this->viewType = $viewType;
+        $this->type = $type;
     }
 
     /**
@@ -34,17 +34,17 @@ class ValidCategoryMean implements Rule
         $index = explode(".", $attribute)[1];
 
         if ($checkingCategory) {
-            return auth()->user()->categories
-                ->where("id", $value)
-                ->where("currency_id", request("data.$index.currency_id"))
-                ->where($this->viewType . "_category", true)
+            $categories = collect(request("categories"));
+            return $categories
+                ->where("currency_id", request("$this->type.$index.currency_id"))
+                ->where($this->type . "_category", true)
                 ->count();
         }
 
-        return auth()->user()->meansOfPayment
-            ->where("id", $value)
-            ->where("currency_id", request("data.$index.currency_id"))
-            ->where($this->viewType . "_mean", true)
+        $means = collect(request("means"));
+        return $means
+            ->where("currency_id", request("$this->type.$index.currency_id"))
+            ->where($this->type . "_mean", true)
             ->count();
     }
 
@@ -55,6 +55,6 @@ class ValidCategoryMean implements Rule
      */
     public function message()
     {
-        return 'This category / mean of payment doesn\'t exist.';
+        return 'The validation error message.';
     }
 }

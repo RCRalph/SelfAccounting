@@ -153,6 +153,7 @@ Route::prefix('/webapi')->group(function() {
         Route::prefix('/backup')->group(function() {
             Route::get('/', 'Bundles\WebApi\BackupController@index')->name('webapi.bundles.backup.index');
             Route::get('/create', 'Bundles\WebApi\BackupController@createBackup')->name('webapi.bundles.backup.create');
+            Route::post('/restore', 'Bundles\WebApi\BackupController@restoreData')->name('webapi.bundles.backup.restore');
         });
 
         Route::prefix('/{bundle}')->group(function() {

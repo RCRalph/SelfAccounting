@@ -70,6 +70,10 @@
                             </button>
                         </div>
                     </div>
+
+					<div class="h3 font-weight-bold text-danger mt-3 text-center">
+						Warning! Performing this action will result in all of your data being erased!
+					</div>
                 </div>
             </div>
 
@@ -157,7 +161,7 @@ export default {
                     typeof item.count_to_summary == "boolean",
                     typeof item.show_on_charts == "boolean",
                     item.start_date === null || this.isDate(item.start_date),
-                    item.end_date === null || this.isDate(item.end_date),
+                    item.end_date === null || this.isDate(item.end_date) && Date.parse(item.start_date) <= Date.parse(item.end_date),
                 ];
 
                 validationResult.push(validation.reduce((item1, item2) => item1 && item2));
@@ -281,9 +285,9 @@ export default {
         submitData() {
             this.submitSpinner = true;
 
-            axios.post("/webapi/bundles/backup/restore", { data: this.data })
+            axios.post("/webapi/bundles/backup/restore", { ...this.dataToDisplay })
                 .then(() => {
-                    location.reload()
+                    window.location.href = "/summary";
                 })
                 .catch(err => {
                     console.error(err);

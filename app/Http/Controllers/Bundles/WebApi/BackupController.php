@@ -5,9 +5,15 @@ namespace App\Http\Controllers\Bundles\WebApi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\Rules\BackupValidIODate;
+use App\Rules\BackupValidCategoryMean;
 
 use App\Backup;
 use App\Currency;
+use App\Income;
+use App\Outcome;
+use App\Category;
+use App\MeanOfPayment;
 
 class BackupController extends Controller
 {
@@ -95,5 +101,98 @@ class BackupController extends Controller
             ->update(["last_backup" => now()]);
 
         return response()->json(compact("categories", "means", "income", "outcome"));
+    }
+
+    public function restoreData()
+    {
+        $data = request()->validate([
+            // Categories
+            "categories.*.currency_id" => ["required", "exists:currencies,id"],
+            "categories.*.name" => ["required", "string", "max:32"],
+            "categories.*.income_category" => ["required", "boolean"],
+            "categories.*.outcome_category" => ["required", "boolean"],
+            "categories.*.count_to_summary" => ["required", "boolean"],
+            "categories.*.show_on_charts" => ["required", "boolean"],
+            "categories.*.start_date" => ["present", "nullable", "date"],
+            "categories.*.end_date" => ["present", "nullable", "date", "after_or_equal:categories.*.start_date"],
+
+            // Means
+            "means.*.currency_id" => ["required", "exists:currencies,id"],
+            "means.*.name" => ["required", "string", "max:32"],
+            "means.*.income_mean" => ["required", "boolean"],
+            "means.*.outcome_mean" => ["required", "boolean"],
+            "means.*.count_to_summary" => ["required", "boolean"],
+            "means.*.show_on_charts" => ["required", "boolean"],
+            "means.*.first_entry_date" => ["required", "date"],
+            "means.*.first_entry_amount" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:-1e11,1e11"],
+
+            // Income
+            "income.*.currency_id" => ["required", "exists:currencies,id"],
+            "income.*.date" => ["required", "date", new BackupValidIODate("income")],
+            "income.*.title" => ["required", "string", "max:64"],
+            "income.*.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "income.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "income.*.category_id" => ["present", "integer", new BackupValidCategoryMean("income")],
+            "income.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("income")],
+
+            // Outcome
+            "outcome.*.currency_id" => ["required", "exists:currencies,id"],
+            "outcome.*.date" => ["required", "date", new BackupValidIODate("outcome")],
+            "outcome.*.title" => ["required", "string", "max:64"],
+            "outcome.*.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "outcome.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "outcome.*.category_id" => ["present", "integer", new BackupValidCategoryMean("outcome")],
+            "outcome.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("outcome")]
+        ]);
+
+        // Erase existing data
+        auth()->user()->categories()->delete();
+        auth()->user()->meansOfPayment()->delete();
+        auth()->user()->income()->delete();
+        auth()->user()->outcome()->delete();
+
+        // Enter categories and means
+        $categories = [ 0 => null ]; $means = [ 0 => null ];
+        foreach ($data["categories"] as $index => $category) {
+            $categories[$index + 1] = Category::create(array_merge(
+                ["user_id" => auth()->user()->id],
+                $category
+            ))->id;
+        }
+
+        foreach ($data["means"] as $index => $mean) {
+            $means[$index + 1] = MeanOfPayment::create(array_merge(
+                ["user_id" => auth()->user()->id],
+                $mean
+            ))->id;
+        }
+
+        // Enter income and outcome
+        foreach ($data["income"] as $income) {
+            Income::create(array_merge(
+                $income,
+                [
+                    "user_id" => auth()->user()->id,
+                    "category_id" => $categories[$income["category_id"]],
+                    "mean_id" => $means[$income["mean_id"]]
+                ]
+            ));
+        }
+
+        foreach ($data["outcome"] as $outcome) {
+            Outcome::create(array_merge(
+                $outcome,
+                [
+                    "user_id" => auth()->user()->id,
+                    "category_id" => $categories[$outcome["category_id"]],
+                    "mean_id" => $means[$outcome["mean_id"]]
+                ]
+            ));
+        }
+
+        auth()->user()->backup
+            ->update(["last_restoration" => now()]);
+
+        return response("", 200);
     }
 }
