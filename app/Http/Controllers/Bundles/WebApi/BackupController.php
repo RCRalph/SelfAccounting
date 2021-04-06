@@ -14,6 +14,7 @@ use App\Income;
 use App\Outcome;
 use App\Category;
 use App\MeanOfPayment;
+use App\Bundle;
 
 class BackupController extends Controller
 {
@@ -36,8 +37,12 @@ class BackupController extends Controller
         $currencies = Currency::all();
         $canCreate = now()->subDays(1)->gte($backup->last_backup);
         $canRestore = now()->subDays(1)->gte($backup->last_restoration);
-        $restoreDate = "";
 
+        $chartsBundle = Bundle::where("code", "charts")->first();
+        $hasChartsBundle = auth()->user()->bundles->contains($chartsBundle) ||
+            auth()->user()->premium_bundles->contains($chartsBundle);
+
+        $restoreDate = "";
         if (!$canRestore && auth()->user()->created_at->addDays(30)->eq($backup->last_restoration)) {
             $restoreDate = explode("T",
                 Carbon::parse($backup->last_restoration)
@@ -45,16 +50,27 @@ class BackupController extends Controller
                 )[0];
         }
 
-        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate"));
+        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate", "hasChartsBundle"));
     }
 
     public function createBackup()
     {
         $this->authorize("createBackup", Backup::class);
 
+        $chartsBundle = Bundle::where("code", "charts")->first();
+        $hasChartsBundle = auth()->user()->bundles->contains($chartsBundle) ||
+            auth()->user()->premium_bundles->contains($chartsBundle);
+
         // Gather categories
         $categories = auth()->user()->categories
             ->map(fn ($item) => collect($item)->except("user_id", "created_at", "updated_at"));
+
+        if (!$hasChartsBundle) {
+            foreach ($categories as $i => $category) {
+                unset($categories[$i]["show_on_charts"]);
+            }
+        }
+
         $categoriesIDs = [];
         foreach ($categories as $i => $category) {
             $categoriesIDs[$category["id"]] = $i + 1;
@@ -63,11 +79,15 @@ class BackupController extends Controller
 
         // Gather means of payment
         $means = auth()->user()->meansOfPayment
-            ->map(function ($item) {
+            ->map(function ($item) use ($hasChartsBundle) {
                 $item = collect($item)->except("user_id", "created_at", "updated_at");
+                if (!$hasChartsBundle) {
+                    unset($item["show_on_charts"]);
+                }
                 $item["first_entry_amount"] *= 1;
                 return $item;
             });
+
         $meansIDs = [];
         foreach ($means as $i => $mean) {
             $meansIDs[$mean["id"]] = $i + 1;
@@ -110,7 +130,7 @@ class BackupController extends Controller
             "categories.*.income_category" => ["required", "boolean"],
             "categories.*.outcome_category" => ["required", "boolean"],
             "categories.*.count_to_summary" => ["required", "boolean"],
-            "categories.*.show_on_charts" => ["required", "boolean"],
+            "categories.*.show_on_charts" => ["present", "nullable", "boolean"],
             "categories.*.start_date" => ["present", "nullable", "date"],
             "categories.*.end_date" => ["present", "nullable", "date", "after_or_equal:categories.*.start_date"],
 
@@ -120,7 +140,7 @@ class BackupController extends Controller
             "means.*.income_mean" => ["required", "boolean"],
             "means.*.outcome_mean" => ["required", "boolean"],
             "means.*.count_to_summary" => ["required", "boolean"],
-            "means.*.show_on_charts" => ["required", "boolean"],
+            "means.*.show_on_charts" => ["present", "nullable", "boolean"],
             "means.*.first_entry_date" => ["required", "date"],
             "means.*.first_entry_amount" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:-1e11,1e11"],
 
@@ -150,27 +170,34 @@ class BackupController extends Controller
         auth()->user()->outcome()->delete();
 
         // Enter categories and means
+        $chartsBundle = Bundle::where("code", "charts")->first();
+        $hasChartsBundle = auth()->user()->bundles->contains($chartsBundle) ||
+            auth()->user()->premium_bundles->contains($chartsBundle);
+
         $categories = [ 0 => null ]; $means = [ 0 => null ];
         foreach ($data["categories"] as $index => $category) {
-            $categories[$index + 1] = Category::create(array_merge(
-                ["user_id" => auth()->user()->id],
-                $category
-            ))->id;
+            if (!$hasChartsBundle) {
+                unset($category["show_on_charts"]);
+            }
+
+            $categories[$index + 1] = auth()->user()->categories()
+                ->create($category)->id;
         }
 
         foreach ($data["means"] as $index => $mean) {
-            $means[$index + 1] = MeanOfPayment::create(array_merge(
-                ["user_id" => auth()->user()->id],
-                $mean
-            ))->id;
+            if (!$hasChartsBundle) {
+                unset($mean["show_on_charts"]);
+            }
+
+            $means[$index + 1] = auth()->user()->meansOfPayment()
+                ->create($mean)->id;
         }
 
         // Enter income and outcome
         foreach ($data["income"] as $income) {
-            Income::create(array_merge(
+            auth()->user()->income()->create(array_merge(
                 $income,
                 [
-                    "user_id" => auth()->user()->id,
                     "category_id" => $categories[$income["category_id"]],
                     "mean_id" => $means[$income["mean_id"]]
                 ]
@@ -178,10 +205,9 @@ class BackupController extends Controller
         }
 
         foreach ($data["outcome"] as $outcome) {
-            Outcome::create(array_merge(
+            auth()->user()->outcome()->create(array_merge(
                 $outcome,
                 [
-                    "user_id" => auth()->user()->id,
                     "category_id" => $categories[$outcome["category_id"]],
                     "mean_id" => $means[$outcome["mean_id"]]
                 ]

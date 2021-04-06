@@ -49,7 +49,7 @@
                                 item.count_to_summary ? 'text-success' : 'text-danger'
                             ]"></i>
                         </td>
-                        <td>
+                        <td v-if="charts">
                             <i :class="[
                                 'fas',
                                 'h4',
@@ -73,10 +73,14 @@
 
 <script>
 export default {
-    props: ["data", "currencies"],
-    data() {
-        return {
-            header: ["Currency", "Name", "Income", "Outcome", "Summary", "Charts", "First entry", "Starting balance"]
+    props: ["data", "currencies", "charts"],
+    computed: {
+        header() {
+            let headerArray = ["Currency", "Name", "Income", "Outcome", "Summary", "First entry", "Starting balance"];
+            if (this.charts) {
+                headerArray.splice(5, 0, "Charts");
+            }
+            return headerArray;
         }
     }
 }
