@@ -20,7 +20,7 @@
                             @click="createBackup"
                             :data-toggle="!canCreate && 'tooltip'"
                             :data-placement="!canCreate && 'bottom'"
-                            :title="!canCreate && 'You can only create one backup per day'"
+                            :title="!canCreate && 'You can only create one backup per 24 hours'"
                         >
                             <div v-if="!createSpinner">
                                 Create backup
@@ -36,7 +36,13 @@
                     </div>
 
                     <div class="col-lg-4 my-lg-0 my-2">
-                        <button class="big-button-primary" :disabled="!canRestore" @click="restoreData">Restore from file</button>
+                        <button class="big-button-primary"
+                            :disabled="!canRestore"
+                            @click="restoreData"
+                            :data-toggle="!canRestore && 'tooltip'"
+                            :data-placement="!canRestore && 'bottom'"
+                            :title="!canRestore && (restoreDate.length ? `Contact the developer or wait until ${restoreDate} to enable this option` : 'You can restore data once per 24 hours')"
+                        >Restore from file</button>
                     </div>
                 </div>
 
@@ -97,6 +103,7 @@ export default {
             ready: false,
             canCreate: false,
             canRestore: false,
+            restoreDate: "",
             createSpinner: false,
             submitSpinner: false,
             dataToDisplay: true,
@@ -167,7 +174,7 @@ export default {
                 validationResult.push(validation.reduce((item1, item2) => item1 && item2));
 			});
 
-            if (!validationResult.reduce((item1, item2) => item1 && item2)) {
+            if (validationResult.length && !validationResult.reduce((item1, item2) => item1 && item2)) {
                 return false;
             }
 
@@ -197,7 +204,7 @@ export default {
                 validationResult.push(validation.reduce((item1, item2) => item1 && item2));
             })
 
-            if (!validationResult.reduce((item1, item2) => item1 && item2)) {
+            if (validationResult.length && !validationResult.reduce((item1, item2) => item1 && item2)) {
                 return false;
             }
 
@@ -233,7 +240,7 @@ export default {
 				}
 			});
 
-			return validationResult.reduce((item1, item2) => item1 && item2);
+			return !validationResult.length || validationResult.reduce((item1, item2) => item1 && item2);
 		},
         readFile() {
             // Get file content
@@ -306,6 +313,7 @@ export default {
 
                 this.canCreate = data.canCreate;
                 this.canRestore = data.canRestore;
+                this.restoreDate = data.restoreDate;
                 this.currencies = data.currencies;
 
                 this.ready = true;

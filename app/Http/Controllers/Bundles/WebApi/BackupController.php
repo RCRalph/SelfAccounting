@@ -24,30 +24,28 @@ class BackupController extends Controller
 
     public function index()
     {
-        if (!auth()->user()->backup) {
-            Backup::insert([
+        $backup = auth()->user()->backup;
+        if (!$backup) {
+            $backup = auth()->user()->backup()->create([
                 "user_id" => auth()->user()->id,
                 "last_backup" => now()->subDays(1),
-                "last_restoration" => now()->subDays(1)
-            ]);
-
-            return response()->json([
-                "canCreate" => true,
-                "canRestore" => true
+                "last_restoration" => auth()->user()->created_at->addDays(30)
             ]);
         }
+
         $currencies = Currency::all();
+        $canCreate = now()->subDays(1)->gte($backup->last_backup);
+        $canRestore = now()->subDays(1)->gte($backup->last_restoration);
+        $restoreDate = "";
 
-        $lastBackup = Carbon::parse(auth()->user()->backup->last_backup);
-        $lastRestoration = Carbon::parse(auth()->user()->backup->last_restoration);
+        if (!$canRestore && auth()->user()->created_at->addDays(30)->eq($backup->last_restoration)) {
+            $restoreDate = explode("T",
+                Carbon::parse($backup->last_restoration)
+                    ->addDays(1)->toISOString()
+                )[0];
+        }
 
-        return response()->json(array_merge(
-            compact("currencies"),
-            [
-                "canCreate" => now()->subDays(1)->gte($lastBackup),
-                "canRestore" => now()->subDays(1)->gte($lastRestoration)
-            ]
-        ));
+        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate"));
     }
 
     public function createBackup()
