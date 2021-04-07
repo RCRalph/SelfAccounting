@@ -8,14 +8,13 @@ use App\Income;
 use App\Outcome;
 use App\Category;
 use App\MeanOfPayment;
+use App\Cash;
 
 class Currency extends Model
 {
     protected $guarded = [];
 
-    protected $hidden = [
-        "created_at", "updated_at"
-    ];
+    public $timestamps = false;
 
     public function income()
     {
@@ -35,5 +34,10 @@ class Currency extends Model
     public function meansOfPayment()
     {
         return $this->belongsToMany(MeanOfPayment::class);
+    }
+
+    public function cash()
+    {
+        return $this->hasMany(Cash::class);
     }
 }

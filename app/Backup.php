@@ -11,6 +11,8 @@ class Backup extends Model
 {
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'user_id', 'last_backup', 'last_restoration'
     ];

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBackupsTable extends Migration
+class CreateCashesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateBackupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('backups', function (Blueprint $table) {
+        Schema::create('cashes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->dateTime('last_backup')->useCurrent();
-            $table->dateTime('last_restoration')->useCurrent();
+            $table->foreignId("currency_id")->constrained("currencies")->onDelete("cascade");
+            $table->decimal("value", 10, 3);
 
-            $table->index(["user_id"]);
+            $table->index(["id", "currency_id"]);
         });
     }
 
@@ -30,6 +29,6 @@ class CreateBackupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('backups');
+        Schema::dropIfExists('cashes');
     }
 }

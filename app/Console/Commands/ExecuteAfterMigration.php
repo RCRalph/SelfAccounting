@@ -42,7 +42,11 @@ class ExecuteAfterMigration extends Command
         DB::table("migrations")
             ->where("migration", "9999_99_99_999999_execute_after_migration")
             ->delete();
+        $this->info("Deleted migration from database");
+
         Artisan::call("migrate", []);
+        $this->info("Entered the values");
+
         return 0;
     }
 }

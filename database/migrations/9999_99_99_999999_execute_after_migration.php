@@ -9,6 +9,7 @@ use App\User;
 use App\Bundle;
 use App\BundleImage;
 use App\Currency;
+use App\Cash;
 
 class ExecuteAfterMigration extends Migration
 {
@@ -20,9 +21,19 @@ class ExecuteAfterMigration extends Migration
     public function up()
     {
         // Set currencies
-        $currencies = ["USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF", "PLN"];
+        $currenciesAndCash = [
+            "USD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05, 0.01],
+            "EUR" => [500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
+            "JPY" => [10000, 5000, 2000, 1000, 500, 100, 50, 10, 5, 1],
+            "GBP" => [50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
+            "AUD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05],
+            "CAD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05, 0.01],
+            "CHF" => [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05],
+            "PLN" => [500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
+            "INR" => [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1]
+        ];
 
-        // Set data of bundles
+        // Set data of bundlesd
         $bundles = [
             [
                 "title" => "Chart pack",
@@ -52,13 +63,35 @@ class ExecuteAfterMigration extends Migration
                     "CBclby9Ln4fKmFHF5rvoq4d2trWMLnQjhe5eMqf5DjL0SQx9om.png",
                     "Ky2VhbsE1ZxSW5a1ZJdTBvVCAfqSBGhalBZDSx0vlwcXEhSFKD.png"
                 ]
+            ],
+            [
+                "title" => "Cash handling",
+                "code" => "cashan",
+                "price" => 10,
+                "short_description" => "Monitor how much cash you have",
+                "thumbnail" => "dupa123.png",
+                "description" => "This bundle allows you to monitor how much cash you have at the current moment and it will tell you if you lost any when you count it all up from time to time. All currencies in the app are supported.\n\nYou can immidately change how much cash you own while entering income or outcome. A special **cash** mean of payment is required.",
+                "gallery" => [
+
+                ]
             ]
         ];
 
         // Add records to database (if they don't exits)
-        foreach ($currencies as $currency) {
-            if (!Currency::where("ISO", $currency)->count()) {
-                Currency::create(["ISO" => $currency]);
+        foreach ($currenciesAndCash as $ISO => $cash) {
+            $currency = Currency::where("ISO", $ISO)->first();
+            if (!$currency) {
+                $currency = Currency::create(compact("ISO"));
+            }
+
+            sort($cash);
+            foreach ($cash as $value) {
+                if (!Cash::where(["currency_id" => $currency->id, "value" => $value])->count()) {
+                    Cash::create([
+                        "currency_id" => $currency->id,
+                        "value" => $value
+                    ]);
+                }
             }
         }
 
