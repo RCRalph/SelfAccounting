@@ -24,13 +24,13 @@ class SummaryController extends Controller
         $categoriesToShow = $categories->where("count_to_summary", true)->pluck("id")->toArray();
 
         $income = auth()->user()->income
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item["value"] = $item["amount"] * $item["price"];
                 return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
             });
 
         $outcome = auth()->user()->outcome
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item["value"] = $item["amount"] * $item["price"];
                 return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
             });

@@ -130,7 +130,7 @@ class BackupController extends Controller
             "categories.*.income_category" => ["required", "boolean"],
             "categories.*.outcome_category" => ["required", "boolean"],
             "categories.*.count_to_summary" => ["required", "boolean"],
-            "categories.*.show_on_charts" => ["present", "nullable", "boolean"],
+            "categories.*.show_on_charts" => ["nullable", "boolean"],
             "categories.*.start_date" => ["present", "nullable", "date"],
             "categories.*.end_date" => ["present", "nullable", "date", "after_or_equal:categories.*.start_date"],
 
@@ -140,7 +140,7 @@ class BackupController extends Controller
             "means.*.income_mean" => ["required", "boolean"],
             "means.*.outcome_mean" => ["required", "boolean"],
             "means.*.count_to_summary" => ["required", "boolean"],
-            "means.*.show_on_charts" => ["present", "nullable", "boolean"],
+            "means.*.show_on_charts" => ["nullable", "boolean"],
             "means.*.first_entry_date" => ["required", "date"],
             "means.*.first_entry_amount" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:-1e11,1e11"],
 

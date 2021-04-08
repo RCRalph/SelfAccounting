@@ -168,7 +168,7 @@ export default {
                     typeof item.income_category == "boolean",
                     typeof item.outcome_category == "boolean",
                     typeof item.count_to_summary == "boolean",
-                    typeof item.show_on_charts == "boolean",
+                    item.show_on_charts === undefined || typeof item.show_on_charts == "boolean",
                     item.start_date === null || this.isDate(item.start_date),
                     item.end_date === null || this.isDate(item.end_date) && Date.parse(item.start_date) <= Date.parse(item.end_date),
                 ];
@@ -198,7 +198,7 @@ export default {
                     typeof item.income_mean == "boolean",
                     typeof item.outcome_mean == "boolean",
                     typeof item.count_to_summary == "boolean",
-                    typeof item.show_on_charts == "boolean",
+                    item.show_on_charts === undefined || typeof item.show_on_charts == "boolean",
                     this.isDate(item.first_entry_date),
                     this.isBetweenNumbers(item.first_entry_amount, -1e11 + 1, 1e11 - 1)
                 ];

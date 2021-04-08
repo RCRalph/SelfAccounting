@@ -8,6 +8,7 @@
     "/css/app.css": "/css/app.css",
     "/js/bundle-show.js": "/js/bundle-show.js",
     "/js/bundles/backup/backup.js": "/js/bundles/backup/backup.js",
+    "/js/bundles/cash/cash.js": "/js/bundles/cash/cash.js",
     "/js/bundles/charts/balance-monitor.js": "/js/bundles/charts/balance-monitor.js",
     "/js/bundles/charts/io-by-type.js": "/js/bundles/charts/io-by-type.js",
     "/js/bundles/charts/presence.js": "/js/bundles/charts/presence.js",

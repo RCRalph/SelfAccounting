@@ -81,4 +81,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Backup::class);
     }
+
+    public function cash_means()
+    {
+        return $this->belongsToMany(MeanOfPayment::class, "cash_mean_user", "user_id", "mean_id");
+    }
 }

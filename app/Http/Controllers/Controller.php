@@ -43,7 +43,7 @@ class Controller extends BaseController
         return Cache::remember(
             "page-render-data-$id",
             now()->addMinutes(15),
-            function() {
+            function () {
                 $retArr = auth()->user()->only("darkmode", "profile_picture");
                 $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
 
@@ -55,6 +55,10 @@ class Controller extends BaseController
                     "backup" => [
                         "icon" => "fas fa-hdd",
                         "directory" => "backup"
+                    ],
+                    "cashan" => [
+                        "icon" => "fas fa-money-bill-wave",
+                        "directory" => "cash"
                     ]
                 ];
 
@@ -128,7 +132,7 @@ class Controller extends BaseController
         return Cache::remember(
             "last-currency-$userId",
             now()->addMinutes(15),
-            function() {
+            function () {
                 $income = auth()->user()->income;
                 $outcome = auth()->user()->outcome;
 

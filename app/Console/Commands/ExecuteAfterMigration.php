@@ -39,6 +39,8 @@ class ExecuteAfterMigration extends Command
      */
     public function handle()
     {
+        $this->info("Starting out");
+
         DB::table("migrations")
             ->where("migration", "9999_99_99_999999_execute_after_migration")
             ->delete();

@@ -74,13 +74,13 @@ class ChartsController extends Controller
 
         $ioData = $ioData
             ->whereIn($type . "_id", $toShow)
-            ->map(function($item) use ($type) {
+            ->map(function ($item) use ($type) {
                 $item->value = $item->price * $item->amount;
 
                 return $item->only("value", "currency_id", ($type . "_id"));
             })
             ->groupBy("currency_id")
-            ->map(function($item) use ($type) {
+            ->map(function ($item) use ($type) {
                 $item = $item->groupBy($type . "_id");
 
                 return $item->map(
@@ -239,12 +239,12 @@ class ChartsController extends Controller
 
         // Get income and outcome and count the values of entries
         $income = auth()->user()->income
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item->value = $item->amount * $item->price;
                 return $item->only("date", "value", "category_id", "mean_id", "currency_id");
             });
         $outcome = auth()->user()->outcome
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item->value = $item->amount * $item->price;
                 return $item->only("date", "value", "category_id", "mean_id", "currency_id");
             });
@@ -255,7 +255,7 @@ class ChartsController extends Controller
             ->groupBy("mean_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
-                ->map(function($item1) {
+                ->map(function ($item1) {
                     $sum = 0;
 
                     foreach ($item1 as $data) {
@@ -270,7 +270,7 @@ class ChartsController extends Controller
             ->groupBy("mean_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
-                ->map(function($item1) {
+                ->map(function ($item1) {
                     $sum = 0;
 
                     foreach ($item1 as $data) {

@@ -139,7 +139,7 @@ class SettingsController extends Controller
         }
 
         $entriesInDB = array_map(
-            function($item) {
+            function ($item) {
                 unset($item["user_id"], $item["created_at"], $item["updated_at"], $item["show_on_charts"]);
                 return $item;
             },

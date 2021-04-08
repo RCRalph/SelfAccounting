@@ -91,7 +91,7 @@ class IncomeOutcomeController extends Controller
         $currencies = Currency::all();
 
         // Get means of payment
-        $meansTemp = auth()->user()->meansOfPayment->map(function($item) {
+        $meansTemp = auth()->user()->meansOfPayment->map(function ($item) {
             return [$item["id"] => $item["name"]];
         });
         $means = [];
@@ -102,7 +102,7 @@ class IncomeOutcomeController extends Controller
         }
 
         // Get categories
-        $categoriesTemp = auth()->user()->categories->map(function($item) {
+        $categoriesTemp = auth()->user()->categories->map(function ($item) {
             return [$item["id"] => $item["name"]];
         });
         $categories = [];

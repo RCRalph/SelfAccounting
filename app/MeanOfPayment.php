@@ -39,4 +39,9 @@ class MeanOfPayment extends Model
     {
         return $this->belongsTo(Outcome::class);
     }
+
+    public function cash_user()
+    {
+        return $this->belongsToMany(User::class, "cash_mean_user", "mean_id", "user_id");
+    }
 }
