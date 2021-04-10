@@ -54,8 +54,8 @@
                                 'fas',
                                 'h4',
                                 'my-auto',
-                                item.show_on_charts ? 'fa-check-square' : 'fa-times-circle',
-                                item.show_on_charts ? 'text-success' : 'text-danger'
+                                (item.show_on_charts || item.show_on_charts === undefined) ? 'fa-check-square' : 'fa-times-circle',
+                                (item.show_on_charts || item.show_on_charts === undefined) ? 'text-success' : 'text-danger'
                             ]"></i>
                         </td>
                         <td>

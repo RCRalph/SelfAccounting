@@ -42,6 +42,11 @@ class CashController extends Controller
             }
         }
 
-        return response()->json(compact("currencies", "lastCurrency", "cash", "means", "cashMeans"));
+		$usersCash = [];
+		foreach (auth()->user()->cash as $userCash) {
+			$usersCash[$userCash->pivot->cash_id] = $userCash->pivot->amount;
+		}
+
+        return response()->json(compact("currencies", "lastCurrency", "cash", "means", "cashMeans", "usersCash"));
     }
 }

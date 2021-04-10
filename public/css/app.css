@@ -2309,6 +2309,7 @@ pre code {
 }
 
 .form-control,
+.cash-input,
 .form-number,
 .form-text,
 .form-date-min,
@@ -2330,6 +2331,7 @@ pre code {
 
 @media (prefers-reduced-motion: reduce) {
   .form-control,
+  .cash-input,
   .form-number,
   .form-text,
   .form-date-min,
@@ -2339,6 +2341,7 @@ pre code {
 }
 
 .form-control::-ms-expand,
+.cash-input::-ms-expand,
 .form-number::-ms-expand,
 .form-text::-ms-expand,
 .form-date-min::-ms-expand,
@@ -2348,6 +2351,7 @@ pre code {
 }
 
 .form-control:-moz-focusring,
+.cash-input:-moz-focusring,
 .form-number:-moz-focusring,
 .form-text:-moz-focusring,
 .form-date-min:-moz-focusring,
@@ -2357,6 +2361,7 @@ pre code {
 }
 
 .form-control:focus,
+.cash-input:focus,
 .form-number:focus,
 .form-text:focus,
 .form-date-min:focus,
@@ -2368,17 +2373,18 @@ pre code {
   box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
 }
 
-.form-control::-moz-placeholder, .form-number::-moz-placeholder, .form-text::-moz-placeholder, .form-date-min::-moz-placeholder, .form-date::-moz-placeholder {
+.form-control::-moz-placeholder, .cash-input::-moz-placeholder, .form-number::-moz-placeholder, .form-text::-moz-placeholder, .form-date-min::-moz-placeholder, .form-date::-moz-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
-.form-control:-ms-input-placeholder, .form-number:-ms-input-placeholder, .form-text:-ms-input-placeholder, .form-date-min:-ms-input-placeholder, .form-date:-ms-input-placeholder {
+.form-control:-ms-input-placeholder, .cash-input:-ms-input-placeholder, .form-number:-ms-input-placeholder, .form-text:-ms-input-placeholder, .form-date-min:-ms-input-placeholder, .form-date:-ms-input-placeholder {
   color: #6c757d;
   opacity: 1;
 }
 
 .form-control::placeholder,
+.cash-input::placeholder,
 .form-number::placeholder,
 .form-text::placeholder,
 .form-date-min::placeholder,
@@ -2388,11 +2394,13 @@ pre code {
 }
 
 .form-control:disabled,
+.cash-input:disabled,
 .form-number:disabled,
 .form-text:disabled,
 .form-date-min:disabled,
 .form-date:disabled,
 .form-control[readonly],
+[readonly].cash-input,
 [readonly].form-number,
 [readonly].form-text,
 [readonly].form-date-min,
@@ -2402,21 +2410,25 @@ pre code {
 }
 
 input[type=date].form-control,
+input[type=date].cash-input,
 input[type=date].form-number,
 input[type=date].form-text,
 input[type=date].form-date-min,
 input[type=date].form-date,
 input[type=time].form-control,
+input[type=time].cash-input,
 input[type=time].form-number,
 input[type=time].form-text,
 input[type=time].form-date-min,
 input[type=time].form-date,
 input[type=datetime-local].form-control,
+input[type=datetime-local].cash-input,
 input[type=datetime-local].form-number,
 input[type=datetime-local].form-text,
 input[type=datetime-local].form-date-min,
 input[type=datetime-local].form-date,
 input[type=month].form-control,
+input[type=month].cash-input,
 input[type=month].form-number,
 input[type=month].form-text,
 input[type=month].form-date-min,
@@ -2427,6 +2439,7 @@ input[type=month].form-date {
 }
 
 select.form-control:focus::-ms-value,
+select.cash-input:focus::-ms-value,
 select.form-number:focus::-ms-value,
 select.form-text:focus::-ms-value,
 select.form-date-min:focus::-ms-value,
@@ -2499,11 +2512,13 @@ select.form-date:focus::-ms-value {
 }
 
 select.form-control[size],
+select[size].cash-input,
 select[size].form-number,
 select[size].form-text,
 select[size].form-date-min,
 select[size].form-date,
 select.form-control[multiple],
+select[multiple].cash-input,
 select[multiple].form-number,
 select[multiple].form-text,
 select[multiple].form-date-min,
@@ -2512,6 +2527,7 @@ select[multiple].form-date {
 }
 
 textarea.form-control,
+textarea.cash-input,
 textarea.form-number,
 textarea.form-text,
 textarea.form-date-min,
@@ -2613,11 +2629,13 @@ textarea.form-date {
 }
 
 .was-validated .form-control:valid,
+.was-validated .cash-input:valid,
 .was-validated .form-number:valid,
 .was-validated .form-text:valid,
 .was-validated .form-date-min:valid,
 .was-validated .form-date:valid,
 .form-control.is-valid,
+.is-valid.cash-input,
 .is-valid.form-number,
 .is-valid.form-text,
 .is-valid.form-date-min,
@@ -2631,11 +2649,13 @@ textarea.form-date {
 }
 
 .was-validated .form-control:valid:focus,
+.was-validated .cash-input:valid:focus,
 .was-validated .form-number:valid:focus,
 .was-validated .form-text:valid:focus,
 .was-validated .form-date-min:valid:focus,
 .was-validated .form-date:valid:focus,
 .form-control.is-valid:focus,
+.is-valid.cash-input:focus,
 .is-valid.form-number:focus,
 .is-valid.form-text:focus,
 .is-valid.form-date-min:focus,
@@ -2645,11 +2665,13 @@ textarea.form-date {
 }
 
 .was-validated textarea.form-control:valid,
+.was-validated textarea.cash-input:valid,
 .was-validated textarea.form-number:valid,
 .was-validated textarea.form-text:valid,
 .was-validated textarea.form-date-min:valid,
 .was-validated textarea.form-date:valid,
 textarea.form-control.is-valid,
+textarea.is-valid.cash-input,
 textarea.is-valid.form-number,
 textarea.is-valid.form-text,
 textarea.is-valid.form-date-min,
@@ -2757,11 +2779,13 @@ textarea.is-valid.form-date {
 }
 
 .was-validated .form-control:invalid,
+.was-validated .cash-input:invalid,
 .was-validated .form-number:invalid,
 .was-validated .form-text:invalid,
 .was-validated .form-date-min:invalid,
 .was-validated .form-date:invalid,
 .form-control.is-invalid,
+.is-invalid.cash-input,
 .is-invalid.form-number,
 .is-invalid.form-text,
 .is-invalid.form-date-min,
@@ -2775,11 +2799,13 @@ textarea.is-valid.form-date {
 }
 
 .was-validated .form-control:invalid:focus,
+.was-validated .cash-input:invalid:focus,
 .was-validated .form-number:invalid:focus,
 .was-validated .form-text:invalid:focus,
 .was-validated .form-date-min:invalid:focus,
 .was-validated .form-date:invalid:focus,
 .form-control.is-invalid:focus,
+.is-invalid.cash-input:focus,
 .is-invalid.form-number:focus,
 .is-invalid.form-text:focus,
 .is-invalid.form-date-min:focus,
@@ -2789,11 +2815,13 @@ textarea.is-valid.form-date {
 }
 
 .was-validated textarea.form-control:invalid,
+.was-validated textarea.cash-input:invalid,
 .was-validated textarea.form-number:invalid,
 .was-validated textarea.form-text:invalid,
 .was-validated textarea.form-date-min:invalid,
 .was-validated textarea.form-date:invalid,
 textarea.form-control.is-invalid,
+textarea.is-invalid.cash-input,
 textarea.is-invalid.form-number,
 textarea.is-invalid.form-text,
 textarea.is-invalid.form-date-min,
@@ -2891,6 +2919,7 @@ textarea.is-invalid.form-date {
   }
 
   .form-inline .form-control,
+  .form-inline .cash-input,
   .form-inline .form-number,
   .form-inline .form-text,
   .form-inline .form-date-min,
@@ -4417,6 +4446,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control,
+.input-group > .cash-input,
 .input-group > .form-number,
 .input-group > .form-text,
 .input-group > .form-date-min,
@@ -4432,41 +4462,55 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control + .form-control,
+.input-group > .cash-input + .form-control,
+.input-group > .form-control + .cash-input,
+.input-group > .cash-input + .cash-input,
 .input-group > .form-number + .form-control,
+.input-group > .form-number + .cash-input,
 .input-group > .form-control + .form-number,
+.input-group > .cash-input + .form-number,
 .input-group > .form-number + .form-number,
 .input-group > .form-text + .form-control,
+.input-group > .form-text + .cash-input,
 .input-group > .form-text + .form-number,
 .input-group > .form-control + .form-text,
+.input-group > .cash-input + .form-text,
 .input-group > .form-number + .form-text,
 .input-group > .form-text + .form-text,
 .input-group > .form-date-min + .form-control,
+.input-group > .form-date-min + .cash-input,
 .input-group > .form-date-min + .form-number,
 .input-group > .form-date-min + .form-text,
 .input-group > .form-control + .form-date-min,
+.input-group > .cash-input + .form-date-min,
 .input-group > .form-number + .form-date-min,
 .input-group > .form-text + .form-date-min,
 .input-group > .form-date-min + .form-date-min,
 .input-group > .form-date + .form-control,
+.input-group > .form-date + .cash-input,
 .input-group > .form-date + .form-number,
 .input-group > .form-date + .form-text,
 .input-group > .form-date + .form-date-min,
 .input-group > .form-control + .form-date,
+.input-group > .cash-input + .form-date,
 .input-group > .form-number + .form-date,
 .input-group > .form-text + .form-date,
 .input-group > .form-date-min + .form-date,
 .input-group > .form-date + .form-date,
 .input-group > .form-control + .custom-select,
+.input-group > .cash-input + .custom-select,
 .input-group > .form-number + .custom-select,
 .input-group > .form-text + .custom-select,
 .input-group > .form-date-min + .custom-select,
 .input-group > .form-date + .custom-select,
 .input-group > .form-control + .custom-file,
+.input-group > .cash-input + .custom-file,
 .input-group > .form-number + .custom-file,
 .input-group > .form-text + .custom-file,
 .input-group > .form-date-min + .custom-file,
 .input-group > .form-date + .custom-file,
 .input-group > .form-control-plaintext + .form-control,
+.input-group > .form-control-plaintext + .cash-input,
 .input-group > .form-control-plaintext + .form-number,
 .input-group > .form-control-plaintext + .form-text,
 .input-group > .form-control-plaintext + .form-date-min,
@@ -4474,6 +4518,7 @@ input[type=button].big-button-danger {
 .input-group > .form-control-plaintext + .custom-select,
 .input-group > .form-control-plaintext + .custom-file,
 .input-group > .custom-select + .form-control,
+.input-group > .custom-select + .cash-input,
 .input-group > .custom-select + .form-number,
 .input-group > .custom-select + .form-text,
 .input-group > .custom-select + .form-date-min,
@@ -4481,6 +4526,7 @@ input[type=button].big-button-danger {
 .input-group > .custom-select + .custom-select,
 .input-group > .custom-select + .custom-file,
 .input-group > .custom-file + .form-control,
+.input-group > .custom-file + .cash-input,
 .input-group > .custom-file + .form-number,
 .input-group > .custom-file + .form-text,
 .input-group > .custom-file + .form-date-min,
@@ -4491,6 +4537,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control:focus,
+.input-group > .cash-input:focus,
 .input-group > .form-number:focus,
 .input-group > .form-text:focus,
 .input-group > .form-date-min:focus,
@@ -4505,6 +4552,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .form-control:not(:first-child),
+.input-group > .cash-input:not(:first-child),
 .input-group > .form-number:not(:first-child),
 .input-group > .form-text:not(:first-child),
 .input-group > .form-date-min:not(:first-child),
@@ -4526,6 +4574,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group:not(.has-validation) > .form-control:not(:last-child),
+.input-group:not(.has-validation) > .cash-input:not(:last-child),
 .input-group:not(.has-validation) > .form-number:not(:last-child),
 .input-group:not(.has-validation) > .form-text:not(:last-child),
 .input-group:not(.has-validation) > .form-date-min:not(:last-child),
@@ -4537,6 +4586,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group.has-validation > .form-control:nth-last-child(n+3),
+.input-group.has-validation > .cash-input:nth-last-child(n+3),
 .input-group.has-validation > .form-number:nth-last-child(n+3),
 .input-group.has-validation > .form-text:nth-last-child(n+3),
 .input-group.has-validation > .form-date-min:nth-last-child(n+3),
@@ -4748,6 +4798,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-lg > .form-control:not(textarea),
+.input-group-lg > .cash-input:not(textarea),
 .input-group-lg > .form-number:not(textarea),
 .input-group-lg > .form-text:not(textarea),
 .input-group-lg > .form-date-min:not(textarea),
@@ -4757,6 +4808,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-lg > .form-control,
+.input-group-lg > .cash-input,
 .input-group-lg > .form-number,
 .input-group-lg > .form-text,
 .input-group-lg > .form-date-min,
@@ -4785,6 +4837,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-sm > .form-control:not(textarea),
+.input-group-sm > .cash-input:not(textarea),
 .input-group-sm > .form-number:not(textarea),
 .input-group-sm > .form-text:not(textarea),
 .input-group-sm > .form-date-min:not(textarea),
@@ -4794,6 +4847,7 @@ input[type=button].big-button-danger {
 }
 
 .input-group-sm > .form-control,
+.input-group-sm > .cash-input,
 .input-group-sm > .form-number,
 .input-group-sm > .form-text,
 .input-group-sm > .form-date-min,
@@ -9919,6 +9973,7 @@ button.card:focus {
 .mr-auto,
 .card-header-text,
 .mx-auto,
+.cash-input,
 .admin-bundle-gallery-image,
 .bundle-image {
   margin-right: auto !important;
@@ -9933,6 +9988,7 @@ button.card:focus {
 
 .ml-auto,
 .mx-auto,
+.cash-input,
 .admin-bundle-gallery-image,
 .bundle-image {
   margin-left: auto !important;
@@ -12326,6 +12382,11 @@ a.text-dark:focus,
 
 .row-hover-bg {
   background-color: rgba(255, 255, 255, 0.075);
+}
+
+.cash-input {
+  max-width: 125px;
+  text-align: center;
 }
 
 td,

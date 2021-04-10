@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="col-lg-5">
-                        <select class="form-control" v-model="cashMeans[currentCurrency]" :disabled="disabled">
+                        <select class="form-control" v-model="cashMeans[currentCurrency]">
                             <option :value="null" :selected="null">N/A</option>
                             <option
                                 v-for="(item, i) in means[currentCurrency]"
@@ -44,7 +44,34 @@
 
                 <hr class="hr">
 
-                <!-- Table of cash with inputs and value -->
+                <div class="row">
+					<div class="col-lg-8 offset-lg-2 table-responsive-lg">
+						<table class="table-themed responsive-table-hover">
+							<thead>
+								<th class="h4 font-weight-bold" scope="col">Value</th>
+								<th class="h4 font-weight-bold" scope="col">Amount</th>
+							</thead>
+
+							<tbody>
+								<tr
+									v-for="(item, i) in cash[currentCurrency]"
+									:key="i"
+								>
+									<th scope="row" class="h5">{{ Number(item.value) }} {{ currencies[currentCurrency - 1].ISO }}</th>
+                                    <td>
+                                        <input
+                                            class="cash-input"
+                                            type="number"
+                                            step="1"
+                                            min="0"
+                                            v-model="usersCash[item.id]"
+                                        >
+                                    </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
             </div>
 
             <Loading v-else></Loading>
@@ -69,6 +96,16 @@ export default {
             cash: {},
             means: {},
             cashMeans: {},
+            usersCash: {}
+        }
+    },
+    methods: {
+        removeZerosFromUsersCash() {
+            for (let i in this.usersCash) {
+                if (this.usersCash[i] == 0) {
+                    delete this.usersCash[i];
+                }
+            }
         }
     },
     beforeMount() {
@@ -85,6 +122,15 @@ export default {
                 this.cash = data.cash;
                 this.means = data.means;
                 this.cashMeans = data.cashMeans;
+
+                for (let i in this.cash) {
+                    this.cash[i].forEach(item => {
+                        if (data.usersCash[item.id] == undefined) {
+                            data.usersCash[item.id] = 0;
+                        }
+                    })
+                }
+                this.usersCash = data.usersCash;
 
                 this.ready = true;
             })
