@@ -45,11 +45,12 @@
                 <hr class="hr">
 
                 <div class="row">
-					<div class="col-lg-8 offset-lg-2 table-responsive-lg">
+					<div class="col-lg-10 offset-lg-1 table-responsive-lg">
 						<table class="table-themed responsive-table-hover">
 							<thead>
-								<th class="h4 font-weight-bold" scope="col">Value</th>
+								<th class="h4 font-weight-bold" scope="col">Face value</th>
 								<th class="h4 font-weight-bold" scope="col">Amount</th>
+                                <th class="h4 font-weight-bold" scope="col">Value</th>
 							</thead>
 
 							<tbody>
@@ -57,21 +58,35 @@
 									v-for="(item, i) in cash[currentCurrency]"
 									:key="i"
 								>
-									<th scope="row" class="h5">{{ Number(item.value) }} {{ currencies[currentCurrency - 1].ISO }}</th>
+									<th scope="row" class="h5 font-weight-bold">
+                                        {{ Number(item.value) }} {{ currencies[currentCurrency - 1].ISO }}
+                                    </th>
+
                                     <td>
                                         <input
-                                            class="cash-input"
+                                            :class="[
+                                                'cash-input',
+                                                !isValidCashAmount(usersCash[item.id]) && 'is-invalid'
+                                            ]"
                                             type="number"
                                             step="1"
                                             min="0"
                                             v-model="usersCash[item.id]"
                                         >
                                     </td>
+
+                                    <td class="h5 font-weight-bold">
+                                        {{ isValidCashAmount(usersCash[item.id]) ? item.value * usersCash[item.id] : 0 }} {{ currencies[currentCurrency - 1].ISO }}
+                                    </td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 				</div>
+
+                <hr class="hr">
+
+
             </div>
 
             <Loading v-else></Loading>
@@ -106,6 +121,14 @@ export default {
                     delete this.usersCash[i];
                 }
             }
+        },
+        isValidCashAmount(amount) {
+            amount = Number(amount);
+            if (isNaN(amount)) {
+                return false;
+            }
+
+            return amount >= 0 && Math.floor(amount) == amount;
         }
     },
     beforeMount() {
