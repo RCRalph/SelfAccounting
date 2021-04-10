@@ -76,7 +76,10 @@
                                     </td>
 
                                     <td class="h5 font-weight-bold">
-                                        {{ isValidCashAmount(usersCash[item.id]) ? item.value * usersCash[item.id] : 0 }} {{ currencies[currentCurrency - 1].ISO }}
+                                        {{ isValidCashAmount(usersCash[item.id]) ?
+											Math.round(item.value * usersCash[item.id] * 1000) / 1000 : 0
+										}}
+										{{ currencies[currentCurrency - 1].ISO }}
                                     </td>
 								</tr>
 							</tbody>
@@ -84,9 +87,41 @@
 					</div>
 				</div>
 
+                <div class="row h3 font-weight-bold">
+                    <div class="col-6 text-right">Sum:</div>
+                    <div class="col-6 ">{{ sumOfCash }} {{ currencies[currentCurrency - 1].ISO }}</div>
+                </div>
+
+                <div v-if="currentCashMeanBalance !== false">
+                    <div class="row h3 font-weight-bold">
+                        <div class="col-6 text-right">Current balance:</div>
+                        <div class="col-6 ">{{ currentCashMeanBalance }} {{ currencies[currentCurrency - 1].ISO }}</div>
+                    </div>
+
+                    <hr class="hr-dashed w-75">
+
+                    <div :class="[
+                        'row',
+                        'h3',
+                        'font-weight-bold',
+                        currentCashMeanBalance - sumOfCash != 0 ? 'text-danger' : 'text-success'
+                    ]">
+                        <div class="col-6 text-right">Balance difference:</div>
+                        <div class="col-6">
+                            {{ currentCashMeanBalance - sumOfCash > 0 ? "+" : "" }}{{ Math.round((currentCashMeanBalance - sumOfCash) * 1000, 3) / 1000 }}
+                            {{ currencies[currentCurrency - 1].ISO }}
+                        </div>
+                    </div>
+                </div>
+
                 <hr class="hr">
 
-
+                <SaveResetChanges
+                    @save="saveChanges"
+                    @reset="resetChanges"
+                    :disableSave="disableSubmit"
+                    :spinner="saveChangesSpinner"
+                ></SaveResetChanges>
             </div>
 
             <Loading v-else></Loading>
@@ -95,11 +130,14 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Loading from "../../../components/Loading.vue";
+import SaveResetChanges from "../../../components/SaveResetChanges.vue";
 
 export default {
     components: {
-        Loading
+        Loading,
+        SaveResetChanges
     },
     data() {
         return {
@@ -111,24 +149,94 @@ export default {
             cash: {},
             means: {},
             cashMeans: {},
-            usersCash: {}
+            cashMeansCopy: {},
+            usersCash: {},
+            usersCashCopy: {},
+            saveChangesSpinner: false
         }
     },
-    methods: {
-        removeZerosFromUsersCash() {
+	computed: {
+		sumOfCash() {
+            if (this.disableSubmit) {
+                return 0;
+            }
+
+			return Math.round(this.cash[this.currentCurrency]
+				.map(item => {
+					return { id: item.id, value: item.value }
+				})
+				.map(item => this.usersCash[item.id] * item.value)
+				.reduce((item1, item2) => item1 + item2) * 1000, 3) / 1000;
+		},
+        currentCashMeanBalance() {
+            if (this.cashMeans[this.currentCurrency] == null) {
+                return false;
+            }
+
+            return this.means[this.currentCurrency]
+                .find(item => item.id == this.cashMeans[this.currentCurrency]).balance
+        },
+        disableSubmit() {
             for (let i in this.usersCash) {
-                if (this.usersCash[i] == 0) {
-                    delete this.usersCash[i];
+                if (!this.isValidCashAmount(this.usersCash[i])) {
+                    return true;
                 }
             }
-        },
+
+            return false;
+        }
+	},
+    methods: {
         isValidCashAmount(amount) {
+            if (amount === "") {
+                return false;
+            }
+
             amount = Number(amount);
             if (isNaN(amount)) {
                 return false;
             }
 
-            return amount >= 0 && Math.floor(amount) == amount;
+            return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63);
+        },
+        saveChanges() {
+            this.saveChangesSpinner = true;
+
+            const usersCash = [];
+            for (let i in this.usersCash) {
+                if (this.usersCash[i] != 0){
+                    usersCash.push({
+                        id: i,
+                        amount: this.usersCash[i]
+                    });
+                }
+            }
+
+            const cashMeans = [];
+            for (let i in this.cashMeans) {
+                if (this.cashMeans[i] != null) {
+                    cashMeans.push(this.cashMeans[i]);
+                }
+            }
+
+            axios
+                .post("/webapi/bundles/cash", {
+                    usersCash, cashMeans
+                })
+                .then(() => {
+                    this.cashMeansCopy = _.cloneDeep(this.cashMeans);
+                    this.usersCashCopy = _.cloneDeep(this.usersCash);
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+                .finally(() => {
+                    this.saveChangesSpinner = false;
+                })
+        },
+        resetChanges() {
+            this.cashMeans = _.cloneDeep(this.cashMeansCopy);
+            this.usersCash = _.cloneDeep(this.usersCashCopy);
         }
     },
     beforeMount() {
@@ -145,6 +253,7 @@ export default {
                 this.cash = data.cash;
                 this.means = data.means;
                 this.cashMeans = data.cashMeans;
+                this.cashMeansCopy = _.cloneDeep(data.cashMeans);
 
                 for (let i in this.cash) {
                     this.cash[i].forEach(item => {
@@ -154,6 +263,7 @@ export default {
                     })
                 }
                 this.usersCash = data.usersCash;
+                this.usersCashCopy = _.cloneDeep(data.usersCash);
 
                 this.ready = true;
             })

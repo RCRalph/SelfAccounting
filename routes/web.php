@@ -162,6 +162,7 @@ Route::prefix('/webapi')->group(function () {
 
         Route::prefix('/cash')->group(function () {
             Route::get('/', 'Bundles\WebApi\CashController@index')->name('webapi.bundles.cash.index');
+            Route::post('/', 'Bundles\WebApi\CashController@saveCashAndMeans')->name('webapi.bundles.cash.save-cash-and-means');
         });
 
         Route::prefix('/{bundle}')->group(function () {
