@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Rules\UniqueMeanCurrency;
+use App\Rules\MeanBelongsToUser;
 
 use App\Currency;
 use App\Cash;
@@ -83,8 +84,47 @@ class CashController extends Controller
 
             // Validate cash means
             "cashMeans" => ["present", "array"],
-            "cashMeans.*" => ["required", "exists:mean_of_payments,id", new UniqueMeanCurrency]
+            "cashMeans.*" => ["required", "exists:mean_of_payments,id", new UniqueMeanCurrency, new MeanBelongsToUser]
         ]);
-        dd($data);
+
+		// Insert cash
+		$usersCashIDsInDB = auth()->user()->cash
+			->map(fn ($item) => $item["id"])
+			->toArray();
+		$usersCashIDs = array_map(fn ($item) => $item["id"] * 1, $data["usersCash"]);
+
+		$IDsToInsert = array_values(array_diff($usersCashIDs, $usersCashIDsInDB));
+		$IDsToRemove = array_values(array_diff($usersCashIDsInDB, $usersCashIDs));
+
+		auth()->user()->cash()->detach($IDsToRemove);
+
+		$usersCashIDsToAmounts = [];
+		foreach ($data["usersCash"] as $cash) {
+			$usersCashIDsToAmounts[$cash["id"]] = $cash["amount"];
+		}
+
+		foreach ($IDsToInsert as $ID) {
+			if (auth()->user()->cash->contains($ID)) {
+				auth()->user()->cash()
+					->updateExistingPivot($ID, ["amount" => $usersCashIDsToAmounts[$ID]]);
+			}
+			else {
+				auth()->user()->cash()
+					->attach($ID, ["amount" => $usersCashIDsToAmounts[$ID]]);
+			}
+		}
+
+		// Insert cash means
+        $cashMeansInDB = auth()->user()->cash_means
+            ->map(fn ($item) => $item["id"])
+            ->toArray();
+
+        $IDsToInsert = array_values(array_diff($data["cashMeans"], $cashMeansInDB));
+        $IDsToRemove = array_values(array_diff($cashMeansInDB, $data["cashMeans"]));
+
+        auth()->user()->cash_means()->detach($IDsToRemove);
+        auth()->user()->cash_means()->attach($IDsToInsert);
+
+		return response()->json(compact("data"));
     }
 }
