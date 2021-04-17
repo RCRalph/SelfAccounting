@@ -38,9 +38,14 @@ class BackupController extends Controller
         $canCreate = now()->subDays(1)->gte($backup->last_backup);
         $canRestore = now()->subDays(1)->gte($backup->last_restoration);
 
-        $chartsBundle = Bundle::where("code", "charts")->first();
-        $hasChartsBundle = auth()->user()->bundles->contains($chartsBundle) ||
-            auth()->user()->premium_bundles->contains($chartsBundle);
+        // Check if user has bundles
+        $bundles = auth()->user()->bundles
+            ->merge(auth()->user()->premium_bundles);
+        $hasBundles = [];
+        
+        foreach (Bundle::all() as $bundle) {
+            $hasBundles[$bundle->code] = $bundles->contains($bundle);
+        }
 
         $restoreDate = "";
         if (!$canRestore && auth()->user()->created_at->addDays(30)->eq($backup->last_restoration)) {
@@ -50,22 +55,27 @@ class BackupController extends Controller
                 )[0];
         }
 
-        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate", "hasChartsBundle"));
+        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate", "hasBundles"));
     }
 
     public function createBackup()
     {
         $this->authorize("createBackup", Backup::class);
 
-        $chartsBundle = Bundle::where("code", "charts")->first();
-        $hasChartsBundle = auth()->user()->bundles->contains($chartsBundle) ||
-            auth()->user()->premium_bundles->contains($chartsBundle);
+        // Check if user has bundles
+        $bundles = auth()->user()->bundles
+            ->merge(auth()->user()->premium_bundles);
+        $hasBundles = [];
+
+        foreach (Bundle::all() as $bundle) {
+            $hasBundles[$bundle->code] = $bundles->contains($bundle);
+        }
 
         // Gather categories
         $categories = auth()->user()->categories
             ->map(fn ($item) => collect($item)->except("user_id", "created_at", "updated_at"));
 
-        if (!$hasChartsBundle) {
+        if (!$hasBundles["charts"]) {
             foreach ($categories as $i => $category) {
                 unset($categories[$i]["show_on_charts"]);
             }
@@ -79,9 +89,9 @@ class BackupController extends Controller
 
         // Gather means of payment
         $means = auth()->user()->meansOfPayment
-            ->map(function ($item) use ($hasChartsBundle) {
+            ->map(function ($item) use ($hasBundles) {
                 $item = collect($item)->except("user_id", "created_at", "updated_at");
-                if (!$hasChartsBundle) {
+                if (!$hasBundles["charts"]) {
                     unset($item["show_on_charts"]);
                 }
                 $item["first_entry_amount"] *= 1;
@@ -105,6 +115,7 @@ class BackupController extends Controller
                 return $item;
             });
 
+        // Gather outcome
         $outcome = auth()->user()->outcome
             ->map(function ($item) use ($categoriesIDs, $meansIDs) {
                 $item = collect($item)->except("id", "user_id", "created_at", "updated_at");
@@ -115,10 +126,23 @@ class BackupController extends Controller
                 return $item;
             });
 
+        $bundleData = [];
+
+        // Gather cash
+        if ($hasBundles["cashan"]) {
+            $bundleData["cash"] = auth()->user()->cash
+                ->map(fn ($item) => [
+                        "currency_id" => $item->currency_id,
+                        "value" => $item->value * 1,
+                        "amount" => $item->pivot->amount
+                    ]
+                );
+        }
+
         $backup = auth()->user()->backup
             ->update(["last_backup" => now()]);
 
-        return response()->json(compact("categories", "means", "income", "outcome"));
+        return response()->json(compact("categories", "means", "income", "outcome", "bundleData"));
     }
 
     public function restoreData()
@@ -169,14 +193,19 @@ class BackupController extends Controller
         auth()->user()->income()->delete();
         auth()->user()->outcome()->delete();
 
-        // Enter categories and means
-        $chartsBundle = Bundle::where("code", "charts")->first();
-        $hasChartsBundle = auth()->user()->bundles->contains($chartsBundle) ||
-            auth()->user()->premium_bundles->contains($chartsBundle);
+        // Check if user has bundles
+        $bundles = auth()->user()->bundles
+            ->merge(auth()->user()->premium_bundles);
+        $hasBundles = [];
 
+        foreach (Bundle::all() as $bundle) {
+            $hasBundles[$bundle->code] = $bundles->contains($bundle);
+        }
+
+        // Enter categories and means
         $categories = [ 0 => null ]; $means = [ 0 => null ];
         foreach ($data["categories"] as $index => $category) {
-            if (!$hasChartsBundle) {
+            if (!$hasBundles["charts"]) {
                 unset($category["show_on_charts"]);
             }
 
@@ -185,7 +214,7 @@ class BackupController extends Controller
         }
 
         foreach ($data["means"] as $index => $mean) {
-            if (!$hasChartsBundle) {
+            if (!$hasBundles["charts"]) {
                 unset($mean["show_on_charts"]);
             }
 

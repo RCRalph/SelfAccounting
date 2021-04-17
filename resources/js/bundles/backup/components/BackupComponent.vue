@@ -56,7 +56,7 @@
                     <RestoreTablesComponent
                         :data="dataToDisplay"
                         :currencies="currencies"
-                        :charts="hasChartsBundle"
+                        :bundles="hasBundles"
                     ></RestoreTablesComponent>
 
                     <hr class="hr">
@@ -109,7 +109,7 @@ export default {
             submitSpinner: false,
             dataToDisplay: true,
             currencies: [],
-            hasChartsBundle: false
+            hasBundles: {}
         }
     },
     methods: {
@@ -317,7 +317,7 @@ export default {
                 this.canRestore = data.canRestore;
                 this.restoreDate = data.restoreDate;
                 this.currencies = data.currencies;
-                this.hasChartsBundle = data.hasChartsBundle;
+                this.hasBundles = data.hasBundles;
 
                 this.ready = true;
             })

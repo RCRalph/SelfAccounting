@@ -5,7 +5,7 @@
         <CategoriesTableComponent
             :data="data.categories"
             :currencies="currencies"
-            :charts="charts"
+            :charts="bundles.charts"
         ></CategoriesTableComponent>
 
         <hr class="hr-dashed">
@@ -13,7 +13,7 @@
         <MeansTableComponent
             :data="data.means"
             :currencies="currencies"
-            :charts="charts"
+            :charts="bundles.charts"
         ></MeansTableComponent>
 
         <hr class="hr-dashed">
@@ -44,7 +44,7 @@ import MeansTableComponent from "./MeansTableComponent.vue";
 import IncomeOutcomeTableComponent from "./IncomeOutcomeTableComponent.vue";
 
 export default {
-    props: ["data", "currencies", "charts"],
+    props: ["data", "currencies", "bundles"],
     components: {
         CategoriesTableComponent,
         MeansTableComponent,
