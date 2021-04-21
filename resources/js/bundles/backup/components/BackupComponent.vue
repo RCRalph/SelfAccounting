@@ -244,6 +244,28 @@ export default {
 
 			return !validationResult.length || validationResult.reduce((item1, item2) => item1 && item2);
 		},
+        checkBundleData(data) {
+            let validationResult = [];
+
+            // Validate cash
+            if (this.hasBundles.cashan && data.cash != undefined) {
+                if (!Array.isArray(data.cash)) {
+                    return false;
+                }
+
+                data.cash.forEach(item => {
+                    let validation = [
+                        this.isCurrency(item.currency_id),
+                        this.isBetweenNumbers(item.value, 0.001, 1e7 - 0.001),
+                        this.isBetweenNumbers(item.amount, 1, Math.pow(2, 63) - 1)
+                    ]
+
+                    validationResult.push(validation.reduce((item1, item2) => item1 && item2));
+                })
+            }
+
+            return !validationResult.length || validationResult.reduce((item1, item2) => item1 && item2);
+        },
         readFile() {
             // Get file content
             const file = document.getElementById("file-input").files[0];
@@ -283,6 +305,15 @@ export default {
 							throw new Error(`Invalid ${item} data`);
 						}
 					});
+
+                    // Check bundle data
+                    if (data.bundleData === undefined || !(data.bundleData instanceof Object)) {
+                        throw new Error("Invalid data type (bundle data not an object)");
+                    }
+
+                    if (this.checkBundleData(data.bundleData) === false) {
+                        throw new Error(`Invalid bundle data`);
+                    }
 
                     this.dataToDisplay = data;
                 })

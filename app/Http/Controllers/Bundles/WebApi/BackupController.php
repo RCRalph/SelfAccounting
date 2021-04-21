@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Rules\BackupValidIODate;
 use App\Rules\BackupValidCategoryMean;
+use App\Rules\CorrectValueForCash;
 
 use App\Backup;
 use App\Currency;
@@ -15,6 +16,7 @@ use App\Outcome;
 use App\Category;
 use App\MeanOfPayment;
 use App\Bundle;
+use App\Cash;
 
 class BackupController extends Controller
 {
@@ -42,7 +44,7 @@ class BackupController extends Controller
         $bundles = auth()->user()->bundles
             ->merge(auth()->user()->premium_bundles);
         $hasBundles = [];
-        
+
         foreach (Bundle::all() as $bundle) {
             $hasBundles[$bundle->code] = $bundles->contains($bundle);
         }
@@ -184,7 +186,16 @@ class BackupController extends Controller
             "outcome.*.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "outcome.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "outcome.*.category_id" => ["present", "integer", new BackupValidCategoryMean("outcome")],
-            "outcome.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("outcome")]
+            "outcome.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("outcome")],
+
+            // Bundle data
+            "bundleData" => ["present", "array"],
+
+            // Cash
+            "bundleData.cash" => ["nullable", "array"],
+            "bundleData.cash.*.currency_id" => ["required", "exists:currencies,id"],
+            "bundleData.cash.*.value" => ["required", "numeric", "min:0", "max:1e7", "not_in:0,1e7", new CorrectValueForCash],
+            "bundleData.cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807"]
         ]);
 
         // Erase existing data
@@ -192,6 +203,7 @@ class BackupController extends Controller
         auth()->user()->meansOfPayment()->delete();
         auth()->user()->income()->delete();
         auth()->user()->outcome()->delete();
+        auth()->user()->cash()->detach();
 
         // Check if user has bundles
         $bundles = auth()->user()->bundles
@@ -241,6 +253,20 @@ class BackupController extends Controller
                     "mean_id" => $means[$outcome["mean_id"]]
                 ]
             ));
+        }
+
+        // Enter cash data
+        if (isset($data["bundleData"]["cash"])) {
+            foreach ($data["bundleData"]["cash"] as $cash) {
+                auth()->user()->cash()->attach(
+                    Cash::firstWhere([
+                        "currency_id" => $cash["currency_id"],
+                        "value" => $cash["value"]
+                    ]), [
+                        "amount" => $cash["amount"]
+                    ]
+                );
+            }
         }
 
         auth()->user()->backup
