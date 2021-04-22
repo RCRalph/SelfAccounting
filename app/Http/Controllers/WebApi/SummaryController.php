@@ -16,7 +16,7 @@ class SummaryController extends Controller
 
     public function getData()
     {
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
         $categories = auth()->user()->categories;
         $means = auth()->user()->meansOfPayment;
 

@@ -130,7 +130,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import Loading from "../../../components/Loading.vue";
 import SaveResetChanges from "../../../components/SaveResetChanges.vue";
 

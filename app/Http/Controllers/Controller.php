@@ -12,6 +12,10 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
+use App\Bundle;
+use App\Currency;
+use App\Cash;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -142,5 +146,52 @@ class Controller extends BaseController
                 return $last != null ? $last->currency_id : 1;
             }
         );
+    }
+
+    public function hasBundle($code)
+    {
+        $bundle = Bundle::firstWhere("code", $code);
+        return auth()->user()->bundles->contains($bundle) ||
+            auth()->user()->premium_bundles->contains($bundle);
+    }
+
+    public function getCurrencies()
+    {
+        return Cache::remember(
+            "currencies",
+            now()->addHours(1),
+            fn () => Currency::all()
+        );
+    }
+
+    public function getCash()
+    {
+        return Cache::remember(
+            "cash",
+            now()->addHours(1),
+            fn () => Cash::all()
+                ->sortByDesc("value")
+                ->groupBy("currency_id")
+        );
+    }
+
+    public function getCashMeans()
+    {
+        $cashMeansList = auth()->user()->cash_means
+            ->map(fn ($item) => $item->only("currency_id", "id"))
+            ->groupBy("currency_id");
+
+        $cashMeans = [];
+        foreach ($cashMeansList as $currency => $value) {
+            $cashMeans[$currency] = $value[0]["id"];
+        }
+
+        foreach ($this->getCurrencies() as $currency) {
+            if (!isset($cashMeans[$currency->id])) {
+                $cashMeans[$currency->id] = null;
+            }
+        }
+
+        return $cashMeans;
     }
 }

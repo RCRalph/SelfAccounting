@@ -23,7 +23,7 @@ class IncomeOutcomeController extends Controller
 
     private function getData($viewType)
     {
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
 
         $nullArray = [
             "id" => 0,
@@ -82,13 +82,22 @@ class IncomeOutcomeController extends Controller
             "mean" => $incomeOutcome == null ? 0 : $incomeOutcome->mean_id
         ];
 
-        return compact("currencies", "categories", "means", "titles", "last");
+        $hasCashBundle = $this->hasBundle("cashan");
+        if ($hasCashBundle) {
+            $cash = $this->getCash();
+            $cashMeans = $this->getCashMeans();
+        }
+
+        return array_merge(
+            compact("currencies", "categories", "means", "titles", "last"),
+            $hasCashBundle ? compact("cash", "cashMeans") : []
+        );
     }
 
     public function start()
     {
         // Get currencies
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
 
         // Get means of payment
         $meansTemp = auth()->user()->meansOfPayment->map(function ($item) {
@@ -114,7 +123,7 @@ class IncomeOutcomeController extends Controller
 
         $lastCurrency = $this->getLastCurrency();
 
-        return response()->json(compact('currencies', 'means', 'categories', 'lastCurrency'));
+        return response()->json(compact("currencies", "means", "categories", "lastCurrency"));
     }
 
     public function all($viewType, Currency $currency)

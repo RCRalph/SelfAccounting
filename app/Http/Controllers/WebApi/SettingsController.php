@@ -40,7 +40,7 @@ class SettingsController extends Controller
             abort(500);
         }
 
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
 
         if (!isset($data["data"])) {
             ($type == $TYPES[0] ?
@@ -187,7 +187,7 @@ class SettingsController extends Controller
             ->sortBy("date");
 
         // Get currencies
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
 
         // Get categories
         $categories = auth()->user()->categories

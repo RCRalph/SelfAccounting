@@ -22,11 +22,9 @@ class CashController extends Controller
 
     public function index()
     {
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
         $lastCurrency = $this->getLastCurrency();
-        $cash = Cash::all()
-            ->sortByDesc("value")
-            ->groupBy("currency_id");
+        $cash = $this->getCash();
 
         $means = auth()->user()->meansOfPayment
             ->map(fn ($item) => $item->only("name", "currency_id", "id", "first_entry_amount"))
@@ -51,20 +49,7 @@ class CashController extends Controller
             }
         }
 
-        $cashMeansList = auth()->user()->cash_means
-            ->map(fn ($item) => $item->only("currency_id", "id"))
-            ->groupBy("currency_id");
-
-        $cashMeans = [];
-        foreach ($cashMeansList as $currency => $value) {
-            $cashMeans[$currency] = $value[0]["id"];
-        }
-
-        foreach ($currencies as $currency) {
-            if (!isset($cashMeans[$currency->id])) {
-                $cashMeans[$currency->id] = null;
-            }
-        }
+        $cashMeans = $this->getCashMeans();
 
 		$usersCash = [];
 		foreach (auth()->user()->cash as $userCash) {

@@ -36,7 +36,7 @@ class BackupController extends Controller
             ]);
         }
 
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
         $canCreate = now()->subDays(1)->gte($backup->last_backup);
         $canRestore = now()->subDays(1)->gte($backup->last_restoration);
 

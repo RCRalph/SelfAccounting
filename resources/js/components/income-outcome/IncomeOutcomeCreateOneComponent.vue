@@ -22,6 +22,18 @@
                     :titles="titles"
                 ></CreateForm>
 
+                <div v-if="cashMeanUsed">
+                    <hr class="hr">
+
+                    <IncomeOutcomeCashComponent
+                        :currencies="currencies"
+                        :used="[data.currency_id]"
+                        :cash="cash"
+                        :sums="sumObject"
+                        v-model="cashUsed"
+                    ></IncomeOutcomeCashComponent>
+                </div>
+
                 <hr class="hr">
 
                 <div class="row">
@@ -53,12 +65,14 @@
 <script>
 import Loading from "../Loading.vue";
 import CreateForm from "./CreateFormComponent.vue";
+import IncomeOutcomeCashComponent from "../../bundles/cash/components/IncomeOutcomeCashComponent.vue";
 
 export default {
     props: ["type"],
     components: {
         Loading,
-        CreateForm
+        CreateForm,
+        IncomeOutcomeCashComponent
     },
     data() {
         return {
@@ -69,6 +83,8 @@ export default {
             categories: {},
             means: {},
             titles: [],
+            cash: {},
+            cashMeans: {},
 
             data: {
                 date: "",
@@ -78,7 +94,8 @@ export default {
                 currency_id: "",
                 category_id: "",
                 mean_id: ""
-            }
+            },
+            cashUsed: {}
         }
     },
     computed: {
@@ -112,6 +129,14 @@ export default {
                 toNumber.price > 0;
 
             return validDate && validTitle && validAmount && validPrice;
+        },
+        cashMeanUsed() {
+            return this.data.mean_id == this.cashMeans[this.data.currency_id];
+        },
+        sumObject() {
+            let retObj = {}
+            retObj[this.data.currency_id] = Math.round(this.data.amount * this.data.price * 1000) / 1000;
+            return retObj;
         }
     },
     methods: {
@@ -122,7 +147,7 @@ export default {
                 .post(`/webapi/${this.type}/store`, {
                     data: [this.data]
                 })
-                .then(response => {
+                .then(() => {
                     window.location.href = `/${this.type}`
                 })
                 .catch(err => {
@@ -145,6 +170,20 @@ export default {
                 this.data.currency_id = data.last.currency;
                 this.data.category_id = data.last.category || 0;
                 this.data.mean_id = data.last.mean || 0;
+
+                if (data.cash != undefined && data.cashMeans != undefined) {
+                    this.cash = data.cash;
+                    this.cashMeans = data.cashMeans;
+
+                    // This way the values inside this.cashUsed will be getters and setters instead of actual values
+                    const tempCashValues = {};
+                    for (let i in this.cash) {
+                        this.cash[i].forEach(item => {
+                            tempCashValues[item.id] = 0;
+                        })
+                    }
+                    this.cashUsed = tempCashValues;
+                }
 
                 this.data.date = (new Date(this.minDate).getTime() > new Date().getTime() ?
                     new Date(this.minDate) : new Date())
