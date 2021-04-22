@@ -185,7 +185,7 @@ export default {
             this.submitted = true;
             document.getElementById("bundle-form").submit();
         }
-    }
+    },
     mounted() {
         axios
             .get("/webapi/admin/bundles/create", {})
