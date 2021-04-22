@@ -10,7 +10,6 @@
         <div class="card-body">
             <div v-if="ready">
                 <UserDataChange
-                    :darkmode="darkmode"
                     :userData="userData"
                     @userDataReset="userDataReset"
                 ></UserDataChange>
@@ -95,8 +94,6 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
-
             userData: {},
 			userDataCopy: {},
             bundles: [],
@@ -131,9 +128,6 @@ export default {
                 })
         }
     },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
     mounted() {
         axios
             .get(`/webapi/admin/users/${this.id}`, {})
@@ -144,9 +138,6 @@ export default {
 
                 this.ready = true;
             })
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

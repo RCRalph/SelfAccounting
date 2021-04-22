@@ -13,12 +13,10 @@ jQuery(() => {
             if (isDarkmode) {
                 // Set lightmode
                 $("body").addClass("lightmode");
-                $("#darkmode-status").html("");
             }
             else {
                 // Set darkmode
                 $("body").removeClass("lightmode");
-                $("#darkmode-status").html("1");
             }
 
             if ($("#navbar-left-side").children().length) {

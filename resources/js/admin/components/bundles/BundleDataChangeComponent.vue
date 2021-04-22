@@ -98,8 +98,7 @@ export default {
     props: {
         data: Object,
         titles: Array,
-        codes: Array,
-        darkmode: Boolean
+        codes: Array
     },
     components: {
         SaveResetChanges,

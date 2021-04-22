@@ -76,7 +76,6 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
 
             currencies: [],
@@ -200,9 +199,6 @@ export default {
 			return new Date(date).toISOString().split("T")[0];
 		}
 	},
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
     mounted() {
         axios
             .get("/webapi/bundles/charts/balance-monitor", {})
@@ -217,9 +213,6 @@ export default {
 
                 this.ready = true;
             })
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

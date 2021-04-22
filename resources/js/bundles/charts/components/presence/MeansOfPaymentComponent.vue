@@ -95,10 +95,6 @@ export default {
             required: true,
             type: Object
         },
-        darkmode: {
-            required: true,
-            type: Boolean
-        },
         currencies: {
             required: true,
             type: Array

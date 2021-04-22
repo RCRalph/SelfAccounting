@@ -100,7 +100,6 @@ export default {
         InputGroup
     },
     props: {
-        darkmode: Boolean,
         userData: Object,
     },
     data() {
