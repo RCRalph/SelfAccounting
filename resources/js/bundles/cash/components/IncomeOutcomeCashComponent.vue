@@ -44,7 +44,7 @@
                                     <input
                                         :class="[
                                             'cash-input',
-                                            !isValidCashAmount(value[item.id]) && 'is-invalid'
+                                            !isValidCashAmount(value[item.id], item.id) && 'is-invalid'
                                         ]"
                                         type="number"
                                         step="1"
@@ -55,7 +55,7 @@
 
                                 <td class="h5 font-weight-bold">
                                     {{
-                                        isValidCashAmount(value[item.id]) ?
+                                        isValidCashAmount(value[item.id], item.id) ?
                                         Math.round(item.value * value[item.id] * 1000) / 1000 : 0
                                     }}
                                     {{ currencies[currentCurrency - 1].ISO }}
@@ -72,7 +72,7 @@
             </div>
 
             <div class="row h3 font-weight-bold">
-                <div class="col-6 text-right">Current balance:</div>
+                <div class="col-6 text-right">Sum from {{ this.type }}:</div>
                 <div class="col-6 ">{{ sums[currentCurrency] }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
 
@@ -84,7 +84,7 @@
                     'font-weight-bold',
                     sums[currentCurrency] - currentSum != 0 ? 'text-danger' : 'text-success'
                 ]">
-                    <div class="col-6 text-right">Balance difference:</div>
+                    <div class="col-6 text-right">Difference:</div>
 
                     <div class="col-6">
                         {{ sums[currentCurrency] - currentSum > 0 ? "+" : "" }}{{ Math.round((sums[currentCurrency] - currentSum) * 1000) / 1000 }}
@@ -102,7 +102,9 @@ export default {
         used: Array,
         cash: Object,
         value: Object,
-        sums: Object
+        sums: Object,
+        type: String,
+        userscash: Object
     },
     data() {
         return {
@@ -114,15 +116,10 @@ export default {
             return this.currencies.filter(item => this.used.includes(item.id));
         },
         currentSum() {
-            let validData = true;
             for (let i in this.value) {
-                if (!this.isValidCashAmount(this.value[i])) {
-                    validData = false;
+                if (!this.isValidCashAmount(this.value[i], i)) {
+                    return 0;
                 }
-            }
-
-            if (!validData) {
-                return 0;
             }
 
             return Math.round(this.cash[this.currentCurrency]
@@ -134,7 +131,7 @@ export default {
         }
 	},
     methods: {
-        isValidCashAmount(amount) {
+        isValidCashAmount(amount, id) {
             if (amount === "") {
                 return false;
             }
@@ -144,7 +141,8 @@ export default {
                 return false;
             }
 
-            return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63);
+            return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63) &&
+                (this.type == "outcome" && (this.userscash[id] == undefined || this.userscash[id] >= amount) || this.type == "income");
         }
     },
     mounted() {

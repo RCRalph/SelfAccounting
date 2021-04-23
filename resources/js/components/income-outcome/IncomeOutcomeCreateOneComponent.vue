@@ -30,6 +30,8 @@
                         :used="[data.currency_id]"
                         :cash="cash"
                         :sums="sumObject"
+                        :type="type"
+                        :userscash="usersCash"
                         v-model="cashUsed"
                     ></IncomeOutcomeCashComponent>
                 </div>
@@ -85,6 +87,7 @@ export default {
             titles: [],
             cash: {},
             cashMeans: {},
+            usersCash: [],
 
             data: {
                 date: "",
@@ -128,6 +131,14 @@ export default {
                 toNumber.price <= 1e11 &&
                 toNumber.price > 0;
 
+            if (this.cashMeanUsed) {
+                for (let i in this.cashUsed) {
+                    if (!this.isValidCashAmount(this.cashUsed[i], i)) {
+                        return false;
+                    }
+                }
+            }
+
             return validDate && validTitle && validAmount && validPrice;
         },
         cashMeanUsed() {
@@ -143,10 +154,26 @@ export default {
         submit() {
             this.submitted = true;
 
+            let submitObj = {
+                data: [this.data]
+            }
+
+            if (this.cashMeanUsed) {
+                submitObj.cash = [];
+                this.cash[this.data.currency_id]
+                    .map(item => item.id)
+                    .forEach(item => {
+                        if (this.cashUsed[item] > 0) {
+                            submitObj.cash.push({
+                                id: item,
+                                amount: this.cashUsed[item]
+                            })
+                        }
+                    })
+            }
+
             axios
-                .post(`/webapi/${this.type}/store`, {
-                    data: [this.data]
-                })
+                .post(`/webapi/${this.type}/store`, submitObj)
                 .then(() => {
                     window.location.href = `/${this.type}`
                 })
@@ -154,6 +181,19 @@ export default {
                     console.log(err);
                     this.submitted = false;
                 })
+        },
+        isValidCashAmount(amount, id) {
+            if (amount === "") {
+                return false;
+            }
+
+            amount = Number(amount);
+            if (isNaN(amount)) {
+                return false;
+            }
+
+            return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63) &&
+                (this.type == "outcome" && (this.usersCash[id] == undefined || this.usersCash[id] >= amount) || this.type == "income");
         }
     },
     mounted() {
@@ -171,9 +211,10 @@ export default {
                 this.data.category_id = data.last.category || 0;
                 this.data.mean_id = data.last.mean || 0;
 
-                if (data.cash != undefined && data.cashMeans != undefined) {
+                if (data.cash != undefined && data.cashMeans != undefined && data.usersCash != undefined) {
                     this.cash = data.cash;
                     this.cashMeans = data.cashMeans;
+                    this.usersCash = data.usersCash;
 
                     // This way the values inside this.cashUsed will be getters and setters instead of actual values
                     const tempCashValues = {};

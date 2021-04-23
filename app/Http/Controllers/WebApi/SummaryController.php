@@ -11,7 +11,7 @@ class SummaryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware("auth");
     }
 
     public function getData()
@@ -110,10 +110,12 @@ class SummaryController extends Controller
             ]);
         }
 
-        $finalData = collect($finalData)->groupBy("currency_id");
+        $finalData = collect($finalData)
+            ->sortByDesc("balance")
+            ->groupBy("currency_id");
 
         $lastCurrency = $this->getLastCurrency();
 
-        return response()->json(compact('currencies', 'finalData', 'lastCurrency'));
+        return response()->json(compact("currencies", "finalData", "lastCurrency"));
     }
 }

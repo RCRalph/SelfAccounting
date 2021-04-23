@@ -12,6 +12,7 @@ use App\MeanOfPayment;
 
 use App\Rules\CorrectDateIO;
 use App\Rules\ValidCategoryMean;
+use App\Rules\HasEnoughCash;
 use App\Http\Middleware\IncomeOutcome;
 
 class IncomeOutcomeController extends Controller
@@ -86,11 +87,14 @@ class IncomeOutcomeController extends Controller
         if ($hasCashBundle) {
             $cash = $this->getCash();
             $cashMeans = $this->getCashMeans();
+            $usersCash = auth()->user()->cash
+                ->map(fn ($item) => [$item->id => $item->pivot->amount])
+                ->mapWithKeys(fn ($item) => $item);
         }
 
         return array_merge(
             compact("currencies", "categories", "means", "titles", "last"),
-            $hasCashBundle ? compact("cash", "cashMeans") : []
+            $hasCashBundle ? compact("cash", "cashMeans", "usersCash") : []
         );
     }
 
@@ -161,14 +165,22 @@ class IncomeOutcomeController extends Controller
     {
         $directory = "data.*";
         $data = request()->validate([
+            // Validate data
             "$directory.date" => ["required", "date", new CorrectDateIO],
             "$directory.title" => ["required", "string", "max:64"],
             "$directory.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "$directory.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "$directory.currency_id" => ["required", "integer", "exists:currencies,id"],
             "$directory.category_id" => ["present", "integer", new ValidCategoryMean($viewType)],
-            "$directory.mean_id" => ["present", "integer", new ValidCategoryMean($viewType)]
-        ])["data"];
+            "$directory.mean_id" => ["present", "integer", new ValidCategoryMean($viewType)],
+
+            // Validate cash
+            "cash" => ["nullable", "array"],
+            "cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807", new HasEnoughCash($viewType)],
+            "cash.*.id" => ["required", "distinct", "exists:cash,id"]
+        ]);
+        $cash = $data["cash"];
+        $data = $data["data"];
 
         foreach ($data as $key => $item) {
             $data[$key] = array_merge(
@@ -191,6 +203,30 @@ class IncomeOutcomeController extends Controller
         else {
             foreach ($data as $item) {
                 Outcome::create($item);
+            }
+        }
+
+        if ($cash) {
+            foreach ($cash as $cashToInsert) {
+                $foundCash = auth()->user()->cash()->find($cashToInsert["id"]);
+                if ($foundCash) {
+                    $pivotAmount = $foundCash->pivot->amount + (
+                        $viewType == "income" ?
+                        $cashToInsert["amount"] :
+                        -$cashToInsert["amount"]
+                    );
+
+                    auth()->user()->cash()->updateExistingPivot(
+                        $cashToInsert["id"],
+                        ["amount" => $pivotAmount]
+                    );
+                }
+                else {
+                    auth()->user()->cash()->attach(
+                        $cashToInsert["id"],
+                        ["amount" => $cashToInsert["amount"]]
+                    );
+                }
             }
         }
 
