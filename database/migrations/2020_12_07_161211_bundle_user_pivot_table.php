@@ -13,7 +13,7 @@ class BundleUser extends Migration
      */
     public function up()
     {
-        Schema::create('bundle_user', function (Blueprint $table) {
+        Schema::create('bundle_user_pivot_table', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bundle_id')->constrained('bundles')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -31,6 +31,6 @@ class BundleUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bundle_user');
+        Schema::dropIfExists('bundle_user_pivot_table');
     }
 }
