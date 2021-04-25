@@ -2,13 +2,19 @@
 
 namespace App\Policies;
 
-use App\Outcome;
+use App\Backup;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Carbon\Carbon;
 
-class OutcomePolicy
+class BackupPolicy
 {
     use HandlesAuthorization;
+
+    public function createBackup(User $user)
+    {
+        return Carbon::now()->subDays(1)->gte($user->backup->last_backup);
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -25,12 +31,12 @@ class OutcomePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Outcome  $outcome
+     * @param  \App\Backup  $backup
      * @return mixed
      */
-    public function view(User $user, Outcome $outcome)
+    public function view(User $user, Backup $backup)
     {
-        return $user->id == $outcome->user_id;
+        //
     }
 
     /**
@@ -48,22 +54,22 @@ class OutcomePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Outcome  $outcome
+     * @param  \App\Backup  $backup
      * @return mixed
      */
-    public function update(User $user, Outcome $outcome)
+    public function update(User $user, Backup $backup)
     {
-        return $user->id == $outcome->user_id;
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Outcome  $outcome
+     * @param  \App\Backup  $backup
      * @return mixed
      */
-    public function delete(User $user, Outcome $outcome)
+    public function delete(User $user, Backup $backup)
     {
         //
     }
@@ -72,10 +78,10 @@ class OutcomePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Outcome  $outcome
+     * @param  \App\Backup  $backup
      * @return mixed
      */
-    public function restore(User $user, Outcome $outcome)
+    public function restore(User $user, Backup $backup)
     {
         //
     }
@@ -84,10 +90,10 @@ class OutcomePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Outcome  $outcome
+     * @param  \App\Backup  $backup
      * @return mixed
      */
-    public function forceDelete(User $user, Outcome $outcome)
+    public function forceDelete(User $user, Backup $backup)
     {
         //
     }

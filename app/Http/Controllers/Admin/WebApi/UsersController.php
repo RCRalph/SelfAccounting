@@ -28,7 +28,7 @@ class UsersController extends Controller
 
     public function details(User $user) // Get user's details
     {
-        $bundles = Bundle::all()->map(function($item) {
+        $bundles = Bundle::all()->map(function ($item) {
             return $item->only("id", "title");
         });
 
@@ -69,7 +69,7 @@ class UsersController extends Controller
 
 		$user->bundles()->toggle(Bundle::whereIn("id", $bundlesToToggle)->get());
 
-        $bundlesToReturn = $user->fresh()->bundles->map(function($item) {
+        $bundlesToReturn = $user->fresh()->bundles->map(function ($item) {
             return ["id" => $item->id, "title" => $item->title];
         });
 

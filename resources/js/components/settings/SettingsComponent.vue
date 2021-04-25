@@ -23,13 +23,11 @@
         <div class="card-body">
             <div v-if="ready">
                 <CategoriesComponent
-                    :darkmode="darkmode"
                     :categories="categories"
                     :currency="currentCurrency"
                 ></CategoriesComponent>
 
                 <MeansOfPaymentComponent
-                    :darkmode="darkmode"
                     :means="means"
                     :currency="currentCurrency"
                     class="mt-3"
@@ -54,7 +52,6 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
             currentCurrency: 1,
 
@@ -62,9 +59,6 @@ export default {
             categories: {},
             means: {}
         }
-    },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         axios
@@ -79,9 +73,6 @@ export default {
 
                 this.ready = true;
             })
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

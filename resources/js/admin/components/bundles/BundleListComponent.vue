@@ -62,7 +62,6 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
             paginationData: {},
         };
@@ -82,14 +81,8 @@ export default {
                 });
         }
     },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
     mounted() {
         this.getPaginationData();
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

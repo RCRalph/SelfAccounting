@@ -43,8 +43,7 @@ class ChartsController extends Controller
         }
 
         // Get currency data
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = $this->getCurrencies();
 
         $lastCurrency = $this->getLastCurrency();
 
@@ -75,13 +74,13 @@ class ChartsController extends Controller
 
         $ioData = $ioData
             ->whereIn($type . "_id", $toShow)
-            ->map(function($item) use ($type) {
+            ->map(function ($item) use ($type) {
                 $item->value = $item->price * $item->amount;
 
                 return $item->only("value", "currency_id", ($type . "_id"));
             })
             ->groupBy("currency_id")
-            ->map(function($item) use ($type) {
+            ->map(function ($item) use ($type) {
                 $item = $item->groupBy($type . "_id");
 
                 return $item->map(
@@ -141,8 +140,7 @@ class ChartsController extends Controller
 
     public function getPresence()
     {
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = $this->getCurrencies();
 
         $categories = auth()->user()->categories
             ->map(fn ($item) => $item->only(
@@ -233,8 +231,7 @@ class ChartsController extends Controller
 
     public function balanceMonitor()
     {
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = $this->getCurrencies();
 
         // Pick only means and categories that have to be shown
         $means = auth()->user()->meansOfPayment;
@@ -242,12 +239,12 @@ class ChartsController extends Controller
 
         // Get income and outcome and count the values of entries
         $income = auth()->user()->income
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item->value = $item->amount * $item->price;
                 return $item->only("date", "value", "category_id", "mean_id", "currency_id");
             });
         $outcome = auth()->user()->outcome
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item->value = $item->amount * $item->price;
                 return $item->only("date", "value", "category_id", "mean_id", "currency_id");
             });
@@ -258,7 +255,7 @@ class ChartsController extends Controller
             ->groupBy("mean_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
-                ->map(function($item1) {
+                ->map(function ($item1) {
                     $sum = 0;
 
                     foreach ($item1 as $data) {
@@ -273,7 +270,7 @@ class ChartsController extends Controller
             ->groupBy("mean_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
-                ->map(function($item1) {
+                ->map(function ($item1) {
                     $sum = 0;
 
                     foreach ($item1 as $data) {
@@ -285,7 +282,7 @@ class ChartsController extends Controller
             );
 
         // Add first entry amounts of means to income by means by dates
-        foreach ($means as $mean) {
+        foreach ($means->where("show_on_charts", true) as $mean) {
             if ($incomeByMeans->has($mean->id)) {
                 $incomeMean = $incomeByMeans->get($mean->id);
 

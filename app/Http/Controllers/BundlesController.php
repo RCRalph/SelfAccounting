@@ -17,7 +17,7 @@ class BundlesController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
-        $bundles = Bundle::all()->sortBy("created_at")->map(function($item) {
+        $bundles = Bundle::all()->sortBy("created_at")->map(function ($item) {
             $item->thumbnail = $this->getLocalImageLink(
                 $this->PUBLIC_DIRECTORIES[0],
                 $item->thumbnail

@@ -30,14 +30,20 @@ class ValidCategoryMean implements Rule
             return true;
         }
 
-        if (strpos($attribute, "category_id") !== false) {
-            return !!auth()->user()->categories
+        $checkingCategory = strpos($attribute, "category") !== false;
+        $index = explode(".", $attribute)[1];
+
+        if ($checkingCategory) {
+            return auth()->user()->categories
                 ->where("id", $value)
+                ->where("currency_id", request("data.$index.currency_id"))
                 ->where($this->viewType . "_category", true)
                 ->count();
         }
-        return !!auth()->user()->meansOfPayment
+
+        return auth()->user()->meansOfPayment
             ->where("id", $value)
+            ->where("currency_id", request("data.$index.currency_id"))
             ->where($this->viewType . "_mean", true)
             ->count();
     }

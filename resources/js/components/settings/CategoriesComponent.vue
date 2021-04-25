@@ -87,10 +87,6 @@ import CategoriesTableRow from "./CategoriesTableRow.vue";
 
 export default {
     props: {
-        darkmode: {
-            required: true,
-            type: Boolean
-        },
         categories: {
             required: true,
             type: Object

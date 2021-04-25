@@ -12,7 +12,6 @@
                 <div class="row">
                     <div class="col-lg-5">
                         <ProfileShowcase
-                            :darkmode="darkmode"
                             :userData="userData"
                         ></ProfileShowcase>
                     </div>
@@ -61,13 +60,9 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
             userData: {},
         }
-    },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         axios.get("/webapi/profile", {})
@@ -75,9 +70,6 @@ export default {
                 this.userData = response.data.user;
                 this.ready = true;
             })
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

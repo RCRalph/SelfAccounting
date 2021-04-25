@@ -31,6 +31,12 @@ mix.js('resources/js/scripts/app.js', 'public/js')
         .js('resources/js/bundles/charts/scripts/balance-monitor.js', 'public/js/bundles/charts')
         .js('resources/js/bundles/charts/scripts/io-by-type.js', 'public/js/bundles/charts')
 
+        // Backup
+        .js('resources/js/bundles/backup/scripts/backup.js', 'public/js/bundles/backup')
+
+        // Cash
+        .js('resources/js/bundles/cash/scripts/cash.js', 'public/js/bundles/cash')
+
     // Admin scripts
     .js('resources/js/admin/scripts/users/list.js', 'public/js/admin/users')
     .js('resources/js/admin/scripts/users/details.js', 'public/js/admin/users')

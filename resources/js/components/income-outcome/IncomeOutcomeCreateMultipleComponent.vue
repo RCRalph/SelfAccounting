@@ -133,6 +133,20 @@
                     <hr v-if="i + 1 < data.length" class="hr-dashed">
                 </div>
 
+                <div v-if="cashMeanUsed.length">
+                    <hr class="hr">
+
+                    <IncomeOutcomeCashComponent
+                        :currencies="currencies"
+                        :used="cashMeanUsed"
+                        :cash="cash"
+                        :sums="sumObject"
+                        :type="type"
+                        :userscash="usersCash"
+                        v-model="cashUsed"
+                    ></IncomeOutcomeCashComponent>
+                </div>
+
                 <hr v-if="data.length" class="hr">
 
                 <div class="row">
@@ -176,17 +190,18 @@
 import Loading from "../Loading.vue";
 import InputGroup from "../InputGroup.vue";
 import CreateForm from "./CreateFormComponent.vue";
+import IncomeOutcomeCashComponent from "../../bundles/cash/components/IncomeOutcomeCashComponent.vue";
 
 export default {
     props: ["type"],
     components: {
         Loading,
         InputGroup,
-        CreateForm
+        CreateForm,
+        IncomeOutcomeCashComponent
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
             submitted: false,
 
@@ -194,6 +209,9 @@ export default {
             categories: {},
             means: {},
             titles: [],
+            cash: {},
+            cashMeans: {},
+            usersCash: [],
 
             common: {
                 date: "",
@@ -204,7 +222,7 @@ export default {
                 category_id: 0,
                 mean_id: 0
             },
-
+            cashUsed: {},
             data: []
         }
     },
@@ -294,6 +312,14 @@ export default {
                     toNumber.price <= 1e11 &&
                     toNumber.price > 0;
 
+                if (this.cashMeanUsed) {
+                    for (let i in this.cashUsed) {
+                        if (!this.isValidCashAmount(this.cashUsed[i], i)) {
+                            return false;
+                        }
+                    }
+                }
+
                 return validDate && validTitle && validAmount && validPrice;
             })
 
@@ -302,6 +328,34 @@ export default {
             }
 
             return validData.reduce((item1, item2) => item1 && item2);
+        },
+        cashMeanUsed() {
+            let retArr = [];
+            this.data.forEach(item => {
+                if (item.mean_id != null &&
+                    item.mean_id == this.cashMeans[item.currency_id] &&
+                    !retArr.includes(item.currency_id)
+                ) {
+                    retArr.push(item.currency_id);
+                }
+            });
+
+            return retArr;
+        },
+        sumObject() {
+            let sums = {};
+            this.data.forEach(item => {
+                if (item.mean_id != null && item.mean_id == this.cashMeans[item.currency_id]) {
+                    if (sums[item.currency_id] == undefined) {
+                        sums[item.currency_id] = Math.round(item.amount * item.price * 1000) / 1000;
+                    }
+                    else {
+                        sums[item.currency_id] += Math.round(item.amount * item.price * 1000) / 1000;
+                    }
+                }
+            });
+
+            return sums;
         }
     },
     methods: {
@@ -332,21 +386,50 @@ export default {
         },
         submit() {
             this.submitted = true;
-            axios
-                .post(`/webapi/${this.type}/store`, {
-                    data: this.data
+
+            let submitObj = {
+                data: this.data
+            }
+
+            if (this.cashMeanUsed) {
+                submitObj.cash = [];
+                this.cashMeanUsed.map(item => {
+                    this.cash[item]
+                        .map(item1 => item1.id)
+                        .forEach(item1 => {
+                            if (this.cashUsed[item1] > 0) {
+                                submitObj.cash.push({
+                                    id: item1,
+                                    amount: this.cashUsed[item1]
+                                })
+                            }
+                        })
                 })
-                .then(response => {
+            }
+
+            axios
+                .post(`/webapi/${this.type}/store`, submitObj)
+                .then(() => {
                     window.location.href = `/${this.type}`;
                 })
                 .catch(err => {
                     console.log(err);
                     this.submitted = false;
                 });
+        },
+        isValidCashAmount(amount, id) {
+            if (amount === "") {
+                return false;
+            }
+
+            amount = Number(amount);
+            if (isNaN(amount)) {
+                return false;
+            }
+
+            return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63) &&
+                (this.type == "outcome" && (this.usersCash[id] == undefined || this.usersCash[id] >= amount) || this.type == "income");
         }
-    },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         axios
@@ -355,9 +438,9 @@ export default {
                 const data = response.data.data;
 
                 this.titles = data.titles;
+                this.currencies = data.currencies;
                 this.common.currency_id = data.last.currency;
 
-                this.currencies = data.currencies;
                 this.categories = data.categories;
                 this.categories[0] = [{
                     id: 0,
@@ -371,6 +454,21 @@ export default {
                     first_entry_date: null
                 }];
 
+                if (data.cash != undefined) {
+                    this.cash = data.cash;
+                    this.cashMeans = data.cashMeans;
+                    this.usersCash = data.usersCash;
+
+                    // This way the values inside this.cashUsed will be getters and setters instead of actual values
+                    const tempCashValues = {};
+                    for (let i in this.cash) {
+                        this.cash[i].forEach(item => {
+                            tempCashValues[item.id] = 0;
+                        })
+                    }
+                    this.cashUsed = tempCashValues;
+                }
+
                 this.data.push({
                     date: "",
                     title: "",
@@ -383,9 +481,6 @@ export default {
 
                 this.ready = true;
             });
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

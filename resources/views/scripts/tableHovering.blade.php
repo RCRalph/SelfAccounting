@@ -26,27 +26,25 @@
         }
 
         $("tbody td, tbody th").on("mouseover", event => {
-            const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
             const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
             const rowspan = event.currentTarget.attributes.rowspan != undefined ?
                 parseInt(event.currentTarget.attributes.rowspan.value) : 1;
 
             for (let i = 0; i < rowspan; i++) {
                 for (let j in table[rowIndex + i]) {
-                    $(table[rowIndex + i][j]).addClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
+                    $(table[rowIndex + i][j]).addClass("row-hover-bg");
                 }
             }
         });
 
         $("tbody td, tbody th").on("mouseleave", event => {
-            const isDarkmode = $('#sun-moon').html().includes('<i class="fas fa-sun"></i>');
             const rowIndex = parseInt(event.currentTarget.parentElement.attributes.i.value);
             const rowspan = event.currentTarget.attributes.rowspan != undefined ?
                 parseInt(event.currentTarget.attributes.rowspan.value) : 1;
 
             for (let i = 0; i < rowspan; i++) {
                 for (let j in table[rowIndex + i]) {
-                    $(table[rowIndex + i][j]).removeClass("hover-bg-" + (isDarkmode ? "dark" : "light"));
+                    $(table[rowIndex + i][j]).removeClass("row-hover-bg");
                 }
             }
         });

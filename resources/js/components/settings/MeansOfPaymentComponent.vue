@@ -86,10 +86,6 @@ import EmptyPlaceholder from  "../EmptyPlaceholder.vue";
 import MeansOfPaymentTableRow from "./MeansOfPaymentTableRow.vue";
 export default {
     props: {
-        darkmode: {
-            required: true,
-            type: Boolean
-        },
         means: {
             required: true,
             type: Object

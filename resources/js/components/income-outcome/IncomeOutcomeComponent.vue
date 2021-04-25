@@ -134,7 +134,6 @@ export default {
             page: 1,
             dataReady: false,
             ready: false,
-            darkmode: false,
             tableKey: 0,
             currentCurrency: 1,
             headerCells: [
@@ -258,9 +257,6 @@ export default {
             this.tableKey++;
         }
     },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
     mounted() {
         axios
             .get(`/webapi/${this.type}/start`, {})
@@ -272,9 +268,6 @@ export default {
                 this.currentCurrency = response.data.lastCurrency;
                 this.ready = true;
             });
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     updated() {
         this.$nextTick(() => {

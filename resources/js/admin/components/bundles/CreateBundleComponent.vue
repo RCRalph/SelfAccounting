@@ -119,7 +119,6 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
             data: {
                 title: "",
@@ -187,9 +186,6 @@ export default {
             document.getElementById("bundle-form").submit();
         }
     },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
     mounted() {
         axios
             .get("/webapi/admin/bundles/create", {})
@@ -198,9 +194,6 @@ export default {
                 this.titles = response.data.titles;
                 this.ready = true;
             });
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

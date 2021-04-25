@@ -65,7 +65,7 @@ class BundlesController extends Controller
         $codes = $details["codes"];
 
         $gallery = $bundle->gallery
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item->image = $this->getLocalImageLink(
                     $this->PUBLIC_DIRECTORIES[1],
                     $item->image
@@ -86,7 +86,7 @@ class BundlesController extends Controller
         ]);
 
         // Get IDs of images that belong to this bundle
-        $ids = $bundle->gallery->map(function($item) {
+        $ids = $bundle->gallery->map(function ($item) {
             return $item->id;
         })->toArray();
 
@@ -105,7 +105,7 @@ class BundlesController extends Controller
         }
 
         // Get gallery as return object
-        $gallery = $bundle->fresh()->gallery->map(function($item) {
+        $gallery = $bundle->fresh()->gallery->map(function ($item) {
             $item->image = $this->getLocalImageLink(
                 $this->PUBLIC_DIRECTORIES[1],
                 $item->image

@@ -19,7 +19,6 @@
     </head>
 
     <body class="{{ ($pageData["darkmode"] ?? true) ? "" : "lightmode" }}">
-        <div id="darkmode-status" style="display: none;">{{ $pageData["darkmode"] ?? true }}</div>
         <div id="app">
             @include('layouts.navbar', compact("pageData"))
 

@@ -11,12 +11,12 @@ class SummaryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware("auth");
     }
 
     public function getData()
     {
-        $currencies = Currency::all();
+        $currencies = $this->getCurrencies();
         $categories = auth()->user()->categories;
         $means = auth()->user()->meansOfPayment;
 
@@ -24,13 +24,13 @@ class SummaryController extends Controller
         $categoriesToShow = $categories->where("count_to_summary", true)->pluck("id")->toArray();
 
         $income = auth()->user()->income
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item["value"] = $item["amount"] * $item["price"];
                 return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
             });
 
         $outcome = auth()->user()->outcome
-            ->map(function($item) {
+            ->map(function ($item) {
                 $item["value"] = $item["amount"] * $item["price"];
                 return collect($item)->only("value", "category_id", "mean_id", "currency_id", "date")->toArray();
             });
@@ -110,10 +110,12 @@ class SummaryController extends Controller
             ]);
         }
 
-        $finalData = collect($finalData)->groupBy("currency_id");
+        $finalData = collect($finalData)
+            ->sortByDesc("balance")
+            ->groupBy("currency_id");
 
         $lastCurrency = $this->getLastCurrency();
 
-        return response()->json(compact('currencies', 'finalData', 'lastCurrency'));
+        return response()->json(compact("currencies", "finalData", "lastCurrency"));
     }
 }

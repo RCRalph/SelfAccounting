@@ -40,8 +40,7 @@ class SettingsController extends Controller
             abort(500);
         }
 
-        $currencies = Currency::all()
-            ->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = $this->getCurrencies();
 
         if (!isset($data["data"])) {
             ($type == $TYPES[0] ?
@@ -140,7 +139,7 @@ class SettingsController extends Controller
         }
 
         $entriesInDB = array_map(
-            function($item) {
+            function ($item) {
                 unset($item["user_id"], $item["created_at"], $item["updated_at"], $item["show_on_charts"]);
                 return $item;
             },
@@ -188,8 +187,7 @@ class SettingsController extends Controller
             ->sortBy("date");
 
         // Get currencies
-        $currencies = Currency::all()
-			->map(fn ($item) => $item->only("id", "ISO"));
+        $currencies = $this->getCurrencies();
 
         // Get categories
         $categories = auth()->user()->categories

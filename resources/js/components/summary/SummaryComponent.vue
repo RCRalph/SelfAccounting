@@ -74,7 +74,6 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
             content: {},
             currencies: [],
@@ -96,9 +95,6 @@ export default {
                 .join(" ");
         }
     },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
-    },
     mounted() {
         axios
             .get('/webapi/summary', {})
@@ -109,9 +105,6 @@ export default {
 
                 this.ready = true;
             });
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

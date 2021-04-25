@@ -83,7 +83,6 @@ export default {
     },
     data() {
         return {
-            darkmode: false,
             ready: false,
             bundles: [],
             selectedBundle: "p-1"
@@ -91,7 +90,7 @@ export default {
     },
     computed: {
         price() {
-            if (typeof this.selectedBundle == 'string') {
+            if (typeof this.selectedBundle == "string") {
                 if (this.selectedBundle == "p-12") {
                     return 15;
                 }
@@ -100,13 +99,7 @@ export default {
             }
 
             return this.bundles.filter(item => item.id == this.selectedBundle)[0].price;
-        },
-        title() {
-
         }
-    },
-    beforeMount() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     },
     mounted() {
         this.selectedBundle = Number(this.id) || "p-1";
@@ -115,9 +108,6 @@ export default {
                 this.bundles = response.data.bundles;
                 this.ready = true;
             })
-    },
-    beforeUpdate() {
-        this.darkmode = document.getElementById("darkmode-status").innerHTML.includes("1");
     }
 }
 </script>

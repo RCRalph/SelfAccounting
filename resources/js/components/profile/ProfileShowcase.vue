@@ -41,7 +41,6 @@
 <script>
 export default {
     props: {
-        darkmode: Boolean,
         userData: Object
     },
     data() {
