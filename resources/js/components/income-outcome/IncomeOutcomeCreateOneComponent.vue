@@ -211,7 +211,7 @@ export default {
                 this.data.category_id = data.last.category || 0;
                 this.data.mean_id = data.last.mean || 0;
 
-                if (data.cash != undefined && data.cashMeans != undefined && data.usersCash != undefined) {
+                if (data.cash != undefined) {
                     this.cash = data.cash;
                     this.cashMeans = data.cashMeans;
                     this.usersCash = data.usersCash;

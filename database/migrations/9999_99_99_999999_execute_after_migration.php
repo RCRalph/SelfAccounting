@@ -69,10 +69,13 @@ class ExecuteAfterMigration extends Migration
                 "code" => "cashan",
                 "price" => 10,
                 "short_description" => "Monitor how much cash you have",
-                "thumbnail" => "dupa123.png",
+                "thumbnail" => "cmdj3kqWW2jjD6ArLTkm7OMkMifxAwMgmVoA4XXKEZLHwsLYls.png",
                 "description" => "This bundle allows you to monitor how much cash you have at the current moment and it will tell you if you lost any when you count it all up from time to time. All currencies in the app are supported.\n\nYou can immidately change how much cash you own while entering income or outcome. A special **cash** mean of payment is required.",
                 "gallery" => [
-
+                    "xVjOkipHCG2tnnh5khniL9wQLYYJLcsX9kc2KqXPm8lXFynrz2.png",
+                    "Hfp53FN32ek3uQaUjC4M9XRpkgQQS7KWR9boPJmN2b9wBXaFdd.png",
+                    "kv1mdZywk4ZPrWgA4y8skWZNDWHGBOA0VUNhe5FKMJPmfYmeDl.png",
+                    "rBEdr7vYhSrdc1FZrawp5QzucS53tSnRXIafFCEDYSQStxCl5i.png"
                 ]
             ]
         ];

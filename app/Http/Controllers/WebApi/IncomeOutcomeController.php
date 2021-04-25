@@ -179,7 +179,9 @@ class IncomeOutcomeController extends Controller
             "cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807", new HasEnoughCash($viewType)],
             "cash.*.id" => ["required", "distinct", "exists:cash,id"]
         ]);
-        $cash = $data["cash"];
+        if (isset($data["cash"])) {
+            $cash = $data["cash"];
+        }
         $data = $data["data"];
 
         foreach ($data as $key => $item) {
@@ -206,7 +208,7 @@ class IncomeOutcomeController extends Controller
             }
         }
 
-        if ($cash) {
+        if (isset($cash) && $cash) {
             foreach ($cash as $cashToInsert) {
                 $foundCash = auth()->user()->cash()->find($cashToInsert["id"]);
                 if ($foundCash) {

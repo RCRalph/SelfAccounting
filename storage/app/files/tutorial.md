@@ -7,6 +7,9 @@ To switch between dark mode and light mode, click on the icon of sun or moon in 
 ## Change your profile picture
 To change your profile picture, click on your temporary profile picture (upper-right corner of the screen) and choose **View profile**, or click on [this link](/profile). Then click on the **Profile picture** labelled field, select your profile picture, and click **Save changes**. The page will reload and after it does you'll see your new profile picture!
 
+## Already done self-accounting?
+If you have any previous data about your self-accounting and you want it to be present in the app, please contact the developer (check out the bottom of the page), we'll see what we can do!
+
 ## When you're done
 Follow this tutorial closely, this will help you get the maximum out of the app!
 
@@ -93,6 +96,17 @@ To access the **Summary** view, click on the SelfAccounting logo on the navigati
 Bundles allow you to expand the application with additional functions and pages. To see the list of them, click the **Bundles** tab on the navigation bar at the top or click on [this link](/bundles). Then if you find any interesting bundles you can click on one.
 ## Acquiring a bundle
 To acquire a bundle, you need to either purchase it by clicking the **Buy now** button or, if you are a Premium user, click the **Start using with premium** button. After you acquired the bundle by using it with Premium, refresh the page. Then click the **Bundles** tab on the navigation bar, a dropdown should pop up. After that click on the name of the bundle you just acquired. Now you should see the main page of your bundle.
+## Charts pack
+This bundle allows you to see charts, which visually represent your self-accounting data. To set it up, go to the main page of the bundle and click **Edit chart presence**. This will redirect you to a page, where you will be able to mark which categories, means of payment etc. will be visible on the charts. After that, go to the bundle page again and click one of the charts.
+
+## Backup data
+This bundle allows you to backup all of your data by gathering it in a file, which you can download and store on your device. To create a backup, go to the bundle page and click **Create backup**. This will open a prompt which will allow you to download a file with *.selfacc* extension. Store it somewhere safe!
+
+You can also restore all your data from this file by clicking **Restore from file**. This will open a prompt which will require you to select a file with *.selfacc* extension. After you open it, the page will include a list of all your data. To confirm restoration, click **Submit**. Bare in mind that this operation will erase all of your existing data and replace it with what's stored in the file.
+
+## Cash handling
+This bundle allows you to monitor how much cash you have at the current moment. It will also add a feature which allows you to insert how much cash you used while entering income or outcome. To get started, go to the bundle page and set the field **Mean of payment used as cash** for the proper currency. If you don't have a mean of payment like that already, go to settings page and create it. After that set how much cash you have at the current moment. The amount should correspond with how much cash it says that you have from transactions.
+Then when you enter your income or outcome, if you set the mean of payment which you used as cash, a window will pop up at the end of the page which will allow you to enter how much cash you need to fill to keep the right balance.
 
 # Premium
 Premium mainly allows you to get access to every available bundle. The cost of it is €1.5 per month or €15 per year. 10% of all the money made from the site goes to the Wikimedia Foundation. You can read more about premium [here](/premium). Every user after registering gets 30 days of premium for free.
