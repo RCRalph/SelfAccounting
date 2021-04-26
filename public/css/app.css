@@ -8272,6 +8272,7 @@ button.card:focus {
 .lightmode .profile-wrapper .profile-picture,
 .profile-wrapper .profile-picture img,
 .profile-wrapper .profile-picture,
+.testimonials .testimonial-item-image,
 .profile-img {
   border-radius: 50% !important;
 }
@@ -9579,6 +9580,7 @@ button.card:focus {
 .lightmode .bundle-wrapper .title,
 .chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
 .bundle-wrapper .title,
+.testimonials .testimonial-item-image,
 .my-2,
 .chart-gallery-wrapper {
   margin-bottom: 0.5rem !important;
@@ -9971,6 +9973,7 @@ button.card:focus {
 .mr-auto,
 .card-header-text,
 .mx-auto,
+.testimonials .testimonial-item-image,
 .cash-input,
 .admin-bundle-gallery-image,
 .bundle-image {
@@ -9986,6 +9989,7 @@ button.card:focus {
 
 .ml-auto,
 .mx-auto,
+.testimonials .testimonial-item-image,
 .cash-input,
 .admin-bundle-gallery-image,
 .bundle-image {
@@ -12556,9 +12560,12 @@ header.masthead h1 {
   max-width: 18rem;
 }
 
-.testimonials .testimonial-item img {
-  max-width: 12rem;
-  border: solid 2px #7f7f7f;
+.testimonials .testimonial-item-image {
+  width: 12rem;
+  height: 12rem;
+  background-size: cover;
+  background-position: center;
+  border: solid 2.5px #7f7f7f;
 }
 
 .welcome-bg {
