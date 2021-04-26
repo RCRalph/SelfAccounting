@@ -205,31 +205,14 @@ class BackupController extends Controller
         auth()->user()->outcome()->delete();
         auth()->user()->cash()->detach();
 
-        // Check if user has bundles
-        $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premium_bundles);
-        $hasBundles = [];
-
-        foreach (Bundle::all() as $bundle) {
-            $hasBundles[$bundle->code] = $bundles->contains($bundle);
-        }
-
         // Enter categories and means
         $categories = [ 0 => null ]; $means = [ 0 => null ];
         foreach ($data["categories"] as $index => $category) {
-            if (!$hasBundles["charts"]) {
-                unset($category["show_on_charts"]);
-            }
-
             $categories[$index + 1] = auth()->user()->categories()
                 ->create($category)->id;
         }
 
         foreach ($data["means"] as $index => $mean) {
-            if (!$hasBundles["charts"]) {
-                unset($mean["show_on_charts"]);
-            }
-
             $means[$index + 1] = auth()->user()->meansOfPayment()
                 ->create($mean)->id;
         }
