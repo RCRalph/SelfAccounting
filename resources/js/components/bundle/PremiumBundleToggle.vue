@@ -17,7 +17,7 @@
 
 <script>
 export default {
-    props: ["premium", "enable", "id"],
+    props: ["premium", "enable", "id", "directory"],
     data() {
         return {
             ready: true,
@@ -42,7 +42,13 @@ export default {
                     .post(`/webapi/bundles/${this.id}/toggle-premium`, {})
                     .then(() => {
                         this.enabled = !this.enabled;
-                        location.reload();
+
+                        if (this.enabled) {
+                            window.location = `/bundles/${this.directory}`
+                        }
+                        else {
+                            location.reload();
+                        }
                     })
                     .catch(() => {
                         this.ready = true;

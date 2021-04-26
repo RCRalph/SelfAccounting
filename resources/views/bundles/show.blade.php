@@ -57,6 +57,7 @@
                         <bundle-toggle
                             enable="{{ $bundleEnabled }}"
                             id="{{ $bundle->id }}"
+                            directory="{{ $pageData["bundle_info"][$bundle->code]["directory"] }}"
                         ></bundle-toggle>
                     </div>
                 @else
@@ -71,6 +72,7 @@
                             premium="{{ $isPremium }}"
                             enable="{{ $hasBundlePremium }}"
                             id="{{ $bundle->id }}"
+                            directory="{{ $pageData["bundle_info"][$bundle->code]["directory"] }}"
                         ></premium-bundle-toggle>
                     </div>
                 @endif
