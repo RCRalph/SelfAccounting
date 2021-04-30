@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1842,7 +1842,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /*!*****************************************************************!*\
   !*** multi ./resources/js/bundles/charts/scripts/io-by-type.js ***!
   \*****************************************************************/

@@ -1,35 +1,12 @@
 <template>
     <div>
         <InputGroup
-            name="date"
-            type="date"
-            v-model="value.date"
-            :min="minDate"
-            :invalid="changed.date && !validDate"
-            :disabled="common && common.hasOwnProperty('date')"
-            @input="changed.date = true"
-        ></InputGroup>
-
-        <InputGroup
-            name="title"
-            v-model="value.title"
-            datalistName="titles"
-            :datalist="titles"
-            maxlength="64"
-            placeholder="Your title here..."
-            :invalid="changed.title && !validTitle"
-            :disabled="common && common.hasOwnProperty('title')"
-            @input="changed.title = true"
-        ></InputGroup>
-
-        <InputGroup
             name="amount"
             type="number"
             v-model="value.amount"
             step="0.001"
             placeholder="Your amount here..."
             :invalid="changed.amount && !validAmount"
-            :disabled="common && common.hasOwnProperty('amount')"
             @input="changed.amount = true"
         ></InputGroup>
 
@@ -49,7 +26,6 @@
                     ]"
                     placeholder="Your price here..."
                     v-model="value.price"
-                    :disabled="common && common.hasOwnProperty('price')"
                     @input="changed.price = true"
                 >
 
@@ -59,7 +35,7 @@
             </div>
 
             <div class="col-md-3 col-sm-12 mt-2 mt-md-0">
-                <select class="form-control" v-model="value.currency_id" @change="currencyChange" :disabled="common && common.hasOwnProperty('currency_id')">
+                <select class="form-control" v-model="value.currency_id" @change="currencyChange">
                     <option
                         v-for="(currency, i) in currencies"
                         :key="i"
@@ -84,7 +60,6 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.category_id"
-            :disabled="common && common.hasOwnProperty('category_id')"
         ></InputGroup>
 
         <InputGroup
@@ -94,14 +69,12 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.mean_id"
-            :disabled="common && common.hasOwnProperty('mean_id')"
-            @input="meanChange"
         ></InputGroup>
     </div>
 </template>
 
 <script>
-import InputGroup from "../InputGroup.vue";
+import InputGroup from "../../InputGroup.vue";
 
 export default {
     props: {
@@ -120,14 +93,6 @@ export default {
         means: {
             required: true,
             type: Object
-        },
-        common: {
-            required: false,
-            type: Object
-        },
-        titles: {
-            required: false,
-            type: Array
         }
     },
     components: {
@@ -144,22 +109,6 @@ export default {
         }
     },
     computed: {
-        minDate() {
-			const meansForCurrency = this.means[this.value.currency_id];
-            if (meansForCurrency == undefined) {
-                return "1970-01-01";
-            }
-			const currentMean = meansForCurrency.filter(item => item.id == this.value.mean_id);
-			return currentMean.length ? currentMean[0].first_entry_date : "1970-01-01";
-        },
-        validDate() {
-            const date = this.value.date;
-            return date !== "" && !isNaN(Date.parse(date)) && new Date(date) >= new Date(this.minDate).getTime()
-        },
-        validTitle() {
-            const title = this.value.title;
-            return title.length && title.length <= 64;
-        },
         validAmount() {
             const amount = Number(this.value.amount);
             return !isNaN(amount) && amount < 1e6 && amount > 0;
@@ -173,14 +122,6 @@ export default {
         currencyChange() {
             this.value.category_id = 0;
             this.value.mean_id = 0;
-        },
-        meanChange() {
-            const date = this.value.date;
-            this.value.date = (
-                date === "" ||
-                isNaN(Date.parse(date)) ||
-                new Date(date).getTime() < new Date(this.minDate).getTime()
-            ) ? this.minDate : date;
         }
     }
 }

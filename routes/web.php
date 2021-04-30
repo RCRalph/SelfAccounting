@@ -105,7 +105,7 @@ Route::prefix('/profile')->group(function () {
     Route::patch('/update', 'ProfileController@updateData')->name('profile.update');
     Route::patch('/password', 'ProfileController@updatePassword')->name('profile.password');
 
-    Route::prefix('/delete')->group(function (){
+    Route::prefix('/delete')->group(function () {
         Route::get('/', 'ProfileController@confirmDeletion')->name('profile.delete');
         Route::get('/confirmed', 'ProfileController@delete')->name('profile.delete.confirmed');
     });
@@ -213,5 +213,6 @@ Route::prefix('/{viewType}')->group(function () {
     Route::get('/', 'IncomeOutcomeController@index')->name('income-outcome');
     Route::get('/create-one', 'IncomeOutcomeController@createOne')->name('income-outcome.create-one');
     Route::get('/create-multiple', 'IncomeOutcomeController@createMultiple')->name('income-outcome.create-multiple');
+    Route::get('/exchange', 'IncomeOutcomeController@exchange')->name('income-outcome.exchange');
     Route::get('/{incomeOutcome}', 'IncomeOutcomeController@edit')->name('income-outcome.edit');
 });

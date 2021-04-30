@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -241,7 +241,7 @@ eval("Vue.component('summary-component', __webpack_require__(/*! ../components/s
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /*!***********************************************!*\
   !*** multi ./resources/js/scripts/summary.js ***!
   \***********************************************/

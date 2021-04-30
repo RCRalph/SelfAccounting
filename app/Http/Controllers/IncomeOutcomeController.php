@@ -55,4 +55,10 @@ class IncomeOutcomeController extends Controller
         $pageData = $this->getDataForPageRender();
         return view("income-outcome.create-multiple", compact("viewType", "pageData"));
     }
+
+    public function exchange($viewType)
+    {
+        $pageData = $this->getDataForPageRender();
+        return view("income-outcome.exchange", compact("viewType", "pageData"));
+    }
 }
