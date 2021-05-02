@@ -53,7 +53,7 @@
                     @input="changed.price = true"
                 >
 
-                <span class="invalid-feedback" role="alert" v-if="!validPrice">
+                <span class="invalid-feedback" role="alert" v-if="changed.price && !validPrice">
                     <strong>Price is invalid</strong>
                 </span>
             </div>

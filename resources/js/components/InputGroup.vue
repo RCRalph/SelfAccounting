@@ -6,7 +6,14 @@
 
 		<!-- Select field -->
         <div v-if="type == 'select'" class="col-md-7">
-            <select class="form-control" v-model="value" :disabled="disabled">
+            <select
+                :class="[
+                    'form-control',
+                    invalid && 'is-invalid'
+                ]"
+                v-model="value"
+                :disabled="disabled"
+            >
                 <option
                     v-for="(item, i) in selectOptions"
                     :key="i"
@@ -16,6 +23,10 @@
                     {{ item[optionTextKey] }}
                 </option>
             </select>
+
+            <span v-if="invalid" class="invalid-feedback" role="alert">
+                <strong>{{ name | capitalize }} is invalid</strong>
+            </span>
         </div>
 
         <!-- Normal input field -->

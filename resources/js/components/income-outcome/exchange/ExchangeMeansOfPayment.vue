@@ -15,29 +15,29 @@
                     v-model="data"
                 ></ExchangeDataComponent>
 
-                <hr class="hr">
-
-                <div class="text-center h2 font-weight-bold mb-3">Outcome:</div>
-
-                <ExchangeIncomeOutcomeComponent
-                    :currencies="currencies"
-                    :categories="categories"
-                    :means="means"
-                    v-model="income"
-                ></ExchangeIncomeOutcomeComponent>
-
-                <hr class="hr">
+                <hr class="hr-dashed">
 
                 <div class="text-center h2 font-weight-bold mb-3">Income:</div>
-
                 <ExchangeIncomeOutcomeComponent
                     :currencies="currencies"
                     :categories="categories"
                     :means="means"
+                    :samemeans="sameMeansOfPayment"
                     v-model="income"
                 ></ExchangeIncomeOutcomeComponent>
 
-                <div v-if="cashMeanUsed && false">
+                <hr class="hr-dashed">
+
+                <div class="text-center h2 font-weight-bold mb-3">Outcome:</div>
+                <ExchangeIncomeOutcomeComponent
+                    :currencies="currencies"
+                    :categories="categories"
+                    :means="means"
+                    :samemeans="sameMeansOfPayment"
+                    v-model="outcome"
+                ></ExchangeIncomeOutcomeComponent>
+
+                <div v-if="cashMeanUsed.length">
                     <hr class="hr">
 
                     <IncomeOutcomeCashComponent
@@ -160,6 +160,10 @@ export default {
             return retVal;
         },
         canSubmit() {
+            if (this.sameMeansOfPayment) {
+                return false;
+            }
+
             const validDate = this.data.date !== "" &&
                 !isNaN(Date.parse(this.data.date)) &&
                 new Date(this.data.date) >= new Date(this.minDate).getTime();
@@ -167,18 +171,32 @@ export default {
             const validTitle = this.data.title.length &&
                 this.data.title.length <= 64;
 
-            const toNumber = {
-                amount: Number(this.data.amount),
-                price: Number(this.data.price)
+            let toNumber = {
+                amountIncome: this.income.amount,
+                amountOutcome: this.outcome.amount,
+                priceIncome: this.income.price,
+                priceOutcome: this.outcome.price
             }
 
-            const validAmount = !isNaN(toNumber.amount) &&
-                toNumber.amount <= 1e6 &&
-                toNumber.amount > 0;
+            for (let i in toNumber) {
+                toNumber[i] = Number(toNumber[i]);
+            }
 
-            const validPrice = !isNaN(toNumber.price) &&
-                toNumber.price <= 1e11 &&
-                toNumber.price > 0;
+            const validAmount =
+                !isNaN(toNumber.amountIncome) &&
+                toNumber.amountIncome <= 1e6 &&
+                toNumber.amountIncome > 0 &&
+                !isNaN(toNumber.amountOutcome) &&
+                toNumber.amountOutcome <= 1e6 &&
+                toNumber.amountOutcome > 0;
+
+            const validPrice =
+                !isNaN(toNumber.priceIncome) &&
+                toNumber.priceIncome <= 1e11 &&
+                toNumber.priceIncome > 0 &&
+                !isNaN(toNumber.priceOutcome) &&
+                toNumber.priceOutcome <= 1e11 &
+                toNumber.priceOutcome > 0;
 
             if (this.cashMeanUsed) {
                 for (let i in this.cashUsed) {
@@ -191,13 +209,29 @@ export default {
             return validDate && validTitle && validAmount && validPrice;
         },
         cashMeanUsed() {
-            return this.income.mean_id == this.cashMeans[this.income.currency_id] ||
-                this.outcome.mean_id == this.cashMeans[this.outcome.currency_id];
+            let retArr = [];
+
+            if (this.income.mean_id != null &&
+                this.income.mean_id == this.cashMeans[this.income.currency_id]
+            ) {
+                retArr.push(this.income.currency_id);
+            }
+
+            if (this.outcome.mean_id != null &&
+                this.outcome.mean_id == this.cashMeans[this.outcome.currency_id]
+            ) {
+                retArr.push(this.outcome.currency_id);
+            }
+
+            return retArr;
         },
         sumObject() {
             let retObj = {}
             retObj[this.data.currency_id] = Math.round(this.data.amount * this.data.price * 1000) / 1000;
             return retObj;
+        },
+        sameMeansOfPayment() {
+            return this.income.mean_id == this.outcome.mean_id && this.income.mean_id != 0;
         }
     },
     methods: {

@@ -29,7 +29,7 @@
                     @input="changed.price = true"
                 >
 
-                <span class="invalid-feedback" role="alert" v-if="!validPrice">
+                <span class="invalid-feedback" role="alert" v-if="changed.price && !validPrice">
                     <strong>Price is invalid</strong>
                 </span>
             </div>
@@ -68,6 +68,7 @@
             :selectOptions="means[value.currency_id]"
             optionValueKey="id"
             optionTextKey="name"
+            :invalid="samemeans"
             v-model="value.mean_id"
         ></InputGroup>
     </div>
@@ -93,6 +94,10 @@ export default {
         means: {
             required: true,
             type: Object
+        },
+        samemeans: {
+            required: true,
+            type: Boolean
         }
     },
     components: {

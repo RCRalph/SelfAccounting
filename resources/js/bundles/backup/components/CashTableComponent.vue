@@ -1,36 +1,72 @@
 <template>
-    <div class="col-lg-6 offset-lg-3">
-        <div class="restore-table">
-            <div class="header">
-                Cash:
+    <div>
+        <div class="col-lg-6 offset-lg-3" v-if="cash.length">
+            <div class="restore-table">
+                <div class="header">
+                    Cash:
+                </div>
+
+                <div class="restore-table-content">
+                    <table>
+                        <thead>
+                            <th
+                                v-for="(item, i) in headerCash"
+                                :key="i"
+                                scope="col"
+                            >{{ item }}</th>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="(item, i) in cash" :key="i">
+                                <td class="font-weight-bold">
+                                    {{ currencies.find(item1 => item1.id == item.currency_id).ISO }}
+                                </td>
+
+                                <td>
+                                    {{ item.value }}
+                                </td>
+
+                                <td>
+                                    {{ item.amount }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+        </div>
 
-            <div class="restore-table-content">
-                <table>
-                    <thead>
-                        <th
-                            v-for="(item, i) in header"
-                            :key="i"
-                            scope="col"
-                        >{{ item }}</th>
-                    </thead>
+        <hr class="hr-dashed">
 
-                    <tbody>
-                        <tr v-for="(item, i) in data" :key="i">
-                            <td class="font-weight-bold">
-                                {{ currencies.find(item1 => item1.id == item.currency_id).ISO }}
-                            </td>
+        <div class="col-lg-6 offset-lg-3">
+            <div class="restore-table">
+                <div class="header">
+                    Cash means of payment:
+                </div>
 
-                            <td>
-                                {{ item.value }}
-                            </td>
+                <div class="restore-table-content">
+                    <table>
+                        <thead>
+                            <th
+                                v-for="(item, i) in headerCashMeans"
+                                :key="i"
+                                scope="col"
+                            >{{ item }}</th>
+                        </thead>
 
-                            <td>
-                                {{ item.amount }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <tbody>
+                            <tr v-for="(item, i) in cashMeans" :key="i">
+                                <td class="font-weight-bold">
+                                    {{ currencies.find(item1 => item1.id == item.currency_id).ISO }}
+                                </td>
+
+                                <td>
+                                    {{ means[item.mean_id - 1].name }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -38,10 +74,11 @@
 
 <script>
 export default {
-    props: ["data", "currencies"],
+    props: ["cash", "cashMeans", "currencies", "means"],
     data() {
         return {
-            header: ["Currency", "Face Value", "Amount"]
+            headerCash: ["Currency", "Face Value", "Amount"],
+            headerCashMeans: ["Currency", "Name"]
         }
     }
 }
