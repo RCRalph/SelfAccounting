@@ -42,7 +42,7 @@
 
                     <IncomeOutcomeCashComponent
                         :currencies="currencies"
-                        :used="[data.currency_id]"
+                        :used="cashMeanUsed"
                         :cash="cash"
                         :sums="sumObject"
                         :type="type"
@@ -227,7 +227,8 @@ export default {
         },
         sumObject() {
             let retObj = {}
-            retObj[this.data.currency_id] = Math.round(this.data.amount * this.data.price * 1000) / 1000;
+            retObj[this.income.currency_id] = Math.round(this.income.amount * this.income.price * 1000) / 1000;
+            retObj[this.outcome.currency_id] = Math.round(this.outcome.amount * this.outcome.price * 1000) / 1000;
             return retObj;
         },
         sameMeansOfPayment() {
