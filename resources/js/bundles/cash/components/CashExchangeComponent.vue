@@ -72,8 +72,8 @@
             </div>
 
             <div class="row h3 font-weight-bold">
-                <div class="col-6 text-right">Sum from {{ this.type }}:</div>
-                <div class="col-6 ">{{ sums[currentCurrency] }} {{ currencies[currentCurrency - 1].ISO }}</div>
+                <div class="col-6 text-right">Sum from {{ currentCurrency == incomeCurrency ? "income" : "outcome" }}:</div>
+                <div class="col-6 ">{{ currentCurrency == incomeCurrency ? incomeSum : outcomeSum }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
 
             <hr class="hr-dashed w-75">
@@ -82,12 +82,12 @@
                     'row',
                     'h3',
                     'font-weight-bold',
-                    sums[currentCurrency] - currentSum != 0 ? 'text-danger' : 'text-success'
+                    (currentCurrency == incomeCurrency ? incomeSum : outcomeSum) - currentSum != 0 ? 'text-danger' : 'text-success'
                 ]">
                     <div class="col-6 text-right">Difference:</div>
 
                     <div class="col-6">
-                        {{ sums[currentCurrency] - currentSum > 0 ? "+" : "" }}{{ Math.round((sums[currentCurrency] - currentSum) * 1000) / 1000 }}
+                        {{ (currentCurrency == incomeCurrency ? incomeSum : outcomeSum) - currentSum > 0 ? "+" : "" }}{{ Math.round(((currentCurrency == incomeCurrency ? incomeSum : outcomeSum) - currentSum) * 1000) / 1000 }}
                         {{ currencies[currentCurrency - 1].ISO }}
                     </div>
             </div>
@@ -102,8 +102,10 @@ export default {
         used: Array,
         cash: Object,
         value: Object,
-        sums: Object,
-        type: String,
+        incomeCurrency: Number,
+        incomeSum: Number,
+        outcomeCurrency: Number,
+        outcomeSum: Number,
         usersCash: Object
     },
     data() {
@@ -141,8 +143,15 @@ export default {
                 return false;
             }
 
-            return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63) &&
-                (this.type == "outcome" && (this.userscash[id] == undefined && amount == 0 || this.userscash[id] >= amount) || this.type == "income");
+            if (!(amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63))) {
+                return false;
+            }
+
+            if (this.cash[this.outcomeCurrency] && this.cash[this.outcomeCurrency].find(item => item.id == id)) {
+                return this.usersCash[id] == undefined && amount == 0 || this.usersCash[id] >= amount;
+            }
+
+            return true;
         }
     },
     mounted() {

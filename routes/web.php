@@ -196,6 +196,7 @@ Route::prefix('/webapi')->group(function () {
         Route::get('/start', 'WebApi\IncomeOutcomeController@start')->name('webapi.income.start');
         Route::post('/store', 'WebApi\IncomeOutcomeController@store')->name('webapi.income-outcome.store');
         Route::get('/create', 'WebApi\IncomeOutcomeController@create')->name('webapi.income-outcome.create');
+        Route::post('/exchange', 'WebApi\IncomeOutcomeController@exchange')->name('webapi.income-outcome.exchange');
 
         Route::get('/all/{currency}', 'WebApi\IncomeOutcomeController@all')->name('webapi.income-outcome.all');
 

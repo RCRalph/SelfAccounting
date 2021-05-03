@@ -9,10 +9,14 @@ use App\Currency;
 use App\Income;
 use App\Outcome;
 use App\MeanOfPayment;
+use App\Cash;
 
 use App\Rules\CorrectDateIO;
 use App\Rules\ValidCategoryMean;
 use App\Rules\HasEnoughCash;
+use App\Rules\CorrectExchangeDate;
+use App\Rules\ValidExchangeCategoryMean;
+use App\Rules\HasEnoughExchangeCash;
 use App\Http\Middleware\IncomeOutcome;
 
 class IncomeOutcomeController extends Controller
@@ -208,15 +212,11 @@ class IncomeOutcomeController extends Controller
             }
         }
 
-        if (isset($cash) && $cash) {
+        if ($this->hasBundle("cashan") && isset($cash)) {
             foreach ($cash as $cashToInsert) {
                 $foundCash = auth()->user()->cash()->find($cashToInsert["id"]);
                 if ($foundCash) {
-                    $pivotAmount = $foundCash->pivot->amount + (
-                        $viewType == "income" ?
-                        $cashToInsert["amount"] :
-                        -$cashToInsert["amount"]
-                    );
+                    $pivotAmount = $foundCash->pivot->amount + ($cashToInsert["amount"] * ($viewType == "income" ? 1 : -1));
 
                     auth()->user()->cash()->updateExistingPivot(
                         $cashToInsert["id"],
@@ -226,7 +226,7 @@ class IncomeOutcomeController extends Controller
                 else {
                     auth()->user()->cash()->attach(
                         $cashToInsert["id"],
-                        ["amount" => $cashToInsert["amount"]]
+                        ["amount" => $cashToInsert["amount"]]  // Don't have to check for outcome because we already know that it's about income only from validation
                     );
                 }
             }
@@ -309,6 +309,87 @@ class IncomeOutcomeController extends Controller
         $this->authorize("viewIncomeOutcome", $incomeOutcome);
 
         $incomeOutcome->delete();
+
+        return response("", 200);
+    }
+
+    public function exchange()
+    {
+        $data = request()->validate([
+            "data" => ["required", "array"],
+            "data.date" => ["required", "date", new CorrectExchangeDate],
+            "data.title" => ["required", "string", "max:64"],
+
+            "income" => ["required", "array"],
+            "income.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "income.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "income.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "income.category_id" => ["present", "integer", new ValidExchangeCategoryMean("income")],
+            "income.mean_id" => ["present", "integer", "different:outcome.mean_id", new ValidExchangeCategoryMean("income")],
+
+            "outcome" => ["required", "array"],
+            "outcome.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "outcome.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "outcome.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "outcome.category_id" => ["present", "integer", new ValidExchangeCategoryMean("outcome")],
+            "outcome.mean_id" => ["present", "integer", "different:income.mean_id", new ValidExchangeCategoryMean("outcome")],
+
+            "cash" => ["nullable", "array"],
+            "cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807", new HasEnoughExchangeCash],
+            "cash.*.id" => ["required", "distinct", "exists:cash,id"]
+        ]);
+
+        Income::create(array_merge(
+            $data["income"],
+            [
+                "date" => $data["data"]["date"],
+                "title" => $data["data"]["title"],
+                "user_id" => auth()->user()->id,
+                "category_id" => $data["income"]["category_id"] == 0 ?
+                    null : $data["income"]["category_id"],
+                "mean_id" => $data["income"]["mean_id"] == 0 ?
+                    null : $data["income"]["mean_id"]
+            ]
+        ));
+
+        Outcome::create(array_merge(
+            $data["outcome"],
+            [
+                "date" => $data["data"]["date"],
+                "title" => $data["data"]["title"],
+                "user_id" => auth()->user()->id,
+                "category_id" => $data["outcome"]["category_id"] == 0 ?
+                    null : $data["outcome"]["category_id"],
+                "mean_id" => $data["outcome"]["mean_id"] == 0 ?
+                    null : $data["outcome"]["mean_id"]
+            ]
+        ));
+
+        if ($this->hasBundle("cashan") && isset($data["cash"])) {
+            $cashMeans = $this->getCashMeans();
+            $outcomeCurrency = $data["outcome"]["currency_id"];
+            $outcomeMean = $data["outcome"]["mean_id"];
+
+            foreach ($data["cash"] as $cashToInsert) {
+                $foundCash = auth()->user()->cash()->find($cashToInsert["id"]);
+                $isOutcome = $cashMeans[$outcomeCurrency] == $outcomeMean && Cash::find($cashToInsert["id"])->currency_id == $outcomeCurrency;
+
+                if ($foundCash) {
+                    $pivotAmount = $foundCash->pivot->amount + ($cashToInsert["amount"] * ($isOutcome ? -1 : 1));
+
+                    auth()->user()->cash()->updateExistingPivot(
+                        $cashToInsert["id"],
+                        ["amount" => $pivotAmount]
+                    );
+                }
+                else {
+                    auth()->user()->cash()->attach(
+                        $cashToInsert["id"],
+                        ["amount" => $cashToInsert["amount"]] // Don't have to check for outcome because we already know that it's about income only from validation
+                    );
+                }
+            }
+        }
 
         return response("", 200);
     }

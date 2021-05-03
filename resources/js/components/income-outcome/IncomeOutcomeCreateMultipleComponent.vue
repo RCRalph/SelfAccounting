@@ -142,7 +142,7 @@
                         :cash="cash"
                         :sums="sumObject"
                         :type="type"
-                        :userscash="usersCash"
+                        :usersCash="usersCash"
                         v-model="cashUsed"
                     ></IncomeOutcomeCashComponent>
                 </div>

@@ -40,15 +40,17 @@
                 <div v-if="cashMeanUsed.length">
                     <hr class="hr">
 
-                    <IncomeOutcomeCashComponent
+                    <CashExchangeComponent
                         :currencies="currencies"
                         :used="cashMeanUsed"
                         :cash="cash"
-                        :sums="sumObject"
-                        :type="type"
-                        :userscash="usersCash"
+                        :incomeSum="incomeSum"
+                        :outcomeSum="outcomeSum"
+                        :incomeCurrency="Number(cashMeans[income.currency_id] == income.mean_id && income.currency_id)"
+                        :outcomeCurrency="Number(cashMeans[outcome.currency_id] == outcome.mean_id && outcome.currency_id)"
+                        :usersCash="usersCash"
                         v-model="cashUsed"
-                    ></IncomeOutcomeCashComponent>
+                    ></CashExchangeComponent>
                 </div>
 
                 <hr class="hr">
@@ -83,7 +85,7 @@
 import Loading from "../../Loading.vue";
 import ExchangeDataComponent from "./ExchangeDataComponent.vue";
 import ExchangeIncomeOutcomeComponent from "./ExchangeIncomeOutcomeComponent.vue";
-import IncomeOutcomeCashComponent from "../../../bundles/cash/components/IncomeOutcomeCashComponent.vue";
+import CashExchangeComponent from "../../../bundles/cash/components/CashExchangeComponent.vue";
 
 export default {
     props: ["type"],
@@ -91,7 +93,7 @@ export default {
         Loading,
         ExchangeDataComponent,
         ExchangeIncomeOutcomeComponent,
-        IncomeOutcomeCashComponent
+        CashExchangeComponent
     },
     data() {
         return {
@@ -225,14 +227,16 @@ export default {
 
             return retArr;
         },
-        sumObject() {
-            let retObj = {}
-            retObj[this.income.currency_id] = Math.round(this.income.amount * this.income.price * 1000) / 1000;
-            retObj[this.outcome.currency_id] = Math.round(this.outcome.amount * this.outcome.price * 1000) / 1000;
-            return retObj;
+        incomeSum() {
+            return Math.round(this.income.amount * this.income.price * 1000) / 1000;
+        },
+        outcomeSum() {
+            return Math.round(this.outcome.amount * this.outcome.price * 1000) / 1000;
         },
         sameMeansOfPayment() {
-            return this.income.mean_id == this.outcome.mean_id && this.income.mean_id != 0;
+            return this.income.mean_id == 0 ?
+                this.income.currency_id == this.outcome.currency_id && this.outcome.mean_id == 0 :
+                this.income.mean_id == this.outcome.mean_id;
         }
     },
     methods: {
@@ -240,27 +244,46 @@ export default {
             this.submitted = true;
 
             let submitObj = {
-                data: [this.data]
+                data: this.data,
+                income: this.income,
+                outcome: this.outcome
             }
 
             if (this.cashMeanUsed) {
                 submitObj.cash = [];
-                this.cash[this.data.currency_id]
-                    .map(item => item.id)
-                    .forEach(item => {
-                        if (this.cashUsed[item] > 0) {
-                            submitObj.cash.push({
-                                id: item,
-                                amount: this.cashUsed[item]
-                            })
-                        }
-                    })
+
+                if (this.cashMeans[this.income.currency_id] == this.income.mean_id) {
+                    this.cash[this.income.currency_id]
+                        .map(item => item.id)
+                        .forEach(item => {
+                            if (this.cashUsed[item] > 0) {
+                                submitObj.cash.push({
+                                    id: item,
+                                    amount: this.cashUsed[item]
+                                })
+                            }
+                        })
+                }
+
+                if (this.cashMeans[this.outcome.currency_id] == this.outcome.mean_id) {
+                    this.cash[this.outcome.currency_id]
+                        .map(item => item.id)
+                        .forEach(item => {
+                            if (this.cashUsed[item] > 0) {
+                                submitObj.cash.push({
+                                    id: item,
+                                    amount: this.cashUsed[item]
+                                })
+                            }
+                        })
+                }
             }
 
             axios
-                .post(`/webapi/${this.type}/store`, submitObj)
+                .post(`/webapi/${this.type}/exchange`, submitObj)
                 .then(() => {
-                    window.location.href = `/${this.type}`
+                    //window.location.href = `/${this.type}`
+                    this.submitted = false;
                 })
                 .catch(err => {
                     console.log(err);
@@ -277,8 +300,16 @@ export default {
                 return false;
             }
 
-            return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63) &&
-                (this.type == "outcome" && (this.usersCash[id] == undefined || this.usersCash[id] >= amount) || this.type == "income");
+            if (!(amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63))) {
+                return false;
+            }
+
+            // Check for valid outcome amount
+            if (this.cash[this.outcome.currency_id].find(item => item.id == id)) {
+                return this.usersCash[id] == undefined || this.usersCash[id] >= amount;
+            }
+
+            return true;
         }
     },
     mounted() {

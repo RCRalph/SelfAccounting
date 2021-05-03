@@ -34,11 +34,7 @@ class HasEnoughCash implements Rule
         $id = request("cash.$index.id");
 
         $cash = auth()->user()->cash()->find($id);
-        if (!$cash) {
-            return false;
-        }
-
-        return $cash->pivot->amount >= $value;
+        return $cash ? $cash->pivot->amount >= $value : false;
     }
 
     /**
