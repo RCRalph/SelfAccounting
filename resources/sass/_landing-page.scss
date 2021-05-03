@@ -105,9 +105,16 @@ header.masthead {
     .testimonial-item {
         max-width: 18rem;
 
-        img {
-            max-width: 12rem;
-            border: solid 2px rgb(127, 127, 127);
+        &-image {
+            @extend .mx-auto;
+            @extend .mb-2;
+            @extend .rounded-circle;
+
+            width: 12rem;
+            height: 12rem;
+            background-size: cover;
+            background-position: center;
+            border: solid 2.5px rgb(127, 127, 127);
         }
     }
 }

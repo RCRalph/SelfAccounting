@@ -104,7 +104,7 @@ export default {
         value: Object,
         sums: Object,
         type: String,
-        userscash: Object
+        usersCash: Object
     },
     data() {
         return {
@@ -142,7 +142,7 @@ export default {
             }
 
             return amount >= 0 && Math.floor(amount) == amount && amount < Math.pow(2, 63) &&
-                (this.type == "outcome" && (this.userscash[id] == undefined || this.userscash[id] >= amount) || this.type == "income");
+                (this.type == "outcome" && (this.userscash[id] == undefined && amount == 0 || this.userscash[id] >= amount) || this.type == "income");
         }
     },
     mounted() {

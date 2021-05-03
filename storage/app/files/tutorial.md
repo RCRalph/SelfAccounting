@@ -18,7 +18,7 @@ Before anything else, you should enter your categories and means of payment. In 
 
 ## Enter settings page
 To enter the settings page, click the **Settings** tab on the navigation bar at the top or click on [this link](/settings). After that choose your currency using the field to the right of the screen:
-![Currency select statement position](https://i.imgur.com/HhI9UKk.png)
+![Currency select statement position](/storage/tutorial/KCDGjzIaZ4SDb6MTig1jQQc1prHpg5qNBXjmHhveAhtGfbAveL.png)
 The latest currency you used in income/outcome will later be used to automatically select your currency. You can add categories and means of payment for multiple currencies, just make sure you are adding them to the correct one. After that follow the instructions below. It is important to add these before entering any income or outcome because then you won't have to edit your data in the future.
 
 ## Enter categories
@@ -32,7 +32,7 @@ To create new categories, click the **New category** button. A new table row wil
 - **Name** - The name of your category, max 32 characters long. It doesn't have to be unique, but it's a good idea to have different names of your categories.
 - **Income** - Should this category be an income category. If chosen, this category will show up when you add, see or edit your income.
 - **Outcome** - Should this category be an outcome category. If chosen, this category will show up when you add, see or edit your outcome.
-- **Summary** - If chosen, the two date fields to the right will be unlocked. This option allows you to count the outcome with this category with dates between the two dates to the right. This option is only useful when you for example spent some money but you are certain you will have them back in some time. Otherwise I advice not selecting it.
+- **Summary** - If chosen, the two date fields to the right will be unlocked. This option allows you to count the outcome with this category with dates between the two dates to the right. This option is only useful when you for example spent some money but you are certain you will have them back in some time. Otherwise, I don't advise selecting it.
 - **Start date** - Only available if the **Summary** option is selected. It marks the inclusive start of counting to the summary. 
 - **End date** - Only available if the **Summary** option is selected. It marks the inclusive end of counting to the summary. 
 
@@ -68,7 +68,7 @@ To delete a mean of payment, click the trashbin to the right of the row which yo
 The [income](/income) and [outcome](/outcome) pages are mostly the same, so everything within this section applies to both of them.
 
 ## Enter income / outcome page
-To enter the income/outcome page, click the **Income** / **Outcome** tab on the navigation bar at the top, or click links above. This will redirect you to the page, where all of your income/outcome will be shown. If you're following this tutorial from the beginning, the only thing you will see is the text *Nothing to see here, for now...*. This means that you haven't entered any income/outcome yet. Above this text there are two buttons, one says **Add multiple income/outcome** and the other says **Add single income/outcome**. 
+To enter the income/outcome page, click the **Income** / **Outcome** tab on the navigation bar at the top, or click links above. This will redirect you to the page, where your income/outcome is shown. If you're following this tutorial from the beginning, the only thing you will see is the text *Nothing to see here, for now...*. This means that you haven't entered any income/outcome yet. Above this text there are two buttons, one says **Add multiple income/outcome** and the other says **Add single income/outcome**. 
 
 ## Add multiple income / outcome
 The **Add multiple income / outcome** page is separated into two sections by a horizontal line: the **Common values** section and **Entries** section. The **Common values** section includes fields such as:
@@ -85,8 +85,8 @@ The values that you set in the **Common values** section will be the same throug
 The **Add single income/outcome** page is a much simpler way of entering your income/outcome. It is pretty much the same as the other one, so if you want information about this particular page, refer to the *Add multiple income/outcome* section.
 
 ## Edit or delete income / outcome
-To edit your income / outcome, go to the [income](/income) / [outcome](/outcome) page. Then click the icon to the right of the income / outcome, which you want to edit:
-![Icon next to the selected income / outcome](https://i.imgur.com/zJ9pJpR.png)
+To edit your income / outcome, go to the [income](/income) / [outcome](/outcome) page. Then click the icon to the right of the income/outcome, which you want to edit:
+![Icon next to the selected income / outcome](/storage/tutorial/u8M0D8poDuPBbQVqwf9ZUFoHVvHIVkrx5YRM327rcVgsodltNV.png)
 Then make the edits you want. Using this view you can also delete this entry. To do that, click the **Delete income/outcome** button. If you changed your mind and you want to reset your changes, click the **Reset changes** button. If you want to save your edits, click the **Save changes** button.
 
 # Summary
@@ -95,18 +95,18 @@ To access the **Summary** view, click on the SelfAccounting logo on the navigati
 # Bundles
 Bundles allow you to expand the application with additional functions and pages. To see the list of them, click the **Bundles** tab on the navigation bar at the top or click on [this link](/bundles). Then if you find any interesting bundles you can click on one.
 ## Acquiring a bundle
-To acquire a bundle, you need to either purchase it by clicking the **Buy now** button or, if you are a Premium user, click the **Start using with premium** button. After you acquired the bundle by using it with Premium, refresh the page. Then click the **Bundles** tab on the navigation bar, a dropdown should pop up. After that click on the name of the bundle you just acquired. Now you should see the main page of your bundle.
+To acquire a bundle, you need to either purchase it by clicking the **Buy now** button or, if you are a Premium user, click the **Start using with premium** button. After you clicked the button, you should be redirected to the bundle's main page. You can also click the **Bundles** tab on the navigation bar, where a dropdown should pop up. After that click on the name of the bundle you just acquired.
 ## Charts pack
 This bundle allows you to see charts, which visually represent your self-accounting data. To set it up, go to the main page of the bundle and click **Edit chart presence**. This will redirect you to a page, where you will be able to mark which categories, means of payment etc. will be visible on the charts. After that, go to the bundle page again and click one of the charts.
 
 ## Backup data
-This bundle allows you to backup all of your data by gathering it in a file, which you can download and store on your device. To create a backup, go to the bundle page and click **Create backup**. This will open a prompt which will allow you to download a file with *.selfacc* extension. Store it somewhere safe!
+This bundle allows you to backup all of your data by gathering it in a file, which you can download and store on your device. To create a backup, go to the bundle page and click **Create backup**. This will open a prompt will download a file with the *.selfacc* extension. Store it somewhere safe!
 
-You can also restore all your data from this file by clicking **Restore from file**. This will open a prompt which will require you to select a file with *.selfacc* extension. After you open it, the page will include a list of all your data. To confirm restoration, click **Submit**. Bare in mind that this operation will erase all of your existing data and replace it with what's stored in the file.
+You can also restore all your data from this file by clicking **Restore from file**. This will open a prompt requesting you to select a file with the *.selfacc* extension. After you open it, the page will include a list of all your data. To confirm restoration, click **Submit**. Keep in mind that this operation will erase all of your existing data and replace it with what's stored in the file.
 
 ## Cash handling
-This bundle allows you to monitor how much cash you have at the current moment. It will also add a feature which allows you to insert how much cash you used while entering income or outcome. To get started, go to the bundle page and set the field **Mean of payment used as cash** for the proper currency. If you don't have a mean of payment like that already, go to settings page and create it. After that set how much cash you have at the current moment. The amount should correspond with how much cash it says that you have from transactions.
-Then when you enter your income or outcome, if you set the mean of payment which you used as cash, a window will pop up at the end of the page which will allow you to enter how much cash you need to fill to keep the right balance.
+This bundle allows you to monitor how much cash you have at the current moment. It will also add a feature allowing you to insert how much cash you used while entering income or outcome. To get started, go to the bundle page and set the field **Mean of payment used as cash** for the proper currency. If you don't have a mean of payment like that already, go to the **Settings** page and create it. After that set how much cash you have at the current moment. The amount should correspond with how much cash it says that you have from transactions.
+Then when you enter your income or outcome, if you set the mean of payment which you used as cash, a window will pop up at the end of the page allowing you to enter how much cash you need to fill in to keep the right balance.
 
 # Premium
 Premium mainly allows you to get access to every available bundle. The cost of it is €1.5 per month or €15 per year. 10% of all the money made from the site goes to the Wikimedia Foundation. You can read more about premium [here](/premium). Every user after registering gets 30 days of premium for free.

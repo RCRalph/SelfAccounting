@@ -53,7 +53,7 @@
                     @input="changed.price = true"
                 >
 
-                <span class="invalid-feedback" role="alert" v-if="!validPrice">
+                <span class="invalid-feedback" role="alert" v-if="changed.price && !validPrice">
                     <strong>Price is invalid</strong>
                 </span>
             </div>
@@ -73,7 +73,7 @@
 
         <InputGroup
             name="value"
-            :value="Math.round(value.amount * value.price * 100) / 100"
+            :value="`${Math.round(value.amount * value.price * 100) / 100} ${currencies[value.currency_id - 1].ISO}`"
             :disabled="true"
         ></InputGroup>
 

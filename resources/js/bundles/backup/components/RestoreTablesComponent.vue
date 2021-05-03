@@ -40,8 +40,10 @@
             <hr class="hr-dashed">
 
             <CashTableComponent
-                :data="data.bundleData.cash"
+                :cash="data.bundleData.cash"
+                :cashMeans="data.bundleData.cashMeans"
                 :currencies="currencies"
+                :means="data.means"
             ></CashTableComponent>
         </div>
     </div>

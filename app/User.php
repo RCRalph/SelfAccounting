@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function bundles()
     {
-        return $this->belongsToMany(Bundle::class)->withPivot('enabled');
+        return $this->belongsToMany(Bundle::class, 'bundle_user')->withPivot('enabled');
     }
 
     public function premium_bundles()

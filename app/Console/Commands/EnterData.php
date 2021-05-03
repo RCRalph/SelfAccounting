@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
 use App\User;
@@ -11,30 +11,34 @@ use App\BundleImage;
 use App\Currency;
 use App\Cash;
 
-class ExecuteAfterMigration extends Migration
+class EnterData extends Command
 {
     /**
-     * Run the migrations.
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'enter_data';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Add records to the database.';
+
+    /**
+     * Create a new command instance.
      *
      * @return void
      */
-    public function up()
+    public function __construct()
     {
-        // Set currencies
-        $currenciesAndCash = [
-            "USD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05, 0.01],
-            "EUR" => [500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
-            "JPY" => [10000, 5000, 2000, 1000, 500, 100, 50, 10, 5, 1],
-            "GBP" => [50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
-            "AUD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05],
-            "CAD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05, 0.01],
-            "CHF" => [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05],
-            "PLN" => [500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
-            "INR" => [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1]
-        ];
+        parent::__construct();
+    }
 
-        // Set data of bundlesd
-        $bundles = [
+    private $dataToEnter = [
+        "bundles" => [
             [
                 "title" => "Chart pack",
                 "code" => "charts",
@@ -67,7 +71,7 @@ class ExecuteAfterMigration extends Migration
             [
                 "title" => "Cash handling",
                 "code" => "cashan",
-                "price" => 10,
+                "price" => 5,
                 "short_description" => "Monitor how much cash you have",
                 "thumbnail" => "cmdj3kqWW2jjD6ArLTkm7OMkMifxAwMgmVoA4XXKEZLHwsLYls.png",
                 "description" => "This bundle allows you to monitor how much cash you have at the current moment and it will tell you if you lost any when you count it all up from time to time. All currencies in the app are supported.\n\nYou can immidately change how much cash you own while entering income or outcome. A special **cash** mean of payment is required.",
@@ -78,63 +82,119 @@ class ExecuteAfterMigration extends Migration
                     "rBEdr7vYhSrdc1FZrawp5QzucS53tSnRXIafFCEDYSQStxCl5i.png"
                 ]
             ]
-        ];
-
-        // Add records to database (if they don't exits)
-        foreach ($currenciesAndCash as $ISO => $cash) {
-            $currency = Currency::where("ISO", $ISO)->first();
-            if (!$currency) {
-                $currency = Currency::create(compact("ISO"));
-            }
-
-            sort($cash);
-            foreach ($cash as $value) {
-                if (!Cash::where(["currency_id" => $currency->id, "value" => $value])->count()) {
-                    Cash::create([
-                        "currency_id" => $currency->id,
-                        "value" => $value
-                    ]);
-                }
-            }
-        }
-
-        if (!User::find(1)) {
-            User::create([
+        ],
+        "currencies" => [
+            "USD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05, 0.01],
+            "EUR" => [500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
+            "JPY" => [10000, 5000, 2000, 1000, 500, 100, 50, 10, 5, 1],
+            "GBP" => [50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
+            "AUD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05],
+            "CAD" => [100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05, 0.01],
+            "CHF" => [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05],
+            "PLN" => [500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01],
+            "INR" => [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1]
+        ],
+        "users" => [
+            [
+                "id" => 1,
                 "username" => "Admin",
                 "email" => "admin@selfaccounting.com",
-                "password" => Hash::make(env("ADMIN_PASSWORD")),
+                "password" => "ADMIN_PASSWORD",
                 "admin" => true,
                 "darkmode" => true,
                 "premium_expiration" => null,
-                'profile_picture' => 'EmojiAdmin.png'
-            ]);
-        }
+                "profile_picture" => "EmojiAdmin.png"
+            ]
+        ]
+    ];
 
-        foreach ($bundles as $bundle) {
-            if (!Bundle::where("code", $bundle["code"])->count()) {
-                $created = Bundle::create(array_diff_key(
-                    $bundle, array_flip(["gallery"])
-                ));
-            }
-
-            foreach ($bundle["gallery"] as $image) {
-                if (!BundleImage::where("image", $image)->count()) {
-                    BundleImage::create([
-                        "bundle_id" => $created->id,
-                        "image" => $image
-                    ]);
-                }
-            }
-        }
+    private function outputMessage($message) {
+        $this->info("$message...");
     }
 
     /**
-     * Reverse the migrations.
+     * Execute the console command.
      *
-     * @return void
+     * @return int
      */
-    public function down()
+    public function handle()
     {
-        return;
+        // Add admin user
+        $progressBar = $this->output
+            ->createProgressBar(count($this->dataToEnter["users"]));
+        $this->outputMessage("Creating users");
+
+        $progressBar->start();
+        foreach ($this->dataToEnter["users"] as $user) {
+            User::updateOrCreate(
+                ["id" => $user["id"]],
+                [
+                    "username" => "Admin",
+                    "email" => "admin@selfaccounting.com",
+                    "password" => Hash::make(env($user["password"], "1234567890")),
+                    "admin" => true,
+                    "darkmode" => true,
+                    "premium_expiration" => null,
+                    "profile_picture" => "EmojiAdmin.png"
+                ]
+            );
+
+            $progressBar->advance();
+        }
+        $progressBar->finish();
+        $this->newLine(2);
+
+        // Add currencies and cash
+        $progressBar = $this->output
+            ->createProgressBar(count($this->dataToEnter["currencies"]));
+        $this->outputMessage("Creating currencies");
+
+        $progressBar->start();
+        foreach ($this->dataToEnter["currencies"] as $ISO => $cash) {
+            $currency = Currency::firstOrCreate(compact("ISO"));
+            sort($cash);
+
+            foreach ($cash as $faceValue) {
+                Cash::firstOrCreate([
+                    "currency_id" => $currency->id,
+                    "value" => $faceValue
+                ]);
+            }
+
+            $progressBar->advance();
+        }
+        $progressBar->finish();
+        $this->newLine(2);
+
+        // Add bundles
+        $progressBar = $this->output
+            ->createProgressBar(count($this->dataToEnter["bundles"]));
+        $this->outputMessage("Creating bundles");
+
+        $progressBar->start();
+
+        foreach ($this->dataToEnter["bundles"] as $bundle) {
+            $bundleInDB = Bundle::firstOrCreate(
+                ["code" => $bundle["code"]],
+                array_diff_key(
+                    $bundle, array_flip(["gallery"])
+                )
+            );
+
+            foreach ($bundle["gallery"] as $image) {
+                BundleImage::firstOrCreate([
+                    "bundle_id" => $bundleInDB->id,
+                    "image" => $image
+                ]);
+            }
+
+            $progressBar->advance();
+        }
+        $progressBar->finish();
+        $this->newLine(2);
+
+        $this->info("Finished!");
+
+        return 0;
     }
 }

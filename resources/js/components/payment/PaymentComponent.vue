@@ -37,7 +37,7 @@
                             <div class="input-group-text">€</div>
                         </div>
 
-                        <input disabled type="text" class="form-control" :value="price">
+                        <input disabled type="text" class="form-control" :value="Number(price).toFixed(2)">
                     </div>
                 </div>
 
@@ -91,11 +91,7 @@ export default {
     computed: {
         price() {
             if (typeof this.selectedBundle == "string") {
-                if (this.selectedBundle == "p-12") {
-                    return 15;
-                }
-
-                return 1.5;
+                return this.selectedBundle == "p-12" ? 15 : 1.5;
             }
 
             return this.bundles.filter(item => item.id == this.selectedBundle)[0].price;

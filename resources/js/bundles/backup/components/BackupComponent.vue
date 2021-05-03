@@ -222,7 +222,6 @@ export default {
         },
 		checkIncomeOutcomeData(data, categories, means) {
 			// Validate
-			let validationResult = [];
 			data.forEach(item => {
 				const validMean = item.mean_id == 0 || means[item.mean_id].currency == item.currency_id,
 					validCategory = item.category_id == 0 || categories[item.category_id] == item.currency_id;
@@ -234,21 +233,22 @@ export default {
                         this.isBetweenNumbers(item.amount, 0.001, 1e6 - 0.001),
                         this.isBetweenNumbers(item.price, 0.01, 1e11 - 0.01)
 					];
-					validationResult.push(validation.reduce((item1, item2) => item1 && item2));
+
+                    if (!validation.reduce((item1, item2) => item1 && item2)) {
+                        return false;
+                    }
 				}
 				else {
-					validationResult.push(false);
+					return false;
 				}
 			});
 
-			return !validationResult.length || validationResult.reduce((item1, item2) => item1 && item2);
+			return true
 		},
-        checkBundleData(data) {
-            let validationResult = [];
-
+        checkBundleData(data, means) {
             // Validate cash
-            if (this.hasBundles.cashan && data.cash != undefined) {
-                if (!Array.isArray(data.cash)) {
+            if (this.hasBundles.cashan && data.cash != undefined && data.cashMeans != undefined) {
+                if (!Array.isArray(data.cash) || !Array.isArray(data.cashMeans)) {
                     return false;
                 }
 
@@ -259,11 +259,26 @@ export default {
                         this.isBetweenNumbers(item.amount, 1, Math.pow(2, 63) - 1)
                     ]
 
-                    validationResult.push(validation.reduce((item1, item2) => item1 && item2));
+                    if (!validation.reduce((item1, item2) => item1 && item2)) {
+                        return false;
+                    }
+                })
+
+                // Validate cash means
+                data.cashMeans.forEach(item => {
+                    let validation = [
+                        this.isCurrency(item.currency_id),
+                        this.isBetweenNumbers(item.mean_id, 1, means.length),
+                        means[item.mean_id - 1].currency_id == item.currency_id
+                    ];
+
+                    if (!validation.reduce((item1, item2) => item1 && item2)) {
+                        return false;
+                    }
                 })
             }
 
-            return !validationResult.length || validationResult.reduce((item1, item2) => item1 && item2);
+            return true;
         },
         readFile() {
             // Get file content
@@ -310,7 +325,7 @@ export default {
                         throw new Error("Invalid data type (bundle data not an object)");
                     }
 
-                    if (this.checkBundleData(data.bundleData) === false) {
+                    if (this.checkBundleData(data.bundleData, data.means) === false) {
                         throw new Error(`Invalid bundle data`);
                     }
 

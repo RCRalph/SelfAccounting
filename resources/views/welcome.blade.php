@@ -85,7 +85,7 @@
             <section class="showcase">
                 <div class="container-fluid p-0">
                     <div class="row no-gutters">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://github.com/StartBootstrap/startbootstrap-landing-page/blob/master/img/bg-showcase-3.jpg?raw=true');"></div>
+                        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/welcome/Easy.jpg');"></div>
                         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                             <h2>Incredibly easy to use</h2>
                             <p class="lead mb-0">
@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="row no-gutters">
-                        <div class="col-lg-6 text-white showcase-img" style="background-image: url('https://i.kym-cdn.com/photos/images/newsfeed/001/499/826/2f0.png');"></div>
+                        <div class="col-lg-6 text-white showcase-img" style="background-image: url('/storage/welcome/Savings.png');"></div>
                         <div class="col-lg-6 my-auto showcase-text">
                             <h2>Get on top of saving money</h2>
                             <p class="lead mb-0">
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="row no-gutters">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('https://i.kym-cdn.com/photos/images/newsfeed/001/871/646/471.jpg');"></div>
+                        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/welcome/Investing.jpg');"></div>
                         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                             <h2>Use saved money to invest in yourself</h2>
                             <p class="lead mb-0">
@@ -124,7 +124,7 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                                <img class="img-fluid rounded-circle mb-3" src="https://github.com/StartBootstrap/startbootstrap-landing-page/blob/master/img/testimonials-2.jpg?raw=true" alt="">
+                                <div class="testimonial-item-image" style="background-image: url('/storage/welcome/Person1.jpg')"></div>
 
                                 <h5>Jacob S.</h5>
                                 <p class="gold-stars">
@@ -139,9 +139,9 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                                <img class="img-fluid rounded-circle mb-3" src="https://github.com/StartBootstrap/startbootstrap-landing-page/blob/master/img/testimonials-3.jpg?raw=true" alt="">
+                                <div class="testimonial-item-image" style="background-image: url('/storage/welcome/Person2.jpg')"></div>
 
-                                <h5>Abigale N.</h5>
+                                <h5>George R.</h5>
                                 <p class="gold-stars">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -154,7 +154,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                                <img class="img-fluid rounded-circle mb-3" src="https://github.com/StartBootstrap/startbootstrap-landing-page/blob/master/img/testimonials-1.jpg?raw=true" alt="">
+                                <div class="testimonial-item-image" style="background-image: url('/storage/welcome/Person3.jpg')"></div>
 
                                 <h5>Margaret E.</h5>
                                 <p class="gold-stars">

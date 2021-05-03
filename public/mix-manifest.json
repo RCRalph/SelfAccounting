@@ -25,6 +25,8 @@
     "/js/bundles/charts/io-by-type.js.map": "/js/bundles/charts/io-by-type.js.map",
     "/js/bundles/charts/presence.js": "/js/bundles/charts/presence.js",
     "/js/bundles/charts/presence.js.map": "/js/bundles/charts/presence.js.map",
+    "/js/exchange-means-of-payment.js": "/js/exchange-means-of-payment.js",
+    "/js/exchange-means-of-payment.js.map": "/js/exchange-means-of-payment.js.map",
     "/js/income-outcome.js": "/js/income-outcome.js",
     "/js/income-outcome.js.map": "/js/income-outcome.js.map",
     "/js/income-outcome-create-multiple.js": "/js/income-outcome-create-multiple.js",

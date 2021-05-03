@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Rules\BackupValidIODate;
 use App\Rules\BackupValidCategoryMean;
 use App\Rules\CorrectValueForCash;
+use App\Rules\BackupValidMeanForCashMeans;
 
 use App\Backup;
 use App\Currency;
@@ -139,6 +140,16 @@ class BackupController extends Controller
                         "amount" => $item->pivot->amount
                     ]
                 );
+
+            $bundleData["cashMeans"] = [];
+            foreach ($this->getCashMeans() as $currency => $mean) {
+                if ($mean) {
+                    array_push($bundleData["cashMeans"], [
+                        "currency_id" => $currency,
+                        "mean_id" => $meansIDs[$mean]
+                    ]);
+                }
+            }
         }
 
         $backup = auth()->user()->backup
@@ -193,9 +204,13 @@ class BackupController extends Controller
 
             // Cash
             "bundleData.cash" => ["nullable", "array"],
+            "bundleData.cashMeans" => ["nullable", "array"],
             "bundleData.cash.*.currency_id" => ["required", "exists:currencies,id"],
             "bundleData.cash.*.value" => ["required", "numeric", "min:0", "max:1e7", "not_in:0,1e7", new CorrectValueForCash],
-            "bundleData.cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807"]
+            "bundleData.cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807"],
+
+            "bundleData.cashMeans.*.currency_id" => ["required", "distinct", "exists:currencies,id"],
+            "bundleData.cashMeans.*.mean_id" => ["required", "integer", "min:1", new BackupValidMeanForCashMeans]
         ]);
 
         // Erase existing data
@@ -204,32 +219,16 @@ class BackupController extends Controller
         auth()->user()->income()->delete();
         auth()->user()->outcome()->delete();
         auth()->user()->cash()->detach();
-
-        // Check if user has bundles
-        $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premium_bundles);
-        $hasBundles = [];
-
-        foreach (Bundle::all() as $bundle) {
-            $hasBundles[$bundle->code] = $bundles->contains($bundle);
-        }
+        auth()->user()->cash_means()->detach();
 
         // Enter categories and means
         $categories = [ 0 => null ]; $means = [ 0 => null ];
         foreach ($data["categories"] as $index => $category) {
-            if (!$hasBundles["charts"]) {
-                unset($category["show_on_charts"]);
-            }
-
             $categories[$index + 1] = auth()->user()->categories()
                 ->create($category)->id;
         }
 
         foreach ($data["means"] as $index => $mean) {
-            if (!$hasBundles["charts"]) {
-                unset($mean["show_on_charts"]);
-            }
-
             $means[$index + 1] = auth()->user()->meansOfPayment()
                 ->create($mean)->id;
         }
@@ -267,6 +266,15 @@ class BackupController extends Controller
                     ]
                 );
             }
+        }
+
+        // Enter cash means
+        if (isset($data["bundleData"]["cashMeans"])) {
+            $meansToAttach = [];
+            foreach ($data["bundleData"]["cashMeans"] as $cashMean) {
+                array_push($meansToAttach, $means[$cashMean["mean_id"]]);
+            }
+            auth()->user()->cash_means()->attach($meansToAttach);
         }
 
         auth()->user()->backup
