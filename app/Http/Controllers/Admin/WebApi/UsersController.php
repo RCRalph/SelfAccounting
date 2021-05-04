@@ -39,7 +39,9 @@ class UsersController extends Controller
             $user->bundles[$key] = $bundle->only("id", "title");
         }
 
-        return response()->json(compact("user", "bundles"));
+        $hasBackupBundle = $this->hasBundle("backup", $user->id);
+
+        return response()->json(compact("user", "bundles", "hasBackupBundle"));
     }
 
     public function update(User $user) // Update user's details
@@ -76,5 +78,31 @@ class UsersController extends Controller
 		return response()->json([
 			"bundles" => $bundlesToReturn
 		]);
+    }
+
+    public function enableBackup(User $user)
+    {
+        if ($this->hasBundle("backup", $user->id)) {
+            $user->backup->update([
+                "last_backup" => now()->subDays(1)
+            ]);
+
+            return response("", 200);
+        }
+
+        return response("User doesn't have the backup bundle", 422);
+    }
+
+    public function enableRestoration(User $user)
+    {
+        if ($this->hasBundle("backup", $user->id)) {
+            $user->backup->update([
+                "last_restoration" => now()->subDays(1)
+            ]);
+
+            return response("", 200);
+        }
+
+        return response("User doesn't have the backup bundle", 422);
     }
 }

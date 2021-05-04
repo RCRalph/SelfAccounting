@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Bundle;
 use App\Currency;
 use App\Cash;
+use App\User;
 
 class Controller extends BaseController
 {
@@ -148,11 +149,13 @@ class Controller extends BaseController
         );
     }
 
-    public function hasBundle($code)
+    public function hasBundle($code, $id = null)
     {
+        $user = $id == null ? auth()->user() : User::find($id);
+
         $bundle = Bundle::firstWhere("code", $code);
-        return auth()->user()->bundles->contains($bundle) ||
-            auth()->user()->premium_bundles->contains($bundle);
+        return $user->bundles->contains($bundle) ||
+            $user->premium_bundles->contains($bundle);
     }
 
     public function getCurrencies()

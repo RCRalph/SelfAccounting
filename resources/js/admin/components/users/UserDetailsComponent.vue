@@ -16,6 +16,42 @@
 
                 <hr class="hr my-4">
 
+                <div v-if="hasBackupBundle">
+                    <div class="row">
+                        <div class="col-md-4 btn-lg offset-md-2">
+                            <button class="big-button-primary" @click="enableBackup" :disabled="backupSpinner">
+                                <div v-if="!backupSpinner">
+                                    Enable backup
+                                </div>
+
+                                <span
+                                    v-else
+                                    class="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
+                        </div>
+
+                        <div class="col-md-4 btn-lg">
+                            <button class="big-button-primary" @click="enableRestoration" :disabled="restorationSpinner">
+                                <div v-if="!restorationSpinner">
+                                    Enable restoration
+                                </div>
+
+                                <span
+                                    v-else
+                                    class="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
+                        </div>
+                    </div>
+
+				    <hr class="hr my-4">
+                </div>
+
                 <div class="row">
                     <div class="col-xl-4 d-flex justify-content-xl-end justify-content-start align-items-center">
                         <div class="h4 font-weight-bold m-xl-0">Bundles</div>
@@ -50,7 +86,7 @@
                     </div>
                 </div>
 
-				<hr class="hr-dashed">
+                <hr class="hr-dashed">
 
                 <SaveResetChanges
                     :disableAll="dataSubmit"
@@ -97,9 +133,13 @@ export default {
             userData: {},
 			userDataCopy: {},
             bundles: [],
+            hasBackupBundle: false,
 
             ready: false,
-            dataSubmit: false
+            dataSubmit: false,
+
+            backupSpinner: false,
+            restorationSpinner: false
         }
     },
     methods: {
@@ -126,6 +166,26 @@ export default {
                 .catch(() => {
                     this.dataSubmit = false;
                 })
+        },
+        enableBackup() {
+            this.backupSpinner = true;
+
+            axios
+                .post(`/webapi/admin/users/${this.userData.id}/enable-backup`)
+                .catch(err => {
+                    console.error(err);
+                })
+                .finally(() => this.backupSpinner = false);
+        },
+        enableRestoration() {
+            this.restorationSpinner = true;
+
+            axios
+                .post(`/webapi/admin/users/${this.userData.id}/enable-restoration`)
+                .catch(err => {
+                    console.error(err);
+                })
+                .finally(() => this.restorationSpinner = false);
         }
     },
     mounted() {
@@ -135,6 +195,7 @@ export default {
                 this.userData = response.data.user;
                 this.userDataCopy = _.cloneDeep(response.data.user);
                 this.bundles = response.data.bundles;
+                this.hasBackupBundle = response.data.hasBackupBundle;
 
                 this.ready = true;
             })

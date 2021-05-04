@@ -35,7 +35,7 @@
                             {{ item.category_id == 0 ? "N/A" : categories[item.category_id - 1].name }}
                         </td>
                         <td>
-                            {{ item.mean_id == 0 ? "N/A" : categories[item.mean_id - 1].name }}
+                            {{ item.mean_id == 0 ? "N/A" : means[item.mean_id - 1].name }}
                         </td>
                     </tr>
                 </tbody>

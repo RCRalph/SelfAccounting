@@ -125,6 +125,8 @@ Route::prefix('/webapi')->group(function () {
             Route::prefix('/{user}')->group(function () {
                 Route::get('/', 'Admin\WebApi\UsersController@details')->name('webapi.admin.user.details');
                 Route::patch('/update', 'Admin\WebApi\UsersController@update')->name('webapi.admin.user.details.update');
+                Route::post('/enable-backup', 'Admin\WebApi\UsersController@enableBackup')->name('admin.users.enable-backup');
+                Route::post('/enable-restoration', 'Admin\WebApi\UsersController@enableRestoration')->name('admin.users.enable-restoration');
             });
         });
 
