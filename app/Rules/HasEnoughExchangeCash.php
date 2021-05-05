@@ -21,7 +21,7 @@ class HasEnoughExchangeCash implements Rule
 
     public function getCashMeans()
     {
-        $cashMeansList = auth()->user()->cash_means
+        $cashMeansList = auth()->user()->cashMeans
             ->map(fn ($item) => $item->only("currency_id", "id"))
             ->groupBy("currency_id");
 

@@ -100,15 +100,15 @@ class CashController extends Controller
 		}
 
 		// Insert cash means
-        $cashMeansInDB = auth()->user()->cash_means
+        $cashMeansInDB = auth()->user()->cashMeans
             ->map(fn ($item) => $item["id"])
             ->toArray();
 
         $IDsToInsert = array_values(array_diff($data["cashMeans"], $cashMeansInDB));
         $IDsToRemove = array_values(array_diff($cashMeansInDB, $data["cashMeans"]));
 
-        auth()->user()->cash_means()->detach($IDsToRemove);
-        auth()->user()->cash_means()->attach($IDsToInsert);
+        auth()->user()->cashMeans()->detach($IDsToRemove);
+        auth()->user()->cashMeans()->attach($IDsToInsert);
 
 		return response()->json(compact("data"));
     }

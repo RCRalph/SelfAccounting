@@ -18,26 +18,31 @@ class Currency extends Model
 
     public function income()
     {
-        return $this->belongsToMany(Income::class);
+        return $this->hasMany(Income::class);
     }
 
     public function outcome()
     {
-        return $this->belongsToMany(Outcome::class);
+        return $this->hasMany(Outcome::class);
     }
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->hasMany(Category::class);
     }
 
     public function meansOfPayment()
     {
-        return $this->belongsToMany(MeanOfPayment::class);
+        return $this->hasMany(MeanOfPayment::class);
     }
 
     public function cash()
     {
         return $this->hasMany(Cash::class);
+    }
+
+    public function reportQueries()
+    {
+        return $this->hasMany(ReportQuery::class);
     }
 }

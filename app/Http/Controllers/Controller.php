@@ -68,7 +68,7 @@ class Controller extends BaseController
                 ];
 
                 // Do the same but with collections
-                $retArr["bundles"] = auth()->user()->premium_bundles
+                $retArr["bundles"] = auth()->user()->premiumBundles
                     ->merge(auth()->user()->bundles)
                     ->filter(
                         fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
@@ -155,7 +155,7 @@ class Controller extends BaseController
 
         $bundle = Bundle::firstWhere("code", $code);
         return $user->bundles->contains($bundle) ||
-            $user->premium_bundles->contains($bundle);
+            $user->premiumBundles->contains($bundle);
     }
 
     public function getCurrencies()
@@ -180,7 +180,7 @@ class Controller extends BaseController
 
     public function getCashMeans()
     {
-        $cashMeansList = auth()->user()->cash_means
+        $cashMeansList = auth()->user()->cashMeans
             ->map(fn ($item) => $item->only("currency_id", "id"))
             ->groupBy("currency_id");
 

@@ -15,7 +15,7 @@ class CashMeanUser extends Migration
     {
         Schema::create('cash_mean_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('mean_id')->constrained('mean_of_payments')->onDelete('cascade');
 
             $table->index(['user_id', 'mean_id']);

@@ -34,11 +34,16 @@ class Category extends Model
 
     public function income()
     {
-        return $this->belongsTo(Income::class);
+        return $this->hasMany(Income::class);
     }
 
     public function outcome()
     {
-        return $this->belongsTo(Outcome::class);
+        return $this->hasMany(Outcome::class);
+    }
+
+    public function reportQueries()
+    {
+        return $this->hasMany(ReportQuery::class);
     }
 }

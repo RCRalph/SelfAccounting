@@ -27,21 +27,26 @@ class MeanOfPayment extends Model
 
     public function currency()
     {
-        return $this->hasMany(Currency::class);
+        return $this->belongsTo(Currency::class);
     }
 
     public function income()
     {
-        return $this->belongsTo(Income::class);
+        return $this->hasMany(Income::class, "mean_id");
     }
 
     public function outcome()
     {
-        return $this->belongsTo(Outcome::class);
+        return $this->hasMany(Outcome::class, "mean_id");
     }
 
-    public function cash_user()
+    public function cashUser()
     {
         return $this->belongsToMany(User::class, "cash_mean_user", "mean_id", "user_id");
+    }
+
+    public function reportQueries()
+    {
+        return $this->hasMany(ReportQuery::class);
     }
 }

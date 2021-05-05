@@ -15,10 +15,10 @@ class CreateCashTable extends Migration
     {
         Schema::create('cash', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("currency_id")->constrained("currencies")->onDelete("cascade");
-            $table->decimal("value", 10, 3);
+            $table->foreignId('currency_id')->constrained()->onDelete('cascade');
+            $table->decimal('value', 9, 2);
 
-            $table->index(["id", "currency_id"]);
+            $table->index(['id', 'currency_id']);
         });
     }
 

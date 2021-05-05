@@ -7,14 +7,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-use App\Method;
-use App\Category;
-use App\Income;
-use App\MeanOfPayment;
-use App\Bundle;
-use App\Backup;
-use App\Cash;
-
 class User extends Authenticatable
 {
     use Notifiable, HasFactory;
@@ -73,7 +65,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Bundle::class, 'bundle_user')->withPivot('enabled');
     }
 
-    public function premium_bundles()
+    public function premiumBundles()
     {
         return $this->belongsToMany(Bundle::class, 'bundle_user_premium', 'user_id', 'bundle_id');
     }
@@ -83,7 +75,7 @@ class User extends Authenticatable
         return $this->hasOne(Backup::class);
     }
 
-    public function cash_means()
+    public function cashMeans()
     {
         return $this->belongsToMany(MeanOfPayment::class, 'cash_mean_user', 'user_id', 'mean_id');
     }
@@ -91,5 +83,10 @@ class User extends Authenticatable
     public function cash()
     {
         return $this->belongsToMany(Cash::class)->withPivot('amount');
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
     }
 }

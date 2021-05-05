@@ -20,7 +20,7 @@ class BundleMiddleware
         $bundle = Bundle::where("code", $bundleCode)->first();
 
         $USER = auth()->user();
-        if (!($USER->bundles->contains($bundle) || $USER->premium_bundles->contains($bundle))) {
+        if (!($USER->bundles->contains($bundle) || $USER->premiumBundles->contains($bundle))) {
             return redirect("/bundles/$bundle->id");
         }
 

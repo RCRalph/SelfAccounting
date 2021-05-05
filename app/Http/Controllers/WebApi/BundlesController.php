@@ -33,7 +33,7 @@ class BundlesController extends Controller
     public function togglePremium(Bundle $bundle) // Add or remove bundle from premium
     {
         $this->authorize("isPremium", auth()->user());
-        auth()->user()->premium_bundles()->toggle($bundle);
+        auth()->user()->premiumBundles()->toggle($bundle);
 
         $id = auth()->user()->id;
         Cache::forget("page-render-data-$id");

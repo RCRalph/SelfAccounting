@@ -28,16 +28,16 @@ class Income extends Model
 
     public function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function currency()
     {
-        return $this->hasOne(Currency::class);
+        return $this->belongsTo(Currency::class);
     }
 
-    public function mean()
+    public function meanOfPayment()
     {
-        return $this->hasOne(MeanOfPayment::class);
+        return $this->belongsTo(MeanOfPayment::class);
     }
 }

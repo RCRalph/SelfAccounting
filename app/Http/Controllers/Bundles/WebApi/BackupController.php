@@ -43,7 +43,7 @@ class BackupController extends Controller
 
         // Check if user has bundles
         $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premium_bundles);
+            ->merge(auth()->user()->premiumBundles);
         $hasBundles = [];
 
         foreach (Bundle::all() as $bundle) {
@@ -67,7 +67,7 @@ class BackupController extends Controller
 
         // Check if user has bundles
         $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premium_bundles);
+            ->merge(auth()->user()->premiumBundles);
         $hasBundles = [];
 
         foreach (Bundle::all() as $bundle) {
@@ -219,7 +219,7 @@ class BackupController extends Controller
         auth()->user()->income()->delete();
         auth()->user()->outcome()->delete();
         auth()->user()->cash()->detach();
-        auth()->user()->cash_means()->detach();
+        auth()->user()->cashMeans()->detach();
 
         // Enter categories and means
         $categories = [ 0 => null ]; $means = [ 0 => null ];
@@ -274,7 +274,7 @@ class BackupController extends Controller
             foreach ($data["bundleData"]["cashMeans"] as $cashMean) {
                 array_push($meansToAttach, $means[$cashMean["mean_id"]]);
             }
-            auth()->user()->cash_means()->attach($meansToAttach);
+            auth()->user()->cashMeans()->attach($meansToAttach);
         }
 
         auth()->user()->backup
