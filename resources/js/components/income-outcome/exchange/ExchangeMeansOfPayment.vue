@@ -228,10 +228,10 @@ export default {
             return retArr;
         },
         incomeSum() {
-            return Math.round(this.income.amount * this.income.price * 1000) / 1000;
+            return Math.round(this.income.amount * this.income.price * 100) / 100;
         },
         outcomeSum() {
-            return Math.round(this.outcome.amount * this.outcome.price * 1000) / 1000;
+            return Math.round(this.outcome.amount * this.outcome.price * 100) / 100;
         },
         sameMeansOfPayment() {
             return this.income.mean_id == 0 ?

@@ -45,4 +45,9 @@ class Currency extends Model
     {
         return $this->hasMany(ReportQuery::class);
     }
+
+    public function reportAdditionalEntries()
+    {
+        return $this->hasMany(ReportAdditionalEntry::class);
+    }
 }

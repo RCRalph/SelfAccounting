@@ -347,10 +347,10 @@ export default {
             this.data.forEach(item => {
                 if (item.mean_id != null && item.mean_id == this.cashMeans[item.currency_id]) {
                     if (sums[item.currency_id] == undefined) {
-                        sums[item.currency_id] = Math.round(item.amount * item.price * 1000) / 1000;
+                        sums[item.currency_id] = Math.round(item.amount * item.price * 100) / 100;
                     }
                     else {
-                        sums[item.currency_id] += Math.round(item.amount * item.price * 1000) / 1000;
+                        sums[item.currency_id] += Math.round(item.amount * item.price * 100) / 100;
                     }
                 }
             });

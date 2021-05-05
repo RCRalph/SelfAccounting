@@ -146,7 +146,7 @@ export default {
         },
         sumObject() {
             let retObj = {}
-            retObj[this.data.currency_id] = Math.round(this.data.amount * this.data.price * 1000) / 1000;
+            retObj[this.data.currency_id] = Math.round(this.data.amount * this.data.price * 100) / 100;
             return retObj;
         }
     },

@@ -56,7 +56,7 @@
                                 <td class="h5 font-weight-bold">
                                     {{
                                         isValidCashAmount(value[item.id], item.id) ?
-                                        Math.round(item.value * value[item.id] * 1000) / 1000 : 0
+                                        Math.round(item.value * value[item.id] * 100) / 100 : 0
                                     }}
                                     {{ currencies[currentCurrency - 1].ISO }}
                                 </td>
@@ -87,7 +87,7 @@
                     <div class="col-6 text-right">Difference:</div>
 
                     <div class="col-6">
-                        {{ sums[currentCurrency] - currentSum > 0 ? "+" : "" }}{{ Math.round((sums[currentCurrency] - currentSum) * 1000) / 1000 }}
+                        {{ sums[currentCurrency] - currentSum > 0 ? "+" : "" }}{{ Math.round((sums[currentCurrency] - currentSum) * 100) / 100 }}
                         {{ currencies[currentCurrency - 1].ISO }}
                     </div>
             </div>
@@ -127,7 +127,7 @@ export default {
 					return { id: item.id, value: item.value }
 				})
 				.map(item => this.value[item.id] * item.value)
-				.reduce((item1, item2) => item1 + item2) * 1000, 3) / 1000;
+				.reduce((item1, item2) => item1 + item2) * 100, 3) / 100;
         }
 	},
     methods: {

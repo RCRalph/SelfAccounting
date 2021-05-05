@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReportQuery extends Model
+class ReportAdditionalEntry extends Model
 {
     use HasFactory;
 
@@ -16,18 +16,18 @@ class ReportQuery extends Model
         return $this->belongsTo(Report::class);
     }
 
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class);
-    }
-
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
     public function meanOfPayment()
     {
-        return $this->belongsTo(MeanOfPayment::class, "mean_id");
+        return $this->belongsTo(MeanOfPayment::class);
     }
 }

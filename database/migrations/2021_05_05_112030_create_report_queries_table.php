@@ -25,7 +25,7 @@ class CreateReportQueriesTable extends Migration
             $table->decimal('min_price', 13, 2)->nullable();
             $table->decimal('max_price', 13, 2)->nullable();
             $table->foreignId('currency_id')->constrained()->onDelete('cascade');
-            $table->foreingId('category_id')->constrained()->onDelete('set null');
+            $table->foreignId('category_id')->constrained()->onDelete('set null');
             $table->foreignId('mean_id')->constrained('mean_of_payments')->onDelete('set null');
 
             $table->index(['id', 'report_id']);

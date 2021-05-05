@@ -89,4 +89,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class);
     }
+
+    public function reportsShared()
+    {
+        return $this->belongsToMany(Report::class, 'report_user_pivot_table');
+    }
 }

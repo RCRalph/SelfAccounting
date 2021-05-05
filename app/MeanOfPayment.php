@@ -47,6 +47,11 @@ class MeanOfPayment extends Model
 
     public function reportQueries()
     {
-        return $this->hasMany(ReportQuery::class);
+        return $this->hasMany(ReportQuery::class, "mean_id");
+    }
+
+    public function reportAdditionalEntries()
+    {
+        return $this->hasMany(ReportAdditionalEntry::class, "mean_id");
     }
 }
