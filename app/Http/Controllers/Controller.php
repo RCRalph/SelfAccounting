@@ -64,6 +64,10 @@ class Controller extends BaseController
                     "cashan" => [
                         "icon" => "fas fa-money-bill-wave",
                         "directory" => "cash"
+                    ],
+                    "report" => [
+                        "icon" => "fas fa-newspaper",
+                        "directory" => "reports"
                     ]
                 ];
 

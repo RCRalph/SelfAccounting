@@ -18,8 +18,7 @@ class UsersController extends Controller
 
     public function users() // Get list of users
     {
-        $users = User::where("id", ">", "0")
-            ->select("id", "email")
+        $users = User::select(["id", "email"])
             ->orderBy("id")
             ->paginate(20);
 

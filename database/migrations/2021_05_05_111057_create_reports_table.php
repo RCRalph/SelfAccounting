@@ -18,6 +18,7 @@ class CreateReportsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title', 64);
             $table->boolean('income_addition')->default(true);
+            $table->boolean('sort_dates_desc')->default(false);
             $table->timestamps();
 
             $table->index(['id', 'user_id']);

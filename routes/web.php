@@ -89,6 +89,10 @@ Route::prefix('/bundles')->group(function () {
         Route::get('/', 'Bundles\CashController@index')->name('bundles.cash.index');
     });
 
+    Route::prefix('/reports')->group(function () {
+        Route::get('/', 'Bundles\ReportsController@index')->name('bundles.reports.index');
+    });
+
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 
@@ -165,6 +169,11 @@ Route::prefix('/webapi')->group(function () {
         Route::prefix('/cash')->group(function () {
             Route::get('/', 'Bundles\WebApi\CashController@index')->name('webapi.bundles.cash.index');
             Route::post('/', 'Bundles\WebApi\CashController@saveCashAndMeans')->name('webapi.bundles.cash.save-cash-and-means');
+        });
+
+        Route::prefix('/reports')->group(function () {
+            Route::get('/user-reports', 'Bundles\WebApi\ReportsController@userReports')->name('webapi.bundles.reports.user-reports');
+            Route::get('/shared-reports', 'Bundles\WebApi\ReportsController@sharedReports')->name('webapi.bundles.reports.shared-reports');
         });
 
         Route::prefix('/{bundle}')->group(function () {

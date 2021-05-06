@@ -11,6 +11,8 @@ class ReportAdditionalEntry extends Model
 
     public $timestamps = false;
 
+    protected $guarded = [];
+
     public function report()
     {
         return $this->belongsTo(Report::class);

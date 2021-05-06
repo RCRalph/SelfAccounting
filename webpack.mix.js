@@ -38,6 +38,9 @@ mix.js('resources/js/scripts/app.js', 'public/js')
         // Cash
         .js('resources/js/bundles/cash/scripts/cash.js', 'public/js/bundles/cash')
 
+        // Reports
+        .js('resources/js/bundles/reports/scripts/all.js', 'public/js/bundles/reports')
+
     // Admin scripts
     .js('resources/js/admin/scripts/users/list.js', 'public/js/admin/users')
     .js('resources/js/admin/scripts/users/details.js', 'public/js/admin/users')

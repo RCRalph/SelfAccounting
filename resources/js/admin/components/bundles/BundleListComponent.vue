@@ -69,6 +69,7 @@ export default {
     methods: {
         getPaginationData(pageNumber = 1) {
             this.ready = false;
+
             axios
                 .get("/webapi/admin/bundles", {
                     params: {
@@ -78,7 +79,10 @@ export default {
                 .then(response => {
                     this.paginationData = response.data.users;
                     this.ready = true;
-                });
+                })
+                .catch(err => {
+                    console.error(err);
+                })
         }
     },
     mounted() {

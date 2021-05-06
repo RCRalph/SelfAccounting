@@ -81,6 +81,17 @@ class EnterData extends Command
                     "kv1mdZywk4ZPrWgA4y8skWZNDWHGBOA0VUNhe5FKMJPmfYmeDl.png",
                     "rBEdr7vYhSrdc1FZrawp5QzucS53tSnRXIafFCEDYSQStxCl5i.png"
                 ]
+            ],
+            [
+                "title" => "Report management",
+                "code" => "report",
+                "price" => 5,
+                "short_description" => "Share your data with other users",
+                "thumbnail" => "fghjkh.jpg",
+                "description" => "This bundle allows you to create and share reports with other users. A report is created by combining results from entered queries and entries specific to the report, then it is presented as a table sorted by dates and titles. You can also not share your reports with anyone and keep them for personal usage.\n\nMake sure that users that you are sharing your reports to own this bundle as well, otherwise they won't be able to see what you share with them.",
+                "gallery" => [
+
+                ]
             ]
         ],
         "currencies" => [
@@ -119,7 +130,7 @@ class EnterData extends Command
      */
     public function handle()
     {
-        // Add admin user
+        // Add users
         $progressBar = $this->output
             ->createProgressBar(count($this->dataToEnter["users"]));
         $this->outputMessage("Creating users");
