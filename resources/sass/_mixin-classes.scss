@@ -5,3 +5,11 @@
 .bundle-wrapper {
     @include bundle-wrapper-mixin(darken($dark, 10%), darken($dark, 10%), white, darken($dark, 7.5%));
 }
+
+.slider-checkbox {
+    @include slider(#ccc, $primary, $danger);
+}
+
+.slider-choice {
+    @include slider($primary, $primary, $danger);
+}

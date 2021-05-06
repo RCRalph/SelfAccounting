@@ -47,9 +47,7 @@ class IncomeOutcomeController extends Controller
                 array_unshift($categories[$currency["id"]], $nullArray);
             }
             else {
-                $categories[$currency["id"]] = [
-                    0 => $nullArray
-                ];
+                $categories[$currency["id"]] = [$nullArray];
             }
         }
 

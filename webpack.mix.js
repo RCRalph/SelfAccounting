@@ -40,6 +40,7 @@ mix.js('resources/js/scripts/app.js', 'public/js')
 
         // Reports
         .js('resources/js/bundles/reports/scripts/all.js', 'public/js/bundles/reports')
+        .js('resources/js/bundles/reports/scripts/create.js', 'public/js/bundles/reports')
 
     // Admin scripts
     .js('resources/js/admin/scripts/users/list.js', 'public/js/admin/users')

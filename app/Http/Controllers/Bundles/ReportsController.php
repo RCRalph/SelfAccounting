@@ -18,4 +18,11 @@ class ReportsController extends Controller
 
         return view("bundles.reports.index", compact("pageData"));
     }
+
+    public function create()
+    {
+        $pageData = $this->getDataForPageRender();
+
+        return view("bundles.reports.create", compact("pageData"));
+    }
 }
