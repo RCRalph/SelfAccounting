@@ -33,10 +33,12 @@ class ReportsController extends Controller
 
     public function create()
     {
+        $queryTypes = ["income", "outcome"];
+
         $currencies = $this->getCurrencies();
         $nullArray = [
             "id" => 0,
-            "name" => "N / A"
+            "name" => "N/A"
         ];
 
         $categories = auth()->user()->categories
@@ -72,8 +74,12 @@ class ReportsController extends Controller
             ->merge(auth()->user()->outcome)
             ->unique("title")
             ->values()
-            ->map(fn ($item) => $item["title"]);
+            ->map(fn ($item) => $item["title"])
+            ->sort()
+            ->values();
 
-        return response()->json(compact("currencies", "categories", "means", "titles"));
+        $lastCurrency = $this->getLastCurrency();
+
+        return response()->json(compact("currencies", "categories", "means", "titles", "queryTypes", "lastCurrency"));
     }
 }

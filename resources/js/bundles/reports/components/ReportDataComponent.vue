@@ -13,8 +13,8 @@
         <hr class="hr-dashed">
 
         <SliderChoice
-            left="Outcome addition"
-            right="Income addition"
+            left="Income subtraction"
+            right="Outcome subtraction"
             v-model="value.income_addition"
         ></SliderChoice>
 

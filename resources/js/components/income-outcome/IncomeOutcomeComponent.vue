@@ -90,12 +90,12 @@
                                     rep="category"
                                     v-if="row.category_id !== undefined"
                                     :rowspan="row.span.category_id"
-                                    >{{ categories[row.category_id] || "N / A" }}</td>
+                                    >{{ categories[row.category_id] || "N/A" }}</td>
                                 <td
                                     rep="mean"
                                     v-if="row.mean_id !== undefined"
                                     :rowspan="row.span.mean_id"
-                                    >{{ means[row.mean_id] || "N / A" }}</td>
+                                    >{{ means[row.mean_id] || "N/A" }}</td>
                                 <td class="py-0 h4 cursor-pointer" @click="redirectToShow(row.id)" rep="edit">
                                     <i class="fas fa-edit p-2"></i>
                                 </td>

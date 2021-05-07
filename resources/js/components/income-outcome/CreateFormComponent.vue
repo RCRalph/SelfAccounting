@@ -154,7 +154,7 @@ export default {
         },
         validDate() {
             const date = this.value.date;
-            return date !== "" && !isNaN(Date.parse(date)) && new Date(date) >= new Date(this.minDate).getTime()
+            return date !== "" && !isNaN(Date.parse(date)) && new Date(date).getTime() >= new Date(this.minDate).getTime()
         },
         validTitle() {
             const title = this.value.title;

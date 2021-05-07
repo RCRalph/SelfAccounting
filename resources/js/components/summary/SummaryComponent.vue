@@ -5,11 +5,11 @@
                 <i class="fas fa-file-invoice-dollar"></i>
                 Summary
             </div>
-            <div class="d-flex" v-if="ready">
+            <div class="d-flex" v-if="ready && availableCurrencies.length">
                 <div class="h4 my-auto mr-3">Currency:</div>
                 <select class="form-control" v-model="currentCurrency">
                     <option
-                        v-for="currency in currencies"
+                        v-for="currency in availableCurrencies"
                         :key="currency.id"
                         :value="currency.id"
                     >
@@ -82,14 +82,29 @@ export default {
     },
     computed: {
         sum() {
+            if (!this.content[this.currentCurrency]) {
+                return 0;
+            }
+
             return this.content[this.currentCurrency]
                 .map(item => item.balance)
                 .reduce((item1, item2) => item1 + item2);
+        },
+        availableCurrencies() {
+            let retArr = [];
+
+            for (let i in this.currencies) {
+                if (this.content[this.currencies[i].id]) {
+                    retArr.push(this.currencies[i]);
+                }
+            }
+
+            return retArr;
         }
     },
     filters: {
         addSpaces(value) {
-            return value
+            return (Math.round(value * 100) / 100)
                 .toLocaleString('en')
                 .split(",")
                 .join(" ");

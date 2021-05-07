@@ -32,7 +32,7 @@ class IncomeOutcomeController extends Controller
 
         $nullArray = [
             "id" => 0,
-            "name" => "N / A"
+            "name" => "N/A"
         ];
 
         // Get categories

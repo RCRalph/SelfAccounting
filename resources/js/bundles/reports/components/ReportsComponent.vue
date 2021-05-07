@@ -15,52 +15,16 @@
 
         <div class="card-body">
             <div v-if="ready">
-                <div v-if="userReports.data.length">
-                    <h1 class="font-weight-bold text-center mb-3">My reports:</h1>
-
-                    <div class="table-responsive-xl w-100" v-if="userReportsReady">
-                        <table
-                            class="responsive-table-hover table-themed"
-                        >
-                            <thead>
-                                <th scope="col" class="h3 font-weight-bold">ID</th>
-                                <th scope="col" class="h3 font-weight-bold">Title</th>
-                                <th scope="col" class="h3 font-weight-bold">View</th>
-                                <th scope="col" class="h3 font-weight-bold">Edit</th>
-                            </thead>
-
-                            <tbody>
-                                <tr v-for="(item, i) in userReports.data" :key="item.id" :id="item.id" :index="i">
-                                    <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
-
-									<td class="h5 my-auto">{{ item.title }}</td>
-
-									<td class="h5 my-auto">
-										<a role="button" class="big-button-primary" :href="`/bundles/reports/${item.id}`">View report</a>
-									</td>
-
-									<td class="h5 my-auto">
-										<a role="button" class="big-button-primary" :href="`/bundles/reports/${item.id}/edit`">Edit report</a>
-									</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-						<div class="d-flex justify-content-center">
-                            <pagination :data="userReports" @pagination-change-page="getUserReports"></pagination>
+                <div class="card" v-if="userReports.total">
+                    <div class="card-header-flex">
+                        <div class="card-header-text">
+                            <i class="fas fa-file-alt"></i>
+                            My reports
                         </div>
                     </div>
 
-                    <Loading v-else></Loading>
-                </div>
-
-                <hr class="hr" v-if="sharedReports.total && userReports.total">
-
-                <div v-if="sharedReports.data.length">
-                    <h1 class="font-weight-bold text-center mb-3">Reports shared with me:</h1>
-
-                    <div v-if="sharedReportsReady">
-                        <div class="table-responsive-xl w-100">
+                    <div class="card-body">
+                        <div class="table-responsive-xl w-100" v-if="userReportsReady">
                             <table
                                 class="responsive-table-hover table-themed"
                             >
@@ -68,10 +32,11 @@
                                     <th scope="col" class="h3 font-weight-bold">ID</th>
                                     <th scope="col" class="h3 font-weight-bold">Title</th>
                                     <th scope="col" class="h3 font-weight-bold">View</th>
+                                    <th scope="col" class="h3 font-weight-bold">Edit</th>
                                 </thead>
 
                                 <tbody>
-                                    <tr v-for="(item, i) in sharedReports.data" :key="item.id" :index="i">
+                                    <tr v-for="(item, i) in userReports.data" :key="item.id" :id="item.id" :index="i">
                                         <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
 
                                         <td class="h5 my-auto">{{ item.title }}</td>
@@ -79,17 +44,66 @@
                                         <td class="h5 my-auto">
                                             <a role="button" class="big-button-primary" :href="`/bundles/reports/${item.id}`">View report</a>
                                         </td>
+
+                                        <td class="h5 my-auto">
+                                            <a role="button" class="big-button-primary" :href="`/bundles/reports/${item.id}/edit`">Edit report</a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
+
+                            <div class="d-flex justify-content-center">
+                                <pagination :data="userReports" @pagination-change-page="getUserReports"></pagination>
+                            </div>
                         </div>
 
-                        <div class="d-flex justify-content-center">
-                            <pagination :data="sharedReports" @pagination-change-page="getSharedReports"></pagination>
+                        <Loading v-else></Loading>
+                    </div>
+                </div>
+
+                <hr class="hr" v-if="userReports.total && sharedReports.total">
+
+                <div class="card" v-if="sharedReports.total">
+                    <div class="card-header-flex">
+                        <div class="card-header-text">
+                            <i class="fas fa-share-alt"></i>
+                            Reports shared with me
                         </div>
                     </div>
 
-                    <Loading v-else></Loading>
+                    <div class="card-body">
+                        <div v-if="sharedReportsReady">
+                            <div class="table-responsive-xl w-100">
+                                <table
+                                    class="responsive-table-hover table-themed"
+                                >
+                                    <thead>
+                                        <th scope="col" class="h3 font-weight-bold">ID</th>
+                                        <th scope="col" class="h3 font-weight-bold">Title</th>
+                                        <th scope="col" class="h3 font-weight-bold">View</th>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr v-for="(item, i) in sharedReports.data" :key="item.id" :index="i">
+                                            <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
+
+                                            <td class="h5 my-auto">{{ item.title }}</td>
+
+                                            <td class="h5 my-auto">
+                                                <a role="button" class="big-button-primary" :href="`/bundles/reports/${item.id}`">View report</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                                <pagination :data="sharedReports" @pagination-change-page="getSharedReports"></pagination>
+                            </div>
+                        </div>
+
+                        <Loading v-else></Loading>
+                    </div>
                 </div>
 
                 <EmptyPlaceholder v-if="!sharedReports.total && !userReports.total"></EmptyPlaceholder>

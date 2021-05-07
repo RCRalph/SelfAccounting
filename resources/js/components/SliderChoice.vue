@@ -1,5 +1,5 @@
 <template>
-    <div class="row my-3">
+    <div class="row my-4">
         <div class="col-5 h4 text-right font-weight-bold mb-0" v-html="left"></div>
 
         <div class="col-2 d-flex justify-content-center align-items-center">

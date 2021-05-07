@@ -115,6 +115,9 @@ class SummaryController extends Controller
             ->groupBy("currency_id");
 
         $lastCurrency = $this->getLastCurrency();
+        if (!isset($finalData[$lastCurrency])) {
+            $lastCurrency = array_key_first($finalData);
+        }
 
         return response()->json(compact("currencies", "finalData", "lastCurrency"));
     }

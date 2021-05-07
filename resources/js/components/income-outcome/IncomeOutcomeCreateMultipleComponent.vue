@@ -274,7 +274,7 @@ export default {
             return [
                 {
                     id: 0,
-                    ISO: "N / A"
+                    ISO: "N/A"
                 },
                 ...this.currencies
             ]
@@ -444,13 +444,13 @@ export default {
                 this.categories = data.categories;
                 this.categories[0] = [{
                     id: 0,
-                    name: "N / A"
+                    name: "N/A"
                 }];
 
                 this.means = data.means;
                 this.means[0] = [{
                     id: 0,
-                    name: "N / A",
+                    name: "N/A",
                     first_entry_date: null
                 }];
 
