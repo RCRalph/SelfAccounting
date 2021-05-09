@@ -128,6 +128,11 @@ export default {
         titles: {
             required: false,
             type: Array
+        },
+        minDateRestriction: {
+            required: false,
+            type: Boolean,
+            default: true
         }
     },
     components: {
@@ -146,7 +151,7 @@ export default {
     computed: {
         minDate() {
 			const meansForCurrency = this.means[this.value.currency_id];
-            if (meansForCurrency == undefined) {
+            if (meansForCurrency == undefined || !this.minDateRestriction) {
                 return "1970-01-01";
             }
 			const currentMean = meansForCurrency.filter(item => item.id == this.value.mean_id);

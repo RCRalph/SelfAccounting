@@ -17,6 +17,7 @@
                     :categories="categories"
                     :means="means"
                     :titles="titles"
+                    :minDateRestriction="false"
                 ></CreateForm>
 
                 <div class="row">

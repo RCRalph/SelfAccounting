@@ -10,6 +10,7 @@
         <div class="card-body">
             <div v-for="(item, i) in value" :key="i">
                 <h4 class="text-center font-weight-bold mb-3">Query #{{ i + 1 }}:</h4>
+
                 <ReportQueryComponent
                     v-model="value[i]"
                     :queryTypes="queryTypes"

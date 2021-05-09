@@ -72,4 +72,9 @@
     .big-button-opposite {
         @include button-variant(#070605, #070605);
     }
+
+    .shared-user {
+        background-color: white;
+        border: solid 4px darken(white, 5%);
+    }
 }

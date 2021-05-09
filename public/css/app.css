@@ -12391,6 +12391,43 @@ a.text-dark:focus,
   text-align: center;
 }
 
+.shared-users-wrapper {
+  display: flex;
+  height: 100%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.shared-users-wrapper .shared-user {
+  padding: 7.5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  width: calc(95% / 2);
+  background-color: #1d2124;
+  border-radius: 30px;
+  margin-bottom: 15px;
+}
+
+.shared-users-wrapper .shared-user-image {
+  height: 100%;
+}
+
+.shared-users-wrapper .shared-user-username {
+  font-size: 1.25rem;
+  margin: 0;
+  text-align: center;
+  overflow-y: hidden;
+}
+
+.shared-users-wrapper .shared-user-delete {
+  font-size: 30px;
+  margin-right: 10px;
+  color: #e3342f;
+  margin-top: 2px;
+}
+
 td,
 th {
   text-align: center;
@@ -12939,6 +12976,17 @@ header.masthead h1 {
 .lightmode .big-button-opposite:not(:disabled):not(.disabled).active:focus,
 .show > .lightmode .big-button-opposite.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(44, 43, 43, 0.5);
+}
+
+.lightmode .shared-user {
+  background-color: white;
+  border: solid 4px #f2f2f2;
+}
+
+@media (max-width: 767.98px) {
+  .shared-user {
+    width: 95% !important;
+  }
 }
 
 /*!

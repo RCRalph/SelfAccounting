@@ -37,6 +37,12 @@
                     @add="addEntry"
                     @remove="removeEntry"
                 ></ReportAdditionalEntries>
+
+                <hr class="hr">
+
+                <ReportUsersSharedComponent
+                    v-model="users"
+                ></ReportUsersSharedComponent>
             </div>
 
             <Loading v-else></Loading>
@@ -48,6 +54,7 @@
 import ReportDataComponent from "./ReportDataComponent.vue";
 import ReportQueriesComponent from "./ReportQueriesComponent.vue";
 import ReportAdditionalEntries from "./ReportAdditionalEntriesComponent.vue";
+import ReportUsersSharedComponent from "./ReportUsersSharedComponent.vue";
 import Loading from "../../../components/Loading.vue";
 import EmptyPlaceholder from "../../../components/EmptyPlaceholder.vue";
 
@@ -57,7 +64,8 @@ export default {
         EmptyPlaceholder,
         ReportDataComponent,
         ReportQueriesComponent,
-        ReportAdditionalEntries
+        ReportAdditionalEntries,
+        ReportUsersSharedComponent
     },
     data() {
         return {
@@ -124,9 +132,6 @@ export default {
                 this.titles = response.data.titles;
                 this.queryTypes = response.data.queryTypes;
                 this.lastCurrency = response.data.lastCurrency;
-
-                this.addQuery();
-                this.addEntry();
 
                 this.ready = true;
             })
