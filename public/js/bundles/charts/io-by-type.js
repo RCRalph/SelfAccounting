@@ -1783,14 +1783,14 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/bundles/charts/scripts/io-by-type.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/bundles/charts/scripts/io-by-type.js ***!
-  \***********************************************************/
+/***/ "./resources/js/bundles/charts/io-by-type.js":
+/*!***************************************************!*\
+  !*** ./resources/js/bundles/charts/io-by-type.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("Vue.component('io-by-type-component', __webpack_require__(/*! ../components/IOByTypeComponent.vue */ \"./resources/js/bundles/charts/components/IOByTypeComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvc2NyaXB0cy9pby1ieS10eXBlLmpzPzYwOTMiXSwibmFtZXMiOlsiVnVlIiwiY29tcG9uZW50IiwicmVxdWlyZSIsImFwcCIsImVsIl0sIm1hcHBpbmdzIjoiQUFBQUEsR0FBRyxDQUFDQyxTQUFKLENBQWMsc0JBQWQsRUFBc0NDLG1CQUFPLENBQUMsMkdBQUQsQ0FBUCxXQUF0QztBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9idW5kbGVzL2NoYXJ0cy9zY3JpcHRzL2lvLWJ5LXR5cGUuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUuY29tcG9uZW50KCdpby1ieS10eXBlLWNvbXBvbmVudCcsIHJlcXVpcmUoJy4uL2NvbXBvbmVudHMvSU9CeVR5cGVDb21wb25lbnQudnVlJykuZGVmYXVsdCk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/bundles/charts/scripts/io-by-type.js\n");
+eval("Vue.component('io-by-type-component', __webpack_require__(/*! ./components/IOByTypeComponent.vue */ \"./resources/js/bundles/charts/components/IOByTypeComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvaW8tYnktdHlwZS5qcz82MmFmIl0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLHNCQUFkLEVBQXNDQyxtQkFBTyxDQUFDLDBHQUFELENBQVAsV0FBdEM7QUFFQSxJQUFNQyxHQUFHLEdBQUcsSUFBSUgsR0FBSixDQUFRO0FBQ2hCSSxJQUFFLEVBQUU7QUFEWSxDQUFSLENBQVoiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvaW8tYnktdHlwZS5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ2lvLWJ5LXR5cGUtY29tcG9uZW50JywgcmVxdWlyZSgnLi9jb21wb25lbnRzL0lPQnlUeXBlQ29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/bundles/charts/io-by-type.js\n");
 
 /***/ }),
 
@@ -1843,13 +1843,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ }),
 
 /***/ 15:
-/*!*****************************************************************!*\
-  !*** multi ./resources/js/bundles/charts/scripts/io-by-type.js ***!
-  \*****************************************************************/
+/*!*********************************************************!*\
+  !*** multi ./resources/js/bundles/charts/io-by-type.js ***!
+  \*********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\charts\scripts\io-by-type.js */"./resources/js/bundles/charts/scripts/io-by-type.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\charts\io-by-type.js */"./resources/js/bundles/charts/io-by-type.js");
 
 
 /***/ })

@@ -157,6 +157,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./resources/js/bundles/reports/all.js":
+/*!*********************************************!*\
+  !*** ./resources/js/bundles/reports/all.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("Vue.component('reports-component', __webpack_require__(/*! ./components/ReportsComponent.vue */ \"./resources/js/bundles/reports/components/ReportsComponent.vue\")[\"default\"]);\nVue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ \"./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js\"));\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9yZXBvcnRzL2FsbC5qcz8wZmUxIl0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLG1CQUFkLEVBQW1DQyxtQkFBTyxDQUFDLHlHQUFELENBQVAsV0FBbkM7QUFDQUYsR0FBRyxDQUFDQyxTQUFKLENBQWMsWUFBZCxFQUE0QkMsbUJBQU8sQ0FBQywyR0FBRCxDQUFuQztBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9idW5kbGVzL3JlcG9ydHMvYWxsLmpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiVnVlLmNvbXBvbmVudCgncmVwb3J0cy1jb21wb25lbnQnLCByZXF1aXJlKCcuL2NvbXBvbmVudHMvUmVwb3J0c0NvbXBvbmVudC52dWUnKS5kZWZhdWx0KTtcblZ1ZS5jb21wb25lbnQoJ3BhZ2luYXRpb24nLCByZXF1aXJlKCdsYXJhdmVsLXZ1ZS1wYWdpbmF0aW9uJykpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/bundles/reports/all.js\n");
+
+/***/ }),
+
 /***/ "./resources/js/bundles/reports/components/ReportsComponent.vue":
 /*!**********************************************************************!*\
   !*** ./resources/js/bundles/reports/components/ReportsComponent.vue ***!
@@ -190,17 +201,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsComponent_vue_vue_type_template_id_60c2f58a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ReportsComponent.vue?vue&type=template&id=60c2f58a& */ \"./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/bundles/reports/components/ReportsComponent.vue?vue&type=template&id=60c2f58a&\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsComponent_vue_vue_type_template_id_60c2f58a___WEBPACK_IMPORTED_MODULE_0__[\"render\"]; });\n\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportsComponent_vue_vue_type_template_id_60c2f58a___WEBPACK_IMPORTED_MODULE_0__[\"staticRenderFns\"]; });\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9yZXBvcnRzL2NvbXBvbmVudHMvUmVwb3J0c0NvbXBvbmVudC52dWU/NmQ2MyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9yZXBvcnRzL2NvbXBvbmVudHMvUmVwb3J0c0NvbXBvbmVudC52dWU/dnVlJnR5cGU9dGVtcGxhdGUmaWQ9NjBjMmY1OGEmLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0ICogZnJvbSBcIi0hLi4vLi4vLi4vLi4vLi4vbm9kZV9tb2R1bGVzL3Z1ZS1sb2FkZXIvbGliL2xvYWRlcnMvdGVtcGxhdGVMb2FkZXIuanM/P3Z1ZS1sb2FkZXItb3B0aW9ucyEuLi8uLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvdnVlLWxvYWRlci9saWIvaW5kZXguanM/P3Z1ZS1sb2FkZXItb3B0aW9ucyEuL1JlcG9ydHNDb21wb25lbnQudnVlP3Z1ZSZ0eXBlPXRlbXBsYXRlJmlkPTYwYzJmNThhJlwiIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/bundles/reports/components/ReportsComponent.vue?vue&type=template&id=60c2f58a&\n");
-
-/***/ }),
-
-/***/ "./resources/js/bundles/reports/scripts/all.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/bundles/reports/scripts/all.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("Vue.component('reports-component', __webpack_require__(/*! ../components/ReportsComponent.vue */ \"./resources/js/bundles/reports/components/ReportsComponent.vue\")[\"default\"]);\nVue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ \"./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js\"));\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9yZXBvcnRzL3NjcmlwdHMvYWxsLmpzPzVlYTUiXSwibmFtZXMiOlsiVnVlIiwiY29tcG9uZW50IiwicmVxdWlyZSIsImFwcCIsImVsIl0sIm1hcHBpbmdzIjoiQUFBQUEsR0FBRyxDQUFDQyxTQUFKLENBQWMsbUJBQWQsRUFBbUNDLG1CQUFPLENBQUMsMEdBQUQsQ0FBUCxXQUFuQztBQUNBRixHQUFHLENBQUNDLFNBQUosQ0FBYyxZQUFkLEVBQTRCQyxtQkFBTyxDQUFDLDJHQUFELENBQW5DO0FBRUEsSUFBTUMsR0FBRyxHQUFHLElBQUlILEdBQUosQ0FBUTtBQUNoQkksSUFBRSxFQUFFO0FBRFksQ0FBUixDQUFaIiwiZmlsZSI6Ii4vcmVzb3VyY2VzL2pzL2J1bmRsZXMvcmVwb3J0cy9zY3JpcHRzL2FsbC5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ3JlcG9ydHMtY29tcG9uZW50JywgcmVxdWlyZSgnLi4vY29tcG9uZW50cy9SZXBvcnRzQ29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuVnVlLmNvbXBvbmVudCgncGFnaW5hdGlvbicsIHJlcXVpcmUoJ2xhcmF2ZWwtdnVlLXBhZ2luYXRpb24nKSk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/bundles/reports/scripts/all.js\n");
 
 /***/ }),
 
@@ -253,13 +253,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ }),
 
 /***/ 18:
-/*!***********************************************************!*\
-  !*** multi ./resources/js/bundles/reports/scripts/all.js ***!
-  \***********************************************************/
+/*!***************************************************!*\
+  !*** multi ./resources/js/bundles/reports/all.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\reports\scripts\all.js */"./resources/js/bundles/reports/scripts/all.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\reports\all.js */"./resources/js/bundles/reports/all.js");
 
 
 /***/ })

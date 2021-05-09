@@ -158,6 +158,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./resources/js/bundles/cash/cash.js":
+/*!*******************************************!*\
+  !*** ./resources/js/bundles/cash/cash.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("Vue.component('cash-component', __webpack_require__(/*! ./components/CashComponent.vue */ \"./resources/js/bundles/cash/components/CashComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jYXNoL2Nhc2guanM/NmU5MiJdLCJuYW1lcyI6WyJWdWUiLCJjb21wb25lbnQiLCJyZXF1aXJlIiwiYXBwIiwiZWwiXSwibWFwcGluZ3MiOiJBQUFBQSxHQUFHLENBQUNDLFNBQUosQ0FBYyxnQkFBZCxFQUFnQ0MsbUJBQU8sQ0FBQyxnR0FBRCxDQUFQLFdBQWhDO0FBRUEsSUFBTUMsR0FBRyxHQUFHLElBQUlILEdBQUosQ0FBUTtBQUNoQkksSUFBRSxFQUFFO0FBRFksQ0FBUixDQUFaIiwiZmlsZSI6Ii4vcmVzb3VyY2VzL2pzL2J1bmRsZXMvY2FzaC9jYXNoLmpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiVnVlLmNvbXBvbmVudCgnY2FzaC1jb21wb25lbnQnLCByZXF1aXJlKCcuL2NvbXBvbmVudHMvQ2FzaENvbXBvbmVudC52dWUnKS5kZWZhdWx0KTtcblxuY29uc3QgYXBwID0gbmV3IFZ1ZSh7XG4gICAgZWw6ICcjYXBwJ1xufSk7XG4iXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./resources/js/bundles/cash/cash.js\n");
+
+/***/ }),
+
 /***/ "./resources/js/bundles/cash/components/CashComponent.vue":
 /*!****************************************************************!*\
   !*** ./resources/js/bundles/cash/components/CashComponent.vue ***!
@@ -191,17 +202,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CashComponent_vue_vue_type_template_id_481b5ea1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./CashComponent.vue?vue&type=template&id=481b5ea1& */ \"./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/bundles/cash/components/CashComponent.vue?vue&type=template&id=481b5ea1&\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CashComponent_vue_vue_type_template_id_481b5ea1___WEBPACK_IMPORTED_MODULE_0__[\"render\"]; });\n\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CashComponent_vue_vue_type_template_id_481b5ea1___WEBPACK_IMPORTED_MODULE_0__[\"staticRenderFns\"]; });\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jYXNoL2NvbXBvbmVudHMvQ2FzaENvbXBvbmVudC52dWU/YzY5NyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jYXNoL2NvbXBvbmVudHMvQ2FzaENvbXBvbmVudC52dWU/dnVlJnR5cGU9dGVtcGxhdGUmaWQ9NDgxYjVlYTEmLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0ICogZnJvbSBcIi0hLi4vLi4vLi4vLi4vLi4vbm9kZV9tb2R1bGVzL3Z1ZS1sb2FkZXIvbGliL2xvYWRlcnMvdGVtcGxhdGVMb2FkZXIuanM/P3Z1ZS1sb2FkZXItb3B0aW9ucyEuLi8uLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvdnVlLWxvYWRlci9saWIvaW5kZXguanM/P3Z1ZS1sb2FkZXItb3B0aW9ucyEuL0Nhc2hDb21wb25lbnQudnVlP3Z1ZSZ0eXBlPXRlbXBsYXRlJmlkPTQ4MWI1ZWExJlwiIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/bundles/cash/components/CashComponent.vue?vue&type=template&id=481b5ea1&\n");
-
-/***/ }),
-
-/***/ "./resources/js/bundles/cash/scripts/cash.js":
-/*!***************************************************!*\
-  !*** ./resources/js/bundles/cash/scripts/cash.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("Vue.component('cash-component', __webpack_require__(/*! ../components/CashComponent.vue */ \"./resources/js/bundles/cash/components/CashComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jYXNoL3NjcmlwdHMvY2FzaC5qcz8yZWE2Il0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLGdCQUFkLEVBQWdDQyxtQkFBTyxDQUFDLGlHQUFELENBQVAsV0FBaEM7QUFFQSxJQUFNQyxHQUFHLEdBQUcsSUFBSUgsR0FBSixDQUFRO0FBQ2hCSSxJQUFFLEVBQUU7QUFEWSxDQUFSLENBQVoiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jYXNoL3NjcmlwdHMvY2FzaC5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ2Nhc2gtY29tcG9uZW50JywgcmVxdWlyZSgnLi4vY29tcG9uZW50cy9DYXNoQ29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/bundles/cash/scripts/cash.js\n");
 
 /***/ }),
 
@@ -266,13 +266,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ }),
 
 /***/ 17:
-/*!*********************************************************!*\
-  !*** multi ./resources/js/bundles/cash/scripts/cash.js ***!
-  \*********************************************************/
+/*!*************************************************!*\
+  !*** multi ./resources/js/bundles/cash/cash.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\cash\scripts\cash.js */"./resources/js/bundles/cash/scripts/cash.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\cash\cash.js */"./resources/js/bundles/cash/cash.js");
 
 
 /***/ })

@@ -374,14 +374,14 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/bundles/charts/scripts/presence.js":
-/*!*********************************************************!*\
-  !*** ./resources/js/bundles/charts/scripts/presence.js ***!
-  \*********************************************************/
+/***/ "./resources/js/bundles/charts/presence.js":
+/*!*************************************************!*\
+  !*** ./resources/js/bundles/charts/presence.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("Vue.component('presence-component', __webpack_require__(/*! ../components/presence/PresenceComponent.vue */ \"./resources/js/bundles/charts/components/presence/PresenceComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvc2NyaXB0cy9wcmVzZW5jZS5qcz9kY2FlIl0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLG9CQUFkLEVBQW9DQyxtQkFBTyxDQUFDLDZIQUFELENBQVAsV0FBcEM7QUFFQSxJQUFNQyxHQUFHLEdBQUcsSUFBSUgsR0FBSixDQUFRO0FBQ2hCSSxJQUFFLEVBQUU7QUFEWSxDQUFSLENBQVoiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvc2NyaXB0cy9wcmVzZW5jZS5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ3ByZXNlbmNlLWNvbXBvbmVudCcsIHJlcXVpcmUoJy4uL2NvbXBvbmVudHMvcHJlc2VuY2UvUHJlc2VuY2VDb21wb25lbnQudnVlJykuZGVmYXVsdCk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/bundles/charts/scripts/presence.js\n");
+eval("Vue.component('presence-component', __webpack_require__(/*! ./components/presence/PresenceComponent.vue */ \"./resources/js/bundles/charts/components/presence/PresenceComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvcHJlc2VuY2UuanM/N2QwOCJdLCJuYW1lcyI6WyJWdWUiLCJjb21wb25lbnQiLCJyZXF1aXJlIiwiYXBwIiwiZWwiXSwibWFwcGluZ3MiOiJBQUFBQSxHQUFHLENBQUNDLFNBQUosQ0FBYyxvQkFBZCxFQUFvQ0MsbUJBQU8sQ0FBQyw0SEFBRCxDQUFQLFdBQXBDO0FBRUEsSUFBTUMsR0FBRyxHQUFHLElBQUlILEdBQUosQ0FBUTtBQUNoQkksSUFBRSxFQUFFO0FBRFksQ0FBUixDQUFaIiwiZmlsZSI6Ii4vcmVzb3VyY2VzL2pzL2J1bmRsZXMvY2hhcnRzL3ByZXNlbmNlLmpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiVnVlLmNvbXBvbmVudCgncHJlc2VuY2UtY29tcG9uZW50JywgcmVxdWlyZSgnLi9jb21wb25lbnRzL3ByZXNlbmNlL1ByZXNlbmNlQ29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/bundles/charts/presence.js\n");
 
 /***/ }),
 
@@ -542,13 +542,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ }),
 
 /***/ 13:
-/*!***************************************************************!*\
-  !*** multi ./resources/js/bundles/charts/scripts/presence.js ***!
-  \***************************************************************/
+/*!*******************************************************!*\
+  !*** multi ./resources/js/bundles/charts/presence.js ***!
+  \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\charts\scripts\presence.js */"./resources/js/bundles/charts/scripts/presence.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\charts\presence.js */"./resources/js/bundles/charts/presence.js");
 
 
 /***/ })

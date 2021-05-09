@@ -1723,6 +1723,17 @@ eval("module.exports = function(module) {\n\tif (!module.webpackPolyfill) {\n\t\
 
 /***/ }),
 
+/***/ "./resources/js/bundles/charts/balance-monitor.js":
+/*!********************************************************!*\
+  !*** ./resources/js/bundles/charts/balance-monitor.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("Vue.component('balance-monitor-component', __webpack_require__(/*! ./components/BalanceMonitorComponent.vue */ \"./resources/js/bundles/charts/components/BalanceMonitorComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvYmFsYW5jZS1tb25pdG9yLmpzPzg0YjUiXSwibmFtZXMiOlsiVnVlIiwiY29tcG9uZW50IiwicmVxdWlyZSIsImFwcCIsImVsIl0sIm1hcHBpbmdzIjoiQUFBQUEsR0FBRyxDQUFDQyxTQUFKLENBQWMsMkJBQWQsRUFBMkNDLG1CQUFPLENBQUMsc0hBQUQsQ0FBUCxXQUEzQztBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9idW5kbGVzL2NoYXJ0cy9iYWxhbmNlLW1vbml0b3IuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUuY29tcG9uZW50KCdiYWxhbmNlLW1vbml0b3ItY29tcG9uZW50JywgcmVxdWlyZSgnLi9jb21wb25lbnRzL0JhbGFuY2VNb25pdG9yQ29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/bundles/charts/balance-monitor.js\n");
+
+/***/ }),
+
 /***/ "./resources/js/bundles/charts/components/BalanceMonitorComponent.vue":
 /*!****************************************************************************!*\
   !*** ./resources/js/bundles/charts/components/BalanceMonitorComponent.vue ***!
@@ -1783,17 +1794,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/bundles/charts/scripts/balance-monitor.js":
-/*!****************************************************************!*\
-  !*** ./resources/js/bundles/charts/scripts/balance-monitor.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("Vue.component('balance-monitor-component', __webpack_require__(/*! ../components/BalanceMonitorComponent.vue */ \"./resources/js/bundles/charts/components/BalanceMonitorComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9jaGFydHMvc2NyaXB0cy9iYWxhbmNlLW1vbml0b3IuanM/NGNlOCJdLCJuYW1lcyI6WyJWdWUiLCJjb21wb25lbnQiLCJyZXF1aXJlIiwiYXBwIiwiZWwiXSwibWFwcGluZ3MiOiJBQUFBQSxHQUFHLENBQUNDLFNBQUosQ0FBYywyQkFBZCxFQUEyQ0MsbUJBQU8sQ0FBQyx1SEFBRCxDQUFQLFdBQTNDO0FBRUEsSUFBTUMsR0FBRyxHQUFHLElBQUlILEdBQUosQ0FBUTtBQUNoQkksSUFBRSxFQUFFO0FBRFksQ0FBUixDQUFaIiwiZmlsZSI6Ii4vcmVzb3VyY2VzL2pzL2J1bmRsZXMvY2hhcnRzL3NjcmlwdHMvYmFsYW5jZS1tb25pdG9yLmpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiVnVlLmNvbXBvbmVudCgnYmFsYW5jZS1tb25pdG9yLWNvbXBvbmVudCcsIHJlcXVpcmUoJy4uL2NvbXBvbmVudHMvQmFsYW5jZU1vbml0b3JDb21wb25lbnQudnVlJykuZGVmYXVsdCk7XG5cbmNvbnN0IGFwcCA9IG5ldyBWdWUoe1xuICAgIGVsOiAnI2FwcCdcbn0pO1xuIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./resources/js/bundles/charts/scripts/balance-monitor.js\n");
-
-/***/ }),
-
 /***/ "./resources/js/components/EmptyPlaceholder.vue":
 /*!******************************************************!*\
   !*** ./resources/js/components/EmptyPlaceholder.vue ***!
@@ -1843,13 +1843,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ }),
 
 /***/ 14:
-/*!**********************************************************************!*\
-  !*** multi ./resources/js/bundles/charts/scripts/balance-monitor.js ***!
-  \**********************************************************************/
+/*!**************************************************************!*\
+  !*** multi ./resources/js/bundles/charts/balance-monitor.js ***!
+  \**************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\charts\scripts\balance-monitor.js */"./resources/js/bundles/charts/scripts/balance-monitor.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\charts\balance-monitor.js */"./resources/js/bundles/charts/balance-monitor.js");
 
 
 /***/ })

@@ -28,25 +28,25 @@ mix.js('resources/js/scripts/app.js', 'public/js')
 
     // Bundle scripts
         // Charts
-        .js('resources/js/bundles/charts/scripts/presence.js', 'public/js/bundles/charts')
-        .js('resources/js/bundles/charts/scripts/balance-monitor.js', 'public/js/bundles/charts')
-        .js('resources/js/bundles/charts/scripts/io-by-type.js', 'public/js/bundles/charts')
+        .js('resources/js/bundles/charts/presence.js', 'public/js/bundles/charts')
+        .js('resources/js/bundles/charts/balance-monitor.js', 'public/js/bundles/charts')
+        .js('resources/js/bundles/charts/io-by-type.js', 'public/js/bundles/charts')
 
         // Backup
-        .js('resources/js/bundles/backup/scripts/backup.js', 'public/js/bundles/backup')
+        .js('resources/js/bundles/backup/backup.js', 'public/js/bundles/backup')
 
         // Cash
-        .js('resources/js/bundles/cash/scripts/cash.js', 'public/js/bundles/cash')
+        .js('resources/js/bundles/cash/cash.js', 'public/js/bundles/cash')
 
         // Reports
-        .js('resources/js/bundles/reports/scripts/all.js', 'public/js/bundles/reports')
-        .js('resources/js/bundles/reports/scripts/create.js', 'public/js/bundles/reports')
+        .js('resources/js/bundles/reports/all.js', 'public/js/bundles/reports')
+        .js('resources/js/bundles/reports/create.js', 'public/js/bundles/reports')
 
     // Admin scripts
-    .js('resources/js/admin/scripts/users/list.js', 'public/js/admin/users')
-    .js('resources/js/admin/scripts/users/details.js', 'public/js/admin/users')
-    .js('resources/js/admin/scripts/bundles/list.js', 'public/js/admin/bundles')
-    .js('resources/js/admin/scripts/bundles/create.js', 'public/js/admin/bundles')
-    .js('resources/js/admin/scripts/bundles/edit.js', 'public/js/admin/bundles')
+    .js('resources/js/admin/users/list.js', 'public/js/admin/users')
+    .js('resources/js/admin/users/details.js', 'public/js/admin/users')
+    .js('resources/js/admin/bundles/list.js', 'public/js/admin/bundles')
+    .js('resources/js/admin/bundles/create.js', 'public/js/admin/bundles')
+    .js('resources/js/admin/bundles/edit.js', 'public/js/admin/bundles')
 
     .sourceMaps();

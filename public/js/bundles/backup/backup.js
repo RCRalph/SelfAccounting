@@ -254,6 +254,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./resources/js/bundles/backup/backup.js":
+/*!***********************************************!*\
+  !*** ./resources/js/bundles/backup/backup.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("Vue.component('backup-component', __webpack_require__(/*! ./components/BackupComponent.vue */ \"./resources/js/bundles/backup/components/BackupComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9iYWNrdXAvYmFja3VwLmpzPzlhNGEiXSwibmFtZXMiOlsiVnVlIiwiY29tcG9uZW50IiwicmVxdWlyZSIsImFwcCIsImVsIl0sIm1hcHBpbmdzIjoiQUFBQUEsR0FBRyxDQUFDQyxTQUFKLENBQWMsa0JBQWQsRUFBa0NDLG1CQUFPLENBQUMsc0dBQUQsQ0FBUCxXQUFsQztBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9idW5kbGVzL2JhY2t1cC9iYWNrdXAuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUuY29tcG9uZW50KCdiYWNrdXAtY29tcG9uZW50JywgcmVxdWlyZSgnLi9jb21wb25lbnRzL0JhY2t1cENvbXBvbmVudC52dWUnKS5kZWZhdWx0KTtcblxuY29uc3QgYXBwID0gbmV3IFZ1ZSh7XG4gICAgZWw6ICcjYXBwJ1xufSk7XG4iXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./resources/js/bundles/backup/backup.js\n");
+
+/***/ }),
+
 /***/ "./resources/js/bundles/backup/components/BackupComponent.vue":
 /*!********************************************************************!*\
   !*** ./resources/js/bundles/backup/components/BackupComponent.vue ***!
@@ -470,17 +481,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/bundles/backup/scripts/backup.js":
-/*!*******************************************************!*\
-  !*** ./resources/js/bundles/backup/scripts/backup.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("Vue.component('backup-component', __webpack_require__(/*! ../components/BackupComponent.vue */ \"./resources/js/bundles/backup/components/BackupComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9iYWNrdXAvc2NyaXB0cy9iYWNrdXAuanM/YjQ2OSJdLCJuYW1lcyI6WyJWdWUiLCJjb21wb25lbnQiLCJyZXF1aXJlIiwiYXBwIiwiZWwiXSwibWFwcGluZ3MiOiJBQUFBQSxHQUFHLENBQUNDLFNBQUosQ0FBYyxrQkFBZCxFQUFrQ0MsbUJBQU8sQ0FBQyx1R0FBRCxDQUFQLFdBQWxDO0FBRUEsSUFBTUMsR0FBRyxHQUFHLElBQUlILEdBQUosQ0FBUTtBQUNoQkksSUFBRSxFQUFFO0FBRFksQ0FBUixDQUFaIiwiZmlsZSI6Ii4vcmVzb3VyY2VzL2pzL2J1bmRsZXMvYmFja3VwL3NjcmlwdHMvYmFja3VwLmpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiVnVlLmNvbXBvbmVudCgnYmFja3VwLWNvbXBvbmVudCcsIHJlcXVpcmUoJy4uL2NvbXBvbmVudHMvQmFja3VwQ29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/bundles/backup/scripts/backup.js\n");
-
-/***/ }),
-
 /***/ "./resources/js/components/Loading.vue":
 /*!*********************************************!*\
   !*** ./resources/js/components/Loading.vue ***!
@@ -506,13 +506,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ }),
 
 /***/ 16:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/bundles/backup/scripts/backup.js ***!
-  \*************************************************************/
+/*!*****************************************************!*\
+  !*** multi ./resources/js/bundles/backup/backup.js ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\backup\scripts\backup.js */"./resources/js/bundles/backup/scripts/backup.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\backup\backup.js */"./resources/js/bundles/backup/backup.js");
 
 
 /***/ })

@@ -518,14 +518,14 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
-/***/ "./resources/js/bundles/reports/scripts/create.js":
-/*!********************************************************!*\
-  !*** ./resources/js/bundles/reports/scripts/create.js ***!
-  \********************************************************/
+/***/ "./resources/js/bundles/reports/create.js":
+/*!************************************************!*\
+  !*** ./resources/js/bundles/reports/create.js ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("Vue.component('create-report-component', __webpack_require__(/*! ../components/CreateReportComponent.vue */ \"./resources/js/bundles/reports/components/CreateReportComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9yZXBvcnRzL3NjcmlwdHMvY3JlYXRlLmpzPzIzYjgiXSwibmFtZXMiOlsiVnVlIiwiY29tcG9uZW50IiwicmVxdWlyZSIsImFwcCIsImVsIl0sIm1hcHBpbmdzIjoiQUFBQUEsR0FBRyxDQUFDQyxTQUFKLENBQWMseUJBQWQsRUFBeUNDLG1CQUFPLENBQUMsb0hBQUQsQ0FBUCxXQUF6QztBQUVBLElBQU1DLEdBQUcsR0FBRyxJQUFJSCxHQUFKLENBQVE7QUFDaEJJLElBQUUsRUFBRTtBQURZLENBQVIsQ0FBWiIsImZpbGUiOiIuL3Jlc291cmNlcy9qcy9idW5kbGVzL3JlcG9ydHMvc2NyaXB0cy9jcmVhdGUuanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJWdWUuY29tcG9uZW50KCdjcmVhdGUtcmVwb3J0LWNvbXBvbmVudCcsIHJlcXVpcmUoJy4uL2NvbXBvbmVudHMvQ3JlYXRlUmVwb3J0Q29tcG9uZW50LnZ1ZScpLmRlZmF1bHQpO1xuXG5jb25zdCBhcHAgPSBuZXcgVnVlKHtcbiAgICBlbDogJyNhcHAnXG59KTtcbiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./resources/js/bundles/reports/scripts/create.js\n");
+eval("Vue.component('create-report-component', __webpack_require__(/*! ./components/CreateReportComponent.vue */ \"./resources/js/bundles/reports/components/CreateReportComponent.vue\")[\"default\"]);\nvar app = new Vue({\n  el: '#app'\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9yZXBvcnRzL2NyZWF0ZS5qcz9hZWE0Il0sIm5hbWVzIjpbIlZ1ZSIsImNvbXBvbmVudCIsInJlcXVpcmUiLCJhcHAiLCJlbCJdLCJtYXBwaW5ncyI6IkFBQUFBLEdBQUcsQ0FBQ0MsU0FBSixDQUFjLHlCQUFkLEVBQXlDQyxtQkFBTyxDQUFDLG1IQUFELENBQVAsV0FBekM7QUFFQSxJQUFNQyxHQUFHLEdBQUcsSUFBSUgsR0FBSixDQUFRO0FBQ2hCSSxJQUFFLEVBQUU7QUFEWSxDQUFSLENBQVoiLCJmaWxlIjoiLi9yZXNvdXJjZXMvanMvYnVuZGxlcy9yZXBvcnRzL2NyZWF0ZS5qcy5qcyIsInNvdXJjZXNDb250ZW50IjpbIlZ1ZS5jb21wb25lbnQoJ2NyZWF0ZS1yZXBvcnQtY29tcG9uZW50JywgcmVxdWlyZSgnLi9jb21wb25lbnRzL0NyZWF0ZVJlcG9ydENvbXBvbmVudC52dWUnKS5kZWZhdWx0KTtcblxuY29uc3QgYXBwID0gbmV3IFZ1ZSh7XG4gICAgZWw6ICcjYXBwJ1xufSk7XG4iXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./resources/js/bundles/reports/create.js\n");
 
 /***/ }),
 
@@ -722,13 +722,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ }),
 
 /***/ 19:
-/*!**************************************************************!*\
-  !*** multi ./resources/js/bundles/reports/scripts/create.js ***!
-  \**************************************************************/
+/*!******************************************************!*\
+  !*** multi ./resources/js/bundles/reports/create.js ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\reports\scripts\create.js */"./resources/js/bundles/reports/scripts/create.js");
+module.exports = __webpack_require__(/*! C:\Users\rafal\Desktop\Important\Programy\PHP\Laravel\SelfAccounting\resources\js\bundles\reports\create.js */"./resources/js/bundles/reports/create.js");
 
 
 /***/ })

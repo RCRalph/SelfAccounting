@@ -1,4 +1,4 @@
-Vue.component('user-list-component', require('../../components/users/UserListComponent.vue').default);
+Vue.component('reports-component', require('./components/ReportsComponent.vue').default);
 Vue.component('pagination', require('laravel-vue-pagination'));
 
 const app = new Vue({
