@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Bundles\WebApi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\User;
+
 class ReportsController extends Controller
 {
     public function __construct()
@@ -81,5 +83,25 @@ class ReportsController extends Controller
         $lastCurrency = $this->getLastCurrency();
 
         return response()->json(compact("currencies", "categories", "means", "titles", "queryTypes", "lastCurrency"));
+    }
+
+    public function getUserInfo()
+    {
+        $userEmail = auth()->user()->email;
+        $email = request()->validate([
+            "email" => ["required", "email", "max:64", "exists:users,email", "not_in:$userEmail"]
+        ])["email"];
+
+        $user = User::firstWhere("email", $email)->only("username", "profile_picture");
+        $user["profile_picture"] = $this->getProfilePictureLink($user["profile_picture"]);
+
+        return response()->json($user);
+    }
+
+    public function store()
+    {
+        $data = request()->all();
+
+        dd($data);
     }
 }

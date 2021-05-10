@@ -10,9 +10,20 @@
 <script>
     export default {
         props: {
-            value: Boolean,
-            disabled: Boolean,
-            name: String,
+            value: {
+                required: true,
+                type: Boolean
+            },
+            disabled: {
+                required: false,
+                type: Boolean,
+                default: false
+            },
+            name: {
+                required: false,
+                type: String,
+                default: ""
+            },
             choice: {
                 type: Boolean,
                 required: false,

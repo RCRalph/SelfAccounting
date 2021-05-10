@@ -137,7 +137,7 @@
 
 .profile-img {
     @extend .rounded-circle;
-    border: solid 1px white;
+    border: solid 2px white;
     height: 39px;
     width: 39px;
     background-color: white;
@@ -290,7 +290,7 @@
         width: calc(95% / 2);
         background-color: darken($dark, 10%);
         border-radius: 30px;
-        margin-bottom: #{$boxHeight / 4};
+        margin: #{$boxHeight / 8} 0;
 
         &-image {
             height: 100%;
@@ -308,6 +308,28 @@
             margin-right: 10px;
             color: $danger;
             margin-top: 2px;
+            cursor: pointer;
+        }
+    }
+
+    .shared-user-waiting {
+        @extend .shared-user;
+        width: #{95% * 2 / 3};
+        padding: 0px 15px;
+
+        &-email {
+            font-size: 1.25rem;
+            text-align: center;
+            overflow-y: hidden;
+        }
+
+        &-spinner {
+            @extend .spinner-border;
+        }
+
+        &-error {
+            font-size: 2.5rem;
+            color: $danger;
         }
     }
 }

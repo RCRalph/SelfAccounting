@@ -7949,7 +7949,8 @@ a.close.disabled {
   }
 }
 
-.spinner-border {
+.spinner-border,
+.shared-users-wrapper .shared-user-waiting-spinner {
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -8008,6 +8009,7 @@ a.close.disabled {
 
 @media (prefers-reduced-motion: reduce) {
   .spinner-border,
+  .shared-users-wrapper .shared-user-waiting-spinner,
   .spinner-grow {
     -webkit-animation-duration: 1.5s;
             animation-duration: 1.5s;
@@ -12276,7 +12278,7 @@ a.text-dark:focus,
 }
 
 .profile-img {
-  border: solid 1px white;
+  border: solid 2px white;
   height: 39px;
   width: 39px;
   background-color: white;
@@ -12398,7 +12400,8 @@ a.text-dark:focus,
   justify-content: space-around;
 }
 
-.shared-users-wrapper .shared-user {
+.shared-users-wrapper .shared-user,
+.shared-users-wrapper .shared-user-waiting {
   padding: 7.5px;
   display: flex;
   justify-content: space-between;
@@ -12407,7 +12410,7 @@ a.text-dark:focus,
   width: calc(95% / 2);
   background-color: #1d2124;
   border-radius: 30px;
-  margin-bottom: 15px;
+  margin: 7.5px 0;
 }
 
 .shared-users-wrapper .shared-user-image {
@@ -12426,6 +12429,23 @@ a.text-dark:focus,
   margin-right: 10px;
   color: #e3342f;
   margin-top: 2px;
+  cursor: pointer;
+}
+
+.shared-users-wrapper .shared-user-waiting {
+  width: 63.3333333333%;
+  padding: 0px 15px;
+}
+
+.shared-users-wrapper .shared-user-waiting-email {
+  font-size: 1.25rem;
+  text-align: center;
+  overflow-y: hidden;
+}
+
+.shared-users-wrapper .shared-user-waiting-error {
+  font-size: 2.5rem;
+  color: #e3342f;
 }
 
 td,
@@ -12978,13 +12998,21 @@ header.masthead h1 {
   box-shadow: 0 0 0 0.2rem rgba(44, 43, 43, 0.5);
 }
 
-.lightmode .shared-user {
+.lightmode .shared-user,
+.lightmode .shared-users-wrapper .shared-user-waiting,
+.shared-users-wrapper .lightmode .shared-user-waiting {
   background-color: white;
   border: solid 4px #f2f2f2;
 }
 
+.lightmode .shared-user-image {
+  border: solid 2px black;
+  border-radius: 50px;
+}
+
 @media (max-width: 767.98px) {
-  .shared-user {
+  .shared-user,
+  .shared-users-wrapper .shared-user-waiting {
     width: 95% !important;
   }
 }

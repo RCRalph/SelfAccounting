@@ -176,6 +176,8 @@ Route::prefix('/webapi')->group(function () {
             Route::get('/user-reports', 'Bundles\WebApi\ReportsController@userReports')->name('webapi.bundles.reports.user-reports');
             Route::get('/shared-reports', 'Bundles\WebApi\ReportsController@sharedReports')->name('webapi.bundles.reports.shared-reports');
             Route::get('/create', 'Bundles\WebApi\ReportsController@create')->name('webapi.bundles.reports.create');
+            Route::get('/get-user-info', 'Bundles\WebApi\ReportsController@getUserInfo')->name('webapi.bundles.reports.get-user-info');
+            Route::post('/store', 'Bundles\WebApi\ReportsController@store')->name('webapi.bundles.reports.store');
         });
 
         Route::prefix('/{bundle}')->group(function () {

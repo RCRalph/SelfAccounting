@@ -76,5 +76,10 @@
     .shared-user {
         background-color: white;
         border: solid 4px darken(white, 5%);
+
+        &-image {
+            border: solid 2px black;
+            border-radius: 50px;
+        }
     }
 }
