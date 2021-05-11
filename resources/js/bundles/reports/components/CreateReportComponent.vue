@@ -135,14 +135,14 @@ export default {
                     !isNaN(Number(item.min_amount)) &&
                     (
                         !item.max_amount ||
-                        item.min_amount <= item.max_amount
+                        item.min_price <= item.max_price
                     ) && item.min_amount < 1e6 && item.min_amount >= 0,
 
                     item.max_amount === "" ||
                     !isNaN(Number(item.max_amount)) &&
                     (
                         !item.min_amount ||
-                        item.min_amount >= item.max_amount
+                        item.min_price <= item.max_price
                     ) && item.max_amount < 1e6 && item.max_amount >= 0,
 
                     item.min_price === "" ||
@@ -156,7 +156,7 @@ export default {
                     !isNaN(Number(item.max_price)) &&
                     (
                         !item.min_price ||
-                        item.max_price >= item.min_price
+                        item.min_price <= item.max_price
                     ) && item.max_price < 1e11 && item.max_price >= 0,
                 ].reduce((item1, item2) => item1 && item2)
             );
