@@ -27,20 +27,20 @@
         <div class="card-body">
             <div v-if="ready">
                 <div class="row mb-3">
-                    <div class="col-md-4 col-6">
-                        <a type="button" :href="'/' + type + '/create-multiple'" class="big-button-primary">
-                            {{ `Add multiple ${type}` }}
+                    <div class="col-lg-4 col-12 my-2 my-lg-0">
+                        <a type="button" :href="`/${type}/create-multiple`" class="big-button-primary">
+                            Add multiple {{ type }}
                         </a>
                     </div>
 
-                    <div class="col-md-4 col-6">
-                        <a type="button" :href="'/' + type + '/create-one'" class="big-button-primary">
-                            {{ `Add single ${type}` }}
+                    <div class="col-lg-4 col-12 my-2 my-lg-0">
+                        <a type="button" :href="`/${type}/create-one`" class="big-button-primary">
+                            Add single {{ type }}
                         </a>
                     </div>
 
-                    <div class="col-md-4 col-6">
-                        <a type="button" :href="'/' + type + '/exchange'" class="big-button-primary">
+                    <div class="col-lg-4 col-12 my-2 my-lg-0">
+                        <a type="button" :href="`/${type}/exchange`" class="big-button-primary">
                             Exchange means of payment
                         </a>
                     </div>

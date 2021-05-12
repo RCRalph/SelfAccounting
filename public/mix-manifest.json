@@ -14,6 +14,7 @@
     "/js/bundles/charts/presence.js": "/js/bundles/charts/presence.js",
     "/js/bundles/reports/all.js": "/js/bundles/reports/all.js",
     "/js/bundles/reports/create.js": "/js/bundles/reports/create.js",
+    "/js/bundles/reports/edit.js": "/js/bundles/reports/edit.js",
     "/js/exchange-means-of-payment.js": "/js/exchange-means-of-payment.js",
     "/js/income-outcome.js": "/js/income-outcome.js",
     "/js/income-outcome-create-multiple.js": "/js/income-outcome-create-multiple.js",

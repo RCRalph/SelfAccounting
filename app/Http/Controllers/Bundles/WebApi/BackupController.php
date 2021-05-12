@@ -187,8 +187,8 @@ class BackupController extends Controller
             "income.*.title" => ["required", "string", "max:64"],
             "income.*.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "income.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "income.*.category_id" => ["present", "integer", new BackupValidCategoryMean("income")],
-            "income.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("income")],
+            "income.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("income")],
+            "income.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("income")],
 
             // Outcome
             "outcome.*.currency_id" => ["required", "exists:currencies,id"],
@@ -196,8 +196,8 @@ class BackupController extends Controller
             "outcome.*.title" => ["required", "string", "max:64"],
             "outcome.*.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "outcome.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "outcome.*.category_id" => ["present", "integer", new BackupValidCategoryMean("outcome")],
-            "outcome.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("outcome")],
+            "outcome.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
+            "outcome.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
 
             // Bundle data
             "bundleData" => ["present", "array"],

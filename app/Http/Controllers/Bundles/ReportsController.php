@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Bundles;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Report;
+
 class ReportsController extends Controller
 {
     public function __construct()
@@ -24,5 +26,15 @@ class ReportsController extends Controller
         $pageData = $this->getDataForPageRender();
 
         return view("bundles.reports.create", compact("pageData"));
+    }
+
+    public function edit(Report $report)
+    {
+        $this->authorize("update", $report);
+
+        $pageData = $this->getDataForPageRender();
+        $id = $report->id;
+
+        return view("bundles.reports.edit", compact("pageData", "id"));
     }
 }

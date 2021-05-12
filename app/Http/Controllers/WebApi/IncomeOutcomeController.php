@@ -57,8 +57,8 @@ class IncomeOutcomeController extends Controller
 
         $last = [
             "currency" => $this->getLastCurrency(),
-            "category" => $incomeOutcome == null ? 0 : $incomeOutcome->category_id,
-            "mean" => $incomeOutcome == null ? 0 : $incomeOutcome->mean_id
+            "category" => $incomeOutcome == null ? null : $incomeOutcome->category_id,
+            "mean" => $incomeOutcome == null ? null : $incomeOutcome->mean_id
         ];
 
         $hasCashBundle = $this->hasBundle("cashan");
@@ -162,27 +162,14 @@ class IncomeOutcomeController extends Controller
         }
         $data = $data["data"];
 
-        foreach ($data as $key => $item) {
-            $data[$key] = array_merge(
-                $data[$key],
-                [
-                    "user_id" => auth()->user()->id,
-                    "category_id" => $data[$key]["category_id"] == 0 ?
-                        null : $data[$key]["category_id"],
-                    "mean_id" => $data[$key]["mean_id"] == 0 ?
-                    null : $data[$key]["mean_id"]
-                ]
-            );
-        }
-
         if ($viewType == "income") {
             foreach ($data as $item) {
-                Income::create($item);
+                auth()->user()->income()->create($item);
             }
         }
         else {
             foreach ($data as $item) {
-                Outcome::create($item);
+                auth()->user()->outcome()->create($item);
             }
         }
 
@@ -244,8 +231,8 @@ class IncomeOutcomeController extends Controller
             "$directory.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "$directory.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "$directory.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "$directory.category_id" => ["present", "integer", new ValidCategoryMean($viewType)],
-            "$directory.mean_id" => ["present", "integer", new ValidCategoryMean($viewType)]
+            "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
+            "$directory.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)]
         ])["data"][0];
 
         $incomeOutcome = $viewType == "income" ?
@@ -254,16 +241,7 @@ class IncomeOutcomeController extends Controller
 
         $this->authorize("viewIncomeOutcome", $incomeOutcome);
 
-        $incomeOutcome->update(array_merge(
-            $data,
-            [
-                "category_id" => $data["category_id"] == 0 ?
-                    null : $data["category_id"],
-                "mean_id" => $data["mean_id"] == 0 ?
-                    null : $data["mean_id"],
-                "user_id" => auth()->user()->id
-            ]
-        ));
+        $incomeOutcome->update($data);
 
         return response()->json([
             "data" => collect($incomeOutcome)->except(["user_id", "created_at", "updated_at"])
@@ -298,44 +276,34 @@ class IncomeOutcomeController extends Controller
             "income.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "income.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "income.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "income.category_id" => ["present", "integer", new ValidExchangeCategoryMean("income")],
-            "income.mean_id" => ["present", "integer", "different:outcome.mean_id", new ValidExchangeCategoryMean("income")],
+            "income.category_id" => ["present", "nullable", "integer", new ValidExchangeCategoryMean("income")],
+            "income.mean_id" => ["present", "nullable", "integer", "different:outcome.mean_id", new ValidExchangeCategoryMean("income")],
 
             "outcome" => ["required", "array"],
             "outcome.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "outcome.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "outcome.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "outcome.category_id" => ["present", "integer", new ValidExchangeCategoryMean("outcome")],
-            "outcome.mean_id" => ["present", "integer", "different:income.mean_id", new ValidExchangeCategoryMean("outcome")],
+            "outcome.category_id" => ["present", "nullable", "integer", new ValidExchangeCategoryMean("outcome")],
+            "outcome.mean_id" => ["present", "nullable", "integer", "different:income.mean_id", new ValidExchangeCategoryMean("outcome")],
 
             "cash" => ["nullable", "array"],
             "cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807", new HasEnoughExchangeCash],
             "cash.*.id" => ["required", "distinct", "exists:cash,id"]
         ]);
 
-        Income::create(array_merge(
+        auth()->user()->income()->create(array_merge(
             $data["income"],
             [
                 "date" => $data["data"]["date"],
-                "title" => $data["data"]["title"],
-                "user_id" => auth()->user()->id,
-                "category_id" => $data["income"]["category_id"] == 0 ?
-                    null : $data["income"]["category_id"],
-                "mean_id" => $data["income"]["mean_id"] == 0 ?
-                    null : $data["income"]["mean_id"]
+                "title" => $data["data"]["title"]
             ]
         ));
 
-        Outcome::create(array_merge(
+        auth()->user()->outcome()->create(array_merge(
             $data["outcome"],
             [
                 "date" => $data["data"]["date"],
-                "title" => $data["data"]["title"],
-                "user_id" => auth()->user()->id,
-                "category_id" => $data["outcome"]["category_id"] == 0 ?
-                    null : $data["outcome"]["category_id"],
-                "mean_id" => $data["outcome"]["mean_id"] == 0 ?
-                    null : $data["outcome"]["mean_id"]
+                "title" => $data["data"]["title"]
             ]
         ));
 

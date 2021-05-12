@@ -116,15 +116,15 @@ export default {
                 amount: "",
                 price: "",
                 currency_id: 0,
-                category_id: 0,
-                mean_id: 0
+                category_id: null,
+                mean_id: null
             },
             outcome: {
                 amount: "",
                 price: "",
                 currency_id: 0,
-                category_id: 0,
-                mean_id: 0
+                category_id: null,
+                mean_id: null
             },
 
             cashUsed: {}
@@ -324,8 +324,8 @@ export default {
                 this.titles = data.titles;
 
                 this.income.currency_id = data.last.currency;
-                this.income.category_id = data.last.category || 0;
-                this.income.mean_id = data.last.mean || 0;
+                this.income.category_id = data.last.category || null;
+                this.income.mean_id = data.last.mean || null;
 
                 this.outcome.currency_id = data.last.currency;
 

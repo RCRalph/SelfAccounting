@@ -24,56 +24,16 @@
 
                 <hr class="hr">
 
-                <div class="row">
-                    <div class="col-12 col-sm-4">
-                        <button
-                            type="button"
-                            class="big-button-danger"
-                            @click="destroy"
-                            :disabled="destroyed || submitted"
-                        >
-                            <div v-if="!destroyed">
-                                Delete {{ type }}
-                            </div>
-
-                            <span
-                                v-else
-                                class="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
-                    </div>
-
-                    <div class="col-12 col-sm-4">
-                        <button
-                            type="button"
-                            class="big-button-primary"
-                            @click="reset"
-                            :disabled="submitted || destroyed "
-                        >
-                            Reset changes
-                        </button>
-                    </div>
-
-                    <div class="col-12 col-sm-4">
-                        <button
-                            type="button"
-                            class="big-button-success"
-                            @click="submit"
-                            :disabled="submitted || destroyed || !canSave"
-                        >
-                            <div v-if="!submitted">Save changes</div>
-
-                            <span
-                                v-else
-                                class="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
-                    </div>
-                </div>
+                <DeleteSaveResetChanges
+                    :disableAll="destroyed || submitted"
+                    :disableSave="!canSave"
+                    :spinnerDelete="destroyed"
+                    :spinnerSave="submitted"
+                    :deleteText="type"
+                    @delete="destroy"
+                    @save="submit"
+                    @reset="reset"
+                ></DeleteSaveResetChanges>
             </div>
 
             <Loading v-else></Loading>
@@ -84,12 +44,14 @@
 <script>
 import Loading from "../Loading.vue";
 import CreateForm from "./CreateFormComponent.vue";
+import DeleteSaveResetChanges from "../DeleteSaveResetChanges.vue";
 
 export default {
     props: ["type", "id"],
     components: {
         Loading,
-        CreateForm
+        CreateForm,
+        DeleteSaveResetChanges
     },
     data() {
         return {
@@ -108,8 +70,8 @@ export default {
                 amount: "",
                 price: "",
                 currency_id: "",
-                category_id: "",
-                mean_id: ""
+                category_id: null,
+                mean_id: null
             },
             dataCopy: {}
         }
@@ -161,18 +123,14 @@ export default {
                     this.data = {
                         ...data,
                         amount: Number(data.amount),
-                        price: Number(data.price),
-                        category_id: data.category_id || 0,
-                        mean_id: data.mean_id || 0
+                        price: Number(data.price)
                     };
                     this.dataCopy = _.cloneDeep(this.data);
-
-                    this.submitted = false;
                 })
                 .catch(err => {
-                    console.log(err);
-                    this.submitted = false;
+                    console.error(err);
                 })
+                .finally(() => this.submitted = false)
         },
         reset() {
             this.data = _.cloneDeep(this.dataCopy);
@@ -182,7 +140,7 @@ export default {
 
             axios
                 .delete(`/webapi/${this.type}/${this.id}/delete`, {})
-                .then(response => {
+                .then(() => {
                     window.location.href = `/${this.type}`;
                 })
                 .catch(err => {
@@ -205,9 +163,7 @@ export default {
                 this.data = {
                     ...data.data,
                     amount: Number(data.data.amount),
-                    price: Number(data.data.price),
-                    category_id: data.data.category_id || 0,
-                    mean_id: data.data.mean_id || 0
+                    price: Number(data.data.price)
                 };
 
                 this.dataCopy = _.cloneDeep(this.data);

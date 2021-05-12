@@ -60,6 +60,7 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.category_id"
+            nullValue="N/A"
         ></InputGroup>
 
         <InputGroup
@@ -70,6 +71,7 @@
             optionTextKey="name"
             :invalid="samemeans"
             v-model="value.mean_id"
+            nullValue="N/A"
         ></InputGroup>
     </div>
 </template>
@@ -125,8 +127,8 @@ export default {
     },
     methods: {
         currencyChange() {
-            this.value.category_id = 0;
-            this.value.mean_id = 0;
+            this.value.category_id = null;
+            this.value.mean_id = null;
         }
     }
 }

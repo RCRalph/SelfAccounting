@@ -116,10 +116,8 @@ export default {
             });
 
             axios
-                .get("/webapi/bundles/reports/get-user-info", {
-                    params: {
-                        email
-                    }
+                .post("/webapi/bundles/reports/get-user-info", {
+                    email
                 })
                 .then(response => {
                     this.value.push({

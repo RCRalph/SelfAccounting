@@ -4,7 +4,7 @@
             <button
                 type="button"
                 class="big-button-success"
-                @click="save"
+                @click="$emit('save')"
                 :disabled="disableAll || disableSave || spinner"
             >
                 <div v-if="!spinner">
@@ -24,7 +24,7 @@
             <button
                 type="button"
                 class="big-button-danger"
-                @click="reset"
+                @click="$emit('reset')"
                 :disabled="disableAll || disableReset || spinner"
             >
                 Reset changes
@@ -55,14 +55,6 @@ export default {
             type: Boolean,
             required: false,
             default: false
-        }
-    },
-    methods: {
-        save() {
-            this.$emit("save");
-        },
-        reset() {
-            this.$emit("reset");
         }
     }
 }

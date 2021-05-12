@@ -178,8 +178,8 @@ export default {
     },
     methods: {
         currencyChange() {
-            this.value.category_id = 0;
-            this.value.mean_id = 0;
+            this.value.category_id = null;
+            this.value.mean_id = null;
         },
         meanChange() {
             const date = this.value.date;

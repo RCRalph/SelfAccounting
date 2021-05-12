@@ -46,25 +46,16 @@
 
                 <hr class="hr">
 
-                <div class="row">
-                    <div class="col-12 col-sm-4 offset-sm-4">
-                        <button
-                            type="button"
-                            class="big-button-success"
-                            @click="submit"
-                            :disabled="submitted || !canSubmit"
-                        >
-                            <div v-if="!submitted">Submit</div>
-
-                            <span
-                                v-else
-                                class="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
-                    </div>
-                </div>
+                <DeleteSaveResetChanges
+                    :disableAll="destroyed || submitted"
+                    :disableSave="!canSubmit"
+                    :spinnerDelete="destroyed"
+                    :spinnerSave="submitted"
+                    deleteText="report"
+                    @delete="destroy"
+                    @save="submit"
+                    @reset="reset"
+                ></DeleteSaveResetChanges>
             </div>
 
             <Loading v-else></Loading>
@@ -79,11 +70,14 @@ import ReportAdditionalEntries from "./ReportAdditionalEntriesComponent.vue";
 import ReportUsersSharedComponent from "./ReportUsersSharedComponent.vue";
 import Loading from "../../../components/Loading.vue";
 import EmptyPlaceholder from "../../../components/EmptyPlaceholder.vue";
+import DeleteSaveResetChanges from "../../../components/DeleteSaveResetChanges.vue";
 
 export default {
+    props: ["id"],
     components: {
         Loading,
         EmptyPlaceholder,
+        DeleteSaveResetChanges,
         ReportDataComponent,
         ReportQueriesComponent,
         ReportAdditionalEntries,
@@ -99,6 +93,8 @@ export default {
             queryTypes: [],
             lastCurrency: 1,
             submitted: false,
+            destroyed: false,
+            copy: {},
 
             queries: [],
             additionalEntries: [],
@@ -240,19 +236,44 @@ export default {
             this.submitted = true;
 
             axios
-                .post("/webapi/bundles/reports/store", {
+                .patch(`/webapi/bundles/reports/${this.id}/update`, {
                     data: this.data,
                     queries: this.queries,
                     additionalEntries: this.additionalEntries,
                     users: this.users.map(item => item.email)
                 })
                 .then(response => {
-                    window.location = `/bundles/reports/${response.data.id}`;
+                    this.data = response.data.data;
+                    this.queries = response.data.queries;
+                    this.additionalEntries = response.data.additionalEntries;
+                    this.users = response.data.users;
+
+                    this.copy.data = _.cloneDeep(response.data.data);
+                    this.copy.queries = _.cloneDeep(response.data.queries);
+                    this.copy.additionalEntries = _.cloneDeep(response.data.additionalEntries);
+                    this.copy.users = _.cloneDeep(response.data.users);
                 })
                 .catch(err => {
                     console.error(err);
-                    this.submitted = false;
                 })
+                .finally(() => this.submitted = false)
+        },
+        reset() {
+            this.data = _.cloneDeep(this.copy.data);
+            this.queries = _.cloneDeep(this.copy.queries);
+            this.additionalEntries = _.cloneDeep(this.copy.additionalEntries);
+            this.users = _.cloneDeep(this.copy.users);
+        },
+        destroy() {
+            this.destroyed = true;
+
+            axios
+                .delete(`/webapi/bundles/reports/${this.id}/delete`, {})
+                .then(() => window.location = "/bundles/reports")
+                .catch(err => {
+                    console.error(err);
+                    this.destroyed = false;
+                });
         },
         isNullLike(value) {
             return value === null || value === "";
@@ -260,8 +281,18 @@ export default {
     },
     mounted() {
         axios
-            .get("/webapi/bundles/reports/create", {})
+            .get(`/webapi/bundles/reports/${this.id}/edit`, {})
             .then(response => {
+                this.data = response.data.data;
+                this.queries = response.data.queries;
+                this.additionalEntries = response.data.additionalEntries;
+                this.users = response.data.users;
+
+                this.copy.data = _.cloneDeep(response.data.data);
+                this.copy.queries = _.cloneDeep(response.data.queries);
+                this.copy.additionalEntries = _.cloneDeep(response.data.additionalEntries);
+                this.copy.users = _.cloneDeep(response.data.users);
+
                 this.currencies = response.data.currencies;
                 this.categories = response.data.categories;
                 this.means = response.data.means;

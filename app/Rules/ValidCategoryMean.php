@@ -43,7 +43,7 @@ class ValidCategoryMean implements Rule
                 ->where("id", $value)
                 ->where("currency_id", request("$this->nestedArrayName.$index.currency_id"));
             if ($this->checkForIncomeOutcome) {
-                $retVal = $categories->where($this->viewType . "_category", true);
+                $retVal = $retVal->where($this->viewType . "_category", true);
             }
         }
         else {

@@ -92,6 +92,10 @@ Route::prefix('/bundles')->group(function () {
     Route::prefix('/reports')->group(function () {
         Route::get('/', 'Bundles\ReportsController@index')->name('bundles.reports.index');
         Route::get('/create', 'Bundles\ReportsController@create')->name('bundles.reports.create');
+
+        Route::prefix('/{report}')->group(function () {
+            Route::get('/edit', 'Bundles\ReportsController@edit')->name('bundles.reports.edit');
+        });
     });
 
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
@@ -176,8 +180,12 @@ Route::prefix('/webapi')->group(function () {
             Route::get('/user-reports', 'Bundles\WebApi\ReportsController@userReports')->name('webapi.bundles.reports.user-reports');
             Route::get('/shared-reports', 'Bundles\WebApi\ReportsController@sharedReports')->name('webapi.bundles.reports.shared-reports');
             Route::get('/create', 'Bundles\WebApi\ReportsController@create')->name('webapi.bundles.reports.create');
-            Route::get('/get-user-info', 'Bundles\WebApi\ReportsController@getUserInfo')->name('webapi.bundles.reports.get-user-info');
+            Route::post('/get-user-info', 'Bundles\WebApi\ReportsController@getUserInfo')->name('webapi.bundles.reports.get-user-info');
             Route::post('/store', 'Bundles\WebApi\ReportsController@store')->name('webapi.bundles.reports.store');
+
+            Route::prefix('/{report}')->group(function () {
+                Route::get('/edit', 'Bundles\WebApi\ReportsController@edit')->name('webapi.bundles.reports.edit');
+            });
         });
 
         Route::prefix('/{bundle}')->group(function () {

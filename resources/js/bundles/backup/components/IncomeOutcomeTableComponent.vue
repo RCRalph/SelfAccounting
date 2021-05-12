@@ -32,10 +32,10 @@
                             {{ item.price }}
                         </td>
                         <td>
-                            {{ item.category_id == 0 ? "N/A" : categories[item.category_id - 1].name }}
+                            {{ !item.category_id ? "N/A" : categories[item.category_id - 1].name }}
                         </td>
                         <td>
-                            {{ item.mean_id == 0 ? "N/A" : means[item.mean_id - 1].name }}
+                            {{ !item.mean_id ? "N/A" : means[item.mean_id - 1].name }}
                         </td>
                     </tr>
                 </tbody>
