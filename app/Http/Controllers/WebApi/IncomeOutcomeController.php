@@ -30,11 +30,6 @@ class IncomeOutcomeController extends Controller
     {
         $currencies = $this->getCurrencies();
 
-        $nullArray = [
-            "id" => 0,
-            "name" => "N/A"
-        ];
-
         // Get categories
         $categories = auth()->user()->categories
             ->where($viewType . "_category", true)
@@ -42,31 +37,12 @@ class IncomeOutcomeController extends Controller
             ->groupBy("currency_id")
             ->toArray();
 
-        foreach ($currencies as $currency) {
-            if (isset($categories[$currency["id"]])) {
-                array_unshift($categories[$currency["id"]], $nullArray);
-            }
-            else {
-                $categories[$currency["id"]] = [$nullArray];
-            }
-        }
-
         // Get means
         $means = auth()->user()->meansOfPayment
             ->where($viewType . "_mean", true)
             ->map(fn ($item) => collect($item)->only(["id", "name", "currency_id", "first_entry_date"]))
             ->groupBy("currency_id")
             ->toArray();
-
-        $nullArray["first_entry_date"] = null;
-        foreach ($currencies as $currency) {
-            if (isset($means[$currency["id"]])) {
-                array_unshift($means[$currency["id"]], $nullArray);
-            }
-            else {
-                $means[$currency["id"]] = [$nullArray];
-            }
-        }
 
         $incomeOutcome = auth()->user()->income
             ->merge(auth()->user()->outcome)
@@ -173,8 +149,8 @@ class IncomeOutcomeController extends Controller
             "$directory.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
             "$directory.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "$directory.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "$directory.category_id" => ["present", "integer", new ValidCategoryMean($viewType)],
-            "$directory.mean_id" => ["present", "integer", new ValidCategoryMean($viewType)],
+            "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
+            "$directory.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
 
             // Validate cash
             "cash" => ["nullable", "array"],

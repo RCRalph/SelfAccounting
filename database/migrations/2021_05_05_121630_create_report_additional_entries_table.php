@@ -20,7 +20,7 @@ class CreateReportAdditionalEntriesTable extends Migration
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);
-            $table->foreignId('category_id')->nullable()->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('mean_id')->nullable()->constrained('mean_of_payments')->onDelete('set null');
             $table->foreignId('currency_id')->constrained()->onDelete('cascade');
 

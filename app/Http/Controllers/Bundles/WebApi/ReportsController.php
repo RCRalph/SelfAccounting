@@ -10,6 +10,7 @@ use App\Rules\ValidQueryMinMax;
 use App\Rules\ValidCategoryMean;
 
 use App\User;
+use App\Report;
 
 class ReportsController extends Controller
 {
@@ -23,7 +24,7 @@ class ReportsController extends Controller
         $reports = auth()->user()->reports()
             ->select("id", "title")
             ->orderBy("id")
-            ->paginate(10);
+            ->paginate(5);
 
         return response()->json(compact("reports"));
     }
@@ -32,7 +33,7 @@ class ReportsController extends Controller
     {
         $reports = auth()->user()->sharedReports()
             ->select("id", "title")
-            ->paginate(10);
+            ->paginate(5);
 
         return response()->json(compact("reports"));
     }
@@ -42,39 +43,16 @@ class ReportsController extends Controller
         $queryTypes = ["income", "outcome"];
 
         $currencies = $this->getCurrencies();
-        $nullArray = [
-            "id" => 0,
-            "name" => "N/A"
-        ];
 
         $categories = auth()->user()->categories
             ->map(fn ($item) => collect($item)->only(["id", "name", "currency_id"]))
             ->groupBy("currency_id")
             ->toArray();
 
-        foreach ($currencies as $currency) {
-            if (isset($categories[$currency["id"]])) {
-                array_unshift($categories[$currency["id"]], $nullArray);
-            }
-            else {
-                $categories[$currency["id"]] = [$nullArray];
-            }
-        }
-
         $means = auth()->user()->meansOfPayment
             ->map(fn ($item) => collect($item)->only(["id", "name", "currency_id"]))
             ->groupBy("currency_id")
             ->toArray();
-
-        foreach ($currencies as $currency) {
-            if (isset($means[$currency["id"]])) {
-                array_unshift($means[$currency["id"]], $nullArray);
-            }
-            else {
-                $means[$currency["id"]] = [$nullArray];
-            }
-        }
-
 
         $titles = auth()->user()->income
             ->merge(auth()->user()->outcome)
@@ -140,8 +118,20 @@ class ReportsController extends Controller
             abort(422, "No data given");
         }
 
+        $report = auth()->user()->reports()->create($data["data"]);
 
+        foreach ($data["queries"] as $query) {
+            $report->queries()->create($query);
+        }
 
-        dd($data);
+        foreach ($data["additionalEntries"] as $entry) {
+            $report->additionalEntries()->create($entry);
+        }
+
+        foreach ($data["users"] as $email) {
+            $report->sharedUsers()->attach(User::firstWhere("email", $email));
+        }
+
+        return response()->json(["id" => $report->id]);
     }
 }

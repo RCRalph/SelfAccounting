@@ -21,7 +21,12 @@ class Report extends Model
         return $this->hasMany(ReportQuery::class);
     }
 
-    public function usersSharedWith()
+    public function additionalEntries()
+    {
+        return $this->hasMany(ReportAdditionalEntry::class);
+    }
+
+    public function sharedUsers()
     {
         return $this->belongsToMany(User::class, 'report_user_pivot_table');
     }

@@ -210,10 +210,10 @@ export default {
                 min_date: "",
                 max_date: "",
                 title: null,
-                min_amount: null,
-                max_amount: null,
-                min_price: null,
-                max_price: null,
+                min_amount: "",
+                max_amount: "",
+                min_price: "",
+                max_price: "",
                 currency_id: null,
                 category_id: null,
                 mean_id: null
@@ -229,8 +229,8 @@ export default {
                 amount: null,
                 price: null,
                 currency_id: this.lastCurrency,
-                category_id: 0,
-                mean_id: 0
+                category_id: null,
+                mean_id: null
             });
         },
         removeEntry(i) {
@@ -247,7 +247,7 @@ export default {
                     users: this.users.map(item => item.email)
                 })
                 .then(response => {
-                    //window.location = `/bundles/reports/${response.data.id}`;
+                    window.location = `/bundles/reports/${response.data.id}`;
                 })
                 .catch(err => {
                     console.error(err);

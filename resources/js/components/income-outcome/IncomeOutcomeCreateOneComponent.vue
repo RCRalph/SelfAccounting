@@ -108,7 +108,7 @@ export default {
                 return "1970-01-01";
             }
 			const currentMean = meansForCurrency.filter(item => item.id == this.data.mean_id);
-			return currentMean.length ? currentMean[0].first_entry_date : "1970-01-01";
+			return (currentMean.length && currentMean.id != null) ? currentMean[0].first_entry_date : "1970-01-01";
         },
         canSubmit() {
             const validDate = this.data.date !== "" &&

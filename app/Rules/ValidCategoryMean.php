@@ -32,7 +32,7 @@ class ValidCategoryMean implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value == 0) {
+        if ($value == null) {
             return true;
         }
 

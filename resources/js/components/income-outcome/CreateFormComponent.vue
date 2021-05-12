@@ -84,6 +84,7 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.category_id"
+            nullValue="N/A"
             :disabled="common && common.hasOwnProperty('category_id')"
         ></InputGroup>
 
@@ -94,6 +95,7 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.mean_id"
+            nullValue="N/A"
             :disabled="common && common.hasOwnProperty('mean_id')"
             @input="meanChange"
         ></InputGroup>
