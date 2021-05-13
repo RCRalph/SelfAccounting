@@ -19,6 +19,12 @@
         ></SliderChoice>
 
         <SliderChoice
+            left="Don't calculate sum"
+            right="Calculate sum"
+            v-model="value.calculate_sum"
+        ></SliderChoice>
+
+        <SliderChoice
             left="Sort dates ascending"
             right="Sort dates descending"
             v-model="value.sort_dates_desc"

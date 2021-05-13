@@ -97,6 +97,8 @@
 </template>
 
 <script>
+import SliderCheckbox from "./SliderCheckbox.vue";
+
 export default {
     props: {
         name: {
@@ -190,6 +192,9 @@ export default {
             type: Boolean,
             default: false
         }
+    },
+    components: {
+        SliderCheckbox
     },
     methods: {
         capitalize(text) {

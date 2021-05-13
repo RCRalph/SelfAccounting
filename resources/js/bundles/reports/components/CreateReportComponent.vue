@@ -106,6 +106,7 @@ export default {
             data: {
                 title: "",
                 income_addition: true,
+                calculate_sum: false,
                 sort_dates_desc: false
             }
         }

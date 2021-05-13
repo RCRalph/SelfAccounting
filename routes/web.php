@@ -185,6 +185,8 @@ Route::prefix('/webapi')->group(function () {
 
             Route::prefix('/{report}')->group(function () {
                 Route::get('/edit', 'Bundles\WebApi\ReportsController@edit')->name('webapi.bundles.reports.edit');
+                Route::patch('/update', 'Bundles\WebApi\ReportsController@update')->name('webapi.bundles.reports.update');
+                Route::delete('/delete', 'Bundles\WebApi\ReportsController@destroy')->name('webapi.bundles.reports.delete');
             });
         });
 

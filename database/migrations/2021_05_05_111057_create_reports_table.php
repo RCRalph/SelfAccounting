@@ -19,6 +19,7 @@ class CreateReportsTable extends Migration
             $table->string('title', 64);
             $table->boolean('income_addition')->default(true);
             $table->boolean('sort_dates_desc')->default(false);
+            $table->boolean('calculate_sum')->default(false);
             $table->timestamps();
 
             $table->index(['id', 'user_id']);

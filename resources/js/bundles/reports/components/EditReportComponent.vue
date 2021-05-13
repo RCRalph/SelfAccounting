@@ -202,6 +202,7 @@ export default {
     methods: {
         addQuery() {
             this.queries.push({
+                id: null,
                 query_data: this.queryTypes[0],
                 min_date: null,
                 max_date: null,
@@ -220,6 +221,7 @@ export default {
         },
         addEntry() {
             this.additionalEntries.push({
+                id: null,
                 date: null,
                 title: null,
                 amount: null,
@@ -246,12 +248,11 @@ export default {
                     this.data = response.data.data;
                     this.queries = response.data.queries;
                     this.additionalEntries = response.data.additionalEntries;
-                    this.users = response.data.users;
 
                     this.copy.data = _.cloneDeep(response.data.data);
                     this.copy.queries = _.cloneDeep(response.data.queries);
                     this.copy.additionalEntries = _.cloneDeep(response.data.additionalEntries);
-                    this.copy.users = _.cloneDeep(response.data.users);
+                    this.copy.users = _.cloneDeep(this.users);
                 })
                 .catch(err => {
                     console.error(err);
