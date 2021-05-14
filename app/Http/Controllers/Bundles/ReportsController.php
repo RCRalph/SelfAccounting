@@ -37,4 +37,13 @@ class ReportsController extends Controller
 
         return view("bundles.reports.edit", compact("pageData", "id"));
     }
+
+    public function show(Report $report)
+    {
+        $this->authorize("view", $report);
+
+        $pageData = $this->getDataForPageRender();
+
+        return view("bundles.reports.show", compact("pageData", "report"));
+    }
 }

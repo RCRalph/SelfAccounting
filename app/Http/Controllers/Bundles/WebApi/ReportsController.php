@@ -11,6 +11,10 @@ use App\Rules\ValidCategoryMean;
 use App\Rules\BelongsToReport;
 
 use App\User;
+use App\Income;
+use App\Outcome;
+use App\Category;
+use App\MeanOfPayment;
 use App\Report;
 use App\ReportQuery;
 use App\ReportAdditionalEntry;
@@ -122,7 +126,7 @@ class ReportsController extends Controller
             "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "additionalEntries")],
 
             "users" => ["present", "array"],
-            "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email"]
+            "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
         ]);
 
         if (!$data["queries"] && !$data["additionalEntries"]) {
@@ -230,7 +234,7 @@ class ReportsController extends Controller
             "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "additionalEntries")],
 
             "users" => ["present", "array"],
-            "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email"]
+            "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
         ]);
 
         if (!$data["queries"] && !$data["additionalEntries"]) {
@@ -279,7 +283,9 @@ class ReportsController extends Controller
             ->map(fn ($item) => $item->email)
             ->toArray();
 
-        $report->sharedUsers()->whereIn("email", array_diff($usersFromDB, $data["users"]))->detach();
+        if (array_diff($usersFromDB, $data["users"])) {
+            $report->sharedUsers()->whereIn("email", array_diff($usersFromDB, $data["users"]))->detach();
+        }
         foreach ($data["users"] as $email) {
             if (!$report->sharedUsers->where("email", $email)->count()) {
                 $report->sharedUsers()->attach(User::firstWhere("email", $email));
@@ -296,5 +302,81 @@ class ReportsController extends Controller
         $report->delete();
 
         return response("");
+    }
+
+    public function show(Report $report)
+    {
+        $this->authorize("view", $report);
+
+        $reportData = [
+            "title" => $report->title
+        ];
+
+        $currencies = $this->getCurrencies();
+
+        $categories = Category::where("user_id", $report->user_id)
+            ->select("id", "name", "currency_id")
+            ->get()
+            ->groupBy("currency_id");
+
+        $means = MeanOfPayment::where("user_id", $report->user_id)
+            ->select("id", "name", "currency_id")
+            ->get()
+            ->groupBy("currency_id");
+
+        $rows = collect();
+        foreach ($report->queries as $query) {
+            $data = $query->query_data == "income" ?
+                Income::where("user_id", $report->user_id) :
+                Outcome::where("user_id", $report->user_id);
+
+            $queryFieldsToCheck = [
+                "min_date", "max_date", "title", "min_amount", "max_amount",
+                "min_price", "max_price", "currency_id", "category_id", "mean_id"
+            ];
+
+            foreach ($queryFieldsToCheck as $field) {
+                if ($query[$field]) {
+                    $firstLetters = substr($field, 0, 4);
+                    $isMin = $firstLetters == "min_";
+                    $isMax = $firstLetters == "max_";
+
+                    $data->where(
+                        ($isMin || $isMax) ? substr($field, 4, strlen($field) - 4) : $field,
+                        $isMin ? ">=" : ($isMax ? "<=" : "="),
+                        $query[$field]
+                    );
+                }
+            }
+
+            $rows = $rows->merge($data
+                ->select("date", "title", "amount", "price", "currency_id", "mean_id", "category_id")
+                ->get()
+				->map(function ($item) use ($report, $query) {
+					$item->amount *= ($report->income_addition xor $query->query_data == "income") ? -1 : 1;
+					$item->price *= 1;
+					return $item;
+				})
+            );
+        }
+
+        foreach ($report->additionalEntries as $entry) {
+            unset($entry["id"], $entry["report_id"]);
+            $rows = $rows->push($entry);
+        }
+
+        $rows = $rows->sort(function ($a, $b) use ($report) {
+			if (strtotime($a->date) == strtotime($b->date)) {
+				if ($a->title === $b->title) {
+					return 0;
+				}
+
+				return strcasecmp($a->title, $b->title);
+			}
+
+			return (strtotime($a->date) < strtotime($b->date) ? -1 : 1) * ($report->sort_dates_desc ? -1 : 1);
+		})->unique()->values();
+
+        return response()->json(compact("reportData", "rows", "currencies", "categories", "means"));
     }
 }

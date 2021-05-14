@@ -3,7 +3,7 @@
         <div class="card-header-flex">
             <div class="card-header-text">
                 <i class="fas fa-newspaper"></i>
-                New report
+                Edit report
             </div>
         </div>
 

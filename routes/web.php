@@ -94,6 +94,7 @@ Route::prefix('/bundles')->group(function () {
         Route::get('/create', 'Bundles\ReportsController@create')->name('bundles.reports.create');
 
         Route::prefix('/{report}')->group(function () {
+            Route::get('/', 'Bundles\ReportsController@show')->name('bundles.reports.show');
             Route::get('/edit', 'Bundles\ReportsController@edit')->name('bundles.reports.edit');
         });
     });
@@ -184,6 +185,7 @@ Route::prefix('/webapi')->group(function () {
             Route::post('/store', 'Bundles\WebApi\ReportsController@store')->name('webapi.bundles.reports.store');
 
             Route::prefix('/{report}')->group(function () {
+                Route::get('/', 'Bundles\WebApi\ReportsController@show')->name('webapi.bundles.reports.show');
                 Route::get('/edit', 'Bundles\WebApi\ReportsController@edit')->name('webapi.bundles.reports.edit');
                 Route::patch('/update', 'Bundles\WebApi\ReportsController@update')->name('webapi.bundles.reports.update');
                 Route::delete('/delete', 'Bundles\WebApi\ReportsController@destroy')->name('webapi.bundles.reports.delete');
