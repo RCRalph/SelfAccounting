@@ -5,6 +5,7 @@
                 <i class="fas fa-file-invoice-dollar"></i>
                 Summary
             </div>
+
             <div class="d-flex" v-if="ready && availableCurrencies.length">
                 <div class="h4 my-auto mr-3">Currency:</div>
                 <select class="form-control" v-model="currentCurrency">

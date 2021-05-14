@@ -15,71 +15,117 @@
 
         <div class="card-body">
             <div v-if="ready">
-                <div class="table-responsive-xl w-100">
-                    <table
-                        id="table-multi-hover"
-                        class="responsive-table-bordered table-themed"
-                        v-if="rows.length"
-                    >
-                        <TableHeader :cells="headerCells"></TableHeader>
+                <div v-if="rows.length">
+                    <div class="row" v-if="sum !== null">
+                        <div class="mx-auto mb-3 col-md-8 col-lg-6 offset-lg-3">
+                            <div class="card">
+                                <div class="card-header-flex">
+                                    <div class="card-header-text">
+                                        <i class="fas fa-calculator"></i>
+                                        Sum
+                                    </div>
 
-                        <tbody>
-                            <tr
-                                v-for="(row, index) in tableRowsSpanned"
-                                :key="index"
-                                :i="index"
-                            >
-                                <th
-                                    scope="row"
-                                    rep="date"
-                                    v-if="row.date"
-                                    :rowspan="row.span.date"
-                                >{{ row.date }}
-                                </th>
+                                    <div class="d-flex" v-if="Object.keys(sum).length">
+                                        <div class="h4 my-auto mr-3">Currency:</div>
+                                        <select class="form-control" v-model="sumCurrency">
+                                            <option
+                                                v-for="(currency, i) in Object.keys(sum)"
+                                                :key="i"
+                                                :value="currency"
+                                            >
+                                                {{ currencies[currency - 1].ISO }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
 
-                                <td
-                                    rep="title"
-                                    v-if="row.title"
-                                    :rowspan="row.span.title"
-                                >{{ row.title }}</td>
+                                <div class="card-body text-center h2 my-auto">
+                                    {{ sum[sumCurrency].toLocaleString('en').split(",").join(" ") }}
+                                    {{ currencies[sumCurrency - 1].ISO }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                <td
-                                    rep="amount"
-                                    v-if="row.amount"
-                                    :rowspan="row.span.amount"
-                                >{{ row.amount }}</td>
+                    <div class="row mb-3">
+                        <div class="col-lg-4 col-12 my-2 my-lg-0 offset-lg-2">
+                            <a type="button" :href="`/${type}/create-multiple`" class="big-button-primary btn-lg">
+                                <i class="fas fa-file-csv"></i>
+                                Export to Excel-readable .csv
+                            </a>
+                        </div>
 
-                                <td
-                                    rep="price"
-                                    v-if="row.price"
-                                    :rowspan="row.span.price"
-                                >{{ row.price + " " + currencies[rows[index].currency_id - 1].ISO }}</td>
+                        <div class="col-lg-4 col-12 my-2 my-lg-0">
+                            <a type="button" :href="`/${type}/create-one`" class="big-button-primary btn-lg">
+                                <i class="fas fa-file-excel"></i>
+                                Export to .tsv file
+                            </a>
+                        </div>
+                    </div>
 
-                                <td
-                                    rep="value"
-                                    v-if="row.value"
-                                    :rowspan="row.span.value"
-                                >{{ row.value + " " + currencies[rows[index].currency_id - 1].ISO }}</td>
+                    <div class="table-responsive-xl w-100">
+                        <table
+                            id="table-multi-hover"
+                            class="responsive-table-bordered table-themed"
+                        >
+                            <TableHeader :cells="headerCells"></TableHeader>
 
-                                <td
-                                    rep="category"
-                                    v-if="row.category_id !== undefined"
-                                    :rowspan="row.span.category_id"
-                                >{{ getCategoryName(rows[index].currency_id, row.category_id) }}</td>
+                            <tbody>
+                                <tr
+                                    v-for="(row, index) in tableRowsSpanned"
+                                    :key="index"
+                                    :i="index"
+                                >
+                                    <th
+                                        scope="row"
+                                        rep="date"
+                                        v-if="row.date"
+                                        :rowspan="row.span.date"
+                                    >{{ row.date }}
+                                    </th>
 
-                                <td
-                                    rep="mean"
-                                    v-if="row.mean_id !== undefined"
-                                    :rowspan="row.span.mean_id"
-                                >{{ getMeanName(rows[index].currency_id, row.mean_id) }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <td
+                                        rep="title"
+                                        v-if="row.title"
+                                        :rowspan="row.span.title"
+                                    >{{ row.title }}</td>
 
-                    <EmptyPlaceholder
-                        v-else-if="!rows.length"
-                    ></EmptyPlaceholder>
+                                    <td
+                                        rep="amount"
+                                        v-if="row.amount"
+                                        :rowspan="row.span.amount"
+                                    >{{ row.amount }}</td>
+
+                                    <td
+                                        rep="price"
+                                        v-if="row.price"
+                                        :rowspan="row.span.price"
+                                    >{{ row.price + " " + currencies[rows[index].currency_id - 1].ISO }}</td>
+
+                                    <td
+                                        rep="value"
+                                        v-if="row.value"
+                                        :rowspan="row.span.value"
+                                    >{{ row.value + " " + currencies[rows[index].currency_id - 1].ISO }}</td>
+
+                                    <td
+                                        rep="category"
+                                        v-if="row.category_id !== undefined"
+                                        :rowspan="row.span.category_id"
+                                    >{{ getCategoryName(rows[index].currency_id, row.category_id) }}</td>
+
+                                    <td
+                                        rep="mean"
+                                        v-if="row.mean_id !== undefined"
+                                        :rowspan="row.span.mean_id"
+                                    >{{ getMeanName(rows[index].currency_id, row.mean_id) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <EmptyPlaceholder v-else></EmptyPlaceholder>
             </div>
 
             <Loading v-else></Loading>
@@ -106,6 +152,8 @@ export default {
             means: {},
             categories: {},
             rows: [],
+            sum: null,
+            sumCurrency: 1,
             ready: false,
 
             headerCells: [
@@ -229,6 +277,12 @@ export default {
                 this.categories = response.data.categories;
                 this.data = response.data.reportData;
                 this.rows = response.data.rows;
+                this.sum = response.data.sum;
+
+                if (response.data.sum !== null) {
+                    this.sumCurrency = Object.keys(response.data.sum);
+                    this.sumCurrency = this.sumCurrency.length ? this.sumCurrency[0] : 0;
+                }
 
                 this.ready = true;
             });

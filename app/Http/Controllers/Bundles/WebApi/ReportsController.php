@@ -377,6 +377,23 @@ class ReportsController extends Controller
 			return (strtotime($a->date) < strtotime($b->date) ? -1 : 1) * ($report->sort_dates_desc ? -1 : 1);
 		})->unique()->values();
 
-        return response()->json(compact("reportData", "rows", "currencies", "categories", "means"));
+        $sum = null;
+        if ($report->calculate_sum) {
+            $sum = [];
+            foreach ($rows as $row) {
+                if (isset($sum[$row["currency_id"]])) {
+                    $sum[$row["currency_id"]] += $row["amount"] * $row["price"];
+                }
+                else {
+                    $sum[$row["currency_id"]] = $row["amount"] * $row["price"];
+                }
+            }
+
+            foreach ($sum as $i => $s) {
+                $sum[$i] = round($sum[$i], 2);
+            }
+        }
+
+        return response()->json(compact("reportData", "rows", "currencies", "categories", "means", "sum"));
     }
 }
