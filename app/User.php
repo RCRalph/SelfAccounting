@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function bundles()
     {
-        return $this->belongsToMany(Bundle::class, 'bundle_user')->withPivot('enabled');
+        return $this->belongsToMany(Bundle::class)->withPivot('enabled');
     }
 
     public function premiumBundles()
@@ -92,6 +92,6 @@ class User extends Authenticatable
 
     public function sharedReports()
     {
-        return $this->belongsToMany(Report::class, 'report_user_pivot_table');
+        return $this->belongsToMany(Report::class);
     }
 }

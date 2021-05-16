@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ReportUserPivotTable extends Migration
+class ReportUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class ReportUserPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('report_user_pivot_table', function (Blueprint $table) {
+        Schema::create('report_user', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('report_id')->constrained()->onDelete('cascade');
 
@@ -28,6 +28,6 @@ class ReportUserPivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('report_user_pivot_table');
+        Schema::dropIfExists('report_user');
     }
 }
