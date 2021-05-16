@@ -186,18 +186,18 @@ export default {
 
             const validAmount =
                 !isNaN(toNumber.amountIncome) &&
-                toNumber.amountIncome <= 1e6 &&
+                toNumber.amountIncome <= 1e7 - 0.001 &&
                 toNumber.amountIncome > 0 &&
                 !isNaN(toNumber.amountOutcome) &&
-                toNumber.amountOutcome <= 1e6 &&
+                toNumber.amountOutcome <= 1e7 - 0.001 &&
                 toNumber.amountOutcome > 0;
 
             const validPrice =
                 !isNaN(toNumber.priceIncome) &&
-                toNumber.priceIncome <= 1e11 &&
+                toNumber.priceIncome <= 1e11 - 0.01 &&
                 toNumber.priceIncome > 0 &&
                 !isNaN(toNumber.priceOutcome) &&
-                toNumber.priceOutcome <= 1e11 &
+                toNumber.priceOutcome <= 1e11 - 0.01 &
                 toNumber.priceOutcome > 0;
 
             if (this.cashMeanUsed) {

@@ -99,11 +99,11 @@ export default {
             }
 
             const validAmount = !isNaN(toNumber.amount) &&
-                toNumber.amount <= 1e6 &&
+                toNumber.amount <= 1e7 - 0.001 &&
                 toNumber.amount > 0;
 
             const validPrice = !isNaN(toNumber.price) &&
-                toNumber.price <= 1e11 &&
+                toNumber.price <= 1e11 - 0.01 &&
                 toNumber.price > 0;
 
             return validDate && validTitle && validAmount && validPrice;

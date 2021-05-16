@@ -4,10 +4,9 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidQueryMinMax implements Rule
+class BackupValidQueryCategoryMean implements Rule
 {
     private $type;
-
     /**
      * Create a new rule instance.
      *
@@ -27,15 +26,19 @@ class ValidQueryMinMax implements Rule
      */
     public function passes($attribute, $value)
     {
-        $index = explode(".", $attribute)[1];
-        $min = request("queries.$index.min_$this->type");
-        $max = request("queries.$index.max_$this->type");
-
-        if ($min == null || $max == null) {
+        if ($value == 0) {
             return true;
         }
 
-        return $min <= $max;
+        $index1 = explode(".", $attribute)[2];
+        $index2 = explode(".", $attribute)[4];
+
+        $selectedType = (
+            strpos($attribute, "category") !== false ?
+            request("categories") : request("means")
+        )[$value - 1];
+
+        return $selectedType["currency_id"] == request("bundleData.reports.$index1.$this->type.$index2.currency_id");
     }
 
     /**
@@ -45,6 +48,6 @@ class ValidQueryMinMax implements Rule
      */
     public function message()
     {
-        return "Minimal $this->type is greater than maximal $this->type";
+        return "Invalid $this->type.";
     }
 }

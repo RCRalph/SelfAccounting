@@ -4,18 +4,16 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidQueryMinMax implements Rule
+class BackupValidQueryDate implements Rule
 {
-    private $type;
-
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($type)
+    public function __construct()
     {
-        $this->type = $type;
+        //
     }
 
     /**
@@ -27,15 +25,16 @@ class ValidQueryMinMax implements Rule
      */
     public function passes($attribute, $value)
     {
-        $index = explode(".", $attribute)[1];
-        $min = request("queries.$index.min_$this->type");
-        $max = request("queries.$index.max_$this->type");
+        $index1 = explode(".", $attribute)[2];
+        $index2 = explode(".", $attribute)[4];
+        $minDate = request("bundleData.reports.$index1.queries.$index2.min_date");
+        $maxDate = request("bundleData.reports.$index1.queries.$index2.max_date");
 
-        if ($min == null || $max == null) {
+        if ($minDate == null || $maxDate == null) {
             return true;
         }
 
-        return $min <= $max;
+        return strtotime($minDate) <= strtotime($maxDate);
     }
 
     /**
@@ -45,6 +44,6 @@ class ValidQueryMinMax implements Rule
      */
     public function message()
     {
-        return "Minimal $this->type is greater than maximal $this->type";
+        return 'Invalid report query dates.';
     }
 }

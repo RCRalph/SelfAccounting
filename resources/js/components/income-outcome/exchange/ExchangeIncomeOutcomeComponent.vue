@@ -118,11 +118,11 @@ export default {
     computed: {
         validAmount() {
             const amount = Number(this.value.amount);
-            return !isNaN(amount) && amount < 1e6 && amount > 0;
+            return !isNaN(amount) && amount <= 1e7 - 0.001 && amount > 0;
         },
         validPrice() {
             const price = Number(this.value.price);
-            return !isNaN(price) & price < 1e11 && price > 0;
+            return !isNaN(price) & price <= 1e11 - 0.01 && price > 0;
         }
     },
     methods: {

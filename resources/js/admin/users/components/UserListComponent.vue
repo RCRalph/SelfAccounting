@@ -10,7 +10,7 @@
         <div class="card-body">
             <div v-if="ready">
                 <div v-if="paginationData.data.length">
-                    <div class="table-responsive-xl w-100">
+                    <div class="table-responsive w-100">
                         <table class="responsive-table-hover table-themed">
                             <thead>
                                 <th scope="col" class="h3 font-weight-bold">ID</th>

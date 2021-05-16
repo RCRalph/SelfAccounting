@@ -149,19 +149,19 @@ export default {
         },
         validMinAmount() {
             const amount = Number(this.value.min_amount);
-            return this.value.min_amount === "" || !isNaN(amount) && (!this.value.max_amount || amount <= this.value.max_amount) && amount < 1e6 && amount >= 0;
+            return this.value.min_amount === "" || !isNaN(amount) && (!this.value.max_amount || amount <= this.value.max_amount) && amount <= 1e7 - 0.001 && amount >= 0;
         },
         validMaxAmount() {
             const amount = Number(this.value.max_amount);
-            return this.value.max_amount === "" || !isNaN(amount) && (!this.value.min_amount || amount >= this.value.min_amount) && amount < 1e6 && amount >= 0;
+            return this.value.max_amount === "" || !isNaN(amount) && (!this.value.min_amount || amount >= this.value.min_amount) && amount <= 1e7 - 0.001 && amount >= 0;
         },
 		validMinPrice() {
 			const price = Number(this.value.min_price);
-			return this.value.min_price === "" || !isNaN(price) && (!this.value.max_price || price <= this.value.max_price) && price < 1e11 && price >= 0;
+			return this.value.min_price === "" || !isNaN(price) && (!this.value.max_price || price <= this.value.max_price) && price <= 1e11 - 0.01 && price >= 0;
 		},
 		validMaxPrice() {
 			const price = Number(this.value.max_price);
-			return this.value.max_price === "" || !isNaN(price) && (!this.value.min_price || price >= this.value.min_price) && price < 1e11 && price >= 0;
+			return this.value.max_price === "" || !isNaN(price) && (!this.value.min_price || price >= this.value.min_price) && price <= 1e11 - 0.01 && price >= 0;
 		}
     },
     methods: {

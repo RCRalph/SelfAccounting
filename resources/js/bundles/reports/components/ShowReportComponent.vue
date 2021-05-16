@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive-xl w-100">
+                    <div class="table-responsive w-100">
                         <table
                             id="table-multi-hover"
                             class="responsive-table-bordered table-themed"
@@ -286,7 +286,7 @@ export default {
 
             const download = document.createElement("a");
             download.style.display = "none;"
-            download.href = `data:text/plain;charset:utf-8,${encodeURIComponent(result)}`;
+            download.href = `data:text/plain;charset:utf-8,${result}`;
             download.download = `${this.data.title}.txt`
 
             document.body.appendChild(download);

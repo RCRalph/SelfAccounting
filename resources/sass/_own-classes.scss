@@ -244,12 +244,12 @@
     }
 
     &-content {
-        @extend .table-responsive-xl;
+        @extend .table-responsive;
         @extend .w-100;
 
         table {
             @extend .table-themed;
-            @extend .responsive-table-hover;
+            @extend .responsive-table-bordered;
 
             thead > th {
                 @extend .h5;

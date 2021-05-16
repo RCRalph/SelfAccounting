@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="table-responsive-xl w-100" v-if="userReportsReady">
+                        <div class="table-responsive w-100" v-if="userReportsReady">
                             <table
                                 class="responsive-table-hover table-themed"
                             >
@@ -73,7 +73,7 @@
 
                     <div class="card-body">
                         <div v-if="sharedReportsReady">
-                            <div class="table-responsive-xl w-100">
+                            <div class="table-responsive w-100">
                                 <table
                                     class="responsive-table-hover table-themed"
                                 >

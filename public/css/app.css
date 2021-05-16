@@ -1798,8 +1798,8 @@ pre code {
 .restore-table-content .lightmode table,
 .responsive-table,
 .responsive-table-hover,
-.restore-table-content table,
-.responsive-table-bordered {
+.responsive-table-bordered,
+.restore-table-content table {
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
@@ -1811,16 +1811,16 @@ pre code {
 .restore-table-content .lightmode table th,
 .responsive-table th,
 .responsive-table-hover th,
-.restore-table-content table th,
 .responsive-table-bordered th,
+.restore-table-content table th,
 .table td,
 .lightmode .table-themed td,
 .lightmode .restore-table-content table td,
 .restore-table-content .lightmode table td,
 .responsive-table td,
 .responsive-table-hover td,
-.restore-table-content table td,
-.responsive-table-bordered td {
+.responsive-table-bordered td,
+.restore-table-content table td {
   padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
@@ -1832,8 +1832,8 @@ pre code {
 .restore-table-content .lightmode table thead th,
 .responsive-table thead th,
 .responsive-table-hover thead th,
-.restore-table-content table thead th,
-.responsive-table-bordered thead th {
+.responsive-table-bordered thead th,
+.restore-table-content table thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #dee2e6;
 }
@@ -1844,8 +1844,8 @@ pre code {
 .restore-table-content .lightmode table tbody + tbody,
 .responsive-table tbody + tbody,
 .responsive-table-hover tbody + tbody,
-.restore-table-content table tbody + tbody,
-.responsive-table-bordered tbody + tbody {
+.responsive-table-bordered tbody + tbody,
+.restore-table-content table tbody + tbody {
   border-top: 2px solid #dee2e6;
 }
 
@@ -1855,21 +1855,26 @@ pre code {
 }
 
 .table-bordered,
-.responsive-table-bordered {
+.responsive-table-bordered,
+.restore-table-content table {
   border: 1px solid #dee2e6;
 }
 
 .table-bordered th,
 .responsive-table-bordered th,
+.restore-table-content table th,
 .table-bordered td,
-.responsive-table-bordered td {
+.responsive-table-bordered td,
+.restore-table-content table td {
   border: 1px solid #dee2e6;
 }
 
 .table-bordered thead th,
 .responsive-table-bordered thead th,
+.restore-table-content table thead th,
 .table-bordered thead td,
-.responsive-table-bordered thead td {
+.responsive-table-bordered thead td,
+.restore-table-content table thead td {
   border-bottom-width: 2px;
 }
 
@@ -1885,8 +1890,7 @@ pre code {
 }
 
 .table-hover tbody tr:hover,
-.responsive-table-hover tbody tr:hover,
-.restore-table-content table tbody tr:hover {
+.responsive-table-hover tbody tr:hover {
   color: #212529;
   background-color: rgba(0, 0, 0, 0.075);
 }
@@ -1905,17 +1909,14 @@ pre code {
 }
 
 .table-hover .table-primary:hover,
-.responsive-table-hover .table-primary:hover,
-.restore-table-content table .table-primary:hover {
+.responsive-table-hover .table-primary:hover {
   background-color: #b0d4f1;
 }
 
 .table-hover .table-primary:hover > td,
 .responsive-table-hover .table-primary:hover > td,
-.restore-table-content table .table-primary:hover > td,
 .table-hover .table-primary:hover > th,
-.responsive-table-hover .table-primary:hover > th,
-.restore-table-content table .table-primary:hover > th {
+.responsive-table-hover .table-primary:hover > th {
   background-color: #b0d4f1;
 }
 
@@ -1933,17 +1934,14 @@ pre code {
 }
 
 .table-hover .table-secondary:hover,
-.responsive-table-hover .table-secondary:hover,
-.restore-table-content table .table-secondary:hover {
+.responsive-table-hover .table-secondary:hover {
   background-color: #c8cbcf;
 }
 
 .table-hover .table-secondary:hover > td,
 .responsive-table-hover .table-secondary:hover > td,
-.restore-table-content table .table-secondary:hover > td,
 .table-hover .table-secondary:hover > th,
-.responsive-table-hover .table-secondary:hover > th,
-.restore-table-content table .table-secondary:hover > th {
+.responsive-table-hover .table-secondary:hover > th {
   background-color: #c8cbcf;
 }
 
@@ -1961,17 +1959,14 @@ pre code {
 }
 
 .table-hover .table-success:hover,
-.responsive-table-hover .table-success:hover,
-.restore-table-content table .table-success:hover {
+.responsive-table-hover .table-success:hover {
   background-color: #b3e8ca;
 }
 
 .table-hover .table-success:hover > td,
 .responsive-table-hover .table-success:hover > td,
-.restore-table-content table .table-success:hover > td,
 .table-hover .table-success:hover > th,
-.responsive-table-hover .table-success:hover > th,
-.restore-table-content table .table-success:hover > th {
+.responsive-table-hover .table-success:hover > th {
   background-color: #b3e8ca;
 }
 
@@ -1989,17 +1984,14 @@ pre code {
 }
 
 .table-hover .table-info:hover,
-.responsive-table-hover .table-info:hover,
-.restore-table-content table .table-info:hover {
+.responsive-table-hover .table-info:hover {
   background-color: #c0ddf6;
 }
 
 .table-hover .table-info:hover > td,
 .responsive-table-hover .table-info:hover > td,
-.restore-table-content table .table-info:hover > td,
 .table-hover .table-info:hover > th,
-.responsive-table-hover .table-info:hover > th,
-.restore-table-content table .table-info:hover > th {
+.responsive-table-hover .table-info:hover > th {
   background-color: #c0ddf6;
 }
 
@@ -2017,17 +2009,14 @@ pre code {
 }
 
 .table-hover .table-warning:hover,
-.responsive-table-hover .table-warning:hover,
-.restore-table-content table .table-warning:hover {
+.responsive-table-hover .table-warning:hover {
   background-color: #fff8b3;
 }
 
 .table-hover .table-warning:hover > td,
 .responsive-table-hover .table-warning:hover > td,
-.restore-table-content table .table-warning:hover > td,
 .table-hover .table-warning:hover > th,
-.responsive-table-hover .table-warning:hover > th,
-.restore-table-content table .table-warning:hover > th {
+.responsive-table-hover .table-warning:hover > th {
   background-color: #fff8b3;
 }
 
@@ -2045,17 +2034,14 @@ pre code {
 }
 
 .table-hover .table-danger:hover,
-.responsive-table-hover .table-danger:hover,
-.restore-table-content table .table-danger:hover {
+.responsive-table-hover .table-danger:hover {
   background-color: #f4b0af;
 }
 
 .table-hover .table-danger:hover > td,
 .responsive-table-hover .table-danger:hover > td,
-.restore-table-content table .table-danger:hover > td,
 .table-hover .table-danger:hover > th,
-.responsive-table-hover .table-danger:hover > th,
-.restore-table-content table .table-danger:hover > th {
+.responsive-table-hover .table-danger:hover > th {
   background-color: #f4b0af;
 }
 
@@ -2073,17 +2059,14 @@ pre code {
 }
 
 .table-hover .table-light:hover,
-.responsive-table-hover .table-light:hover,
-.restore-table-content table .table-light:hover {
+.responsive-table-hover .table-light:hover {
   background-color: #ececf6;
 }
 
 .table-hover .table-light:hover > td,
 .responsive-table-hover .table-light:hover > td,
-.restore-table-content table .table-light:hover > td,
 .table-hover .table-light:hover > th,
-.responsive-table-hover .table-light:hover > th,
-.restore-table-content table .table-light:hover > th {
+.responsive-table-hover .table-light:hover > th {
   background-color: #ececf6;
 }
 
@@ -2117,12 +2100,9 @@ pre code {
 .table-hover .restore-table-content table:hover,
 .restore-table-content .table-hover table:hover,
 .responsive-table-hover .table-dark:hover,
-.restore-table-content table .table-dark:hover,
 .responsive-table-hover .table-themed:hover,
-.restore-table-content table .table-themed:hover,
 .responsive-table-hover .restore-table-content table:hover,
-.restore-table-content .responsive-table-hover table:hover,
-.restore-table-content table table:hover {
+.restore-table-content .responsive-table-hover table:hover {
   background-color: #b9bbbe;
 }
 
@@ -2131,25 +2111,17 @@ pre code {
 .table-hover .restore-table-content table:hover > td,
 .restore-table-content .table-hover table:hover > td,
 .responsive-table-hover .table-dark:hover > td,
-.restore-table-content table .table-dark:hover > td,
 .responsive-table-hover .table-themed:hover > td,
-.restore-table-content table .table-themed:hover > td,
 .responsive-table-hover .restore-table-content table:hover > td,
-.restore-table-content table .restore-table-content table:hover > td,
 .restore-table-content .responsive-table-hover table:hover > td,
-.restore-table-content table table:hover > td,
 .table-hover .table-dark:hover > th,
 .table-hover .table-themed:hover > th,
 .table-hover .restore-table-content table:hover > th,
 .restore-table-content .table-hover table:hover > th,
 .responsive-table-hover .table-dark:hover > th,
-.restore-table-content table .table-dark:hover > th,
 .responsive-table-hover .table-themed:hover > th,
-.restore-table-content table .table-themed:hover > th,
 .responsive-table-hover .restore-table-content table:hover > th,
-.restore-table-content table .restore-table-content table:hover > th,
-.restore-table-content .responsive-table-hover table:hover > th,
-.restore-table-content table table:hover > th {
+.restore-table-content .responsive-table-hover table:hover > th {
   background-color: #b9bbbe;
 }
 
@@ -2160,17 +2132,14 @@ pre code {
 }
 
 .table-hover .table-active:hover,
-.responsive-table-hover .table-active:hover,
-.restore-table-content table .table-active:hover {
+.responsive-table-hover .table-active:hover {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
 .table-hover .table-active:hover > td,
 .responsive-table-hover .table-active:hover > td,
-.restore-table-content table .table-active:hover > td,
 .table-hover .table-active:hover > th,
-.responsive-table-hover .table-active:hover > th,
-.restore-table-content table .table-active:hover > th {
+.responsive-table-hover .table-active:hover > th {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
@@ -2178,8 +2147,8 @@ pre code {
 .lightmode .table-themed .thead-dark th,
 .responsive-table .thead-dark th,
 .responsive-table-hover .thead-dark th,
-.restore-table-content table .thead-dark th,
-.responsive-table-bordered .thead-dark th {
+.responsive-table-bordered .thead-dark th,
+.restore-table-content table .thead-dark th {
   color: #fff;
   background-color: #343a40;
   border-color: #454d55;
@@ -2189,8 +2158,8 @@ pre code {
 .lightmode .table-themed .thead-light th,
 .responsive-table .thead-light th,
 .responsive-table-hover .thead-light th,
-.restore-table-content table .thead-light th,
-.responsive-table-bordered .thead-light th {
+.responsive-table-bordered .thead-light th,
+.restore-table-content table .thead-light th {
   color: #495057;
   background-color: #e9ecef;
   border-color: #dee2e6;
@@ -2215,10 +2184,9 @@ pre code {
 
 .table-dark.table-bordered,
 .table-bordered.table-themed,
-.restore-table-content table.table-bordered,
 .table-dark.responsive-table-bordered,
 .responsive-table-bordered.table-themed,
-.restore-table-content table.responsive-table-bordered {
+.restore-table-content table {
   border: 0;
 }
 
@@ -2230,9 +2198,10 @@ pre code {
 
 .table-dark.table-hover tbody tr:hover,
 .table-hover.table-themed tbody tr:hover,
+.restore-table-content table.table-hover tbody tr:hover,
 .table-dark.responsive-table-hover tbody tr:hover,
 .responsive-table-hover.table-themed tbody tr:hover,
-.restore-table-content table tbody tr:hover {
+.restore-table-content table.responsive-table-hover tbody tr:hover {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.075);
 }
@@ -2246,7 +2215,8 @@ pre code {
   }
 
   .table-responsive-sm > .table-bordered,
-  .table-responsive-sm > .responsive-table-bordered {
+  .table-responsive-sm > .responsive-table-bordered,
+  .restore-table-content .table-responsive-sm > table {
     border: 0;
   }
 }
@@ -2260,7 +2230,8 @@ pre code {
   }
 
   .table-responsive-md > .table-bordered,
-  .table-responsive-md > .responsive-table-bordered {
+  .table-responsive-md > .responsive-table-bordered,
+  .restore-table-content .table-responsive-md > table {
     border: 0;
   }
 }
@@ -2274,14 +2245,14 @@ pre code {
   }
 
   .table-responsive-lg > .table-bordered,
-  .table-responsive-lg > .responsive-table-bordered {
+  .table-responsive-lg > .responsive-table-bordered,
+  .restore-table-content .table-responsive-lg > table {
     border: 0;
   }
 }
 
 @media (max-width: 1199.98px) {
-  .table-responsive-xl,
-  .restore-table-content {
+  .table-responsive-xl {
     display: block;
     width: 100%;
     overflow-x: auto;
@@ -2289,14 +2260,14 @@ pre code {
   }
 
   .table-responsive-xl > .table-bordered,
-  .restore-table-content > .table-bordered,
   .table-responsive-xl > .responsive-table-bordered,
-  .restore-table-content > .responsive-table-bordered {
+  .restore-table-content .table-responsive-xl > table {
     border: 0;
   }
 }
 
-.table-responsive {
+.table-responsive,
+.restore-table-content {
   display: block;
   width: 100%;
   overflow-x: auto;
@@ -2304,7 +2275,11 @@ pre code {
 }
 
 .table-responsive > .table-bordered,
-.table-responsive > .responsive-table-bordered {
+.restore-table-content > .table-bordered,
+.table-responsive > .responsive-table-bordered,
+.restore-table-content .table-responsive > table,
+.restore-table-content > .responsive-table-bordered,
+.restore-table-content > table {
   border: 0;
 }
 
@@ -11763,8 +11738,8 @@ button.card:focus {
 .text-nowrap,
 .responsive-table,
 .responsive-table-hover,
-.restore-table-content table,
-.responsive-table-bordered {
+.responsive-table-bordered,
+.restore-table-content table {
   white-space: nowrap !important;
 }
 
@@ -11798,8 +11773,8 @@ button.card:focus {
 .restore-table .header,
 .responsive-table,
 .responsive-table-hover,
-.restore-table-content table,
-.responsive-table-bordered {
+.responsive-table-bordered,
+.restore-table-content table {
   text-align: center !important;
 }
 
@@ -12117,8 +12092,8 @@ a.text-dark:focus,
   .restore-table-content .lightmode table,
   .responsive-table,
   .responsive-table-hover,
-  .restore-table-content table,
-  .responsive-table-bordered {
+  .responsive-table-bordered,
+  .restore-table-content table {
     border-collapse: collapse !important;
   }
 
@@ -12128,23 +12103,25 @@ a.text-dark:focus,
   .restore-table-content .lightmode table td,
   .responsive-table td,
   .responsive-table-hover td,
-  .restore-table-content table td,
   .responsive-table-bordered td,
+  .restore-table-content table td,
   .table th,
   .lightmode .table-themed th,
   .lightmode .restore-table-content table th,
   .restore-table-content .lightmode table th,
   .responsive-table th,
   .responsive-table-hover th,
-  .restore-table-content table th,
-  .responsive-table-bordered th {
+  .responsive-table-bordered th,
+  .restore-table-content table th {
     background-color: #fff !important;
   }
 
   .table-bordered th,
   .responsive-table-bordered th,
+  .restore-table-content table th,
   .table-bordered td,
-  .responsive-table-bordered td {
+  .responsive-table-bordered td,
+  .restore-table-content table td {
     border: 1px solid #dee2e6 !important;
   }
 
@@ -12171,8 +12148,8 @@ a.text-dark:focus,
   .lightmode .table-themed .thead-dark th,
   .responsive-table .thead-dark th,
   .responsive-table-hover .thead-dark th,
-  .restore-table-content table .thead-dark th,
-  .responsive-table-bordered .thead-dark th {
+  .responsive-table-bordered .thead-dark th,
+  .restore-table-content table .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
   }

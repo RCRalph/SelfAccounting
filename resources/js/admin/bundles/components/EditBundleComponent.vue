@@ -31,7 +31,7 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive-xl" v-if="gallery.length">
+                    <div class="table-responsive" v-if="gallery.length">
                         <table class="responsive-table-bordered table-themed">
                             <thead>
                                 <tr>

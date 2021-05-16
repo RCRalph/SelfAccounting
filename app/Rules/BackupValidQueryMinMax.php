@@ -4,10 +4,9 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidQueryMinMax implements Rule
+class BackupValidQueryMinMax implements Rule
 {
     private $type;
-
     /**
      * Create a new rule instance.
      *
@@ -27,9 +26,10 @@ class ValidQueryMinMax implements Rule
      */
     public function passes($attribute, $value)
     {
-        $index = explode(".", $attribute)[1];
-        $min = request("queries.$index.min_$this->type");
-        $max = request("queries.$index.max_$this->type");
+        $index1 = explode(".", $attribute)[2];
+        $index2 = explode(".", $attribute)[4];
+        $min = request("bundleData.reports.$index1.queries.$index2.min_$this->type");
+        $max = request("bundleData.reports.$index1.queries.$index2.min_$this->type");
 
         if ($min == null || $max == null) {
             return true;

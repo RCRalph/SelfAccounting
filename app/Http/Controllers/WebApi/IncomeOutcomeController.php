@@ -146,7 +146,7 @@ class IncomeOutcomeController extends Controller
             // Validate data
             "$directory.date" => ["required", "date", new CorrectDateIO],
             "$directory.title" => ["required", "string", "max:64"],
-            "$directory.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "$directory.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "$directory.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "$directory.currency_id" => ["required", "integer", "exists:currencies,id"],
             "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
@@ -228,7 +228,7 @@ class IncomeOutcomeController extends Controller
         $data = request()->validate([
             "$directory.date" => ["required", "date", new CorrectDateIO],
             "$directory.title" => ["required", "string", "max:64"],
-            "$directory.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "$directory.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "$directory.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "$directory.currency_id" => ["required", "integer", "exists:currencies,id"],
             "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
@@ -273,14 +273,14 @@ class IncomeOutcomeController extends Controller
             "data.title" => ["required", "string", "max:64"],
 
             "income" => ["required", "array"],
-            "income.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "income.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "income.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "income.currency_id" => ["required", "integer", "exists:currencies,id"],
             "income.category_id" => ["present", "nullable", "integer", new ValidExchangeCategoryMean("income")],
             "income.mean_id" => ["present", "nullable", "integer", "different:outcome.mean_id", new ValidExchangeCategoryMean("income")],
 
             "outcome" => ["required", "array"],
-            "outcome.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "outcome.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "outcome.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "outcome.currency_id" => ["required", "integer", "exists:currencies,id"],
             "outcome.category_id" => ["present", "nullable", "integer", new ValidExchangeCategoryMean("outcome")],

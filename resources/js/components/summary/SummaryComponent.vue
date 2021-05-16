@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive-xl w-100">
+                <div class="table-responsive w-100">
                     <table class="responsive-table-hover table-themed">
                         <thead>
                             <tr>

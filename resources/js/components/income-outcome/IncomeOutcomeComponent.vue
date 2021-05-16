@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive-xl w-100" :key="tableKey">
+                <div class="table-responsive w-100" :key="tableKey">
                     <table
                         id="table-multi-hover"
                         class="responsive-table-bordered table-themed"

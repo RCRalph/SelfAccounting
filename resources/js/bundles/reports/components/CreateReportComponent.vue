@@ -137,28 +137,28 @@ export default {
                     (
                         !item.max_amount ||
                         item.min_price <= item.max_price
-                    ) && item.min_amount < 1e6 && item.min_amount >= 0,
+                    ) && item.min_amount <= 1e7 - 0.001 && item.min_amount >= 0,
 
                     this.isNullLike(item.max_amount) ||
                     !isNaN(Number(item.max_amount)) &&
                     (
                         !item.min_amount ||
                         item.min_price <= item.max_price
-                    ) && item.max_amount < 1e6 && item.max_amount >= 0,
+                    ) && item.max_amount <= 1e7 - 0.001 && item.max_amount >= 0,
 
                     this.isNullLike(item.min_price) ||
                     !isNaN(Number(item.min_price)) &&
                     (
                         !item.max_price ||
                         item.min_price <= item.max_price
-                    ) && item.min_price < 1e11 && item.min_price >= 0,
+                    ) && item.min_price <= 1e11 - 0.01 && item.min_price >= 0,
 
                     this.isNullLike(item.max_price) ||
                     !isNaN(Number(item.max_price)) &&
                     (
                         !item.min_price ||
                         item.min_price <= item.max_price
-                    ) && item.max_price < 1e11 && item.max_price >= 0,
+                    ) && item.max_price <= 1e11 - 0.01 && item.max_price >= 0,
                 ].reduce((item1, item2) => item1 && item2)
             );
 
@@ -174,11 +174,11 @@ export default {
                     item.title.length <= 64,
 
                     !isNaN(Number(item.amount)) &&
-                    item.amount < 1e6 &&
+                    item.amount <= 1e7 - 0.001 &&
                     item.amount > 0,
 
                     !isNaN(Number(item.price)) &&
-                    item.price < 1e11 &&
+                    item.price <= 1e11 - 0.01 &&
                     item.price > 0
                 ].reduce((item1, item2) => item1 && item2)
             );
