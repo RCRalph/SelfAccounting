@@ -28,6 +28,6 @@ class Report extends Model
 
     public function sharedUsers()
     {
-        return $this->belongsToMany(User::class, 'report_user_pivot_table');
+        return $this->belongsToMany(User::class);
     }
 }
