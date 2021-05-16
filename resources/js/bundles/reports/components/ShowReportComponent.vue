@@ -48,18 +48,11 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-lg-4 col-12 my-2 my-lg-0 offset-lg-2">
-                            <a type="button" :href="`/${type}/create-multiple`" class="big-button-primary btn-lg">
-                                <i class="fas fa-file-csv"></i>
-                                Export to Excel-readable .csv
-                            </a>
-                        </div>
-
-                        <div class="col-lg-4 col-12 my-2 my-lg-0">
-                            <a type="button" :href="`/${type}/create-one`" class="big-button-primary btn-lg">
-                                <i class="fas fa-file-excel"></i>
-                                Export to .tsv file
-                            </a>
+                        <div class="col-lg-4 col-md-6 col-12 my-2 my-md-0 offset-lg-4 offset-md-3">
+                            <button class="big-button-primary btn-lg" @click="exportToTXT">
+                                <i class="fas fa-file-alt"></i>
+                                Export to .txt file
+                            </button>
                         </div>
                     </div>
 
@@ -266,7 +259,40 @@ export default {
                 .find(item => item.id == id);
 
             return foundMean ? foundMean.name : "N/A";
-        }
+        },
+		exportToTXT() {
+			let fileRows = ["Date\tTitle\tAmount\tPrice\tValue\tCategory\tMean"];
+
+            this.rows.forEach((item, index) => {
+                fileRows.push(
+                `${
+                    item.date
+                }\t${
+                    item.title
+                }\t${
+                    item.amount
+                }\t${
+                    item.price + " " + this.currencies[this.rows[index].currency_id - 1].ISO
+                }\t${
+                    item.value + " " + this.currencies[this.rows[index].currency_id - 1].ISO
+                }\t${
+                    this.getCategoryName(this.rows[index].currency_id, item.category_id)
+                }\t${
+                    this.getMeanName(this.rows[index].currency_id, item.mean_id)
+                }`);
+            })
+
+            let result = fileRows.join("\n");
+
+            const download = document.createElement("a");
+            download.style.display = "none;"
+            download.href = `data:text/plain;charset:utf-8,${encodeURIComponent(result)}`;
+            download.download = `${this.data.title}.txt`
+
+            document.body.appendChild(download);
+            download.click();
+            document.body.removeChild(download);
+		}
     },
     mounted() {
         axios

@@ -161,7 +161,7 @@ class EnterData extends Command
         // Add currencies and cash
         $progressBar = $this->output
             ->createProgressBar(count($this->dataToEnter["currencies"]));
-        $this->outputMessage("Creating currencies");
+        $this->outputMessage("Creating currencies and cash");
 
         $progressBar->start();
         foreach ($this->dataToEnter["currencies"] as $ISO => $cash) {
