@@ -14,6 +14,7 @@ use App\Rules\BackupValidQueryDate;
 use App\Rules\BackupValidQueryMinMax;
 use App\Rules\BackupValidQueryCategoryMean;
 
+use App\User;
 use App\Backup;
 use App\Currency;
 use App\Income;
@@ -283,6 +284,7 @@ class BackupController extends Controller
             "bundleData.reports.*.queries.*.category_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("queries")],
             "bundleData.reports.*.queries.*.mean_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("queries")],
 
+            // Report additional entries
             "bundleData.reports.*.additionalEntries" => ["present", "array"],
             "bundleData.reports.*.additionalEntries.*.date" => ["required", "date"],
             "bundleData.reports.*.additionalEntries.*.title" => ["required", "string", "max:64"],
@@ -292,11 +294,10 @@ class BackupController extends Controller
             "bundleData.reports.*.additionalEntries.*.category_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("additionalEntries")],
             "bundleData.reports.*.additionalEntries.*.mean_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("additionalEntries")],
 
+            // Report users
             "bundleData.reports.*.users" => ["present", "array"],
             "bundleData.reports.*.users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
         ]);
-
-        dd($data);
 
         // Erase existing data
         auth()->user()->categories()->delete();
@@ -305,6 +306,7 @@ class BackupController extends Controller
         auth()->user()->outcome()->delete();
         auth()->user()->cash()->detach();
         auth()->user()->cashMeans()->detach();
+        auth()->user()->reports()->delete();
 
         // Enter categories and means
         $categories = [ 0 => null ]; $means = [ 0 => null ];
@@ -360,6 +362,37 @@ class BackupController extends Controller
                 array_push($meansToAttach, $means[$cashMean["mean_id"]]);
             }
             auth()->user()->cashMeans()->attach($meansToAttach);
+        }
+
+        // Enter reports
+        if (isset($data["bundleData"]["reports"])) {
+            foreach ($data["bundleData"]["reports"] as $report) {
+                $queries = $report["queries"];
+                $entries = $report["additionalEntries"];
+                $users = $report["users"];
+
+                unset($report["queries"], $report["additionalEntries"], $report["users"]);
+
+                $created = auth()->user()->reports()->create($report);
+
+                foreach ($queries as $query) {
+                    $query["category_id"] = $categories[$query["category_id"]];
+                    $query["mean_id"] = $means[$query["mean_id"]];
+
+                    $created->queries()->create($query);
+                }
+
+                foreach ($entries as $entry) {
+                    $entry["category_id"] = $categories[$entry["category_id"]];
+                    $entry["mean_id"] = $means[$entry["mean_id"]];
+
+                    $created->additionalEntries()->create($entry);
+                }
+
+                foreach ($users as $user) {
+                    $created->sharedUsers()->attach(User::firstWhere("email", $user));
+                }
+            }
         }
 
         auth()->user()->backup
