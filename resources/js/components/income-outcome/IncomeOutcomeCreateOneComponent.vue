@@ -108,7 +108,7 @@ export default {
                 return "1970-01-01";
             }
 			const currentMean = meansForCurrency.filter(item => item.id == this.data.mean_id);
-			return currentMean.length ? currentMean[0].first_entry_date : "1970-01-01";
+			return (currentMean.length && currentMean.id != null) ? currentMean[0].first_entry_date : "1970-01-01";
         },
         canSubmit() {
             const validDate = this.data.date !== "" &&
@@ -124,11 +124,11 @@ export default {
             }
 
             const validAmount = !isNaN(toNumber.amount) &&
-                toNumber.amount <= 1e6 &&
+                toNumber.amount <= 1e7 - 0.001 &&
                 toNumber.amount > 0;
 
             const validPrice = !isNaN(toNumber.price) &&
-                toNumber.price <= 1e11 &&
+                toNumber.price <= 1e11 - 0.01 &&
                 toNumber.price > 0;
 
             if (this.cashMeanUsed) {
@@ -146,7 +146,7 @@ export default {
         },
         sumObject() {
             let retObj = {}
-            retObj[this.data.currency_id] = Math.round(this.data.amount * this.data.price * 1000) / 1000;
+            retObj[this.data.currency_id] = Math.round(this.data.amount * this.data.price * 100) / 100;
             return retObj;
         }
     },

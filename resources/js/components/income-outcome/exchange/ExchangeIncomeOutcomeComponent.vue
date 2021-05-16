@@ -60,6 +60,7 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.category_id"
+            nullValue="N/A"
         ></InputGroup>
 
         <InputGroup
@@ -70,6 +71,7 @@
             optionTextKey="name"
             :invalid="samemeans"
             v-model="value.mean_id"
+            nullValue="N/A"
         ></InputGroup>
     </div>
 </template>
@@ -116,17 +118,17 @@ export default {
     computed: {
         validAmount() {
             const amount = Number(this.value.amount);
-            return !isNaN(amount) && amount < 1e6 && amount > 0;
+            return !isNaN(amount) && amount <= 1e7 - 0.001 && amount > 0;
         },
         validPrice() {
             const price = Number(this.value.price);
-            return !isNaN(price) & price < 1e11 && price > 0;
+            return !isNaN(price) & price <= 1e11 - 0.01 && price > 0;
         }
     },
     methods: {
         currencyChange() {
-            this.value.category_id = 0;
-            this.value.mean_id = 0;
+            this.value.category_id = null;
+            this.value.mean_id = null;
         }
     }
 }

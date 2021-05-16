@@ -9,7 +9,7 @@
 
 		<div class="card-body">
 			<div>
-                <div v-if="content[currency].length" class="table-responsive-xl">
+                <div v-if="content[currency].length" class="table-responsive">
                     <table class="responsive-table-hover table-themed">
                         <TableHeader
                             :cells="header"
@@ -152,7 +152,7 @@ export default {
                             item.date_limit === null);
 
                         const validAmount = item.first_entry_amount !== "" &&
-                            Math.abs(Number(item.first_entry_amount)) < 1e11;
+                            Math.abs(Number(item.first_entry_amount)) <= 1e11 - 0.01;
 
                         return validName && validDate && validAmount;
                     })

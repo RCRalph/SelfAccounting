@@ -6,15 +6,21 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCategoryMean implements Rule
 {
-    private $viewType = "";
+    private $viewType, $checkForIncomeOutcome, $nestedArrayName;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($viewType)
+    public function __construct(
+        $viewType,
+        $checkForIncomeOutcome = true,
+        $nestedArrayName = "data"
+    )
     {
         $this->viewType = $viewType;
+        $this->checkForIncomeOutcome = $checkForIncomeOutcome;
+        $this->nestedArrayName = $nestedArrayName;
     }
 
     /**
@@ -26,26 +32,30 @@ class ValidCategoryMean implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value == 0) {
+        if ($value == null) {
             return true;
         }
 
-        $checkingCategory = strpos($attribute, "category") !== false;
+        $retVal;
         $index = explode(".", $attribute)[1];
-
-        if ($checkingCategory) {
-            return auth()->user()->categories
+        if (strpos($attribute, "category") !== false) {
+            $retVal = auth()->user()->categories
                 ->where("id", $value)
-                ->where("currency_id", request("data.$index.currency_id"))
-                ->where($this->viewType . "_category", true)
-                ->count();
+                ->where("currency_id", request("$this->nestedArrayName.$index.currency_id"));
+            if ($this->checkForIncomeOutcome) {
+                $retVal = $retVal->where($this->viewType . "_category", true);
+            }
+        }
+        else {
+            $retVal = auth()->user()->meansOfPayment
+                ->where("id", $value)
+                ->where("currency_id", request("$this->nestedArrayName.$index.currency_id"));
+            if ($this->checkForIncomeOutcome) {
+                $retVal = $retVal->where($this->viewType . "_mean", true);
+            }
         }
 
-        return auth()->user()->meansOfPayment
-            ->where("id", $value)
-            ->where("currency_id", request("data.$index.currency_id"))
-            ->where($this->viewType . "_mean", true)
-            ->count();
+        return $retVal->count();
     }
 
     /**
@@ -55,6 +65,6 @@ class ValidCategoryMean implements Rule
      */
     public function message()
     {
-        return 'This category / mean of payment doesn\'t exist.';
+        return "This category / mean of payment doesn't exist.";
     }
 }

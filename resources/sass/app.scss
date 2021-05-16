@@ -14,9 +14,6 @@
 @import 'own-classes';
 @import 'own-customization';
 
-// Switch
-@import 'switch';
-
 // Welcome page
 @import 'landing-page';
 
@@ -28,6 +25,9 @@
 
 // Light-mode styles
 @import 'light-mode';
+
+// Media queries
+@import 'responsive';
 
 // Font Awesome
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';

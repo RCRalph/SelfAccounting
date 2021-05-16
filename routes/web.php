@@ -89,6 +89,16 @@ Route::prefix('/bundles')->group(function () {
         Route::get('/', 'Bundles\CashController@index')->name('bundles.cash.index');
     });
 
+    Route::prefix('/reports')->group(function () {
+        Route::get('/', 'Bundles\ReportsController@index')->name('bundles.reports.index');
+        Route::get('/create', 'Bundles\ReportsController@create')->name('bundles.reports.create');
+
+        Route::prefix('/{report}')->group(function () {
+            Route::get('/', 'Bundles\ReportsController@show')->name('bundles.reports.show');
+            Route::get('/edit', 'Bundles\ReportsController@edit')->name('bundles.reports.edit');
+        });
+    });
+
     Route::get('/{bundle}', 'BundlesController@show')->name('bundles.show');
 });
 
@@ -125,6 +135,8 @@ Route::prefix('/webapi')->group(function () {
             Route::prefix('/{user}')->group(function () {
                 Route::get('/', 'Admin\WebApi\UsersController@details')->name('webapi.admin.user.details');
                 Route::patch('/update', 'Admin\WebApi\UsersController@update')->name('webapi.admin.user.details.update');
+                Route::post('/enable-backup', 'Admin\WebApi\UsersController@enableBackup')->name('admin.users.enable-backup');
+                Route::post('/enable-restoration', 'Admin\WebApi\UsersController@enableRestoration')->name('admin.users.enable-restoration');
             });
         });
 
@@ -163,6 +175,21 @@ Route::prefix('/webapi')->group(function () {
         Route::prefix('/cash')->group(function () {
             Route::get('/', 'Bundles\WebApi\CashController@index')->name('webapi.bundles.cash.index');
             Route::post('/', 'Bundles\WebApi\CashController@saveCashAndMeans')->name('webapi.bundles.cash.save-cash-and-means');
+        });
+
+        Route::prefix('/reports')->group(function () {
+            Route::get('/user-reports', 'Bundles\WebApi\ReportsController@userReports')->name('webapi.bundles.reports.user-reports');
+            Route::get('/shared-reports', 'Bundles\WebApi\ReportsController@sharedReports')->name('webapi.bundles.reports.shared-reports');
+            Route::get('/create', 'Bundles\WebApi\ReportsController@create')->name('webapi.bundles.reports.create');
+            Route::post('/get-user-info', 'Bundles\WebApi\ReportsController@getUserInfo')->name('webapi.bundles.reports.get-user-info');
+            Route::post('/store', 'Bundles\WebApi\ReportsController@store')->name('webapi.bundles.reports.store');
+
+            Route::prefix('/{report}')->group(function () {
+                Route::get('/', 'Bundles\WebApi\ReportsController@show')->name('webapi.bundles.reports.show');
+                Route::get('/edit', 'Bundles\WebApi\ReportsController@edit')->name('webapi.bundles.reports.edit');
+                Route::patch('/update', 'Bundles\WebApi\ReportsController@update')->name('webapi.bundles.reports.update');
+                Route::delete('/delete', 'Bundles\WebApi\ReportsController@destroy')->name('webapi.bundles.reports.delete');
+            });
         });
 
         Route::prefix('/{bundle}')->group(function () {

@@ -17,9 +17,6 @@
                 <tbody>
                     <tr v-for="(item, i) in data" :key="i">
                         <td class="font-weight-bold">
-                            {{ currencies.find(item1 => item1.id == item.currency_id).ISO }}
-                        </td>
-                        <td>
                             {{ item.date }}
                         </td>
                         <td>
@@ -29,13 +26,13 @@
                             {{ item.amount }}
                         </td>
                         <td>
-                            {{ item.price }}
+                            {{ item.price }} {{ currencies.find(item1 => item1.id == item.currency_id).ISO }}
                         </td>
                         <td>
-                            {{ item.category_id == 0 ? "N/A" : categories[item.category_id - 1].name }}
+                            {{ !item.category_id ? "N/A" : categories[item.category_id - 1].name }}
                         </td>
                         <td>
-                            {{ item.mean_id == 0 ? "N/A" : categories[item.mean_id - 1].name }}
+                            {{ !item.mean_id ? "N/A" : means[item.mean_id - 1].name }}
                         </td>
                     </tr>
                 </tbody>
@@ -49,7 +46,7 @@ export default {
     props: ["data", "currencies", "title", "categories", "means"],
     data() {
         return {
-            header: ["Currency", "Date", "Title", "Amount", "Price", "Category", "Mean"]
+            header: ["Date", "Title", "Amount", "Price", "Category", "Mean"]
         }
     }
 }

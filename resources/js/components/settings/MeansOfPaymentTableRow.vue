@@ -90,7 +90,7 @@ export default {
         validAmount() {
             const amount = Number(this.value.first_entry_amount);
 
-            return this.value.first_entry_amount !== "" && Math.abs(amount) < 1e11;
+            return this.value.first_entry_amount !== "" && Math.abs(amount) <= 1e11 - 0.01;
         }
     }
 }

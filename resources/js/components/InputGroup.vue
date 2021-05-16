@@ -1,12 +1,13 @@
 <template>
     <div class="form-group row">
         <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
-            <div class="h5 font-weight-bold m-md-0">{{ (name != 'password_confirmation' ? name : 'confirm') | capitalize }}</div>
+            <div class="h5 font-weight-bold m-md-0">{{ capitalize((name != 'password_confirmation' ? name : 'confirm')) }}</div>
         </div>
 
 		<!-- Select field -->
         <div v-if="type == 'select'" class="col-md-7">
             <select
+                v-if="optionKeyAndValue"
                 :class="[
                     'form-control',
                     invalid && 'is-invalid'
@@ -14,6 +15,29 @@
                 v-model="value"
                 :disabled="disabled"
             >
+                <option v-if="nullValue" :value="null">{{ nullValue }}</option>
+
+                <option
+                    v-for="(item, i) in selectOptions"
+                    :key="i"
+                    :value="item"
+                    :selected="value == item || selectOptions.length == 1"
+                >
+                    {{ capitalizeOptions ? capitalize(item) : item }}
+                </option>
+            </select>
+
+            <select
+                v-else
+                :class="[
+                    'form-control',
+                    invalid && 'is-invalid'
+                ]"
+                v-model="value"
+                :disabled="disabled"
+            >
+                <option v-if="nullValue" :value="null">{{ nullValue }}</option>
+
                 <option
                     v-for="(item, i) in selectOptions"
                     :key="i"
@@ -25,7 +49,7 @@
             </select>
 
             <span v-if="invalid" class="invalid-feedback" role="alert">
-                <strong>{{ name | capitalize }} is invalid</strong>
+                <strong>{{ capitalize(name) }} is invalid</strong>
             </span>
         </div>
 
@@ -66,13 +90,15 @@
             </div>
 
             <span v-if="invalid" class="invalid-feedback" role="alert">
-                <strong>{{ name | capitalize }} is invalid</strong>
+                <strong>{{ capitalize(name) }} is invalid</strong>
             </span>
         </div>
     </div>
 </template>
 
 <script>
+import SliderCheckbox from "./SliderCheckbox.vue";
+
 export default {
     props: {
         name: {
@@ -146,13 +172,31 @@ export default {
             required: false,
             type: String
         },
+        optionKeyAndValue: {
+            required: false,
+            type: Boolean,
+            default: false
+        },
+        capitalizeOptions: {
+            required: false,
+            type: Boolean,
+            default: false
+        },
+        nullValue: {
+            required: false,
+            type: String,
+            default: ""
+        },
         disabled: {
             required: false,
             type: Boolean,
             default: false
         }
     },
-    filters: {
+    components: {
+        SliderCheckbox
+    },
+    methods: {
         capitalize(text) {
             return (text.charAt(0).toUpperCase() + text.slice(1)).replace("_", " ")
         }

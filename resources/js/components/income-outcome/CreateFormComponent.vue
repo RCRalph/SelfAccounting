@@ -84,6 +84,7 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.category_id"
+            nullValue="N/A"
             :disabled="common && common.hasOwnProperty('category_id')"
         ></InputGroup>
 
@@ -94,6 +95,7 @@
             optionValueKey="id"
             optionTextKey="name"
             v-model="value.mean_id"
+            nullValue="N/A"
             :disabled="common && common.hasOwnProperty('mean_id')"
             @input="meanChange"
         ></InputGroup>
@@ -128,6 +130,11 @@ export default {
         titles: {
             required: false,
             type: Array
+        },
+        minDateRestriction: {
+            required: false,
+            type: Boolean,
+            default: true
         }
     },
     components: {
@@ -146,7 +153,7 @@ export default {
     computed: {
         minDate() {
 			const meansForCurrency = this.means[this.value.currency_id];
-            if (meansForCurrency == undefined) {
+            if (meansForCurrency == undefined || !this.minDateRestriction) {
                 return "1970-01-01";
             }
 			const currentMean = meansForCurrency.filter(item => item.id == this.value.mean_id);
@@ -154,7 +161,7 @@ export default {
         },
         validDate() {
             const date = this.value.date;
-            return date !== "" && !isNaN(Date.parse(date)) && new Date(date) >= new Date(this.minDate).getTime()
+            return date !== "" && !isNaN(Date.parse(date)) && new Date(date).getTime() >= new Date(this.minDate).getTime()
         },
         validTitle() {
             const title = this.value.title;
@@ -162,17 +169,17 @@ export default {
         },
         validAmount() {
             const amount = Number(this.value.amount);
-            return !isNaN(amount) && amount < 1e6 && amount > 0;
+            return !isNaN(amount) && amount <= 1e7 - 0.001 && amount > 0;
         },
         validPrice() {
             const price = Number(this.value.price);
-            return !isNaN(price) & price < 1e11 && price > 0;
+            return !isNaN(price) & price <= 1e11 - 0.01 && price > 0;
         }
     },
     methods: {
         currencyChange() {
-            this.value.category_id = 0;
-            this.value.mean_id = 0;
+            this.value.category_id = null;
+            this.value.mean_id = null;
         },
         meanChange() {
             const date = this.value.date;

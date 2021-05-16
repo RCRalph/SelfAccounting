@@ -137,7 +137,7 @@
 
 .profile-img {
     @extend .rounded-circle;
-    border: solid 1px white;
+    border: solid 2px white;
     height: 39px;
     width: 39px;
     background-color: white;
@@ -244,12 +244,12 @@
     }
 
     &-content {
-        @extend .table-responsive-xl;
+        @extend .table-responsive;
         @extend .w-100;
 
         table {
             @extend .table-themed;
-            @extend .responsive-table-hover;
+            @extend .responsive-table-bordered;
 
             thead > th {
                 @extend .h5;
@@ -269,4 +269,67 @@
 
     max-width: 150px;
     text-align: center;
+}
+
+.shared-users-wrapper {
+    display: flex;
+    height: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    .shared-user {
+        $boxHeight: 60px;
+        $contentHeight: 45px;
+
+        padding: #{($boxHeight - $contentHeight) / 2};
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: $boxHeight;
+        width: calc(95% / 2);
+        background-color: darken($dark, 10%);
+        border-radius: 30px;
+        margin: #{$boxHeight / 8} 0;
+
+        &-image {
+            height: 100%;
+        }
+
+        &-username {
+            font-size: 1.25rem;
+            margin: 0;
+            text-align: center;
+            overflow-y: hidden;
+        }
+
+        &-delete {
+            font-size: #{2 * $contentHeight / 3};
+            margin-right: 10px;
+            color: $danger;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+    }
+
+    .shared-user-waiting {
+        @extend .shared-user;
+        width: #{95% * 2 / 3};
+        padding: 0px 15px;
+
+        &-email {
+            font-size: 1.25rem;
+            text-align: center;
+            overflow-y: hidden;
+        }
+
+        &-spinner {
+            @extend .spinner-border;
+        }
+
+        &-error {
+            font-size: 2.5rem;
+            color: $danger;
+        }
+    }
 }

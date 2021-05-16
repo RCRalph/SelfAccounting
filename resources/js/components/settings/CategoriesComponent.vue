@@ -9,7 +9,7 @@
 
         <div class="card-body">
             <div>
-                <div v-if="content[currency].length" class="table-responsive-xl">
+                <div v-if="content[currency].length" class="table-responsive">
                     <table class="responsive-table-hover table-themed">
                         <TableHeader
                             :cells="header"

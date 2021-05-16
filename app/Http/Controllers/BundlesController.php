@@ -32,7 +32,7 @@ class BundlesController extends Controller
         $pageData = $this->getDataForPageRender();
 
         $hasBundle = auth()->user()->bundles->contains($bundle);
-        $hasBundlePremium = auth()->user()->premium_bundles->contains($bundle);
+        $hasBundlePremium = auth()->user()->premiumBundles->contains($bundle);
 
         $bundleEnabled = false;
         if ($hasBundle) {

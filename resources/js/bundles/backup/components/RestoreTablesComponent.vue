@@ -36,7 +36,7 @@
             :means="data.means"
         ></IncomeOutcomeTableComponent>
 
-        <div v-if="data.bundleData.cash != undefined">
+        <div v-if="data.bundleData.cash != undefined && data.bundleData.reports.length">
             <hr class="hr-dashed">
 
             <CashTableComponent
@@ -46,6 +46,17 @@
                 :means="data.means"
             ></CashTableComponent>
         </div>
+
+        <div v-if="data.bundleData.reports != undefined && data.bundleData.reports.length">
+            <hr class="hr-dashed">
+
+            <ReportsTableComponent
+                :data="data.bundleData.reports"
+                :currencies="currencies"
+                :categories="data.categories"
+                :means="data.means"
+            ></ReportsTableComponent>
+        </div>
     </div>
 </template>
 
@@ -54,6 +65,7 @@ import CategoriesTableComponent from "./CategoriesTableComponent.vue";
 import MeansTableComponent from "./MeansTableComponent.vue";
 import IncomeOutcomeTableComponent from "./IncomeOutcomeTableComponent.vue";
 import CashTableComponent from "./CashTableComponent.vue";
+import ReportsTableComponent from "./ReportsTableComponent.vue";
 
 export default {
     props: ["data", "currencies", "bundles"],
@@ -61,7 +73,8 @@ export default {
         CategoriesTableComponent,
         MeansTableComponent,
         IncomeOutcomeTableComponent,
-        CashTableComponent
+        CashTableComponent,
+        ReportsTableComponent
     }
 }
 </script>

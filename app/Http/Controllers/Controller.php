@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Bundle;
 use App\Currency;
 use App\Cash;
+use App\User;
 
 class Controller extends BaseController
 {
@@ -63,11 +64,15 @@ class Controller extends BaseController
                     "cashan" => [
                         "icon" => "fas fa-money-bill-wave",
                         "directory" => "cash"
+                    ],
+                    "report" => [
+                        "icon" => "fas fa-newspaper",
+                        "directory" => "reports"
                     ]
                 ];
 
                 // Do the same but with collections
-                $retArr["bundles"] = auth()->user()->premium_bundles
+                $retArr["bundles"] = auth()->user()->premiumBundles
                     ->merge(auth()->user()->bundles)
                     ->filter(
                         fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
@@ -148,11 +153,13 @@ class Controller extends BaseController
         );
     }
 
-    public function hasBundle($code)
+    public function hasBundle($code, $id = null)
     {
+        $user = $id == null ? auth()->user() : User::find($id);
+
         $bundle = Bundle::firstWhere("code", $code);
-        return auth()->user()->bundles->contains($bundle) ||
-            auth()->user()->premium_bundles->contains($bundle);
+        return $user->bundles->contains($bundle) ||
+            $user->premiumBundles->contains($bundle);
     }
 
     public function getCurrencies()
@@ -177,7 +184,7 @@ class Controller extends BaseController
 
     public function getCashMeans()
     {
-        $cashMeansList = auth()->user()->cash_means
+        $cashMeansList = auth()->user()->cashMeans
             ->map(fn ($item) => $item->only("currency_id", "id"))
             ->groupBy("currency_id");
 

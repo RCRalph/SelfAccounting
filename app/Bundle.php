@@ -20,7 +20,7 @@ class Bundle extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, "bundle_user");
+        return $this->belongsToMany(User::class, "bundle_user", "bundle_id", "user_id");
     }
 
     public function premium_users()

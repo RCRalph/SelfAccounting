@@ -116,15 +116,15 @@ export default {
                 amount: "",
                 price: "",
                 currency_id: 0,
-                category_id: 0,
-                mean_id: 0
+                category_id: null,
+                mean_id: null
             },
             outcome: {
                 amount: "",
                 price: "",
                 currency_id: 0,
-                category_id: 0,
-                mean_id: 0
+                category_id: null,
+                mean_id: null
             },
 
             cashUsed: {}
@@ -186,18 +186,18 @@ export default {
 
             const validAmount =
                 !isNaN(toNumber.amountIncome) &&
-                toNumber.amountIncome <= 1e6 &&
+                toNumber.amountIncome <= 1e7 - 0.001 &&
                 toNumber.amountIncome > 0 &&
                 !isNaN(toNumber.amountOutcome) &&
-                toNumber.amountOutcome <= 1e6 &&
+                toNumber.amountOutcome <= 1e7 - 0.001 &&
                 toNumber.amountOutcome > 0;
 
             const validPrice =
                 !isNaN(toNumber.priceIncome) &&
-                toNumber.priceIncome <= 1e11 &&
+                toNumber.priceIncome <= 1e11 - 0.01 &&
                 toNumber.priceIncome > 0 &&
                 !isNaN(toNumber.priceOutcome) &&
-                toNumber.priceOutcome <= 1e11 &
+                toNumber.priceOutcome <= 1e11 - 0.01 &
                 toNumber.priceOutcome > 0;
 
             if (this.cashMeanUsed) {
@@ -228,10 +228,10 @@ export default {
             return retArr;
         },
         incomeSum() {
-            return Math.round(this.income.amount * this.income.price * 1000) / 1000;
+            return Math.round(this.income.amount * this.income.price * 100) / 100;
         },
         outcomeSum() {
-            return Math.round(this.outcome.amount * this.outcome.price * 1000) / 1000;
+            return Math.round(this.outcome.amount * this.outcome.price * 100) / 100;
         },
         sameMeansOfPayment() {
             return this.income.mean_id == 0 ?
@@ -324,8 +324,8 @@ export default {
                 this.titles = data.titles;
 
                 this.income.currency_id = data.last.currency;
-                this.income.category_id = data.last.category || 0;
-                this.income.mean_id = data.last.mean || 0;
+                this.income.category_id = data.last.category || null;
+                this.income.mean_id = data.last.mean || null;
 
                 this.outcome.currency_id = data.last.currency;
 

@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Bundles\WebApi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+
 use App\Rules\BackupValidIODate;
 use App\Rules\BackupValidCategoryMean;
 use App\Rules\CorrectValueForCash;
 use App\Rules\BackupValidMeanForCashMeans;
+use App\Rules\BackupValidQueryDate;
+use App\Rules\BackupValidQueryMinMax;
+use App\Rules\BackupValidQueryCategoryMean;
 
+use App\User;
 use App\Backup;
 use App\Currency;
 use App\Income;
@@ -43,7 +48,7 @@ class BackupController extends Controller
 
         // Check if user has bundles
         $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premium_bundles);
+            ->merge(auth()->user()->premiumBundles);
         $hasBundles = [];
 
         foreach (Bundle::all() as $bundle) {
@@ -67,7 +72,7 @@ class BackupController extends Controller
 
         // Check if user has bundles
         $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premium_bundles);
+            ->merge(auth()->user()->premiumBundles);
         $hasBundles = [];
 
         foreach (Bundle::all() as $bundle) {
@@ -152,6 +157,51 @@ class BackupController extends Controller
             }
         }
 
+        // Gather reports
+        if ($hasBundles["report"]) {
+            $bundleData["reports"] = [];
+            $reports = auth()->user()->reports;
+
+            foreach ($reports as $i => $report) {
+                array_push(
+                    $bundleData["reports"],
+                    $report->only("title", "income_addition", "sort_dates_desc", "calculate_sum")
+                );
+
+                $bundleData["reports"][$i]["queries"] = [];
+                $bundleData["reports"][$i]["additionalEntries"] = [];
+                $bundleData["reports"][$i]["users"] = [];
+
+                foreach ($report->queries as $query) {
+                    unset($query["id"], $query["report_id"]);
+
+                    $query["min_amount"] = $query["min_amount"] === null ? null : $query["min_amount"] * 1;
+                    $query["max_amount"] = $query["max_amount"] === null ? null : $query["max_amount"] * 1;
+                    $query["min_price"] = $query["min_price"] === null ? null : $query["min_price"] * 1;
+                    $query["max_price"] = $query["max_price"] === null ? null : $query["max_price"] * 1;
+                    $query["category_id"] = $query["category_id"] === null ? 0 : $categoriesIDs[$query["category_id"]];
+                    $query["mean_id"] = $query["mean_id"] === null ? 0 : $meansIDs[$query["mean_id"]];
+
+                    array_push($bundleData["reports"][$i]["queries"], $query->toArray());
+                }
+
+                foreach ($report->additionalEntries as $entry) {
+                    unset($entry["id"], $entry["report_id"]);
+
+                    $entry["amount"] *= 1;
+                    $entry["price"] *= 1;
+                    $entry["category_id"] = $entry["category_id"] === null ? 0 : $categoriesIDs[$entry["category_id"]];
+                    $entry["mean_id"] = $entry["mean_id"] === null ? 0 : $meansIDs[$entry["mean_id"]];
+
+                    array_push($bundleData["reports"][$i]["additionalEntries"], $entry->toArray());
+                }
+
+                foreach ($report->sharedUsers as $user) {
+                    array_push($bundleData["reports"][$i]["users"], $user->email);
+                }
+            }
+        }
+
         $backup = auth()->user()->backup
             ->update(["last_backup" => now()]);
 
@@ -185,19 +235,19 @@ class BackupController extends Controller
             "income.*.currency_id" => ["required", "exists:currencies,id"],
             "income.*.date" => ["required", "date", new BackupValidIODate("income")],
             "income.*.title" => ["required", "string", "max:64"],
-            "income.*.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "income.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "income.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "income.*.category_id" => ["present", "integer", new BackupValidCategoryMean("income")],
-            "income.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("income")],
+            "income.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("income")],
+            "income.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("income")],
 
             // Outcome
             "outcome.*.currency_id" => ["required", "exists:currencies,id"],
             "outcome.*.date" => ["required", "date", new BackupValidIODate("outcome")],
             "outcome.*.title" => ["required", "string", "max:64"],
-            "outcome.*.amount" => ["required", "numeric", "max:1e6", "min:0", "not_in:0,1e6"],
+            "outcome.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "outcome.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "outcome.*.category_id" => ["present", "integer", new BackupValidCategoryMean("outcome")],
-            "outcome.*.mean_id" => ["present", "integer", new BackupValidCategoryMean("outcome")],
+            "outcome.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
+            "outcome.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
 
             // Bundle data
             "bundleData" => ["present", "array"],
@@ -206,11 +256,47 @@ class BackupController extends Controller
             "bundleData.cash" => ["nullable", "array"],
             "bundleData.cashMeans" => ["nullable", "array"],
             "bundleData.cash.*.currency_id" => ["required", "exists:currencies,id"],
-            "bundleData.cash.*.value" => ["required", "numeric", "min:0", "max:1e7", "not_in:0,1e7", new CorrectValueForCash],
+            "bundleData.cash.*.value" => ["required", "numeric", "min:0", "max:1e8", "not_in:0,1e8", new CorrectValueForCash],
             "bundleData.cash.*.amount" => ["required", "integer", "min:1", "max:9223372036854775807"],
 
+            // Cash means
             "bundleData.cashMeans.*.currency_id" => ["required", "distinct", "exists:currencies,id"],
-            "bundleData.cashMeans.*.mean_id" => ["required", "integer", "min:1", new BackupValidMeanForCashMeans]
+            "bundleData.cashMeans.*.mean_id" => ["required", "integer", "min:1", new BackupValidMeanForCashMeans],
+
+            // Reports
+            "bundleData.reports" => ["nullable", "array"],
+            "bundleData.reports.*.title" => ["required", "string", "max:64"],
+            "bundleData.reports.*.income_addition" => ["required", "boolean"],
+            "bundleData.reports.*.sort_dates_desc" => ["required", "boolean"],
+            "bundleData.reports.*.calculate_sum" => ["required", "boolean"],
+
+            // Report queries
+            "bundleData.reports.*.queries" => ["present", "array"],
+            "bundleData.reports.*.queries.*.query_data" => ["required", "string", "in:income,outcome"],
+            "bundleData.reports.*.queries.*.min_date" => ["present", "nullable", "date", new BackupValidQueryDate],
+            "bundleData.reports.*.queries.*.max_date" => ["present", "nullable", "date", new BackupValidQueryDate],
+            "bundleData.reports.*.queries.*.title" => ["present", "nullable", "string", "max:64"],
+            "bundleData.reports.*.queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:0,1e7", new BackupValidQueryMinMax("amount")],
+            "bundleData.reports.*.queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:0,1e7", new BackupValidQueryMinMax("amount")],
+            "bundleData.reports.*.queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:0,1e11", new BackupValidQueryMinMax("price")],
+            "bundleData.reports.*.queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:0,1e11", new BackupValidQueryMinMax("price")],
+            "bundleData.reports.*.queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
+            "bundleData.reports.*.queries.*.category_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("queries")],
+            "bundleData.reports.*.queries.*.mean_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("queries")],
+
+            // Report additional entries
+            "bundleData.reports.*.additionalEntries" => ["present", "array"],
+            "bundleData.reports.*.additionalEntries.*.date" => ["required", "date"],
+            "bundleData.reports.*.additionalEntries.*.title" => ["required", "string", "max:64"],
+            "bundleData.reports.*.additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
+            "bundleData.reports.*.additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "bundleData.reports.*.additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "bundleData.reports.*.additionalEntries.*.category_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("additionalEntries")],
+            "bundleData.reports.*.additionalEntries.*.mean_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("additionalEntries")],
+
+            // Report users
+            "bundleData.reports.*.users" => ["present", "array"],
+            "bundleData.reports.*.users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
         ]);
 
         // Erase existing data
@@ -219,7 +305,8 @@ class BackupController extends Controller
         auth()->user()->income()->delete();
         auth()->user()->outcome()->delete();
         auth()->user()->cash()->detach();
-        auth()->user()->cash_means()->detach();
+        auth()->user()->cashMeans()->detach();
+        auth()->user()->reports()->delete();
 
         // Enter categories and means
         $categories = [ 0 => null ]; $means = [ 0 => null ];
@@ -274,7 +361,38 @@ class BackupController extends Controller
             foreach ($data["bundleData"]["cashMeans"] as $cashMean) {
                 array_push($meansToAttach, $means[$cashMean["mean_id"]]);
             }
-            auth()->user()->cash_means()->attach($meansToAttach);
+            auth()->user()->cashMeans()->attach($meansToAttach);
+        }
+
+        // Enter reports
+        if (isset($data["bundleData"]["reports"])) {
+            foreach ($data["bundleData"]["reports"] as $report) {
+                $queries = $report["queries"];
+                $entries = $report["additionalEntries"];
+                $users = $report["users"];
+
+                unset($report["queries"], $report["additionalEntries"], $report["users"]);
+
+                $created = auth()->user()->reports()->create($report);
+
+                foreach ($queries as $query) {
+                    $query["category_id"] = $categories[$query["category_id"]];
+                    $query["mean_id"] = $means[$query["mean_id"]];
+
+                    $created->queries()->create($query);
+                }
+
+                foreach ($entries as $entry) {
+                    $entry["category_id"] = $categories[$entry["category_id"]];
+                    $entry["mean_id"] = $means[$entry["mean_id"]];
+
+                    $created->additionalEntries()->create($entry);
+                }
+
+                foreach ($users as $user) {
+                    $created->sharedUsers()->attach(User::firstWhere("email", $user));
+                }
+            }
         }
 
         auth()->user()->backup

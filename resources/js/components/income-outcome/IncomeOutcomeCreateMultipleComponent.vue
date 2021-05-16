@@ -94,6 +94,7 @@
                     optionValueKey="id"
                     optionTextKey="name"
                     v-model="common.category_id"
+                    nullValue="N/A"
                     @input="updateData('category_id')"
                 ></InputGroup>
 
@@ -104,6 +105,7 @@
 					optionValueKey="id"
 					optionTextKey="name"
 					v-model="common.mean_id"
+                    nullValue="N/A"
                     @input="updateData('mean_id')"
 				></InputGroup>
 
@@ -212,15 +214,16 @@ export default {
             cash: {},
             cashMeans: {},
             usersCash: [],
+            lastCurrency: 1,
 
             common: {
                 date: "",
                 title: "",
                 amount: "",
                 price: "",
-                currency_id: 0,
-                category_id: 0,
-                mean_id: 0
+                currency_id: 1,
+                category_id: null,
+                mean_id: null
             },
             cashUsed: {},
             data: []
@@ -233,7 +236,7 @@ export default {
                 return "1970-01-01";
             }
 			const currentMean = meansForCurrency.filter(item => item.id == this.data.mean_id);
-			return currentMean.length ? currentMean[0].first_entry_date : "1970-01-01";
+			return (currentMean.length && currentMean.id != null) ? currentMean[0].first_entry_date : "1970-01-01";
         },
         validDate() {
             const date = this.common.date;
@@ -249,14 +252,14 @@ export default {
             const amount = Number(this.common.amount);
             return this.common.amount === "" ||
                 !isNaN(amount) &&
-                amount < 1e6 &&
+                amount <= 1e7 - 0.001 &&
                 amount > 0;
         },
         validPrice() {
             const price = Number(this.common.price);
             return this.common.price === "" ||
                 !isNaN(price) &&
-                price < 1e11 &&
+                price <= 1e11 - 0.01 &&
                 price > 0;
         },
         commonObject() {
@@ -274,7 +277,7 @@ export default {
             return [
                 {
                     id: 0,
-                    ISO: "N / A"
+                    ISO: "N/A"
                 },
                 ...this.currencies
             ]
@@ -305,11 +308,11 @@ export default {
                 }
 
                 const validAmount = !isNaN(toNumber.amount) &&
-                    toNumber.amount <= 1e6 &&
+                    toNumber.amount <= 1e7 - 0.001 &&
                     toNumber.amount > 0;
 
                 const validPrice = !isNaN(toNumber.price) &&
-                    toNumber.price <= 1e11 &&
+                    toNumber.price <= 1e11 - 0.01  &&
                     toNumber.price > 0;
 
                 if (this.cashMeanUsed) {
@@ -347,10 +350,10 @@ export default {
             this.data.forEach(item => {
                 if (item.mean_id != null && item.mean_id == this.cashMeans[item.currency_id]) {
                     if (sums[item.currency_id] == undefined) {
-                        sums[item.currency_id] = Math.round(item.amount * item.price * 1000) / 1000;
+                        sums[item.currency_id] = Math.round(item.amount * item.price * 100) / 100;
                     }
                     else {
-                        sums[item.currency_id] += Math.round(item.amount * item.price * 1000) / 1000;
+                        sums[item.currency_id] += Math.round(item.amount * item.price * 100) / 100;
                     }
                 }
             });
@@ -361,6 +364,10 @@ export default {
     methods: {
         newEntry() {
             this.data.push({...this.common});
+
+            if (this.data[this.data.length - 1].currency_id == 0) {
+                this.data[this.data.length - 1].currency_id = this.lastCurrency;
+            }
         },
         deleteEntry(index) {
             this.data.splice(index, 1);
@@ -368,12 +375,12 @@ export default {
         updateData(key) {
             setTimeout(() => {
                 if (key == "currency_id") {
-                    this.common.category_id = 0;
-                    this.common.mean_id = 0;
+                    this.common.category_id = null;
+                    this.common.mean_id = null;
 
                     this.data.forEach((item, i) => {
-                        this.data[i].category_id = 0;
-                        this.data[i].mean_id = 0;
+                        this.data[i].category_id = null;
+                        this.data[i].mean_id = null;
                         this.data[i].currency_id = this.common.currency_id || 1;
                     });
                 }
@@ -442,17 +449,8 @@ export default {
                 this.common.currency_id = data.last.currency;
 
                 this.categories = data.categories;
-                this.categories[0] = [{
-                    id: 0,
-                    name: "N / A"
-                }];
 
                 this.means = data.means;
-                this.means[0] = [{
-                    id: 0,
-                    name: "N / A",
-                    first_entry_date: null
-                }];
 
                 if (data.cash != undefined) {
                     this.cash = data.cash;
@@ -469,14 +467,16 @@ export default {
                     this.cashUsed = tempCashValues;
                 }
 
+                this.lastCurrency = data.last.currency;
+
                 this.data.push({
                     date: "",
                     title: "",
                     amount: "",
                     price: "",
-                    currency_id: data.last.currency,
-                    category_id: data.last.category || 0,
-                    mean_id: data.last.mean || 0
+                    currency_id: this.lastCurrency,
+                    category_id: data.last.category || null,
+                    mean_id: data.last.mean || null
                 });
 
                 this.ready = true;

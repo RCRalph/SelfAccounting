@@ -81,6 +81,20 @@ class EnterData extends Command
                     "kv1mdZywk4ZPrWgA4y8skWZNDWHGBOA0VUNhe5FKMJPmfYmeDl.png",
                     "rBEdr7vYhSrdc1FZrawp5QzucS53tSnRXIafFCEDYSQStxCl5i.png"
                 ]
+            ],
+            [
+                "title" => "Report management",
+                "code" => "report",
+                "price" => 5,
+                "short_description" => "Share your data with other users",
+                "thumbnail" => "tWE8V7sdg7uDYJRynL7V3Axz787A8Sja9ecrzV0pd8xvsulm9t.png",
+                "description" => "This bundle allows you to create and share reports with **other users**. A report is created by combining results from entered queries and entries specific to the report, then it is presented as a table sorted by dates and titles. You can also not share your reports with anyone and keep them for **personal usage**.\n\nMake sure that users that you are sharing your reports to own this bundle as well, otherwise they won't be able to see what you share with them.",
+                "gallery" => [
+                    "ClWlSfW6eGCa6lyp54vfM1OxkjkYU3JOM8OMY5JrM8MqCTgteV.png",
+                    "dSLzL5fTYBgSaxQVm7m2fEd0EerNrBPuXaqJ2i9r3SQfr002u5.png",
+                    "ZfnEKjUrugiLValA8QMhJSnVdjRqhuiYwMInLNEXoAFcrlTrfJ.png",
+                    "LMxjtx3XDX7WDNZOSM1BsW4suEntQpzVEcCG0Rfjhgy4SCWHXL.png"
+                ]
             ]
         ],
         "currencies" => [
@@ -119,7 +133,7 @@ class EnterData extends Command
      */
     public function handle()
     {
-        // Add admin user
+        // Add users
         $progressBar = $this->output
             ->createProgressBar(count($this->dataToEnter["users"]));
         $this->outputMessage("Creating users");
@@ -147,7 +161,7 @@ class EnterData extends Command
         // Add currencies and cash
         $progressBar = $this->output
             ->createProgressBar(count($this->dataToEnter["currencies"]));
-        $this->outputMessage("Creating currencies");
+        $this->outputMessage("Creating currencies and cash");
 
         $progressBar->start();
         foreach ($this->dataToEnter["currencies"] as $ISO => $cash) {

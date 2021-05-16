@@ -199,7 +199,7 @@ export default {
                     typeof item.count_to_summary == "boolean",
                     item.show_on_charts === undefined || typeof item.show_on_charts == "boolean",
                     this.isDate(item.first_entry_date),
-                    this.isBetweenNumbers(item.first_entry_amount, -1e11 + 1, 1e11 - 1)
+                    this.isBetweenNumbers(item.first_entry_amount, -1e11 + 0.01, 1e11 - 0.01)
                 ];
 
                 validationResult.push(validation.reduce((item1, item2) => item1 && item2));
@@ -230,7 +230,7 @@ export default {
 						this.isDate(item.date) && Date.parse(item.date) >= Date.parse(item.mean_id == 0 ? "1970" : means[item.mean_id].first_entry),
 						this.isValidString(item.title, 1, 64),
 						this.isCurrency(item.currency_id),
-                        this.isBetweenNumbers(item.amount, 0.001, 1e6 - 0.001),
+                        this.isBetweenNumbers(item.amount, 0.001, 1e7 - 0.001),
                         this.isBetweenNumbers(item.price, 0.01, 1e11 - 0.01)
 					];
 
@@ -245,7 +245,7 @@ export default {
 
 			return true
 		},
-        checkBundleData(data, means) {
+        checkBundleData(data, categories, means) {
             // Validate cash
             if (this.hasBundles.cashan && data.cash != undefined && data.cashMeans != undefined) {
                 if (!Array.isArray(data.cash) || !Array.isArray(data.cashMeans)) {
@@ -255,7 +255,7 @@ export default {
                 data.cash.forEach(item => {
                     let validation = [
                         this.isCurrency(item.currency_id),
-                        this.isBetweenNumbers(item.value, 0.001, 1e7 - 0.001),
+                        this.isBetweenNumbers(item.value, 0.001, 1e8 - 0.01),
                         this.isBetweenNumbers(item.amount, 1, Math.pow(2, 63) - 1)
                     ]
 
@@ -276,6 +276,100 @@ export default {
                         return false;
                     }
                 })
+            }
+
+            // Validate reports
+            if (this.hasBundles.report && data.reports != undefined) {
+                if (!Array.isArray(data.reports)) {
+                    return false;
+                }
+
+                data.reports.forEach(item => {
+                    const validation = [
+                        // Validate report data
+                        typeof this.isValidString(item.title, 1, 64),
+                        typeof item.income_addition == "boolean",
+                        typeof item.sort_dates_desc == "boolean",
+                        typeof item.calculate_sum == "boolean",
+
+                        // Validate report queries
+                        Array.isArray(item.queries) && item.queries.map(item1 => [
+                            ["income", "outcome"].includes(item1.query_data),
+
+                            item1.min_date === null ||
+                            this.isDate(item1.min_date) &&
+                            (
+                                !item1.max_date ||
+                                Date.parse(item1.min_date) <= Date.parse(item1.max_date)
+                            ),
+
+                            item1.max_date === null ||
+                            !isNaN(Date.parse(item1.max_date)) &&
+                            (
+                                !item1.min_date ||
+                                Date.parse(item1.min_date) <= Date.parse(item1.max_date)
+                            ),
+
+                            item1.min_amount === null ||
+                            typeof item1.min_amount == "number" &&
+                            (
+                                item1.max_amount === null ||
+                                item1.min_amount <= item1.max_amount
+                            ) && this.isBetweenNumbers(item1.min_date, 0, 1e7 - 0.001),
+
+                            item1.max_amount === null ||
+                            typeof item1.max_amount == "number" &&
+                            (
+                                item1.min_amount === null ||
+                                item1.min_amount <= item1.max_amount
+                            ) && this.isBetweenNumbers(item1.min_date, 0, 1e7 - 0.001),
+
+                            item1.min_price === null ||
+                            typeof item1.min_price == "number" &&
+                            (
+                                item1.max_price === null ||
+                                item1.min_price <= item1.max_price
+                            ) && this.isBetweenNumbers(item1.min_date, 0, 1e11 - 0.01),
+
+                            item1.max_price === null ||
+                            typeof item1.max_price == "number" &&
+                            (
+                                item1.min_price === null ||
+                                item1.min_price <= item1.max_price
+                            ) && this.isBetweenNumbers(item1.min_date, 0, 1e11 - 0.01),
+
+                            item1.currency_id === null ||
+                            this.isCurrency(item1.currency_id),
+
+                            item1.category_id === 0 ||
+                            categories[item1.category_id - 1].currency_id == item1.currency_id,
+
+                            item1.mean_id === 0 ||
+                            means[item1.mean_id - 1].currency_id == item1.currency_id
+                        ]).reduce((item1, item2) => item1 && item2),
+
+                        // Validate report additional entries
+                        Array.isArray(item.additionalEntries) && item.additionalEntries.map(item1 => [
+                            this.isDate(item1.date),
+                            this.isValidString(item1.title, 1, 64),
+                            this.isBetweenNumbers(item1.amount, 0.001, 1e7 - 0.001),
+                            this.isBetweenNumbers(item1.price, 0.01, 1e11 - 0.01),
+                            this.isCurrency(item1.currency_id),
+                            item1.category_id == 0 || categories[item1.category_id].currency == item1.currency_id,
+                            item1.mean_id == 0 || means[item1.mean_id].currency == item1.currency_id
+                        ]).reduce((item1, item2) => item1 && item2),
+
+                        // Validate report users
+                        Array.isArray(item.users) && item.additionalEntries.map(item1 =>
+                            this.isValidString(item1.title, 1, 64) &&
+                            /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(item1.title)
+                        ).reduce((item1, item2) => item1 && item2)
+                    ];
+
+                    if (!validation.reduce((item1, item2) => item1 && item2)) {
+                        return false;
+                    }
+                });
             }
 
             return true;
@@ -325,7 +419,7 @@ export default {
                         throw new Error("Invalid data type (bundle data not an object)");
                     }
 
-                    if (this.checkBundleData(data.bundleData, data.means) === false) {
+                    if (this.checkBundleData(data.bundleData, data.categories, data.means) === false) {
                         throw new Error(`Invalid bundle data`);
                     }
 
@@ -341,7 +435,7 @@ export default {
 
             axios.post("/webapi/bundles/backup/restore", { ...this.dataToDisplay })
                 .then(() => {
-                    window.location.href = "/summary";
+                    //window.location.href = "/summary";
                 })
                 .catch(err => {
                     console.error(err);

@@ -112,9 +112,17 @@ class SummaryController extends Controller
 
         $finalData = collect($finalData)
             ->sortByDesc("balance")
-            ->groupBy("currency_id");
+            ->groupBy("currency_id")
+            ->toArray();
 
         $lastCurrency = $this->getLastCurrency();
+
+        if (!$finalData) {
+            $lastCurrency = 1;
+        }
+        else if (!isset($finalData[$lastCurrency])) {
+            $lastCurrency = array_key_first($finalData);
+        }
 
         return response()->json(compact("currencies", "finalData", "lastCurrency"));
     }

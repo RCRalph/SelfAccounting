@@ -20,8 +20,7 @@ class BundlesController extends Controller
 
     public function bundles() // Get list of bundles
     {
-        $users = Bundle::where("id", ">", "0")
-            ->select("id", "title")
+        $users = Bundle::select(["id", "title"])
             ->orderBy("id")
             ->paginate(20);
 

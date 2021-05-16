@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class BackupValidCategoryMean implements Rule
 {
-    private $type = "";
+    private $type;
     /**
      * Create a new rule instance.
      *
@@ -30,22 +30,15 @@ class BackupValidCategoryMean implements Rule
             return true;
         }
 
-        $checkingCategory = strpos($attribute, "category") !== false;
         $index = explode(".", $attribute)[1];
+        $isCategory = strpos($attribute, "category") !== false;
+        $selectedType = (
+            $isCategory ?
+            request("categories") : request("means")
+        )[$value - 1];
 
-        if ($checkingCategory) {
-            $categories = collect(request("categories"));
-            return $categories
-                ->where("currency_id", request("$this->type.$index.currency_id"))
-                ->where($this->type . "_category", true)
-                ->count();
-        }
-
-        $means = collect(request("means"));
-        return $means
-            ->where("currency_id", request("$this->type.$index.currency_id"))
-            ->where($this->type . "_mean", true)
-            ->count();
+        return $selectedType["currency_id"] == request("$this->type.$index.currency_id") &&
+            $selectedType[$this->type . ($isCategory ? "_category" : "_mean")];
     }
 
     /**
@@ -55,6 +48,6 @@ class BackupValidCategoryMean implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'Invalid category / mean.';
     }
 }
