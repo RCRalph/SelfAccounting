@@ -36,7 +36,7 @@
             :means="data.means"
         ></IncomeOutcomeTableComponent>
 
-        <div v-if="data.bundleData.cash != undefined && data.bundleData.reports.length">
+        <div v-if="data.bundleData.cash != undefined && data.bundleData.cash.length">
             <hr class="hr-dashed">
 
             <CashTableComponent
