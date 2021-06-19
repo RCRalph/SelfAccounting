@@ -435,7 +435,7 @@ export default {
 
             axios.post("/webapi/bundles/backup/restore", { ...this.dataToDisplay })
                 .then(() => {
-                    //window.location.href = "/summary";
+                    window.location.href = "/summary";
                 })
                 .catch(err => {
                     console.error(err);
