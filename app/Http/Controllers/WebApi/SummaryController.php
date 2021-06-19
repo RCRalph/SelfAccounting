@@ -67,8 +67,8 @@ class SummaryController extends Controller
                 $endTime = $categories->where("id", $categoryID)->first()["end_date"];
 
                 if (
-                    $startTime != null && strtotime($value["date"]) < $startTime &&
-                    $endTime != null && strtotime($value["date"]) > $endTime
+                    ($startTime != null && strtotime($value["date"]) < strtotime($startTime)) ||
+                    ($endTime != null && strtotime($value["date"]) > strtotime($endTime))
                 ) {
                     unset($balanceByCategories[$categoryID][$key]);
                 }
