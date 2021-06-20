@@ -169,10 +169,23 @@ export default {
                 currency_id: 1
             };
 
-            this.rows.forEach((item, i) => {
-                item.value = (Math.round(item.amount * item.price * 100) / 100).toLocaleString('en').split(",").join(" ");
-                item.amount = Number(item.amount).toLocaleString('en').split(",").join(" ");
-                item.price = Number(item.price).toLocaleString('en').split(",").join(" ");
+            this.rows.forEach((item1, i) => {
+                let item = _.cloneDeep(item1);
+                item.value = (item.amount * item.price)
+                    .toLocaleString("en", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).split(",").join(" ");
+                item.amount = Number(item.amount)
+                    .toLocaleString("en", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 3
+                    }).split(",").join(" ");
+                item.price = Number(item.price)
+                    .toLocaleString("en", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }).split(",").join(" ");
 
                 if (!rowspaned.length) {
                     rowspaned.push({
