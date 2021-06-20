@@ -48,7 +48,7 @@
                         <tbody>
                             <tr v-for="(item, i) in content[currentCurrency]" :key="i">
                                 <th scope="row" class="h5 my-auto font-weight-bold">{{ item.name }}</th>
-                                <td class="h5 my-auto">{{ (Math.round(item.balance * 100) / 100) | addSpaces }} {{ currencies[currentCurrency - 1].ISO }}</td>
+                                <td class="h5 my-auto">{{ item.balance | addSpaces }} {{ currencies[currentCurrency - 1].ISO }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -105,8 +105,11 @@ export default {
     },
     filters: {
         addSpaces(value) {
-            return (Math.round(value * 100) / 100)
-                .toLocaleString('en')
+            return value
+                .toLocaleString("en", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
                 .split(",")
                 .join(" ");
         }
