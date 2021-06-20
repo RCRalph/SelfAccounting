@@ -127,6 +127,7 @@ class IncomeOutcomeController extends Controller
             )
             ->orderBy("date", "DESC")
             ->orderBy("title")
+            ->orderBy("amount")
             ->paginate(20);
 
         return response()->json(compact("data"));
