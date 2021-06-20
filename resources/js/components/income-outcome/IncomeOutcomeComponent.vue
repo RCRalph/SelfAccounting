@@ -187,6 +187,8 @@ export default {
                         maximumFractionDigits: 2
                     }).split(",").join(" ");
 
+                item.title = item.title.replaceAll("->", "→")
+
                 if (!rowspaned.length) {
                     rowspaned.push({
                         ...item,
@@ -259,12 +261,12 @@ export default {
                 .then(response => {
                     this.dataReady = true;
                     this.rows = this.rows.concat(response.data.data.data);
-                    this.page++;
 
 					if (response.data.data.current_page == response.data.data.last_page) {
 						$state.complete();
 					}
                     $state.loaded();
+                    this.page++;
                 });
         },
         redirectToShow(id) {
