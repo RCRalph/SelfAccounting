@@ -107,7 +107,7 @@
                         v-else-if="!rows.length && dataReady"
                     ></EmptyPlaceholder>
 
-                    <InfiniteLoading @infinite="getData" :key="currentCurrency">
+                    <InfiniteLoading :force-use-infinite-wrapper="true" @infinite="getData" :key="currentCurrency">
                         <div slot="no-more"></div>
                     </InfiniteLoading>
                 </div>
