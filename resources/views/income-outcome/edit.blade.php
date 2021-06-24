@@ -5,5 +5,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ mix('js/income-outcome-edit.js') }}" defer></script>
+    <script src="{{ asset('js/income-outcome-edit.js') }}" defer></script>
 @endsection
