@@ -86,5 +86,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ mix('js/bundle-show.js') }}" defer></script>
+    <script src="{{ asset('js/bundle-show.js') }}" defer></script>
 @endsection

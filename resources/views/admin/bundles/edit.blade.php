@@ -1,7 +1,7 @@
 @extends('layouts.width8')
 
 @section('script')
-    <script src="{{ mix('js/admin/bundles/edit.js') }}" defer></script>
+    <script src="{{ asset('js/admin/bundles/edit.js') }}" defer></script>
 @endsection
 
 @section('content')

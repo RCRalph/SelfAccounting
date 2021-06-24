@@ -2,7 +2,7 @@
 
 @section('script')
     @include("scripts.tableHovering")
-    <script src="{{ mix('js/income-outcome.js') }}" defer></script>
+    <script src="{{ asset('js/income-outcome.js') }}" defer></script>
 @endsection
 
 @section('content')
