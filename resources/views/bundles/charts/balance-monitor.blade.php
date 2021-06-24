@@ -1,7 +1,7 @@
 @extends('layouts.widthfull')
 
 @section('script')
-    <script src="{{ asset('js/bundles/charts/balance-monitor.js') }}" defer></script>
+    <script src="{{ mix('js/bundles/charts/balance-monitor.js') }}" defer></script>
 @endsection
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layouts.width10')
 
 @section('script')
-    <script src="{{ asset('js/profile.js') }}" defer></script>
+    <script src="{{ mix('js/profile.js') }}" defer></script>
 @endsection
 
 @section('content')

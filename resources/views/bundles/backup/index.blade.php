@@ -1,7 +1,7 @@
 @extends('layouts.width12')
 
 @section('script')
-    <script src="{{ asset('js/bundles/backup/backup.js') }}" defer></script>
+    <script src="{{ mix('js/bundles/backup/backup.js') }}" defer></script>
 @endsection
 
 @section('content')
