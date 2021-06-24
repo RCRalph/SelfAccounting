@@ -105,11 +105,13 @@ This bundle allows you to backup all of your data by gathering it in a file, whi
 You can also restore all your data from this file by clicking **Restore from file**. This will open a prompt requesting you to select a file with the *.selfacc* extension. After you open it, the page will include a list of all your data. To confirm restoration, click **Submit**. Keep in mind that this operation will erase all of your existing data and replace it with what's stored in the file.
 
 ## Cash handling
-This bundle allows you to monitor how much cash you have at the current moment. It will also add a feature allowing you to insert how much cash you used while entering income or outcome. To get started, go to the bundle page and set the field **Mean of payment used as cash** for the proper currency. If you don't have a mean of payment like that already, go to the **Settings** page and create it. After that set how much cash you have at the current moment. The amount should correspond with how much cash it says that you have from transactions.
-Then when you enter your income or outcome, if you set the mean of payment which you used as cash, a window will pop up at the end of the page allowing you to enter how much cash you need to fill in to keep the right balance.
+This bundle allows you to monitor how much cash you have at the current moment. It will also add a feature allowing you to insert how much cash you used while entering income or outcome. To get started, go to the bundle page and set the field **Mean of payment used as cash** for the proper currency. If you don't have a mean of payment like that already, go to the **Settings** page and create it. After that set how much cash you have at the current moment. The amount should correspond with how much cash it says that you have from transactions. Then when you enter your income or outcome, if you set the mean of payment which you used as cash, a window will pop up at the end of the page allowing you to enter how much cash you need to fill in to keep the right balance.
+
+## Report management
+This bundle allows you to create reports about your income and outcome for your personal usage or for sharing them with other SelfAccounting users. Bare in mind that you can share your reports with other users, but for them to see it, they will have to own this bundle as well (via Premium or permanently). On the main screen you can see which reports you own and which were shared with you. Creating a report involves adding queries and additional entries to the report. If you have any questions about the bundle, contact the developer (look at the bottom of the page).
 
 # Premium
 Premium mainly allows you to get access to every available bundle. The cost of it is €1.5 per month or €15 per year. 10% of all the money made from the site goes to the Wikimedia Foundation. You can read more about premium [here](/premium). Every user after registering gets 30 days of premium for free.
 
 # Contact the developer
-To contact the developer, send an email to [r.chrzanowski.priv@gmail.com](mailto:r.chrzanowski.priv@gmail.com) or send me a direct message on Twitter [@RCRalph72](https://twitter.com/RCRalph72).
+To contact the developer, send an email to [rcralph@rcralph.me](mailto:rcralph@rcralph.me) or send a direct message on Twitter [@RCRalph72](https://twitter.com/RCRalph72).
