@@ -10,6 +10,12 @@
                 ></i>
                 Edit {{ type }}
             </div>
+
+            <div class="d-flex" v-if="ready">
+                <a role="button" class="big-button-primary" :href="`/${type}`">
+                    Go back
+                </a>
+            </div>
         </div>
 
         <div class="card-body">
