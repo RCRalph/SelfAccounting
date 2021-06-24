@@ -8,14 +8,14 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-        <link rel="icon" href="{{ URL::asset('favicon.ico') }}" type="image/x-icon"/>
+        <link rel="icon" href="{{ URL::mix('favicon.ico') }}" type="image/x-icon"/>
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
         <!-- Styles -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     </head>
 
     <body class="{{ ($pageData["darkmode"] ?? true) ? "" : "lightmode" }}">
@@ -27,7 +27,7 @@
             </main>
         </div>
 
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ mix('js/app.js') }}" defer></script>
         @yield('script')
     </body>
 </html>

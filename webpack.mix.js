@@ -51,4 +51,5 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/admin/bundles/create.js', 'public/js/admin/bundles')
     .js('resources/js/admin/bundles/edit.js', 'public/js/admin/bundles')
 
+    .version()
     .sourceMaps();
