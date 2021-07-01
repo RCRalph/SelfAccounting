@@ -135,6 +135,11 @@ export default {
             required: false,
             type: Boolean,
             default: true
+        },
+        ignoreNegativePrice: {
+            required: false,
+            type: Boolean,
+            default: false
         }
     },
     components: {
@@ -173,7 +178,7 @@ export default {
         },
         validPrice() {
             const price = Number(this.value.price);
-            return !isNaN(price) & price <= 1e11 - 0.01 && price > 0;
+            return !isNaN(price) & Math.abs(price) <= 1e11 - 0.01 && (price > 0 || this.ignoreNegativePrice);
         }
     },
     methods: {
