@@ -179,7 +179,7 @@ export default {
 
                     !isNaN(Number(item.price)) &&
                     Math.abs(item.price) <= 1e11 - 0.01 &&
-                    !item.price
+                    item.price != 0
                 ].reduce((item1, item2) => item1 && item2)
             );
 
