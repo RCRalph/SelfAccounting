@@ -18,6 +18,7 @@
                     :means="means"
                     :titles="titles"
                     :minDateRestriction="false"
+                    :ignoreNegativePrice="true"
                 ></CreateForm>
 
                 <div class="row">
