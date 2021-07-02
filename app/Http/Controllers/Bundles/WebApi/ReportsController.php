@@ -61,7 +61,7 @@ class ReportsController extends Controller
     {
         $reports = auth()->user()->reports()
             ->select("id", "title")
-            ->orderBy("id")
+            ->orderBy("id", "DESC")
             ->paginate(5);
 
         return response()->json(compact("reports"));
@@ -71,6 +71,7 @@ class ReportsController extends Controller
     {
         $reports = auth()->user()->sharedReports()
             ->select("id", "title")
+			->orderBy("id", "DESC")
             ->paginate(5);
 
         return response()->json(compact("reports"));

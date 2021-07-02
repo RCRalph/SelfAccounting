@@ -444,14 +444,6 @@ export default {
             .then(response => {
                 const data = response.data.data;
 
-                this.titles = data.titles;
-                this.currencies = data.currencies;
-                this.common.currency_id = data.last.currency;
-
-                this.categories = data.categories;
-
-                this.means = data.means;
-
                 if (data.cash != undefined) {
                     this.cash = data.cash;
                     this.cashMeans = data.cashMeans;
@@ -467,6 +459,11 @@ export default {
                     this.cashUsed = tempCashValues;
                 }
 
+                this.titles = data.titles;
+                this.currencies = data.currencies;
+                this.common.currency_id = data.last.currency;
+                this.categories = data.categories;
+                this.means = data.means;
                 this.lastCurrency = data.last.currency;
 
                 this.data.push({
