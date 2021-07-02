@@ -202,15 +202,6 @@ export default {
             .then(response => {
                 const data = response.data.data;
 
-                this.currencies = data.currencies;
-                this.categories = data.categories;
-                this.means = data.means;
-                this.titles = data.titles;
-
-                this.data.currency_id = data.last.currency;
-                this.data.category_id = data.last.category || 0;
-                this.data.mean_id = data.last.mean || 0;
-
                 if (data.cash != undefined) {
                     this.cash = data.cash;
                     this.cashMeans = data.cashMeans;
@@ -223,8 +214,18 @@ export default {
                             tempCashValues[item.id] = 0;
                         })
                     }
+
                     this.cashUsed = tempCashValues;
                 }
+
+                this.currencies = data.currencies;
+                this.categories = data.categories;
+                this.means = data.means;
+                this.titles = data.titles;
+
+                this.data.currency_id = data.last.currency;
+                this.data.category_id = data.last.category || null;
+                this.data.mean_id = data.last.mean || null;
 
                 this.data.date = (new Date(this.minDate).getTime() > new Date().getTime() ?
                     new Date(this.minDate) : new Date())
