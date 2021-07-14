@@ -15,6 +15,12 @@
 
                 <hr class="hr">
 
+                <ReportColumnsComponent
+                    v-model="columns"
+                ></ReportColumnsComponent>
+
+                <hr class="hr">
+
                 <ReportQueriesComponent
                     v-model="queries"
                     :queryTypes="queryTypes"
@@ -68,6 +74,7 @@ import ReportDataComponent from "./ReportDataComponent.vue";
 import ReportQueriesComponent from "./ReportQueriesComponent.vue";
 import ReportAdditionalEntries from "./ReportAdditionalEntriesComponent.vue";
 import ReportUsersSharedComponent from "./ReportUsersSharedComponent.vue";
+import ReportColumnsComponent from "./ReportColumnsComponent.vue";
 import Loading from "../../../components/Loading.vue";
 import EmptyPlaceholder from "../../../components/EmptyPlaceholder.vue";
 import DeleteSaveResetChanges from "../../../components/DeleteSaveResetChanges.vue";
@@ -81,7 +88,8 @@ export default {
         ReportDataComponent,
         ReportQueriesComponent,
         ReportAdditionalEntries,
-        ReportUsersSharedComponent
+        ReportUsersSharedComponent,
+        ReportColumnsComponent
     },
     data() {
         return {
@@ -91,6 +99,7 @@ export default {
             means: {},
             titles: [],
             queryTypes: [],
+            columns: {},
             lastCurrency: 1,
             submitted: false,
             destroyed: false,
@@ -102,6 +111,7 @@ export default {
             data: {
                 title: "",
                 income_addition: true,
+                calculate_sum: false,
                 sort_dates_desc: false
             }
         }
@@ -240,6 +250,7 @@ export default {
             axios
                 .patch(`/webapi/bundles/reports/${this.id}/update`, {
                     data: this.data,
+                    columns: this.columns,
                     queries: this.queries,
                     additionalEntries: this.additionalEntries,
                     users: this.users.map(item => item.email)
@@ -248,10 +259,12 @@ export default {
                     this.data = response.data.data;
                     this.queries = response.data.queries;
                     this.additionalEntries = response.data.additionalEntries;
+                    this.columns = response.data.columns;
 
                     this.copy.data = _.cloneDeep(response.data.data);
                     this.copy.queries = _.cloneDeep(response.data.queries);
                     this.copy.additionalEntries = _.cloneDeep(response.data.additionalEntries);
+                    this.copy.columns = _.cloneDeep(response.data.columns);
                     this.copy.users = _.cloneDeep(this.users);
                 })
                 .catch(err => {
@@ -264,6 +277,7 @@ export default {
             this.queries = _.cloneDeep(this.copy.queries);
             this.additionalEntries = _.cloneDeep(this.copy.additionalEntries);
             this.users = _.cloneDeep(this.copy.users);
+            this.columns = _.cloneDeep(this.copy.columns);
         },
         destroy() {
             this.destroyed = true;
@@ -288,11 +302,13 @@ export default {
                 this.queries = response.data.queries;
                 this.additionalEntries = response.data.additionalEntries;
                 this.users = response.data.users;
+                this.columns = response.data.columns;
 
                 this.copy.data = _.cloneDeep(response.data.data);
                 this.copy.queries = _.cloneDeep(response.data.queries);
                 this.copy.additionalEntries = _.cloneDeep(response.data.additionalEntries);
                 this.copy.users = _.cloneDeep(response.data.users);
+                this.copy.columns = _.cloneDeep(response.data.columns);
 
                 this.currencies = response.data.currencies;
                 this.categories = response.data.categories;
