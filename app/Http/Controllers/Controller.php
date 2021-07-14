@@ -30,6 +30,8 @@ class Controller extends BaseController
         "bundles/gallery"
     ];
 
+    public $TABLE_HEAD = ["date", "title", "amount", "price", "value", "category", "mean"];
+
     public function getProfilePictureLink($profile_picture)
     {
         if (preg_match("/Emoji([1-6]|Admin).png/", $profile_picture)) {

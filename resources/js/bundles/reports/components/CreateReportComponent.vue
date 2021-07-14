@@ -15,6 +15,12 @@
 
                 <hr class="hr">
 
+                <ReportColumnsComponent
+                    v-model="columns"
+                ></ReportColumnsComponent>
+
+                <hr class="hr">
+
                 <ReportQueriesComponent
                     v-model="queries"
                     :queryTypes="queryTypes"
@@ -77,6 +83,7 @@ import ReportDataComponent from "./ReportDataComponent.vue";
 import ReportQueriesComponent from "./ReportQueriesComponent.vue";
 import ReportAdditionalEntries from "./ReportAdditionalEntriesComponent.vue";
 import ReportUsersSharedComponent from "./ReportUsersSharedComponent.vue";
+import ReportColumnsComponent from "./ReportColumnsComponent.vue";
 import Loading from "../../../components/Loading.vue";
 import EmptyPlaceholder from "../../../components/EmptyPlaceholder.vue";
 
@@ -87,7 +94,8 @@ export default {
         ReportDataComponent,
         ReportQueriesComponent,
         ReportAdditionalEntries,
-        ReportUsersSharedComponent
+        ReportUsersSharedComponent,
+        ReportColumnsComponent
     },
     data() {
         return {
@@ -108,6 +116,15 @@ export default {
                 income_addition: true,
                 calculate_sum: false,
                 sort_dates_desc: false
+            },
+            columns: {
+                date: true,
+                title: true,
+                amount: true,
+                price: true,
+                value: true,
+                category: true,
+                mean: true
             }
         }
     },
@@ -243,6 +260,7 @@ export default {
             axios
                 .post("/webapi/bundles/reports/store", {
                     data: this.data,
+                    columns: this.columns,
                     queries: this.queries,
                     additionalEntries: this.additionalEntries,
                     users: this.users.map(item => item.email)

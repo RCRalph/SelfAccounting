@@ -57,6 +57,28 @@ class ReportsController extends Controller
         return $retArr;
     }
 
+    private function getColumnBinary($columns)
+    {
+        $columnNumber = 0;
+        foreach ($this->TABLE_HEAD as $key) {
+            $columnNumber <<= 1;
+            $columnNumber += $columns[$key];
+        }
+
+        return $columnNumber;
+    }
+
+    private function getColumnsToShow($columnNumber)
+    {
+        $columns = [];
+        foreach (array_reverse($this->TABLE_HEAD) as $key) {
+            $columns[$key] = !!($columnNumber % 2);
+            $columnNumber >>= 1;
+        }
+
+        return $columns;
+    }
+
     public function userReports()
     {
         $reports = auth()->user()->reports()
@@ -104,6 +126,15 @@ class ReportsController extends Controller
             "data.sort_dates_desc" => ["required", "boolean"],
             "data.calculate_sum" => ["required", "boolean"],
 
+            "columns.*" => "boolean",
+            "columns.date" => "required",
+            "columns.title" => "required",
+            "columns.amount" => "required",
+            "columns.price" => "required",
+            "columns.value" => "required",
+            "columns.category" => "required",
+            "columns.mean" => "required",
+
             "queries" => ["present", "array"],
             "queries.*.query_data" => ["required", "string", "in:income,outcome"],
             "queries.*.min_date" => ["present", "nullable", "date", new ValidQueryDate],
@@ -134,6 +165,7 @@ class ReportsController extends Controller
             abort(422, "No data given");
         }
 
+        $data["data"]["show_columns"] = $this->getColumnBinary($data["columns"]);
         $report = auth()->user()->reports()->create($data["data"]);
 
         foreach ($data["queries"] as $query) {
@@ -157,6 +189,8 @@ class ReportsController extends Controller
 
         // Get report's data
         $data = $report->only("title", "income_addition", "sort_dates_desc", "calculate_sum");
+
+        $columns = $this->getColumnsToShow($report->show_columns);
 
         $queries = $report->queries->toArray();
         foreach ($queries as $i => $query) {
@@ -191,10 +225,10 @@ class ReportsController extends Controller
             $users[$i]["profile_picture"] = $this->getProfilePictureLink($user["profile_picture"]);
         }
 
-        $reportData =  $this->getReportCreationData();
+        $reportData = $this->getReportCreationData();
 
         return response()->json(array_merge(
-            compact("data", "queries", "additionalEntries", "users"),
+            compact("data", "queries", "additionalEntries", "users", "columns"),
             $reportData
         ));
     }
@@ -209,6 +243,15 @@ class ReportsController extends Controller
             "data.income_addition" => ["required", "boolean"],
             "data.sort_dates_desc" => ["required", "boolean"],
             "data.calculate_sum" => ["required", "boolean"],
+
+            "columns.*" => "boolean",
+            "columns.date" => "required",
+            "columns.title" => "required",
+            "columns.amount" => "required",
+            "columns.price" => "required",
+            "columns.value" => "required",
+            "columns.category" => "required",
+            "columns.mean" => "required",
 
             "queries" => ["present", "array"],
             "queries.*.id" => ["present", "nullable", "integer", "exists:report_queries,id", new BelongsToReport($report)],
@@ -242,7 +285,9 @@ class ReportsController extends Controller
             abort(422, "No data given");
         }
 
+        $data["data"]["show_columns"] = $this->getColumnBinary($data["columns"]);
         $report->update($data["data"]);
+        unset($data["data"]["show_columns"]);
 
         // Handle queries
         $IDsFromDB = $report->queries
@@ -310,7 +355,8 @@ class ReportsController extends Controller
         $this->authorize("view", $report);
 
         $reportData = [
-            "title" => $report->title
+            "title" => $report->title,
+            "columns" => $this->getColumnsToShow($report->show_columns)
         ];
 
         $currencies = $this->getCurrencies();
@@ -356,6 +402,7 @@ class ReportsController extends Controller
 				->map(function ($item) use ($report, $query) {
 					$item->amount *= ($report->income_addition xor $query->query_data == "income") ? -1 : 1;
 					$item->price *= 1;
+                    $item->value = round($item->amount * $item->price, 2);
 					return $item;
 				})
             );
@@ -363,6 +410,8 @@ class ReportsController extends Controller
 
         foreach ($report->additionalEntries as $entry) {
             unset($entry["id"], $entry["report_id"]);
+
+            $entry->value = round($entry->amount * $entry->price, 2);
             $rows = $rows->push($entry);
         }
 
@@ -395,6 +444,26 @@ class ReportsController extends Controller
             }
         }
 
-        return response()->json(compact("reportData", "rows", "currencies", "categories", "means", "sum"));
+        $columnToKey = [
+            "date" => "date",
+            "title" => "title",
+            "amount" => "amount",
+            "value" => "value",
+            "price" => "price",
+            "category" => "category_id",
+            "mean" => "mean_id"
+        ];
+
+        foreach ($reportData["columns"] as $column => $toShow) {
+            if (!$toShow) {
+                foreach ($rows as $i => $row) {
+                    unset($row[$columnToKey[$column]]);
+                }
+            }
+        }
+
+        $columnNames = $this->TABLE_HEAD;
+
+        return response()->json(compact("reportData", "rows", "currencies", "categories", "means", "sum", "columnNames"));
     }
 }

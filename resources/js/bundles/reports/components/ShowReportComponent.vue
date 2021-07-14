@@ -147,20 +147,24 @@ export default {
             rows: [],
             sum: null,
             sumCurrency: 1,
-            ready: false,
+            columnNames: [],
 
-            headerCells: [
-                { text: "Date" },
-                { text: "Title" },
-                { text: "Amount" },
-                { text: "Price" },
-                { text: "Value" },
-                { text: "Category" },
-                { text: "Mean" }
-            ],
+            ready: false
         }
     },
     computed: {
+        headerCells() {
+            const retArr = []
+            this.columnNames.forEach(item => {
+                if (this.data.columns[item]) {
+                    retArr.push({
+                        text: item.charAt(0).toUpperCase() + item.slice(1)
+                    })
+                }
+            })
+
+            return retArr;
+        },
         tableRowsSpanned() {
             let rowspaned = [], lastValues = {};
             const spanSet1 = {
@@ -177,21 +181,29 @@ export default {
             this.rows.forEach((item1, i) => {
                 let item = _.cloneDeep(item1);
 
-                item.value = (item.amount * item.price)
-                    .toLocaleString("en", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }).split(",").join(" ");
-                item.amount = Number(item.amount)
-                    .toLocaleString("en", {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 3
-                    }).split(",").join(" ");
-                item.price = Number(item.price)
-                    .toLocaleString("en", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }).split(",").join(" ");
+                if (this.data.columns.value) {
+                    item.value = Number(item.value)
+                        .toLocaleString("en", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).split(",").join(" ");
+                }
+
+                if (this.data.columns.amount) {
+                    item.amount = Number(item.amount)
+                        .toLocaleString("en", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 3
+                        }).split(",").join(" ");
+                }
+
+                if (this.data.columns.price) {
+                    item.price = Number(item.price)
+                        .toLocaleString("en", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).split(",").join(" ");
+                }
 
                 if (!rowspaned.length) {
                     rowspaned.push({
@@ -275,28 +287,46 @@ export default {
             return foundMean ? foundMean.name : "N/A";
         },
 		exportToTXT() {
-			let fileRows = ["Date\tTitle\tAmount\tPrice\tValue\tCategory\tMean"];
+            let fileRows = [
+                this.columnNames.map(item => {
+                    if (this.data.columns[item]) {
+                        return item.charAt(0).toUpperCase() + item.slice(1);
+                    }
+                }).join("%09")
+            ];
+
+            let columnToKey = {
+                date: "date",
+                title: "title",
+                amount: "amount",
+                value: "value",
+                price: "price",
+                category: "category_id",
+                mean: "mean_id"
+            };
 
             this.rows.forEach((item, index) => {
-                fileRows.push(
-                `${
-                    item.date
-                }\t${
-                    item.title
-                }\t${
-                    item.amount
-                }\t${
-                    item.price + " " + this.currencies[this.rows[index].currency_id - 1].ISO
-                }\t${
-                    item.value + " " + this.currencies[this.rows[index].currency_id - 1].ISO
-                }\t${
-                    this.getCategoryName(this.rows[index].currency_id, item.category_id)
-                }\t${
-                    this.getMeanName(this.rows[index].currency_id, item.mean_id)
-                }`);
+                let row = this.columnNames.map((item1, i) => {
+                    if (this.data.columns[item1]) {
+                        if (i <= 2) {
+                            return item[item1];
+                        }
+                        else if (i <= 4) {
+                            return item[item1] + " " + this.currencies[this.rows[index].currency_id - 1].ISO
+                        }
+                        else if (i == 5) {
+                            return this.getCategoryName(this.rows[index].currency_id, item.category_id)
+                        }
+                        else {
+                            return this.getMeanName(this.rows[index].currency_id, item.mean_id)
+                        }
+                    }
+                }).join("%09");
+
+                fileRows.push(row);
             })
 
-            let result = fileRows.join("\n");
+            let result = fileRows.join("%0A");
 
             const download = document.createElement("a");
             download.style.display = "none;"
@@ -318,6 +348,7 @@ export default {
                 this.data = response.data.reportData;
                 this.rows = response.data.rows;
                 this.sum = response.data.sum;
+                this.columnNames = response.data.columnNames;
 
                 if (response.data.sum !== null) {
                     this.sumCurrency = Object.keys(response.data.sum);
