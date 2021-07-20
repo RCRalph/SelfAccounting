@@ -19,6 +19,12 @@
     </head>
 
     <body class="{{ ($pageData["darkmode"] ?? true) ? "" : "lightmode" }}">
+        <div id="tutorial-modal">
+            <div class="tutorial-wrapper">
+                Tutorial text placeholder
+            </div>
+        </div>
+
         <div id="app">
             @include('layouts.navbar', compact("pageData"))
 

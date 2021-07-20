@@ -1,8 +1,22 @@
 require("./bootstrap");
+window.Cookies = require("js-cookie");
 window.Vue = require("vue");
 
 jQuery(() => {
     $('[data-toggle="tooltip"]').tooltip();
+
+    // Tutorial modal
+    if (!Cookies.getJSON("hide_tutorial")) {
+        $("#tutorial-modal").addClass("show");
+        $("#app").css("filter", "blur(5px)")
+
+        console.log("Next time tutorial will be hidden");
+        /*Cookies.set("hide_tutorial", true, {
+            path: "",
+            expires: 3650,
+            secure: true
+        });*/
+    }
 
     // Darkmode switcher
     $("#darkmode-switcher").on("click", () => {

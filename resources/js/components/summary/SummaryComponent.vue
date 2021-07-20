@@ -40,7 +40,7 @@
                     <table class="responsive-table-hover table-themed">
                         <thead>
                             <tr>
-                                <th scope="col" class="h3 font-weight-bold">Type</th>
+                                <th scope="col" class="h3 font-weight-bold">Mean</th>
                                 <th scope="col" class="h3 font-weight-bold">Balance</th>
                             </tr>
                         </thead>
