@@ -378,7 +378,7 @@ h6,
 .h2,
 .h3,
 .lightmode .profile-wrapper .username,
-.tutorial-wrapper h2,
+.tutorial-wrapper .tutorial-content h2,
 .chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
 .profile-wrapper .username,
 .trashbin,
@@ -412,7 +412,7 @@ h2,
 h3,
 .h3,
 .lightmode .profile-wrapper .username,
-.tutorial-wrapper h2,
+.tutorial-wrapper .tutorial-content h2,
 .chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title,
 .profile-wrapper .username,
 .trashbin {
@@ -2940,6 +2940,10 @@ textarea.is-invalid.form-date {
 }
 
 .btn,
+.tutorial-wrapper .buttons .button,
+.tutorial-wrapper .buttons .button-stop-tutorials,
+.tutorial-wrapper .buttons .button-stop-showing,
+.tutorial-wrapper .buttons .button-close,
 .big-button,
 .big-button-golden,
 .big-button-opposite,
@@ -2966,6 +2970,10 @@ textarea.is-invalid.form-date {
 
 @media (prefers-reduced-motion: reduce) {
   .btn,
+  .tutorial-wrapper .buttons .button,
+  .tutorial-wrapper .buttons .button-stop-tutorials,
+  .tutorial-wrapper .buttons .button-stop-showing,
+  .tutorial-wrapper .buttons .button-close,
   .big-button,
   .big-button-golden,
   .big-button-opposite,
@@ -2977,6 +2985,10 @@ textarea.is-invalid.form-date {
 }
 
 .btn:hover,
+.tutorial-wrapper .buttons .button:hover,
+.tutorial-wrapper .buttons .button-stop-tutorials:hover,
+.tutorial-wrapper .buttons .button-stop-showing:hover,
+.tutorial-wrapper .buttons .button-close:hover,
 .big-button:hover,
 .big-button-golden:hover,
 .big-button-opposite:hover,
@@ -2988,6 +3000,10 @@ textarea.is-invalid.form-date {
 }
 
 .btn:focus,
+.tutorial-wrapper .buttons .button:focus,
+.tutorial-wrapper .buttons .button-stop-tutorials:focus,
+.tutorial-wrapper .buttons .button-stop-showing:focus,
+.tutorial-wrapper .buttons .button-close:focus,
 .big-button:focus,
 .big-button-golden:focus,
 .big-button-opposite:focus,
@@ -2995,6 +3011,10 @@ textarea.is-invalid.form-date {
 .big-button-success:focus,
 .big-button-danger:focus,
 .btn.focus,
+.tutorial-wrapper .buttons .focus.button,
+.tutorial-wrapper .buttons .focus.button-stop-tutorials,
+.tutorial-wrapper .buttons .focus.button-stop-showing,
+.tutorial-wrapper .buttons .focus.button-close,
 .focus.big-button,
 .focus.big-button-golden,
 .focus.big-button-opposite,
@@ -3006,6 +3026,10 @@ textarea.is-invalid.form-date {
 }
 
 .btn.disabled,
+.tutorial-wrapper .buttons .disabled.button,
+.tutorial-wrapper .buttons .disabled.button-stop-tutorials,
+.tutorial-wrapper .buttons .disabled.button-stop-showing,
+.tutorial-wrapper .buttons .disabled.button-close,
 .disabled.big-button,
 .disabled.big-button-golden,
 .disabled.big-button-opposite,
@@ -3013,6 +3037,10 @@ textarea.is-invalid.form-date {
 .disabled.big-button-success,
 .disabled.big-button-danger,
 .btn:disabled,
+.tutorial-wrapper .buttons .button:disabled,
+.tutorial-wrapper .buttons .button-stop-tutorials:disabled,
+.tutorial-wrapper .buttons .button-stop-showing:disabled,
+.tutorial-wrapper .buttons .button-close:disabled,
 .big-button:disabled,
 .big-button-golden:disabled,
 .big-button-opposite:disabled,
@@ -3023,6 +3051,10 @@ textarea.is-invalid.form-date {
 }
 
 .btn:not(:disabled):not(.disabled),
+.tutorial-wrapper .buttons .button:not(:disabled):not(.disabled),
+.tutorial-wrapper .buttons .button-stop-tutorials:not(:disabled):not(.disabled),
+.tutorial-wrapper .buttons .button-stop-showing:not(:disabled):not(.disabled),
+.tutorial-wrapper .buttons .button-close:not(:disabled):not(.disabled),
 .big-button:not(:disabled):not(.disabled),
 .big-button-golden:not(:disabled):not(.disabled),
 .big-button-opposite:not(:disabled):not(.disabled),
@@ -3033,6 +3065,10 @@ textarea.is-invalid.form-date {
 }
 
 a.btn.disabled,
+.tutorial-wrapper .buttons a.disabled.button,
+.tutorial-wrapper .buttons a.disabled.button-stop-tutorials,
+.tutorial-wrapper .buttons a.disabled.button-stop-showing,
+.tutorial-wrapper .buttons a.disabled.button-close,
 a.disabled.big-button,
 a.disabled.big-button-golden,
 a.disabled.big-button-opposite,
@@ -3040,6 +3076,14 @@ a.disabled.big-button-primary,
 a.disabled.big-button-success,
 a.disabled.big-button-danger,
 fieldset:disabled a.btn,
+fieldset:disabled .tutorial-wrapper .buttons a.button,
+fieldset:disabled .tutorial-wrapper .buttons a.button-stop-tutorials,
+fieldset:disabled .tutorial-wrapper .buttons a.button-stop-showing,
+fieldset:disabled .tutorial-wrapper .buttons a.button-close,
+.tutorial-wrapper .buttons fieldset:disabled a.button,
+.tutorial-wrapper .buttons fieldset:disabled a.button-stop-tutorials,
+.tutorial-wrapper .buttons fieldset:disabled a.button-stop-showing,
+.tutorial-wrapper .buttons fieldset:disabled a.button-close,
 fieldset:disabled a.big-button,
 fieldset:disabled a.big-button-golden,
 fieldset:disabled a.big-button-opposite,
@@ -3050,6 +3094,7 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-primary,
+.tutorial-wrapper .buttons .button-stop-showing,
 .big-button-primary {
   color: #fff;
   background-color: #3490dc;
@@ -3057,6 +3102,7 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-primary:hover,
+.tutorial-wrapper .buttons .button-stop-showing:hover,
 .big-button-primary:hover {
   color: #fff;
   background-color: #227dc7;
@@ -3064,8 +3110,10 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-primary:focus,
+.tutorial-wrapper .buttons .button-stop-showing:focus,
 .big-button-primary:focus,
 .btn-primary.focus,
+.tutorial-wrapper .buttons .focus.button-stop-showing,
 .focus.big-button-primary {
   color: #fff;
   background-color: #227dc7;
@@ -3074,8 +3122,10 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-primary.disabled,
+.tutorial-wrapper .buttons .disabled.button-stop-showing,
 .disabled.big-button-primary,
 .btn-primary:disabled,
+.tutorial-wrapper .buttons .button-stop-showing:disabled,
 .big-button-primary:disabled {
   color: #fff;
   background-color: #3490dc;
@@ -3083,10 +3133,13 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-primary:not(:disabled):not(.disabled):active,
+.tutorial-wrapper .buttons .button-stop-showing:not(:disabled):not(.disabled):active,
 .big-button-primary:not(:disabled):not(.disabled):active,
 .btn-primary:not(:disabled):not(.disabled).active,
+.tutorial-wrapper .buttons .button-stop-showing:not(:disabled):not(.disabled).active,
 .big-button-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle,
+.tutorial-wrapper .buttons .show > .dropdown-toggle.button-stop-showing,
 .show > .dropdown-toggle.big-button-primary {
   color: #fff;
   background-color: #2176bd;
@@ -3094,10 +3147,13 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus,
+.tutorial-wrapper .buttons .button-stop-showing:not(:disabled):not(.disabled):active:focus,
 .big-button-primary:not(:disabled):not(.disabled):active:focus,
 .btn-primary:not(:disabled):not(.disabled).active:focus,
+.tutorial-wrapper .buttons .button-stop-showing:not(:disabled):not(.disabled).active:focus,
 .big-button-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus,
+.tutorial-wrapper .buttons .show > .dropdown-toggle.button-stop-showing:focus,
 .show > .dropdown-toggle.big-button-primary:focus {
   box-shadow: 0 0 0 0.2rem rgba(82, 161, 225, 0.5);
 }
@@ -3144,6 +3200,7 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-success,
+.tutorial-wrapper .buttons .button-close,
 .big-button-success {
   color: #fff;
   background-color: #38c172;
@@ -3151,6 +3208,7 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-success:hover,
+.tutorial-wrapper .buttons .button-close:hover,
 .big-button-success:hover {
   color: #fff;
   background-color: #2fa360;
@@ -3158,8 +3216,10 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-success:focus,
+.tutorial-wrapper .buttons .button-close:focus,
 .big-button-success:focus,
 .btn-success.focus,
+.tutorial-wrapper .buttons .focus.button-close,
 .focus.big-button-success {
   color: #fff;
   background-color: #2fa360;
@@ -3168,8 +3228,10 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-success.disabled,
+.tutorial-wrapper .buttons .disabled.button-close,
 .disabled.big-button-success,
 .btn-success:disabled,
+.tutorial-wrapper .buttons .button-close:disabled,
 .big-button-success:disabled {
   color: #fff;
   background-color: #38c172;
@@ -3177,10 +3239,13 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-success:not(:disabled):not(.disabled):active,
+.tutorial-wrapper .buttons .button-close:not(:disabled):not(.disabled):active,
 .big-button-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
+.tutorial-wrapper .buttons .button-close:not(:disabled):not(.disabled).active,
 .big-button-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle,
+.tutorial-wrapper .buttons .show > .dropdown-toggle.button-close,
 .show > .dropdown-toggle.big-button-success {
   color: #fff;
   background-color: #2d995b;
@@ -3188,10 +3253,13 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-success:not(:disabled):not(.disabled):active:focus,
+.tutorial-wrapper .buttons .button-close:not(:disabled):not(.disabled):active:focus,
 .big-button-success:not(:disabled):not(.disabled):active:focus,
 .btn-success:not(:disabled):not(.disabled).active:focus,
+.tutorial-wrapper .buttons .button-close:not(:disabled):not(.disabled).active:focus,
 .big-button-success:not(:disabled):not(.disabled).active:focus,
 .show > .btn-success.dropdown-toggle:focus,
+.tutorial-wrapper .buttons .show > .dropdown-toggle.button-close:focus,
 .show > .dropdown-toggle.big-button-success:focus {
   box-shadow: 0 0 0 0.2rem rgba(86, 202, 135, 0.5);
 }
@@ -3279,6 +3347,7 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-danger,
+.tutorial-wrapper .buttons .button-stop-tutorials,
 .big-button-danger {
   color: #fff;
   background-color: #e3342f;
@@ -3286,6 +3355,7 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-danger:hover,
+.tutorial-wrapper .buttons .button-stop-tutorials:hover,
 .big-button-danger:hover {
   color: #fff;
   background-color: #d0211c;
@@ -3293,8 +3363,10 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-danger:focus,
+.tutorial-wrapper .buttons .button-stop-tutorials:focus,
 .big-button-danger:focus,
 .btn-danger.focus,
+.tutorial-wrapper .buttons .focus.button-stop-tutorials,
 .focus.big-button-danger {
   color: #fff;
   background-color: #d0211c;
@@ -3303,8 +3375,10 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-danger.disabled,
+.tutorial-wrapper .buttons .disabled.button-stop-tutorials,
 .disabled.big-button-danger,
 .btn-danger:disabled,
+.tutorial-wrapper .buttons .button-stop-tutorials:disabled,
 .big-button-danger:disabled {
   color: #fff;
   background-color: #e3342f;
@@ -3312,10 +3386,13 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-danger:not(:disabled):not(.disabled):active,
+.tutorial-wrapper .buttons .button-stop-tutorials:not(:disabled):not(.disabled):active,
 .big-button-danger:not(:disabled):not(.disabled):active,
 .btn-danger:not(:disabled):not(.disabled).active,
+.tutorial-wrapper .buttons .button-stop-tutorials:not(:disabled):not(.disabled).active,
 .big-button-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle,
+.tutorial-wrapper .buttons .show > .dropdown-toggle.button-stop-tutorials,
 .show > .dropdown-toggle.big-button-danger {
   color: #fff;
   background-color: #c51f1a;
@@ -3323,10 +3400,13 @@ fieldset:disabled a.big-button-danger {
 }
 
 .btn-danger:not(:disabled):not(.disabled):active:focus,
+.tutorial-wrapper .buttons .button-stop-tutorials:not(:disabled):not(.disabled):active:focus,
 .big-button-danger:not(:disabled):not(.disabled):active:focus,
 .btn-danger:not(:disabled):not(.disabled).active:focus,
+.tutorial-wrapper .buttons .button-stop-tutorials:not(:disabled):not(.disabled).active:focus,
 .big-button-danger:not(:disabled):not(.disabled).active:focus,
 .show > .btn-danger.dropdown-toggle:focus,
+.tutorial-wrapper .buttons .show > .dropdown-toggle.button-stop-tutorials:focus,
 .show > .dropdown-toggle.big-button-danger:focus {
   box-shadow: 0 0 0 0.2rem rgba(231, 82, 78, 0.5);
 }
@@ -3725,6 +3805,10 @@ fieldset:disabled a.big-button-danger {
 
 .btn-lg,
 .btn-group-lg > .btn,
+.tutorial-wrapper .buttons .btn-group-lg > .button,
+.tutorial-wrapper .buttons .btn-group-lg > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-lg > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-lg > .button-close,
 .btn-group-lg > .big-button,
 .btn-group-lg > .big-button-golden,
 .btn-group-lg > .big-button-opposite,
@@ -3739,6 +3823,10 @@ fieldset:disabled a.big-button-danger {
 
 .btn-sm,
 .btn-group-sm > .btn,
+.tutorial-wrapper .buttons .btn-group-sm > .button,
+.tutorial-wrapper .buttons .btn-group-sm > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-sm > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-sm > .button-close,
 .btn-group-sm > .big-button,
 .btn-group-sm > .big-button-golden,
 .btn-group-sm > .big-button-opposite,
@@ -4135,6 +4223,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group > .btn,
+.tutorial-wrapper .buttons .btn-group > .button,
+.tutorial-wrapper .buttons .btn-group > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group > .button-close,
 .btn-group > .big-button,
 .btn-group > .big-button-golden,
 .btn-group > .big-button-opposite,
@@ -4142,6 +4234,10 @@ input[type=button].big-button-danger {
 .btn-group > .big-button-success,
 .btn-group > .big-button-danger,
 .btn-group-vertical > .btn,
+.tutorial-wrapper .buttons .btn-group-vertical > .button,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close,
 .btn-group-vertical > .big-button,
 .btn-group-vertical > .big-button-golden,
 .btn-group-vertical > .big-button-opposite,
@@ -4153,6 +4249,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group > .btn:hover,
+.tutorial-wrapper .buttons .btn-group > .button:hover,
+.tutorial-wrapper .buttons .btn-group > .button-stop-tutorials:hover,
+.tutorial-wrapper .buttons .btn-group > .button-stop-showing:hover,
+.tutorial-wrapper .buttons .btn-group > .button-close:hover,
 .btn-group > .big-button:hover,
 .btn-group > .big-button-golden:hover,
 .btn-group > .big-button-opposite:hover,
@@ -4160,6 +4260,10 @@ input[type=button].big-button-danger {
 .btn-group > .big-button-success:hover,
 .btn-group > .big-button-danger:hover,
 .btn-group-vertical > .btn:hover,
+.tutorial-wrapper .buttons .btn-group-vertical > .button:hover,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials:hover,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing:hover,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close:hover,
 .btn-group-vertical > .big-button:hover,
 .btn-group-vertical > .big-button-golden:hover,
 .btn-group-vertical > .big-button-opposite:hover,
@@ -4170,6 +4274,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group > .btn:focus,
+.tutorial-wrapper .buttons .btn-group > .button:focus,
+.tutorial-wrapper .buttons .btn-group > .button-stop-tutorials:focus,
+.tutorial-wrapper .buttons .btn-group > .button-stop-showing:focus,
+.tutorial-wrapper .buttons .btn-group > .button-close:focus,
 .btn-group > .big-button:focus,
 .btn-group > .big-button-golden:focus,
 .btn-group > .big-button-opposite:focus,
@@ -4177,6 +4285,10 @@ input[type=button].big-button-danger {
 .btn-group > .big-button-success:focus,
 .btn-group > .big-button-danger:focus,
 .btn-group > .btn:active,
+.tutorial-wrapper .buttons .btn-group > .button:active,
+.tutorial-wrapper .buttons .btn-group > .button-stop-tutorials:active,
+.tutorial-wrapper .buttons .btn-group > .button-stop-showing:active,
+.tutorial-wrapper .buttons .btn-group > .button-close:active,
 .btn-group > .big-button:active,
 .btn-group > .big-button-golden:active,
 .btn-group > .big-button-opposite:active,
@@ -4184,6 +4296,10 @@ input[type=button].big-button-danger {
 .btn-group > .big-button-success:active,
 .btn-group > .big-button-danger:active,
 .btn-group > .btn.active,
+.tutorial-wrapper .buttons .btn-group > .active.button,
+.tutorial-wrapper .buttons .btn-group > .active.button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group > .active.button-stop-showing,
+.tutorial-wrapper .buttons .btn-group > .active.button-close,
 .btn-group > .active.big-button,
 .btn-group > .active.big-button-golden,
 .btn-group > .active.big-button-opposite,
@@ -4191,6 +4307,10 @@ input[type=button].big-button-danger {
 .btn-group > .active.big-button-success,
 .btn-group > .active.big-button-danger,
 .btn-group-vertical > .btn:focus,
+.tutorial-wrapper .buttons .btn-group-vertical > .button:focus,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials:focus,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing:focus,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close:focus,
 .btn-group-vertical > .big-button:focus,
 .btn-group-vertical > .big-button-golden:focus,
 .btn-group-vertical > .big-button-opposite:focus,
@@ -4198,6 +4318,10 @@ input[type=button].big-button-danger {
 .btn-group-vertical > .big-button-success:focus,
 .btn-group-vertical > .big-button-danger:focus,
 .btn-group-vertical > .btn:active,
+.tutorial-wrapper .buttons .btn-group-vertical > .button:active,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials:active,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing:active,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close:active,
 .btn-group-vertical > .big-button:active,
 .btn-group-vertical > .big-button-golden:active,
 .btn-group-vertical > .big-button-opposite:active,
@@ -4205,6 +4329,10 @@ input[type=button].big-button-danger {
 .btn-group-vertical > .big-button-success:active,
 .btn-group-vertical > .big-button-danger:active,
 .btn-group-vertical > .btn.active,
+.tutorial-wrapper .buttons .btn-group-vertical > .active.button,
+.tutorial-wrapper .buttons .btn-group-vertical > .active.button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-vertical > .active.button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-vertical > .active.button-close,
 .btn-group-vertical > .active.big-button,
 .btn-group-vertical > .active.big-button-golden,
 .btn-group-vertical > .active.big-button-opposite,
@@ -4225,6 +4353,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group > .btn:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button-stop-tutorials:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button-stop-showing:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button-close:not(:first-child),
 .btn-group > .big-button:not(:first-child),
 .btn-group > .big-button-golden:not(:first-child),
 .btn-group > .big-button-opposite:not(:first-child),
@@ -4236,6 +4368,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group > .btn:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group > .button:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group > .button-stop-tutorials:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group > .button-stop-showing:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group > .button-close:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button-golden:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button-opposite:not(:last-child):not(.dropdown-toggle),
@@ -4243,6 +4379,10 @@ input[type=button].big-button-danger {
 .btn-group > .big-button-success:not(:last-child):not(.dropdown-toggle),
 .btn-group > .big-button-danger:not(:last-child):not(.dropdown-toggle),
 .btn-group > .btn-group:not(:last-child) > .btn,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:last-child) > .button,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:last-child) > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:last-child) > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:last-child) > .button-close,
 .btn-group > .btn-group:not(:last-child) > .big-button,
 .btn-group > .btn-group:not(:last-child) > .big-button-golden,
 .btn-group > .btn-group:not(:last-child) > .big-button-opposite,
@@ -4254,6 +4394,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group > .btn:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button-stop-tutorials:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button-stop-showing:not(:first-child),
+.tutorial-wrapper .buttons .btn-group > .button-close:not(:first-child),
 .btn-group > .big-button:not(:first-child),
 .btn-group > .big-button-golden:not(:first-child),
 .btn-group > .big-button-opposite:not(:first-child),
@@ -4261,6 +4405,10 @@ input[type=button].big-button-danger {
 .btn-group > .big-button-success:not(:first-child),
 .btn-group > .big-button-danger:not(:first-child),
 .btn-group > .btn-group:not(:first-child) > .btn,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:first-child) > .button,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:first-child) > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:first-child) > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group > .btn-group:not(:first-child) > .button-close,
 .btn-group > .btn-group:not(:first-child) > .big-button,
 .btn-group > .btn-group:not(:first-child) > .big-button-golden,
 .btn-group > .btn-group:not(:first-child) > .big-button-opposite,
@@ -4288,6 +4436,10 @@ input[type=button].big-button-danger {
 
 .btn-sm + .dropdown-toggle-split,
 .btn-group-sm > .btn + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-sm > .button + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-sm > .button-stop-tutorials + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-sm > .button-stop-showing + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-sm > .button-close + .dropdown-toggle-split,
 .btn-group-sm > .big-button + .dropdown-toggle-split,
 .btn-group-sm > .big-button-golden + .dropdown-toggle-split,
 .btn-group-sm > .big-button-opposite + .dropdown-toggle-split,
@@ -4300,6 +4452,10 @@ input[type=button].big-button-danger {
 
 .btn-lg + .dropdown-toggle-split,
 .btn-group-lg > .btn + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-lg > .button + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-lg > .button-stop-tutorials + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-lg > .button-stop-showing + .dropdown-toggle-split,
+.tutorial-wrapper .buttons .btn-group-lg > .button-close + .dropdown-toggle-split,
 .btn-group-lg > .big-button + .dropdown-toggle-split,
 .btn-group-lg > .big-button-golden + .dropdown-toggle-split,
 .btn-group-lg > .big-button-opposite + .dropdown-toggle-split,
@@ -4317,6 +4473,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group-vertical > .btn,
+.tutorial-wrapper .buttons .btn-group-vertical > .button,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close,
 .btn-group-vertical > .big-button,
 .btn-group-vertical > .big-button-golden,
 .btn-group-vertical > .big-button-opposite,
@@ -4328,6 +4488,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group-vertical > .btn:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close:not(:first-child),
 .btn-group-vertical > .big-button:not(:first-child),
 .btn-group-vertical > .big-button-golden:not(:first-child),
 .btn-group-vertical > .big-button-opposite:not(:first-child),
@@ -4339,6 +4503,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group-vertical > .btn:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group-vertical > .button:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button-golden:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button-opposite:not(:last-child):not(.dropdown-toggle),
@@ -4346,6 +4514,10 @@ input[type=button].big-button-danger {
 .btn-group-vertical > .big-button-success:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .big-button-danger:not(:last-child):not(.dropdown-toggle),
 .btn-group-vertical > .btn-group:not(:last-child) > .btn,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:last-child) > .button,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:last-child) > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:last-child) > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:last-child) > .button-close,
 .btn-group-vertical > .btn-group:not(:last-child) > .big-button,
 .btn-group-vertical > .btn-group:not(:last-child) > .big-button-golden,
 .btn-group-vertical > .btn-group:not(:last-child) > .big-button-opposite,
@@ -4357,6 +4529,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group-vertical > .btn:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-tutorials:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-stop-showing:not(:first-child),
+.tutorial-wrapper .buttons .btn-group-vertical > .button-close:not(:first-child),
 .btn-group-vertical > .big-button:not(:first-child),
 .btn-group-vertical > .big-button-golden:not(:first-child),
 .btn-group-vertical > .big-button-opposite:not(:first-child),
@@ -4364,6 +4540,10 @@ input[type=button].big-button-danger {
 .btn-group-vertical > .big-button-success:not(:first-child),
 .btn-group-vertical > .big-button-danger:not(:first-child),
 .btn-group-vertical > .btn-group:not(:first-child) > .btn,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:first-child) > .button,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:first-child) > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:first-child) > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-vertical > .btn-group:not(:first-child) > .button-close,
 .btn-group-vertical > .btn-group:not(:first-child) > .big-button,
 .btn-group-vertical > .btn-group:not(:first-child) > .big-button-golden,
 .btn-group-vertical > .btn-group:not(:first-child) > .big-button-opposite,
@@ -4375,6 +4555,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group-toggle > .btn,
+.tutorial-wrapper .buttons .btn-group-toggle > .button,
+.tutorial-wrapper .buttons .btn-group-toggle > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-toggle > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-toggle > .button-close,
 .btn-group-toggle > .big-button,
 .btn-group-toggle > .big-button-golden,
 .btn-group-toggle > .big-button-opposite,
@@ -4382,6 +4566,10 @@ input[type=button].big-button-danger {
 .btn-group-toggle > .big-button-success,
 .btn-group-toggle > .big-button-danger,
 .btn-group-toggle > .btn-group > .btn,
+.tutorial-wrapper .buttons .btn-group-toggle > .btn-group > .button,
+.tutorial-wrapper .buttons .btn-group-toggle > .btn-group > .button-stop-tutorials,
+.tutorial-wrapper .buttons .btn-group-toggle > .btn-group > .button-stop-showing,
+.tutorial-wrapper .buttons .btn-group-toggle > .btn-group > .button-close,
 .btn-group-toggle > .btn-group > .big-button,
 .btn-group-toggle > .btn-group > .big-button-golden,
 .btn-group-toggle > .btn-group > .big-button-opposite,
@@ -4392,6 +4580,10 @@ input[type=button].big-button-danger {
 }
 
 .btn-group-toggle > .btn input[type=radio],
+.tutorial-wrapper .buttons .btn-group-toggle > .button input[type=radio],
+.tutorial-wrapper .buttons .btn-group-toggle > .button-stop-tutorials input[type=radio],
+.tutorial-wrapper .buttons .btn-group-toggle > .button-stop-showing input[type=radio],
+.tutorial-wrapper .buttons .btn-group-toggle > .button-close input[type=radio],
 .btn-group-toggle > .big-button input[type=radio],
 .btn-group-toggle > .big-button-golden input[type=radio],
 .btn-group-toggle > .big-button-opposite input[type=radio],
@@ -4399,6 +4591,10 @@ input[type=button].big-button-danger {
 .btn-group-toggle > .big-button-success input[type=radio],
 .btn-group-toggle > .big-button-danger input[type=radio],
 .btn-group-toggle > .btn input[type=checkbox],
+.tutorial-wrapper .buttons .btn-group-toggle > .button input[type=checkbox],
+.tutorial-wrapper .buttons .btn-group-toggle > .button-stop-tutorials input[type=checkbox],
+.tutorial-wrapper .buttons .btn-group-toggle > .button-stop-showing input[type=checkbox],
+.tutorial-wrapper .buttons .btn-group-toggle > .button-close input[type=checkbox],
 .btn-group-toggle > .big-button input[type=checkbox],
 .btn-group-toggle > .big-button-golden input[type=checkbox],
 .btn-group-toggle > .big-button-opposite input[type=checkbox],
@@ -4578,6 +4774,14 @@ input[type=button].big-button-danger {
 }
 
 .input-group-prepend .btn,
+.input-group-prepend .tutorial-wrapper .buttons .button,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .button,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .button-close,
 .input-group-prepend .big-button,
 .input-group-prepend .big-button-golden,
 .input-group-prepend .big-button-opposite,
@@ -4585,6 +4789,14 @@ input[type=button].big-button-danger {
 .input-group-prepend .big-button-success,
 .input-group-prepend .big-button-danger,
 .input-group-append .btn,
+.input-group-append .tutorial-wrapper .buttons .button,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .button-close,
+.tutorial-wrapper .buttons .input-group-append .button,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .button-close,
 .input-group-append .big-button,
 .input-group-append .big-button-golden,
 .input-group-append .big-button-opposite,
@@ -4596,6 +4808,14 @@ input[type=button].big-button-danger {
 }
 
 .input-group-prepend .btn:focus,
+.input-group-prepend .tutorial-wrapper .buttons .button:focus,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials:focus,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing:focus,
+.input-group-prepend .tutorial-wrapper .buttons .button-close:focus,
+.tutorial-wrapper .buttons .input-group-prepend .button:focus,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials:focus,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing:focus,
+.tutorial-wrapper .buttons .input-group-prepend .button-close:focus,
 .input-group-prepend .big-button:focus,
 .input-group-prepend .big-button-golden:focus,
 .input-group-prepend .big-button-opposite:focus,
@@ -4603,6 +4823,14 @@ input[type=button].big-button-danger {
 .input-group-prepend .big-button-success:focus,
 .input-group-prepend .big-button-danger:focus,
 .input-group-append .btn:focus,
+.input-group-append .tutorial-wrapper .buttons .button:focus,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials:focus,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing:focus,
+.input-group-append .tutorial-wrapper .buttons .button-close:focus,
+.tutorial-wrapper .buttons .input-group-append .button:focus,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials:focus,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing:focus,
+.tutorial-wrapper .buttons .input-group-append .button-close:focus,
 .input-group-append .big-button:focus,
 .input-group-append .big-button-golden:focus,
 .input-group-append .big-button-opposite:focus,
@@ -4613,18 +4841,162 @@ input[type=button].big-button-danger {
 }
 
 .input-group-prepend .btn + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .button + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .btn,
+.tutorial-wrapper .buttons .input-group-prepend .button + .btn,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .btn,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .btn,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .btn + .button,
+.input-group-prepend .tutorial-wrapper .buttons .btn + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .btn + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .btn + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .btn + .button,
+.tutorial-wrapper .buttons .input-group-prepend .btn + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .btn + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .btn + .button-close,
+.input-group-prepend .tutorial-wrapper .buttons .button + .button,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .button,
+.input-group-prepend .tutorial-wrapper .buttons .button + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .button,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .button + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .button,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .button + .button-close,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .button-close,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .button-close,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .button + .button,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .button,
+.tutorial-wrapper .buttons .input-group-prepend .button + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .button,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .button + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .button,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .button + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .button-close,
 .input-group-prepend .big-button + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .big-button + .button,
+.input-group-prepend .tutorial-wrapper .buttons .big-button + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .big-button + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .big-button + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .big-button + .button,
+.tutorial-wrapper .buttons .input-group-prepend .big-button + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .big-button + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .big-button + .button-close,
 .input-group-prepend .big-button-golden + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-golden + .button,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-golden + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-golden + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-golden + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-golden + .button,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-golden + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-golden + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-golden + .button-close,
 .input-group-prepend .big-button-opposite + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-opposite + .button,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-opposite + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-opposite + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-opposite + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-opposite + .button,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-opposite + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-opposite + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-opposite + .button-close,
 .input-group-prepend .big-button-primary + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-primary + .button,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-primary + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-primary + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-primary + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-primary + .button,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-primary + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-primary + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-primary + .button-close,
 .input-group-prepend .big-button-success + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-success + .button,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-success + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-success + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-success + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-success + .button,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-success + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-success + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-success + .button-close,
 .input-group-prepend .big-button-danger + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-danger + .button,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-danger + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-danger + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .big-button-danger + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-danger + .button,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-danger + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-danger + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .big-button-danger + .button-close,
 .input-group-prepend .btn + .big-button,
+.input-group-prepend .tutorial-wrapper .buttons .button + .big-button,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .big-button,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .big-button,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .big-button,
+.tutorial-wrapper .buttons .input-group-prepend .button + .big-button,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .big-button,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .big-button,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .big-button,
 .input-group-prepend .btn + .big-button-golden,
+.input-group-prepend .tutorial-wrapper .buttons .button + .big-button-golden,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-golden,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .big-button-golden,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-prepend .button + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .big-button-golden,
 .input-group-prepend .btn + .big-button-opposite,
+.input-group-prepend .tutorial-wrapper .buttons .button + .big-button-opposite,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-opposite,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .big-button-opposite,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-prepend .button + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .big-button-opposite,
 .input-group-prepend .btn + .big-button-primary,
+.input-group-prepend .tutorial-wrapper .buttons .button + .big-button-primary,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-primary,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .big-button-primary,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-prepend .button + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .big-button-primary,
 .input-group-prepend .btn + .big-button-success,
+.input-group-prepend .tutorial-wrapper .buttons .button + .big-button-success,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-success,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .big-button-success,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .big-button-success,
+.tutorial-wrapper .buttons .input-group-prepend .button + .big-button-success,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .big-button-success,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .big-button-success,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .big-button-success,
 .input-group-prepend .btn + .big-button-danger,
+.input-group-prepend .tutorial-wrapper .buttons .button + .big-button-danger,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-danger,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .big-button-danger,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-prepend .button + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .big-button-danger,
 .input-group-prepend .big-button + .big-button,
 .input-group-prepend .big-button-golden + .big-button,
 .input-group-prepend .big-button + .big-button-golden,
@@ -4662,6 +5034,14 @@ input[type=button].big-button-danger {
 .input-group-prepend .big-button-success + .big-button-danger,
 .input-group-prepend .big-button-danger + .big-button-danger,
 .input-group-prepend .btn + .input-group-text,
+.input-group-prepend .tutorial-wrapper .buttons .button + .input-group-text,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-tutorials + .input-group-text,
+.input-group-prepend .tutorial-wrapper .buttons .button-stop-showing + .input-group-text,
+.input-group-prepend .tutorial-wrapper .buttons .button-close + .input-group-text,
+.tutorial-wrapper .buttons .input-group-prepend .button + .input-group-text,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-tutorials + .input-group-text,
+.tutorial-wrapper .buttons .input-group-prepend .button-stop-showing + .input-group-text,
+.tutorial-wrapper .buttons .input-group-prepend .button-close + .input-group-text,
 .input-group-prepend .big-button + .input-group-text,
 .input-group-prepend .big-button-golden + .input-group-text,
 .input-group-prepend .big-button-opposite + .input-group-text,
@@ -4670,6 +5050,14 @@ input[type=button].big-button-danger {
 .input-group-prepend .big-button-danger + .input-group-text,
 .input-group-prepend .input-group-text + .input-group-text,
 .input-group-prepend .input-group-text + .btn,
+.input-group-prepend .tutorial-wrapper .buttons .input-group-text + .button,
+.input-group-prepend .tutorial-wrapper .buttons .input-group-text + .button-stop-tutorials,
+.input-group-prepend .tutorial-wrapper .buttons .input-group-text + .button-stop-showing,
+.input-group-prepend .tutorial-wrapper .buttons .input-group-text + .button-close,
+.tutorial-wrapper .buttons .input-group-prepend .input-group-text + .button,
+.tutorial-wrapper .buttons .input-group-prepend .input-group-text + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-prepend .input-group-text + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-prepend .input-group-text + .button-close,
 .input-group-prepend .input-group-text + .big-button,
 .input-group-prepend .input-group-text + .big-button-golden,
 .input-group-prepend .input-group-text + .big-button-opposite,
@@ -4677,18 +5065,162 @@ input[type=button].big-button-danger {
 .input-group-prepend .input-group-text + .big-button-success,
 .input-group-prepend .input-group-text + .big-button-danger,
 .input-group-append .btn + .btn,
+.input-group-append .tutorial-wrapper .buttons .button + .btn,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .btn,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .btn,
+.input-group-append .tutorial-wrapper .buttons .button-close + .btn,
+.tutorial-wrapper .buttons .input-group-append .button + .btn,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .btn,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .btn,
+.tutorial-wrapper .buttons .input-group-append .button-close + .btn,
+.input-group-append .tutorial-wrapper .buttons .btn + .button,
+.input-group-append .tutorial-wrapper .buttons .btn + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .btn + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .btn + .button-close,
+.tutorial-wrapper .buttons .input-group-append .btn + .button,
+.tutorial-wrapper .buttons .input-group-append .btn + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .btn + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .btn + .button-close,
+.input-group-append .tutorial-wrapper .buttons .button + .button,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .button,
+.input-group-append .tutorial-wrapper .buttons .button + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .button,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .button + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .button-close + .button,
+.input-group-append .tutorial-wrapper .buttons .button-close + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .button-close + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .button + .button-close,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .button-close,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .button-close,
+.input-group-append .tutorial-wrapper .buttons .button-close + .button-close,
+.tutorial-wrapper .buttons .input-group-append .button + .button,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .button,
+.tutorial-wrapper .buttons .input-group-append .button + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .button,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .button + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .button-close + .button,
+.tutorial-wrapper .buttons .input-group-append .button-close + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .button-close + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .button + .button-close,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .button-close,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .button-close,
+.tutorial-wrapper .buttons .input-group-append .button-close + .button-close,
 .input-group-append .big-button + .btn,
+.input-group-append .tutorial-wrapper .buttons .big-button + .button,
+.input-group-append .tutorial-wrapper .buttons .big-button + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .big-button + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .big-button + .button-close,
+.tutorial-wrapper .buttons .input-group-append .big-button + .button,
+.tutorial-wrapper .buttons .input-group-append .big-button + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .big-button + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .big-button + .button-close,
 .input-group-append .big-button-golden + .btn,
+.input-group-append .tutorial-wrapper .buttons .big-button-golden + .button,
+.input-group-append .tutorial-wrapper .buttons .big-button-golden + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .big-button-golden + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .big-button-golden + .button-close,
+.tutorial-wrapper .buttons .input-group-append .big-button-golden + .button,
+.tutorial-wrapper .buttons .input-group-append .big-button-golden + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .big-button-golden + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .big-button-golden + .button-close,
 .input-group-append .big-button-opposite + .btn,
+.input-group-append .tutorial-wrapper .buttons .big-button-opposite + .button,
+.input-group-append .tutorial-wrapper .buttons .big-button-opposite + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .big-button-opposite + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .big-button-opposite + .button-close,
+.tutorial-wrapper .buttons .input-group-append .big-button-opposite + .button,
+.tutorial-wrapper .buttons .input-group-append .big-button-opposite + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .big-button-opposite + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .big-button-opposite + .button-close,
 .input-group-append .big-button-primary + .btn,
+.input-group-append .tutorial-wrapper .buttons .big-button-primary + .button,
+.input-group-append .tutorial-wrapper .buttons .big-button-primary + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .big-button-primary + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .big-button-primary + .button-close,
+.tutorial-wrapper .buttons .input-group-append .big-button-primary + .button,
+.tutorial-wrapper .buttons .input-group-append .big-button-primary + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .big-button-primary + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .big-button-primary + .button-close,
 .input-group-append .big-button-success + .btn,
+.input-group-append .tutorial-wrapper .buttons .big-button-success + .button,
+.input-group-append .tutorial-wrapper .buttons .big-button-success + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .big-button-success + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .big-button-success + .button-close,
+.tutorial-wrapper .buttons .input-group-append .big-button-success + .button,
+.tutorial-wrapper .buttons .input-group-append .big-button-success + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .big-button-success + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .big-button-success + .button-close,
 .input-group-append .big-button-danger + .btn,
+.input-group-append .tutorial-wrapper .buttons .big-button-danger + .button,
+.input-group-append .tutorial-wrapper .buttons .big-button-danger + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .big-button-danger + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .big-button-danger + .button-close,
+.tutorial-wrapper .buttons .input-group-append .big-button-danger + .button,
+.tutorial-wrapper .buttons .input-group-append .big-button-danger + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .big-button-danger + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .big-button-danger + .button-close,
 .input-group-append .btn + .big-button,
+.input-group-append .tutorial-wrapper .buttons .button + .big-button,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .big-button,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .big-button,
+.input-group-append .tutorial-wrapper .buttons .button-close + .big-button,
+.tutorial-wrapper .buttons .input-group-append .button + .big-button,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .big-button,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .big-button,
+.tutorial-wrapper .buttons .input-group-append .button-close + .big-button,
 .input-group-append .btn + .big-button-golden,
+.input-group-append .tutorial-wrapper .buttons .button + .big-button-golden,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-golden,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .big-button-golden,
+.input-group-append .tutorial-wrapper .buttons .button-close + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-append .button + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .big-button-golden,
+.tutorial-wrapper .buttons .input-group-append .button-close + .big-button-golden,
 .input-group-append .btn + .big-button-opposite,
+.input-group-append .tutorial-wrapper .buttons .button + .big-button-opposite,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-opposite,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .big-button-opposite,
+.input-group-append .tutorial-wrapper .buttons .button-close + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-append .button + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .big-button-opposite,
+.tutorial-wrapper .buttons .input-group-append .button-close + .big-button-opposite,
 .input-group-append .btn + .big-button-primary,
+.input-group-append .tutorial-wrapper .buttons .button + .big-button-primary,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-primary,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .big-button-primary,
+.input-group-append .tutorial-wrapper .buttons .button-close + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-append .button + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .big-button-primary,
+.tutorial-wrapper .buttons .input-group-append .button-close + .big-button-primary,
 .input-group-append .btn + .big-button-success,
+.input-group-append .tutorial-wrapper .buttons .button + .big-button-success,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-success,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .big-button-success,
+.input-group-append .tutorial-wrapper .buttons .button-close + .big-button-success,
+.tutorial-wrapper .buttons .input-group-append .button + .big-button-success,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .big-button-success,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .big-button-success,
+.tutorial-wrapper .buttons .input-group-append .button-close + .big-button-success,
 .input-group-append .btn + .big-button-danger,
+.input-group-append .tutorial-wrapper .buttons .button + .big-button-danger,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .big-button-danger,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .big-button-danger,
+.input-group-append .tutorial-wrapper .buttons .button-close + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-append .button + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .big-button-danger,
+.tutorial-wrapper .buttons .input-group-append .button-close + .big-button-danger,
 .input-group-append .big-button + .big-button,
 .input-group-append .big-button-golden + .big-button,
 .input-group-append .big-button + .big-button-golden,
@@ -4726,6 +5258,14 @@ input[type=button].big-button-danger {
 .input-group-append .big-button-success + .big-button-danger,
 .input-group-append .big-button-danger + .big-button-danger,
 .input-group-append .btn + .input-group-text,
+.input-group-append .tutorial-wrapper .buttons .button + .input-group-text,
+.input-group-append .tutorial-wrapper .buttons .button-stop-tutorials + .input-group-text,
+.input-group-append .tutorial-wrapper .buttons .button-stop-showing + .input-group-text,
+.input-group-append .tutorial-wrapper .buttons .button-close + .input-group-text,
+.tutorial-wrapper .buttons .input-group-append .button + .input-group-text,
+.tutorial-wrapper .buttons .input-group-append .button-stop-tutorials + .input-group-text,
+.tutorial-wrapper .buttons .input-group-append .button-stop-showing + .input-group-text,
+.tutorial-wrapper .buttons .input-group-append .button-close + .input-group-text,
 .input-group-append .big-button + .input-group-text,
 .input-group-append .big-button-golden + .input-group-text,
 .input-group-append .big-button-opposite + .input-group-text,
@@ -4734,6 +5274,14 @@ input[type=button].big-button-danger {
 .input-group-append .big-button-danger + .input-group-text,
 .input-group-append .input-group-text + .input-group-text,
 .input-group-append .input-group-text + .btn,
+.input-group-append .tutorial-wrapper .buttons .input-group-text + .button,
+.input-group-append .tutorial-wrapper .buttons .input-group-text + .button-stop-tutorials,
+.input-group-append .tutorial-wrapper .buttons .input-group-text + .button-stop-showing,
+.input-group-append .tutorial-wrapper .buttons .input-group-text + .button-close,
+.tutorial-wrapper .buttons .input-group-append .input-group-text + .button,
+.tutorial-wrapper .buttons .input-group-append .input-group-text + .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-append .input-group-text + .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-append .input-group-text + .button-close,
 .input-group-append .input-group-text + .big-button,
 .input-group-append .input-group-text + .big-button-golden,
 .input-group-append .input-group-text + .big-button-opposite,
@@ -4792,6 +5340,10 @@ input[type=button].big-button-danger {
 .input-group-lg > .input-group-prepend > .input-group-text,
 .input-group-lg > .input-group-append > .input-group-text,
 .input-group-lg > .input-group-prepend > .btn,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-prepend > .button,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-prepend > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-prepend > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-prepend > .button-close,
 .input-group-lg > .input-group-prepend > .big-button,
 .input-group-lg > .input-group-prepend > .big-button-golden,
 .input-group-lg > .input-group-prepend > .big-button-opposite,
@@ -4799,6 +5351,10 @@ input[type=button].big-button-danger {
 .input-group-lg > .input-group-prepend > .big-button-success,
 .input-group-lg > .input-group-prepend > .big-button-danger,
 .input-group-lg > .input-group-append > .btn,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-append > .button,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-append > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-append > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-lg > .input-group-append > .button-close,
 .input-group-lg > .input-group-append > .big-button,
 .input-group-lg > .input-group-append > .big-button-golden,
 .input-group-lg > .input-group-append > .big-button-opposite,
@@ -4831,6 +5387,10 @@ input[type=button].big-button-danger {
 .input-group-sm > .input-group-prepend > .input-group-text,
 .input-group-sm > .input-group-append > .input-group-text,
 .input-group-sm > .input-group-prepend > .btn,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-prepend > .button,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-prepend > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-prepend > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-prepend > .button-close,
 .input-group-sm > .input-group-prepend > .big-button,
 .input-group-sm > .input-group-prepend > .big-button-golden,
 .input-group-sm > .input-group-prepend > .big-button-opposite,
@@ -4838,6 +5398,10 @@ input[type=button].big-button-danger {
 .input-group-sm > .input-group-prepend > .big-button-success,
 .input-group-sm > .input-group-prepend > .big-button-danger,
 .input-group-sm > .input-group-append > .btn,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-append > .button,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-append > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-append > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group-sm > .input-group-append > .button-close,
 .input-group-sm > .input-group-append > .big-button,
 .input-group-sm > .input-group-append > .big-button-golden,
 .input-group-sm > .input-group-append > .big-button-opposite,
@@ -4856,6 +5420,10 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .input-group-prepend > .btn,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend > .button,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend > .button-close,
 .input-group > .input-group-prepend > .big-button,
 .input-group > .input-group-prepend > .big-button-golden,
 .input-group > .input-group-prepend > .big-button-opposite,
@@ -4864,6 +5432,10 @@ input[type=button].big-button-danger {
 .input-group > .input-group-prepend > .big-button-danger,
 .input-group > .input-group-prepend > .input-group-text,
 .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .btn,
+.tutorial-wrapper .buttons .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .button,
+.tutorial-wrapper .buttons .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .button-close,
 .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .big-button,
 .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .big-button-golden,
 .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .big-button-opposite,
@@ -4872,6 +5444,10 @@ input[type=button].big-button-danger {
 .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .big-button-danger,
 .input-group:not(.has-validation) > .input-group-append:not(:last-child) > .input-group-text,
 .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .btn,
+.tutorial-wrapper .buttons .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .button,
+.tutorial-wrapper .buttons .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .button-close,
 .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .big-button,
 .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .big-button-golden,
 .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .big-button-opposite,
@@ -4880,6 +5456,10 @@ input[type=button].big-button-danger {
 .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .big-button-danger,
 .input-group.has-validation > .input-group-append:nth-last-child(n+3) > .input-group-text,
 .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .input-group > .input-group-append:last-child > .button:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .input-group > .input-group-append:last-child > .button-stop-tutorials:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .input-group > .input-group-append:last-child > .button-stop-showing:not(:last-child):not(.dropdown-toggle),
+.tutorial-wrapper .buttons .input-group > .input-group-append:last-child > .button-close:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .big-button:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .big-button-golden:not(:last-child):not(.dropdown-toggle),
 .input-group > .input-group-append:last-child > .big-button-opposite:not(:last-child):not(.dropdown-toggle),
@@ -4892,6 +5472,10 @@ input[type=button].big-button-danger {
 }
 
 .input-group > .input-group-append > .btn,
+.tutorial-wrapper .buttons .input-group > .input-group-append > .button,
+.tutorial-wrapper .buttons .input-group > .input-group-append > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group > .input-group-append > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group > .input-group-append > .button-close,
 .input-group > .input-group-append > .big-button,
 .input-group > .input-group-append > .big-button-golden,
 .input-group > .input-group-append > .big-button-opposite,
@@ -4900,6 +5484,10 @@ input[type=button].big-button-danger {
 .input-group > .input-group-append > .big-button-danger,
 .input-group > .input-group-append > .input-group-text,
 .input-group > .input-group-prepend:not(:first-child) > .btn,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:not(:first-child) > .button,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:not(:first-child) > .button-stop-tutorials,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:not(:first-child) > .button-stop-showing,
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:not(:first-child) > .button-close,
 .input-group > .input-group-prepend:not(:first-child) > .big-button,
 .input-group > .input-group-prepend:not(:first-child) > .big-button-golden,
 .input-group > .input-group-prepend:not(:first-child) > .big-button-opposite,
@@ -4908,6 +5496,10 @@ input[type=button].big-button-danger {
 .input-group > .input-group-prepend:not(:first-child) > .big-button-danger,
 .input-group > .input-group-prepend:not(:first-child) > .input-group-text,
 .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:first-child > .button:not(:first-child),
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:first-child > .button-stop-tutorials:not(:first-child),
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:first-child > .button-stop-showing:not(:first-child),
+.tutorial-wrapper .buttons .input-group > .input-group-prepend:first-child > .button-close:not(:first-child),
 .input-group > .input-group-prepend:first-child > .big-button:not(:first-child),
 .input-group > .input-group-prepend:first-child > .big-button-golden:not(:first-child),
 .input-group > .input-group-prepend:first-child > .big-button-opposite:not(:first-child),
@@ -6377,6 +6969,10 @@ a.badge:focus {
 }
 
 .btn .badge,
+.tutorial-wrapper .buttons .button .badge,
+.tutorial-wrapper .buttons .button-stop-tutorials .badge,
+.tutorial-wrapper .buttons .button-stop-showing .badge,
+.tutorial-wrapper .buttons .button-close .badge,
 .big-button .badge,
 .big-button-golden .badge,
 .big-button-opposite .badge,
@@ -9606,7 +10202,7 @@ button.card:focus {
 
 .mt-4,
 .lightmode .profile-wrapper .username,
-.tutorial-wrapper h1,
+.tutorial-wrapper .tutorial-content h1,
 .profile-wrapper .username,
 .description-long,
 .my-4 {
@@ -9718,7 +10314,7 @@ button.card:focus {
 }
 
 .pb-2,
-.tutorial-wrapper h1,
+.tutorial-wrapper .tutorial-content h1,
 .py-2 {
   padding-bottom: 0.5rem !important;
 }
@@ -12402,6 +12998,10 @@ th {
   cursor: pointer;
 }
 
+#app {
+  transition: filter 0.75s;
+}
+
 body {
   background-color: #020508;
   min-height: 100vh;
@@ -12784,23 +13384,30 @@ header.masthead h1 {
 .tutorial-wrapper {
   background-color: #30363b;
   border: #cccccc 5px solid;
-  border-radius: 10px;
+  border-radius: 25px;
+  width: 1140px;
+}
+
+.tutorial-wrapper .tutorial-content {
+  max-height: calc(80vh - 75px);
+  padding: 0px 16px;
+  overflow-y: scroll;
   text-align: justify;
   font-size: 16px;
 }
 
-.tutorial-wrapper h1 {
+.tutorial-wrapper .tutorial-content h1 {
   text-align: center;
   font-weight: bold;
   border-bottom: #7f7f7f solid 1px;
 }
 
-.tutorial-wrapper h2 {
+.tutorial-wrapper .tutorial-content h2 {
   font-weight: bold;
   margin-top: 16px;
 }
 
-.tutorial-wrapper img {
+.tutorial-wrapper .tutorial-content img {
   margin: 10px auto;
   text-align: center;
   width: 100%;
@@ -12809,10 +13416,25 @@ header.masthead h1 {
   border: solid 2.5px #7f7f7f;
 }
 
-.tutorial-wrapper ul,
-.tutorial-wrapper ol {
+.tutorial-wrapper .tutorial-content ul,
+.tutorial-wrapper .tutorial-content ol {
   margin-top: -16px;
   margin-bottom: 4px;
+}
+
+.tutorial-wrapper .buttons {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.tutorial-wrapper .buttons .button,
+.tutorial-wrapper .buttons .button-stop-tutorials,
+.tutorial-wrapper .buttons .button-stop-showing,
+.tutorial-wrapper .buttons .button-close {
+  width: 30%;
+  margin: 4px 10px;
+  font-weight: bold;
 }
 
 .lightmode {
@@ -13012,6 +13634,25 @@ header.masthead h1 {
   .shared-user,
   .shared-users-wrapper .shared-user-waiting {
     width: 95% !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .tutorial-content {
+    max-height: calc(80vh - 200px);
+  }
+
+  .button,
+  .tutorial-wrapper .buttons .button-close,
+  .tutorial-wrapper .buttons .button-stop-showing,
+  .tutorial-wrapper .buttons .button-stop-tutorials {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .tutorial-wrapper {
+    width: 90vw;
   }
 }
 

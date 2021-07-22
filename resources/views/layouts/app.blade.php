@@ -16,12 +16,25 @@
 
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+        <!-- Web Manifest -->
+        <link rel="manifest" href="manifest.json">
     </head>
 
     <body class="{{ ($pageData["darkmode"] ?? true) ? "" : "lightmode" }}">
         <div id="tutorial-modal">
             <div class="tutorial-wrapper">
-                Tutorial text placeholder
+                <div class="tutorial-content">
+                    {!! Markdown::parse(Illuminate\Support\Facades\Storage::disk("local")->get("files/tutorial.md")) !!}
+                </div>
+
+                <hr class="hr">
+
+                <div class="buttons">
+                    <div id="tutorial-never-show" class="button-stop-tutorials">Don't show me any tutorials</div>
+                    <div id="tutorial-stop-showing" class="button-stop-showing">Don't show again</div>
+                    <div id="tutorial-close" class="button-close">Close</div>
+                </div>
             </div>
         </div>
 
@@ -32,6 +45,13 @@
                 @yield('wrapper')
             </main>
         </div>
+
+        <script>
+            const SERVER_DATA = {
+                user_id: {{ json_encode($pageData["id"]) }},
+                hide_all_tutorials: {{ json_encode($pageData["hide_all_tutorials"]) }}
+            };
+        </script>
 
         <script src="{{ asset('js/app.js') }}" defer></script>
         @yield('script')

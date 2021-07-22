@@ -6,16 +6,47 @@ jQuery(() => {
     $('[data-toggle="tooltip"]').tooltip();
 
     // Tutorial modal
-    if (!Cookies.getJSON("hide_tutorial")) {
-        $("#tutorial-modal").addClass("show");
-        $("#app").css("filter", "blur(5px)")
 
-        console.log("Next time tutorial will be hidden");
-        /*Cookies.set("hide_tutorial", true, {
-            path: "",
-            expires: 3650,
-            secure: true
-        });*/
+    const pathName = window.location.pathname
+        .replaceAll("/", "_").split("_")
+        .map(item => (isNaN(Number(item)) || item === "") ? item : "*")
+        .join("_");
+
+    const cookiePath = `hide_tutorial_${SERVER_DATA.user_id + pathName}`;
+    if (!Cookies.getJSON(cookiePath) && !SERVER_DATA.hide_all_tutorials && $(".tutorial-content").html().trim().length) {
+        $("#tutorial-modal").addClass("show");
+        $("#app").css("filter", "blur(5px)");
+
+        function removeElement() {
+            $("#app").css("filter", "none");
+            $("#tutorial-modal").removeClass("show");
+        }
+
+        $("#tutorial-close").on("click", () => {
+            removeElement();
+        });
+
+        $("#tutorial-stop-showing").on("click", () => {
+            Cookies.set(
+                cookiePath,
+                1,
+                {
+                    path: window.location.pathname,
+                    expires: 3650,
+                    secure: true
+                }
+            );
+            removeElement();
+        });
+
+        $("#tutorial-never-show").on("click", () => {
+            removeElement();
+
+            axios
+                .post("/webapi/settings/tutorials", {
+                    tutorials: true
+                });
+        });
     }
 
     // Darkmode switcher

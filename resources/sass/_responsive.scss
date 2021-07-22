@@ -3,3 +3,19 @@
         width: 95% !important;
     }
 }
+
+@include media-breakpoint-down(md) {
+    .tutorial-content {
+        max-height: calc(80vh - 200px);
+    }
+
+    .button {
+        width: 100%;
+    }
+}
+
+@include media-breakpoint-down(lg) {
+    .tutorial-wrapper {
+        width: 90vw;
+    }
+}

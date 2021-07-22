@@ -51,7 +51,7 @@ class Controller extends BaseController
             "page-render-data-$id",
             now()->addMinutes(15),
             function () {
-                $retArr = auth()->user()->only("darkmode", "profile_picture");
+                $retArr = auth()->user()->only("darkmode", "profile_picture", "id", "hide_all_tutorials");
                 $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
 
                 $retArr["bundle_info"] = [
