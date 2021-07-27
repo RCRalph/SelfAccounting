@@ -8,12 +8,12 @@
     width: 100%;
     visibility: collapse;
     opacity: 0%;
-    transition: opacity 0.75s, visibility 0.75s;
+    transition: opacity 0.75s cubic-bezier(.45,.05,.55,.95), visibility 0.75s;
 
     &.show {
         visibility: visible;
         opacity: 100%;
-        transition: opacity 0.75s;
+        transition: opacity 0.75s cubic-bezier(.45,.05,.55,.95);
     }
 }
 

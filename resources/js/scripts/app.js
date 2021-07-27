@@ -1,9 +1,15 @@
 require("./bootstrap");
 window.Cookies = require("js-cookie");
-window.Vue = require("vue");
+window.Vue = require("vue").default;
+
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
+const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+})
 
 jQuery(() => {
-    $('[data-toggle="tooltip"]').tooltip();
+
+
 
     // Tutorial modal
 

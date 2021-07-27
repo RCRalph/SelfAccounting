@@ -36,7 +36,7 @@
                         !validFile && 'is-invalid'
                     ]">
 
-                    <img :src="userData.profile_picture" style="height: 37px; width: 37px;" alt="Profile picture" class="profile-img ml-2">
+                    <img :src="userData.profile_picture" style="height: 37px; width: 37px;" alt="Profile picture" class="profile-img ms-2">
                 </div>
             </div>
 

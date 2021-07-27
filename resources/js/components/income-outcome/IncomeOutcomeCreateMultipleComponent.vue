@@ -112,7 +112,7 @@
                 <hr class="hr">
 
                 <div v-for="(item, i) in data" :key="i">
-                    <div class="h4 font-weight-bold ml-3 mb-3">Entry #{{ i + 1 }}</div>
+                    <div class="h4 font-weight-bold ms-3 mb-3">Entry #{{ i + 1 }}</div>
 
                     <CreateForm
                         v-model="data[i]"

@@ -5,7 +5,7 @@
 
 .card-header-text {
     @extend .h4;
-    @extend .mr-auto;
+    @extend .me-auto;
     @extend .my-auto;
 }
 
@@ -41,8 +41,9 @@
 
 .big-button {
     @extend .btn;
-    @extend .font-weight-bold;
-    @extend .btn-block;
+
+    width: 100%;
+    font-weight: bold;
 
     &-danger {
         @extend .big-button;
@@ -94,14 +95,14 @@
 .form-text {
     @extend .form-control;
     @extend .m-auto;
-    @extend .text-left;
+    text-align: left;
     width: 170px;
 }
 
 .form-number {
     @extend .form-control;
     @extend .m-auto;
-    @extend .text-left;
+    text-align: left;
     width: 170px;
 }
 
@@ -200,7 +201,7 @@
 
     .header {
         @extend .h1;
-        @extend .font-weight-bold;
+        font-weight: bold;
         @extend .text-center;
     }
 
@@ -214,7 +215,7 @@
 
             thead > th {
                 @extend .h5;
-                @extend .font-weight-bold;
+                font-weight: bold;
             }
         }
     }

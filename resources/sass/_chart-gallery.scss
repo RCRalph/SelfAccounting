@@ -22,7 +22,7 @@
             .chart-title {
                 @extend .h3;
                 @extend .mb-2;
-                @extend .font-weight-bold;
+                font-weight: bold;
                 @extend .text-center;
             }
 
