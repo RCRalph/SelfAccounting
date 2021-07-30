@@ -1,4 +1,4 @@
-@extends('layouts.width10')
+@extends('layouts.width8')
 
 @section('script')
     <script src="{{ mix('js/admin/users/list.js') }}" defer></script>

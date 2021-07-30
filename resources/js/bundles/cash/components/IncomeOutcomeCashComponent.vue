@@ -67,16 +67,16 @@
             </div>
 
             <div class="row h3 font-weight-bold">
-                <div class="col-6 text-right">Sum:</div>
+                <div class="col-6 text-end">Sum:</div>
                 <div class="col-6 ">{{ currentSum }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
 
             <div class="row h3 font-weight-bold">
-                <div class="col-6 text-right">Sum from {{ this.type }}:</div>
+                <div class="col-6 text-end">Sum from {{ this.type }}:</div>
                 <div class="col-6 ">{{ sums[currentCurrency] }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
 
-            <hr class="hr-dashed w-75">
+            <hr class="hr-dashed w-100">
 
             <div :class="[
                     'row',
@@ -84,7 +84,7 @@
                     'font-weight-bold',
                     sums[currentCurrency] - currentSum != 0 ? 'text-danger' : 'text-success'
                 ]">
-                    <div class="col-6 text-right">Difference:</div>
+                    <div class="col-6 text-end">Difference:</div>
 
                     <div class="col-6">
                         {{ sums[currentCurrency] - currentSum > 0 ? "+" : "" }}{{ Math.round((sums[currentCurrency] - currentSum) * 100) / 100 }}

@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="table-responsive w-100">
-                    <table class="responsive-table-hover table-themed">
+                    <table class="table-themed responsive-table-hover">
                         <thead>
                             <tr>
                                 <th scope="col" class="h3 font-weight-bold">Mean</th>

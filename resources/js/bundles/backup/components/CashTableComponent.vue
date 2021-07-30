@@ -9,11 +9,13 @@
                 <div class="restore-table-content">
                     <table>
                         <thead>
-                            <th
-                                v-for="(item, i) in headerCash"
-                                :key="i"
-                                scope="col"
-                            >{{ item }}</th>
+                            <tr>
+                                <th
+                                    v-for="(item, i) in headerCash"
+                                    :key="i"
+                                    scope="col"
+                                >{{ item }}</th>
+                            </tr>
                         </thead>
 
                         <tbody>
@@ -47,11 +49,13 @@
                 <div class="restore-table-content">
                     <table>
                         <thead>
-                            <th
-                                v-for="(item, i) in headerCashMeans"
-                                :key="i"
-                                scope="col"
-                            >{{ item }}</th>
+                            <tr>
+                                <th
+                                    v-for="(item, i) in headerCashMeans"
+                                    :key="i"
+                                    scope="col"
+                                >{{ item }}</th>
+                            </tr>
                         </thead>
 
                         <tbody>

@@ -15,6 +15,7 @@
                             :userData="userData"
                         ></ProfileShowcase>
                     </div>
+
                     <div class="col-lg-7 mt-sm-3">
                         <ProfileInfoChange
                             :userDataCopy="userData"
@@ -23,6 +24,20 @@
 						<hr class="hr my-3">
 
                         <ProfilePasswordChange></ProfilePasswordChange>
+
+                        <hr class="hr my-3">
+
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                <button class="big-button-primary" @click="toggleTutorials" :disabled="!tutorialButtonReady">
+                                    <div v-if="tutorialButtonReady">
+                                        {{ userData.hide_all_tutorials ? "Show me tutorials again" : "Stop showing me tutorials" }}
+                                    </div>
+
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
+                                </button>
+                            </div>
+                        </div>
 
                         <div v-if="userData.id != 1">
                             <hr class="hr my-3">
@@ -62,6 +77,20 @@ export default {
         return {
             ready: false,
             userData: {},
+            tutorialButtonReady: true
+        }
+    },
+    methods: {
+        toggleTutorials() {
+            this.userData.hide_all_tutorials = !this.userData.hide_all_tutorials;
+            this.tutorialButtonReady = false;
+
+            axios
+                .post("/webapi/settings/tutorials", {
+                    tutorials: this.userData.hide_all_tutorials
+                })
+                .catch(() => this.userData.hide_all_tutorials = !this.userData.hide_all_tutorials)
+                .finally(() => this.tutorialButtonReady = true)
         }
     },
     mounted() {

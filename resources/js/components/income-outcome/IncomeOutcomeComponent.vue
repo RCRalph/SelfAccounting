@@ -49,7 +49,7 @@
                 <div class="table-responsive w-100" :key="tableKey">
                     <table
                         id="table-multi-hover"
-                        class="responsive-table-bordered table-themed"
+                        class="table-themed responsive-table-bordered"
                         v-if="rows.length && dataReady"
                     >
                         <TableHeader :cells="headerCells"></TableHeader>

@@ -52,7 +52,7 @@ body {
   font-weight: 400;
   line-height: 1.6;
   color: #212529;
-  background-color: #f8fafc;
+  background-color: #020508;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -573,7 +573,7 @@ progress {
 
 .img-thumbnail {
   padding: 0.25rem;
-  background-color: #f8fafc;
+  background-color: #020508;
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
@@ -633,7 +633,7 @@ progress {
     max-width: 1320px;
   }
 }
-.row {
+.row, .input-group-row {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
   display: flex;
@@ -642,7 +642,7 @@ progress {
   margin-right: calc(var(--bs-gutter-x) * -.5);
   margin-left: calc(var(--bs-gutter-x) * -.5);
 }
-.row > * {
+.row > *, .input-group-row > * {
   flex-shrink: 0;
   width: 100%;
   max-width: 100%;
@@ -2549,10 +2549,10 @@ textarea.form-control-lg {
   outline: 0;
 }
 .form-range:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 1px #f8fafc, 0 0 0 0.25rem rgba(52, 144, 220, 0.25);
+  box-shadow: 0 0 0 1px #020508, 0 0 0 0.25rem rgba(52, 144, 220, 0.25);
 }
 .form-range:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 1px #f8fafc, 0 0 0 0.25rem rgba(52, 144, 220, 0.25);
+  box-shadow: 0 0 0 1px #020508, 0 0 0 0.25rem rgba(52, 144, 220, 0.25);
 }
 .form-range::-moz-focus-outer {
   border: 0;
@@ -2706,29 +2706,31 @@ textarea.form-control-lg {
   transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
 
-.input-group {
+.input-group, .input-group-row {
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
   width: 100%;
 }
-.input-group > .form-control, .input-group > .cash-input, .input-group > .form-number, .input-group > .form-text, .input-group > .form-date-min, .input-group > .form-date,
-.input-group > .form-select {
+.input-group > .form-control, .input-group-row > .form-control, .input-group > .cash-input, .input-group-row > .cash-input, .input-group > .form-number, .input-group-row > .form-number, .input-group > .form-text, .input-group-row > .form-text, .input-group > .form-date-min, .input-group-row > .form-date-min, .input-group > .form-date, .input-group-row > .form-date,
+.input-group > .form-select,
+.input-group-row > .form-select {
   position: relative;
   flex: 1 1 auto;
   width: 1%;
   min-width: 0;
 }
-.input-group > .form-control:focus, .input-group > .cash-input:focus, .input-group > .form-number:focus, .input-group > .form-text:focus, .input-group > .form-date-min:focus, .input-group > .form-date:focus,
-.input-group > .form-select:focus {
+.input-group > .form-control:focus, .input-group-row > .form-control:focus, .input-group > .cash-input:focus, .input-group-row > .cash-input:focus, .input-group > .form-number:focus, .input-group-row > .form-number:focus, .input-group > .form-text:focus, .input-group-row > .form-text:focus, .input-group > .form-date-min:focus, .input-group-row > .form-date-min:focus, .input-group > .form-date:focus, .input-group-row > .form-date:focus,
+.input-group > .form-select:focus,
+.input-group-row > .form-select:focus {
   z-index: 3;
 }
-.input-group .btn, .input-group .tutorial-wrapper .buttons .button, .input-group .tutorial-wrapper .buttons .button-stop-tutorials, .input-group .tutorial-wrapper .buttons .button-stop-showing, .input-group .tutorial-wrapper .buttons .button-close, .tutorial-wrapper .buttons .input-group .button, .tutorial-wrapper .buttons .input-group .button-stop-tutorials, .tutorial-wrapper .buttons .input-group .button-stop-showing, .tutorial-wrapper .buttons .input-group .button-close, .input-group .big-button, .input-group .big-button-golden, .input-group .big-button-opposite, .input-group .big-button-primary, .input-group .big-button-success, .input-group .big-button-danger {
+.input-group .btn, .input-group .tutorial-wrapper .buttons .button, .input-group .tutorial-wrapper .buttons .button-stop-tutorials, .input-group .tutorial-wrapper .buttons .button-stop-showing, .input-group .tutorial-wrapper .buttons .button-close, .tutorial-wrapper .buttons .input-group .button, .tutorial-wrapper .buttons .input-group .button-stop-tutorials, .tutorial-wrapper .buttons .input-group .button-stop-showing, .tutorial-wrapper .buttons .input-group .button-close, .input-group-row .btn, .input-group-row .tutorial-wrapper .buttons .button, .input-group-row .tutorial-wrapper .buttons .button-stop-tutorials, .input-group-row .tutorial-wrapper .buttons .button-stop-showing, .input-group-row .tutorial-wrapper .buttons .button-close, .tutorial-wrapper .buttons .input-group-row .button, .tutorial-wrapper .buttons .input-group-row .button-stop-tutorials, .tutorial-wrapper .buttons .input-group-row .button-stop-showing, .tutorial-wrapper .buttons .input-group-row .button-close, .input-group .big-button, .input-group-row .big-button, .input-group .big-button-golden, .input-group-row .big-button-golden, .input-group .big-button-opposite, .input-group-row .big-button-opposite, .input-group .big-button-primary, .input-group-row .big-button-primary, .input-group .big-button-success, .input-group-row .big-button-success, .input-group .big-button-danger, .input-group-row .big-button-danger {
   position: relative;
   z-index: 2;
 }
-.input-group .btn:focus, .input-group .tutorial-wrapper .buttons .button:focus, .input-group .tutorial-wrapper .buttons .button-stop-tutorials:focus, .input-group .tutorial-wrapper .buttons .button-stop-showing:focus, .input-group .tutorial-wrapper .buttons .button-close:focus, .tutorial-wrapper .buttons .input-group .button:focus, .tutorial-wrapper .buttons .input-group .button-stop-tutorials:focus, .tutorial-wrapper .buttons .input-group .button-stop-showing:focus, .tutorial-wrapper .buttons .input-group .button-close:focus, .input-group .big-button:focus, .input-group .big-button-golden:focus, .input-group .big-button-opposite:focus, .input-group .big-button-primary:focus, .input-group .big-button-success:focus, .input-group .big-button-danger:focus {
+.input-group .btn:focus, .input-group .tutorial-wrapper .buttons .button:focus, .input-group .tutorial-wrapper .buttons .button-stop-tutorials:focus, .input-group .tutorial-wrapper .buttons .button-stop-showing:focus, .input-group .tutorial-wrapper .buttons .button-close:focus, .tutorial-wrapper .buttons .input-group .button:focus, .tutorial-wrapper .buttons .input-group .button-stop-tutorials:focus, .tutorial-wrapper .buttons .input-group .button-stop-showing:focus, .tutorial-wrapper .buttons .input-group .button-close:focus, .input-group-row .btn:focus, .input-group-row .tutorial-wrapper .buttons .button:focus, .input-group-row .tutorial-wrapper .buttons .button-stop-tutorials:focus, .input-group-row .tutorial-wrapper .buttons .button-stop-showing:focus, .input-group-row .tutorial-wrapper .buttons .button-close:focus, .tutorial-wrapper .buttons .input-group-row .button:focus, .tutorial-wrapper .buttons .input-group-row .button-stop-tutorials:focus, .tutorial-wrapper .buttons .input-group-row .button-stop-showing:focus, .tutorial-wrapper .buttons .input-group-row .button-close:focus, .input-group .big-button:focus, .input-group-row .big-button:focus, .input-group .big-button-golden:focus, .input-group-row .big-button-golden:focus, .input-group .big-button-opposite:focus, .input-group-row .big-button-opposite:focus, .input-group .big-button-primary:focus, .input-group-row .big-button-primary:focus, .input-group .big-button-success:focus, .input-group-row .big-button-success:focus, .input-group .big-button-danger:focus, .input-group-row .big-button-danger:focus {
   z-index: 3;
 }
 
@@ -2790,17 +2792,19 @@ textarea.form-control-lg {
   padding-right: 3rem;
 }
 
-.input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu),
-.input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3) {
+.input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu), .input-group-row:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu),
+.input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3),
+.input-group-row:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3) {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.input-group.has-validation > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu),
-.input-group.has-validation > .dropdown-toggle:nth-last-child(n+4) {
+.input-group.has-validation > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu), .has-validation.input-group-row > :nth-last-child(n+3):not(.dropdown-toggle):not(.dropdown-menu),
+.input-group.has-validation > .dropdown-toggle:nth-last-child(n+4),
+.has-validation.input-group-row > .dropdown-toggle:nth-last-child(n+4) {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback), .input-group-row > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
   margin-left: -1px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -2884,14 +2888,18 @@ textarea.form-control-lg {
   margin-left: 0.5em;
 }
 
-.was-validated .input-group .form-control:valid, .was-validated .input-group .cash-input:valid, .was-validated .input-group .form-number:valid, .was-validated .input-group .form-text:valid, .was-validated .input-group .form-date-min:valid, .was-validated .input-group .form-date:valid, .input-group .form-control.is-valid, .input-group .is-valid.cash-input, .input-group .is-valid.form-number, .input-group .is-valid.form-text, .input-group .is-valid.form-date-min, .input-group .is-valid.form-date,
+.was-validated .input-group .form-control:valid, .was-validated .input-group-row .form-control:valid, .was-validated .input-group .cash-input:valid, .was-validated .input-group-row .cash-input:valid, .was-validated .input-group .form-number:valid, .was-validated .input-group-row .form-number:valid, .was-validated .input-group .form-text:valid, .was-validated .input-group-row .form-text:valid, .was-validated .input-group .form-date-min:valid, .was-validated .input-group-row .form-date-min:valid, .was-validated .input-group .form-date:valid, .was-validated .input-group-row .form-date:valid, .input-group .form-control.is-valid, .input-group-row .form-control.is-valid, .input-group .is-valid.cash-input, .input-group-row .is-valid.cash-input, .input-group .is-valid.form-number, .input-group-row .is-valid.form-number, .input-group .is-valid.form-text, .input-group-row .is-valid.form-text, .input-group .is-valid.form-date-min, .input-group-row .is-valid.form-date-min, .input-group .is-valid.form-date, .input-group-row .is-valid.form-date,
 .was-validated .input-group .form-select:valid,
-.input-group .form-select.is-valid {
+.was-validated .input-group-row .form-select:valid,
+.input-group .form-select.is-valid,
+.input-group-row .form-select.is-valid {
   z-index: 1;
 }
-.was-validated .input-group .form-control:valid:focus, .was-validated .input-group .cash-input:valid:focus, .was-validated .input-group .form-number:valid:focus, .was-validated .input-group .form-text:valid:focus, .was-validated .input-group .form-date-min:valid:focus, .was-validated .input-group .form-date:valid:focus, .input-group .form-control.is-valid:focus, .input-group .is-valid.cash-input:focus, .input-group .is-valid.form-number:focus, .input-group .is-valid.form-text:focus, .input-group .is-valid.form-date-min:focus, .input-group .is-valid.form-date:focus,
+.was-validated .input-group .form-control:valid:focus, .was-validated .input-group-row .form-control:valid:focus, .was-validated .input-group .cash-input:valid:focus, .was-validated .input-group-row .cash-input:valid:focus, .was-validated .input-group .form-number:valid:focus, .was-validated .input-group-row .form-number:valid:focus, .was-validated .input-group .form-text:valid:focus, .was-validated .input-group-row .form-text:valid:focus, .was-validated .input-group .form-date-min:valid:focus, .was-validated .input-group-row .form-date-min:valid:focus, .was-validated .input-group .form-date:valid:focus, .was-validated .input-group-row .form-date:valid:focus, .input-group .form-control.is-valid:focus, .input-group-row .form-control.is-valid:focus, .input-group .is-valid.cash-input:focus, .input-group-row .is-valid.cash-input:focus, .input-group .is-valid.form-number:focus, .input-group-row .is-valid.form-number:focus, .input-group .is-valid.form-text:focus, .input-group-row .is-valid.form-text:focus, .input-group .is-valid.form-date-min:focus, .input-group-row .is-valid.form-date-min:focus, .input-group .is-valid.form-date:focus, .input-group-row .is-valid.form-date:focus,
 .was-validated .input-group .form-select:valid:focus,
-.input-group .form-select.is-valid:focus {
+.was-validated .input-group-row .form-select:valid:focus,
+.input-group .form-select.is-valid:focus,
+.input-group-row .form-select.is-valid:focus {
   z-index: 3;
 }
 
@@ -2973,14 +2981,18 @@ textarea.form-control-lg {
   margin-left: 0.5em;
 }
 
-.was-validated .input-group .form-control:invalid, .was-validated .input-group .cash-input:invalid, .was-validated .input-group .form-number:invalid, .was-validated .input-group .form-text:invalid, .was-validated .input-group .form-date-min:invalid, .was-validated .input-group .form-date:invalid, .input-group .form-control.is-invalid, .input-group .is-invalid.cash-input, .input-group .is-invalid.form-number, .input-group .is-invalid.form-text, .input-group .is-invalid.form-date-min, .input-group .is-invalid.form-date,
+.was-validated .input-group .form-control:invalid, .was-validated .input-group-row .form-control:invalid, .was-validated .input-group .cash-input:invalid, .was-validated .input-group-row .cash-input:invalid, .was-validated .input-group .form-number:invalid, .was-validated .input-group-row .form-number:invalid, .was-validated .input-group .form-text:invalid, .was-validated .input-group-row .form-text:invalid, .was-validated .input-group .form-date-min:invalid, .was-validated .input-group-row .form-date-min:invalid, .was-validated .input-group .form-date:invalid, .was-validated .input-group-row .form-date:invalid, .input-group .form-control.is-invalid, .input-group-row .form-control.is-invalid, .input-group .is-invalid.cash-input, .input-group-row .is-invalid.cash-input, .input-group .is-invalid.form-number, .input-group-row .is-invalid.form-number, .input-group .is-invalid.form-text, .input-group-row .is-invalid.form-text, .input-group .is-invalid.form-date-min, .input-group-row .is-invalid.form-date-min, .input-group .is-invalid.form-date, .input-group-row .is-invalid.form-date,
 .was-validated .input-group .form-select:invalid,
-.input-group .form-select.is-invalid {
+.was-validated .input-group-row .form-select:invalid,
+.input-group .form-select.is-invalid,
+.input-group-row .form-select.is-invalid {
   z-index: 2;
 }
-.was-validated .input-group .form-control:invalid:focus, .was-validated .input-group .cash-input:invalid:focus, .was-validated .input-group .form-number:invalid:focus, .was-validated .input-group .form-text:invalid:focus, .was-validated .input-group .form-date-min:invalid:focus, .was-validated .input-group .form-date:invalid:focus, .input-group .form-control.is-invalid:focus, .input-group .is-invalid.cash-input:focus, .input-group .is-invalid.form-number:focus, .input-group .is-invalid.form-text:focus, .input-group .is-invalid.form-date-min:focus, .input-group .is-invalid.form-date:focus,
+.was-validated .input-group .form-control:invalid:focus, .was-validated .input-group-row .form-control:invalid:focus, .was-validated .input-group .cash-input:invalid:focus, .was-validated .input-group-row .cash-input:invalid:focus, .was-validated .input-group .form-number:invalid:focus, .was-validated .input-group-row .form-number:invalid:focus, .was-validated .input-group .form-text:invalid:focus, .was-validated .input-group-row .form-text:invalid:focus, .was-validated .input-group .form-date-min:invalid:focus, .was-validated .input-group-row .form-date-min:invalid:focus, .was-validated .input-group .form-date:invalid:focus, .was-validated .input-group-row .form-date:invalid:focus, .input-group .form-control.is-invalid:focus, .input-group-row .form-control.is-invalid:focus, .input-group .is-invalid.cash-input:focus, .input-group-row .is-invalid.cash-input:focus, .input-group .is-invalid.form-number:focus, .input-group-row .is-invalid.form-number:focus, .input-group .is-invalid.form-text:focus, .input-group-row .is-invalid.form-text:focus, .input-group .is-invalid.form-date-min:focus, .input-group-row .is-invalid.form-date-min:focus, .input-group .is-invalid.form-date:focus, .input-group-row .is-invalid.form-date:focus,
 .was-validated .input-group .form-select:invalid:focus,
-.input-group .form-select.is-invalid:focus {
+.was-validated .input-group-row .form-select:invalid:focus,
+.input-group .form-select.is-invalid:focus,
+.input-group-row .form-select.is-invalid:focus {
   z-index: 3;
 }
 
@@ -3969,7 +3981,7 @@ textarea.form-control-lg {
   flex-wrap: wrap;
   justify-content: flex-start;
 }
-.btn-toolbar .input-group {
+.btn-toolbar .input-group, .btn-toolbar .input-group-row {
   width: auto;
 }
 
@@ -4135,8 +4147,8 @@ textarea.form-control-lg {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #495057;
-  background-color: #f8fafc;
-  border-color: #dee2e6 #dee2e6 #f8fafc;
+  background-color: #020508;
+  border-color: #dee2e6 #dee2e6 #020508;
 }
 .nav-tabs .dropdown-menu {
   margin-top: -1px;
@@ -4675,7 +4687,7 @@ textarea.form-control-lg {
   font-size: 0.9rem;
   color: #212529;
   text-align: left;
-  background-color: #f8fafc;
+  background-color: #020508;
   border: 0;
   border-radius: 0;
   overflow-anchor: none;
@@ -4726,7 +4738,7 @@ textarea.form-control-lg {
 }
 
 .accordion-item {
-  background-color: #f8fafc;
+  background-color: #020508;
   border: 1px solid rgba(0, 0, 0, 0.125);
 }
 .accordion-item:first-of-type {
@@ -7240,7 +7252,7 @@ textarea.form-control-lg {
   margin-bottom: 0.5rem !important;
 }
 
-.mb-3, .lightmode .bundle-wrapper .description, .bundle-wrapper .description {
+.mb-3, .lightmode .bundle-wrapper .description, .bundle-wrapper .description, .input-group-row {
   margin-bottom: 1rem !important;
 }
 
@@ -7676,7 +7688,7 @@ textarea.form-control-lg {
 }
 
 .bg-body {
-  background-color: #f8fafc !important;
+  background-color: #020508 !important;
 }
 
 .bg-white {
@@ -11095,6 +11107,7 @@ textarea.form-control-lg {
 .big-button, .big-button-golden, .big-button-opposite, .big-button-primary, .big-button-success, .big-button-danger {
   width: 100%;
   font-weight: bold;
+  color: white;
 }
 .big-button-opposite {
   color: #000;
@@ -11127,16 +11140,17 @@ textarea.form-control-lg {
 }
 .big-button-golden {
   background-color: #ffd500;
+  color: black;
 }
 .big-button-golden:hover {
   background-color: #ccaa00;
 }
 
 .form-date {
-  width: 170px;
+  width: 200px;
 }
 .form-date-min {
-  min-width: 170px;
+  min-width: 200px;
 }
 
 .trashbin {
@@ -11145,12 +11159,12 @@ textarea.form-control-lg {
 
 .form-text {
   text-align: left;
-  width: 170px;
+  width: 200px;
 }
 
 .form-number {
   text-align: left;
-  width: 170px;
+  width: 200px;
 }
 
 .border-large {
@@ -11305,6 +11319,11 @@ textarea.form-control-lg {
 .shared-users-wrapper .shared-user-waiting-error {
   font-size: 2.5rem;
   color: #e3342f;
+}
+
+tbody > tr td, tbody > tr th {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
 }
 
 td, th {
@@ -11492,8 +11511,8 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
   border-width: 5px;
   border-style: solid;
   color: white;
-  border-color: #0a0c0d;
-  background-color: #0a0c0d;
+  border-color: #171a1c;
+  background-color: #171a1c;
   transition: border-color 0.5s, background-color 0.5s;
 }
 .bundle-wrapper .image {
@@ -11501,7 +11520,7 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
   background-size: cover;
   background-position: center;
   border-radius: 1rem;
-  border: solid 4px #0a0c0d;
+  border: solid 4px #171a1c;
 }
 .bundle-wrapper .title {
   font-weight: bold;
@@ -11511,8 +11530,8 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
   text-align: center;
 }
 .bundle-wrapper:hover {
-  background-color: #101214;
-  border-color: #101214;
+  background-color: #1d2023;
+  border-color: #1d2023;
   transition: border-color 0.5s, background-color 0.5s;
 }
 
@@ -11664,7 +11683,7 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
 }
 
 .tutorial-wrapper {
-  background-color: #30363b;
+  background-color: #212529;
   border: #cccccc 5px solid;
   border-radius: 25px;
   width: 1140px;
@@ -11706,6 +11725,7 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
   width: 30%;
   margin: 4px 10px;
   font-weight: bold;
+  color: white;
 }
 .lightmode {
   background-color: #f8fafc;

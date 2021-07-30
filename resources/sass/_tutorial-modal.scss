@@ -22,7 +22,7 @@
     @extend .py-4;
     @extend .text-white;
 
-    background-color: #30363b;
+    background-color: $dark;
     border: #cccccc 5px solid;
     border-radius: 25px;
     width: 1140px;
@@ -73,6 +73,7 @@
             width: 30%;
             margin: 4px 10px;
             font-weight: bold;
+            color: white;
 
             &-close {
                 @extend .button;

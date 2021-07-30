@@ -25,7 +25,7 @@
                 v-if="content[currentCurrency].length"
                 class="table-responsive-lg"
             >
-                <table class="responsive-table-hover table-themed">
+                <table class="table-themed responsive-table-hover">
                     <TableHeader
                         :cells="header"
                     ></TableHeader>

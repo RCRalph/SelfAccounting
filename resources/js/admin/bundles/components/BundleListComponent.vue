@@ -18,12 +18,14 @@
                 <div v-if="paginationData.data.length">
                     <div class="table-responsive w-100">
                         <table
-                            class="responsive-table-hover table-themed"
+                            class="table-themed responsive-table-hover"
                         >
                             <thead>
-                                <th scope="col" class="h3 font-weight-bold">ID</th>
-                                <th scope="col" class="h3 font-weight-bold">Title</th>
-                                <th scope="col" class="h3 font-weight-bold">Details</th>
+                                <tr>
+                                    <th scope="col" class="h3 font-weight-bold">ID</th>
+                                    <th scope="col" class="h3 font-weight-bold">Title</th>
+                                    <th scope="col" class="h3 font-weight-bold">Details</th>
+                                </tr>
                             </thead>
 
                             <tbody>

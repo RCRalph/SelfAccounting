@@ -1,4 +1,4 @@
-@extends('layouts.width8')
+@extends('layouts.width6')
 
 @section('content')
     <income-outcome-edit-component type="{{ $viewType }}" id="{{ $id }}"></income-outcome-edit-component>

@@ -1,6 +1,6 @@
 <template>
     <div class="row my-4">
-        <div class="col-5 h5 text-right font-weight-bold mb-0" v-html="left"></div>
+        <div class="col-5 h5 text-end font-weight-bold mb-0" v-html="left"></div>
 
         <div class="col-2 d-flex justify-content-center align-items-center">
             <SliderCheckbox v-model="value" :choice="true"></SliderCheckbox>

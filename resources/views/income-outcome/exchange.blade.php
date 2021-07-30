@@ -1,4 +1,4 @@
-@extends('layouts.width8')
+@extends('layouts.width6')
 
 @section('content')
     <exchange-means-of-payment-component type="{{ $viewType }}"></exchange-means-of-payment-component>

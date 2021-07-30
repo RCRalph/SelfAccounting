@@ -26,13 +26,15 @@
                     <div class="card-body">
                         <div class="table-responsive w-100" v-if="userReportsReady">
                             <table
-                                class="responsive-table-hover table-themed"
+                                class="table-themed responsive-table-hover"
                             >
                                 <thead>
-                                    <th scope="col" class="h3 font-weight-bold">ID</th>
-                                    <th scope="col" class="h3 font-weight-bold">Title</th>
-                                    <th scope="col" class="h3 font-weight-bold">View</th>
-                                    <th scope="col" class="h3 font-weight-bold">Edit</th>
+                                    <tr>
+                                        <th scope="col" class="h3 font-weight-bold">ID</th>
+                                        <th scope="col" class="h3 font-weight-bold">Title</th>
+                                        <th scope="col" class="h3 font-weight-bold">View</th>
+                                        <th scope="col" class="h3 font-weight-bold">Edit</th>
+                                    </tr>
                                 </thead>
 
                                 <tbody>
@@ -75,12 +77,14 @@
                         <div v-if="sharedReportsReady">
                             <div class="table-responsive w-100">
                                 <table
-                                    class="responsive-table-hover table-themed"
+                                    class="table-themed responsive-table-hover"
                                 >
                                     <thead>
-                                        <th scope="col" class="h3 font-weight-bold">ID</th>
-                                        <th scope="col" class="h3 font-weight-bold">Title</th>
-                                        <th scope="col" class="h3 font-weight-bold">View</th>
+                                        <tr>
+                                            <th scope="col" class="h3 font-weight-bold">ID</th>
+                                            <th scope="col" class="h3 font-weight-bold">Title</th>
+                                            <th scope="col" class="h3 font-weight-bold">View</th>
+                                        </tr>
                                     </thead>
 
                                     <tbody>

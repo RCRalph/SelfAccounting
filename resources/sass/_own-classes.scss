@@ -44,6 +44,7 @@
 
     width: 100%;
     font-weight: bold;
+    color: white;
 
     &-danger {
         @extend .big-button;
@@ -68,6 +69,7 @@
     &-golden {
         @extend .big-button;
         background-color: $gold-star-color;
+        color: black;
 
         &:hover {
             background-color: darken($gold-star-color, 10%);
@@ -78,11 +80,11 @@
 .form-date {
     @extend .form-control;
     @extend .m-auto;
-    width: 170px;
+    width: $form-field-width;
 
     &-min {
         @extend .form-control;
-        min-width: 170px;
+        min-width: $form-field-width;
     }
 }
 
@@ -96,14 +98,14 @@
     @extend .form-control;
     @extend .m-auto;
     text-align: left;
-    width: 170px;
+    width: $form-field-width;
 }
 
 .form-number {
     @extend .form-control;
     @extend .m-auto;
     text-align: left;
-    width: 170px;
+    width: $form-field-width;
 }
 
 .table-themed {
@@ -293,5 +295,18 @@
             font-size: 2.5rem;
             color: $danger;
         }
+    }
+}
+
+.input-group-row {
+    @extend .input-group;
+    @extend .row;
+    @extend .mb-3;
+}
+
+tbody > tr {
+    td, th {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
     }
 }
