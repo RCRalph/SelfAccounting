@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Darkmode switcher
     document.getElementById("darkmode-switcher")
         .addEventListener("click", () => {
-            console.log("dupa");
             const sunMoon = document.getElementById("sun-moon");
             if (sunMoon.innerHTML.includes("sun") || sunMoon.innerHTML.includes("moon")) {
                 const isDarkmode = sunMoon.innerHTML.includes("sun");
