@@ -5,8 +5,8 @@
                 :key="index"
                 :scope="cell.text && 'col'"
                 :class="cell.text && 'h5 font-weight-bold'"
-                :data-toggle="cell.tooltip && 'tooltip'"
-                :data-placement="cell.tooltip && 'bottom'"
+                :data-bs-toggle="cell.tooltip && 'tooltip'"
+                :data-bs-placement="cell.tooltip && 'bottom'"
                 :title="cell.tooltip"
             >
                 {{ cell.text }}

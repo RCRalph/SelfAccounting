@@ -17,6 +17,7 @@ class BundlesController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
+        $tutorial = $this->getTutorial("bundles.md");
         $bundles = Bundle::all()->sortBy("created_at")->map(function ($item) {
             $item->thumbnail = $this->getLocalImageLink(
                 $this->PUBLIC_DIRECTORIES[0],
@@ -25,7 +26,7 @@ class BundlesController extends Controller
             return $item;
         });
 
-        return view("bundles.index", compact("pageData", "bundles"));
+        return view("bundles.index", compact("pageData", "bundles", "tutorial"));
     }
 
     public function show(Bundle $bundle) {

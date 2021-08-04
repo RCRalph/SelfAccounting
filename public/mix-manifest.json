@@ -11,6 +11,7 @@
     "/js/profile.js": "/js/profile.js",
     "/js/bundle-show.js": "/js/bundle-show.js",
     "/js/payment.js": "/js/payment.js",
+    "/js/table-hovering.js": "/js/table-hovering.js",
     "/js/bundles/charts/presence.js": "/js/bundles/charts/presence.js",
     "/js/bundles/charts/balance-monitor.js": "/js/bundles/charts/balance-monitor.js",
     "/js/bundles/charts/io-by-type.js": "/js/bundles/charts/io-by-type.js",

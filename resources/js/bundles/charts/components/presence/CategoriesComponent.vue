@@ -171,7 +171,7 @@ export default {
         },
         refreshTooltip() {
             this.$nextTick(() => {
-                $('[data-toggle="tooltip"]').tooltip()
+                updateTooltips();
             });
         }
     },

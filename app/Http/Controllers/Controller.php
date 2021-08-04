@@ -203,4 +203,26 @@ class Controller extends BaseController
 
         return $cashMeans;
     }
+
+    public function addNoBreakSpaces($text)
+    {
+        $text = explode(" ", $text);
+
+        for ($i = count($text) - 2; $i >= 0; $i--) {
+            if (strlen($text[$i]) == 1 && !in_array($text[$i], ["#", "-"])) {
+                $text[$i + 1] = $text[$i] . "&nbsp;" . $text[$i + 1];
+                array_splice($text, $i, 1);
+                $i++;
+            }
+        }
+
+        return implode(" ", $text);
+    }
+
+    public function getTutorial($directory)
+    {
+        return $this->addNoBreakSpaces(
+            Storage::disk("local")->get("files/tutorials/$directory")
+        );
+    }
 }

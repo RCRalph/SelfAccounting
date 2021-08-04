@@ -25,9 +25,12 @@
         }
 
         tbody tr:hover {
-            background-color: #eeeeee;
             color: #212529;
         }
+    }
+
+    .row-hover-bg {
+        background-color: rgba(0, 0, 0, 0.075) !important;
     }
 
     .welcome-bg-change {

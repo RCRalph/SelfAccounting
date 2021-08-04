@@ -8,7 +8,7 @@
                         type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
                     ]"
                 ></i>
-                Add multiple {{ type }}
+                Add multiple {{ type }}s
             </div>
         </div>
 

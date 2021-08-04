@@ -75,6 +75,10 @@
             background-color: darken($gold-star-color, 10%);
         }
     }
+
+    &:disabled {
+        color: white;
+    }
 }
 
 .form-date {
@@ -224,7 +228,7 @@
 }
 
 .row-hover-bg {
-    background-color: rgba(255, 255, 255, 0.075);
+    background-color: rgba(255, 255, 255, 0.075) !important;
 }
 
 .cash-input {
@@ -245,7 +249,7 @@
         $boxHeight: 60px;
         $contentHeight: 45px;
 
-        padding: #{($boxHeight - $contentHeight) / 2};
+        padding: math.div($boxHeight - $contentHeight, 2);
 
         display: flex;
         justify-content: space-between;
@@ -254,7 +258,7 @@
         width: calc(95% / 2);
         background-color: darken($dark, 10%);
         border-radius: 30px;
-        margin: #{$boxHeight / 8} 0;
+        margin: #{math.div($boxHeight, 8)} 0;
 
         &-image {
             height: 100%;
@@ -268,7 +272,7 @@
         }
 
         &-delete {
-            font-size: #{2 * $contentHeight / 3};
+            font-size: math.div(2 * $contentHeight, 3);
             margin-right: 10px;
             color: $danger;
             margin-top: 2px;
@@ -278,7 +282,7 @@
 
     .shared-user-waiting {
         @extend .shared-user;
-        width: #{95% * 2 / 3};
+        width: math.div(95% * 2, 3);
         padding: 0px 15px;
 
         &-email {

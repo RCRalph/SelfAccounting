@@ -14,6 +14,7 @@ class SummaryController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
-        return view("summary.index", compact("pageData"));
+        $tutorial = $this->getTutorial("summary.md");
+        return view("summary.index", compact("pageData", "tutorial"));
     }
 }

@@ -123,7 +123,7 @@ Route::prefix('/profile')->group(function () {
 
 Route::get('/payment', 'PagesController@payment')->name('payment');
 Route::get('/premium', 'PagesController@premium')->name('premium');
-Route::get('/tutorial', 'PagesController@tutorial')->name('tutorial');
+Route::get('/getting-started', 'PagesController@gettingStarted')->name('getting-started');
 
 // ----- Web API ----- //
 

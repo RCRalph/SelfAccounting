@@ -24,8 +24,8 @@
     <body class="{{ ($pageData["darkmode"] ?? true) ? "" : "lightmode" }}">
         <div id="tutorial-modal">
             <div class="tutorial-wrapper">
-                <div class="tutorial-content">
-                    {!! Markdown::parse(Illuminate\Support\Facades\Storage::disk("local")->get("files/tutorial.md")) !!}
+                <div id="tutorial-modal-content" class="tutorial-content">
+                    {!! Markdown::parse($tutorial ?? "") !!}
                 </div>
 
                 <hr class="hr">

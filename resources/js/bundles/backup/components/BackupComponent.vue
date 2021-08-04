@@ -15,34 +15,41 @@
 
                 <div class="row">
                     <div class="col-lg-4 offset-lg-2 my-lg-0 my-2">
-                        <button class="big-button-primary"
-                            :disabled="!canCreate || createSpinner"
-                            @click="createBackup"
-                            :data-toggle="!canCreate && 'tooltip'"
-                            :data-placement="!canCreate && 'bottom'"
+                        <div
+                            :data-bs-toggle="!canCreate && 'tooltip'"
+                            :data-bs-placement="!canCreate && 'bottom'"
                             :title="!canCreate && 'You can only create one backup per 24 hours'"
                         >
-                            <div v-if="!createSpinner">
-                                Create backup
-                            </div>
+                            <button class="big-button-primary"
+                                :disabled="!canCreate || createSpinner"
+                                @click="createBackup"
+                            >
+                                <div v-if="!createSpinner">
+                                    Create backup
+                                </div>
 
-                            <span
-                                v-else
-                                class="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
+                                <span
+                                    v-else
+                                    class="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="col-lg-4 my-lg-0 my-2">
-                        <button class="big-button-primary"
-                            :disabled="!canRestore"
-                            @click="restoreData"
-                            :data-toggle="!canRestore && 'tooltip'"
-                            :data-placement="!canRestore && 'bottom'"
+                        <div
+                            :data-bs-toggle="!canRestore && 'tooltip'"
+                            :data-bs-placement="!canRestore && 'bottom'"
                             :title="!canRestore && (restoreDate.length ? `Contact the developer or wait until ${restoreDate} to enable this option` : 'You can restore data once per 24 hours')"
-                        >Restore from file</button>
+                        >
+                            <button class="big-button-primary"
+                                :disabled="!canRestore"
+                                @click="restoreData"
+
+                            >Restore from file</button>
+                        </div>
                     </div>
                 </div>
 
@@ -459,7 +466,9 @@ export default {
             })
     },
     updated() {
-        $('[data-toggle="tooltip"]').tooltip();
+        this.$nextTick(() => {
+            updateTooltips();
+        });
     }
 }
 </script>

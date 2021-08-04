@@ -361,7 +361,7 @@ export default {
     updated() {
         this.$nextTick(() => {
             if (document.getElementById("table-multi-hover")) {
-                tableHoveringScript();
+                tableHovering();
             }
         });
     }

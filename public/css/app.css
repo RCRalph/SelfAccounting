@@ -7345,7 +7345,7 @@ textarea.form-control-lg {
   padding-left: 1.5rem !important;
 }
 
-.px-5, .tutorial-wrapper {
+.px-5 {
   padding-right: 3rem !important;
   padding-left: 3rem !important;
 }
@@ -11145,6 +11145,9 @@ textarea.form-control-lg {
 .big-button-golden:hover {
   background-color: #ccaa00;
 }
+.big-button:disabled, .big-button-danger:disabled, .big-button-success:disabled, .big-button-primary:disabled, .big-button-opposite:disabled, .big-button-golden:disabled {
+  color: white;
+}
 
 .form-date {
   width: 200px;
@@ -11266,7 +11269,7 @@ textarea.form-control-lg {
 }
 
 .row-hover-bg {
-  background-color: rgba(255, 255, 255, 0.075);
+  background-color: rgba(255, 255, 255, 0.075) !important;
 }
 
 .cash-input {
@@ -11687,11 +11690,13 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
   border: #cccccc 5px solid;
   border-radius: 25px;
   width: 1140px;
+  padding: 1.5rem 3rem;
+  margin: 0.5rem;
 }
 .tutorial-wrapper .tutorial-content {
   max-height: calc(80vh - 75px);
   padding: 0px 16px;
-  overflow-y: scroll;
+  overflow-y: auto;
   text-align: justify;
   font-size: 16px;
 }
@@ -11745,8 +11750,10 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
   border-color: #dee2e6 !important;
 }
 .lightmode .table-themed tbody tr:hover, .lightmode .restore-table-content table tbody tr:hover, .restore-table-content .lightmode table tbody tr:hover {
-  background-color: #eeeeee;
   color: #212529;
+}
+.lightmode .row-hover-bg {
+  background-color: rgba(0, 0, 0, 0.075) !important;
 }
 .lightmode .profile-wrapper {
   border-radius: 1rem;
@@ -11888,15 +11895,21 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
   }
 }
 @media (max-width: 767.98px) {
+  .tutorial-wrapper {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
   .tutorial-content {
     max-height: calc(80vh - 200px);
   }
-
+}
+@media (max-width: 991.98px) {
   .button, .tutorial-wrapper .buttons .button-close, .tutorial-wrapper .buttons .button-stop-showing, .tutorial-wrapper .buttons .button-stop-tutorials {
     width: 100%;
   }
 }
-@media (max-width: 991.98px) {
+@media (max-width: 1199.98px) {
   .tutorial-wrapper {
     width: 90vw;
   }

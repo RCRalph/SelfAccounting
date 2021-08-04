@@ -22,8 +22,9 @@ class IncomeOutcomeController extends Controller
     public function index($viewType)
     {
         $pageData = $this->getDataForPageRender();
+        $tutorial = $this->getTutorial("$viewType.md");
 
-        return view("income-outcome.index", compact("viewType", "pageData"));
+        return view("income-outcome.index", compact("viewType", "pageData", "tutorial"));
     }
 
     public function edit($viewType, $incomeOutcome)
@@ -47,18 +48,21 @@ class IncomeOutcomeController extends Controller
     public function createOne($viewType)
     {
         $pageData = $this->getDataForPageRender();
-        return view("income-outcome.create-one", compact("viewType", "pageData"));
+        $tutorial = $this->getTutorial("$viewType-single.md");
+        return view("income-outcome.create-one", compact("viewType", "pageData", "tutorial"));
     }
 
     public function createMultiple($viewType)
     {
         $pageData = $this->getDataForPageRender();
-        return view("income-outcome.create-multiple", compact("viewType", "pageData"));
+        $tutorial = $this->getTutorial("$viewType-multiple.md");
+        return view("income-outcome.create-multiple", compact("viewType", "pageData", "tutorial"));
     }
 
     public function exchange($viewType)
     {
         $pageData = $this->getDataForPageRender();
-        return view("income-outcome.exchange", compact("viewType", "pageData"));
+        $tutorial = $this->getTutorial("exchange-means-of-payment.md");
+        return view("income-outcome.exchange", compact("viewType", "pageData", "tutorial"));
     }
 }

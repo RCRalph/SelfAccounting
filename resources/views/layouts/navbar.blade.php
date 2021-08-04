@@ -83,9 +83,9 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/tutorial">
+                        <a class="nav-link" href="/getting-started">
                             <i class="fas fa-graduation-cap"></i>
-                            {{ __('Tutorial') }}
+                            {{ __('Getting started') }}
                         </a>
                     </li>
 

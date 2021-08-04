@@ -27,6 +27,7 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/scripts/profile.js', 'public/js')
     .js('resources/js/scripts/bundle-show.js', 'public/js')
     .js('resources/js/scripts/payment.js', 'public/js')
+    .js('resources/js/scripts/table-hovering.js', 'public/js')
 
     // Bundle scripts
         // Charts

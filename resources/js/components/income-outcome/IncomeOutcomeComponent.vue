@@ -29,7 +29,7 @@
                 <div class="row mb-3">
                     <div class="col-lg-4 col-12 my-2 my-lg-0">
                         <a type="button" :href="`/${type}/create-multiple`" class="big-button-primary">
-                            Add multiple {{ type }}
+                            Add multiple {{ type }}s
                         </a>
                     </div>
 
@@ -293,10 +293,10 @@ export default {
     },
     updated() {
         this.$nextTick(() => {
-            $('[data-toggle="tooltip"]').tooltip()
+            updateTooltips();
 
             if (document.getElementById("table-multi-hover")) {
-                tableHoveringScript();
+                tableHovering();
             }
         });
     }

@@ -31,22 +31,11 @@ class PagesController extends Controller
         return view("premium", compact("pageData"));
     }
 
-    public function tutorial()
+    public function gettingStarted()
     {
         $pageData = $this->getDataForPageRender();
-        $text = Storage::disk("local")->get("files/tutorial.md");
+        $text = $this->getTutorial("getting-started.md");
 
-		// Add no-break spaces
-        $text = explode(" ", $text);
-        for ($i = count($text) - 2; $i >= 0; $i--) {
-            if (strlen($text[$i]) == 1 && !in_array($text[$i], ["#", "-"])) {
-                $text[$i + 1] = $text[$i] . "&nbsp;" . $text[$i + 1];
-                array_splice($text, $i, 1);
-                $i++;
-            }
-        }
-        $text = implode(" ", $text);
-
-        return view("tutorial", compact("pageData", "text"));
+        return view("getting-started", compact("pageData", "text"));
     }
 }
