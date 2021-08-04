@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // Fonts
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
@@ -7,21 +9,13 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-// Mixins
 @import 'own-mixins';
-
-// Own classes and customization
 @import 'own-classes';
 @import 'own-customization';
-
-// Welcome page
 @import 'landing-page';
-
-// Mixin classes
 @import 'mixin-classes';
-
-// Chart gallery
 @import 'chart-gallery';
+@import 'tutorial-modal';
 
 // Light-mode styles
 @import 'light-mode';

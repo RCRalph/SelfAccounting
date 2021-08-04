@@ -5,7 +5,7 @@
 
 .card-header-text {
     @extend .h4;
-    @extend .mr-auto;
+    @extend .me-auto;
     @extend .my-auto;
 }
 
@@ -41,8 +41,10 @@
 
 .big-button {
     @extend .btn;
-    @extend .font-weight-bold;
-    @extend .btn-block;
+
+    width: 100%;
+    font-weight: bold;
+    color: white;
 
     &-danger {
         @extend .big-button;
@@ -67,21 +69,26 @@
     &-golden {
         @extend .big-button;
         background-color: $gold-star-color;
+        color: black;
 
         &:hover {
             background-color: darken($gold-star-color, 10%);
         }
+    }
+
+    &:disabled {
+        color: white;
     }
 }
 
 .form-date {
     @extend .form-control;
     @extend .m-auto;
-    width: 170px;
+    width: $form-field-width;
 
     &-min {
         @extend .form-control;
-        min-width: 170px;
+        min-width: $form-field-width;
     }
 }
 
@@ -94,15 +101,15 @@
 .form-text {
     @extend .form-control;
     @extend .m-auto;
-    @extend .text-left;
-    width: 170px;
+    text-align: left;
+    width: $form-field-width;
 }
 
 .form-number {
     @extend .form-control;
     @extend .m-auto;
-    @extend .text-left;
-    width: 170px;
+    text-align: left;
+    width: $form-field-width;
 }
 
 .table-themed {
@@ -188,45 +195,6 @@
     border: solid 5px rgb(127, 127, 127);
 }
 
-.tutorial-wrapper {
-    @extend .px-5;
-    @extend .py-4;
-    @extend .text-white;
-
-    background-color: #30363b;
-    border-radius: 10px;
-    text-align: justify;
-    font-size: 16px;
-
-    h1 {
-        @extend .mt-4;
-        @extend .pb-2;
-        text-align: center;
-        font-weight: bold;
-		border-bottom: rgb(127, 127, 127) solid 1px;
-    }
-
-    h2 {
-        @extend .h3;
-        font-weight: bold;
-        margin-top: 16px;
-    }
-
-    img {
-        margin: 10px auto;
-        text-align: center;
-        width: 100%;
-        display: block;
-        border-radius: 10px;
-        border: solid 2.5px rgb(127, 127, 127);
-    }
-
-    ul, ol {
-        margin-top: -16px;
-        margin-bottom: 4px;
-    }
-}
-
 .text-stand-out {
     @include change-text-brightness(text-stand-out-animation, #fff, #000);
 
@@ -239,7 +207,7 @@
 
     .header {
         @extend .h1;
-        @extend .font-weight-bold;
+        font-weight: bold;
         @extend .text-center;
     }
 
@@ -253,14 +221,14 @@
 
             thead > th {
                 @extend .h5;
-                @extend .font-weight-bold;
+                font-weight: bold;
             }
         }
     }
 }
 
 .row-hover-bg {
-    background-color: rgba(255, 255, 255, 0.075);
+    background-color: rgba(255, 255, 255, 0.075) !important;
 }
 
 .cash-input {
@@ -281,7 +249,7 @@
         $boxHeight: 60px;
         $contentHeight: 45px;
 
-        padding: #{($boxHeight - $contentHeight) / 2};
+        padding: math.div($boxHeight - $contentHeight, 2);
 
         display: flex;
         justify-content: space-between;
@@ -290,7 +258,7 @@
         width: calc(95% / 2);
         background-color: darken($dark, 10%);
         border-radius: 30px;
-        margin: #{$boxHeight / 8} 0;
+        margin: #{math.div($boxHeight, 8)} 0;
 
         &-image {
             height: 100%;
@@ -304,7 +272,7 @@
         }
 
         &-delete {
-            font-size: #{2 * $contentHeight / 3};
+            font-size: math.div(2 * $contentHeight, 3);
             margin-right: 10px;
             color: $danger;
             margin-top: 2px;
@@ -314,7 +282,7 @@
 
     .shared-user-waiting {
         @extend .shared-user;
-        width: #{95% * 2 / 3};
+        width: math.div(95% * 2, 3);
         padding: 0px 15px;
 
         &-email {
@@ -331,5 +299,18 @@
             font-size: 2.5rem;
             color: $danger;
         }
+    }
+}
+
+.input-group-row {
+    @extend .input-group;
+    @extend .row;
+    @extend .mb-3;
+}
+
+tbody > tr {
+    td, th {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
     }
 }

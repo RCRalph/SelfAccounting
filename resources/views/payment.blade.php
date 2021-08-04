@@ -1,7 +1,7 @@
-@extends('layouts.width8')
+@extends('layouts.width6')
 
 @section('script')
-    <script src="{{ asset('js/payment.js') }}" defer></script>
+    <script src="{{ mix('js/payment.js') }}" defer></script>
 @endsection
 
 @section('content')

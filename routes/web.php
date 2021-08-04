@@ -123,7 +123,7 @@ Route::prefix('/profile')->group(function () {
 
 Route::get('/payment', 'PagesController@payment')->name('payment');
 Route::get('/premium', 'PagesController@premium')->name('premium');
-Route::get('/tutorial', 'PagesController@tutorial')->name('tutorial');
+Route::get('/getting-started', 'PagesController@gettingStarted')->name('getting-started');
 
 // ----- Web API ----- //
 
@@ -207,6 +207,7 @@ Route::prefix('/webapi')->group(function () {
         Route::post('/categories', 'WebApi\SettingsController@saveCategories')->name('webapi.settings.categories');
         Route::post('/means', 'WebApi\SettingsController@saveMeans')->name('webapi.settings.means');
         Route::post('/darkmode', 'WebApi\SettingsController@darkmode')->name('webapi.settings.darkmode');
+        Route::post('/tutorials', 'WebApi\SettingsController@tutorials')->name('webapi.settings.tutorials');
     });
 
     Route::prefix('/profile')->group(function () {

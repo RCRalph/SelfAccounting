@@ -22,7 +22,7 @@
                 autocomplete="off"
             ></InputGroup>
 
-            <div class="form-group row">
+            <div class="input-group-row">
                 <div class="col-xl-7 offset-xl-4">
                     <button type="button" class="big-button-success" @click="submitForm" :disabled="!canSubmit || !validPasswords">
                         <div v-if="!submit">

@@ -25,8 +25,8 @@
                                         Sum
                                     </div>
 
-                                    <div class="d-flex" v-if="Object.keys(sum).length">
-                                        <div class="h4 my-auto mr-3">Currency:</div>
+                                    <div class="d-flex" v-if="Object.keys(sum).length > 1">
+                                        <div class="h4 my-auto me-3">Currency:</div>
                                         <select class="form-control" v-model="sumCurrency">
                                             <option
                                                 v-for="(currency, i) in Object.keys(sum)"
@@ -59,7 +59,7 @@
                     <div class="table-responsive w-100">
                         <table
                             id="table-multi-hover"
-                            class="responsive-table-bordered table-themed"
+                            class="table-themed responsive-table-bordered"
                         >
                             <TableHeader :cells="headerCells"></TableHeader>
 
@@ -361,7 +361,7 @@ export default {
     updated() {
         this.$nextTick(() => {
             if (document.getElementById("table-multi-hover")) {
-                tableHoveringScript();
+                tableHovering();
             }
         });
     }

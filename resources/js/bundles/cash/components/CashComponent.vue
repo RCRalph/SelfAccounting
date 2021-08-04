@@ -7,7 +7,7 @@
             </div>
 
             <div class="d-flex" v-if="ready">
-                <div class="h4 my-auto mr-3">Currency:</div>
+                <div class="h4 my-auto me-3">Currency:</div>
                 <select class="form-control" v-model="currentCurrency">
                     <option
                         v-for="currency in currencies"
@@ -48,9 +48,11 @@
 					<div class="col-lg-10 offset-lg-1 table-responsive-lg">
 						<table class="table-themed responsive-table-hover">
 							<thead>
-								<th class="h4 font-weight-bold" scope="col">Face value</th>
-								<th class="h4 font-weight-bold" scope="col">Amount</th>
-                                <th class="h4 font-weight-bold" scope="col">Value</th>
+                                <tr>
+                                    <th class="h4 font-weight-bold" scope="col">Face value</th>
+                                    <th class="h4 font-weight-bold" scope="col">Amount</th>
+                                    <th class="h4 font-weight-bold" scope="col">Value</th>
+                                </tr>
 							</thead>
 
 							<tbody>
@@ -88,17 +90,17 @@
 				</div>
 
                 <div class="row h3 font-weight-bold">
-                    <div class="col-6 text-right">Sum:</div>
+                    <div class="col-6 text-end">Sum:</div>
                     <div class="col-6 ">{{ sumOfCash }} {{ currencies[currentCurrency - 1].ISO }}</div>
                 </div>
 
                 <div v-if="currentCashMeanBalance !== false">
                     <div class="row h3 font-weight-bold">
-                        <div class="col-6 text-right">Current balance:</div>
+                        <div class="col-6 text-end">Current balance:</div>
                         <div class="col-6 ">{{ currentCashMeanBalance }} {{ currencies[currentCurrency - 1].ISO }}</div>
                     </div>
 
-                    <hr class="hr-dashed w-75">
+                    <hr class="hr-dashed w-100">
 
                     <div :class="[
                         'row',
@@ -106,7 +108,7 @@
                         'font-weight-bold',
                         currentCashMeanBalance - sumOfCash != 0 ? 'text-danger' : 'text-success'
                     ]">
-                        <div class="col-6 text-right">Balance difference:</div>
+                        <div class="col-6 text-end">Balance difference:</div>
                         <div class="col-6">
                             {{ currentCashMeanBalance - sumOfCash > 0 ? "+" : "" }}{{ Math.round((currentCashMeanBalance - sumOfCash) * 100) / 100 }}
                             {{ currencies[currentCurrency - 1].ISO }}

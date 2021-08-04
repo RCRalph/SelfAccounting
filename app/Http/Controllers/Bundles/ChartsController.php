@@ -15,6 +15,7 @@ class ChartsController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
+        $tutorial = $this->getTutorial("chart-pack.md");
 
         $charts = [
             [
@@ -50,7 +51,7 @@ class ChartsController extends Controller
             ]
 		];
 
-        return view("bundles.charts.index", compact("pageData", "charts"));
+        return view("bundles.charts.index", compact("pageData", "charts", "tutorial"));
     }
 
     public function presence()

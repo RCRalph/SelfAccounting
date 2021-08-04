@@ -1,18 +1,21 @@
 <template>
-    <button
-        class="big-button-golden"
-        :disabled="!premium || !ready"
-        :data-toggle="!premium && 'tooltip'"
-        :data-placement="!premium && 'top'"
+    <div
+        :data-bs-toggle="!premium && 'tooltip'"
+        :data-bs-placement="!premium && 'top'"
         :title="!premium && 'Buy Premium to use this feature'"
-        @click="changeStatus"
     >
-        <div v-if="ready">
-            {{ buttonText }}
-        </div>
+        <button
+            class="big-button-golden"
+            :disabled="!premium || !ready"
+            @click="changeStatus"
+        >
+            <div v-if="ready">
+                {{ buttonText }}
+            </div>
 
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
-    </button>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
+        </button>
+    </div>
 </template>
 
 <script>

@@ -11,7 +11,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav mr-auto" id="navbar-left-side">
+            <ul class="navbar-nav me-auto" id="navbar-left-side">
                 @auth
                     <li>
                         <a class="nav-link" href="/income">
@@ -36,7 +36,7 @@
                         </li>
                     @else
                         <li class="nav-item dropdown">
-                            <a id="bundles-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a id="bundles-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-box-open"></i>
                                 {{ __('Bundles') }}
                             </a>
@@ -83,15 +83,15 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/tutorial">
+                        <a class="nav-link" href="/getting-started">
                             <i class="fas fa-graduation-cap"></i>
-                            {{ __('Tutorial') }}
+                            {{ __('Getting started') }}
                         </a>
                     </li>
 
                     @can("isAdmin", auth()->user())
                     <li class="nav-item dropdown">
-                        <a id="admin-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a id="admin-dropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user-lock"></i>
                             Admin
                         </a>
@@ -118,7 +118,7 @@
             </ul>
 
             <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ms-auto">
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">
@@ -131,7 +131,7 @@
                     @endif
                 @else
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle py-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle py-0" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             <img class="profile-img" src="{{ $pageData["profile_picture"] }}" alt="{{ auth()->user()->username }}">
                             <span class="caret"></span>
                         </a>

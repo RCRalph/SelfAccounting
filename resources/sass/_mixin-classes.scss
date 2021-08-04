@@ -3,7 +3,7 @@
 }
 
 .bundle-wrapper {
-    @include bundle-wrapper-mixin(darken($dark, 10%), darken($dark, 10%), white, darken($dark, 7.5%));
+    @include bundle-wrapper-mixin(hsl(210, 10%, 10%), hsl(210, 10%, 10%), white, hsl(210, 10%, 12.5%));
 }
 
 .slider-checkbox {

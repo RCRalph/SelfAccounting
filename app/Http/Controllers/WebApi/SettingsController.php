@@ -257,4 +257,19 @@ class SettingsController extends Controller
         $data = $this->saveCatsMeans($data, "mean");
         return response()->json(compact("data"));
     }
+
+    public function tutorials() // Change hide_all_tutorials
+    {
+        $tutorials = request()->validate([
+            "tutorials" => ["required", "boolean"]
+        ])["tutorials"];
+
+        auth()->user()->update([
+            "hide_all_tutorials" => $tutorials
+        ]);
+        $id = auth()->user()->id;
+        Cache::forget("page-render-data-$id");
+
+        return response("", 200);
+    }
 }

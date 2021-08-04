@@ -40,7 +40,7 @@
     .username {
         @extend .h3;
         @extend .text-center;
-        @extend .font-weight-bold;
+        font-weight: bold;
         @extend .mt-4;
     }
 
@@ -52,13 +52,13 @@
 
     .account-type {
         @extend .h5;
-        @extend .font-weight-bold;
+        font-weight: bold;
         @extend .text-center;
     }
 
     .sa-since {
         @extend .h5;
-        @extend .font-weight-bold;
+        font-weight: bold;
         @extend .text-center;
 	}
 }
@@ -87,7 +87,7 @@
 
     .title {
         @extend .h1;
-        @extend .font-weight-bold;
+        font-weight: bold;
         @extend .text-center;
         @extend .mt-3;
         @extend .mb-2;

@@ -10,11 +10,13 @@
                     <div class="restore-table-content">
                         <table>
                             <thead>
-                                <th
-                                    v-for="(item, i) in header.reports"
-                                    :key="i"
-                                    scope="col"
-                                >{{ item }}</th>
+                                <tr>
+                                    <th
+                                        v-for="(item, i) in header.reports"
+                                        :key="i"
+                                        scope="col"
+                                    >{{ item }}</th>
+                                </tr>
                             </thead>
 
                             <tbody>
@@ -68,11 +70,13 @@
                 <div class="restore-table-content">
                     <table>
                         <thead>
-                            <th
-                                v-for="(item, i) in header.queries"
-                                :key="i"
-                                scope="col"
-                            >{{ item }}</th>
+                            <tr>
+                                <th
+                                    v-for="(item, i) in header.queries"
+                                    :key="i"
+                                    scope="col"
+                                >{{ item }}</th>
+                            </tr>
                         </thead>
 
                         <tbody>
@@ -142,11 +146,13 @@
                 <div class="restore-table-content">
                     <table>
                         <thead>
-                            <th
-                                v-for="(item, i) in header.additionalEntries"
-                                :key="i"
-                                scope="col"
-                            >{{ item }}</th>
+                            <tr>
+                                <th
+                                    v-for="(item, i) in header.additionalEntries"
+                                    :key="i"
+                                    scope="col"
+                                >{{ item }}</th>
+                            </tr>
                         </thead>
 
                         <tbody>

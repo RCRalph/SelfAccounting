@@ -7,6 +7,11 @@ td, th {
     cursor: pointer;
 }
 
+#app {
+    transition: filter 0.75s;
+}
+
 body {
-    background-color: hsl(210, 60%, 2%)
+    background-color: hsl(210, 60%, 2%);
+    min-height: 100vh;
 }

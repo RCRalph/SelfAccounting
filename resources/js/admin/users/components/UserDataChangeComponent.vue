@@ -25,10 +25,11 @@
                 :invalid="!validEmail"
             ></InputGroup>
 
-            <div class="form-group row">
+            <div class="input-group-row">
                 <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
                     <div class="h5 font-weight-bold m-md-0">Profile picture</div>
                 </div>
+
                 <div class="col-md-7 my-auto d-flex">
                     <input type="file" id="picture" name="picture" @change="checkFile" :class="[
                         'form-control',
@@ -36,7 +37,7 @@
                         !validFile && 'is-invalid'
                     ]">
 
-                    <img :src="userData.profile_picture" style="height: 37px; width: 37px;" alt="Profile picture" class="profile-img ml-2">
+                    <img :src="userData.profile_picture" style="height: 37px; width: 37px;" alt="Profile picture" class="profile-img ms-2">
                 </div>
             </div>
 
@@ -51,7 +52,7 @@
 
         <div class="row">
             <div class="table-responsive col-md-6 offset-md-3">
-                <table class="responsive-table-bordered table-hover mb-0 table-themed">
+                <table class="table-themed responsive-table-bordered table-hover mb-0">
                     <tbody>
                         <tr>
                             <th scope="row">Darkmode</th>

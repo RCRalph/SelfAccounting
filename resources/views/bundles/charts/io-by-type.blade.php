@@ -1,7 +1,7 @@
-@extends('layouts.width10')
+@extends('layouts.width8')
 
 @section('script')
-    <script src="{{ asset('js/bundles/charts/io-by-type.js') }}" defer></script>
+    <script src="{{ mix('js/bundles/charts/io-by-type.js') }}" defer></script>
 @endsection
 
 @section('content')

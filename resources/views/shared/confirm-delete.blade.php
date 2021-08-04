@@ -1,4 +1,4 @@
-@extends('layouts.width8')
+@extends('layouts.width6')
 
 @section('content')
     <div class="card">

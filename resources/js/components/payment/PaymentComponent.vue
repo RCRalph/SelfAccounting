@@ -27,21 +27,23 @@
 
                 <hr class="hr">
 
-                <div class="form-group row">
+                <div class="row mb-3">
                     <div class="col-lg-5 d-flex justify-content-lg-end justify-content-start align-items-center">
                         <div class="h4 font-weight-bold m-lg-0">Payment amount</div>
                     </div>
 
-                    <div class="col-lg-5 input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">€</div>
-                        </div>
+                    <div class="col-lg-5">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                €
+                            </span>
 
-                        <input disabled type="text" class="form-control" :value="Number(price).toFixed(2)">
+                            <input disabled type="text" class="form-control" :value="Number(price).toFixed(2)">
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="row mb-3">
                     <div class="col-lg-5 d-flex justify-content-lg-end justify-content-start align-items-center">
                         <div class="h4 font-weight-bold m-lg-0">Payment note</div>
                     </div>

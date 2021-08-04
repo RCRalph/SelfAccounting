@@ -17,8 +17,9 @@ class ReportsController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
+        $tutorial = $this->getTutorial("report-management.md");
 
-        return view("bundles.reports.index", compact("pageData"));
+        return view("bundles.reports.index", compact("pageData", "tutorial"));
     }
 
     public function create()

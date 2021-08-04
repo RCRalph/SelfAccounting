@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="table-responsive" v-if="gallery.length">
-                        <table class="responsive-table-bordered table-themed">
+                        <table class="table-themed responsive-table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col" class="h3 font-weight-bold">ID</th>

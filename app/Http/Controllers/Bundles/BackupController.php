@@ -15,7 +15,8 @@ class BackupController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
+        $tutorial = $this->getTutorial("backup-data.md");
 
-        return view("bundles.backup.index", compact("pageData"));
+        return view("bundles.backup.index", compact("pageData", "tutorial"));
     }
 }

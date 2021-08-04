@@ -1,4 +1,4 @@
-@extends('layouts.width10')
+@extends('layouts.width8')
 
 @section('content')
     <div class="card">
@@ -86,5 +86,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ asset('js/bundle-show.js') }}" defer></script>
+    <script src="{{ mix('js/bundle-show.js') }}" defer></script>
 @endsection

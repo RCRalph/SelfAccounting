@@ -1,8 +1,8 @@
 @extends('layouts.width12')
 
 @section('script')
-    @include("scripts.tableHovering")
-    <script src="{{ asset('js/bundles/reports/show.js') }}" defer></script>
+    <script src="{{ mix('js/table-hovering.js') }}" defer></script>
+    <script src="{{ mix('js/bundles/reports/show.js') }}" defer></script>
 @endsection
 
 @section('content')

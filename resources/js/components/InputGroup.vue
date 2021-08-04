@@ -1,7 +1,9 @@
 <template>
-    <div class="form-group row">
-        <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
-            <div class="h5 font-weight-bold m-md-0">{{ capitalize((name != 'password_confirmation' ? name : 'confirm')) }}</div>
+    <div :class="!(prepend || append) && 'input-group-row'">
+        <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center" v-if="!(prepend || append)">
+            <div class="h5 font-weight-bold m-md-0">
+                {{ capitalize((name != 'password_confirmation' ? name : 'confirm')) }}
+            </div>
         </div>
 
 		<!-- Select field -->
@@ -53,15 +55,56 @@
             </span>
         </div>
 
-        <!-- Normal input field -->
-        <div v-else :class="[
-            'col-md-7',
-            (prepend || append) && 'input-group'
-        ]">
-            <div v-if="prepend" class="input-group-prepend">
-                <div class="input-group-text">{{ prepend }}</div>
+        <!-- Input field with prepend or append -->
+        <div v-else-if="prepend || append" class="input-group-row">
+            <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
+                <div class="h5 font-weight-bold m-md-0">
+                    {{ capitalize((name != 'password_confirmation' ? name : 'confirm')) }}
+                </div>
             </div>
 
+            <div class="col-md-7">
+                <div class="input-group">
+                    <span class="input-group-text" v-if="prepend">
+                        {{ prepend }}
+                    </span>
+
+                    <input
+                        :type="type"
+                        :name="name"
+                        v-model="value"
+                        :class="[
+                            'form-control',
+                            invalid && 'is-invalid'
+                        ]"
+                        :min="min"
+                        :max="max"
+                        :minlength="minlength"
+                        :maxlength="maxlength"
+                        :autocomplete="autocomplete"
+                        :placeholder="placeholder"
+                        :list="datalistName"
+                        :step="step"
+                        :disabled="disabled"
+                    >
+
+                    <span class="input-group-text" v-if="append">
+                        {{ append }}
+                    </span>
+
+                    <datalist v-if="datalist" :id="datalistName">
+                        <option v-for="(item, i) in datalist" :key="i">{{ item }}</option>
+                    </datalist>
+
+                    <span v-if="invalid" class="invalid-feedback" role="alert">
+                        <strong>{{ capitalize(name) }} is invalid</strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Normal input field -->
+        <div v-else class="col-md-7">
             <input
                 :type="type"
                 :name="name"
@@ -84,10 +127,6 @@
             <datalist v-if="datalist" :id="datalistName">
                 <option v-for="(item, i) in datalist" :key="i">{{ item }}</option>
             </datalist>
-
-            <div v-if="append" class="input-group-append">
-                <div class="input-group-text">{{ append }}</div>
-            </div>
 
             <span v-if="invalid" class="invalid-feedback" role="alert">
                 <strong>{{ capitalize(name) }} is invalid</strong>

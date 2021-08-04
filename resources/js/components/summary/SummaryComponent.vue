@@ -7,7 +7,7 @@
             </div>
 
             <div class="d-flex" v-if="ready && availableCurrencies.length > 1">
-                <div class="h4 my-auto mr-3">Currency:</div>
+                <div class="h4 my-auto me-3">Currency:</div>
                 <select class="form-control" v-model="currentCurrency">
                     <option
                         v-for="currency in availableCurrencies"
@@ -37,10 +37,10 @@
                 </div>
 
                 <div class="table-responsive w-100">
-                    <table class="responsive-table-hover table-themed">
+                    <table class="table-themed responsive-table-hover">
                         <thead>
                             <tr>
-                                <th scope="col" class="h3 font-weight-bold">Type</th>
+                                <th scope="col" class="h3 font-weight-bold">Mean</th>
                                 <th scope="col" class="h3 font-weight-bold">Balance</th>
                             </tr>
                         </thead>

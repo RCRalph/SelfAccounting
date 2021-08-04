@@ -17,6 +17,8 @@ class SettingsController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
-        return view("settings.index", compact("pageData"));
+        $tutorial = $this->getTutorial("settings.md");
+
+        return view("settings.index", compact("pageData", "tutorial"));
     }
 }

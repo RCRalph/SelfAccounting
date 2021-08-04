@@ -7,11 +7,13 @@
         <div class="restore-table-content">
             <table>
                 <thead>
-                    <th
-                        v-for="(item, i) in header"
-                        :key="i"
-                        scope="col"
-                    >{{ item }}</th>
+                    <tr>
+                        <th
+                            v-for="(item, i) in header"
+                            :key="i"
+                            scope="col"
+                        >{{ item }}</th>
+                    </tr>
                 </thead>
 
                 <tbody>

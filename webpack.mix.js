@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 
+require('laravel-mix-clean');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -25,6 +27,7 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/scripts/profile.js', 'public/js')
     .js('resources/js/scripts/bundle-show.js', 'public/js')
     .js('resources/js/scripts/payment.js', 'public/js')
+    .js('resources/js/scripts/table-hovering.js', 'public/js')
 
     // Bundle scripts
         // Charts
@@ -51,5 +54,24 @@ mix.js('resources/js/scripts/app.js', 'public/js')
     .js('resources/js/admin/bundles/create.js', 'public/js/admin/bundles')
     .js('resources/js/admin/bundles/edit.js', 'public/js/admin/bundles')
 
-    .version()
-    .sourceMaps();
+    .vue()
+    .sourceMaps()
+    .clean({
+        cleanOnceBeforeBuildPatterns: [
+            "./js/*",
+            "./css/*",
+            "./fonts/*"
+        ]
+    });
+
+
+if (mix.inProduction()) {
+    mix.version();
+    mix.then(() => {
+        const convertToFileHash = require("laravel-mix-make-file-hash");
+        convertToFileHash({
+            publicPath: "public",
+            manifestFilePath: "public/mix-manifest.json"
+        });
+    });
+}

@@ -7,7 +7,7 @@
             </div>
 
             <div class="d-flex">
-                <div class="h4 my-auto mr-3">Currency:</div>
+                <div class="h4 my-auto me-3">Currency:</div>
                 <select class="form-control" v-model="currentCurrency">
                     <option
                         v-for="currency in currencies"
@@ -25,7 +25,7 @@
                 v-if="content[currentCurrency].length"
                 class="table-responsive-lg"
             >
-                <table class="responsive-table-hover table-themed">
+                <table class="table-themed responsive-table-hover">
                     <TableHeader
                         :cells="header"
                     ></TableHeader>
@@ -171,7 +171,7 @@ export default {
         },
         refreshTooltip() {
             this.$nextTick(() => {
-                $('[data-toggle="tooltip"]').tooltip()
+                updateTooltips();
             });
         }
     },

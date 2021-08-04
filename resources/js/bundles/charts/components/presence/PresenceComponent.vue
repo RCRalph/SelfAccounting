@@ -18,7 +18,7 @@
                 <MeansOfPaymentComponent
                     :content="means"
                     :currencies="currencies"
-                    :currency="currency"
+                    :lastcurrency="currency"
                     class="mt-3"
                 ></MeansOfPaymentComponent>
             </div>

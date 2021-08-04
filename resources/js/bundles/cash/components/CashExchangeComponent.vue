@@ -7,7 +7,7 @@
             </div>
 
             <div class="d-flex" v-if="used.length > 1">
-                <div class="h4 my-auto mr-3">Currency:</div>
+                <div class="h4 my-auto me-3">Currency:</div>
                 <select class="form-control" v-model="currentCurrency">
                     <option
                         v-for="currency in availableCurrencies"
@@ -67,16 +67,16 @@
             </div>
 
             <div class="row h3 font-weight-bold">
-                <div class="col-6 text-right">Sum:</div>
+                <div class="col-6 text-end">Sum:</div>
                 <div class="col-6 ">{{ currentSum }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
 
             <div class="row h3 font-weight-bold">
-                <div class="col-6 text-right">Sum from {{ currentCurrency == incomeCurrency ? "income" : "outcome" }}:</div>
+                <div class="col-6 text-end">Sum from {{ currentCurrency == incomeCurrency ? "income" : "outcome" }}:</div>
                 <div class="col-6 ">{{ currentCurrency == incomeCurrency ? incomeSum : outcomeSum }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
 
-            <hr class="hr-dashed w-75">
+            <hr class="hr-dashed w-100">
 
             <div :class="[
                     'row',
@@ -84,7 +84,7 @@
                     'font-weight-bold',
                     (currentCurrency == incomeCurrency ? incomeSum : outcomeSum) - currentSum != 0 ? 'text-danger' : 'text-success'
                 ]">
-                    <div class="col-6 text-right">Difference:</div>
+                    <div class="col-6 text-end">Difference:</div>
 
                     <div class="col-6">
                         {{ (currentCurrency == incomeCurrency ? incomeSum : outcomeSum) - currentSum > 0 ? "+" : "" }}{{ Math.round(((currentCurrency == incomeCurrency ? incomeSum : outcomeSum) - currentSum) * 100) / 100 }}

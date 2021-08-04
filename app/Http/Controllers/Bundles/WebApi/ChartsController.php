@@ -84,7 +84,7 @@ class ChartsController extends Controller
                 $item = $item->groupBy($type . "_id");
 
                 return $item->map(
-                    fn ($item) => $item->sum("value")
+                    fn ($item) => round($item->sum("value"), 2)
                 );
             });
 

@@ -10,7 +10,7 @@
         <div class="card-body">
             <div>
                 <div v-if="content[currency].length" class="table-responsive">
-                    <table class="responsive-table-hover table-themed">
+                    <table class="table-themed responsive-table-hover">
                         <TableHeader
                             :cells="header"
                         ></TableHeader>
@@ -204,7 +204,7 @@ export default {
         },
         refreshTooltip() {
             this.$nextTick(() => {
-                $('[data-toggle="tooltip"]').tooltip()
+                updateTooltips();
             });
         }
     },

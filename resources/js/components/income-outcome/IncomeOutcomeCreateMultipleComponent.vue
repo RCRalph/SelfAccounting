@@ -8,7 +8,7 @@
                         type == 'income' ? 'fa-sign-in-alt' : 'fa-sign-out-alt'
                     ]"
                 ></i>
-                Add multiple {{ type }}
+                Add multiple {{ type }}s
             </div>
         </div>
 
@@ -47,7 +47,7 @@
                 ></InputGroup>
 
                 <!-- Price and currency -->
-                <div class="form-group row">
+                <div class="input-group-row">
                     <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
                         <div class="h5 font-weight-bold m-md-0">Price</div>
                     </div>
@@ -112,7 +112,7 @@
                 <hr class="hr">
 
                 <div v-for="(item, i) in data" :key="i">
-                    <div class="h4 font-weight-bold ml-3 mb-3">Entry #{{ i + 1 }}</div>
+                    <div class="h4 font-weight-bold ms-3 mb-3">Entry #{{ i + 1 }}</div>
 
                     <CreateForm
                         v-model="data[i]"
@@ -123,7 +123,7 @@
                         :common="commonObject"
                     ></CreateForm>
 
-                    <div class="row">
+                    <div class="input-group-row">
                         <div class="col-12 col-sm-4 offset-sm-4">
                             <button class="big-button-danger" @click="deleteEntry(i)">
                                 <i class="fas fa-trash"></i>

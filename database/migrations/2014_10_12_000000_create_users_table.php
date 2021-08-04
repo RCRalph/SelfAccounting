@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->boolean('darkmode')->default(true);
             $table->string('profile_picture', 64);
             $table->date('premium_expiration')->nullable();
+            $table->boolean('hide_all_tutorials')->default(false);
             $table->rememberToken();
             $table->timestamps(6);
 

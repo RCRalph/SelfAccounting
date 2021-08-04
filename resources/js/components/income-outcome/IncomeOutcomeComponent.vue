@@ -11,7 +11,7 @@
             </div>
 
             <div class="d-flex" v-if="ready">
-                <div class="h4 my-auto mr-3">Currency:</div>
+                <div class="h4 my-auto me-3">Currency:</div>
                 <select class="form-control" v-model="currentCurrency" @change="resetRows">
                     <option
                         v-for="currency in currencies"
@@ -29,7 +29,7 @@
                 <div class="row mb-3">
                     <div class="col-lg-4 col-12 my-2 my-lg-0">
                         <a type="button" :href="`/${type}/create-multiple`" class="big-button-primary">
-                            Add multiple {{ type }}
+                            Add multiple {{ type }}s
                         </a>
                     </div>
 
@@ -49,7 +49,7 @@
                 <div class="table-responsive w-100" :key="tableKey">
                     <table
                         id="table-multi-hover"
-                        class="responsive-table-bordered table-themed"
+                        class="table-themed responsive-table-bordered"
                         v-if="rows.length && dataReady"
                     >
                         <TableHeader :cells="headerCells"></TableHeader>
@@ -293,10 +293,10 @@ export default {
     },
     updated() {
         this.$nextTick(() => {
-            $('[data-toggle="tooltip"]').tooltip()
+            updateTooltips();
 
             if (document.getElementById("table-multi-hover")) {
-                tableHoveringScript();
+                tableHovering();
             }
         });
     }

@@ -15,7 +15,8 @@ class CashController extends Controller
     public function index()
     {
         $pageData = $this->getDataForPageRender();
+        $tutorial = $this->getTutorial("cash-handling.md");
 
-        return view("bundles.cash.index", compact("pageData"));
+        return view("bundles.cash.index", compact("pageData", "tutorial"));
     }
 }

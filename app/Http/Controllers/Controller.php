@@ -51,7 +51,7 @@ class Controller extends BaseController
             "page-render-data-$id",
             now()->addMinutes(15),
             function () {
-                $retArr = auth()->user()->only("darkmode", "profile_picture");
+                $retArr = auth()->user()->only("darkmode", "profile_picture", "id", "hide_all_tutorials");
                 $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
 
                 $retArr["bundle_info"] = [
@@ -202,5 +202,27 @@ class Controller extends BaseController
         }
 
         return $cashMeans;
+    }
+
+    public function addNoBreakSpaces($text)
+    {
+        $text = explode(" ", $text);
+
+        for ($i = count($text) - 2; $i >= 0; $i--) {
+            if (strlen($text[$i]) == 1 && !in_array($text[$i], ["#", "-"])) {
+                $text[$i + 1] = $text[$i] . "&nbsp;" . $text[$i + 1];
+                array_splice($text, $i, 1);
+                $i++;
+            }
+        }
+
+        return implode(" ", $text);
+    }
+
+    public function getTutorial($directory)
+    {
+        return $this->addNoBreakSpaces(
+            Storage::disk("local")->get("files/tutorials/$directory")
+        );
     }
 }
