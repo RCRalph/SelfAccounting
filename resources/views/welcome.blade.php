@@ -28,7 +28,6 @@
 
             <!-- Header -->
             <header class="masthead text-white text-center">
-                <div class="overlay"></div>
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-9 mx-auto">
@@ -84,7 +83,7 @@
             <!-- Image Showcases -->
             <section class="showcase">
                 <div class="container-fluid p-0">
-                    <div class="row no-gutters">
+                    <div class="row g-0">
                         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/welcome/Easy.jpg');"></div>
                         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                             <h2>Incredibly easy to use</h2>
@@ -94,7 +93,7 @@
                         </div>
                     </div>
 
-                    <div class="row no-gutters">
+                    <div class="row g-0">
                         <div class="col-lg-6 text-white showcase-img" style="background-image: url('/storage/welcome/Savings.png');"></div>
                         <div class="col-lg-6 my-auto showcase-text">
                             <h2>Get on top of saving money</h2>
@@ -104,7 +103,7 @@
                         </div>
                     </div>
 
-                    <div class="row no-gutters">
+                    <div class="row g-0">
                         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/welcome/Investing.jpg');"></div>
                         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                             <h2>Use saved money to invest in yourself</h2>
@@ -173,16 +172,14 @@
 
             <!-- Call to Action -->
             <section class="call-to-action text-white text-center">
-                <div class="overlay"></div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-9 mx-auto">
-                                <h1 class="big-text-h1">What are you waiting for?</h1>
-                            </div>
-                            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                                <div class="col-12 col-md-4 mx-auto">
-                                    <a role="button" class="btn btn-block btn-lg btn-dark" href="/register">Register now!</a>
-                                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-9 mx-auto">
+                            <h1 class="big-text-h1">What are you waiting for?</h1>
+                        </div>
+                        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                            <div class="col-12 col-md-4 mx-auto">
+                                <a role="button" class="btn btn-block btn-lg btn-dark" href="/register">Register now!</a>
                             </div>
                         </div>
                     </div>

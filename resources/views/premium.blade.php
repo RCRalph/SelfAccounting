@@ -59,7 +59,7 @@
 	<!-- Image Showcases -->
 	<section class="showcase">
 		<div class="container-fluid p-0">
-			<div class="row no-gutters">
+			<div class="row g-0">
 				<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/premium/Galaxy.jpg');"></div>
 				<div class="col-lg-6 order-lg-1 my-auto showcase-text">
 					<h2>Unlimited bundles</h2>
@@ -69,7 +69,7 @@
 				</div>
 			</div>
 
-			<div class="row no-gutters">
+			<div class="row g-0">
 				<div class="col-lg-6 text-white showcase-img" style="background-image: url('/storage/premium/Handshake.jpg');"></div>
 				<div class="col-lg-6 my-auto showcase-text">
 					<h2>Request own solutions</h2>
@@ -79,7 +79,7 @@
 				</div>
 			</div>
 
-			<div class="row no-gutters">
+			<div class="row g-0">
 				<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/premium/Charity.jpg'); background-position-y: bottom;"></div>
 				<div class="col-lg-6 order-lg-1 my-auto showcase-text">
 					<h2>Support charity</h2>
