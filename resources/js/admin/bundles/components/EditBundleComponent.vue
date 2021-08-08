@@ -20,7 +20,7 @@
 
                 <div>
                     <div class="d-flex justify-content-between align-items-center mx-xl-4 mb-3">
-                        <div class="h3 font-weight-bold m-xl-0">
+                        <div class="h3 fw-bold m-xl-0">
                             Gallery
                         </div>
 
@@ -35,15 +35,15 @@
                         <table class="table-themed responsive-table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="h3 font-weight-bold">ID</th>
-                                    <th scope="col" class="h3 font-weight-bold">Image</th>
-                                    <th scope="col" class="h3 font-weight-bold">Delete</th>
+                                    <th scope="col" class="h3 fw-bold">ID</th>
+                                    <th scope="col" class="h3 fw-bold">Image</th>
+                                    <th scope="col" class="h3 fw-bold">Delete</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <tr v-for="(item, i) in gallery" :key="i">
-                                    <th scope="row" class="h5 my-auto font-weight-bold" style="min-width: 100px;">{{ item.id }}</th>
+                                    <th scope="row" class="h5 my-auto fw-bold" style="min-width: 100px;">{{ item.id }}</th>
 
                                     <td>
                                         <div class="admin-bundle-gallery-image" :style="`background-image: url(${item.image})`"></div>

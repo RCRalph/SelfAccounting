@@ -14,7 +14,7 @@
 
         <div class="card-body">
             <div v-if="ready">
-                <div class="h1 font-weight-bold text-center mb-3">Common values</div>
+                <div class="h1 fw-bold text-center mb-3">Common values</div>
 
                 <InputGroup
                     name="date"
@@ -49,7 +49,7 @@
                 <!-- Price and currency -->
                 <div class="input-group-row">
                     <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
-                        <div class="h5 font-weight-bold m-md-0">Price</div>
+                        <div class="h5 fw-bold m-md-0">Price</div>
                     </div>
 
                     <div class="col-md-4 col-sm-12">
@@ -112,7 +112,7 @@
                 <hr class="hr">
 
                 <div v-for="(item, i) in data" :key="i">
-                    <div class="h4 font-weight-bold ms-3 mb-3">Entry #{{ i + 1 }}</div>
+                    <div class="h4 fw-bold ms-3 mb-3">Entry #{{ i + 1 }}</div>
 
                     <CreateForm
                         v-model="data[i]"

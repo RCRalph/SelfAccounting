@@ -54,7 +54,7 @@
 
                 <div class="row">
                     <div class="col-xl-4 d-flex justify-content-xl-end justify-content-start align-items-center">
-                        <div class="h4 font-weight-bold m-xl-0">Bundles</div>
+                        <div class="h4 fw-bold m-xl-0">Bundles</div>
                     </div>
 
                     <div class="col-xl-7">

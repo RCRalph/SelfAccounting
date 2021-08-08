@@ -1,7 +1,7 @@
 <template>
     <div :class="!(prepend || append) && 'input-group-row'">
         <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center" v-if="!(prepend || append)">
-            <div class="h5 font-weight-bold m-md-0">
+            <div class="h5 fw-bold m-md-0">
                 {{ capitalize((name != 'password_confirmation' ? name : 'confirm')) }}
             </div>
         </div>
@@ -58,7 +58,7 @@
         <!-- Input field with prepend or append -->
         <div v-else-if="prepend || append" class="input-group-row">
             <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
-                <div class="h5 font-weight-bold m-md-0">
+                <div class="h5 fw-bold m-md-0">
                     {{ capitalize((name != 'password_confirmation' ? name : 'confirm')) }}
                 </div>
             </div>

@@ -15,48 +15,50 @@ window.updateTooltips = () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     // Tutorial modal
-    const pathName = window.location.pathname
-        .replaceAll("/", "_").split("_")
-        .map(item => (isNaN(Number(item)) || item === "") ? item : "*")
-        .join("_");
+	if (document.getElementById("tutorial-modal-content") && document.getElementById("tutorial-modal-content").innerHTML.trim()) {
+		const pathName = window.location.pathname
+			.replaceAll("/", "_").split("_")
+			.map(item => (isNaN(Number(item)) || item === "") ? item : "*")
+			.join("_");
 
-    const cookiePath = `hide_tutorial_${SERVER_DATA.user_id + pathName}`;
-    if (!Cookies.getJSON(cookiePath) && !SERVER_DATA.hide_all_tutorials && document.getElementById("tutorial-modal-content").innerHTML.trim()) {
-        document.getElementById("tutorial-modal").classList.add("show");
-        document.getElementById("app").style.filter = "blur(5px)";
+		const cookiePath = `hide_tutorial_${SERVER_DATA.user_id + pathName}`;
+		if (!Cookies.getJSON(cookiePath) && !SERVER_DATA.hide_all_tutorials) {
+			document.getElementById("tutorial-modal").classList.add("show");
+			document.getElementById("app").style.filter = "blur(5px)";
 
-        function removeElement() {
-            document.getElementById("tutorial-modal").classList.remove("show");
-            document.getElementById("app").style.filter = "none";
-        }
+			function removeElement() {
+				document.getElementById("tutorial-modal").classList.remove("show");
+				document.getElementById("app").style.filter = "none";
+			}
 
-        document.getElementById("tutorial-close")
-            .addEventListener("click", () => removeElement())
+			document.getElementById("tutorial-close")
+				.addEventListener("click", () => removeElement())
 
-        document.getElementById("tutorial-stop-showing")
-            .addEventListener("click", () => {
-                Cookies.set(
-                    cookiePath,
-                    1,
-                    {
-                        path: window.location.pathname,
-                        expires: 3650,
-                        secure: true
-                    }
-                );
-                removeElement();
-            })
+			document.getElementById("tutorial-stop-showing")
+				.addEventListener("click", () => {
+					Cookies.set(
+						cookiePath,
+						1,
+						{
+							path: window.location.pathname,
+							expires: 3650,
+							secure: true
+						}
+					);
+					removeElement();
+				})
 
-        document.getElementById("tutorial-never-show")
-            .addEventListener("click", () => {
-                removeElement();
+			document.getElementById("tutorial-never-show")
+				.addEventListener("click", () => {
+					removeElement();
 
-                axios
-                    .post("/webapi/settings/tutorials", {
-                        tutorials: true
-                    });
-            })
-    }
+					axios
+						.post("/webapi/settings/tutorials", {
+							tutorials: true
+						});
+				})
+		}
+	}
 
     // Darkmode switcher
     document.getElementById("darkmode-switcher")

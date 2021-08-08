@@ -34,7 +34,7 @@
 
             <div class="input-group-row">
                 <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
-                    <div class="h5 font-weight-bold m-md-0">Thumbnail</div>
+                    <div class="h5 fw-bold m-md-0">Thumbnail</div>
                 </div>
 
                 <div class="col-lg-7">
@@ -49,7 +49,7 @@
             <hr class="hr-dashed">
 
             <div>
-                <div class="h3 text-center font-weight-bold">Short Description</div>
+                <div class="h3 text-center fw-bold">Short Description</div>
                 <div class="col-lg-8 offset-lg-2 my-3">
                     <textarea v-model="data.short_description" name="short_description" placeholder="Shortly describe this bundle..." :class="[
                         'form-control',
@@ -63,7 +63,7 @@
             <hr class="hr-dashed">
 
             <div>
-                <div class="h3 text-center font-weight-bold">Description</div>
+                <div class="h3 text-center fw-bold">Description</div>
                 <div class="col-lg-8 offset-lg-2 my-3">
                     <textarea v-model="data.description" name="description" placeholder="Describe this bundle..." :class="[
                         'form-control',

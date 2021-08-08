@@ -11,7 +11,7 @@
             <div v-if="ready">
                 <div class="row">
                     <div class="col-lg-5 d-flex justify-content-lg-end justify-content-start align-items-center">
-                        <div class="h4 font-weight-bold m-lg-0">Package</div>
+                        <div class="h4 fw-bold m-lg-0">Package</div>
                     </div>
 
                     <div class="col-lg-5">
@@ -29,7 +29,7 @@
 
                 <div class="row mb-3">
                     <div class="col-lg-5 d-flex justify-content-lg-end justify-content-start align-items-center">
-                        <div class="h4 font-weight-bold m-lg-0">Payment amount</div>
+                        <div class="h4 fw-bold m-lg-0">Payment amount</div>
                     </div>
 
                     <div class="col-lg-5">
@@ -45,7 +45,7 @@
 
                 <div class="row mb-3">
                     <div class="col-lg-5 d-flex justify-content-lg-end justify-content-start align-items-center">
-                        <div class="h4 font-weight-bold m-lg-0">Payment note</div>
+                        <div class="h4 fw-bold m-lg-0">Payment note</div>
                     </div>
 
                     <div class="col-lg-5">
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 h5 font-weight-bold text-center my-2 text-danger">
+                    <div class="col-12 h5 fw-bold text-center my-2 text-danger">
                         Remember to enter the note given above!
                     </div>
 

@@ -5,30 +5,28 @@
     background-size: cover;
 }
 
-$background: hsl(140, 90%, 60%);
+$main-color: lighten($primary, 10%);
 
 .big-text-h1 {
     @extend .mb-5;
+
+    font-size: 4.5rem !important;
+    color: $main-color;
+    -webkit-text-stroke: 2.5px #1a1d20;
     font-weight: bold;
+    user-select: none;
 }
 
 header.masthead {
     @include background-cover;
 
     position: relative;
-    background: $background;
+    background-image: url('/storage/welcome/Overlay1.jpg');
+    background-position: center;
     padding-top: 8rem;
     padding-bottom: 8rem;
 
-    .overlay {
-        position: absolute;
-        background-color: $gray-900;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        opacity: 0.3;
-    }
+    color: $main-color;
 
     h1 {
         font-size: 2rem;
@@ -48,13 +46,13 @@ header.masthead {
     @include background-cover;
 
     position: relative;
-    background: $background;
+    background-image: url('/storage/welcome/Overlay2.jpg');
+    background-position: center;
     padding-top: 8rem;
     padding-bottom: 8rem;
 
     .overlay {
         position: absolute;
-        background-color: $gray-900;
         height: 100%;
         width: 100%;
         top: 0;
@@ -76,7 +74,7 @@ header.masthead {
             @extend .align-items-center;
 
             height: 7rem;
-            color: darken($background, 15%);
+            color: darken($main-color, 15%);
 
             i {
                 font-size: 5rem;

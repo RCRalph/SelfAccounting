@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="row" v-if="dataToDisplay === false">
-                    <div class="h3 w-100 mt-3 font-weight-bold text-danger text-center">
+                    <div class="h3 w-100 mt-3 fw-bold text-danger text-center">
                         This file is invalid. Please try a&nbsp;different file.
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                         </div>
                     </div>
 
-					<div class="h3 font-weight-bold text-danger mt-3 text-center">
+					<div class="h3 fw-bold text-danger mt-3 text-center">
 						Warning! Performing this action will result in all of your data being erased!
 					</div>
                 </div>

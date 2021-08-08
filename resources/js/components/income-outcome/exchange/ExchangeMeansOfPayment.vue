@@ -17,7 +17,7 @@
 
                 <hr class="hr-dashed">
 
-                <div class="text-center h2 font-weight-bold mb-3">Income:</div>
+                <div class="text-center h2 fw-bold mb-3">Income:</div>
                 <ExchangeIncomeOutcomeComponent
                     :currencies="currencies"
                     :categories="categories"
@@ -28,7 +28,7 @@
 
                 <hr class="hr-dashed">
 
-                <div class="text-center h2 font-weight-bold mb-3">Outcome:</div>
+                <div class="text-center h2 fw-bold mb-3">Outcome:</div>
                 <ExchangeIncomeOutcomeComponent
                     :currencies="currencies"
                     :categories="categories"
