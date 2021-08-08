@@ -26,9 +26,9 @@
                 <div class="w-100 table-responsive-lg">
                     <table class="table-themed responsive-table-hover">
                         <thead>
-                            <th class="h4 font-weight-bold" scope="col">Face value</th>
-                            <th class="h4 font-weight-bold" scope="col">Amount</th>
-                            <th class="h4 font-weight-bold" scope="col">Value</th>
+                            <th class="h4 fw-bold" scope="col">Face value</th>
+                            <th class="h4 fw-bold" scope="col">Amount</th>
+                            <th class="h4 fw-bold" scope="col">Value</th>
                         </thead>
 
                         <tbody>
@@ -36,7 +36,7 @@
                                 v-for="(item, i) in cash[currentCurrency]"
                                 :key="i"
                             >
-                                <th scope="row" class="h5 font-weight-bold">
+                                <th scope="row" class="h5 fw-bold">
                                     {{ Number(item.value) }} {{ currencies[currentCurrency - 1].ISO }}
                                 </th>
 
@@ -53,7 +53,7 @@
                                     >
                                 </td>
 
-                                <td class="h5 font-weight-bold">
+                                <td class="h5 fw-bold">
                                     {{
                                         isValidCashAmount(value[item.id], item.id) ?
                                         Math.round(item.value * value[item.id] * 100) / 100 : 0
@@ -66,12 +66,12 @@
                 </div>
             </div>
 
-            <div class="row h3 font-weight-bold">
+            <div class="row h3 fw-bold">
                 <div class="col-6 text-end">Sum:</div>
                 <div class="col-6 ">{{ currentSum }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
 
-            <div class="row h3 font-weight-bold">
+            <div class="row h3 fw-bold">
                 <div class="col-6 text-end">Sum from {{ this.type }}:</div>
                 <div class="col-6 ">{{ sums[currentCurrency] }} {{ currencies[currentCurrency - 1].ISO }}</div>
             </div>
@@ -81,7 +81,7 @@
             <div :class="[
                     'row',
                     'h3',
-                    'font-weight-bold',
+                    'fw-bold',
                     sums[currentCurrency] - currentSum != 0 ? 'text-danger' : 'text-success'
                 ]">
                     <div class="col-6 text-end">Difference:</div>

@@ -24,7 +24,7 @@
 
             <div class="input-group-row">
                 <div class="col-md-4 d-flex justify-content-md-end justify-content-start align-items-center">
-                    <div class="h5 font-weight-bold m-md-0">Profile picture</div>
+                    <div class="h5 fw-bold m-md-0">Profile picture</div>
                 </div>
 
                 <div class="col-md-7 my-auto">

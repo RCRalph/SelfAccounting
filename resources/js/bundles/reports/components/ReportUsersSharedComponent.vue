@@ -45,7 +45,7 @@
 
             <div class="row">
                 <div class="col-md-3 d-flex justify-content-md-end justify-content-start align-items-center">
-                    <div class="h5 font-weight-bold m-md-0">User's email:</div>
+                    <div class="h5 fw-bold m-md-0">User's email:</div>
                 </div>
 
                 <div class="col-md-5">

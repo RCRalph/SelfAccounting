@@ -5,15 +5,16 @@
     background-size: cover;
 }
 
-$background: hsl(140, 90%, 50%);
+$main-color: lighten($primary, 10%);
 
 .big-text-h1 {
     @extend .mb-5;
 
-    font-size: 4rem !important;
-    color: hsl(140, 90%, 50%);
-    -webkit-text-stroke: 2px #1a1d20;
+    font-size: 4.5rem !important;
+    color: $main-color;
+    -webkit-text-stroke: 2.5px #1a1d20;
     font-weight: bold;
+    user-select: none;
 }
 
 header.masthead {
@@ -25,7 +26,7 @@ header.masthead {
     padding-top: 8rem;
     padding-bottom: 8rem;
 
-    color: $background;
+    color: $main-color;
 
     h1 {
         font-size: 2rem;
@@ -73,7 +74,7 @@ header.masthead {
             @extend .align-items-center;
 
             height: 7rem;
-            color: darken($background, 15%);
+            color: darken($main-color, 15%);
 
             i {
                 font-size: 5rem;

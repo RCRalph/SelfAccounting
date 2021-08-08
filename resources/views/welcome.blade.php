@@ -35,7 +35,7 @@
                         </div>
                         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                             <div class="col-12 col-md-4 mx-auto">
-                                <a role="button" class="btn btn-block btn-lg btn-dark" href="/register">Register now!</a>
+                                <a role="button" class="btn btn-block btn-lg btn-dark fw-bold" href="/register">Register now!</a>
                             </div>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                         </div>
                         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                             <div class="col-12 col-md-4 mx-auto">
-                                <a role="button" class="btn btn-block btn-lg btn-dark" href="/register">Register now!</a>
+                                <a role="button" class="btn btn-block btn-lg btn-dark fw-bold" href="/register">Register now!</a>
                             </div>
                         </div>
                     </div>

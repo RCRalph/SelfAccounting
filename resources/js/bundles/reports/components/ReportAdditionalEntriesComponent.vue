@@ -9,7 +9,7 @@
 
         <div class="card-body">
             <div v-for="(item, i) in value" :key="i">
-                <div class="h4 font-weight-bold ms-3 mb-3">Entry #{{ i + 1 }}</div>
+                <div class="h4 fw-bold ms-3 mb-3">Entry #{{ i + 1 }}</div>
 
                 <CreateForm
                     v-model="value[i]"

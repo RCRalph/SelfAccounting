@@ -20,7 +20,7 @@
 
                         <tbody>
                             <tr v-for="(item, i) in cash" :key="i">
-                                <td class="font-weight-bold">
+                                <td class="fw-bold">
                                     {{ currencies.find(item1 => item1.id == item.currency_id).ISO }}
                                 </td>
 
@@ -60,7 +60,7 @@
 
                         <tbody>
                             <tr v-for="(item, i) in cashMeans" :key="i">
-                                <td class="font-weight-bold">
+                                <td class="fw-bold">
                                     {{ currencies.find(item1 => item1.id == item.currency_id).ISO }}
                                 </td>
 

@@ -18,7 +18,7 @@
 
                 <tbody>
                     <tr v-for="(item, i) in data" :key="i">
-                        <td class="font-weight-bold">
+                        <td class="fw-bold">
                             {{ item.date }}
                         </td>
                         <td>

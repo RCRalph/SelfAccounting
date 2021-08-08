@@ -30,16 +30,16 @@
                             >
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="h3 font-weight-bold">ID</th>
-                                        <th scope="col" class="h3 font-weight-bold">Title</th>
-                                        <th scope="col" class="h3 font-weight-bold">View</th>
-                                        <th scope="col" class="h3 font-weight-bold">Edit</th>
+                                        <th scope="col" class="h3 fw-bold">ID</th>
+                                        <th scope="col" class="h3 fw-bold">Title</th>
+                                        <th scope="col" class="h3 fw-bold">View</th>
+                                        <th scope="col" class="h3 fw-bold">Edit</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     <tr v-for="(item, i) in userReports.data" :key="item.id" :id="item.id" :index="i">
-                                        <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
+                                        <th scope="row" class="h5 my-auto fw-bold">{{ item.id }}</th>
 
                                         <td class="h5 my-auto">{{ item.title }}</td>
 
@@ -81,15 +81,15 @@
                                 >
                                     <thead>
                                         <tr>
-                                            <th scope="col" class="h3 font-weight-bold">ID</th>
-                                            <th scope="col" class="h3 font-weight-bold">Title</th>
-                                            <th scope="col" class="h3 font-weight-bold">View</th>
+                                            <th scope="col" class="h3 fw-bold">ID</th>
+                                            <th scope="col" class="h3 fw-bold">Title</th>
+                                            <th scope="col" class="h3 fw-bold">View</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         <tr v-for="(item, i) in sharedReports.data" :key="item.id" :index="i">
-                                            <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
+                                            <th scope="row" class="h5 my-auto fw-bold">{{ item.id }}</th>
 
                                             <td class="h5 my-auto">{{ item.title }}</td>
 

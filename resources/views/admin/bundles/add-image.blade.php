@@ -13,8 +13,8 @@
             <form action="/admin/bundles/{{ $bundle->id }}/add-image" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-group row">
-                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
+                <div class="input-group-row">
+                    <label for="image" class="col-md-4 col-form-label text-md-end">Image</label>
 
                     <div class="col-md-6">
                         <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" value="{{ old('image') }}" autocomplete="image" autofocus>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row mb-0">
+                <div class="input-group-row mb-0">
                     <div class="col-md-3 offset-md-4">
                         <button type="submit" class="big-button-primary">
                             Submit

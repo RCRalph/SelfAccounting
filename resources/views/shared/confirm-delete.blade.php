@@ -10,7 +10,7 @@
         </div>
 
         <div class="card-body">
-            <div class="h3 text-center font-weight-bold">
+            <div class="h3 text-center fw-bold">
                 Are you sure you want to delete&nbsp;this?
             </div>
 

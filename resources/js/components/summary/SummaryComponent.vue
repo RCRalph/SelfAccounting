@@ -26,7 +26,7 @@
                     <div class="mx-auto mb-3 col-md-12 col-lg-8 offset-lg-2">
                         <div class="card">
                             <div class="card-header">
-                                <div class="m-auto text-center font-weight-bold h2">
+                                <div class="m-auto text-center fw-bold h2">
                                     Sum
                                 </div>
                             </div>
@@ -40,14 +40,14 @@
                     <table class="table-themed responsive-table-hover">
                         <thead>
                             <tr>
-                                <th scope="col" class="h3 font-weight-bold">Mean</th>
-                                <th scope="col" class="h3 font-weight-bold">Balance</th>
+                                <th scope="col" class="h3 fw-bold">Mean</th>
+                                <th scope="col" class="h3 fw-bold">Balance</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr v-for="(item, i) in content[currentCurrency]" :key="i">
-                                <th scope="row" class="h5 my-auto font-weight-bold">{{ item.name }}</th>
+                                <th scope="row" class="h5 my-auto fw-bold">{{ item.name }}</th>
                                 <td class="h5 my-auto">{{ item.balance | addSpaces }} {{ currencies[currentCurrency - 1].ISO }}</td>
                             </tr>
                         </tbody>

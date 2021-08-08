@@ -22,9 +22,9 @@
 
         <div class="card-body">
             <div v-if="ready">
-                <div class="form-group row">
+                <div class="input-group-row">
                     <div class="col-lg-5 d-flex justify-content-lg-end justify-content-start align-items-center">
-                        <div class="h5 font-weight-bold m-lg-0">Mean of payment used as cash:</div>
+                        <div class="h5 fw-bold m-lg-0">Mean of payment used as cash:</div>
                     </div>
 
                     <div class="col-lg-5">
@@ -49,9 +49,9 @@
 						<table class="table-themed responsive-table-hover">
 							<thead>
                                 <tr>
-                                    <th class="h4 font-weight-bold" scope="col">Face value</th>
-                                    <th class="h4 font-weight-bold" scope="col">Amount</th>
-                                    <th class="h4 font-weight-bold" scope="col">Value</th>
+                                    <th class="h4 fw-bold" scope="col">Face value</th>
+                                    <th class="h4 fw-bold" scope="col">Amount</th>
+                                    <th class="h4 fw-bold" scope="col">Value</th>
                                 </tr>
 							</thead>
 
@@ -60,7 +60,7 @@
 									v-for="(item, i) in cash[currentCurrency]"
 									:key="i"
 								>
-									<th scope="row" class="h5 font-weight-bold">
+									<th scope="row" class="h5 fw-bold">
                                         {{ Number(item.value) }} {{ currencies[currentCurrency - 1].ISO }}
                                     </th>
 
@@ -77,7 +77,7 @@
                                         >
                                     </td>
 
-                                    <td class="h5 font-weight-bold">
+                                    <td class="h5 fw-bold">
                                         {{ isValidCashAmount(usersCash[item.id]) ?
 											Math.round(item.value * usersCash[item.id] * 100) / 100 : 0
 										}}
@@ -89,13 +89,13 @@
 					</div>
 				</div>
 
-                <div class="row h3 font-weight-bold">
+                <div class="row h3 fw-bold">
                     <div class="col-6 text-end">Sum:</div>
                     <div class="col-6 ">{{ sumOfCash }} {{ currencies[currentCurrency - 1].ISO }}</div>
                 </div>
 
                 <div v-if="currentCashMeanBalance !== false">
-                    <div class="row h3 font-weight-bold">
+                    <div class="row h3 fw-bold">
                         <div class="col-6 text-end">Current balance:</div>
                         <div class="col-6 ">{{ currentCashMeanBalance }} {{ currencies[currentCurrency - 1].ISO }}</div>
                     </div>
@@ -105,7 +105,7 @@
                     <div :class="[
                         'row',
                         'h3',
-                        'font-weight-bold',
+                        'fw-bold',
                         currentCashMeanBalance - sumOfCash != 0 ? 'text-danger' : 'text-success'
                     ]">
                         <div class="col-6 text-end">Balance difference:</div>

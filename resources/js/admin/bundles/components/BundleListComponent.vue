@@ -22,15 +22,15 @@
                         >
                             <thead>
                                 <tr>
-                                    <th scope="col" class="h3 font-weight-bold">ID</th>
-                                    <th scope="col" class="h3 font-weight-bold">Title</th>
-                                    <th scope="col" class="h3 font-weight-bold">Details</th>
+                                    <th scope="col" class="h3 fw-bold">ID</th>
+                                    <th scope="col" class="h3 fw-bold">Title</th>
+                                    <th scope="col" class="h3 fw-bold">Details</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <tr v-for="(item, i) in paginationData.data" :key="item.id" :id="item.id" :index="i">
-                                    <th scope="row" class="h5 my-auto font-weight-bold">{{ item.id }}</th>
+                                    <th scope="row" class="h5 my-auto fw-bold">{{ item.id }}</th>
                                     <td class="h5 my-auto">{{ item.title }}</td>
                                     <td class="h5 my-auto">
                                         <a role="button" class="big-button-primary" :href="'/admin/bundles/' + item.id">View details</a>
