@@ -122,11 +122,11 @@
                                 </td>
 
                                 <td>
-                                    {{ item.category_id === 0  ? "N/A" : categories[item.category_id].name }}
+                                    {{ item.category_id === 0  ? "N/A" : categories[item.category_id - 1].name }}
                                 </td>
 
                                 <td>
-                                    {{ item.mean_id === 0  ? "N/A" : means[item.mean_id].name }}
+                                    {{ item.mean_id === 0  ? "N/A" : means[item.mean_id - 1].name }}
                                 </td>
                             </tr>
                         </tbody>
@@ -178,11 +178,11 @@
                                 </td>
 
                                 <td>
-                                    {{ categories[item.category_id].name }}
+                                    {{ item.category_id === 0  ? "N/A" : categories[item.category_id - 1].name }}
                                 </td>
 
                                 <td>
-                                    {{ means[item.mean_id].name }}
+                                    {{ item.mean_id === 0  ? "N/A" : means[item.mean_id - 1].name }}
                                 </td>
                             </tr>
                         </tbody>
@@ -204,11 +204,13 @@
                         <div class="restore-table-content">
                             <table>
                                 <thead>
-                                    <th
-                                        v-for="(item, i) in header.users"
-                                        :key="i"
-                                        scope="col"
-                                    >{{ item }}</th>
+                                    <tr>
+                                        <th
+                                            v-for="(item, i) in header.users"
+                                            :key="i"
+                                            scope="col"
+                                        >{{ item }}</th>
+                                    </tr>
                                 </thead>
 
                                 <tbody>

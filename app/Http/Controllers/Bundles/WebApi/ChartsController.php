@@ -339,6 +339,7 @@ class ChartsController extends Controller
         // Sum the differences to create collection of balance
         $balanceByMeans = collect();
         foreach ($differenceByMeans as $meanID => $differences) {
+            $differences = $differences->sortKeys();
             $firstKey = $differences->keys()->first();
             $retArr = collect([
                 $firstKey => $differences->first()
@@ -394,8 +395,6 @@ class ChartsController extends Controller
 				}
             }
 
-            usort($retArr["data"], fn ($a, $b) => strtotime($a["t"]) > strtotime($b["t"]));
-
             array_push($data[$mean->currency_id]["datasets"], $retArr);
 
 			if (isset($differencesByCurrency[$mean->currency_id])) {
@@ -420,6 +419,7 @@ class ChartsController extends Controller
 			}
 
 			usort($datesAndDifferences, fn ($a, $b) => strtotime($a["t"]) > strtotime($b["t"]));
+
             if (count($datesAndDifferences)) {
                 // Sum data by dates
                 $sumData = [$datesAndDifferences[0]["t"] => $datesAndDifferences[0]];

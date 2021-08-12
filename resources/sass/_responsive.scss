@@ -2,6 +2,16 @@
     .shared-user {
         width: 95% !important;
     }
+
+    .big-text-h1 {
+        font-size: 3.25rem !important;
+    }
+
+    .card-header-flex {
+        .currency-text {
+            font-size: calc(1.1rem + 0.12vw);
+        }
+    }
 }
 
 @include media-breakpoint-down(md) {

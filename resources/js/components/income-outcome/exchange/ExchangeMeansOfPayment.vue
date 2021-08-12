@@ -282,7 +282,7 @@ export default {
             axios
                 .post(`/webapi/${this.type}/exchange`, submitObj)
                 .then(() => {
-                    //window.location.href = `/${this.type}`
+                    window.location.href = `/${this.type}`
                     this.submitted = false;
                 })
                 .catch(err => {

@@ -13,14 +13,14 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto" id="navbar-left-side">
                 @auth
-                    <li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/income">
                             <i class="fas fa-sign-in-alt"></i>
                             {{ __('Income') }}
                         </a>
                     </li>
 
-                    <li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/outcome">
                             <i class="fas fa-sign-out-alt"></i>
                             {{ __('Outcome') }}
