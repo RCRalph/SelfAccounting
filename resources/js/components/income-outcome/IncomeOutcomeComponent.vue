@@ -11,7 +11,7 @@
             </div>
 
             <div class="d-flex" v-if="ready">
-                <div class="h4 my-auto me-3">Currency:</div>
+                <div class="currency-text">Currency:</div>
                 <select class="form-control" v-model="currentCurrency" @change="resetRows">
                     <option
                         v-for="currency in currencies"

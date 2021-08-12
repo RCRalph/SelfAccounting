@@ -9,6 +9,11 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Carousel
+@import "~@glidejs/glide/src/assets/sass/glide.core";
+@import "~@glidejs/glide/src/assets/sass/glide.theme";
+
+// Own styling
 @import 'own-mixins';
 @import 'own-classes';
 @import 'own-customization';

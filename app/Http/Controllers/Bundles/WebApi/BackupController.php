@@ -13,6 +13,7 @@ use App\Rules\BackupValidMeanForCashMeans;
 use App\Rules\BackupValidQueryDate;
 use App\Rules\BackupValidQueryMinMax;
 use App\Rules\BackupValidQueryCategoryMean;
+use App\Rules\UniqueInArray;
 
 use App\User;
 use App\Backup;
@@ -289,14 +290,14 @@ class BackupController extends Controller
             "bundleData.reports.*.additionalEntries.*.date" => ["required", "date"],
             "bundleData.reports.*.additionalEntries.*.title" => ["required", "string", "max:64"],
             "bundleData.reports.*.additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
-            "bundleData.reports.*.additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "bundleData.reports.*.additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:0,1e11,-1e11"],
             "bundleData.reports.*.additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
             "bundleData.reports.*.additionalEntries.*.category_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("additionalEntries")],
             "bundleData.reports.*.additionalEntries.*.mean_id" => ["present", "nullable", "integer", new BackupValidQueryCategoryMean("additionalEntries")],
 
             // Report users
-            "bundleData.reports.*.users" => ["present", "array"],
-            "bundleData.reports.*.users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
+            "bundleData.reports.*.users" => ["present", "array", new UniqueInArray],
+            "bundleData.reports.*.users.*" => ["required", "email", "max:64", "exists:users,email", "not_in:" . auth()->user()->email]
         ]);
 
         // Erase existing data

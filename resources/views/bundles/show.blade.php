@@ -11,49 +11,40 @@
 
         <div class="card-body">
             @if (count($gallery))
-                <div class="d-flex justify-content-center align-items-center w-100" style="max-height: 400px;">
-                    <div id="image-gallery" class="carousel slide w-75" data-ride="carousel">
-                        <ol class="carousel-indicators carousel-control-color">
+                <div class="glide">
+                    <div class="glide__track" data-glide-el="track">
+                        <ul class="glide__slides">
                             @foreach ($gallery as $index => $image)
-                                <li
-                                    data-target="#image-gallery"
-                                    data-slide-to="{{ $index }}"
-                                    class="{{ $index == 0 ? "active" : "" }}"
-                                ></li>
-                            @endforeach
-                        </ol>
-
-                        <div class="carousel-inner">
-                            @foreach ($gallery as $index => $image)
-                                <div style="height: 375px;" class="carousel-item {{ $index == 0 ? "active" : "" }}">
+                                <li class="glide__slide my-auto">
                                     <img
                                         class="bundle-image"
                                         src="{{ $image }}"
                                         style="object-fit: cover;"
                                         alt="Slide {{ $index + 1 }}"
                                     >
-                                </div>
+                                </li>
                             @endforeach
-                        </div>
+                        </ul>
+                    </div>
 
-                        <a class="carousel-control-prev" href="#image-gallery" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon carousel-control-color" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
+                    <div class="glide__arrows" data-glide-el="controls">
+                        <button class="glide__arrow glide__arrow--left" data-glide-dir="<"><</button>
+                        <button class="glide__arrow glide__arrow--right" data-glide-dir=">">></button>
+                    </div>
 
-                        <a class="carousel-control-next" href="#image-gallery" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon carousel-control-color" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                    <div class="glide__bullets" data-glide-el="controls[nav]">
+                        @foreach ($gallery as $index => $image)
+                            <button class="glide__bullet" data-glide-dir="={{ $index }}"></button>
+                        @endforeach
                     </div>
                 </div>
 
-                <hr class="mt-5 hr">
+                <hr class="hr">
             @endif
 
             <div class="row">
                 @if ($hasBundle)
-                    <div class="col-sm-4 offset-sm-4">
+                    <div class="col-md-4 offset-md-4">
                         <bundle-toggle
                             enable="{{ $bundleEnabled }}"
                             id="{{ $bundle->id }}"
@@ -61,13 +52,13 @@
                         ></bundle-toggle>
                     </div>
                 @else
-                    <div class="col-sm-4 offset-sm-2">
+                    <div class="col-md-4 offset-md-2 mb-md-0 mb-2">
                         <a href="/payment?bundle={{ $bundle->id }}" type="button" class="big-button-primary">
                             Buy now - €{{ $bundle->price }}
                         </a>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-md-4">
                         <premium-bundle-toggle
                             premium="{{ $isPremium }}"
                             enable="{{ $hasBundlePremium }}"

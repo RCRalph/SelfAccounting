@@ -3,6 +3,8 @@ require("./bootstrap");
 // Global settings
 window.Cookies = require("js-cookie");
 window.Vue = require("vue").default;
+import Glide from "@glidejs/glide";
+window.Glide = Glide;
 
 // Bootstrap tooltips
 window.updateTooltips = () => {
@@ -14,6 +16,8 @@ window.updateTooltips = () => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    new Glide(".glide").mount();
+
     // Tutorial modal
 	if (document.getElementById("tutorial-modal-content") && document.getElementById("tutorial-modal-content").innerHTML.trim()) {
 		const pathName = window.location.pathname
