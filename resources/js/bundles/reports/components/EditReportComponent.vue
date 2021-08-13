@@ -5,6 +5,21 @@
                 <i class="fas fa-newspaper"></i>
                 Edit report
             </div>
+
+            <div class="d-flex" v-if="ready">
+                <button class="big-button-primary" @click="showReport" :disabled="submitted || destroyed || showReportClicked">
+                    <div v-if="!showReportClicked">
+                        Show report
+                    </div>
+
+                    <span
+                        v-else
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                    ></span>
+                </button>
+            </div>
         </div>
 
         <div class="card-body">
@@ -103,6 +118,7 @@ export default {
             lastCurrency: 1,
             submitted: false,
             destroyed: false,
+            showReportClicked: false,
             copy: {},
 
             queries: [],
@@ -247,7 +263,7 @@ export default {
         submit() {
             this.submitted = true;
 
-            axios
+            return axios
                 .patch(`/webapi/bundles/reports/${this.id}/update`, {
                     data: this.data,
                     columns: this.columns,
@@ -292,6 +308,11 @@ export default {
         },
         isNullLike(value) {
             return value === null || value === "";
+        },
+        showReport() {
+            this.showReportClicked = true;
+            this.submit()
+                .then(() => window.location = `/bundles/reports/${this.id}`);
         }
     },
     mounted() {

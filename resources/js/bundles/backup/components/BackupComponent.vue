@@ -294,10 +294,11 @@ export default {
                 data.reports.forEach(item => {
                     const validation = [
                         // Validate report data
-                        typeof this.isValidString(item.title, 1, 64),
+                        this.isValidString(item.title, 1, 64),
                         typeof item.income_addition == "boolean",
                         typeof item.sort_dates_desc == "boolean",
                         typeof item.calculate_sum == "boolean",
+                        item.show_columns ? this.isBetweenNumbers(item.show_columns, 1, 127) : 127,
 
                         // Validate report queries
                         Array.isArray(item.queries) && item.queries.map(item1 => [

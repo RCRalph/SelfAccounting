@@ -51,6 +51,9 @@
                                             item.calculate_sum ? 'fa-check-square' : 'fa-times-circle'
                                         ]"></i>
                                     </td>
+                                    <td>
+                                        {{ item.show_columns || 127 }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -239,7 +242,7 @@ export default {
     data() {
         return {
             header: {
-                reports: ["Title", "Income addition", "Sort dates desc", "Calculate sum"],
+                reports: ["Title", "Income addition", "Sort dates desc", "Calculate sum", "Show columns"],
                 queries: ["Report", "Type", "Min date", "Max date", "Title", "Min amount", "Max amount", "Min Price", "Max Price", "Currency", "Category", "Mean"],
                 additionalEntries: ["Report", "Date", "Title", "Amount", "Price", "Category", "Mean"],
                 users: ["Report", "Email"]

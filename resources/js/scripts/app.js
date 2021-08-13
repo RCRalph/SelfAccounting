@@ -16,7 +16,9 @@ window.updateTooltips = () => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    new Glide(".glide").mount();
+    if (document.getElementsByClassName("glide").length) {
+        new Glide(".glide").mount();
+    }
 
     // Tutorial modal
 	if (document.getElementById("tutorial-modal-content") && document.getElementById("tutorial-modal-content").innerHTML.trim()) {
