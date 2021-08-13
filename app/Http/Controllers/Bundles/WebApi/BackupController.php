@@ -166,7 +166,7 @@ class BackupController extends Controller
             foreach ($reports as $i => $report) {
                 array_push(
                     $bundleData["reports"],
-                    $report->only("title", "income_addition", "sort_dates_desc", "calculate_sum")
+                    $report->only("title", "income_addition", "sort_dates_desc", "calculate_sum", "show_columns")
                 );
 
                 $bundleData["reports"][$i]["queries"] = [];
@@ -270,6 +270,7 @@ class BackupController extends Controller
             "bundleData.reports.*.income_addition" => ["required", "boolean"],
             "bundleData.reports.*.sort_dates_desc" => ["required", "boolean"],
             "bundleData.reports.*.calculate_sum" => ["required", "boolean"],
+            "bundleData.reports.*.show_columns" => ["nullable", "integer", "min:1", "max:127"],
 
             // Report queries
             "bundleData.reports.*.queries" => ["present", "array"],
@@ -299,6 +300,8 @@ class BackupController extends Controller
             "bundleData.reports.*.users" => ["present", "array", new UniqueInArray],
             "bundleData.reports.*.users.*" => ["required", "email", "max:64", "exists:users,email", "not_in:" . auth()->user()->email]
         ]);
+
+        dd($data["bundleData"]["reports"]);
 
         // Erase existing data
         auth()->user()->categories()->delete();
@@ -374,6 +377,9 @@ class BackupController extends Controller
 
                 unset($report["queries"], $report["additionalEntries"], $report["users"]);
 
+                if (!$report["show_columns"]) {
+                    $report["show_columns"] = 127;
+                }
                 $created = auth()->user()->reports()->create($report);
 
                 foreach ($queries as $query) {
