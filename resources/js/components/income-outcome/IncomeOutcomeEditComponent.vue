@@ -12,9 +12,18 @@
             </div>
 
             <div class="d-flex" v-if="ready">
-                <a role="button" class="big-button-primary" :href="`/${type}`">
-                    Go back
-                </a>
+                <button class="big-button-primary" @click="goBack">
+                    <div v-if="goBackClicked">
+                        Go back
+                    </div>
+
+                    <span
+                        v-else
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                    ></span>
+                </button>
             </div>
         </div>
 
@@ -64,6 +73,7 @@ export default {
             ready: false,
             submitted: false,
             destroyed: false,
+            goBackClicked: false,
 
             currencies: {},
             categories: {},
@@ -119,7 +129,7 @@ export default {
         submit() {
             this.submitted = true;
 
-            axios
+            return axios
                 .patch(`/webapi/${this.type}/${this.id}/update`, {
                     data: [this.data]
                 })
@@ -135,6 +145,7 @@ export default {
                 })
                 .catch(err => {
                     console.error(err);
+                    this.goBackClicked = false;
                 })
                 .finally(() => this.submitted = false)
         },
@@ -153,6 +164,15 @@ export default {
                     console.log(err);
                     this.destroyed = false;
                 })
+        },
+        goBack() {
+            this.goBackClicked = true;
+            this.submit()
+                .then(() => {
+                    if (this.goBackClicked) {
+                        window.location = `/${this.type}`;
+                    }
+                });
         }
     },
     mounted() {

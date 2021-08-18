@@ -217,9 +217,9 @@ export default {
             lastCurrency: 1,
 
             common: {
-                date: "",
+                date: new Date().toISOString().split("T")[0],
                 title: "",
-                amount: "",
+                amount: "1",
                 price: "",
                 currency_id: 1,
                 category_id: null,
@@ -467,13 +467,15 @@ export default {
                 this.lastCurrency = data.last.currency;
 
                 this.data.push({
-                    date: "",
+                    date: this.common.date,
                     title: "",
-                    amount: "",
+                    amount: this.common.amount,
                     price: "",
                     currency_id: this.lastCurrency,
-                    category_id: data.last.category || null,
-                    mean_id: data.last.mean || null
+                    category_id: this.categories[data.last.currency]
+                        .find(item => item.id == data.last.category) ? data.last.category : null,
+                    mean_id: this.means[data.last.currency]
+                        .find(item => item.id == data.last.mean) ? data.last.mean : null
                 });
 
                 this.ready = true;

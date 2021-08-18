@@ -211,6 +211,8 @@ class BackupController extends Controller
 
     public function restoreData()
     {
+        ini_set("max_execution_time", "300");
+
         $data = request()->validate([
             // Categories
             "categories.*.currency_id" => ["required", "exists:currencies,id"],
@@ -301,8 +303,6 @@ class BackupController extends Controller
             "bundleData.reports.*.users.*" => ["required", "email", "max:64", "exists:users,email", "not_in:" . auth()->user()->email]
         ]);
 
-        dd($data["bundleData"]["reports"]);
-
         // Erase existing data
         auth()->user()->categories()->delete();
         auth()->user()->meansOfPayment()->delete();
@@ -377,7 +377,7 @@ class BackupController extends Controller
 
                 unset($report["queries"], $report["additionalEntries"], $report["users"]);
 
-                if (!$report["show_columns"]) {
+                if (!isset($report["show_columns"])) {
                     $report["show_columns"] = 127;
                 }
                 $created = auth()->user()->reports()->create($report);

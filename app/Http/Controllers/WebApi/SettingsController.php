@@ -192,12 +192,14 @@ class SettingsController extends Controller
         // Get categories
         $categories = auth()->user()->categories
             ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at", "show_on_charts"))
+            ->sortBy("id")
             ->groupBy("currency_id")
             ->toArray();
 
         // Get means of payment
         $means = auth()->user()->meansOfPayment
             ->map(fn ($item) => collect($item)->forget("user_id", "created_at", "updated_at", "show_on_charts"))
+            ->sortBy("id")
             ->toArray();
 
         $means = collect($this->getMeanDateLimits($incomeOutcome, $means))
