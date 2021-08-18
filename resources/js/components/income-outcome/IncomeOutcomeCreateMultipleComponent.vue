@@ -149,7 +149,42 @@
                     ></IncomeOutcomeCashComponent>
                 </div>
 
-                <hr v-if="data.length" class="hr">
+                <div v-if="data.length">
+                    <hr class="hr">
+
+                    <div class="row mb-3">
+                        <div class="col-md-8 offset-md-2">
+                            <div class="card">
+                                <div class="card-header-flex">
+                                    <div class="card-header-text">
+                                        <i class="fas fa-calculator"></i>
+                                        Sum
+                                    </div>
+
+                                    <div class="d-flex" v-if="usedCurrencies.length > 1">
+                                        <div class="currency-text">Currency:</div>
+                                        <select class="form-control" v-model="currentCurrencySum">
+                                            <option
+                                                v-for="currency in usedCurrencies"
+                                                :key="currencies[currency - 1].id"
+                                                :value="currencies[currency - 1].id"
+                                            >
+                                                {{ currencies[currency - 1].ISO }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="card-body text-center h2 my-auto">
+                                    {{ sums[currentCurrencySum].toLocaleString('en').split(",").join(" ") }}
+                                    {{ currencies[currentCurrencySum - 1].ISO }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="hr">
+                </div>
 
                 <div class="row">
                     <div class="col-sm-6 my-2 my-sm-0">
@@ -226,7 +261,8 @@ export default {
                 mean_id: null
             },
             cashUsed: {},
-            data: []
+            data: [],
+            currentCurrencySum: 1
         }
     },
     computed: {
@@ -359,7 +395,26 @@ export default {
             });
 
             return sums;
-        }
+        },
+        usedCurrencies() {
+            const currencies = [...new Set(this.data.map(item => item.currency_id))];
+
+            if (!currencies.includes(this.currentCurrencySum)) {
+                this.currentCurrencySum = currencies[0] || 1;
+            }
+
+            return currencies;
+        },
+		sums() {
+			let retObj = {};
+			this.usedCurrencies.forEach(item => retObj[item] = 0);
+
+			this.data.forEach(item =>
+				retObj[item.currency_id] += Math.round(item.amount * item.price * 100) / 100
+			);
+
+			return retObj;
+		}
     },
     methods: {
         newEntry() {
@@ -461,10 +516,9 @@ export default {
 
                 this.titles = data.titles;
                 this.currencies = data.currencies;
-                this.common.currency_id = data.last.currency;
+                this.currentCurrencySum = this.lastCurrency = this.common.currency_id = data.last.currency;
                 this.categories = data.categories;
                 this.means = data.means;
-                this.lastCurrency = data.last.currency;
 
                 this.data.push({
                     date: this.common.date,
