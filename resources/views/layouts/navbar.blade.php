@@ -82,12 +82,14 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/getting-started">
-                            <i class="fas fa-graduation-cap"></i>
-                            {{ __('Getting started') }}
-                        </a>
-                    </li>
+					@if(!$pageData["hide_all_tutorials"])
+                        <li class="nav-item">
+                            <a class="nav-link" href="/getting-started">
+                                <i class="fas fa-graduation-cap"></i>
+                                {{ __('Getting started') }}
+                            </a>
+                        </li>
+                    @endif
 
                     @can("isAdmin", auth()->user())
                     <li class="nav-item dropdown">

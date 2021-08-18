@@ -34,6 +34,7 @@ class IncomeOutcomeController extends Controller
         $categories = auth()->user()->categories
             ->where($viewType . "_category", true)
             ->map(fn ($item) => collect($item)->only(["id", "name", "currency_id"]))
+            ->sortBy("id")
             ->groupBy("currency_id")
             ->toArray();
 
@@ -41,6 +42,7 @@ class IncomeOutcomeController extends Controller
         $means = auth()->user()->meansOfPayment
             ->where($viewType . "_mean", true)
             ->map(fn ($item) => collect($item)->only(["id", "name", "currency_id", "first_entry_date"]))
+            ->sortBy("id")
             ->groupBy("currency_id")
             ->toArray();
 

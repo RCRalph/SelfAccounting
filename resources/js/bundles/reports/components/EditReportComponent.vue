@@ -285,6 +285,7 @@ export default {
                 })
                 .catch(err => {
                     console.error(err);
+                    this.showReportClicked = false;
                 })
                 .finally(() => this.submitted = false)
         },
@@ -312,7 +313,11 @@ export default {
         showReport() {
             this.showReportClicked = true;
             this.submit()
-                .then(() => window.location = `/bundles/reports/${this.id}`);
+                .then(() => {
+                    if (this.showReportClicked) {
+                        window.location = `/bundles/reports/${this.id}`;
+                    }
+                });
         }
     },
     mounted() {
