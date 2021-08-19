@@ -78,8 +78,11 @@ class CashController extends Controller
 			->toArray();
 		$usersCashIDs = array_map(fn ($item) => $item["id"] * 1, $data["usersCash"]);
 
-		$IDsToInsert = array_values(array_diff($usersCashIDs, $usersCashIDsInDB));
 		$IDsToRemove = array_values(array_diff($usersCashIDsInDB, $usersCashIDs));
+        $IDsToUpdate = array_merge(
+            array_values(array_intersect($usersCashIDsInDB, $usersCashIDs)),
+            array_values(array_diff($usersCashIDs, $usersCashIDsInDB))
+        );
 
 		auth()->user()->cash()->detach($IDsToRemove);
 
@@ -88,7 +91,7 @@ class CashController extends Controller
 			$usersCashIDsToAmounts[$cash["id"]] = $cash["amount"];
 		}
 
-		foreach ($IDsToInsert as $ID) {
+		foreach ($IDsToUpdate as $ID) {
 			if (auth()->user()->cash->contains($ID)) {
 				auth()->user()->cash()
 					->updateExistingPivot($ID, ["amount" => $usersCashIDsToAmounts[$ID]]);

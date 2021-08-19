@@ -12,8 +12,8 @@
             </div>
 
             <div class="d-flex" v-if="ready">
-                <button class="big-button-primary" @click="goBack">
-                    <div v-if="goBackClicked">
+                <button class="big-button-primary" @click="goBack" :disabled="goBackClicked">
+                    <div v-if="!goBackClicked">
                         Go back
                     </div>
 
