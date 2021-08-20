@@ -224,10 +224,10 @@ export default {
                 this.titles = data.titles;
 
                 this.data.currency_id = data.last.currency;
-                this.data.category_id = this.categories[data.last.currency]
-                    .find(item => item.id == data.last.category) ? data.last.category : null;
-                this.data.mean_id = this.means[data.last.currency]
-                    .find(item => item.id == data.last.mean) ? data.last.mean : null;
+                this.data.category_id = (this.categories[data.last.currency] != undefined &&
+                        this.categories[data.last.currency].find(item => item.id == data.last.category)) ? data.last.category : null,
+                this.data.mean_id = (this.means[data.last.currency] != undefined &&
+                        this.means[data.last.currency].find(item => item.id == data.last.mean)) ? data.last.mean : null
                 this.data.amount = "1";
 
                 this.data.date = (new Date(this.minDate).getTime() > new Date().getTime() ?

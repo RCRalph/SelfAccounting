@@ -526,10 +526,10 @@ export default {
                     amount: this.common.amount,
                     price: "",
                     currency_id: this.lastCurrency,
-                    category_id: this.categories[data.last.currency]
-                        .find(item => item.id == data.last.category) ? data.last.category : null,
-                    mean_id: this.means[data.last.currency]
-                        .find(item => item.id == data.last.mean) ? data.last.mean : null
+                    category_id: (this.categories[data.last.currency] != undefined &&
+                        this.categories[data.last.currency].find(item => item.id == data.last.category)) ? data.last.category : null,
+                    mean_id: (this.means[data.last.currency] != undefined &&
+                        this.means[data.last.currency].find(item => item.id == data.last.mean)) ? data.last.mean : null
                 });
 
                 this.ready = true;
