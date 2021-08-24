@@ -27,6 +27,12 @@ Route::get('/', function () {
     return view("welcome");
 })->name('welcome');
 
+if (config("app.debug")) {
+    Route::get('/mail-test', function () {
+        return new App\Mail\RemindOfPremiumExpiration(5, "Username");
+    });
+}
+
 Route::prefix('/admin')->group(function () {
     Route::prefix('/users')->group(function () {
         Route::get('/', 'Admin\UsersController@list')->name('admin.users.list');
