@@ -411,6 +411,8 @@ class ReportsController extends Controller
         foreach ($report->additionalEntries as $entry) {
             unset($entry["id"], $entry["report_id"]);
 
+            $entry->amount *= 1;
+            $entry->price *= 1;
             $entry->value = round($entry->amount * $entry->price, 2);
             $rows = $rows->push($entry);
         }
