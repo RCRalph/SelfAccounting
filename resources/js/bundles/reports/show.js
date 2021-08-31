@@ -3,3 +3,5 @@ Vue.component('show-report-component', require('./components/ShowReportComponent
 const app = new Vue({
     el: '#app'
 });
+
+window.XLSX = require("xlsx");

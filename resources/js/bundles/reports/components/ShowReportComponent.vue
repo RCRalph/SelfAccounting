@@ -48,10 +48,17 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-lg-4 col-md-6 col-12 my-2 my-md-0 offset-lg-4 offset-md-3">
+                        <div class="col-lg-4 col-md-6 my-2 my-md-0 offset-lg-2">
                             <button class="big-button-primary btn-lg" @click="exportToTXT">
                                 <i class="fas fa-file-alt"></i>
                                 Export to .txt file
+                            </button>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 my-2 my-md-0">
+                            <button class="big-button-success btn-lg" @click="exportToXLSX">
+                                <i class="fas fa-file-excel"></i>
+                                Export to .xlsx file
                             </button>
                         </div>
                     </div>
@@ -295,16 +302,6 @@ export default {
                 }).join("%09")
             ];
 
-            let columnToKey = {
-                date: "date",
-                title: "title",
-                amount: "amount",
-                value: "value",
-                price: "price",
-                category: "category_id",
-                mean: "mean_id"
-            };
-
             this.rows.forEach((item, index) => {
                 let row = this.columnNames.map((item1, i) => {
                     if (this.data.columns[item1]) {
@@ -336,7 +333,39 @@ export default {
             document.body.appendChild(download);
             download.click();
             document.body.removeChild(download);
-		}
+		},
+        exportToXLSX() {
+            const workbook = XLSX.utils.book_new();
+
+            const data = [
+                this.columnNames.map(item => {
+                    if (this.data.columns[item]) {
+                        return item.charAt(0).toUpperCase() + item.slice(1);
+                    }
+                })
+            ]
+
+            // Convert object to array
+            this.rows.forEach((item, index) => {
+                data.push(this.columnNames.map((item1, i) => {
+                    if (this.data.columns[item1]) {
+                        return i <= 4 ?
+                            item[item1] : (
+                                i == 5 ?
+                                this.getCategoryName(this.rows[index].currency_id, item.category_id) :
+                                this.getMeanName(this.rows[index].currency_id, item.mean_id)
+                            );
+                    }
+                }));
+            })
+
+            const sheet = XLSX.utils.json_to_sheet(data, {
+                skipHeader: true
+            });
+
+            XLSX.utils.book_append_sheet(workbook, sheet, this.data.title);
+            XLSX.writeFile(workbook, `${this.data.title}.xlsx`);
+        }
     },
     mounted() {
         axios
