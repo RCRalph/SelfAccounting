@@ -493,7 +493,7 @@ class ReportsController extends Controller
         foreach ($report->sharedUsers as $user) {
             unset($query["id"], $query["report_id"]);
 
-            $report->sharedUsers()->attach($user->id);
+            $report->sharedUsers()->attach($user);
         }
 
         return response()->json([ "id" => $new["id"] ]);
