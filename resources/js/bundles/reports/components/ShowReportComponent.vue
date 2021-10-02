@@ -48,14 +48,14 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-lg-4 col-md-6 my-2 my-md-0 offset-lg-2">
+                        <div class="col-lg-3 col-md-6 my-2 my-md-0 offset-lg-3">
                             <button class="big-button-primary btn-lg" @click="exportToTXT">
                                 <i class="fas fa-file-alt"></i>
                                 Export to .txt file
                             </button>
                         </div>
 
-                        <div class="col-lg-4 col-md-6 my-2 my-md-0">
+                        <div class="col-lg-3 col-md-6 my-2 my-md-0">
                             <button class="big-button-success btn-lg" @click="exportToXLSX">
                                 <i class="fas fa-file-excel"></i>
                                 Export to .xlsx file
@@ -345,7 +345,7 @@ export default {
                 })
             ]
 
-            // Convert object to array
+            // Convert object to 2D array
             this.rows.forEach((item, index) => {
                 data.push(this.columnNames.map((item1, i) => {
                     if (this.data.columns[item1]) {
