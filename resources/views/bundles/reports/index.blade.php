@@ -1,4 +1,4 @@
-@extends('layouts.width8')
+@extends('layouts.width10')
 
 @section('script')
     <script src="{{ mix('js/bundles/reports/all.js') }}" defer></script>

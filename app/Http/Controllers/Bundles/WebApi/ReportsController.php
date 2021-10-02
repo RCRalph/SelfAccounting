@@ -468,4 +468,34 @@ class ReportsController extends Controller
 
         return response()->json(compact("reportData", "rows", "currencies", "categories", "means", "sum", "columnNames"));
     }
+
+    public function duplicate(Report $report)
+    {
+        $this->authorize("update", $report);
+
+        $reportData = $report->toArray();
+        unset($reportData["id"], $reportData["created_at"], $reportData["updated_at"]);
+
+        $new = Report::create($reportData);
+
+        foreach ($report->queries->toArray() as $query) {
+            unset($query["id"], $query["report_id"]);
+
+            $new->queries()->create($query);
+        }
+
+        foreach ($report->additionalEntries->toArray() as $additionalEntry) {
+            unset($additionalEntry["id"], $additionalEntry["report_id"]);
+
+            $new->additionalEntries()->create($additionalEntry);
+        }
+
+        foreach ($report->sharedUsers as $user) {
+            unset($query["id"], $query["report_id"]);
+
+            $report->sharedUsers()->attach($user->id);
+        }
+
+        return response()->json([ "id" => $new["id"] ]);
+    }
 }
