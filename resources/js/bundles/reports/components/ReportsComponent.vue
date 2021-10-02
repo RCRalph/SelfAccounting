@@ -34,6 +34,7 @@
                                         <th scope="col" class="h3 fw-bold">Title</th>
                                         <th scope="col" class="h3 fw-bold">View</th>
                                         <th scope="col" class="h3 fw-bold">Edit</th>
+                                        <th scope="col" class="h3 fw-bold">Duplicate</th>
                                     </tr>
                                 </thead>
 
@@ -49,6 +50,21 @@
 
                                         <td class="h5 my-auto">
                                             <a role="button" class="big-button-primary" :href="`/bundles/reports/${item.id}/edit`">Edit report</a>
+                                        </td>
+
+                                        <td class="h5 my-auto">
+                                            <button class="big-button-primary" @click="duplicate(item.id)" :disabled="duplicateClicked">
+                                                <div v-if="!duplicateClicked">
+                                                    Duplicate report
+                                                </div>
+
+                                                <span
+                                                    v-else
+                                                    class="spinner-border spinner-border-sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                ></span>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -121,6 +137,7 @@
 <script>
 import Loading from "../../../components/Loading.vue";
 import EmptyPlaceholder from "../../../components/EmptyPlaceholder.vue";
+import axios from 'axios';
 
 export default {
     components: {
@@ -135,7 +152,9 @@ export default {
             userReportsReady: false,
 
             sharedReports: {},
-            sharedReportsReady: false
+            sharedReportsReady: false,
+
+            duplicateClicked: false
         }
     },
     methods: {
@@ -179,6 +198,19 @@ export default {
                 })
                 .catch(err => {
                     console.error(err);
+                })
+        },
+        duplicate(id) {
+            this.duplicateClicked = true;
+
+            axios
+                .post(`/webapi/bundles/reports/${id}/duplicate`)
+                .then(response => {
+                    window.location = `/bundles/reports/${response.data.id}`;
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.duplicateClicked = false;
                 })
         }
     },
