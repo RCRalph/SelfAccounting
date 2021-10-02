@@ -34,7 +34,7 @@ class RemindOfPremiumExpiration extends Mailable implements ShouldQueue
         $multipleDays = $this->daysLeft > 1 ? "s" : "";
 
         return $this
-            ->subject("Only $this->daysLeft day$mulipleDays of SelfAccounting Premium left!")
+            ->subject("Only $this->daysLeft day$multipleDays of SelfAccounting Premium left!")
             ->markdown("emails.remind-of-premium-expiration");
     }
 }
