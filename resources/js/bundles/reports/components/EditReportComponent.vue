@@ -7,7 +7,7 @@
             </div>
 
             <div class="d-flex" v-if="ready">
-                <button class="big-button-primary" @click="showReport" :disabled="submitted || destroyed || showReportClicked">
+                <button class="big-button-primary" @click="showReport" :disabled="submitted || destroyed || showReportClicked || !canSubmit">
                     <div v-if="!showReportClicked">
                         Show report
                     </div>
