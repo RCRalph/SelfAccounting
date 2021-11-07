@@ -6,7 +6,6 @@
             v-model="value.date"
             :min="minDate"
             :invalid="changed.date && !validDate"
-            :disabled="common && common.hasOwnProperty('date')"
             @input="changed.date = true"
         ></InputGroup>
 
@@ -18,7 +17,6 @@
             maxlength="64"
             placeholder="Your title here..."
             :invalid="changed.title && !validTitle"
-            :disabled="common && common.hasOwnProperty('title')"
             @input="changed.title = true"
         ></InputGroup>
 
@@ -29,7 +27,6 @@
             step="0.001"
             placeholder="Your amount here..."
             :invalid="changed.amount && !validAmount"
-            :disabled="common && common.hasOwnProperty('amount')"
             @input="changed.amount = true"
         ></InputGroup>
 
@@ -85,7 +82,6 @@
             optionTextKey="name"
             v-model="value.category_id"
             nullValue="N/A"
-            :disabled="common && common.hasOwnProperty('category_id')"
         ></InputGroup>
 
         <InputGroup
@@ -96,7 +92,6 @@
             optionTextKey="name"
             v-model="value.mean_id"
             nullValue="N/A"
-            :disabled="common && common.hasOwnProperty('mean_id')"
             @input="meanChange"
         ></InputGroup>
     </div>
