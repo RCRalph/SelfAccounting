@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import marked from 'marked';
+import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
 import InputGroup from "../../../components/InputGroup.vue";

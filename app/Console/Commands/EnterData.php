@@ -112,7 +112,7 @@ class EnterData extends Command
             [
                 "id" => 1,
                 "username" => "Admin",
-                "email" => "admin@selfaccounting.com",
+                "email" => "ADMIN_EMAIL",
                 "password" => "ADMIN_PASSWORD",
                 "admin" => true,
                 "darkmode" => true,
@@ -144,7 +144,7 @@ class EnterData extends Command
                 ["id" => $user["id"]],
                 [
                     "username" => "Admin",
-                    "email" => "admin@selfaccounting.com",
+                    "email" => env($user["email"], "test@test.com"),
                     "password" => Hash::make(env($user["password"], "1234567890")),
                     "admin" => true,
                     "darkmode" => true,

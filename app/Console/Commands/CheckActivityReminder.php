@@ -7,25 +7,25 @@ use Carbon\Carbon;
 use Mail;
 
 use App\User;
-use App\Mail\RemindOfPremiumExpiration;
+use App\Mail\ActivityReminder;
 
-class CheckPremiumExpiration extends Command
+class CheckActivityReminder extends Command
 {
-    protected $daysToCheck = [7, 1];
+    protected $daysToCheck = [7, 14, 30];
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = "check_premium_expiration";
+    protected $signature = 'check_activity_reminder';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Sends emails if user has 7 or 1 day until premium expiration";
+    protected $description = 'Sends emails of user has a set amount of days of inactivity.';
 
     /**
      * Create a new command instance.
@@ -45,12 +45,13 @@ class CheckPremiumExpiration extends Command
     public function handle()
     {
         foreach ($this->daysToCheck as $numberOfDays) {
-            $users = User::where("premium_expiration", Carbon::now()->addDays($numberOfDays - 1))
+            $users = User::where("last_page_visit", Carbon::now()->subDays($numberOfDays))
                 ->select("username", "email")->get();
 
             foreach ($users as $user) {
+                $this->info("$user->email $user->username");
                 Mail::to($user->email)
-                    ->queue(new RemindOfPremiumExpiration($numberOfDays, $user->username));
+                    ->queue(new ActivityReminder($numberOfDays, $user->username));
             }
         }
 

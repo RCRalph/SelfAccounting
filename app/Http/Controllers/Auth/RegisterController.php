@@ -70,7 +70,8 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'profile_picture' => 'Emoji' . rand(1, 6) . '.png',
-            'premium_expiration' => Carbon::now()->addDay(30)->toISOString()
+            'premium_expiration' => Carbon::now()->addDay(30),
+            'last_page_visit' => Carbon::now()
         ]);
     }
 }

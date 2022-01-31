@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('profile_picture', 64);
             $table->date('premium_expiration')->nullable();
             $table->boolean('hide_all_tutorials')->default(false);
+            $table->boolean('send_activity_reminders')->default(true);
+            $table->date('last_page_visit');
             $table->rememberToken();
             $table->timestamps(6);
 
