@@ -21,6 +21,25 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public $BUNDLE_INFO_LIST = [
+        "charts" => [
+            "icon" => "fas fa-chart-bar",
+            "directory" => "charts"
+        ],
+        "backup" => [
+            "icon" => "fas fa-hdd",
+            "directory" => "backup"
+        ],
+        "cashan" => [
+            "icon" => "fas fa-money-bill-wave",
+            "directory" => "cash"
+        ],
+        "report" => [
+            "icon" => "fas fa-newspaper",
+            "directory" => "reports"
+        ]
+    ];
+
     public $COS_DIRECTORIES = [
         "profile_pictures"
     ];
@@ -53,32 +72,19 @@ class Controller extends BaseController
             function () {
                 $retArr = auth()->user()->only("darkmode", "profile_picture", "id", "hide_all_tutorials");
                 $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
+                $retArr["bundle_info"] = $this->BUNDLE_INFO_LIST;
 
-                $retArr["bundle_info"] = [
-                    "charts" => [
-                        "icon" => "fas fa-chart-bar",
-                        "directory" => "charts"
-                    ],
-                    "backup" => [
-                        "icon" => "fas fa-hdd",
-                        "directory" => "backup"
-                    ],
-                    "cashan" => [
-                        "icon" => "fas fa-money-bill-wave",
-                        "directory" => "cash"
-                    ],
-                    "report" => [
-                        "icon" => "fas fa-newspaper",
-                        "directory" => "reports"
-                    ]
-                ];
-
-                // Do the same but with collections
+                // Select bundles available to the user
                 $retArr["bundles"] = auth()->user()->premiumBundles
                     ->merge(auth()->user()->bundles)
                     ->filter(
                         fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
                     );
+
+                // Update user's last page visit
+                auth()->user()->update([
+                    "last_page_visit" => Carbon::now()
+                ]);
 
                 return $retArr;
             }
