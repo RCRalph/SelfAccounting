@@ -45,11 +45,12 @@ class CheckActivityReminder extends Command
     public function handle()
     {
         foreach ($this->daysToCheck as $numberOfDays) {
-            $users = User::where("last_page_visit", Carbon::now()->subDays($numberOfDays))
-                ->select("username", "email")->get();
+            $users = User::where([
+                ["last_page_visit", Carbon::now()->subDays($numberOfDays)],
+                ["send_activity_reminders", true]
+            ])->select("username", "email")->get();
 
             foreach ($users as $user) {
-                $this->info("$user->email $user->username");
                 Mail::to($user->email)
                     ->queue(new ActivityReminder($numberOfDays, $user->username));
             }
