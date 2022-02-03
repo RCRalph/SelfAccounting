@@ -179,11 +179,11 @@ class ChartsController extends Controller
 
         $data = isset($data["data"]) ? $data["data"] : [];
 
-        Category::whereIn("id", $data)->update([
+        auth()->user()->categories()->whereIn("id", $data)->update([
             "show_on_charts" => true
         ]);
 
-        Category::whereNotIn("id", $data)->update([
+        auth()->user()->categories()->whereNotIn("id", $data)->update([
             "show_on_charts" => false
         ]);
 
@@ -198,11 +198,11 @@ class ChartsController extends Controller
 
         $data = isset($data["data"]) ? $data["data"] : [];
 
-        MeanOfPayment::whereIn("id", $data)->update([
+        auth()->user()->meansOfPayment()->whereIn("id", $data)->update([
             "show_on_charts" => true
         ]);
 
-        MeanOfPayment::whereNotIn("id", $data)->update([
+        auth()->user()->meansOfPayment()->whereNotIn("id", $data)->update([
             "show_on_charts" => false
         ]);
 
