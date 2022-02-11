@@ -117,7 +117,9 @@ class EnterData extends Command
                 "admin" => true,
                 "darkmode" => true,
                 "premium_expiration" => null,
-                "profile_picture" => "EmojiAdmin.png"
+                "profile_picture" => "EmojiAdmin.png",
+                "last_page_visit" => "2000-01-01",
+                "send_activity_reminders" => true
             ]
         ]
     ];
@@ -149,7 +151,9 @@ class EnterData extends Command
                     "admin" => true,
                     "darkmode" => true,
                     "premium_expiration" => null,
-                    "profile_picture" => "EmojiAdmin.png"
+                    "profile_picture" => "EmojiAdmin.png",
+                    "last_page_visit" => "2000-01-01",
+                    "send_activity_reminders" => true
                 ]
             );
 
