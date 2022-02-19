@@ -11,7 +11,7 @@ use App\Mail\RemindOfPremiumExpiration;
 
 class CheckPremiumExpiration extends Command
 {
-    protected $daysToCheck = [7, 1];
+    protected $daysToCheck = [7, 3, 1];
 
     /**
      * The name and signature of the console command.
