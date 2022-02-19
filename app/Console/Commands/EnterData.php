@@ -37,6 +37,8 @@ class EnterData extends Command
         parent::__construct();
     }
 
+    private $ADD_ADMIN = true;
+
     private $dataToEnter = [
         "bundles" => [
             [
@@ -110,14 +112,14 @@ class EnterData extends Command
         ],
         "users" => [
             [
-                "id" => 1,
-                "username" => "Admin",
-                "email" => "ADMIN_EMAIL",
-                "password" => "ADMIN_PASSWORD",
-                "admin" => true,
+                "id" => 2,
+                "username" => "Normal",
+                "email" => "normal@test.com",
+                "password" => "1234567890",
+                "admin" => false,
                 "darkmode" => true,
                 "premium_expiration" => null,
-                "profile_picture" => "EmojiAdmin.png",
+                "profile_picture" => "Emoji1.png",
                 "last_page_visit" => "2000-01-01",
                 "send_activity_reminders" => true
             ]
@@ -137,23 +139,41 @@ class EnterData extends Command
     {
         // Add users
         $progressBar = $this->output
-            ->createProgressBar(count($this->dataToEnter["users"]));
+            ->createProgressBar(count($this->dataToEnter["users"]) + $this->ADD_ADMIN);
         $this->outputMessage("Creating users");
 
         $progressBar->start();
-        foreach ($this->dataToEnter["users"] as $user) {
+        if ($this->ADD_ADMIN) {
             User::updateOrCreate(
-                ["id" => $user["id"]],
+                ["id" => 1],
                 [
                     "username" => "Admin",
-                    "email" => env($user["email"], "test@test.com"),
-                    "password" => Hash::make(env($user["password"], "1234567890")),
+                    "email" => env("ADMIN_EMAIL", "admin@test.com"),
+                    "password" => Hash::make(env("ADMIN_PASSWORD", "1234567890")),
                     "admin" => true,
                     "darkmode" => true,
                     "premium_expiration" => null,
                     "profile_picture" => "EmojiAdmin.png",
                     "last_page_visit" => "2000-01-01",
                     "send_activity_reminders" => true
+                ]
+            );
+            $progressBar->advance();
+        }
+
+        foreach ($this->dataToEnter["users"] as $user) {
+            User::updateOrCreate(
+                ["id" => $user["id"]],
+                [
+                    "username" => $user["username"],
+                    "email" => $user["email"],
+                    "password" => Hash::make(env($user["password"], "1234567890")),
+                    "admin" => $user["admin"],
+                    "darkmode" => $user["darkmode"],
+                    "premium_expiration" => $user["premium_expiration"],
+                    "profile_picture" => $user["profile_picture"],
+                    "last_page_visit" => $user["last_page_visit"],
+                    "send_activity_reminders" => $user["send_activity_reminders"]
                 ]
             );
 
