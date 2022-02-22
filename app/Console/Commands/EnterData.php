@@ -148,13 +148,13 @@ class EnterData extends Command
                 ["id" => 1],
                 [
                     "username" => "Admin",
-                    "email" => env("ADMIN_EMAIL", "admin@test.com"),
+                    "email" => env("ADMIN_EMAIL", "admin@selfaccounting.com"),
                     "password" => Hash::make(env("ADMIN_PASSWORD", "1234567890")),
                     "admin" => true,
                     "darkmode" => true,
                     "premium_expiration" => null,
                     "profile_picture" => "EmojiAdmin.png",
-                    "last_page_visit" => "2000-01-01",
+                    "last_page_visit" => "1970-01-01",
                     "send_activity_reminders" => true
                 ]
             );
