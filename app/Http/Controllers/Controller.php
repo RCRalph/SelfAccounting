@@ -100,12 +100,12 @@ class Controller extends BaseController
                 ->timestamp >= Carbon::now()->timestamp;
     }
 
-    public function deleteImage($directory, $name, $disk = "ibm-cos")
+    public function deleteImage($directory, $name, $disk = "s3")
     {
         Storage::disk($disk)->delete("$directory/$name");
     }
 
-    public function uploadImage($image, $directory, $delete = false, $fit = [], $disk = "ibm-cos")
+    public function uploadImage($image, $directory, $delete = false, $fit = [], $disk = "s3")
     {
         $img = Image::make($image);
         if (count($fit) == 2) {
@@ -126,8 +126,8 @@ class Controller extends BaseController
 
     public function getCosLink($directory, $filename)
     {
-        $endpoint = config("object-storage.endpoint");
-        $bucket = config("object-storage.bucket");
+        $endpoint = config("filesystems.disks.s3.endpoint");
+        $bucket = config("filesystems.disks.s3.bucket");
 
         return "$endpoint/$bucket/$directory/$filename";
     }

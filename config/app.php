@@ -165,7 +165,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Tavux\IBMCloudObjectStorage\Laravel\IbmCloudObjectStorageProvider::class,
 
         /*
          * Application Service Providers...
