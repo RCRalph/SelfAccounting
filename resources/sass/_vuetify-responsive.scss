@@ -1,0 +1,35 @@
+@import '~vuetify/src/styles/settings/_variables';
+
+@media (max-width: #{map-get($grid-breakpoints, "sm") - 0.02px}) {
+    .v-application {
+        .text-h6 {
+            font-size: 0.85rem !important;
+        }
+
+        .text-h4 {
+            font-size: 1.85rem !important;
+        }
+    }
+}
+
+@media (max-width: 767.98px) {
+
+}
+
+@media (max-width: 991.98px) {
+
+}
+
+@media (max-width: 1199.98px) {
+
+}
+
+@media (max-width: 1399.98px) {
+
+}
+
+@media (hover: none) {
+    .menu-margin {
+        margin-left: 0;
+    }
+}

@@ -27,6 +27,10 @@ Route::get('/', function () {
     return view("welcome");
 })->name('welcome');
 
+Route::get('/app', function () {
+    return view("app");
+});
+
 if (config("app.debug")) {
     Route::get('/mail-test', function () {
         return new App\Mail\RemindOfPremiumExpiration(5, "Username");
