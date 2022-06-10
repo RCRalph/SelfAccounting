@@ -231,4 +231,27 @@ class Controller extends BaseController
             Storage::disk("local")->get("files/tutorials/$directory")
         );
     }
+
+    public function getLastUsedCurrencies()
+    {
+        $id = auth()->user()->id;
+
+        return Cache::remember(
+            "last-used-currencies-$id",
+            now()->addMinutes(15),
+            function () {
+                $data = auth()->user()->income
+                    ->concat(auth()->user()->outcome)
+                    ->sortBy("updated_at")
+                    ->groupBy("currency_id");
+
+                $retArr = [];
+                foreach ($data as $currency => $entries) {
+                    $retArr[$currency] = collect($entries)->last()["updated_at"];
+                }
+
+                return collect($retArr)->sortDesc()->keys()->toArray();
+            }
+        );
+    }
 }

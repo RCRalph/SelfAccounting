@@ -21,19 +21,25 @@ Auth::routes();
 Route::get('/', function () {
     // Redirect if authenticated
     if (Auth::check()) {
-        return redirect()->route("summary");
+        return redirect()->route('summary');
     }
 
-    return view("welcome");
+    return view('welcome');
 })->name('welcome');
 
-Route::get('/app', function () {
-    return view("app");
+Route::get('/app', 'AppController@index')->name('app');
+
+Route::prefix('/web-api')->group(function () {
+    Route::get('/app', 'WebAPI\AppController@index')->name('web-api.app');
+    Route::prefix('/dashboard/{currency}')->group(function () {
+        Route::get('/', 'WebAPI\DashboardController@index')->name('web-api.dashboard');
+        Route::get('/balance-history', 'WebAPI\DashboardController@balanceHistory')->name('web-api.dashboard.balance-history');
+    });
 });
 
-if (config("app.debug")) {
+if (config('app.debug')) {
     Route::get('/mail-test', function () {
-        return new App\Mail\RemindOfPremiumExpiration(5, "Username");
+        return new App\Mail\RemindOfPremiumExpiration(5, 'Username');
     });
 }
 
