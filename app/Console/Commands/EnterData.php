@@ -38,7 +38,9 @@ class EnterData extends Command
         parent::__construct();
     }
 
-    private $ADD_ADMIN = true;
+    private $ADD_ADMIN = false;
+
+    private $ADD_USERS = false;
 
     private $dataToEnter = [
         "bundles" => [
@@ -184,26 +186,28 @@ class EnterData extends Command
             $progressBar->advance();
         }
 
-        foreach ($this->dataToEnter["users"] as $user) {
-            User::updateOrCreate(
-                ["id" => $user["id"]],
-                [
-                    "username" => $user["username"],
-                    "email" => $user["email"],
-                    "password" => Hash::make(env($user["password"], "1234567890")),
-                    "admin" => $user["admin"],
-                    "darkmode" => $user["darkmode"],
-                    "premium_expiration" => $user["premium_expiration"],
-                    "profile_picture" => $user["profile_picture"],
-                    "last_page_visit" => $user["last_page_visit"],
-                    "send_activity_reminders" => $user["send_activity_reminders"]
-                ]
-            );
+        if ($this->ADD_USERS) {
+            foreach ($this->dataToEnter["users"] as $user) {
+                User::updateOrCreate(
+                    ["id" => $user["id"]],
+                    [
+                        "username" => $user["username"],
+                        "email" => $user["email"],
+                        "password" => Hash::make(env($user["password"], "1234567890")),
+                        "admin" => $user["admin"],
+                        "darkmode" => $user["darkmode"],
+                        "premium_expiration" => $user["premium_expiration"],
+                        "profile_picture" => $user["profile_picture"],
+                        "last_page_visit" => $user["last_page_visit"],
+                        "send_activity_reminders" => $user["send_activity_reminders"]
+                    ]
+                );
 
-            $progressBar->advance();
+                $progressBar->advance();
+            }
+            $progressBar->finish();
+            $this->newLine(2);
         }
-        $progressBar->finish();
-        $this->newLine(2);
 
         // Add currencies and cash
         $progressBar = $this->output
