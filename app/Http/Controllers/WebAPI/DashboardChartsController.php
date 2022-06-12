@@ -380,7 +380,7 @@ class DashboardChartsController extends Controller
         }
         else if ($chart->id <= 5) {
             $data = $chart->id <= 3 ? "income" : "outcome";
-            $type = $chart->id % 2 ? "category" : "mean";
+            $type = $chart->id % 2 ? "mean" : "category";
             $retArr = $this->dataByType($currency, $data, $type);
         }
 
