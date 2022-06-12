@@ -288,7 +288,7 @@ class Controller extends BaseController
                 ->where("id", $categoryID)
                 ->first();
 
-            foreach ($balanceByCategories[$categoryID]->keys() as $key) {
+            foreach ($balanceByCategories[$categoryID] as $key => $value) {
                 $limitedByStart = (
                     $category["start_date"] != null &&
                     strtotime($value["date"]) < strtotime($category["start_date"])
