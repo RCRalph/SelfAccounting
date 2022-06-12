@@ -1,0 +1,17 @@
+$font-family: "Nunito";
+
+.v-application {
+    font-family: $font-family, sans-serif !important;
+
+    [class*="text-"] {
+        font-family: $font-family, sans-serif !important;
+    }
+
+    .text-h6 {
+        font-size: 1.125rem !important;
+    }
+}
+
+.menu-margin {
+    margin-left: 56px;
+}

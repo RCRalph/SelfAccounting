@@ -14,7 +14,10 @@ require('laravel-mix-clean');
  */
 
 mix.js('resources/js/scripts/app.js', 'public/js')
+    .js('resources/js/app.js', 'public/js/new')
 	.sass('resources/sass/app.scss', 'public/css')
+    .sass('resources/sass/new.scss', 'public/css')
+    .copy('node_modules/vuetify/dist/vuetify.css.map', 'public/css')
     .js('node_modules/popper.js/dist/popper.js', 'public/js')
 
     .js('resources/js/scripts/settings.js', 'public/js')

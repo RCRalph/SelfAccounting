@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-xl shadow-sm">
-    <div class="container">
+    <div class="container py-0">
         <a class="navbar-brand" @auth href="/summary" @else href="/" @endauth>
             <img src="/favicon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
             {{ config('app.name', 'SelfAccounting') }}
@@ -152,10 +152,6 @@
                                 <i class="fas fa-key"></i>
                                 {{ __('Logout') }}
                             </a>
-
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
                         </div>
                     </li>
                 @endguest
