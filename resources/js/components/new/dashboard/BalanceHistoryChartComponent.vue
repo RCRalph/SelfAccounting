@@ -22,6 +22,9 @@ export default {
     components: {
         LineChart
     },
+    props: {
+        id: Number
+    },
     setup() {
         const currencies = useCurrenciesStore();
 
@@ -39,7 +42,7 @@ export default {
             this.ready = false;
 
             axios
-                .get(`/web-api/dashboard/${this.currencies.usedCurrency}/balance-history`)
+                .get(`/web-api/dashboard/${this.currencies.usedCurrency}/charts/${this.id}`)
                 .then(response => {
                     const data = response.data;
                     this.chartData = data.data;

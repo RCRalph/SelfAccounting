@@ -34,7 +34,7 @@ Route::prefix('/web-api')->group(function () {
 
     Route::prefix('/dashboard/{currency}')->group(function () {
         Route::get('/', 'WebAPI\DashboardController@index')->name('web-api.dashboard');
-        Route::get('/balance-history', 'WebAPI\DashboardController@balanceHistory')->name('web-api.dashboard.balance-history');
+        Route::get('/charts/{chart}', 'WebAPI\DashboardChartsController@index')->name("web-api.dashboard.charts");
     });
 });
 

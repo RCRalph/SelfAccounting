@@ -10,6 +10,7 @@ use App\Bundle;
 use App\BundleImage;
 use App\Currency;
 use App\Cash;
+use App\Chart;
 
 class EnterData extends Command
 {
@@ -123,6 +124,28 @@ class EnterData extends Command
                 "last_page_visit" => "2000-01-01",
                 "send_activity_reminders" => true
             ]
+        ],
+        "charts" => [
+            [
+                "id" => 1,
+                "name" => "Balance history"
+            ],
+            [
+                "id" => 2,
+                "name" => "Income by categories"
+            ],
+            [
+                "id" => 3,
+                "name" => "Income by means of payment"
+            ],
+            [
+                "id" => 4,
+                "name" => "Outcome by categories"
+            ],
+            [
+                "id" => 5,
+                "name" => "Outcome by means of payment"
+            ]
         ]
     ];
 
@@ -225,6 +248,24 @@ class EnterData extends Command
                     "image" => $image
                 ]);
             }
+
+            $progressBar->advance();
+        }
+        $progressBar->finish();
+        $this->newLine(2);
+
+        // Add charts
+        $progressBar = $this->output
+            ->createProgressBar(count($this->dataToEnter["charts"]));
+        $this->outputMessage("Creating charts");
+
+        $progressBar->start();
+
+        foreach ($this->dataToEnter["charts"] as $chart) {
+            Chart::updateOrCreate(
+                ["id" => $chart["id"]],
+                $chart
+            );
 
             $progressBar->advance();
         }

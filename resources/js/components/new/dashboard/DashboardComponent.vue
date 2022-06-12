@@ -34,10 +34,12 @@
                             <span class="font-weight-bold justify-center text-h5">Last 30 days</span>
                         </v-col>
 
-                        <v-col class="col-sm-6 col-12">
+                        <v-col class="col-sm-6 col-12" v-if="currentBalance.length">
                             <v-select
                                 v-model="currentChart"
                                 :items="chartTypes"
+                                item-value="id"
+                                item-text="name"
                                 dense
                                 outlined
                                 hide-details
@@ -45,8 +47,10 @@
                         </v-col>
                     </v-row></v-card-title>
 
-                <div class="mx-3">
-                    <BalanceHistoryChartComponent v-if="currentChart == 1"></BalanceHistoryChartComponent>
+                <div class="mx-3" v-if="currentBalance.length" :style="'height: 400px'">
+                    <BalanceHistoryChartComponent v-if="currentChart == 1" :id="1"></BalanceHistoryChartComponent>
+
+                    <DataByTypeChartComponent v-else-if="currentChart <= 5" :id="currentChart"></DataByTypeChartComponent>
                 </div>
 
                 <v-card-text>
@@ -102,7 +106,6 @@
         <v-progress-circular
             indeterminate
             size="96"
-
         ></v-progress-circular>
     </v-overlay>
 </template>
@@ -110,10 +113,12 @@
 <script>
 import { useCurrenciesStore } from "../../../stores/currencies";
 import BalanceHistoryChartComponent from "./BalanceHistoryChartComponent.vue";
+import DataByTypeChartComponent from "./DataByTypeChartComponent.vue";
 
 export default {
     components: {
-        BalanceHistoryChartComponent
+        BalanceHistoryChartComponent,
+        DataByTypeChartComponent
     },
     setup() {
         const currencies = useCurrenciesStore();
@@ -122,17 +127,8 @@ export default {
     },
     data() {
         return {
-            chartTypes: [
-                {
-                    value: 1,
-                    text: "Balance history"
-                },
-                {
-                    value: 2,
-                    text: "Outcome by categories"
-                }
-            ],
-            currentChart: 1,
+            chartTypes: [],
+            currentChart: null,
             currentBalance: [],
             last30Days: {},
             ready: false
@@ -175,6 +171,10 @@ export default {
                     const data = response.data;
                     this.currentBalance = data.currentBalance;
                     this.last30Days = data.last30Days;
+                    this.chartTypes = data.charts;
+                    if (data.charts.length) {
+                        this.currentChart = data.charts[0].id
+                    }
 
                     this.ready = true;
                 })
