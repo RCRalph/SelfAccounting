@@ -99,7 +99,7 @@
             </v-col>
 
             <v-col class="col-lg-8 col-md-6 col-12">
-                <v-card style="position: sticky; top: 12px">
+                <v-card style="position: sticky; top: 16px">
                     <v-card-title class="font-weight-bold justify-center text-h5">Recent transactions</v-card-title>
 
                     <v-card-text>

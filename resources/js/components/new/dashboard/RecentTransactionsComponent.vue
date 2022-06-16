@@ -24,7 +24,7 @@
             </template>
         </v-data-table>
 
-        <div class="text-center pt-2">
+        <div class="text-center pt-4">
             <v-pagination></v-pagination>
         </div>
     </div>
