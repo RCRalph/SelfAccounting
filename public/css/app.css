@@ -29646,6 +29646,19 @@ html.overflow-y-hidden {
   cursor: pointer;
 }
 
+.table-bordered th, .responsive-table-bordered th, .restore-table-content table th {
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+.table-bordered td, .responsive-table-bordered td, .restore-table-content table td {
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+.table-bordered table, .responsive-table-bordered table, .restore-table-content table table {
+  border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
 /*!
  * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors

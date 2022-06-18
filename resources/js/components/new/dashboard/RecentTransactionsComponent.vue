@@ -3,19 +3,22 @@
         <v-data-table
             disable-sort
             :headers="headers"
-            :items="items"
-            :items-per-page="15"
+            :items="mergedCells"
+            :items-per-page="pagination.perPage"
+            :loading="tableLoading"
             hide-default-footer
+
+            class="table-bordered"
         >
             <template v-slot:item="{item, index}">
                 <tr class="text-center">
-                    <td :i="index" @mouseover="hoverId = index">{{ item.date }}</td>
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.amount }}</td>
-                    <td>{{ item.price | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
-                    <td>{{ item.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
-                    <td>{{ item.category }}</td>
-                    <td>{{ item.mean }}</td>
+                    <td v-if="item.date.span" :rowspan="item.date.span" :i="index" @mouseover="hoverId = index">{{ item.date.value }}</td>
+                    <td v-if="item.title.span" :rowspan="item.title.span">{{ item.title.value }}</td>
+                    <td v-if="item.amount.span" :rowspan="item.amount.span">{{ item.amount.value }}</td>
+                    <td v-if="item.price.span" :rowspan="item.price.span">{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
+                    <td v-if="item.value.span" :rowspan="item.value.span">{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
+                    <td v-if="item.category.span" :rowspan="item.category.span">{{ item.category.value }}</td>
+                    <td v-if="item.mean.span" :rowspan="item.mean.span">{{ item.mean.value }}</td>
                     <td style="white-space: nowrap">
                         <v-icon class="mr-2 cursor-pointer">mdi-pencil</v-icon>
                         <v-icon class="cursor-pointer">mdi-delete</v-icon>
@@ -25,7 +28,10 @@
         </v-data-table>
 
         <div class="text-center pt-4">
-            <v-pagination></v-pagination>
+            <v-pagination
+                v-model="pagination.page"
+                :length="pagination.last"
+            ></v-pagination>
         </div>
     </div>
 </template>
@@ -54,29 +60,93 @@ export default {
                 { text: "Actions", align: "center" }
             ],
             items: [],
+            pagination: {
+                page: 1,
+                last: null,
+                perPage: null
+            },
 
-            hoverId: 0,
+            ready: false,
+            tableLoading: false
+        }
+    },
+    computed: {
+        mergedCells() {
+            if (!this.items.length) {
+                return [];
+            }
 
-            ready: false
+            let keys = Object.keys(this.items[0]).filter(item => item != "id"), counters = {}, retArr = [];
+            keys.forEach(item => {
+                counters[item] = {
+                    value: this.items[0][item],
+                    count: 1
+                };
+            });
+
+            this.items.forEach((item, index) => {
+                let pushObj = {};
+                keys.forEach(item => pushObj[item] = {
+                    value: this.items[index][item],
+                    span: 0
+                });
+                retArr.push(pushObj);
+
+                keys.forEach(key => {
+                    if (index && item[key] != counters[key].value) {
+                        retArr[index - counters[key].count][key].span = counters[key].count;
+                        counters[key] = {
+                            value: item[key],
+                            count: 1
+                        }
+                    }
+                    else if (index) {
+                        counters[key].count += 1
+                    }
+                })
+            })
+
+            keys.forEach(item => {
+                retArr[retArr.length - counters[item].count][item].span = counters[item].count;
+            })
+
+            return retArr;
         }
     },
     methods: {
         getData() {
-            this.ready = false;
+            if (this.ready) {
+                this.tableLoading = true
+            }
+            else {
+                this.ready = false;
+            }
 
             axios
-                .get(`/web-api/dashboard/${this.currencies.usedCurrency}/recent-transactions`)
+                .get(`/web-api/dashboard/${this.currencies.usedCurrency}/recent-transactions?page=${this.pagination.page}`)
                 .then(response => {
                     const data = response.data;
 
                     this.items = data.items.data;
+                    this.pagination.last = data.items.last_page;
+                    this.pagination.perPage = data.items.per_page;
 
-                    this.ready = true;
+                    if (this.ready) {
+                        this.tableLoading = false;
+                    }
+                    else {
+                        this.ready = true;
+                    }
                 })
         }
     },
+    watch: {
+        'pagination.page'() {
+            this.getData()
+        }
+    },
     mounted() {
-        this.getData()
+        this.getData();
     }
 }
 </script>

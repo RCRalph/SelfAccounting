@@ -29645,6 +29645,19 @@ html.overflow-y-hidden {
   cursor: pointer;
 }
 
+.table-bordered th {
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+.table-bordered td {
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+.table-bordered table {
+  border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;
@@ -29658,6 +29671,19 @@ html.overflow-y-hidden {
     margin-left: 0;
   }
 }
+#app.theme--light .table-bordered th {
+  border-right-color: rgba(0, 0, 0, 0.12) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.12) !important;
+}
+#app.theme--light .table-bordered td {
+  border-right-color: rgba(0, 0, 0, 0.12) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.12) !important;
+}
+#app.theme--light .table-bordered table {
+  border-left-color: rgba(0, 0, 0, 0.12) !important;
+  border-top-color: rgba(0, 0, 0, 0.12) !important;
+}
+
 /*!
  * Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
