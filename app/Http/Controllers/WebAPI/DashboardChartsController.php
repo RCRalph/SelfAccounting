@@ -139,7 +139,10 @@ class DashboardChartsController extends Controller
                 return $item->only("date", "value", "category_id", "mean_id");
             });
 
-        $balanceBefore = $this->getBalance($income, $outcome, $means, [], $meansToShow, []);
+        $balanceBefore = $this->getBalance(
+            $income->where("date", "<", Carbon::today()->subDays(30)),
+            $outcome->where("date", "<", Carbon::today()->subDays(30)),
+            $means, [], $meansToShow, []);
 
         $firstEntries = [];
         foreach ($balanceBefore as $balance) {
