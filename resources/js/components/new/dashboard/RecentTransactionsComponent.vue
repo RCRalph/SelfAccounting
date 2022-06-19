@@ -12,14 +12,37 @@
         >
             <template v-slot:item="{item, index}">
                 <tr class="text-center">
-                    <td v-if="item.date.span" :rowspan="item.date.span" :i="index" @mouseover="hoverId = index">{{ item.date.value }}</td>
-                    <td v-if="item.title.span" :rowspan="item.title.span">{{ item.title.value }}</td>
-                    <td v-if="item.amount.span" :rowspan="item.amount.span">{{ item.amount.value }}</td>
-                    <td v-if="item.price.span" :rowspan="item.price.span">{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
-                    <td v-if="item.value.span" :rowspan="item.value.span">{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
-                    <td v-if="item.category.span" :rowspan="item.category.span">{{ item.category.value }}</td>
-                    <td v-if="item.mean.span" :rowspan="item.mean.span">{{ item.mean.value }}</td>
-                    <td style="white-space: nowrap">
+                    <td v-if="item.date.span" :rowspan="item.date.span" @mouseover="setRowsToHighlight(index, item.date.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.date.span) && 'table-hover-background'"
+                    >{{ item.date.value }}</td>
+
+                    <td v-if="item.title.span" :rowspan="item.title.span"  @mouseover="setRowsToHighlight(index, item.title.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.title.span) && 'table-hover-background'"
+                    >{{ item.title.value }}</td>
+
+                    <td v-if="item.amount.span" :rowspan="item.amount.span" @mouseover="setRowsToHighlight(index, item.amount.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.amount.span) && 'table-hover-background'"
+                    >{{ item.amount.value }}</td>
+
+                    <td v-if="item.price.span" :rowspan="item.price.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                    >{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
+
+                    <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                    >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
+
+                    <td v-if="item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'"
+                    >{{ item.category.value }}</td>
+
+                    <td v-if="item.mean.span" :rowspan="item.mean.span" @mouseover="setRowsToHighlight(index, item.mean.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
+                    >{{ item.mean.value }}</td>
+
+                    <td style="white-space: nowrap" @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, 1) && 'table-hover-background'"
+                    >
                         <v-icon class="mr-2 cursor-pointer">mdi-pencil</v-icon>
                         <v-icon class="cursor-pointer">mdi-delete</v-icon>
                     </td>
@@ -39,6 +62,7 @@
 <script>
 import { useCurrenciesStore } from "../../../stores/currencies";
 import main from "../../../mixins/main";
+import customTableMerged from "../../../mixins/customTableMerged";
 
 export default {
     setup() {
@@ -46,7 +70,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [main],
+    mixins: [main, customTableMerged],
     data() {
         return {
             headers: [
@@ -68,49 +92,6 @@ export default {
 
             ready: false,
             tableLoading: false
-        }
-    },
-    computed: {
-        mergedCells() {
-            if (!this.items.length) {
-                return [];
-            }
-
-            let keys = Object.keys(this.items[0]).filter(item => item != "id"), counters = {}, retArr = [];
-            keys.forEach(item => {
-                counters[item] = {
-                    value: this.items[0][item],
-                    count: 1
-                };
-            });
-
-            this.items.forEach((item, index) => {
-                let pushObj = {};
-                keys.forEach(item => pushObj[item] = {
-                    value: this.items[index][item],
-                    span: 0
-                });
-                retArr.push(pushObj);
-
-                keys.forEach(key => {
-                    if (index && item[key] != counters[key].value) {
-                        retArr[index - counters[key].count][key].span = counters[key].count;
-                        counters[key] = {
-                            value: item[key],
-                            count: 1
-                        }
-                    }
-                    else if (index) {
-                        counters[key].count += 1
-                    }
-                })
-            })
-
-            keys.forEach(item => {
-                retArr[retArr.length - counters[item].count][item].span = counters[item].count;
-            })
-
-            return retArr;
         }
     },
     methods: {

@@ -1,11 +1,6 @@
-#app.theme--light {
+.theme--light {
     .table-bordered {
-        th {
-            border-right-color: rgba(0, 0, 0, 0.12) !important;
-            border-bottom-color: rgba(0, 0, 0, 0.12) !important;
-        }
-
-        td {
+        th, td {
             border-right-color: rgba(0, 0, 0, 0.12) !important;
             border-bottom-color: rgba(0, 0, 0, 0.12) !important;
         }
@@ -14,5 +9,9 @@
             border-left-color: rgba(0, 0, 0, 0.12) !important;
             border-top-color: rgba(0, 0, 0, 0.12) !important;
         }
+    }
+
+    .table-hover-background {
+        background: #eee;
     }
 }

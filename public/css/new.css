@@ -29645,17 +29645,20 @@ html.overflow-y-hidden {
   cursor: pointer;
 }
 
-.table-bordered th {
-  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-.table-bordered td {
+.table-bordered th, .table-bordered td {
   border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 .table-bordered table {
   border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+.table-bordered tr:hover {
+  background-color: transparent !important;
+}
+
+.table-hover-background {
+  background: #616161;
 }
 
 @media (max-width: 599.98px) {
@@ -29671,17 +29674,16 @@ html.overflow-y-hidden {
     margin-left: 0;
   }
 }
-#app.theme--light .table-bordered th {
+.theme--light .table-bordered th, .theme--light .table-bordered td {
   border-right-color: rgba(0, 0, 0, 0.12) !important;
   border-bottom-color: rgba(0, 0, 0, 0.12) !important;
 }
-#app.theme--light .table-bordered td {
-  border-right-color: rgba(0, 0, 0, 0.12) !important;
-  border-bottom-color: rgba(0, 0, 0, 0.12) !important;
-}
-#app.theme--light .table-bordered table {
+.theme--light .table-bordered table {
   border-left-color: rgba(0, 0, 0, 0.12) !important;
   border-top-color: rgba(0, 0, 0, 0.12) !important;
+}
+.theme--light .table-hover-background {
+  background: #eee;
 }
 
 /*!
