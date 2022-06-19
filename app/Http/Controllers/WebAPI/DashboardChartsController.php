@@ -178,7 +178,7 @@ class DashboardChartsController extends Controller
                     $incomeMean
                         ->prepend(
                             $firstEntries[$mean->id] * 1,
-                            Carbon::today()->subDays(31)->format("Y-m-d")
+                            Carbon::today()->subDays(30)->format("Y-m-d")
                         );
                 }
 
@@ -190,7 +190,7 @@ class DashboardChartsController extends Controller
                 $incomeLast30Days->put(
                     $mean->id,
                     collect([
-                        Carbon::today()->subDays(31)->format("Y-m-d") => $firstEntries[$mean->id],
+                        Carbon::today()->subDays(30)->format("Y-m-d") => $firstEntries[$mean->id],
                         Carbon::today()->format("Y-m-d") => 0
                     ])
                 );

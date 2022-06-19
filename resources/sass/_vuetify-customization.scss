@@ -15,3 +15,27 @@ $font-family: "Nunito";
 .menu-margin {
     margin-left: 56px;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.table-bordered {
+    th, td {
+        border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+
+    table {
+        border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+
+    tr:hover {
+        background-color: transparent !important;
+    }
+}
+
+.table-hover-background {
+    background: #616161;
+}
