@@ -24,6 +24,7 @@ $font-family: "Nunito";
     th, td {
         border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+        transition: background-color 0.1s ease-in-out !important;
     }
 
     table {
@@ -37,5 +38,6 @@ $font-family: "Nunito";
 }
 
 .table-hover-background {
-    background: #616161;
+    background-color: #616161;
+    transition: background-color 0.05s ease-in-out !important;
 }
