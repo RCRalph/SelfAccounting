@@ -27,23 +27,28 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/app', 'AppController@index')->name('app');
+Route::get("/app", "AppController@index")->name("app");
 
-Route::prefix('/web-api')->group(function () {
-    Route::get('/app', 'WebAPI\AppController@index')->name('web-api.app');
+Route::prefix("/web-api")->group(function () {
+    Route::get("/app", "WebAPI\AppController@index")->name("web-api.app");
 
-    Route::prefix('/dashboard/{currency}')->group(function () {
-        Route::get('/', 'WebAPI\DashboardController@index')->name('web-api.dashboard');
-        Route::get('/recent-transactions', 'WebAPI\DashboardController@getRecentTransactions')->name('web-api.dashboard.recent-transactions');
-        Route::get('/charts/{chart}', 'WebAPI\DashboardChartsController@index')->name("web-api.dashboard.charts");
+    Route::prefix("/dashboard")->group(function() {
+        Route::prefix("/{currency}")->group(function () {
+            Route::get("/", "WebAPI\DashboardController@index")->name("web-api.dashboard");
+            Route::get("/recent-transactions", "WebAPI\DashboardController@getRecentTransactions")->name("web-api.dashboard.recent-transactions");
+            Route::get("/charts/{chart}", "WebAPI\DashboardChartsController@index")->name("web-api.dashboard.charts");
+        });
     });
+
+    // Income and outcome routes
+    foreach (["income", "outcome"] as $type) {
+        Route::group(["prefix" => "/$type", "middleware" => "IO:$type"], function () use ($type) {
+            Route::get("/{id}", "WebAPI\IOController@show")->name("web-api.$type.show");
+            Route::patch("/{id}", "WebAPI\IOController@update")->name("web-api.$type.update");
+            Route::delete("/{id}", "WebAPI\IOController@destroy")->name("web-api.$type.destroy");
+        });
+    }
 });
-
-if (config('app.debug')) {
-    Route::get('/mail-test', function () {
-        return new App\Mail\RemindOfPremiumExpiration(5, 'Username');
-    });
-}
 
 Route::prefix('/admin')->group(function () {
     Route::prefix('/users')->group(function () {

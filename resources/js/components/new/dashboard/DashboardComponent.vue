@@ -1,7 +1,7 @@
 <template>
     <div v-if="ready">
         <v-row>
-            <v-col class="col-lg-4 col-md-6 col-12">
+            <v-col class="col-lg-4 col-md-5 col-12">
                 <v-card class="mb-4">
                     <v-card-title class="font-weight-bold justify-center text-h5">Current balance</v-card-title>
 
@@ -48,7 +48,7 @@
                             </v-col>
                         </v-row></v-card-title>
 
-                    <div class="mx-3" v-if="currentBalance.length" :style="'height: 400px'">
+                    <div class="mx-3" v-if="currentBalance.length">
                         <BalanceHistoryChartComponent v-if="currentChart == 1" :id="1"></BalanceHistoryChartComponent>
 
                         <DataByTypeChartComponent v-else-if="currentChart <= 5" :id="currentChart"></DataByTypeChartComponent>
@@ -98,7 +98,7 @@
                 </v-card>
             </v-col>
 
-            <v-col class="col-lg-8 col-md-6 col-12">
+            <v-col class="col-lg-8 col-md-7 col-12">
                 <v-card style="position: sticky; top: 16px">
                     <v-card-title class="font-weight-bold justify-center text-h5">Recent transactions</v-card-title>
 

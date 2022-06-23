@@ -14,7 +14,7 @@ export default {
                 return [];
             }
 
-            let keys = Object.keys(this.items[0]).filter(item => item != "id"), counters = {}, retArr = [];
+            let keys = Object.keys(this.items[0]), counters = {}, retArr = [];
             keys.forEach(item => {
                 counters[item] = {
                     value: this.items[0][item],
@@ -38,7 +38,7 @@ export default {
                 })
 
                 keys.forEach(key => {
-                    if (foundChangeInSeparatorKeys || index && item[key] != counters[key].value) {
+                    if (foundChangeInSeparatorKeys || index && (item[key] != counters[key].value || key == "id")) {
                         retArr[index - counters[key].count][key].span = counters[key].count;
                         counters[key] = {
                             value: item[key],

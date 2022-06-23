@@ -20,11 +20,22 @@ $font-family: "Nunito";
     cursor: pointer;
 }
 
+tr {
+    transition: background-color 0.2s ease-in-out !important;
+
+    th, td {
+        transition: background-color 0.2s ease-in-out !important;
+    }
+
+    &:hover {
+        transition: background-color 0.2s ease-in-out !important;
+    }
+}
+
 .table-bordered {
     th, td {
         border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-        transition: background-color 0.1s ease-in-out !important;
     }
 
     table {
@@ -39,5 +50,5 @@ $font-family: "Nunito";
 
 .table-hover-background {
     background-color: #616161;
-    transition: background-color 0.05s ease-in-out !important;
+    transition: background-color 0.2s ease-in-out !important;
 }

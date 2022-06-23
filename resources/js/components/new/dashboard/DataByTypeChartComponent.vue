@@ -1,8 +1,10 @@
 <template>
     <div v-if="ready">
         <DoughnutChart
+            v-if="chartData.labels.length"
             :options="options"
             :chartData="chartData"
+            :style="'height: 400px'"
         ></DoughnutChart>
     </div>
 
