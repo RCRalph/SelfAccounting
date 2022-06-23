@@ -1,6 +1,6 @@
 {
     "/js/app.js": "/js/app.c138f64fc9df46e43588fb9f58a92a84.js",
-    "/js/new/app.js": "/js/new/app.2eed68bbc67239117b30cad9e636ccde.js",
+    "/js/new/app.js": "/js/new/app.9c5f878f8e43c09733887b096a768c9c.js",
     "/js/popper.js": "/js/popper.9761f29229e7541ef4b3426eb1cabe39.js",
     "/js/settings.js": "/js/settings.016148d2146ba70ec9093812dc054d76.js",
     "/js/income-outcome.js": "/js/income-outcome.3dd18f347096b9a90ab5cdb7a99967de.js",
@@ -27,9 +27,9 @@
     "/js/admin/bundles/list.js": "/js/admin/bundles/list.4480bc84d8c08402ad681a700a23af81.js",
     "/js/admin/bundles/create.js": "/js/admin/bundles/create.24f1b1ce73f43a57d6436b4f0142a25d.js",
     "/js/admin/bundles/edit.js": "/js/admin/bundles/edit.04a6f06d530cc828b2deabe80cc36a32.js",
-    "/css/new.css": "/css/new.cbda9350dca530035d749956a2bc1ccd.css",
-    "/css/app.css": "/css/app.13517dfcf9da6e47bd7248f022994ddb.css",
-    "/css/app.css.map": "/css/app.css.2c0fcf722b0d40c30b8a34d8c639ffe1.map",
-    "/css/new.css.map": "/css/new.css.e8d8312698a329ff0c2a01202b0929a6.map",
+    "/css/new.css": "/css/new.e506e1284da2adb9b00d0b606f4357e2.css",
+    "/css/app.css": "/css/app.b0f677eb8dc68f9ac3b1809883979501.css",
+    "/css/app.css.map": "/css/app.css.a8551d393ef58b428a8b55e99db2c547.map",
+    "/css/new.css.map": "/css/new.css.5e160a0eeb51e737c9608ead45d47e7e.map",
     "/css/vuetify.css.map": "/css/vuetify.css.d7027388c5bd30d3dfc8b09a039c2f34.map"
 }

@@ -30,7 +30,7 @@
 
                         <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                             <div class="caption mb-2">Value</div>
-                            <h2 style='white-space: nowrap'>{{ valueField | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                            <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ valueField | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                         </v-col>
                     </v-row>
 
