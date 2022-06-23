@@ -12,12 +12,12 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="error" outlined @click="remove" :loading="loading">
-                    Yes
+                <v-btn outlined @click="dialog = false" :disabled="loading">
+                    No
                 </v-btn>
 
-                <v-btn color="primary" outlined @click="dialog = false" :disabled="loading">
-                    No
+                <v-btn color="error" outlined @click="remove" :loading="loading">
+                    Yes
                 </v-btn>
             </v-card-actions>
         </v-card>

@@ -29646,13 +29646,13 @@ html.overflow-y-hidden {
 }
 
 tr {
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 tr th, tr td {
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 tr:hover {
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 
 .table-bordered th, .table-bordered td {
@@ -29669,7 +29669,7 @@ tr:hover {
 
 .table-hover-background {
   background-color: #616161;
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 
 @media (max-width: 599.98px) {

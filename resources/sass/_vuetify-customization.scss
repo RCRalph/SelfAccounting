@@ -21,14 +21,14 @@ $font-family: "Nunito";
 }
 
 tr {
-    transition: background-color 0.2s ease-in-out !important;
+    transition: background-color 0.1s ease-in-out !important;
 
     th, td {
-        transition: background-color 0.2s ease-in-out !important;
+        transition: background-color 0.1s ease-in-out !important;
     }
 
     &:hover {
-        transition: background-color 0.2s ease-in-out !important;
+        transition: background-color 0.1s ease-in-out !important;
     }
 }
 
@@ -50,5 +50,5 @@ tr {
 
 .table-hover-background {
     background-color: #616161;
-    transition: background-color 0.2s ease-in-out !important;
+    transition: background-color 0.1s ease-in-out !important;
 }

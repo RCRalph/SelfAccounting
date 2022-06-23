@@ -29647,13 +29647,13 @@ html.overflow-y-hidden {
 }
 
 tr {
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 tr th, tr td {
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 tr:hover {
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 
 .table-bordered th, .responsive-table-bordered th, .restore-table-content table th, .table-bordered td, .responsive-table-bordered td, .restore-table-content table td {
@@ -29670,7 +29670,7 @@ tr:hover {
 
 .table-hover-background {
   background-color: #616161;
-  transition: background-color 0.2s ease-in-out !important;
+  transition: background-color 0.1s ease-in-out !important;
 }
 
 /*!
