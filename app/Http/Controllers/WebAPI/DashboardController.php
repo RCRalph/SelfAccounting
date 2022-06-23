@@ -50,7 +50,7 @@ class DashboardController extends Controller
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", DB::raw("-1 AS type"));
 
-        /*if ($filteredDates != null) {
+        if ($filteredDates != null) {
             $income = $income->whereIn("date", $filteredDates);
             $outcome = $outcome->whereIn("date", $filteredDates);
         }
@@ -58,7 +58,7 @@ class DashboardController extends Controller
         if ($searchTerm != null) {
             $income = $income->where("title", "ilike", $searchTerm);
             $outcome = $outcome->where("title", "ilike", $searchTerm);
-        }*/
+        }
 
         $items = $income
             ->union($outcome)

@@ -3,6 +3,7 @@
         <LineChart
             :options="options"
             :chartData="chartData"
+            :style="'height: 400px'"
         ></LineChart>
     </div>
 

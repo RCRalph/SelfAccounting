@@ -7,6 +7,7 @@
             :items-per-page="pagination.perPage"
             :loading="tableLoading"
             hide-default-footer
+            :mobile-breakpoint="0"
 
             class="table-bordered"
         >
@@ -43,8 +44,17 @@
                     <td style="white-space: nowrap" @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
                     >
-                        <v-icon class="mr-2 cursor-pointer">mdi-pencil</v-icon>
-                        <v-icon class="cursor-pointer">mdi-delete</v-icon>
+                        <EditIODialogComponent
+                            :type="item.value.value < 0 ? 'outcome' : 'income'"
+                            :id="item.id.value"
+                            @updated="getData"
+                        ></EditIODialogComponent>
+
+                        <DeleteIODialogComponent
+                            :type="item.value.value < 0 ? 'outcome' : 'income'"
+                            :id="item.id.value"
+                            @deleted="getData"
+                        ></DeleteIODialogComponent>
                     </td>
                 </tr>
             </template>
@@ -64,6 +74,9 @@ import { useCurrenciesStore } from "../../../stores/currencies";
 import main from "../../../mixins/main";
 import customTableMerged from "../../../mixins/customTableMerged";
 
+import EditIODialogComponent from "./EditIODialogComponent.vue";
+import DeleteIODialogComponent from "./DeleteIODialogComponent.vue";
+
 export default {
     setup() {
         const currencies = useCurrenciesStore();
@@ -71,6 +84,10 @@ export default {
         return { currencies };
     },
     mixins: [main, customTableMerged],
+    components: {
+        EditIODialogComponent,
+        DeleteIODialogComponent
+    },
     data() {
         return {
             headers: [
@@ -91,7 +108,11 @@ export default {
             },
 
             ready: false,
-            tableLoading: false
+            tableLoading: false,
+            dialogs: {
+                delete: false,
+                edit: false
+            },
         }
     },
     methods: {
