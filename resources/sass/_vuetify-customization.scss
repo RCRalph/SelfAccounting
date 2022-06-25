@@ -52,3 +52,8 @@ tr {
     background-color: #616161;
     transition: background-color 0.1s ease-in-out !important;
 }
+
+.sticky-panel {
+    position: sticky;
+    top: 16px;
+}
