@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app v-if="ready">
         <v-navigation-drawer v-model="drawer" permanent :mini-variant.sync="mini"
             :expand-on-hover="$vuetify.breakpoint.mdAndUp && !menuClicked" fixed>
             <v-list-item class="pa-2">
@@ -17,7 +17,7 @@
             <v-divider class="my-1"></v-divider>
 
             <v-list dense>
-                <v-list-item v-for="item in items" :key="item.title" link>
+                <v-list-item v-for="item in items" :key="item.title" link :to="item.link">
                     <v-list-item-icon>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-icon>
@@ -95,10 +95,17 @@
             </div>
         </v-main>
     </v-app>
+
+    <v-overlay v-else :value="true" opacity="1">
+        <v-progress-circular
+            indeterminate
+            size="128"
+        ></v-progress-circular>
+    </v-overlay>
 </template>
 
 <script>
-import { useCurrenciesStore } from '../../stores/currencies';
+import { useCurrenciesStore } from '&/stores/currencies';
 
 export default {
     setup() {
@@ -123,7 +130,8 @@ export default {
             ],
             mini: true,
             menuClicked: false,
-            user: {}
+            user: {},
+            ready: false
         }
     },
     methods: {
@@ -132,6 +140,8 @@ export default {
         }
     },
     mounted() {
+        this.ready = false;
+
         axios.get("/web-api/app")
             .then(response => {
                 const data = response.data;
@@ -141,6 +151,8 @@ export default {
 
                 this.currencies.currencies = data.currencies;
                 this.currencies.usedCurrency = data.currencies[0].id;
+
+                this.ready = true;
             })
     }
 }

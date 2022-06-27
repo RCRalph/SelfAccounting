@@ -356,4 +356,35 @@ class Controller extends BaseController
 
         return $currentBalance;
     }
+
+    public function addNamesToPaginatedIOItems($items, Currency $currency)
+    {
+        $paginatedData = $items->getCollection()->toArray();
+
+        $categories = auth()->user()->categories()
+            ->where("currency_id", $currency->id)
+            ->select("id", "name")
+            ->get()
+            ->keyBy("id");
+
+        $means = auth()->user()->meansOfPayment()
+            ->where("currency_id", $currency->id)
+            ->select("id", "name")
+            ->get()
+            ->keyBy("id");
+
+        foreach ($paginatedData as $i => $item) {
+            $paginatedData[$i]["amount"] *= 1;
+            $paginatedData[$i]["price"] *= 1;
+            $paginatedData[$i]["value"] = round($item["amount"] * $item["price"] * ($item["type"] ?? 1), 2);
+            $paginatedData[$i]["category"] = $categories[$item["category_id"]]->name ?? "N/A";
+            $paginatedData[$i]["mean"] = $means[$item["mean_id"]]->name ?? "N/A";
+
+            unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["mean_id"]);
+        }
+
+        $items->setCollection(collect($paginatedData));
+
+        return $items;
+    }
 }

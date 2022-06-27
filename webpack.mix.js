@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const path = require('path');
 
 require('laravel-mix-clean');
 
@@ -65,7 +66,11 @@ mix.js('resources/js/scripts/app.js', 'public/js')
             "./css/*",
             "./fonts/*"
         ]
-    });
+    })
+    .alias({
+        "@": path.join("resources/js/components/new"),
+        "&": path.join("resources/js")
+    })
 
 
 if (mix.inProduction()) {

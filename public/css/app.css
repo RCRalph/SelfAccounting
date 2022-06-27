@@ -29637,6 +29637,9 @@ html.overflow-y-hidden {
 .v-application .text-h6 {
   font-size: 1.125rem !important;
 }
+.v-application .v-data-table-header th {
+  white-space: nowrap;
+}
 
 .menu-margin {
   margin-left: 56px;
@@ -29677,6 +29680,10 @@ tr:hover {
   position: -webkit-sticky;
   position: sticky;
   top: 16px;
+}
+
+.loading-height {
+  min-height: 128px;
 }
 
 /*!

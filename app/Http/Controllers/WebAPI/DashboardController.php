@@ -50,88 +50,51 @@ class DashboardController extends Controller
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", DB::raw("-1 AS type"));
 
-        if ($filteredDates != null) {
-            $income = $income->whereIn("date", $filteredDates);
-            $outcome = $outcome->whereIn("date", $filteredDates);
-        }
-
-        if ($searchTerm != null) {
-            $income = $income->where("title", "ilike", $searchTerm);
-            $outcome = $outcome->where("title", "ilike", $searchTerm);
-        }
-
         $items = $income
             ->union($outcome)
             ->orderBy("date", "desc")
             ->orderBy("title")
             ->orderBy("amount")
             ->orderBy("price")
-            ->paginate(15);
+            ->orderBy("category_id")
+            ->orderBy("mean_id")
+            ->paginate(20);
 
-        $paginatedData = $items->getCollection()->toArray();
-
-        $categories = auth()->user()->categories()
-            ->where("currency_id", $currency->id)
-            ->select("id", "name")
-            ->get()
-            ->keyBy("id");
-
-        $means = auth()->user()->meansOfPayment()
-            ->where("currency_id", $currency->id)
-            ->select("id", "name")
-            ->get()
-            ->keyBy("id");
-
-        foreach ($paginatedData as $i => $item) {
-            $paginatedData[$i]["amount"] *= 1;
-            $paginatedData[$i]["price"] *= 1;
-            $paginatedData[$i]["value"] = round($item["amount"] * $item["price"] * $item["type"], 2);
-            $paginatedData[$i]["category"] = $categories[$item["category_id"]]->name ?? "N/A";
-            $paginatedData[$i]["mean"] = $means[$item["mean_id"]]->name ?? "N/A";
-
-            unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["mean_id"]);
-        }
-
-        $items->setCollection(collect($paginatedData));
+        $items = $this->addNamesToPaginatedIOItems($items, $currency);
 
         return response()->json(compact("items"));
     }
 
     public function index(Currency $currency)
     {
-        $categories = auth()->user()->categories
+        $categories = auth()->user()->categories()
+            ->select("id")
             ->where("currency_id", $currency->id);
 
-        $means = auth()->user()->meansOfPayment
+        $means = auth()->user()->meansOfPayment()
+            ->select("id")
             ->where("currency_id", $currency->id);
-
-        $meansToShow = $means
-            ->where("count_to_summary", true)
-            ->pluck("id")->toArray();
 
         $categoriesToShow = $categories
-            ->where("count_to_summary", true)
+            ->where("count_to_summary", true)->get()
             ->pluck("id")->toArray();
 
-        $income = auth()->user()->income
+        $meansToShow = $means
+            ->where("count_to_summary", true)->get()
+            ->pluck("id")->toArray();
+
+        $means = $means->addSelect("name", "first_entry_date", "first_entry_amount")->get();
+        $categories = $categories->addSelect("name")->get();
+
+        $income = auth()->user()->income()
             ->where("currency_id", $currency->id)
-            ->map(function ($item) {
-                $item["value"] = round($item["amount"] * $item["price"], 2);
+            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
+            ->get();
 
-                return collect($item)
-                    ->only("value", "category_id", "mean_id", "date")
-                    ->toArray();
-            });
-
-        $outcome = auth()->user()->outcome
+        $outcome = auth()->user()->outcome()
             ->where("currency_id", $currency->id)
-            ->map(function ($item) {
-                $item["value"] = round($item["amount"] * $item["price"], 2);
-
-                return collect($item)
-                    ->only("value", "category_id", "mean_id", "date")
-                    ->toArray();
-            });
+            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
+            ->get();
 
         $currentBalance = $this->getBalance($income, $outcome, $means, $categories, $meansToShow, $categoriesToShow);
         $last30Days = $this->getLast30DaysBalance($income, $outcome, $meansToShow, $categoriesToShow);

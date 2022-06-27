@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { useCurrenciesStore } from "../../../stores/currencies";
-import LineChart from "../charts/LineChart.vue";
+import { useCurrenciesStore } from "&/stores/currencies";
+import LineChart from "@/charts/LineChart.vue";
 
 export default {
     components: {
@@ -54,7 +54,7 @@ export default {
         }
     },
     mounted() {
-        this.getChartData(); // Has to be called, because the parent component doesn't render it unless it receives response
+        this.getChartData();
         this.currencies.$subscribe(() => this.getChartData());
     }
 }

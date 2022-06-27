@@ -10,6 +10,10 @@ $font-family: "Nunito";
     .text-h6 {
         font-size: 1.125rem !important;
     }
+
+    .v-data-table-header th {
+        white-space: nowrap;
+    }
 }
 
 .menu-margin {
@@ -56,4 +60,8 @@ tr {
 .sticky-panel {
     position: sticky;
     top: 16px;
+}
+
+.loading-height {
+    min-height: 128px;
 }

@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { useCurrenciesStore } from "../../../stores/currencies";
-import DoughnutChart from "../charts/DoughnutChart.vue";
+import { useCurrenciesStore } from "&/stores/currencies";
+import DoughnutChart from "@/charts/DoughnutChart.vue";
 
 export default {
     props: {
@@ -55,7 +55,7 @@ export default {
         }
     },
     mounted() {
-        this.getChartData(); // Has to be called, because the parent component doesn't render it unless it receives response
+        this.getChartData();
         this.currencies.$subscribe(() => this.getChartData());
     },
     watch: {
