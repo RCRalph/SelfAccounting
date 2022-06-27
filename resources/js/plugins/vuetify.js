@@ -10,7 +10,15 @@ library.add(fas)
 
 export default new Vuetify({
     icons: {
-        iconfont: "faSvg"
+        iconfont: "faSvg",
+        values: {
+            checkboxOff: {
+                component: FontAwesomeIcon,
+                props: {
+                    icon: ['fas', 'square'],
+                }
+            }
+        }
     },
     theme: { dark: true }
 })

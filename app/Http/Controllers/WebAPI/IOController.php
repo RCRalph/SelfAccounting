@@ -5,12 +5,16 @@ namespace App\Http\Controllers\WebAPI;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 use App\Income;
 use App\Outcome;
+use App\Currency;
+use App\Chart;
 
 use App\Rules\CorrectDateIOUpdate;
 use App\Rules\ValidCategoryOrMeanUpdate;
+use App\Rules\SameLengthAs;
 
 class IOController extends Controller
 {
@@ -81,5 +85,77 @@ class IOController extends Controller
             ->get()->firstOrFail()->delete();
 
         return response("", 200);
+    }
+
+    public function overview(Currency $currency) {
+        $categories = auth()->user()->categories()
+            ->where("currency_id", $currency->id)
+            ->where(request()->type . "_category", true)
+            ->get();
+
+        $means = auth()->user()->meansOfPayment()
+            ->where("currency_id", $currency->id)
+            ->where(request()->type . "_mean", true)
+            ->get();
+
+        $charts = Chart::where("name", "ilike", "%" . request()->type . "%")->get();
+
+        return response()->json(compact("categories", "means", "charts"));
+    }
+
+    public function list(Currency $currency)
+    {
+        $items = $this->getTypeRelation()
+            ->where("currency_id", $currency->id)
+            ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"));
+
+        $fields = ["date", "title", "amount", "price", "value"];
+
+        $data = request()->validate([
+            "title" => ["nullable", "string", "min:1", "max:64"],
+            "dates" => ["nullable", "array"],
+            "dates.*" => ["required", "date", "distinct"],
+            "categories" => ["nullable", "array"],
+            "categories.*" => ["required", "integer", "exists:categories,id"],
+            "means" => ["nullable", "array"],
+            "means.*" => ["required", "integer", "exists:mean_of_payments,id"],
+            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields.*" => ["required", "string", "in:" . implode(",", $fields), "distinct"],
+            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections.*" => ["nullable", "string", "in:asc,desc"]
+        ]);
+
+        if (isset($data["title"])) {
+            $items->where("title", "ilike", "%" . $data["title"] . "%");
+        }
+
+        if (isset($data["dates"])) {
+            $items->whereIn("date", $data["dates"]);
+        }
+
+        if (isset($data["categories"])) {
+            $items->whereIn("category_id", $data["categories"]);
+        }
+
+        if (isset($data["means"])) {
+            $items->whereIn("mean_id", $data["means"]);
+        }
+
+        $fields = ["date", "title", "amount", "price", "value"];
+
+        if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
+            foreach ($data["orderFields"] as $i => $item) {
+                $fields = array_diff($fields, [$item]);
+                $items = $items->orderBy($item, $data["orderDirections"][$i] ?? "asc");
+            }
+        }
+
+        foreach ($fields as $field) {
+            $items = $items->orderBy($field, $field == "date" ? "desc" : "asc");
+        }
+
+        $items = $this->addNamesToPaginatedIOItems($items->paginate(20), $currency);
+
+        return response()->json(compact("items"));
     }
 }

@@ -10,6 +10,10 @@ export default {
                 .join(String.fromCharCode(160));
         },
         addNoBreakSpaces(value) {
+            if (!value) {
+                return "";
+            }
+
             return value.split(" ").join(String.fromCharCode(160));
         }
     }

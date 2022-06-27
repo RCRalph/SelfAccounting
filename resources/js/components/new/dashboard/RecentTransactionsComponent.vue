@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="ready">
         <v-data-table
             disable-sort
             :headers="headers"
@@ -67,15 +67,22 @@
             ></v-pagination>
         </div>
     </div>
+
+    <v-overlay v-else :value="true" opacity="1" absolute>
+        <v-progress-circular
+            indeterminate
+            size="96"
+        ></v-progress-circular>
+    </v-overlay>
 </template>
 
 <script>
-import { useCurrenciesStore } from "../../../stores/currencies";
-import main from "../../../mixins/main";
-import customTableMerged from "../../../mixins/customTableMerged";
+import { useCurrenciesStore } from "&/stores/currencies";
+import main from "&/mixins/main";
+import customTableMerged from "&/mixins/customTableMerged";
 
-import EditIODialogComponent from "./EditIODialogComponent.vue";
-import DeleteIODialogComponent from "./DeleteIODialogComponent.vue";
+import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
+import DeleteIODialogComponent from "@/income-outcome/DeleteIODialogComponent.vue";
 
 export default {
     setup() {
@@ -112,7 +119,7 @@ export default {
             dialogs: {
                 delete: false,
                 edit: false
-            },
+            }
         }
     },
     methods: {
