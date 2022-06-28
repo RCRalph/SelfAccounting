@@ -1,187 +1,192 @@
 <template>
-    <v-data-table
-        v-if="ready"
-        class="table-bordered"
-        hide-default-footer
-        :headers="headers"
-        :items="mergedCells"
-        :mobile-breakpoint="0"
-        :loading="tableLoading"
-        :server-items-length="pagination.perPage"
-        :options.sync="options"
-        multi-sort
-    >
-        <template v-slot:top>
-            <v-row class="align-center mb-0">
-                <v-col cols="12" sm="5" lg="4">
-                    <v-text-field
-                        v-model="titleSearch"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        dense
-                        single-line
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-
-                <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" :class="['d-flex', $vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end']">
-                    <v-btn outlined class="me-3">Exchange</v-btn>
-                    <v-btn outlined>Add {{ type }}</v-btn>
-                </v-col>
-            </v-row>
-        </template>
-
-        <template v-slot:[`header.date`]="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on">
-                        <v-icon small :color="filteredData.dates.length ? 'primary' : ''">
-                            mdi-filter
-                        </v-icon>
-                    </v-btn>
-                </template>
-
-                <v-date-picker
-                    v-model="filteredData.dates"
-                    min="1970-01-01"
-                    multiple
-                    color="primary"
-                    prev-icon="mdi-skip-previous"
-                    next-icon="mdi-skip-next"
-                ></v-date-picker>
-            </v-menu>
-        </template>
-
-        <template v-slot:[`header.category`]="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on">
-                        <v-icon small :color="filteredData.categories.length ? 'primary' : ''">
-                            mdi-filter
-                        </v-icon>
-                    </v-btn>
-                </template>
-
-                <v-card max-width="350">
-                    <v-card-text>
-                        <v-select
-                            v-model="filteredData.categories"
-                            :items="categories"
-                            item-text="name"
-                            item-value="id"
-                            multiple
+    <div>
+        <v-data-table
+            class="table-bordered"
+            hide-default-footer
+            :headers="headers"
+            :items="mergedCells"
+            :mobile-breakpoint="0"
+            :loading="tableLoading"
+            :server-items-length="pagination.perPage"
+            :options.sync="options"
+            multi-sort
+        >
+            <template v-slot:top>
+                <v-row class="align-center mb-0">
+                    <v-col cols="12" sm="5" lg="4">
+                        <v-text-field
+                            v-model="titleSearch"
+                            append-icon="mdi-magnify"
+                            label="Search"
+                            dense
+                            single-line
                             hide-details
-                        >
-                            <template v-slot:selection="{ item, index }">
-                                <v-chip v-if="index === 0" small>
-                                    <span>{{ item.name }}</span>
-                                </v-chip>
+                        ></v-text-field>
+                    </v-col>
 
-                                <span
-                                    v-if="index === 1"
-                                    class="grey--text text-caption"
-                                >(+{{ filteredData.categories.length - 1 }} other{{ filteredData.categories.length > 2 ? "s" : "" }})</span>
-                            </template>
-                        </v-select>
-                    </v-card-text>
-                </v-card>
-            </v-menu>
-        </template>
+                    <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" :class="['d-flex', $vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end']">
+                        <v-btn outlined class="me-3">Exchange</v-btn>
+                        <v-btn outlined>Add {{ type }}</v-btn>
+                    </v-col>
+                </v-row>
+            </template>
 
-        <template v-slot:[`header.mean`]="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn small icon v-bind="attrs" v-on="on">
-                        <v-icon small :color="filteredData.means.length ? 'primary' : ''">
-                            mdi-filter
-                        </v-icon>
-                    </v-btn>
-                </template>
+            <template v-slot:[`header.date`]="{ header }">
+                {{ header.text }}
+                <v-menu offset-y :close-on-content-click="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn small icon v-bind="attrs" v-on="on">
+                            <v-icon small :color="filteredData.dates.length ? 'primary' : ''">
+                                mdi-filter
+                            </v-icon>
+                        </v-btn>
+                    </template>
 
-                <v-card max-width="350">
-                    <v-card-text>
-                        <v-select
-                            v-model="filteredData.means"
-                            :items="means"
-                            item-text="name"
-                            item-value="id"
-                            multiple
-                            hide-details
-                        >
-                            <template v-slot:selection="{ item, index }">
-                                <v-chip v-if="index === 0" small>
-                                    <span>{{ item.name }}</span>
-                                </v-chip>
+                    <v-date-picker
+                        v-model="filteredData.dates"
+                        min="1970-01-01"
+                        multiple
+                        color="primary"
+                        prev-icon="mdi-skip-previous"
+                        next-icon="mdi-skip-next"
+                    ></v-date-picker>
+                </v-menu>
+            </template>
 
-                                <span
-                                    v-if="index === 1"
-                                    class="grey--text text-caption"
-                                >(+{{ filteredData.means.length - 1 }} other{{ filteredData.means.length > 2 ? "s" : "" }})</span>
-                            </template>
-                        </v-select>
-                    </v-card-text>
-                </v-card>
-            </v-menu>
-        </template>
+            <template v-slot:[`header.category`]="{ header }">
+                {{ header.text }}
+                <v-menu offset-y :close-on-content-click="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn small icon v-bind="attrs" v-on="on">
+                            <v-icon small :color="filteredData.categories.length ? 'primary' : ''">
+                                mdi-filter
+                            </v-icon>
+                        </v-btn>
+                    </template>
 
-        <template v-slot:item="{item, index}">
-            <tr class="text-center">
-                <td v-if="item.date.span" :rowspan="item.date.span" @mouseover="setRowsToHighlight(index, item.date.span)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, item.date.span) && 'table-hover-background'"
-                >{{ item.date.value }}</td>
+                    <v-card max-width="350">
+                        <v-card-text>
+                            <v-select
+                                v-model="filteredData.categories"
+                                :items="categories"
+                                item-text="name"
+                                item-value="id"
+                                multiple
+                                hide-details
+                            >
+                                <template v-slot:selection="{ item, index }">
+                                    <v-chip v-if="index === 0" small>
+                                        <span>{{ item.name }}</span>
+                                    </v-chip>
 
-                <td v-if="item.title.span" :rowspan="item.title.span"  @mouseover="setRowsToHighlight(index, item.title.span)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, item.title.span) && 'table-hover-background'"
-                >{{ item.title.value }}</td>
+                                    <span
+                                        v-if="index === 1"
+                                        class="grey--text text-caption"
+                                    >(+{{ filteredData.categories.length - 1 }} other{{ filteredData.categories.length > 2 ? "s" : "" }})</span>
+                                </template>
+                            </v-select>
+                        </v-card-text>
+                    </v-card>
+                </v-menu>
+            </template>
 
-                <td v-if="item.amount.span" :rowspan="item.amount.span" @mouseover="setRowsToHighlight(index, item.amount.span)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, item.amount.span) && 'table-hover-background'"
-                >{{ item.amount.value }}</td>
+            <template v-slot:[`header.mean`]="{ header }">
+                {{ header.text }}
+                <v-menu offset-y :close-on-content-click="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn small icon v-bind="attrs" v-on="on">
+                            <v-icon small :color="filteredData.means.length ? 'primary' : ''">
+                                mdi-filter
+                            </v-icon>
+                        </v-btn>
+                    </template>
 
-                <td v-if="item.price.span" :rowspan="item.price.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
-                >{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
+                    <v-card max-width="350">
+                        <v-card-text>
+                            <v-select
+                                v-model="filteredData.means"
+                                :items="means"
+                                item-text="name"
+                                item-value="id"
+                                multiple
+                                hide-details
+                            >
+                                <template v-slot:selection="{ item, index }">
+                                    <v-chip v-if="index === 0" small>
+                                        <span>{{ item.name }}</span>
+                                    </v-chip>
 
-                <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
-                >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
+                                    <span
+                                        v-if="index === 1"
+                                        class="grey--text text-caption"
+                                    >(+{{ filteredData.means.length - 1 }} other{{ filteredData.means.length > 2 ? "s" : "" }})</span>
+                                </template>
+                            </v-select>
+                        </v-card-text>
+                    </v-card>
+                </v-menu>
+            </template>
 
-                <td v-if="item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'"
-                >{{ item.category.value }}</td>
+            <template v-slot:item="{item, index}">
+                <tr class="text-center">
+                    <td v-if="item.date.span" :rowspan="item.date.span" @mouseover="setRowsToHighlight(index, item.date.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.date.span) && 'table-hover-background'"
+                    >{{ item.date.value }}</td>
 
-                <td v-if="item.mean.span" :rowspan="item.mean.span" @mouseover="setRowsToHighlight(index, item.mean.span)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
-                >{{ item.mean.value }}</td>
+                    <td v-if="item.title.span" :rowspan="item.title.span"  @mouseover="setRowsToHighlight(index, item.title.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.title.span) && 'table-hover-background'"
+                    >{{ item.title.value }}</td>
 
-                <td style="white-space: nowrap" @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
-                    :class="isRowHighlighted(index, 1) && 'table-hover-background'"
-                >
-                    <EditIODialogComponent
-                        :type="item.value.value < 0 ? 'outcome' : 'income'"
-                        :id="item.id.value"
-                        @updated="getData"
-                    ></EditIODialogComponent>
+                    <td v-if="item.amount.span" :rowspan="item.amount.span" @mouseover="setRowsToHighlight(index, item.amount.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.amount.span) && 'table-hover-background'"
+                    >{{ item.amount.value }}</td>
 
-                    <DeleteIODialogComponent
-                        :type="item.value.value < 0 ? 'outcome' : 'income'"
-                        :id="item.id.value"
-                        @deleted="getData"
-                    ></DeleteIODialogComponent>
-                </td>
-            </tr>
-        </template>
-    </v-data-table>
+                    <td v-if="item.price.span" :rowspan="item.price.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                    >{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
-    <v-overlay v-else :value="true" opacity="1" absolute>
-        <v-progress-circular
-            indeterminate
-            size="96"
-        ></v-progress-circular>
-    </v-overlay>
+                    <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                    >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
+
+                    <td v-if="item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'"
+                    >{{ item.category.value }}</td>
+
+                    <td v-if="item.mean.span" :rowspan="item.mean.span" @mouseover="setRowsToHighlight(index, item.mean.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
+                    >{{ item.mean.value }}</td>
+
+                    <td style="white-space: nowrap" @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, 1) && 'table-hover-background'"
+                    >
+                        <EditIODialogComponent
+                            :type="item.value.value < 0 ? 'outcome' : 'income'"
+                            :id="item.id.value"
+                            @updated="getData"
+                        ></EditIODialogComponent>
+
+                        <DeleteIODialogComponent
+                            :type="item.value.value < 0 ? 'outcome' : 'income'"
+                            :id="item.id.value"
+                            @deleted="getData"
+                        ></DeleteIODialogComponent>
+                    </td>
+                </tr>
+            </template>
+
+            <template slot:bottom></template>
+        </v-data-table>
+
+        <InfiniteLoading
+            v-if="!tableLoading"
+            :force-use-infinite-wrapper="true"
+            @infinite="getData"
+            :key="currencies.usedCurrency && tableLoading"
+        >
+            <div slot="no-more"></div>
+        </InfiniteLoading>
+    </div>
 </template>
 
 <script>
@@ -191,6 +196,8 @@ import customTableMerged from "&/mixins/customTableMerged";
 
 import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
 import DeleteIODialogComponent from "@/income-outcome/DeleteIODialogComponent.vue";
+import InfiniteLoading from 'vue-infinite-loading';
+
 
 export default {
     setup() {
@@ -201,7 +208,8 @@ export default {
     mixins: [main, customTableMerged],
     components: {
         EditIODialogComponent,
-        DeleteIODialogComponent
+        DeleteIODialogComponent,
+        InfiniteLoading
     },
     props: {
         type: {
@@ -240,7 +248,6 @@ export default {
             pagination: {
                 page: 1,
                 last: null,
-                total: 0,
                 perPage: null
             },
             options: {},
@@ -253,15 +260,8 @@ export default {
             lastChange: new Date()
         }
     },
-    methods: {
-        getData() {
-            if (this.ready) {
-                this.tableLoading = true
-            }
-            else {
-                this.ready = false;
-            }
-
+    computed: {
+        dataQuery() {
             let query = {};
 
             if (Object.keys(this.options).length) {
@@ -286,26 +286,49 @@ export default {
                 })
             }
 
-            axios
-                .get(`/web-api/${this.type}/list/${this.currencies.usedCurrency}`, {
-                    params: { page: this.pagination.page, ...query }
-                })
-                .then(response => {
-                    const data = response.data;
+            return query;
+        }
+    },
+    methods: {
+        getData($state) {
+            if (!$state) {
+                this.tableLoading = true;
+                this.pagination.page = 1;
+                this.pagination.last = null;
+            }
 
-                    this.items = data.items.data;
-                    this.pagination.last = data.items.last_page;
-                    this.pagination.perPage = data.items.per_page;
+            if (this.pagination.page <= this.pagination.last || this.pagination.last == null) {
+                axios
+                    .get(`/web-api/${this.type}/list/${this.currencies.usedCurrency}`, {
+                        params: { page: this.pagination.page, ...this.dataQuery }
+                    })
+                    .then(response => {
+                        const data = response.data;
 
-                    this.pagination.total = data.items.total
+                        this.items = this.pagination.page == 1 ?
+                            data.items.data :
+                            this.items.concat(data.items.data);
+                        this.items = this.items.concat(data.items.data);
+                        this.pagination.last = data.items.last_page;
+                        this.pagination.perPage = data.items.per_page;
+                        if (!$state) {
+                            this.tableLoading = false;
+                        }
 
-                    if (this.ready) {
-                        this.tableLoading = false;
-                    }
-                    else {
-                        this.ready = true;
-                    }
-                });
+                        if ($state) {
+                            if (data.items.current_page == data.items.last_page) {
+                                $state.complete();
+                            }
+                            $state.loaded();
+                        }
+
+                        this.pagination.page++;
+                    });
+            }
+            else if ($state) {
+                $state.complete();
+                $state.loaded();
+            }
         },
         updateWithOffset() {
             const timeOffset = 250;
@@ -319,9 +342,6 @@ export default {
         }
     },
     watch: {
-        'pagination.page'() {
-            this.getData()
-        },
         options(newOptions, oldOptions) {
             if (Object.keys(oldOptions).length) {
                 this.getData();
@@ -339,9 +359,6 @@ export default {
         'filteredData.means'() {
             this.updateWithOffset();
         }
-    },
-    mounted() {
-        this.getData();
     }
 }
 </script>
