@@ -26,13 +26,18 @@
 
                     <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" :class="['d-flex', $vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end']">
                         <v-btn outlined class="me-3">Exchange</v-btn>
-                        <v-btn outlined>Add {{ type }}</v-btn>
+
+                        <AddIODialogComponent
+                            :type="type"
+                            @added="getData"
+                        ></AddIODialogComponent>
                     </v-col>
                 </v-row>
             </template>
 
             <template v-slot:[`header.date`]="{ header }">
                 {{ header.text }}
+
                 <v-menu offset-y :close-on-content-click="false">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn small icon v-bind="attrs" v-on="on">
@@ -73,6 +78,7 @@
                                 item-value="id"
                                 multiple
                                 hide-details
+                                filled
                             >
                                 <template v-slot:selection="{ item, index }">
                                     <v-chip v-if="index === 0" small>
@@ -110,6 +116,7 @@
                                 item-value="id"
                                 multiple
                                 hide-details
+                                filled
                             >
                                 <template v-slot:selection="{ item, index }">
                                     <v-chip v-if="index === 0" small>
@@ -161,13 +168,13 @@
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
                     >
                         <EditIODialogComponent
-                            :type="item.value.value < 0 ? 'outcome' : 'income'"
+                            :type="type"
                             :id="item.id.value"
                             @updated="getData"
                         ></EditIODialogComponent>
 
                         <DeleteIODialogComponent
-                            :type="item.value.value < 0 ? 'outcome' : 'income'"
+                            :type="type"
                             :id="item.id.value"
                             @deleted="getData"
                         ></DeleteIODialogComponent>
@@ -194,10 +201,10 @@ import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 import customTableMerged from "&/mixins/customTableMerged";
 
+import AddIODialogComponent from "@/income-outcome/AddIODialogComponent.vue";
 import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
 import DeleteIODialogComponent from "@/income-outcome/DeleteIODialogComponent.vue";
 import InfiniteLoading from 'vue-infinite-loading';
-
 
 export default {
     setup() {
@@ -207,6 +214,7 @@ export default {
     },
     mixins: [main, customTableMerged],
     components: {
+        AddIODialogComponent,
         EditIODialogComponent,
         DeleteIODialogComponent,
         InfiniteLoading
@@ -308,9 +316,10 @@ export default {
                         this.items = this.pagination.page == 1 ?
                             data.items.data :
                             this.items.concat(data.items.data);
-                        this.items = this.items.concat(data.items.data);
+
                         this.pagination.last = data.items.last_page;
                         this.pagination.perPage = data.items.per_page;
+
                         if (!$state) {
                             this.tableLoading = false;
                         }
@@ -331,14 +340,17 @@ export default {
             }
         },
         updateWithOffset() {
+            console.log("start");
             const timeOffset = 250;
             this.lastChange = new Date();
 
             setTimeout(() => {
+                console.log(new Date() - this.lastChange);
                 if (new Date() - this.lastChange >= timeOffset) {
+                    console.log("fire");
                     this.getData();
                 }
-            }, timeOffset);
+            }, timeOffset + 1);
         }
     },
     watch: {

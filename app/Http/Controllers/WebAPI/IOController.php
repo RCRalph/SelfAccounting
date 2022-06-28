@@ -158,4 +158,23 @@ class IOController extends Controller
 
         return response()->json(compact("items"));
     }
+
+    public function data(Currency $currency)
+    {
+        $means = auth()->user()->meansOfPayment()
+            ->select("id", "name", "first_entry_date")
+            ->where("currency_id", $currency->currency_id)
+            ->where(request()->type . "_mean", true)
+            ->get()
+            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+
+        $categories = auth()->user()->categories()
+            ->select("id", "name")
+            ->where("currency_id", $currency->currency_id)
+            ->where(request()->type . "_category", true)
+            ->get()
+            ->prepend(["id" => null, "name" => "N/A"]);
+
+        return response()->json(compact("means", "categories"));
+    }
 }
