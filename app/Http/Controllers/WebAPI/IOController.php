@@ -12,8 +12,10 @@ use App\Outcome;
 use App\Currency;
 use App\Chart;
 
+use App\Rules\CorrectDateIO;
 use App\Rules\CorrectDateIOUpdate;
 use App\Rules\ValidCategoryOrMeanUpdate;
+use App\Rules\ValidCategoryMean;
 use App\Rules\SameLengthAs;
 
 class IOController extends Controller
@@ -163,18 +165,37 @@ class IOController extends Controller
     {
         $means = auth()->user()->meansOfPayment()
             ->select("id", "name", "first_entry_date")
-            ->where("currency_id", $currency->currency_id)
+            ->where("currency_id", $currency->id)
             ->where(request()->type . "_mean", true)
             ->get()
             ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
 
         $categories = auth()->user()->categories()
             ->select("id", "name")
-            ->where("currency_id", $currency->currency_id)
+            ->where("currency_id", $currency->id)
             ->where(request()->type . "_category", true)
             ->get()
             ->prepend(["id" => null, "name" => "N/A"]);
 
         return response()->json(compact("means", "categories"));
+    }
+
+    public function store()
+    {
+        $data = request()->validate([
+            "data.*.date" => ["required", "date", new CorrectDateIO],
+            "data.*.title" => ["required", "string", "max:64"],
+            "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
+            "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "data.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryMean(request()->type)],
+            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean(request()->type)],
+        ]);
+
+        foreach ($data["data"] as $item) {
+            $this->getTypeRelation()->create($item);
+        }
+
+        return response("");
     }
 }

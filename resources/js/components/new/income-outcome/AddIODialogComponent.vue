@@ -13,53 +13,61 @@
 
             <v-card-text>
                 <v-form v-model="canSubmit">
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field type="date" label="Date" v-model="data[page].date" :min="usedMean.first_entry_date" :rules="[validation.date(usedMean.first_entry_date)]"></v-text-field>
-                        </v-col>
+                    <div v-for="i in data.length" :key="i">
+                        <div v-show="page == i - 1">
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-text-field type="date" label="Date" v-model="data[i - 1].date" :min="usedMean.first_entry_date" :rules="[validation.date(usedMean.first_entry_date)]"></v-text-field>
+                                </v-col>
 
-                        <v-col cols="12" md="8">
-                            <v-text-field label="Title" v-model="data[page].title" counter="64" :rules="[validation.title]"></v-text-field>
-                        </v-col>
-                    </v-row>
+                                <v-col cols="12" md="8">
+                                    <v-text-field label="Title" v-model="data[i - 1].title" counter="64" :rules="[validation.title]"></v-text-field>
+                                </v-col>
+                            </v-row>
 
-                    <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field label="Amount" v-model="data[page].amount" :rules="[validation.amount]"></v-text-field>
-                        </v-col>
+                            <v-row>
+                                <v-col cols="12" md="4">
+                                    <v-text-field label="Amount" v-model="data[i - 1].amount" :rules="[validation.amount]"></v-text-field>
+                                </v-col>
 
-                        <v-col cols="12" md="4">
-                            <v-text-field label="Price" v-model="data[page].price" :rules="[validation.price]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
-                        </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-text-field label="Price" v-model="data[i - 1].price" :rules="[validation.price]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
+                                </v-col>
 
-                        <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
-                            <div class="caption mb-2">Value</div>
-                            <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ valueField | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
-                        </v-col>
-                    </v-row>
+                                <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
+                                    <div class="caption mb-2">Value</div>
+                                    <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ valueField | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                                </v-col>
+                            </v-row>
 
-                    <v-row>
-                        <v-col cols="12" md="6">
-                            <v-select
-                                v-model="data[page].category_id"
-                                :items="categories"
-                                item-text="name"
-                                item-value="id"
-                                label="Category"
-                            ></v-select>
-                        </v-col>
+                            <v-row>
+                                <v-col cols="12" md="6">
+                                    <v-select
+                                        v-model="data[i - 1].category_id"
+                                        :items="categories"
+                                        item-text="name"
+                                        item-value="id"
+                                        label="Category"
+                                    ></v-select>
+                                </v-col>
 
-                        <v-col cols="12" md="6">
-                            <v-select
-                                v-model="data[page].mean_id"
-                                :items="means"
-                                item-text="name"
-                                item-value="id"
-                                label="Mean of payment"
-                            ></v-select>
-                        </v-col>
-                    </v-row>
+                                <v-col cols="12" md="6">
+                                    <v-select
+                                        v-model="data[i - 1].mean_id"
+                                        :items="means"
+                                        item-text="name"
+                                        item-value="id"
+                                        label="Mean of payment"
+                                    ></v-select>
+                                </v-col>
+                            </v-row>
+                        </div>
+                    </div>
                 </v-form>
+
+                <div class="text-center text-h5" v-if="data.length > 1">
+                    Sum: {{ sum | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                </div>
             </v-card-text>
 
             <v-card-actions class="d-flex justify-space-between">
@@ -74,21 +82,21 @@
                 </div>
 
                 <div>
-                    <v-btn outlined color="error" class="mx-1" width="90" :disabled="data.length == 1">
+                    <v-btn color="error" class="mx-1" width="90" outlined :disabled="data.length == 1 || loading" @click="removeData">
                         Delete
                     </v-btn>
 
-                    <v-btn color="success" class="mx-1" outlined :disabled="!canSubmit" @click="submit" :loading="loading" width="90">
+                    <v-btn color="success" class="mx-1" width="90" outlined :disabled="!canSubmit" @click="submit" :loading="loading">
                         Submit
                     </v-btn>
                 </div>
 
                 <div>
-                    <v-btn outlined rounded fab small class="me-2" @click="nextPage">
+                    <v-btn outlined rounded fab small class="me-2" @click="nextPage" :color="this.page == this.data.length - 1 ? 'primary' : undefined">
                         <v-icon>mdi-arrow-right</v-icon>
                     </v-btn>
 
-                    <v-btn outlined rounded fab small @click="page = data.length - 1" :disabled="page == data.length - 1">
+                    <v-btn outlined rounded fab small @click="lastPage" :color="this.page == this.data.length - 1 ? 'primary' : undefined">
                         <v-icon>mdi-arrow-collapse-right</v-icon>
                     </v-btn>
                 </div>
@@ -150,6 +158,7 @@ export default {
     },
     watch: {
         dialog() {
+            if (!this.dialog) return;
             this.ready = false;
 
             axios
@@ -159,7 +168,9 @@ export default {
 
                     this.means = data.means;
                     this.categories = data.categories;
-                    this.appendData();
+                    if (!this.data.length) {
+                        this.appendData();
+                    }
 
                     this.ready = true;
                 })
@@ -178,6 +189,11 @@ export default {
         },
         valueField() {
             return Math.round(this.data[this.page].amount * this.data[this.page].price * 100) / 100;
+        },
+        sum() {
+            let sum = 0;
+            this.data.forEach(item => sum += item.amount * item.price);
+            return sum;
         }
     },
     methods: {
@@ -185,20 +201,22 @@ export default {
             this.loading = true;
 
             const dataNoComma = _.cloneDeep(this.data);
-            if (typeof dataNoComma.amount == "string") {
-                dataNoComma.amount.replaceAll(",", ".");
-            }
-            if (typeof dataNoComma.price == "string") {
-                dataNoComma.price.replaceAll(",", ".");
-            }
+            dataNoComma.forEach((item, i) => {
+                if (typeof item.amount == "string") {
+                    dataNoComma[i].amount.replaceAll(",", ".");
+                }
+                if (typeof item.price == "string") {
+                    dataNoComma[i].price.replaceAll(",", ".");
+                }
+            })
 
             axios
-                .post(`/web-api/${this.type}`, dataNoComma)
+                .post(`/web-api/${this.type}`, {data: dataNoComma})
                 .then(() => {
-                    this.loading = false;
-                    this.dataCopy = _.cloneDeep(this.data);
                     this.$emit("added");
+                    this.loading = false;
                     this.dialog = false;
+                    this.data = [];
                 })
                 .catch(err => {
                     console.error(err);
@@ -216,6 +234,12 @@ export default {
                 category_id: null,
                 mean_id: null
             })
+        },
+        removeData() {
+            this.data.splice(this.page, 1);
+            if (this.page == this.data.length) {
+                this.page--;
+            }
         },
         nextPage() {
             if (this.data.length - 1 == this.page) {
