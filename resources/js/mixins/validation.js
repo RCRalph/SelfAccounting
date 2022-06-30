@@ -2,9 +2,12 @@ export default {
     data() {
         return {
             validation: {
-                date(firstEntryDate) {
+                date(firstEntryDate, allowNull) {
                     return date => {
-                        if (isNaN(Date.parse(date))) {
+                        if (allowNull && !date) {
+                            return true;
+                        }
+                        else if (isNaN(Date.parse(date))) {
                             return "Date has to be a date";
                         }
                         else if (new Date(date).getTime() < new Date(firstEntryDate).getTime()) {
@@ -14,54 +17,69 @@ export default {
                         return true;
                     }
                 },
-                title: title => {
-                    if (!title) {
-                        return "Title is required";
-                    }
-                    else if (typeof title != "string") {
-                        return "Title has to be a string";
-                    }
-                    else if (title.length > 64) {
-                        return "Title can't have more than 64 characters";
-                    }
+                title(allowNull) {
+                    return title => {
+                        if (allowNull && !title) {
+                            return true;
+                        }
+                        else if (!title) {
+                            return "Title is required";
+                        }
+                        else if (typeof title != "string") {
+                            return "Title has to be a string";
+                        }
+                        else if (title.length > 64) {
+                            return "Title can't have more than 64 characters";
+                        }
 
-                    return true;
+                        return true;
+                    }
                 },
-                amount: amount => {
-                    amount = String(amount).replaceAll(",", ".");
+                amount(allowNull) {
+                    return amount => {
+                        amount = String(amount).replaceAll(",", ".");
 
-                    if (!amount) {
-                        return "Amount is required";
-                    }
-                    else if (isNaN(Number(amount))) {
-                        return "Amount has to be a number";
-                    }
-                    else if (Number(amount) <= 0) {
-                        return "Amount has to be positive";
-                    }
-                    else if (!amount.match(/^\s*(\d{1,6})?(\.\d{1,3})?\s*$/)) {
-                        return "Amount is an invalid number";
-                    }
+                        if (allowNull && !amount) {
+                            return true;
+                        }
+                        else if (!amount) {
+                            return "Amount is required";
+                        }
+                        else if (isNaN(Number(amount))) {
+                            return "Amount has to be a number";
+                        }
+                        else if (Number(amount) <= 0) {
+                            return "Amount has to be positive";
+                        }
+                        else if (!amount.match(/^\s*(\d{1,6})?(\.\d{1,3})?\s*$/)) {
+                            return "Amount is an invalid number";
+                        }
 
-                    return true;
+                        return true;
+                    }
                 },
-                price: price => {
-                    price = String(price).replaceAll(",", ".");
+                price(allowNull = false) {
+                    return price => {
+                        price = String(price).replaceAll(",", ".");
 
-                    if (!price) {
-                        return "Price is required";
-                    }
-                    else if (isNaN(Number(price))) {
-                        return "Price has to be a number";
-                    }
-                    else if (Number(price) <= 0) {
-                        return "Price has to be positive";
-                    }
-                    else if (!price.match(/^\s*(\d{1,11})?(\.\d{1,2})?\s*$/)) {
-                        return "Price is an invalid number";
-                    }
+                        if (allowNull && !price) {
+                            return true;
+                        }
+                        else if (!price) {
+                            return "Price is required";
+                        }
+                        else if (isNaN(Number(price))) {
+                            return "Price has to be a number";
+                        }
+                        else if (Number(price) <= 0) {
+                            return "Price has to be positive";
+                        }
+                        else if (!price.match(/^\s*(\d{1,11})?(\.\d{1,2})?\s*$/)) {
+                            return "Price is an invalid number";
+                        }
 
-                    return true;
+                        return true;
+                    }
                 }
             }
         }

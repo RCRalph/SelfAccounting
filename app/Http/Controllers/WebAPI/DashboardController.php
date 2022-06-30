@@ -84,7 +84,7 @@ class DashboardController extends Controller
             ->pluck("id")->toArray();
 
         $means = $means->addSelect("name", "first_entry_date", "first_entry_amount")->get();
-        $categories = $categories->addSelect("name")->get();
+        $categories = $categories->addSelect("name", "count_to_summary", "start_date", "end_date")->get();
 
         $income = auth()->user()->income()
             ->where("currency_id", $currency->id)

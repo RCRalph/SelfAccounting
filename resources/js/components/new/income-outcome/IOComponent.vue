@@ -1,7 +1,7 @@
 <template>
     <div v-if="ready">
         <v-row>
-            <v-col lg="8" md="7" cols="12">
+            <v-col xl="8" cols="12" order="last" order-xl="first">
                 <v-card class="sticky-panel loading-height">
                     <v-card-title class="font-weight-bold justify-center text-h5 text-capitalize pb-lg-0">{{ type }}</v-card-title>
 
@@ -15,7 +15,7 @@
                 </v-card>
             </v-col>
 
-            <v-col lg="4" md="5" cols="12">
+            <v-col xl="4" cols="12" order-xl="last">
                 <v-card class="sticky-panel">
                     <v-card-title class="font-weight-bold justify-center text-h5">Overview</v-card-title>
 
@@ -45,7 +45,7 @@ import IOTableComponent from "@/income-outcome/IOTableComponent.vue";
 
 export default {
     components: {
-        IOTableComponent
+        IOTableComponent,
     },
     mixins: [main],
     setup() {

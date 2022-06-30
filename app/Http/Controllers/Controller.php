@@ -290,13 +290,13 @@ class Controller extends BaseController
 
             foreach ($balanceByCategories[$categoryID] as $key => $value) {
                 $limitedByStart = (
-                    $category["start_date"] != null &&
-                    strtotime($value["date"]) < strtotime($category["start_date"])
+                    $category->start_date != null &&
+                    strtotime($value["date"]) < strtotime($category->start_date)
                 );
 
                 $limitedByEnd = (
-                    $category["end_date"] != null &&
-                    strtotime($value["date"]) > strtotime($category["end_date"])
+                    $category->end_date != null &&
+                    strtotime($value["date"]) > strtotime($category->end_date)
                 );
 
                 if ($limitedByStart || $limitedByEnd) {
