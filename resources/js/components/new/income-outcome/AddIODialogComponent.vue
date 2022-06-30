@@ -8,7 +8,14 @@
             <v-card-title class="d-flex justify-space-between">
                 <div>Add {{ type }}</div>
 
-                <v-btn outlined color="primary">Set common values</v-btn>
+                <SetCommonValuesComponent
+                    :value="clonedCommonValues"
+                    :categories="categories"
+                    :means="means"
+                    :disableUpdate="loading"
+
+                    @update="updateCommonValues"
+                ></SetCommonValuesComponent>
             </v-card-title>
 
             <v-card-text>
@@ -21,17 +28,17 @@
                                 </v-col>
 
                                 <v-col cols="12" md="8">
-                                    <v-text-field label="Title" v-model="data[i - 1].title" counter="64" :rules="[validation.title]"></v-text-field>
+                                    <v-text-field label="Title" v-model="data[i - 1].title" counter="64" :rules="[validation.title(false)]"></v-text-field>
                                 </v-col>
                             </v-row>
 
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Amount" v-model="data[i - 1].amount" :rules="[validation.amount]"></v-text-field>
+                                    <v-text-field label="Amount" v-model="data[i - 1].amount" :rules="[validation.amount(false)]"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Price" v-model="data[i - 1].price" :rules="[validation.price]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
+                                    <v-text-field label="Price" v-model="data[i - 1].price" :rules="[validation.price(false)]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -92,12 +99,13 @@
                 </div>
 
                 <div>
-                    <v-btn outlined rounded fab small class="me-2" @click="nextPage" :color="this.page == this.data.length - 1 ? 'primary' : undefined">
+                    <v-btn outlined rounded fab small class="me-2" @click="nextPage" :disabled="this.page == this.data.length - 1">
                         <v-icon>mdi-arrow-right</v-icon>
                     </v-btn>
 
                     <v-btn outlined rounded fab small @click="lastPage" :color="this.page == this.data.length - 1 ? 'primary' : undefined">
-                        <v-icon>mdi-arrow-collapse-right</v-icon>
+                        <v-icon v-if="this.page != this.data.length - 1">mdi-arrow-collapse-right</v-icon>
+                        <v-icon v-else>mdi-plus</v-icon>
                     </v-btn>
                 </div>
             </v-card-actions>
@@ -124,6 +132,7 @@
 
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+import SetCommonValuesComponent from "@/income-outcome/SetCommonValuesComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import validation from "&/mixins/validation";
@@ -137,7 +146,8 @@ export default {
     },
     mixins: [validation, main],
     components: {
-        ErrorSnackbarComponent
+        ErrorSnackbarComponent,
+        SetCommonValuesComponent
     },
     props: {
         type: String
@@ -149,6 +159,15 @@ export default {
             means: [],
             categories: [],
             page: 0,
+            commonValues: {
+                date: new Date().toISOString().split("T")[0],
+                title: "",
+                amount: 1,
+                price: "",
+                currency_id: this.currencies.usedCurrency,
+                category_id: null,
+                mean_id: null
+            },
 
             ready: false,
             error: false,
@@ -194,6 +213,9 @@ export default {
             let sum = 0;
             this.data.forEach(item => sum += item.amount * item.price);
             return sum;
+        },
+        clonedCommonValues() {
+            return _.cloneDeep(this.commonValues);
         }
     },
     methods: {
@@ -225,15 +247,7 @@ export default {
                 })
         },
         appendData() {
-            this.data.push({
-                date: "",
-                title: "",
-                amount: "",
-                price: "",
-                currency_id: this.currencies.usedCurrency,
-                category_id: null,
-                mean_id: null
-            })
+            this.data.push(_.cloneDeep(this.commonValues))
         },
         removeData() {
             this.data.splice(this.page, 1);
@@ -254,6 +268,18 @@ export default {
             }
 
             this.page = this.data.length - 1;
+        },
+        updateCommonValues(newValues) {
+
+            this.data.forEach((item, i) => {
+                Object.keys(newValues).forEach(item1 => {
+                    if (this.commonValues[item1] != newValues[item1] && newValues[item1] !== "") {
+                        this.data[i][item1] = newValues[item1];
+                    }
+                })
+            })
+
+            this.commonValues = newValues;
         }
     }
 }
