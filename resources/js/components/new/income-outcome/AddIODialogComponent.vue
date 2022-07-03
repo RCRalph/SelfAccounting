@@ -270,7 +270,6 @@ export default {
             this.page = this.data.length - 1;
         },
         updateCommonValues(newValues) {
-
             this.data.forEach((item, i) => {
                 Object.keys(newValues).forEach(item1 => {
                     if (this.commonValues[item1] != newValues[item1] && newValues[item1] !== "") {

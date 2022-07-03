@@ -32,6 +32,27 @@ class IOController extends Controller
             auth()->user()->outcome();
     }
 
+    private function getCategoriesAndMeans($currency)
+    {
+        $categories = auth()->user()->categories()
+            ->select("id", "name")
+            ->where("currency_id", $currency->id)
+            ->where(request()->type . "_category", true)
+            ->orderBy("name")
+            ->get()
+            ->prepend(["id" => null, "name" => "N/A"]);
+
+        $means = auth()->user()->meansOfPayment()
+            ->select("id", "name", "first_entry_date")
+            ->where("currency_id", $currency->id)
+            ->where(request()->type . "_mean", true)
+            ->orderBy("name")
+            ->get()
+            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+
+        return compact("categories", "means");
+    }
+
     public function show($id)
     {
         $data = $this->getTypeRelation()
@@ -39,24 +60,15 @@ class IOController extends Controller
             ->where("id", $id)
             ->get()->firstOrFail();
 
-        $data["price"] *= 1;
-        $data["amount"] *= 1;
+        $data->price *= 1;
+        $data->amount *= 1;
 
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "name", "first_entry_date")
-            ->where("currency_id", $data->currency_id)
-            ->where(request()->type . "_mean", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+        $meansAndCategories = $this->getCategoriesAndMeans($data->currency);
 
-        $categories = auth()->user()->categories()
-            ->select("id", "name")
-            ->where("currency_id", $data->currency_id)
-            ->where(request()->type . "_category", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A"]);
+        $data = collect($data);
+        $data->forget("currency");
 
-        return response()->json(compact("data", "means", "categories"));
+        return response()->json([ ...compact("data"), ...$meansAndCategories ]);
     }
 
     public function update($id)
@@ -163,21 +175,9 @@ class IOController extends Controller
 
     public function data(Currency $currency)
     {
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "name", "first_entry_date")
-            ->where("currency_id", $currency->id)
-            ->where(request()->type . "_mean", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+        $meansAndCategories = $this->getCategoriesAndMeans($data->currency);
 
-        $categories = auth()->user()->categories()
-            ->select("id", "name")
-            ->where("currency_id", $currency->id)
-            ->where(request()->type . "_category", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A"]);
-
-        return response()->json(compact("means", "categories"));
+        return response()->json([...$meansAndCategories]);
     }
 
     public function store()
