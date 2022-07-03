@@ -32,7 +32,7 @@ Route::get("/app", "AppController@index")->name("app");
 Route::prefix("/web-api")->group(function () {
     Route::get("/app", "WebAPI\AppController@index")->name("web-api.app");
 
-    Route::prefix("/dashboard")->group(function() {
+    Route::prefix("/dashboard")->group(function () {
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\DashboardController@index")->name("web-api.dashboard");
             Route::get("/recent-transactions", "WebAPI\DashboardController@getRecentTransactions")->name("web-api.dashboard.recent-transactions");
@@ -53,6 +53,10 @@ Route::prefix("/web-api")->group(function () {
             Route::get("/list/{currency}", "WebAPI\IOController@list")->name("web-api.$type.list");
         });
     }
+
+    Route::prefix("/exchange")->group(function () {
+        Route::get("/", "WebAPI\ExchangeController@show")->name("web-api.exchange.index");
+    });
 });
 
 Route::prefix('/admin')->group(function () {

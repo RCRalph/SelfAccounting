@@ -93,7 +93,7 @@
                         Delete
                     </v-btn>
 
-                    <v-btn color="success" class="mx-1" width="90" outlined :disabled="!canSubmit" @click="submit" :loading="loading">
+                    <v-btn color="success" class="mx-1" width="90" outlined :disabled="!canSubmit || loading" @click="submit" :loading="loading">
                         Submit
                     </v-btn>
                 </div>

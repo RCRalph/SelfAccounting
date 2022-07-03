@@ -63,7 +63,7 @@
                     Reset
                 </v-btn>
 
-                <v-btn color="success" outlined :disabled="!canSubmit" @click="update" :loading="loading">
+                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading">
                     Update
                 </v-btn>
             </v-card-actions>

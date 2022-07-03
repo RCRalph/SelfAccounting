@@ -175,7 +175,7 @@ class IOController extends Controller
 
     public function data(Currency $currency)
     {
-        $meansAndCategories = $this->getCategoriesAndMeans($data->currency);
+        $meansAndCategories = $this->getCategoriesAndMeans($currency);
 
         return response()->json([...$meansAndCategories]);
     }

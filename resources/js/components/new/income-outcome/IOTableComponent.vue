@@ -25,7 +25,9 @@
                     </v-col>
 
                     <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" :class="['d-flex', $vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end']">
-                        <v-btn outlined class="me-3">Exchange</v-btn>
+                        <ExchangeIODialogComponent
+                            @exchanged="getData"
+                        ></ExchangeIODialogComponent>
 
                         <AddIODialogComponent
                             :type="type"
@@ -204,6 +206,7 @@ import customTableMerged from "&/mixins/customTableMerged";
 import AddIODialogComponent from "@/income-outcome/AddIODialogComponent.vue";
 import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
 import DeleteIODialogComponent from "@/income-outcome/DeleteIODialogComponent.vue";
+import ExchangeIODialogComponent from "@/income-outcome/ExchangeIODialogComponent.vue";
 import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
@@ -217,6 +220,7 @@ export default {
         AddIODialogComponent,
         EditIODialogComponent,
         DeleteIODialogComponent,
+        ExchangeIODialogComponent,
         InfiniteLoading
     },
     props: {
