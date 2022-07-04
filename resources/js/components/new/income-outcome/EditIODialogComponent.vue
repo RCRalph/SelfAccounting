@@ -15,7 +15,13 @@
                         </v-col>
 
                         <v-col cols="12" md="8">
-                            <v-text-field label="Title" v-model="data.title" counter="64" :rules="[validation.title(false)]"></v-text-field>
+                            <v-combobox
+                                label="Title"
+                                :items="titles"
+                                v-model="data.title"
+                                counter="64"
+                                :rules="[validation.title(false)]"
+                            ></v-combobox>
                         </v-col>
                     </v-row>
 
@@ -112,6 +118,7 @@ export default {
             dataCopy: {},
             means: [],
             categories: [],
+            titles: [],
 
             ready: false,
             error: false,
@@ -128,6 +135,7 @@ export default {
                 .then(response => {
                     const data = response.data;
 
+                    this.titles = data.titles;
                     this.data = data.data;
                     this.dataCopy = _.cloneDeep(data.data);
                     this.means = data.means;
@@ -149,7 +157,10 @@ export default {
             return this.means.find(item => item.id == this.data.mean_id);
         },
         valueField() {
-            return Math.round(this.data.amount * this.data.price * 100) / 100;
+            const amount = typeof this.data.amount == "string" ? this.data.amount.replaceAll(",", ".") : this.data.amount,
+                price = typeof this.data.price == "string" ? this.data.price.replaceAll(",", ".") : this.data.price;
+
+            return Math.round(amount * price * 100) / 100;
         }
     },
     methods: {
@@ -170,10 +181,10 @@ export default {
             axios
                 .patch(`/web-api/${this.type}/${this.id}`, dataNoComma)
                 .then(() => {
-                    this.loading = false;
                     this.dataCopy = _.cloneDeep(this.data);
                     this.$emit("updated");
                     this.dialog = false;
+                    this.loading = false;
                 })
                 .catch(err => {
                     console.error(err);

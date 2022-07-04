@@ -15,7 +15,13 @@
 
                             <v-text-field type="date" label="Date" v-model="from.date" :min="fromData.mean.first_entry_date" :rules="[validation.date(fromData.mean.first_entry_date)]"></v-text-field>
 
-                            <v-text-field label="Title" v-model="from.title" counter="64" :rules="[validation.title(false)]"></v-text-field>
+                            <v-combobox
+                                label="Title"
+                                :items="titles"
+                                v-model="from.title"
+                                counter="64"
+                                :rules="[validation.title(false)]"
+                            ></v-combobox>
 
                             <v-text-field label="Amount" v-model="from.amount" :rules="[validation.amount(false)]"></v-text-field>
 
@@ -35,7 +41,7 @@
 
                             <v-select
                                 v-model="from.category_id"
-                                :items="categories[from.currency_id]"
+                                :items="fromSelects.categories"
                                 item-text="name"
                                 item-value="id"
                                 label="Category"
@@ -43,7 +49,7 @@
 
                             <v-select
                                 v-model="from.mean_id"
-                                :items="means[from.currency_id]"
+                                :items="fromSelects.means"
                                 :rules="[validation.differentMeans(to.mean_id)]"
                                 item-text="name"
                                 item-value="id"
@@ -56,7 +62,13 @@
 
                             <v-text-field type="date" label="Date" v-model="to.date" :min="toData.mean.first_entry_date" :rules="[validation.date(toData.mean.first_entry_date)]"></v-text-field>
 
-                            <v-text-field label="Title" v-model="to.title" counter="64" :rules="[validation.title(false)]"></v-text-field>
+                            <v-combobox
+                                label="Title"
+                                :items="titles"
+                                v-model="to.title"
+                                counter="64"
+                                :rules="[validation.title(false)]"
+                            ></v-combobox>
 
                             <v-text-field label="Amount" v-model="to.amount" :rules="[validation.amount(false)]"></v-text-field>
 
@@ -76,7 +88,7 @@
 
                             <v-select
                                 v-model="to.category_id"
-                                :items="categories[to.currency_id]"
+                                :items="toSelects.categories"
                                 item-text="name"
                                 item-value="id"
                                 label="Category"
@@ -84,7 +96,7 @@
 
                             <v-select
                                 v-model="to.mean_id"
-                                :items="means[to.currency_id]"
+                                :items="toSelects.means"
                                 :rules="[validation.differentMeans(from.mean_id)]"
                                 item-text="name"
                                 item-value="id"
@@ -96,7 +108,7 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading">
+                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="submit" :loading="loading">
                     Submit
                 </v-btn>
             </v-card-actions>
@@ -142,6 +154,7 @@ export default {
             means: {},
             categories: {},
             availableCurrencies: [],
+            titles: [],
 
             ready: false,
             error: false,
@@ -159,6 +172,7 @@ export default {
                 .then(response => {
                     const data = response.data;
 
+                    this.titles = data.titles;
                     this.means = data.means;
                     this.categories = data.categories;
                     this.availableCurrencies = data.availableCurrencies;
@@ -190,49 +204,72 @@ export default {
         fromData() {
             if (!this.ready) return {};
 
-            const categorie = this.categories[this.from.currency_id].find(item => item.id == this.from.category_id),
-                mean = this.means[this.from.currency_id].find(item => item.id == this.from.mean_id);
+            const categories = this.categories[this.from.currency_id].find(item => item.id == this.from.category_id),
+                mean = this.means[this.from.currency_id].find(item => item.id == this.from.mean_id),
+                amount = typeof this.from.amount == "string" ? this.from.amount.replaceAll(",", ".") : this.from.amount,
+                price = typeof this.from.price == "string" ? this.from.price.replaceAll(",", ".") : this.from.price;
 
             return {
                 currency: this.currencies.selectCurrencies([this.from.currency_id])[0],
-                value: Math.round(this.from.amount * this.from.price * 100) / 100,
-                categories: categorie !== undefined ? categorie : [],
+                value: Math.round(amount * price * 100) / 100,
+                categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
+            }
+        },
+        fromSelects() {
+            return {
+                categories: this.categories[this.from.currency_id].filter(item => item.outcome_category),
+                means: this.means[this.from.currency_id].filter(item => item.outcome_mean)
             }
         },
         toData() {
             if (!this.ready) return {};
 
-            const categorie = this.categories[this.to.currency_id].find(item => item.id == this.to.category_id),
-                mean = this.means[this.to.currency_id].find(item => item.id == this.to.mean_id);
+            const categories = this.categories[this.to.currency_id].find(item => item.id == this.to.category_id),
+                mean = this.means[this.to.currency_id].find(item => item.id == this.to.mean_id),
+                amount = typeof this.to.amount == "string" ? this.to.amount.replaceAll(",", ".") : this.to.amount,
+                price = typeof this.to.price == "string" ? this.to.price.replaceAll(",", ".") : this.to.price;
 
             return {
                 currency: this.currencies.selectCurrencies([this.to.currency_id])[0],
-                value: Math.round(this.to.amount * this.to.price * 100) / 100,
-                categories: categorie !== undefined ? categorie : [],
+                value: Math.round(amount * price * 100) / 100,
+                categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
+            }
+        },
+        toSelects() {
+            return {
+                categories: this.categories[this.from.currency_id].filter(item => item.income_category),
+                means: this.means[this.from.currency_id].filter(item => item.income_mean)
             }
         }
     },
     methods: {
-        update() {
+        submit() {
             this.loading = true;
 
-            const dataNoComma = _.cloneDeep(this.data);
-            if (typeof dataNoComma.amount == "string") {
-                dataNoComma.amount.replaceAll(",", ".");
+            const fromNoComma = _.cloneDeep(this.from);
+            if (typeof fromNoComma.amount == "string") {
+                fromNoComma.amount.replaceAll(",", ".");
             }
-            if (typeof dataNoComma.price == "string") {
-                dataNoComma.price.replaceAll(",", ".");
+            if (typeof fromNoComma.price == "string") {
+                fromNoComma.price.replaceAll(",", ".");
+            }
+
+            const toNoComma = _.cloneDeep(this.to);
+            if (typeof toNoComma.amount == "string") {
+                toNoComma.amount.replaceAll(",", ".");
+            }
+            if (typeof toNoComma.price == "string") {
+                toNoComma.price.replaceAll(",", ".");
             }
 
             axios
-                .patch(`/web-api/${this.type}/${this.id}`, dataNoComma)
+                .post(`/web-api/exchange`, { from: fromNoComma, to: toNoComma })
                 .then(() => {
-                    this.loading = false;
-                    this.dataCopy = _.cloneDeep(this.data);
-                    this.$emit("updated");
+                    this.$emit("exchanged");
                     this.dialog = false;
+                    this.loading = false;
                 })
                 .catch(err => {
                     console.error(err);

@@ -9,7 +9,7 @@ use App\Income;
 use App\Outcome;
 
 use App\Rules\CorrectDateIO_One;
-use App\Rules\ValidCategoryMean;
+use App\Rules\ValidCategoryOrMean;
 use App\Http\Middleware\IncomeOutcome;
 
 class IncomeOutcomeController extends Controller

@@ -387,4 +387,23 @@ class Controller extends BaseController
 
         return $items;
     }
+
+    public function getTitles()
+    {
+        $userID = auth()->user()->id;
+
+        return Cache::remember(
+            "titles-$userID",
+            now()->addMinutes(15),
+            function () {
+                $incomeTitles = auth()->user()->income()->pluck("title");
+                $outcomeTitles = auth()->user()->outcome()->pluck("title");
+
+                return $incomeTitles
+                    ->merge($outcomeTitles)
+                    ->unique()
+                    ->values();
+            }
+        );
+    }
 }

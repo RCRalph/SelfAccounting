@@ -15,7 +15,7 @@ use App\Chart;
 use App\Rules\CorrectDateIO;
 use App\Rules\CorrectDateIOUpdate;
 use App\Rules\ValidCategoryOrMeanUpdate;
-use App\Rules\ValidCategoryMean;
+use App\Rules\ValidCategoryOrMean;
 use App\Rules\SameLengthAs;
 
 class IOController extends Controller
@@ -65,10 +65,12 @@ class IOController extends Controller
 
         $meansAndCategories = $this->getCategoriesAndMeans($data->currency);
 
+        $titles = $this->getTitles();
+
         $data = collect($data);
         $data->forget("currency");
 
-        return response()->json([ ...compact("data"), ...$meansAndCategories ]);
+        return response()->json([ ...compact("data", "titles"), ...$meansAndCategories ]);
     }
 
     public function update($id)
@@ -176,8 +178,9 @@ class IOController extends Controller
     public function data(Currency $currency)
     {
         $meansAndCategories = $this->getCategoriesAndMeans($currency);
+        $titles = $this->getTitles();
 
-        return response()->json([...$meansAndCategories]);
+        return response()->json([ ...compact("titles"), ...$meansAndCategories ]);
     }
 
     public function store()
@@ -188,8 +191,8 @@ class IOController extends Controller
             "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "data.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryMean(request()->type)],
-            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean(request()->type)],
+            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type)],
+            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type)],
         ]);
 
         foreach ($data["data"] as $item) {

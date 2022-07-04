@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Rules\ValidQueryDate;
 use App\Rules\ValidQueryMinMax;
-use App\Rules\ValidCategoryMean;
+use App\Rules\ValidCategoryOrMean;
 use App\Rules\BelongsToReport;
 
 use App\User;
@@ -145,8 +145,8 @@ class ReportsController extends Controller
             "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:0,1e11", new ValidQueryMinMax("price")],
             "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:0,1e11", new ValidQueryMinMax("price")],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
-            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "queries")],
-            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "queries")],
+            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "queries")],
+            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "queries")],
 
             "additionalEntries" => ["present", "array"],
             "additionalEntries.*.date" => ["required", "date"],
@@ -154,8 +154,8 @@ class ReportsController extends Controller
             "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:0,1e11,-1e11"],
             "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "additionalEntries")],
-            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "additionalEntries")],
+            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "additionalEntries")],
+            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "additionalEntries")],
 
             "users" => ["present", "array"],
             "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
@@ -264,8 +264,8 @@ class ReportsController extends Controller
             "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:0,1e11", new ValidQueryMinMax("price")],
             "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:0,1e11", new ValidQueryMinMax("price")],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
-            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "queries")],
-            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "queries")],
+            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "queries")],
+            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "queries")],
 
             "additionalEntries" => ["present", "array"],
             "additionalEntries.*.id" => ["present", "nullable", "integer", "exists:report_additional_entries,id", new BelongsToReport($report)],
@@ -274,8 +274,8 @@ class ReportsController extends Controller
             "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:0,1e11,-1e11"],
             "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "additionalEntries")],
-            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean("", false, "additionalEntries")],
+            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "additionalEntries")],
+            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean("", false, "additionalEntries")],
 
             "users" => ["present", "array"],
             "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]

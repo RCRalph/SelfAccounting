@@ -13,6 +13,7 @@
                     :categories="categories"
                     :means="means"
                     :disableUpdate="loading"
+                    :titles="titles"
 
                     @update="updateCommonValues"
                 ></SetCommonValuesComponent>
@@ -28,7 +29,13 @@
                                 </v-col>
 
                                 <v-col cols="12" md="8">
-                                    <v-text-field label="Title" v-model="data[i - 1].title" counter="64" :rules="[validation.title(false)]"></v-text-field>
+                                    <v-combobox
+                                        label="Title"
+                                        :items="titles"
+                                        v-model="data[i - 1].title"
+                                        counter="64"
+                                        :rules="[validation.title(false)]"
+                                    ></v-combobox>
                                 </v-col>
                             </v-row>
 
@@ -168,6 +175,7 @@ export default {
                 category_id: null,
                 mean_id: null
             },
+            titles: [],
 
             ready: false,
             error: false,
@@ -185,6 +193,7 @@ export default {
                 .then(response => {
                     const data = response.data;
 
+                    this.titles = data.titles;
                     this.means = data.means;
                     this.categories = data.categories;
                     if (!this.data.length) {
@@ -207,7 +216,10 @@ export default {
             return this.means.find(item => item.id == this.data[this.page].mean_id);
         },
         valueField() {
-            return Math.round(this.data[this.page].amount * this.data[this.page].price * 100) / 100;
+            const amount = typeof this.data[this.page].amount == "string" ? this.data[this.page].amount.replaceAll(",", ".") : this.data[this.page].amount,
+                price = typeof this.data[this.page].price == "string" ? this.data[this.page].price.replaceAll(",", ".") : this.data[this.page].price;
+
+            return Math.round(amount * price * 100) / 100;
         },
         sum() {
             let sum = 0;
@@ -236,8 +248,8 @@ export default {
                 .post(`/web-api/${this.type}`, {data: dataNoComma})
                 .then(() => {
                     this.$emit("added");
-                    this.loading = false;
                     this.dialog = false;
+                    this.loading = false;
                     this.data = [];
                 })
                 .catch(err => {
