@@ -12,7 +12,7 @@ use App\MeanOfPayment;
 use App\Cash;
 
 use App\Rules\CorrectDateIO;
-use App\Rules\ValidCategoryOrMean;
+use App\Rules\ValidCategoryMean;
 use App\Rules\HasEnoughCash;
 use App\Rules\CorrectExchangeDate;
 use App\Rules\ValidExchangeCategoryMean;
@@ -152,8 +152,8 @@ class IncomeOutcomeController extends Controller
             "$directory.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "$directory.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "$directory.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($viewType)],
-            "$directory.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($viewType)],
+            "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
+            "$directory.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
 
             // Validate cash
             "cash" => ["nullable", "array"],
@@ -234,8 +234,8 @@ class IncomeOutcomeController extends Controller
             "$directory.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "$directory.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "$directory.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($viewType)],
-            "$directory.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($viewType)]
+            "$directory.category_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)],
+            "$directory.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean($viewType)]
         ])["data"][0];
 
         $incomeOutcome = $viewType == "income" ?
