@@ -58,7 +58,7 @@ export default {
                         return true;
                     }
                 },
-                price(allowNull = false) {
+                price(allowNull) {
                     return price => {
                         price = String(price).replaceAll(",", ".");
 
@@ -76,6 +76,18 @@ export default {
                         }
                         else if (!price.match(/^\s*(\d{1,11})?(\.\d{1,2})?\s*$/)) {
                             return "Price is an invalid number";
+                        }
+
+                        return true;
+                    }
+                },
+                differentMeans(otherMean) {
+                    return mean => {
+                        if (!mean) {
+                            return "Mean of payment is required";
+                        }
+                        else if (mean == otherMean) {
+                            return "Means of payment cannot be the same";
                         }
 
                         return true;

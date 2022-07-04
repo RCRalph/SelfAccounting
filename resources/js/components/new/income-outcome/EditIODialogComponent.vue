@@ -15,17 +15,23 @@
                         </v-col>
 
                         <v-col cols="12" md="8">
-                            <v-text-field label="Title" v-model="data.title" counter="64" :rules="[validation.title]"></v-text-field>
+                            <v-combobox
+                                label="Title"
+                                :items="titles"
+                                v-model="data.title"
+                                counter="64"
+                                :rules="[validation.title(false)]"
+                            ></v-combobox>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field label="Amount" v-model="data.amount" :rules="[validation.amount]"></v-text-field>
+                            <v-text-field label="Amount" v-model="data.amount" :rules="[validation.amount(false)]"></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field label="Price" v-model="data.price" :rules="[validation.price]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
+                            <v-text-field label="Price" v-model="data.price" :rules="[validation.price(false)]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -63,7 +69,7 @@
                     Reset
                 </v-btn>
 
-                <v-btn color="success" outlined :disabled="!canSubmit" @click="update" :loading="loading">
+                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading">
                     Update
                 </v-btn>
             </v-card-actions>
@@ -112,6 +118,7 @@ export default {
             dataCopy: {},
             means: [],
             categories: [],
+            titles: [],
 
             ready: false,
             error: false,
@@ -128,6 +135,7 @@ export default {
                 .then(response => {
                     const data = response.data;
 
+                    this.titles = data.titles;
                     this.data = data.data;
                     this.dataCopy = _.cloneDeep(data.data);
                     this.means = data.means;
@@ -149,7 +157,10 @@ export default {
             return this.means.find(item => item.id == this.data.mean_id);
         },
         valueField() {
-            return Math.round(this.data.amount * this.data.price * 100) / 100;
+            const amount = typeof this.data.amount == "string" ? this.data.amount.replaceAll(",", ".") : this.data.amount,
+                price = typeof this.data.price == "string" ? this.data.price.replaceAll(",", ".") : this.data.price;
+
+            return Math.round(amount * price * 100) / 100;
         }
     },
     methods: {
@@ -170,10 +181,10 @@ export default {
             axios
                 .patch(`/web-api/${this.type}/${this.id}`, dataNoComma)
                 .then(() => {
-                    this.loading = false;
                     this.dataCopy = _.cloneDeep(this.data);
                     this.$emit("updated");
                     this.dialog = false;
+                    this.loading = false;
                 })
                 .catch(err => {
                     console.error(err);

@@ -4,8 +4,6 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-use App\MeanOfPayment;
-
 class CorrectDateIO implements Rule
 {
     /**
@@ -34,8 +32,12 @@ class CorrectDateIO implements Rule
             return true;
         }
 
-        $firstEntryDate = MeanOfPayment::findOrFail($id)->first_entry_date;
-        return strtotime($firstEntryDate) <= strtotime($value);
+        $mean = auth()->user()->meansOfPayment()->where("id", $id)->first();
+        if (!$mean) {
+            return false;
+        }
+
+        return strtotime($mean->first_entry_date) <= strtotime($value);
     }
 
     /**

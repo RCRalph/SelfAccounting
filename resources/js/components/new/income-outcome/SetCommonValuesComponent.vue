@@ -15,7 +15,13 @@
                         </v-col>
 
                         <v-col cols="12" md="8">
-                            <v-text-field label="Title" v-model="value.title" counter="64" :rules="[validation.title(true)]"></v-text-field>
+                            <v-combobox
+                                label="Title"
+                                :items="titles"
+                                v-model="value.title"
+                                counter="64"
+                                :rules="[validation.title(true)]"
+                            ></v-combobox>
                         </v-col>
                     </v-row>
 
@@ -95,6 +101,10 @@ export default {
         disableUpdate: {
             required: true,
             type: Boolean
+        },
+        titles: {
+            required: true,
+            type: Array
         }
     },
     data() {

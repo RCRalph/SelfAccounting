@@ -51,9 +51,9 @@ export default {
             axios
                 .delete(`/web-api/${this.type}/${this.id}`)
                 .then(() => {
-                    this.loading = false;
-                    this.dialog = false;
                     this.$emit("deleted");
+                    this.dialog = false;
+                    this.loading = false;
                 })
                 .catch(err => {
                     console.error(err);

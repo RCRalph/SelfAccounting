@@ -1,6 +1,6 @@
 {
     "/js/app.js": "/js/app.c138f64fc9df46e43588fb9f58a92a84.js",
-    "/js/new/app.js": "/js/new/app.808aa255202042dbe65abd8fa912af73.js",
+    "/js/new/app.js": "/js/new/app.a66ad80a21d8fa4f7b41bd1370913784.js",
     "/js/popper.js": "/js/popper.9761f29229e7541ef4b3426eb1cabe39.js",
     "/js/settings.js": "/js/settings.016148d2146ba70ec9093812dc054d76.js",
     "/js/income-outcome.js": "/js/income-outcome.3dd18f347096b9a90ab5cdb7a99967de.js",
@@ -14,8 +14,8 @@
     "/js/payment.js": "/js/payment.b9af256db9d9d0195f9a80275d4d660e.js",
     "/js/table-hovering.js": "/js/table-hovering.0c68f3ba4a54f959f8930b7ae6d62d1b.js",
     "/js/bundles/charts/presence.js": "/js/bundles/charts/presence.ebe84c9a6b95fbf95afe5cd4f219ea5c.js",
-    "/js/bundles/charts/balance-monitor.js": "/js/bundles/charts/balance-monitor.8b6eaa9b145373539c7a833f00314cea.js",
-    "/js/bundles/charts/io-by-type.js": "/js/bundles/charts/io-by-type.19ced513fb84e6a76c703f41a7ab0051.js",
+    "/js/bundles/charts/balance-monitor.js": "/js/bundles/charts/balance-monitor.3333ecc4cbca09ab81c3878f914ee355.js",
+    "/js/bundles/charts/io-by-type.js": "/js/bundles/charts/io-by-type.d7fc1181575a512f65e471a97340eba5.js",
     "/js/bundles/backup/backup.js": "/js/bundles/backup/backup.1d01bb4b60433d34eae671c9049c0ba0.js",
     "/js/bundles/cash/cash.js": "/js/bundles/cash/cash.fff67221de6d3094a441cf61edd9c381.js",
     "/js/bundles/reports/all.js": "/js/bundles/reports/all.60989e9f4dd2a663987a700900ae48f1.js",

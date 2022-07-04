@@ -33,11 +33,12 @@ class CorrectDateIOUpdate implements Rule
             return true;
         }
 
-        $firstEntryDate = auth()->user()->meansOfPayment()
-            ->where("id", $id)->get()
-            ->firstOrFail()->first_entry_date;
+        $mean = auth()->user()->meansOfPayment()->where("id", $id)->first();
+        if (!$mean) {
+            return false;
+        }
 
-        return strtotime($firstEntryDate) <= strtotime($value);
+        return strtotime($mean->first_entry_date) <= strtotime($value);
     }
 
     /**

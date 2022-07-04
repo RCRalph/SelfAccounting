@@ -15,7 +15,7 @@ use App\Chart;
 use App\Rules\CorrectDateIO;
 use App\Rules\CorrectDateIOUpdate;
 use App\Rules\ValidCategoryOrMeanUpdate;
-use App\Rules\ValidCategoryMean;
+use App\Rules\ValidCategoryOrMean;
 use App\Rules\SameLengthAs;
 
 class IOController extends Controller
@@ -32,6 +32,27 @@ class IOController extends Controller
             auth()->user()->outcome();
     }
 
+    private function getCategoriesAndMeans($currency)
+    {
+        $categories = auth()->user()->categories()
+            ->select("id", "name")
+            ->where("currency_id", $currency->id)
+            ->where(request()->type . "_category", true)
+            ->orderBy("name")
+            ->get()
+            ->prepend(["id" => null, "name" => "N/A"]);
+
+        $means = auth()->user()->meansOfPayment()
+            ->select("id", "name", "first_entry_date")
+            ->where("currency_id", $currency->id)
+            ->where(request()->type . "_mean", true)
+            ->orderBy("name")
+            ->get()
+            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+
+        return compact("categories", "means");
+    }
+
     public function show($id)
     {
         $data = $this->getTypeRelation()
@@ -39,24 +60,17 @@ class IOController extends Controller
             ->where("id", $id)
             ->get()->firstOrFail();
 
-        $data["price"] *= 1;
-        $data["amount"] *= 1;
+        $data->price *= 1;
+        $data->amount *= 1;
 
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "name", "first_entry_date")
-            ->where("currency_id", $data->currency_id)
-            ->where(request()->type . "_mean", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+        $meansAndCategories = $this->getCategoriesAndMeans($data->currency);
 
-        $categories = auth()->user()->categories()
-            ->select("id", "name")
-            ->where("currency_id", $data->currency_id)
-            ->where(request()->type . "_category", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A"]);
+        $titles = $this->getTitles();
 
-        return response()->json(compact("data", "means", "categories"));
+        $data = collect($data);
+        $data->forget("currency");
+
+        return response()->json([ ...compact("data", "titles"), ...$meansAndCategories ]);
     }
 
     public function update($id)
@@ -163,21 +177,10 @@ class IOController extends Controller
 
     public function data(Currency $currency)
     {
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "name", "first_entry_date")
-            ->where("currency_id", $currency->id)
-            ->where(request()->type . "_mean", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+        $meansAndCategories = $this->getCategoriesAndMeans($currency);
+        $titles = $this->getTitles();
 
-        $categories = auth()->user()->categories()
-            ->select("id", "name")
-            ->where("currency_id", $currency->id)
-            ->where(request()->type . "_category", true)
-            ->get()
-            ->prepend(["id" => null, "name" => "N/A"]);
-
-        return response()->json(compact("means", "categories"));
+        return response()->json([ ...compact("titles"), ...$meansAndCategories ]);
     }
 
     public function store()
@@ -188,8 +191,8 @@ class IOController extends Controller
             "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "data.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryMean(request()->type)],
-            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryMean(request()->type)],
+            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type)],
+            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type)],
         ]);
 
         foreach ($data["data"] as $item) {
