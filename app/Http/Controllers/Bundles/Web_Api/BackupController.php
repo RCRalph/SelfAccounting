@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 
 use App\Rules\BackupValidIODate;
-use App\Rules\BackupValidCategoryOrMean;
+use App\Rules\BackupValidCategoryMean;
 use App\Rules\CorrectValueForCash;
 use App\Rules\BackupValidMeanForCashMeans;
 use App\Rules\BackupValidQueryDate;
@@ -240,8 +240,8 @@ class BackupController extends Controller
             "income.*.title" => ["required", "string", "max:64"],
             "income.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "income.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "income.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryOrMean("income")],
-            "income.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryOrMean("income")],
+            "income.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("income")],
+            "income.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("income")],
 
             // Outcome
             "outcome.*.currency_id" => ["required", "exists:currencies,id"],
@@ -249,8 +249,8 @@ class BackupController extends Controller
             "outcome.*.title" => ["required", "string", "max:64"],
             "outcome.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "outcome.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "outcome.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryOrMean("outcome")],
-            "outcome.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryOrMean("outcome")],
+            "outcome.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
+            "outcome.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
 
             // Bundle data
             "bundleData" => ["present", "array"],

@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class BackupValidCategoryOrMean implements Rule
+class BackupValidCategoryMean implements Rule
 {
     private $type;
     /**
