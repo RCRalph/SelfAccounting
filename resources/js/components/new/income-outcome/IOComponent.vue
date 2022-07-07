@@ -16,15 +16,10 @@
             </v-col>
 
             <v-col xl="4" cols="12" order-xl="last">
-                <v-card class="sticky-panel">
-                    <v-card-title class="font-weight-bold justify-center text-h5">Overview</v-card-title>
-
-                    <div class="mx-3">
-                        <!--<BalanceHistoryChartComponent v-if="currentChart == 1" :id="1"></BalanceHistoryChartComponent>
-
-                        <DataByTypeChartComponent v-else-if="currentChart <= 5" :id="currentChart"></DataByTypeChartComponent>-->
-                    </div>
-                </v-card>
+                <IOOverviewComponent
+                    :type="type"
+                    :charts="charts"
+                ></IOOverviewComponent>
             </v-col>
         </v-row>
     </div>
@@ -42,10 +37,12 @@ import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 
 import IOTableComponent from "@/income-outcome/IOTableComponent.vue";
+import IOOverviewComponent from "@/income-outcome/IOOverviewComponent.vue";
 
 export default {
     components: {
         IOTableComponent,
+        IOOverviewComponent
     },
     mixins: [main],
     setup() {
@@ -62,33 +59,25 @@ export default {
     },
     data() {
         return {
-            chartTypes: [],
-            currentChart: null,
-
             categories: [],
             means: [],
+            charts: [],
 
             ready: false
         }
-    },
-    computed: {
-
     },
     methods: {
         getData() {
             this.ready = false;
 
             axios
-                .get(`/web-api/${this.type}/overview/${this.currencies.usedCurrency}`)
+                .get(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`)
                 .then(response => {
                     const data = response.data;
 
-                    if (data.charts.length) {
-                        this.currentChart = data.charts[0].id
-                    }
-
                     this.categories = data.categories;
                     this.means = data.means;
+                    this.charts = data.charts;
 
                     this.ready = true;
                 })

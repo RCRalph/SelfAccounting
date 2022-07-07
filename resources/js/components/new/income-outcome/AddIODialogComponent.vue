@@ -189,7 +189,7 @@ export default {
             this.ready = false;
 
             axios
-                .get(`/web-api/${this.type}/data/${this.currencies.usedCurrency}`)
+                .get(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}/data`)
                 .then(response => {
                     const data = response.data;
 

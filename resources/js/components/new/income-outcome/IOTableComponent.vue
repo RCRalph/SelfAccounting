@@ -311,7 +311,7 @@ export default {
 
             if (this.pagination.page <= this.pagination.last || this.pagination.last == null) {
                 axios
-                    .get(`/web-api/${this.type}/list/${this.currencies.usedCurrency}`, {
+                    .get(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}/list`, {
                         params: { page: this.pagination.page, ...this.dataQuery }
                     })
                     .then(response => {
@@ -344,14 +344,11 @@ export default {
             }
         },
         updateWithOffset() {
-            console.log("start");
             const timeOffset = 250;
             this.lastChange = new Date();
 
             setTimeout(() => {
-                console.log(new Date() - this.lastChange);
                 if (new Date() - this.lastChange >= timeOffset) {
-                    console.log("fire");
                     this.getData();
                 }
             }, timeOffset + 1);

@@ -17,22 +17,6 @@ class DashboardChartsController extends Controller
         $this->middleware("auth");
     }
 
-    private function getColors($numberOfColors)
-    {
-        $circleShift = rand(1, 360);
-        $step = 360 / $numberOfColors;
-
-        $retArr = [];
-        for ($i = 0; $i < $numberOfColors; $i++) {
-            $h = ($circleShift + $i * $step) % 360;
-            $s = rand(80, 100);
-            $l = rand(40, 60);
-            array_push($retArr, "hsl($h, $s%, $l%)");
-        }
-
-        return $retArr;
-    }
-
     private function dataByType(Currency $currency, $io, $type)
     {
         // Get type data
@@ -296,7 +280,7 @@ class DashboardChartsController extends Controller
             }
         }
 
-        usort($datesAndDifferences, fn ($a, $b) => strtotime($a["t"]) > strtotime($b["t"]));
+        usort($datesAndDifferences, fn ($a, $b) => strtotime($a["t"]) - strtotime($b["t"]));
 
         if (count($datesAndDifferences)) {
             // Sum data by dates
