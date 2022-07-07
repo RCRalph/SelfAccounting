@@ -83,7 +83,7 @@ class ExchangeController extends Controller
             "from.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "from.currency_id" => ["required", "integer", "exists:currencies,id"],
             "from.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanExchange("from")],
-            "from.mean_id" => ["required", "integer", new ValidCategoryOrMeanExchange("from")],
+            "from.mean_id" => ["required", "integer", "different:to.mean_id", new ValidCategoryOrMeanExchange("from")],
 
             "to.date" => ["required", "date", new CorrectDateIOExchange("to")],
             "to.title" => ["required", "string", "max:64"],
@@ -91,7 +91,7 @@ class ExchangeController extends Controller
             "to.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "to.currency_id" => ["required", "integer", "exists:currencies,id"],
             "to.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanExchange("to")],
-            "to.mean_id" => ["required", "integer", new ValidCategoryOrMeanExchange("to")],
+            "to.mean_id" => ["required", "integer", "different:from.mean_id", new ValidCategoryOrMeanExchange("to")],
         ]);
 
         auth()->user()->outcome()->create($data["from"]);

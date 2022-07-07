@@ -406,4 +406,24 @@ class Controller extends BaseController
             }
         );
     }
+
+    public function getColors($numberOfColors)
+    {
+        if (!$numberOfColors) {
+            return [];
+        }
+
+        $circleShift = rand(1, 360);
+        $step = round(360 / $numberOfColors);
+
+        $retArr = [];
+        for ($i = 0; $i < $numberOfColors; $i++) {
+            $h = ($circleShift + $i * $step) % 360;
+            $s = rand(80, 100);
+            $l = rand(40, 60);
+            array_push($retArr, "hsl($h, $s%, $l%)");
+        }
+
+        return $retArr;
+    }
 }

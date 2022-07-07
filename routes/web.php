@@ -48,9 +48,12 @@ Route::prefix("/web-api")->group(function () {
             Route::patch("/{id}", "WebAPI\IOController@update")->name("web-api.$type.update");
             Route::delete("/{id}", "WebAPI\IOController@destroy")->name("web-api.$type.destroy");
 
-            Route::get("/data/{currency}", "WebAPI\IOController@data")->name("web-api.$type.data");
-            Route::get("/overview/{currency}", "WebAPI\IOController@overview")->name("web-api.$type.overview");
-            Route::get("/list/{currency}", "WebAPI\IOController@list")->name("web-api.$type.list");
+            Route::prefix("/currency/{currency}")->group(function () use ($type) {
+                Route::get("/", "WebAPI\IOController@index")->name("web-api.$type.currency");
+                Route::get("/data", "WebAPI\IOController@data")->name("web-api.$type.currency.data");
+                Route::get("/overview", "WebAPI\IOController@overview")->name("web-api.$type.currency.overview");
+                Route::get("/list", "WebAPI\IOController@list")->name("web-api.$type.currency.list");
+            });
         });
     }
 
