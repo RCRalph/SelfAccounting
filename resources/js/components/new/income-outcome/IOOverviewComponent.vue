@@ -25,7 +25,7 @@
                         <DoughnutChart
                             :options="chartData.categories.options"
                             :chartData="chartData.categories.data"
-                            :style="'height: 350px'"
+                            :style="'height: 330px'"
                         ></DoughnutChart>
                     </v-col>
 
@@ -35,7 +35,7 @@
                         <DoughnutChart
                             :options="chartData.means.options"
                             :chartData="chartData.means.data"
-                            :style="'height: 350px'"
+                            :style="'height: 330px'"
                         ></DoughnutChart>
                     </v-col>
 
