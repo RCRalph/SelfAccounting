@@ -13,7 +13,7 @@
                         <v-col cols="12" md="6">
                             <div :class="['font-weight-bold', 'text-center', 'text-h5', $vuetify.theme.dark ? 'white--text' : 'black--text']">From</div>
 
-                            <v-text-field type="date" label="Date" v-model="from.date" :min="fromData.mean.first_entry_date" :rules="[validation.date(fromData.mean.first_entry_date)]"></v-text-field>
+                            <v-text-field type="date" label="Date" v-model="from.date" :min="fromData.mean.first_entry_date" :rules="[validation.date(false, fromData.mean.first_entry_date)]"></v-text-field>
 
                             <v-combobox
                                 label="Title"
@@ -60,7 +60,7 @@
                         <v-col cols="12" md="6">
                             <div :class="['font-weight-bold', 'text-center', 'text-h5', $vuetify.theme.dark ? 'white--text' : 'black--text']">To</div>
 
-                            <v-text-field type="date" label="Date" v-model="to.date" :min="toData.mean.first_entry_date" :rules="[validation.date(toData.mean.first_entry_date)]"></v-text-field>
+                            <v-text-field type="date" label="Date" v-model="to.date" :min="toData.mean.first_entry_date" :rules="[validation.date(false, toData.mean.first_entry_date)]"></v-text-field>
 
                             <v-combobox
                                 label="Title"

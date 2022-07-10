@@ -175,11 +175,11 @@
                             @updated="getData"
                         ></EditIODialogComponent>
 
-                        <DeleteIODialogComponent
-                            :type="type"
-                            :id="item.id.value"
+                        <DeleteDialogComponent
+                            :thing="type"
+                            :url="`${type}/${item.id.value}`"
                             @deleted="getData"
-                        ></DeleteIODialogComponent>
+                        ></DeleteDialogComponent>
                     </td>
                 </tr>
             </template>
@@ -205,7 +205,7 @@ import customTableMerged from "&/mixins/customTableMerged";
 
 import AddIODialogComponent from "@/income-outcome/AddIODialogComponent.vue";
 import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
-import DeleteIODialogComponent from "@/income-outcome/DeleteIODialogComponent.vue";
+import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import ExchangeIODialogComponent from "@/income-outcome/ExchangeIODialogComponent.vue";
 import InfiniteLoading from 'vue-infinite-loading';
 
@@ -219,7 +219,7 @@ export default {
     components: {
         AddIODialogComponent,
         EditIODialogComponent,
-        DeleteIODialogComponent,
+        DeleteDialogComponent,
         ExchangeIODialogComponent,
         InfiniteLoading
     },
@@ -253,10 +253,6 @@ export default {
             items: [],
             ready: false,
             tableLoading: false,
-            dialogs: {
-                delete: false,
-                edit: false
-            },
             pagination: {
                 page: 1,
                 last: null,

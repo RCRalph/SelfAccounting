@@ -25,7 +25,7 @@
                         <div v-show="page == i - 1">
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-text-field type="date" label="Date" v-model="data[i - 1].date" :min="usedMean.first_entry_date" :rules="[validation.date(usedMean.first_entry_date)]"></v-text-field>
+                                    <v-text-field type="date" label="Date" v-model="data[i - 1].date" :min="usedMean.first_entry_date" :rules="[validation.date(false, usedMean.first_entry_date)]"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="8">
@@ -223,8 +223,11 @@ export default {
         },
         sum() {
             let sum = 0;
-            this.data.forEach(item => sum += item.amount * item.price);
-            return sum;
+            this.data.forEach(item => sum +=
+                (typeof item.amount == "string" ? item.amount.replaceAll(",", ".") : item.amount) *
+                (typeof item.price == "string" ? item.price.replaceAll(",", ".") : item.price)
+            );
+            return Math.round(sum * 100) / 100;
         },
         clonedCommonValues() {
             return _.cloneDeep(this.commonValues);
@@ -237,10 +240,10 @@ export default {
             const dataNoComma = _.cloneDeep(this.data);
             dataNoComma.forEach((item, i) => {
                 if (typeof item.amount == "string") {
-                    dataNoComma[i].amount.replaceAll(",", ".");
+                    dataNoComma[i].amount = dataNoComma[i].amount.replaceAll(",", ".");
                 }
                 if (typeof item.price == "string") {
-                    dataNoComma[i].price.replaceAll(",", ".");
+                    dataNoComma[i].price = dataNoComma[i].price.replaceAll(",", ".");
                 }
             })
 

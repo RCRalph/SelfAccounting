@@ -2,7 +2,7 @@ export default {
     data() {
         return {
             validation: {
-                date(firstEntryDate, allowNull) {
+                date(allowNull, firstEntryDate = null) {
                     return date => {
                         if (allowNull && !date) {
                             return true;
@@ -10,7 +10,7 @@ export default {
                         else if (isNaN(Date.parse(date))) {
                             return "Date has to be a date";
                         }
-                        else if (new Date(date).getTime() < new Date(firstEntryDate).getTime()) {
+                        else if (firstEntryDate != null && new Date(date).getTime() < new Date(firstEntryDate).getTime()) {
                             return "Date can't be earlier than first entry date set for the current mean";
                         }
 
@@ -88,6 +88,24 @@ export default {
                         }
                         else if (mean == otherMean) {
                             return "Means of payment cannot be the same";
+                        }
+
+                        return true;
+                    }
+                },
+                name(allowNull) {
+                    return name => {
+                        if (allowNull && !price) {
+                            return true;
+                        }
+                        else if (!name) {
+                            return "Name is required";
+                        }
+                        else if (typeof name != "string") {
+                            return "Name has to be a string";
+                        }
+                        else if (name.length > 32) {
+                            return "Name can't have more than 32 characters"
                         }
 
                         return true;

@@ -11,8 +11,7 @@ $main-color: lighten($primary, 10%);
     @extend .mb-5;
 
     font-size: 4.5rem !important;
-    color: $main-color;
-    -webkit-text-stroke: 2.5px #1a1d20;
+    color: white;
     font-weight: bold;
     user-select: none;
 }
@@ -79,14 +78,11 @@ header.masthead {
 
             i {
                 font-size: 5rem;
-                transition: font-size 0.5s;
-            }
-        }
-        &:hover {
-            .features-icons-icon {
-                i {
+                transition: font-size 0.2s;
+
+                &:hover {
                     font-size: 6rem;
-                    transition: font-size 0.5s;
+                    transition: font-size 0.2s;
                 }
             }
         }

@@ -40569,8 +40569,7 @@ body {
 
 .big-text-h1 {
   font-size: 4.5rem !important;
-  color: #60a8e4;
-  -webkit-text-stroke: 2.5px #1a1d20;
+  color: white;
   font-weight: bold;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -40631,11 +40630,11 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
 }
 .features-icons .features-icons-item .features-icons-icon i {
   font-size: 5rem;
-  transition: font-size 0.5s;
+  transition: font-size 0.2s;
 }
-.features-icons .features-icons-item:hover .features-icons-icon i {
+.features-icons .features-icons-item .features-icons-icon i:hover {
   font-size: 6rem;
-  transition: font-size 0.5s;
+  transition: font-size 0.2s;
 }
 .features-icons .features-icons-item h3, .features-icons .features-icons-item .h3, .features-icons .features-icons-item .tutorial-wrapper .tutorial-content h2, .tutorial-wrapper .tutorial-content .features-icons .features-icons-item h2, .features-icons .features-icons-item .tutorial-wrapper .tutorial-content .h2, .tutorial-wrapper .tutorial-content .features-icons .features-icons-item .h2, .features-icons .features-icons-item .chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title, .chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .features-icons .features-icons-item .chart-title, .features-icons .features-icons-item .profile-wrapper .username, .profile-wrapper .features-icons .features-icons-item .username, .features-icons .features-icons-item .trashbin {
   font-weight: bold;
@@ -41115,7 +41114,7 @@ header.masthead h1, header.masthead .h1, header.masthead .bundle-wrapper .title,
     width: 95% !important;
   }
   .big-text-h1 {
-    font-size: 3.25rem !important;
+    font-size: 3rem !important;
   }
   .card-header-flex .currency-text {
     font-size: calc(1.1rem + 0.12vw);
