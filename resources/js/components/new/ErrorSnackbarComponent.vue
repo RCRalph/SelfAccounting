@@ -6,7 +6,7 @@
             <v-btn
                 text
                 v-bind="attrs"
-                @click="value = false"
+                @click="$emit('input', false)"
             >
                 Close
             </v-btn>

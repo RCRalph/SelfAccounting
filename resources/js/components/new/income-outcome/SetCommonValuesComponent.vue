@@ -11,7 +11,7 @@
                 <v-form v-model="canUpdate">
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field type="date" label="Date" v-model="value.date" :min="usedMean.first_entry_date" :rules="[validation.date(usedMean.first_entry_date, true)]"></v-text-field>
+                            <v-text-field type="date" label="Date" v-model="value.date" :min="usedMean.first_entry_date" :rules="[validation.date(true, usedMean.first_entry_date, true)]"></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="8">

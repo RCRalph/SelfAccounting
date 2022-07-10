@@ -50,11 +50,11 @@
                             @updated="getData"
                         ></EditIODialogComponent>
 
-                        <DeleteIODialogComponent
-                            :type="item.value.value < 0 ? 'outcome' : 'income'"
-                            :id="item.id.value"
+                        <DeleteDialogComponent
+                            :thing="item.value.value < 0 ? 'outcome' : 'income'"
+                            :url="`${item.value.value < 0 ? 'outcome' : 'income'}/${item.id.value}`"
                             @deleted="getData"
-                        ></DeleteIODialogComponent>
+                        ></DeleteDialogComponent>
                     </td>
                 </tr>
             </template>
@@ -82,7 +82,7 @@ import main from "&/mixins/main";
 import customTableMerged from "&/mixins/customTableMerged";
 
 import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
-import DeleteIODialogComponent from "@/income-outcome/DeleteIODialogComponent.vue";
+import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 
 export default {
     setup() {
@@ -93,7 +93,7 @@ export default {
     mixins: [main, customTableMerged],
     components: {
         EditIODialogComponent,
-        DeleteIODialogComponent
+        DeleteDialogComponent
     },
     data() {
         return {

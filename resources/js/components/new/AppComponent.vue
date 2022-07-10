@@ -120,10 +120,10 @@ export default {
                 { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
                 { title: "Income", icon: "fas fa-sign-in-alt", link: "/income" },
                 { title: "Outcome", icon: "fas fa-sign-out-alt", link: "/outcome" },
-                { title: "Bundles", icon: "mdi-package-variant", link: "/bundles" },
                 { title: "Settings", icon: "fas fa-cog", link: "/settings" },
-                { title: "Admin", icon: "mdi-lock", link: "/admin" },
                 { title: "Getting started", icon: "mdi-school", link: "/getting-started" },
+                { title: "Bundles", icon: "mdi-package-variant", link: "/bundles" },
+                { title: "Admin", icon: "mdi-lock", link: "/admin" },
             ],
             profileItems: [
                 { title: "View profile", icon: "mdi-account", link: "/profile" }

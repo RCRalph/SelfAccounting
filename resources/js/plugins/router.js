@@ -1,15 +1,17 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import DashboardComponent from "../components/new/dashboard/DashboardComponent.vue";
-import IOComponent from "../components/new/income-outcome/IOComponent.vue";
+import DashboardComponent from "@/dashboard/DashboardComponent.vue";
+import IOComponent from "@/income-outcome/IOComponent.vue";
+import SettingsComponent from "@/settings/SettingsComponent.vue";
 
 Vue.use(VueRouter)
 
 const routes = [
     { path: "/", component: DashboardComponent },
     { path: "/income", component: IOComponent, props: { type: "income" } },
-    { path: "/outcome", component: IOComponent, props: { type: "outcome" } }
+    { path: "/outcome", component: IOComponent, props: { type: "outcome" } },
+    { path: "/settings", component: SettingsComponent }
 ]
 
 export default new VueRouter({ routes/*, mode: "history"*/ })

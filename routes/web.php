@@ -61,6 +61,20 @@ Route::prefix("/web-api")->group(function () {
         Route::get("/", "WebAPI\ExchangeController@show")->name("web-api.exchange.show");
         Route::post("/", "WebAPI\ExchangeController@store")->name("web-api.exchange.store");
     });
+
+    Route::prefix("/settings")->group(function () {
+        Route::prefix("/{currency}")->group(function () {
+            Route::get("/", "WebAPI\SettingsController@index")->name("web-api.settings");
+            Route::get("/categories", "WebAPI\SettingsController@getCategories")->name("web-api.settings.categories");
+        });
+
+        Route::prefix("/categories")->group(function () {
+            Route::post("/", "WebAPI\SettingsController@createCategory")->name("web-api.settings.categories.create");
+            Route::get("/{category}", "WebAPI\SettingsController@showCategory")->name("web-api.settings.categories.show");
+            Route::patch("/{category}", "WebAPI\SettingsController@updateCategory")->name("web-api.settings.categories.update");
+            Route::delete("/{category}", "WebAPI\SettingsController@deleteCategory")->name("web-api.settings.categories.delete");
+        });
+    });
 });
 
 Route::prefix('/admin')->group(function () {

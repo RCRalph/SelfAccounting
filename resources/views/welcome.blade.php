@@ -31,8 +31,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-9 mx-auto">
-                            <h1 class="big-text-h1">Start self-accounting today!</h1>
+                            <h1 class="big-text-h1">Start using<br>SelfAccounting today!</h1>
                         </div>
+
                         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                             <div class="col-12 col-md-4 mx-auto">
                                 <a role="button" class="btn btn-block btn-lg btn-dark fw-bold" href="/register">Register now!</a>
@@ -72,8 +73,8 @@
                                     <i class="fas fa-money-check-alt"></i>
                                 </div>
 
-                                <h3>Improve your savings</h3>
-                                <p class="lead mb-0">Analizing your balance will help you save even more money</p>
+                                <h3>Increase your savings</h3>
+                                <p class="lead mb-0">Plan ahead and limit spending on unnecessary things</p>
                             </div>
                         </div>
                     </div>
@@ -88,7 +89,7 @@
                         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                             <h2>Incredibly easy to use</h2>
                             <p class="lead mb-0">
-                                The ease of self-accounting is very important to me. That's why I created this website and will continue to improve and expand it in the future!
+                                The ease of personal accounting is very important to me. That's why I created this website and will continue to improve and expand it in the future!
                             </p>
                         </div>
                     </div>
@@ -98,13 +99,13 @@
                         <div class="col-lg-6 my-auto showcase-text">
                             <h2>Get on top of saving money</h2>
                             <p class="lead mb-0">
-                                By using this site you will learn how much and what do you spend money on. This will certainly help you with saving money as well as managing your balance better!
+                                By using this site, you will learn how much and what do you spend money on. This will certainly help you with saving money as well as managing your finances better!
                             </p>
                         </div>
                     </div>
 
                     <div class="row g-0">
-                        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/welcome/Investing.jpg');"></div>
+                        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/storage/welcome/Investing.jpg'); margin-bottom: 12px"></div>
                         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                             <h2>Use saved money to invest in yourself</h2>
                             <p class="lead mb-0">
@@ -148,7 +149,7 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                 </p>
-                                <p class="font-weight-light mb-0">"Finally a way to improve my self&#8209;accounting&nbsp;abilities!"</p>
+                                <p class="font-weight-light mb-0">"Finally a way to improve my personal&nbsp;accounting!"</p>
                             </div>
                         </div>
                         <div class="col-lg-4">

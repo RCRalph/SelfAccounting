@@ -5,7 +5,7 @@
 
             <v-card-text>
                 <v-row>
-                    <v-col cols="12" class="d-flex justify-center flex-nowrap align-center">
+                    <v-col cols="12" class="d-flex justify-center flex-nowrap align-end">
                         <div class="me-2 ms-0" style="width: 145px">
                             <v-text-field type="date" label="Start" v-model="start" :max="end" min="1970-01-01" hide-details></v-text-field>
                         </div>
