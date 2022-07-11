@@ -110,6 +110,26 @@ export default {
 
                         return true;
                     }
+                },
+                startBalance(allowNull) {
+                    return balance => {
+                        balance = String(balance).replaceAll(",", ".");
+
+                        if (allowNull && !balance) {
+                            return true;
+                        }
+                        else if (!balance) {
+                            return "Balance is required";
+                        }
+                        else if (isNaN(Number(balance))) {
+                            return "Balance has to be a number";
+                        }
+                        else if (!balance.match(/^\s*(-)?(\d{1,11})?(\.\d{1,2})?\s*$/)) {
+                            return "Balance is an invalid number";
+                        }
+
+                        return true;
+                    }
                 }
             }
         }

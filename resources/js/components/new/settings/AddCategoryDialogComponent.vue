@@ -107,7 +107,6 @@ export default {
             },
             data: {},
 
-            ready: false,
             error: false,
             loading: false,
             canSubmit: false

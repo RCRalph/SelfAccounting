@@ -1,5 +1,5 @@
 <template>
-    <v-snackbar v-model="value" color="error" bottom>
+    <v-snackbar :value="value" @input="$emit('input', value)" color="error" bottom>
         An error occured, please try again...
 
         <template v-slot:action="{ attrs }">

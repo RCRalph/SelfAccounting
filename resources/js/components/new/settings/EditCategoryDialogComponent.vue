@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" max-width="700">
         <template v-slot:activator="{ on, attrs }">
-            <v-icon class="mr-2 cursor-pointer" v-bind="attrs" v-on="on">mdi-pencil</v-icon>
+            <v-icon class="mx-1 cursor-pointer" v-bind="attrs" v-on="on">mdi-pencil</v-icon>
         </template>
 
         <v-card v-if="ready">

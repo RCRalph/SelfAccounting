@@ -8,13 +8,9 @@
             </v-col>
 
             <v-col xl="6" cols="12">
-                <v-card class="loading-height">
-                    <v-card-title class="font-weight-bold justify-center text-h5 text-capitalize pb-lg-0">Means of payment</v-card-title>
-
-                    <v-card-text>
-
-                    </v-card-text>
-                </v-card>
+                <MeansComponent
+                    :startData="means"
+                ></MeansComponent>
             </v-col>
         </v-row>
     </div>
@@ -31,10 +27,12 @@
 import { useCurrenciesStore } from "&/stores/currencies";
 
 import CategoriesComponent from "@/settings/CategoriesComponent.vue";
+import MeansComponent from "@/settings/MeansComponent.vue";
 
 export default {
     components: {
-        CategoriesComponent
+        CategoriesComponent,
+        MeansComponent
     },
     setup() {
         const currencies = useCurrenciesStore();

@@ -17,6 +17,7 @@
                 :loading="tableLoading"
                 disable-filtering
                 disable-sort
+                disable-pagination
             >
                 <template v-slot:[`item.name`]="{ item }">
                     <span style="white-space: nowrap">{{ item.name }}</span>
@@ -39,17 +40,19 @@
                 </template>
 
                 <template v-slot:[`item.actions`]="{ item }">
-                    <td style="white-space: nowrap">
-                        <EditCategoryDialogComponent
-                            :id="item.id"
-                            @updated="getData"
-                        ></EditCategoryDialogComponent>
+                    <td class="d-flex flex-nowrap justify-center align-center">
+                        <div>
+                            <EditCategoryDialogComponent
+                                :id="item.id"
+                                @updated="getData"
+                            ></EditCategoryDialogComponent>
 
-                        <DeleteDialogComponent
-                            thing="category"
-                            :url="`settings/categories/${item.id}`"
-                            @deleted="getData"
-                        ></DeleteDialogComponent>
+                            <DeleteDialogComponent
+                                thing="category"
+                                :url="`settings/categories/${item.id}`"
+                                @deleted="getData"
+                            ></DeleteDialogComponent>
+                        </div>
                     </td>
                 </template>
             </v-data-table>
