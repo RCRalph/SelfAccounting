@@ -66,6 +66,7 @@ Route::prefix("/web-api")->group(function () {
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\SettingsController@index")->name("web-api.settings");
             Route::get("/categories", "WebAPI\SettingsController@getCategories")->name("web-api.settings.categories");
+            Route::get("/means", "WebAPI\SettingsController@getMeans")->name("web-api.settings.means");
         });
 
         Route::prefix("/categories")->group(function () {
@@ -73,6 +74,13 @@ Route::prefix("/web-api")->group(function () {
             Route::get("/{category}", "WebAPI\SettingsController@showCategory")->name("web-api.settings.categories.show");
             Route::patch("/{category}", "WebAPI\SettingsController@updateCategory")->name("web-api.settings.categories.update");
             Route::delete("/{category}", "WebAPI\SettingsController@deleteCategory")->name("web-api.settings.categories.delete");
+        });
+
+        Route::prefix("/means")->group(function () {
+            Route::post("/", "WebAPI\SettingsController@createMean")->name("web-api.settings.means.create");
+            Route::get("/{mean}", "WebAPI\SettingsController@showMean")->name("web-api.settings.means.show");
+            Route::patch("/{mean}", "WebAPI\SettingsController@updateMean")->name("web-api.settings.means.update");
+            Route::delete("/{mean}", "WebAPI\SettingsController@deleteMean")->name("web-api.settings.means.delete");
         });
     });
 });

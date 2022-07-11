@@ -41,7 +41,7 @@
                         :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
                     >{{ item.mean.value }}</td>
 
-                    <td style="white-space: nowrap" @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
+                    <td class="d-flex flex-nowrap justify-center align-center" @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
                     >
                         <EditIODialogComponent
