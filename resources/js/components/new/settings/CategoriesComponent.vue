@@ -41,18 +41,16 @@
 
                 <template v-slot:[`item.actions`]="{ item }">
                     <td class="d-flex flex-nowrap justify-center align-center">
-                        <div>
-                            <EditCategoryDialogComponent
-                                :id="item.id"
-                                @updated="getData"
-                            ></EditCategoryDialogComponent>
+                        <EditCategoryDialogComponent
+                            :id="item.id"
+                            @updated="getData"
+                        ></EditCategoryDialogComponent>
 
-                            <DeleteDialogComponent
-                                thing="category"
-                                :url="`settings/categories/${item.id}`"
-                                @deleted="getData"
-                            ></DeleteDialogComponent>
-                        </div>
+                        <DeleteDialogComponent
+                            thing="category"
+                            :url="`settings/categories/${item.id}`"
+                            @deleted="getData"
+                        ></DeleteDialogComponent>
                     </td>
                 </template>
             </v-data-table>

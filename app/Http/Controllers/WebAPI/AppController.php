@@ -16,9 +16,8 @@ class AppController extends Controller
 
     private function getAppStartData()
     {
-        $id = auth()->user()->id;
         return Cache::remember(
-            "app-data-$id",
+            "app-data-" . auth()->user()->id,
             now()->addMinutes(15),
             function () {
                 $currencies = $this->getCurrencies()->toArray();
@@ -31,11 +30,9 @@ class AppController extends Controller
                 }
 
                 $retArr = [
-                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture"),
+                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link"),
                     "currencies" => $currencies
                 ];
-
-                $retArr["user"]["profile_picture"] = $this->getProfilePictureLink($retArr["user"]["profile_picture"]);
 
                 //$retArr["bundle_info"] = $this->BUNDLE_INFO_LIST;
 
@@ -59,7 +56,6 @@ class AppController extends Controller
     public function index()
     {
         $data = $this->getAppStartData();
-
         return response()->json($data);
     }
 }

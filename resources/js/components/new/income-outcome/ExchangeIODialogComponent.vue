@@ -239,8 +239,8 @@ export default {
         },
         toSelects() {
             return {
-                categories: this.categories[this.from.currency_id].filter(item => item.income_category),
-                means: this.means[this.from.currency_id].filter(item => item.income_mean)
+                categories: this.categories[this.to.currency_id].filter(item => item.income_category),
+                means: this.means[this.to.currency_id].filter(item => item.income_mean)
             }
         }
     },
@@ -250,18 +250,18 @@ export default {
 
             const fromNoComma = _.cloneDeep(this.from);
             if (typeof fromNoComma.amount == "string") {
-                fromNoComma.amount.replaceAll(",", ".");
+                fromNoComma.amount = fromNoComma.amount.replaceAll(",", ".");
             }
             if (typeof fromNoComma.price == "string") {
-                fromNoComma.price.replaceAll(",", ".");
+                fromNoComma.price =fromNoComma.price.replaceAll(",", ".");
             }
 
             const toNoComma = _.cloneDeep(this.to);
             if (typeof toNoComma.amount == "string") {
-                toNoComma.amount.replaceAll(",", ".");
+                toNoComma.amount = toNoComma.amount.replaceAll(",", ".");
             }
             if (typeof toNoComma.price == "string") {
-                toNoComma.price.replaceAll(",", ".");
+                toNoComma.price = toNoComma.price.replaceAll(",", ".");
             }
 
             axios

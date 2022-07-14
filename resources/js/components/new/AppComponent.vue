@@ -50,7 +50,7 @@
                         <v-list-item class="pa-2" v-bind="attrs" v-on="on">
                             <v-list-item-avatar>
                                 <v-img
-                                    :src="user.profile_picture">
+                                    :src="user.profile_picture_link">
                                 </v-img>
                             </v-list-item-avatar>
 
@@ -63,7 +63,7 @@
                     </template>
 
                     <v-list>
-                        <v-list-item v-for="(item, index) in profileItems" :key="index" link>
+                        <v-list-item v-for="(item, index) in profileItems" :key="index" link :to="item.link">
                             <v-list-item-icon>
                                 <v-icon>{{ item.icon }}</v-icon>
                             </v-list-item-icon>
@@ -90,7 +90,7 @@
         <v-main>
             <div class="menu-margin">
                 <div class="ma-4">
-                    <router-view></router-view>
+                    <router-view @updatedUser="updateUser"></router-view>
                 </div>
             </div>
         </v-main>
@@ -137,6 +137,10 @@ export default {
     methods: {
         logout() {
             document.getElementById("logout-form").submit();
+        },
+        updateUser(newUser) {
+            this.user = {...this.user, ...newUser}
+            this.$vuetify.theme.dark = this.user.darkmode;
         }
     },
     mounted() {
@@ -153,7 +157,7 @@ export default {
                 this.currencies.usedCurrency = data.currencies[0].id;
 
                 this.ready = true;
-            })
+            });
     }
 }
 </script>

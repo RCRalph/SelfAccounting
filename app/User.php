@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
@@ -39,6 +40,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $appends = ["profile_picture_link"];
 
     public function categories()
     {
@@ -93,5 +96,26 @@ class User extends Authenticatable
     public function sharedReports()
     {
         return $this->belongsToMany(Report::class);
+    }
+
+    protected function profilePictureLink(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                if (preg_match("/Emoji([1-6]|Admin).png/", $attributes["profile_picture"])) {
+                    return getFileLink(
+                        "public",
+                        config("constants.directories.public.profile_picture"),
+                        $attributes["profile_picture"]
+                    );
+                }
+
+                return getFileLink(
+                    "s3",
+                    config("constants.directories.cloud.profile_picture"),
+                    $attributes["profile_picture"]
+                );
+            }
+        );
     }
 }

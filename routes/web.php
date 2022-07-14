@@ -83,6 +83,11 @@ Route::prefix("/web-api")->group(function () {
             Route::delete("/{mean}", "WebAPI\SettingsController@deleteMean")->name("web-api.settings.means.delete");
         });
     });
+
+    Route::prefix("/profile")->group(function () {
+        Route::get("/", "WebAPI\ProfileController@index")->name("web-api.profile");
+        Route::post("/picture", "WebAPI\ProfileController@profilePicture")->name("web-api.profile.picture");
+    });
 });
 
 Route::prefix('/admin')->group(function () {
