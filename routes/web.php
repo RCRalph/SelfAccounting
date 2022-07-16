@@ -86,7 +86,11 @@ Route::prefix("/web-api")->group(function () {
 
     Route::prefix("/profile")->group(function () {
         Route::get("/", "WebAPI\ProfileController@index")->name("web-api.profile");
-        Route::post("/picture", "WebAPI\ProfileController@profilePicture")->name("web-api.profile.picture");
+        Route::delete("/", "WebAPI\ProfileController@destroy")->name("web-api.profile.delete");
+        Route::post("/picture", "WebAPI\ProfileController@updatePicture")->name("web-api.profile.update.picture");
+        Route::post("/information", "WebAPI\ProfileController@updateInformation")->name("web-api.profile.update.information");
+        Route::post("/password", "WebAPI\ProfileController@updatePassword")->name("web-api.profile.update.password");
+        Route::post("/settings", "WebAPI\ProfileController@updateSettings")->name("web-api.profile.update.settings");
     });
 });
 

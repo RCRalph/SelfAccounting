@@ -10,7 +10,7 @@
                     ></ProfilePictureDialogComponent>
                 </div>
 
-                <div class="text-center py-4 pb-0 text-h5">Admin Username</div>
+                <div class="text-center py-4 pb-0 text-h5">{{ data.username }}</div>
 
                 <v-card-text>
                     <v-row>
@@ -20,16 +20,16 @@
                                     <tbody>
                                         <tr>
                                             <td class="text-end text-h6" width="50%">With us since</td>
-                                            <td class="text-h6">1970-01-01</td>
+                                            <td class="text-h6">{{ data.since }}</td>
                                         </tr>
 
                                         <tr>
                                             <td class="text-end text-h6">Account type</td>
-                                            <td class="text-h6 amber--text">Premium</td>
+                                            <td :class="['text-h6', accountTypeColor]">{{ data.account_type }}</td>
                                         </tr>
 
-                                        <tr>
-                                            <td class="text-h6 text-center" colspan="2">20 days until expiration</td>
+                                        <tr v-if="data.expiration">
+                                            <td class="text-h6 text-center" colspan="2">{{ data.expiration }}</td>
                                         </tr>
                                     </tbody>
                                 </template>
@@ -40,9 +40,15 @@
                     </v-row>
 
                     <div class="d-flex justify-center flex-wrap mt-3">
-                        <v-btn outlined class="mx-3 my-2" width="145" :block="$vuetify.breakpoint.xs">Information</v-btn>
-                        <v-btn outlined class="mx-3 my-2" width="145" :block="$vuetify.breakpoint.xs">Password</v-btn>
-                        <v-btn outlined class="mx-3 my-2" width="145" :block="$vuetify.breakpoint.xs">Appearance</v-btn>
+                        <ProfileInformationDialogComponent v-model="data"></ProfileInformationDialogComponent>
+
+                        <ProfilePasswordDialogComponent></ProfilePasswordDialogComponent>
+
+                        <ProfileSettingsDialogComponent v-model="data"></ProfileSettingsDialogComponent>
+                    </div>
+
+                    <div class="d-flex justify-center flex-wrap mt-0">
+                        <ProfileDeleteDialogComponent></ProfileDeleteDialogComponent>
                     </div>
                 </v-card-text>
             </v-card>
@@ -63,22 +69,49 @@
 
 <script>
 import ProfilePictureDialogComponent from "@/profile/ProfilePictureComponent.vue";
+import ProfileInformationDialogComponent from "@/profile/ProfileInformationDialogComponent.vue";
+import ProfilePasswordDialogComponent from "@/profile/ProfilePasswordDialogComponent.vue";
+import ProfileSettingsDialogComponent from "@/profile/ProfileSettingsDialogComponent.vue"
+import ProfileDeleteDialogComponent from "@/profile/ProfileDeleteDialogComponent.vue";
 
 export default {
     components: {
-        ProfilePictureDialogComponent
+        ProfilePictureDialogComponent,
+        ProfileInformationDialogComponent,
+        ProfilePasswordDialogComponent,
+        ProfileSettingsDialogComponent,
+        ProfileDeleteDialogComponent
     },
     data() {
         return {
-            data: {
-                profile_picture_link: ""
-            },
+            data: {},
             ready: false
         }
     },
     watch: {
         'data.profile_picture_link'() {
             this.$emit("updatedUser", { profile_picture_link: this.data.profile_picture_link });
+        },
+        'data.username'() {
+            this.$emit("updatedUser", { username: this.data.username });
+        },
+        'data.darkmode'() {
+            this.$emit("updatedUser", { darkmode: this.data.darkmode });
+        },
+        'data.hide_all_tutorials'() {
+            this.$emit("updatedUser", { hide_all_tutorials: this.data.hide_all_tutorials });
+        }
+    },
+    computed: {
+        accountTypeColor() {
+            switch (this.data.account_type) {
+                case "Premium":
+                    return "amber--text";
+                case "Admin":
+                    return "primary--text";
+                default:
+                    return "";
+            }
         }
     },
     mounted() {

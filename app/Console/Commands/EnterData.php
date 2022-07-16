@@ -38,10 +38,6 @@ class EnterData extends Command
         parent::__construct();
     }
 
-    private $ADD_ADMIN = false;
-
-    private $ADD_USERS = false;
-
     private $dataToEnter = [
         "bundles" => [
             [
@@ -164,11 +160,11 @@ class EnterData extends Command
     {
         // Add users
         $progressBar = $this->output
-            ->createProgressBar(count($this->dataToEnter["users"]) + $this->ADD_ADMIN);
+            ->createProgressBar(count($this->dataToEnter["users"]) + env("CREATE_ADMIN", false));
         $this->outputMessage("Creating users");
 
         $progressBar->start();
-        if ($this->ADD_ADMIN) {
+        if (env("CREATE_ADMIN", false)) {
             User::updateOrCreate(
                 ["id" => 1],
                 [
@@ -186,7 +182,7 @@ class EnterData extends Command
             $progressBar->advance();
         }
 
-        if ($this->ADD_USERS) {
+        if (env("CREATE_USERS", false)) {
             foreach ($this->dataToEnter["users"] as $user) {
                 User::updateOrCreate(
                     ["id" => $user["id"]],
@@ -205,9 +201,10 @@ class EnterData extends Command
 
                 $progressBar->advance();
             }
-            $progressBar->finish();
-            $this->newLine(2);
         }
+
+        $progressBar->finish();
+        $this->newLine(2);
 
         // Add currencies and cash
         $progressBar = $this->output

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -39,9 +40,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'premium_expiration' => 'date:Y-m-d'
     ];
 
-    protected $appends = ["profile_picture_link"];
+    protected $appends = ["profile_picture_link", "account_type"];
 
     public function categories()
     {
@@ -102,6 +104,10 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function ($value, $attributes) {
+                if (!array_key_exists("profile_picture", $attributes)) {
+                    return "";
+                }
+
                 if (preg_match("/Emoji([1-6]|Admin).png/", $attributes["profile_picture"])) {
                     return getFileLink(
                         "public",
@@ -115,6 +121,27 @@ class User extends Authenticatable
                     config("constants.directories.cloud.profile_picture"),
                     $attributes["profile_picture"]
                 );
+            }
+        );
+    }
+
+    protected function accountType(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                if (!array_key_exists("admin", $attributes) || !array_key_exists("premium_expiration", $attributes)) {
+                    return "";
+                }
+
+                if ($attributes["admin"]) {
+                    return "Admin";
+                }
+
+                if ($attributes["premium_expiration"] == null || today()->lte(Carbon::parse($attributes["premium_expiration"]))) {
+                    return "Premium";
+                }
+
+                return "Normal";
             }
         );
     }
