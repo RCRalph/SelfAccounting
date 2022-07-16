@@ -83,6 +83,15 @@ Route::prefix("/web-api")->group(function () {
             Route::delete("/{mean}", "WebAPI\SettingsController@deleteMean")->name("web-api.settings.means.delete");
         });
     });
+
+    Route::prefix("/profile")->group(function () {
+        Route::get("/", "WebAPI\ProfileController@index")->name("web-api.profile");
+        Route::delete("/", "WebAPI\ProfileController@destroy")->name("web-api.profile.delete");
+        Route::post("/picture", "WebAPI\ProfileController@updatePicture")->name("web-api.profile.update.picture");
+        Route::post("/information", "WebAPI\ProfileController@updateInformation")->name("web-api.profile.update.information");
+        Route::post("/password", "WebAPI\ProfileController@updatePassword")->name("web-api.profile.update.password");
+        Route::post("/settings", "WebAPI\ProfileController@updateSettings")->name("web-api.profile.update.settings");
+    });
 });
 
 Route::prefix('/admin')->group(function () {

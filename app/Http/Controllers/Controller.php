@@ -232,6 +232,8 @@ class Controller extends BaseController
         );
     }
 
+    /* ----- Common functions for new design ----- */
+
     public function getLastUsedCurrencies()
     {
         $id = auth()->user()->id;
@@ -425,5 +427,30 @@ class Controller extends BaseController
         }
 
         return $retArr;
+    }
+
+    public function removeFile($disk, $directory, $name)
+    {
+        Storage::disk($disk)->delete("$directory/$name");
+    }
+
+    public function saveImage($disk, $image, $directory, $fileToRemove = null, $fitResolution = [])
+    {
+        $img = Image::make($image);
+        if (count($fitResolution) == 2) {
+            $img->fit($fitResolution[0], $fitResolution[1]);
+        }
+
+        do {
+            $filename = Str::random(50) . "." . $image->extension();
+        } while (Storage::disk($disk)->has("$directory/$filename"));
+
+        if ($fileToRemove) {
+            $this->removeFile($disk, $directory, $fileToRemove);
+        }
+
+        Storage::disk($disk)->put("$directory/$filename", $img->stream());
+
+        return $filename;
     }
 }

@@ -22,7 +22,7 @@
 
                     <v-row>
                         <v-col cols="6" sm="4">
-                            <v-switch color="white" v-model="data.income_mean">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.income_mean">
                                 <template v-slot:label>
                                     Show in income
                                 </template>
@@ -30,7 +30,7 @@
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch color="white" v-model="data.outcome_mean">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.outcome_mean">
                                 <template v-slot:label>
                                     Show in outcome
                                 </template>
@@ -38,7 +38,7 @@
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch color="white" v-model="data.show_on_charts">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.show_on_charts">
                                 <template v-slot:label>
                                     Show on charts
                                 </template>
@@ -46,7 +46,7 @@
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch color="white" v-model="data.count_to_summary">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.count_to_summary">
                                 <template v-slot:label>
                                     Count to summary
                                 </template>

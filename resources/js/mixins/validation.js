@@ -95,7 +95,7 @@ export default {
                 },
                 name(allowNull) {
                     return name => {
-                        if (allowNull && !price) {
+                        if (allowNull && !name) {
                             return true;
                         }
                         else if (!name) {
@@ -126,6 +126,66 @@ export default {
                         }
                         else if (!balance.match(/^\s*(-)?(\d{1,11})?(\.\d{1,2})?\s*$/)) {
                             return "Balance is an invalid number";
+                        }
+
+                        return true;
+                    }
+                },
+                username(allowNull) {
+                    return username => {
+                        if (allowNull && !username) {
+                            return true;
+                        }
+                        else if (!username) {
+                            return "Username is required";
+                        }
+                        else if (typeof username != "string") {
+                            return "Username has to be a string";
+                        }
+                        else if (username.length > 32) {
+                            return "Username can't have more than 32 characters"
+                        }
+
+                        return true;
+                    }
+                },
+                email(allowNull) {
+                    return email => {
+                        if (allowNull && !email) {
+                            return true;
+                        }
+                        else if (!email) {
+                            return "E-mail is required";
+                        }
+                        else if (typeof email != "string") {
+                            return "E-mail has to be a string";
+                        }
+                        else if (!email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                            return "E-mail has to be a valid e-mail"
+                        }
+                        else if (email.length > 64) {
+                            return "E-mail can't have more than 64 characters"
+                        }
+
+                        return true;
+                    }
+                },
+                password(allowNull) {
+                    return password => {
+                        if (allowNull && !password) {
+                            return true;
+                        }
+                        else if (!password) {
+                            return "Password is required";
+                        }
+                        else if (typeof password != "string") {
+                            return "Password has to be a string";
+                        }
+                        else if (password.length < 8) {
+                            return "Password has to have more than 8 characters";
+                        }
+                        else if (password.length > 64) {
+                            return "Password can't hqave more than 64 characters";
                         }
 
                         return true;
