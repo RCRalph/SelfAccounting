@@ -130,13 +130,15 @@
 </template>
 
 <script>
-import { useCurrenciesStore } from '&/stores/currencies';
+import { useCurrenciesStore } from "&/stores/currencies";
+import { useBundlesStore } from "&/stores/bundles";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
+        const bundles = useBundlesStore();
 
-        return { currencies };
+        return { currencies, bundles };
     },
     data() {
         return {
@@ -147,7 +149,6 @@ export default {
             mini: true,
             menuClicked: false,
             user: {},
-            bundles: [],
             ready: false
         }
     },
@@ -160,14 +161,14 @@ export default {
                 { title: "Settings", icon: "fas fa-cog", link: "/settings" }
             ];
 
-            if (this.bundles.length) {
+            if (this.bundles.ownedBundlesObjects.length) {
                 const links = [{
                     icon: "mdi-view-list",
                     text: "Bundle list",
                     link: "/bundles/list"
                 }];
 
-                this.bundles.forEach(item => {
+                this.bundles.ownedBundlesObjects.forEach(item => {
                     links.push({
                         icon: item.icon,
                         text: item.title,
@@ -211,7 +212,13 @@ export default {
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
 
-                this.bundles = data.bundles;
+                //this.bundles = data.bundles;
+
+                this.currencies.setCurrencies(data.currencies);
+                this.currencies.changeCurrency(data.currencies[0].id);
+
+                this.bundles.setBundles(data.bundles);
+                this.bundles.setOwnedBundles(data.ownedBundles);
 
                 this.currencies.currencies = data.currencies;
                 this.currencies.usedCurrency = data.currencies[0].id;

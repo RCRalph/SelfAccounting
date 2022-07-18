@@ -34,10 +34,10 @@ class AppController extends Controller
                 $retArr = [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
                     "currencies" => $currencies,
-                    "bundles" => Bundle::whereIn("id", auth()->user()->bundleIDs)
-                        ->select("icon", "directory", "title")
+                    "bundles" => Bundle::all()->makeHidden("id", "created_at", "updated_at"),
+                    "ownedBundles" => Bundle::whereIn("id", auth()->user()->bundleIDs)
                         ->orderBy("title")
-                        ->get()
+                        ->pluck("code")
                 ];
 
                 // Update user's last page visit
