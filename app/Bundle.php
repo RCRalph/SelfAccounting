@@ -10,7 +10,7 @@ use App\User;
 class Bundle extends Model
 {
     protected $fillable = [
-        "title", "price", "thumbnail", "short_description", "description", "code"
+        "title", "price", "thumbnail", "short_description", "description", "code", "icon", "directory"
     ];
 
     public function gallery()

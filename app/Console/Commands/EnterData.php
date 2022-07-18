@@ -43,6 +43,8 @@ class EnterData extends Command
             [
                 "title" => "Chart pack",
                 "code" => "charts",
+                "icon" => "mdi-chart-bar",
+                "directory" => "charts",
                 "price" => 5,
                 "short_description" => "A pack of useful charts",
                 "thumbnail" => "Qc7TmMyeTRQttayk85Xw6zd3WvwNhSqOhdzL8DRs0sM322zv8y.png",
@@ -58,6 +60,8 @@ class EnterData extends Command
             [
                 "title" => "Backup data",
                 "code" => "backup",
+                "icon" => "mdi-content-save",
+                "directory" => "backup",
                 "price" => 2.5,
                 "short_description" => "Create backups of your data",
                 "thumbnail" => "9FNj1k4yQ2Sp0OZ2swlhlSgwfYHx9awtrD6s8Cd5h4x4euBKXT.png",
@@ -72,6 +76,8 @@ class EnterData extends Command
             [
                 "title" => "Cash handling",
                 "code" => "cashan",
+                "icon" => "mdi-cash-multiple",
+                "directory" => "cash",
                 "price" => 5,
                 "short_description" => "Monitor how much cash you have",
                 "thumbnail" => "cmdj3kqWW2jjD6ArLTkm7OMkMifxAwMgmVoA4XXKEZLHwsLYls.png",
@@ -86,6 +92,8 @@ class EnterData extends Command
             [
                 "title" => "Report management",
                 "code" => "report",
+                "icon" => "mdi-newspaper",
+                "directory" => "reports",
                 "price" => 5,
                 "short_description" => "Share your data with other users",
                 "thumbnail" => "tWE8V7sdg7uDYJRynL7V3Axz787A8Sja9ecrzV0pd8xvsulm9t.png",
@@ -111,7 +119,6 @@ class EnterData extends Command
         ],
         "users" => [
             [
-                "id" => 2,
                 "username" => "Normal",
                 "email" => "normal@test.com",
                 "password" => "1234567890",
@@ -151,20 +158,20 @@ class EnterData extends Command
         $this->info("$message...");
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    private function addUsers()
     {
-        // Add users
-        $progressBar = $this->output
-            ->createProgressBar(count($this->dataToEnter["users"]) + env("CREATE_ADMIN", false));
+        $createAdmin = env("CREATE_ADMIN", false);
+        $createUsers = env("CREATE_USERS", false);
+
+        if (!$createUsers && !$createUsers) {
+            return;
+        }
+
+        $progressBar = $this->output->createProgressBar(count($this->dataToEnter["users"]) + $createAdmin);
         $this->outputMessage("Creating users");
 
         $progressBar->start();
-        if (env("CREATE_ADMIN", false)) {
+        if ($createAdmin) {
             User::updateOrCreate(
                 ["id" => 1],
                 [
@@ -179,17 +186,17 @@ class EnterData extends Command
                     "send_activity_reminders" => true
                 ]
             );
+
             $progressBar->advance();
         }
 
-        if (env("CREATE_USERS", false)) {
+        if ($createUsers) {
             foreach ($this->dataToEnter["users"] as $user) {
                 User::updateOrCreate(
-                    ["id" => $user["id"]],
+                    ["email" => $user["email"]],
                     [
                         "username" => $user["username"],
-                        "email" => $user["email"],
-                        "password" => Hash::make(env($user["password"], "1234567890")),
+                        "password" => Hash::make($user["password"]),
                         "admin" => $user["admin"],
                         "darkmode" => $user["darkmode"],
                         "premium_expiration" => $user["premium_expiration"],
@@ -205,73 +212,89 @@ class EnterData extends Command
 
         $progressBar->finish();
         $this->newLine(2);
+    }
 
-        // Add currencies and cash
-        $progressBar = $this->output
-            ->createProgressBar(count($this->dataToEnter["currencies"]));
+    private function addCurrenciesAndCash()
+    {
+        $progressBar = $this->output->createProgressBar(count($this->dataToEnter["currencies"]));
         $this->outputMessage("Creating currencies and cash");
 
         $progressBar->start();
         foreach ($this->dataToEnter["currencies"] as $ISO => $cash) {
-            $currency = Currency::firstOrCreate(compact("ISO"));
+            $currencyInDB = Currency::firstOrCreate(compact("ISO"));
             sort($cash);
 
-            foreach ($cash as $faceValue) {
-                Cash::firstOrCreate([
-                    "currency_id" => $currency->id,
-                    "value" => $faceValue
-                ]);
+            foreach ($cash as $value) {
+                $cashInDB = $currencyInDB->cash()->where("value", $value)->first();
+
+                if (!$cashInDB) {
+                    $currencyInDB->cash()->create(["value" => $value]);
+                }
             }
+
+            $currencyInDB->cash()->whereNotIn("value", $cash)->delete();
 
             $progressBar->advance();
         }
+
         $progressBar->finish();
         $this->newLine(2);
+    }
 
-        // Add bundles
-        $progressBar = $this->output
-            ->createProgressBar(count($this->dataToEnter["bundles"]));
+    private function addBundles()
+    {
+        $progressBar = $this->output->createProgressBar(count($this->dataToEnter["bundles"]));
         $this->outputMessage("Creating bundles");
 
         $progressBar->start();
 
         foreach ($this->dataToEnter["bundles"] as $bundle) {
-            $bundleInDB = Bundle::firstOrCreate(
-                ["code" => $bundle["code"]],
-                array_diff_key(
-                    $bundle, array_flip(["gallery"])
-                )
-            );
+            $bundleInDB = Bundle::updateOrCreate(["code" => $bundle["code"]], $bundle);
 
             foreach ($bundle["gallery"] as $image) {
-                BundleImage::firstOrCreate([
-                    "bundle_id" => $bundleInDB->id,
-                    "image" => $image
-                ]);
+                $imageInDB = $bundleInDB->gallery()->where("image", $image)->first();
+
+                if (!$imageInDB) {
+                    $bundleInDB->gallery()->create(["image" => $image]);
+                }
             }
+
+            $bundleInDB->gallery()->whereNotIn("image", $bundle["gallery"])->delete();
 
             $progressBar->advance();
         }
+
         $progressBar->finish();
         $this->newLine(2);
+    }
 
-        // Add charts
-        $progressBar = $this->output
-            ->createProgressBar(count($this->dataToEnter["charts"]));
+    private function addCharts()
+    {
+        $progressBar = $this->output->createProgressBar(count($this->dataToEnter["charts"]));
         $this->outputMessage("Creating charts");
 
         $progressBar->start();
 
         foreach ($this->dataToEnter["charts"] as $chart) {
-            Chart::updateOrCreate(
-                ["id" => $chart["id"]],
-                $chart
-            );
+            Chart::updateOrCreate(["id" => $chart["id"]], $chart);
 
             $progressBar->advance();
         }
         $progressBar->finish();
         $this->newLine(2);
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+        $this->addUsers();
+        $this->addCurrenciesAndCash();
+        $this->addBundles();
+        $this->addCharts();
 
         $this->info("Finished!");
 

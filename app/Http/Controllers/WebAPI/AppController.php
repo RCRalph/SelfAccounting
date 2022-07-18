@@ -30,7 +30,7 @@ class AppController extends Controller
                 }
 
                 $retArr = [
-                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link"),
+                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
                     "currencies" => $currencies
                 ];
 
