@@ -1,7 +1,8 @@
 <template>
     <v-app v-if="ready">
         <v-navigation-drawer v-model="drawer" permanent :mini-variant.sync="mini"
-            :expand-on-hover="$vuetify.breakpoint.mdAndUp && !menuClicked" fixed>
+            :expand-on-hover="$vuetify.breakpoint.mdAndUp && !menuClicked" fixed
+        >
             <v-list-item class="pa-2">
                 <v-list-item-avatar>
                     <v-img src="/storage/SelfAccounting.svg"></v-img>
@@ -18,7 +19,7 @@
 
             <v-list dense>
                 <div v-for="item in items" :key="item.title">
-                    <v-list-item link :to="item.link" >
+                    <v-list-item v-if="item.link" link :to="item.link">
                         <v-list-item-icon>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-item-icon>
@@ -27,6 +28,28 @@
                             <v-list-item-title>{{ item.title }}</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+
+                    <v-list-group v-else link no-action :prepend-icon="item.icon" color="unset">
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.title"></v-list-item-title>
+                            </v-list-item-content>
+                        </template>
+
+                        <v-list-item
+                            v-for="sublink in item.links"
+                            :key="sublink.text"
+                            :to="sublink.link"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>{{ sublink.icon }}</v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title v-text="sublink.text"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-group>
                 </div>
             </v-list>
 
@@ -138,7 +161,21 @@ export default {
             ];
 
             if (this.bundles.length) {
+                const links = [{
+                    icon: "mdi-view-list",
+                    text: "Bundle list",
+                    link: "/bundles/list"
+                }];
 
+                this.bundles.forEach(item => {
+                    links.push({
+                        icon: item.icon,
+                        text: item.title,
+                        link: `/bundles/${item.directory}`
+                    });
+                });
+
+                retArr.push({ title: "Bundles", icon: "mdi-package-variant", links });
             }
             else {
                 retArr.push({ title: "Bundles", icon: "mdi-package-variant", link: "/bundles" });
@@ -174,9 +211,7 @@ export default {
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
 
-                if (this.user.admin) {
-
-                }
+                this.bundles = data.bundles;
 
                 this.currencies.currencies = data.currencies;
                 this.currencies.usedCurrency = data.currencies[0].id;

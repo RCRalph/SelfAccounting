@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function bundles()
     {
-        return $this->belongsToMany(Bundle::class)->withPivot('enabled');
+        return $this->belongsToMany(Bundle::class, 'bundle_user', 'user_id', 'bundle_id')->withPivot('enabled');
     }
 
     public function premiumBundles()
@@ -142,6 +142,18 @@ class User extends Authenticatable
                 }
 
                 return "Normal";
+            }
+        );
+    }
+
+    protected function bundleIDs(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $IDs = auth()->user()->bundles->whereInStrict("pivot_enabled", [null, true])->pluck("id")->toArray();
+                $premiumBundleIDs = auth()->user()->premiumBundles()->pluck("bundles.id")->toArray();
+
+                return array_unique(array_merge($IDs, $premiumBundleIDs));
             }
         );
     }
