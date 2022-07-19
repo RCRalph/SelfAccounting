@@ -35,7 +35,7 @@ class AppController extends Controller
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
                     "currencies" => $currencies,
                     "bundles" => Bundle::all()->makeHidden("id", "created_at", "updated_at"),
-                    "ownedBundles" => Bundle::whereIn("id", auth()->user()->bundleIDs)
+                    "ownedBundles" => Bundle::whereIn("code", auth()->user()->bundleCodes)
                         ->orderBy("title")
                         ->pluck("code")
                 ];

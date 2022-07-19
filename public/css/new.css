@@ -29702,6 +29702,15 @@ tr:hover {
   border-radius: 50%;
 }
 
+.v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
+  padding-left: 54px;
+}
+
+.add-income-buttons {
+  display: flex;
+  justify-content: center;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;
@@ -29713,6 +29722,22 @@ tr:hover {
 @media (hover: none) {
   .menu-margin {
     margin-left: 0;
+  }
+}
+@media (max-width: 475px) {
+  .add-income-buttons {
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .add-income-buttons button {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+  .add-income-buttons button:first-child {
+    margin-top: unset;
+  }
+  .add-income-buttons button:last-child {
+    margin-bottom: unset;
   }
 }
 .theme--light .table-bordered th, .theme--light .table-bordered td {

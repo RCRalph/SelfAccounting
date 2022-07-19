@@ -146,14 +146,14 @@ class User extends Authenticatable
         );
     }
 
-    protected function bundleIDs(): Attribute
+    protected function bundleCodes(): Attribute
     {
         return Attribute::make(
             get: function () {
-                $IDs = auth()->user()->bundles->whereInStrict("pivot_enabled", [null, true])->pluck("id")->toArray();
-                $premiumBundleIDs = auth()->user()->premiumBundles()->pluck("bundles.id")->toArray();
+                $codes = auth()->user()->bundles->whereInStrict("pivot_enabled", [null, true])->pluck("code");
+                $premiumCodes = auth()->user()->premiumBundles()->pluck("bundles.code");
 
-                return array_unique(array_merge($IDs, $premiumBundleIDs));
+                return $codes->merge($premiumCodes)->unique();
             }
         );
     }

@@ -6,7 +6,10 @@ export const useBundlesStore = defineStore("bundles", {
         ownedBundles: []
     }),
     getters: {
-        ownedBundlesObjects: state => state.bundles.filter(item => state.ownedBundles.includes(item.code))
+        ownedBundlesObjects: state => state.bundles.filter(item => state.ownedBundles.includes(item.code)),
+        hasBundle: state => {
+            return bundleCode => state.ownedBundles.includes(bundleCode);
+        }
     },
     actions: {
         setOwnedBundles(ownedBundles) {

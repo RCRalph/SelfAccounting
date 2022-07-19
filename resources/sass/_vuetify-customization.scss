@@ -85,3 +85,12 @@ tr {
         border-radius: 50%;
     }
 }
+
+.v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
+    padding-left: 54px;
+}
+
+.add-income-buttons {
+    display: flex;
+    justify-content: center;
+}
