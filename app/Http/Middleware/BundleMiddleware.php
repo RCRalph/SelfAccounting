@@ -17,11 +17,8 @@ class BundleMiddleware
      */
     public function handle(Request $request, Closure $next, $bundleCode)
     {
-        $bundle = Bundle::where("code", $bundleCode)->first();
-
-        $USER = auth()->user();
-        if (!($USER->bundles->contains($bundle) || $USER->premiumBundles->contains($bundle))) {
-            return redirect("/bundles/$bundle->id");
+        if (auth()->user()->bundleCodes->doesntContain($bundleCode)) {
+            abort(403);
         }
 
         return $next($request);

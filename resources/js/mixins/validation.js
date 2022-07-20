@@ -190,6 +190,30 @@ export default {
 
                         return true;
                     }
+                },
+                cash(owned = 0) {
+                    return amount => {
+                        if (!amount) {
+                            return true;
+                        }
+                        else if (isNaN(Number(amount))) {
+                            return "Amount has to be a number";
+                        }
+                        else if (amount < 0) {
+                            return "Amount cannot be negative";
+                        }
+                        else if (amount >= 1e7) {
+                            return "Amount has to be less than 1000000";
+                        }
+                        else if (!Number.isInteger(Number(amount))) {
+                            return "Amount has to be an integer";
+                        }
+                        else if (owned < amount) {
+                            return "Amount cannot be greater than currently owned amount";
+                        }
+
+                        return true;
+                    }
                 }
             }
         }

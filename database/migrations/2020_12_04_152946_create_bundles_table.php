@@ -17,6 +17,8 @@ class CreateBundlesTable extends Migration
             $table->id();
             $table->string('code', 6);
             $table->string('title', 64);
+            $table->string('icon', 32);
+            $table->string('directory', 32)->unique();
             $table->decimal('price', 5, 2);
             $table->string('thumbnail', 96);
             $table->text('short_description');

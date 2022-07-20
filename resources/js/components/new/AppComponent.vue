@@ -1,7 +1,8 @@
 <template>
     <v-app v-if="ready">
         <v-navigation-drawer v-model="drawer" permanent :mini-variant.sync="mini"
-            :expand-on-hover="$vuetify.breakpoint.mdAndUp && !menuClicked" fixed>
+            :expand-on-hover="$vuetify.breakpoint.mdAndUp && !menuClicked" fixed
+        >
             <v-list-item class="pa-2">
                 <v-list-item-avatar>
                     <v-img src="/storage/SelfAccounting.svg"></v-img>
@@ -17,15 +18,39 @@
             <v-divider class="my-1"></v-divider>
 
             <v-list dense>
-                <v-list-item v-for="item in items" :key="item.title" link :to="item.link">
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
+                <div v-for="item in items" :key="item.title">
+                    <v-list-item v-if="item.link" link :to="item.link">
+                        <v-list-item-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
 
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-group v-else link no-action :prepend-icon="item.icon" color="unset">
+                        <template v-slot:activator>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.title"></v-list-item-title>
+                            </v-list-item-content>
+                        </template>
+
+                        <v-list-item
+                            v-for="sublink in item.links"
+                            :key="sublink.text"
+                            :to="sublink.link"
+                        >
+                            <v-list-item-icon>
+                                <v-icon>{{ sublink.icon }}</v-icon>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title v-text="sublink.text"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-group>
+                </div>
             </v-list>
 
             <v-divider class="my-1"></v-divider>
@@ -105,26 +130,19 @@
 </template>
 
 <script>
-import { useCurrenciesStore } from '&/stores/currencies';
+import { useCurrenciesStore } from "&/stores/currencies";
+import { useBundlesStore } from "&/stores/bundles";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
+        const bundles = useBundlesStore();
 
-        return { currencies };
+        return { currencies, bundles };
     },
     data() {
         return {
             drawer: true,
-            items: [
-                { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
-                { title: "Income", icon: "fas fa-sign-in-alt", link: "/income" },
-                { title: "Outcome", icon: "fas fa-sign-out-alt", link: "/outcome" },
-                { title: "Settings", icon: "fas fa-cog", link: "/settings" },
-                { title: "Getting started", icon: "mdi-school", link: "/getting-started" },
-                { title: "Bundles", icon: "mdi-package-variant", link: "/bundles" },
-                { title: "Admin", icon: "mdi-lock", link: "/admin" },
-            ],
             profileItems: [
                 { title: "View profile", icon: "mdi-account", link: "/profile" }
             ],
@@ -132,6 +150,47 @@ export default {
             menuClicked: false,
             user: {},
             ready: false
+        }
+    },
+    computed: {
+        items() {
+            const retArr = [
+                { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
+                { title: "Income", icon: "fas fa-sign-in-alt", link: "/income" },
+                { title: "Outcome", icon: "fas fa-sign-out-alt", link: "/outcome" },
+                { title: "Settings", icon: "fas fa-cog", link: "/settings" }
+            ];
+
+            if (this.bundles.ownedBundlesObjects.length) {
+                const links = [{
+                    icon: "mdi-view-list",
+                    text: "Bundle list",
+                    link: "/bundles/list"
+                }];
+
+                this.bundles.ownedBundlesObjects.forEach(item => {
+                    links.push({
+                        icon: item.icon,
+                        text: item.title,
+                        link: `/bundles/${item.directory}`
+                    });
+                });
+
+                retArr.push({ title: "Bundles", icon: "mdi-package-variant", links });
+            }
+            else {
+                retArr.push({ title: "Bundles", icon: "mdi-package-variant", link: "/bundles" });
+            }
+
+            if (!this.user.hide_all_tutorials) {
+                retArr.push({ title: "Getting started", icon: "mdi-school", link: "/getting-started" });
+            }
+
+            if (this.user.admin) {
+                retArr.push({ title: "Admin", icon: "mdi-lock", link: "/admin" });
+            }
+
+            return retArr;
         }
     },
     methods: {
@@ -152,6 +211,14 @@ export default {
 
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
+
+                //this.bundles = data.bundles;
+
+                this.currencies.setCurrencies(data.currencies);
+                this.currencies.changeCurrency(data.currencies[0].id);
+
+                this.bundles.setBundles(data.bundles);
+                this.bundles.setOwnedBundles(data.ownedBundles);
 
                 this.currencies.currencies = data.currencies;
                 this.currencies.usedCurrency = data.currencies[0].id;

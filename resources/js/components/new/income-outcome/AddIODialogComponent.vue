@@ -5,7 +5,7 @@
         </template>
 
         <v-card v-if="ready">
-            <v-card-title class="d-flex justify-space-between">
+            <v-card-title :class="['d-flex', $vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between']">
                 <div>Add {{ type }}</div>
 
                 <SetCommonValuesComponent
@@ -85,17 +85,25 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-space-between">
-                <div>
-                    <v-btn outlined rounded fab small @click="page = 0" :disabled="page == 0">
+                <div :class="$vuetify.breakpoint.xs && 'd-flex flex-wrap flex-column-reverse'">
+                    <v-btn outlined rounded fab small class="ma-1" @click="page = 0" :disabled="page == 0">
                         <v-icon>mdi-arrow-collapse-left</v-icon>
                     </v-btn>
 
-                    <v-btn outlined rounded fab small class="ms-2" @click="page--" :disabled="page == 0">
+                    <v-btn outlined rounded fab small class="ma-1" @click="page--" :disabled="page == 0">
                         <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
                 </div>
 
-                <div>
+                <div class="add-income-buttons">
+                    <CashIODialogComponent
+                        v-if="bundles.hasBundle('cashan')"
+                        v-model="cash"
+                        :meanIDs="meanIDs"
+                        :disabled="loading"
+                        :sumByMeans="sumByMeans"
+                    ></CashIODialogComponent>
+
                     <v-btn color="error" class="mx-1" width="90" outlined :disabled="data.length == 1 || loading" @click="removeData">
                         Delete
                     </v-btn>
@@ -105,12 +113,12 @@
                     </v-btn>
                 </div>
 
-                <div>
-                    <v-btn outlined rounded fab small class="me-2" @click="nextPage" :disabled="this.page == this.data.length - 1">
+                <div :class="$vuetify.breakpoint.xs && 'd-flex flex-wrap flex-column'">
+                    <v-btn outlined rounded fab small class="ma-1" @click="nextPage" :disabled="this.page == this.data.length - 1">
                         <v-icon>mdi-arrow-right</v-icon>
                     </v-btn>
 
-                    <v-btn outlined rounded fab small @click="lastPage" :color="this.page == this.data.length - 1 ? 'primary' : undefined">
+                    <v-btn outlined rounded fab small class="ma-1" @click="lastPage" :color="this.page == this.data.length - 1 ? 'primary' : undefined">
                         <v-icon v-if="this.page != this.data.length - 1">mdi-arrow-collapse-right</v-icon>
                         <v-icon v-else>mdi-plus</v-icon>
                     </v-btn>
@@ -140,21 +148,25 @@
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 import SetCommonValuesComponent from "@/income-outcome/SetCommonValuesComponent.vue";
+import CashIODialogComponent from "@/income-outcome/CashIODialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
+import { useBundlesStore } from "&/stores/bundles";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
+        const bundles = useBundlesStore();
 
-        return { currencies };
+        return { currencies, bundles };
     },
     mixins: [validation, main],
     components: {
         ErrorSnackbarComponent,
-        SetCommonValuesComponent
+        SetCommonValuesComponent,
+        CashIODialogComponent
     },
     props: {
         type: String
@@ -171,11 +183,11 @@ export default {
                 title: "",
                 amount: 1,
                 price: "",
-                currency_id: this.currencies.usedCurrency,
                 category_id: null,
                 mean_id: null
             },
             titles: [],
+            cash: {},
 
             ready: false,
             error: false,
@@ -231,6 +243,30 @@ export default {
         },
         clonedCommonValues() {
             return _.cloneDeep(this.commonValues);
+        },
+        meanIDs() {
+            return this.data.map(item => item.mean_id);
+        },
+        sumByMeans() {
+            let sumObj = {};
+
+            this.data.forEach(item => {
+                if (item.mean_id != null) {
+                    const amount = typeof this.data[this.page].amount == "string" ? this.data[this.page].amount.replaceAll(",", ".") : this.data[this.page].amount,
+                        price = typeof this.data[this.page].price == "string" ? this.data[this.page].price.replaceAll(",", ".") : this.data[this.page].price;
+
+                    const value = Math.round(amount * price * 100) / 100;
+
+                    if (sumObj[item.mean_id] == undefined) {
+                        sumObj[item.mean_id] = value
+                    }
+                    else {
+                        sumObj[item.mean_id] += value;
+                    }
+                }
+            });
+
+            return sumObj;
         }
     },
     methods: {
@@ -245,10 +281,21 @@ export default {
                 if (typeof item.price == "string") {
                     dataNoComma[i].price = dataNoComma[i].price.replaceAll(",", ".");
                 }
+            });
+
+            const cashArray = [];
+            Object.keys(this.cash).forEach(item => {
+                cashArray.push({
+                    id: item,
+                    amount: this.cash[item]
+                });
             })
 
             axios
-                .post(`/web-api/${this.type}`, {data: dataNoComma})
+                .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, {
+                    data: dataNoComma,
+                    cash: cashArray
+                })
                 .then(() => {
                     this.$emit("added");
                     this.dialog = false;

@@ -12,24 +12,28 @@
     }
 }
 
-@media (max-width: 767.98px) {
-
-}
-
-@media (max-width: 991.98px) {
-
-}
-
-@media (max-width: 1199.98px) {
-
-}
-
-@media (max-width: 1399.98px) {
-
-}
-
 @media (hover: none) {
     .menu-margin {
         margin-left: 0;
+    }
+}
+
+@media (max-width: 475px) {
+    .add-income-buttons {
+        flex-wrap: wrap;
+        flex-direction: column;
+
+        button {
+            margin-top: 4px;
+            margin-bottom: 4px;
+
+            &:first-child {
+                margin-top: unset;
+            }
+
+            &:last-child {
+                margin-bottom: unset;
+            }
+        }
     }
 }

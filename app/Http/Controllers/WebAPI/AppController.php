@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
+use App\Bundle;
+
 class AppController extends Controller
 {
     public function __construct()
@@ -18,7 +20,7 @@ class AppController extends Controller
     {
         return Cache::remember(
             "app-data-" . auth()->user()->id,
-            now()->addMinutes(15),
+            now()->addMinutes(env("APP_DEBUG") ? 0 : 15),
             function () {
                 $currencies = $this->getCurrencies()->toArray();
                 $lastCurrencies = $this->getLastUsedCurrencies();
@@ -30,18 +32,13 @@ class AppController extends Controller
                 }
 
                 $retArr = [
-                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link"),
-                    "currencies" => $currencies
+                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
+                    "currencies" => $currencies,
+                    "bundles" => Bundle::all()->makeHidden("id", "created_at", "updated_at"),
+                    "ownedBundles" => Bundle::whereIn("code", auth()->user()->bundleCodes)
+                        ->orderBy("title")
+                        ->pluck("code")
                 ];
-
-                //$retArr["bundle_info"] = $this->BUNDLE_INFO_LIST;
-
-                // Select bundles available to the user
-                /*$retArr["bundles"] = auth()->user()->premiumBundles
-                    ->merge(auth()->user()->bundles)
-                    ->filter(
-                        fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
-                    );*/
 
                 // Update user's last page visit
                 auth()->user()->update([

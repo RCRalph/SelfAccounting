@@ -47,7 +47,7 @@
                         <ProfileSettingsDialogComponent v-model="data"></ProfileSettingsDialogComponent>
                     </div>
 
-                    <div class="d-flex justify-center flex-wrap mt-0">
+                    <div v-if="data.account_type != 'Admin'" class="d-flex justify-center flex-wrap mt-0">
                         <ProfileDeleteDialogComponent></ProfileDeleteDialogComponent>
                     </div>
                 </v-card-text>

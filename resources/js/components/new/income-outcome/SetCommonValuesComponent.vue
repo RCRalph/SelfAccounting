@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" max-width="700">
         <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined color="primary" v-bind="attrs" v-on="on">Set common values</v-btn>
+            <v-btn outlined color="primary" v-bind="attrs" v-on="on" :class="$vuetify.breakpoint.xs && 'mt-2'">Set common values</v-btn>
         </template>
 
         <v-card>
@@ -60,7 +60,7 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-center">
-                <v-btn color="success" width="90" outlined :disabled="!canUpdate || disableUpdate" @click="update">
+                <v-btn color="success" outlined :disabled="!canUpdate || disableUpdate" @click="update">
                     Update
                 </v-btn>
             </v-card-actions>
