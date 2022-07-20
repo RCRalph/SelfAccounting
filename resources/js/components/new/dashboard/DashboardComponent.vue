@@ -8,7 +8,7 @@
                             <v-card-title class="font-weight-bold justify-center text-h5">Current balance</v-card-title>
 
                             <v-card-text>
-                                <div :class="['text-h4', 'text-center', 'font-weight-regular', 'mb-6', $vuetify.theme.dark ? 'white--text' : 'black--text']">
+                                <div class="text-h4 text-center font-weight-regular mb-6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">
                                     {{ currentBalanceSum | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
                                 </div>
 
@@ -39,7 +39,7 @@
                                         'd-flex', 'align-center',
                                         !currentBalance.length && 'justify-center'
                                     ]">
-                                        <span :class="['font-weight-bold', 'text-h5']">Last 30 days</span>
+                                        <span class="font-weight-bold text-h5">Last 30 days</span>
                                     </v-col>
 
                                     <v-col sm="6" cols="12" v-if="currentBalance.length">

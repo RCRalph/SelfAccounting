@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" max-width="500" persistent>
         <template v-slot:activator="{ on, attrs }">
-            <v-btn class="mx-1" width="90" outlined v-on="on" v-bind="attrs" :disabled="!usesCash || disabled">
+            <v-btn class="mx-1" outlined v-on="on" v-bind="attrs" :disabled="!usesCash || disabled">
                 Cash
             </v-btn>
         </template>
@@ -63,12 +63,12 @@
 
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                         <div class="caption mb-2">Entered sum</div>
-                        <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                        <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (entryValue || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                     </v-col>
 
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                         <div class="caption mb-2">Difference</div>
-                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ Math.abs(sum - sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ Math.abs(sum - entryValue || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -111,8 +111,13 @@ export default {
         ErrorSnackbarComponent
     },
     props: {
-        meanIDs: {
-            type: Array
+        currency: {
+            type: Object,
+            required: true
+        },
+        meanID: {
+            type: Number,
+            required: false
         },
         value: {
             required: true,
@@ -122,9 +127,9 @@ export default {
             required: true,
             type: Boolean
         },
-        sumByMeans: {
+        entryValue: {
             required: true,
-            type: Object
+            type: Number
         }
     },
     data() {
@@ -145,16 +150,19 @@ export default {
                     delete this.value[item];
                 }
             });
+        },
+        currency() {
+            this.getData();
         }
     },
     computed: {
         usesCash() {
-            return this.meanIDs.includes(this.cashMean);
+            return this.meanID == this.cashMean;
         },
         cashObject() {
             return Object.entries(this.cash).map(item => ({
                 id: item[0],
-                value: `${this.$options.filters.addSpaces(item[1])} ${this.currencies.usedCurrencyObject.ISO}`
+                value: `${this.$options.filters.addSpaces(item[1])} ${this.currency.ISO}`
             }))
         },
         sortedSelectedValues() {
@@ -173,10 +181,10 @@ export default {
             return Math.round(sum * 100) / 100;
         },
         sumSign() {
-            if (this.sum > this.sumByMeans[this.cashMean]) {
+            if (this.sum > this.entryValue) {
                 return "+";
             }
-            else if (this.sum < this.sumByMeans[this.cashMean]) {
+            else if (this.sum < this.entryValue) {
                 return "-";
             }
             else {
@@ -184,19 +192,24 @@ export default {
             }
         }
     },
+    methods: {
+        getData() {
+            this.ready = false;
+
+            axios.get(`/web-api/bundles/cash/${this.currency.id}`)
+                .then(response => {
+                    const data = response.data;
+
+                    this.cash = data.cash;
+                    this.cashMean = data.cashMean;
+                    this.ownedCash = data.ownedCash;
+
+                    this.ready = true;
+                })
+        }
+    },
     mounted() {
-        this.ready = false;
-
-        axios.get(`/web-api/bundles/cash/${this.currencies.usedCurrency}`)
-            .then(response => {
-                const data = response.data;
-
-                this.cash = data.cash;
-                this.cashMean = data.cashMean;
-                this.ownedCash = data.ownedCash;
-
-                this.ready = true;
-            })
+        this.getData();
     }
 }
 </script>

@@ -25,7 +25,7 @@
 
                                         <tr>
                                             <td class="text-end text-h6">Account type</td>
-                                            <td :class="['text-h6', accountTypeColor]">{{ data.account_type }}</td>
+                                            <td class="text-h6" :class="accountTypeColor">{{ data.account_type }}</td>
                                         </tr>
 
                                         <tr v-if="data.expiration">

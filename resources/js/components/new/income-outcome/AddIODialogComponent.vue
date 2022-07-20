@@ -5,7 +5,7 @@
         </template>
 
         <v-card v-if="ready">
-            <v-card-title :class="['d-flex', $vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between']">
+            <v-card-title class="d-flex" :class="$vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between'">
                 <div>Add {{ type }}</div>
 
                 <SetCommonValuesComponent
