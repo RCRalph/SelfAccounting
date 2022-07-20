@@ -43,13 +43,13 @@ Route::prefix("/web-api")->group(function () {
     // Income and outcome routes
     foreach (["income", "outcome"] as $type) {
         Route::group(["prefix" => "/$type", "middleware" => "IO:$type"], function () use ($type) {
-            Route::post("/", "WebAPI\IOController@store")->name("web-api.$type.store");
             Route::get("/{id}", "WebAPI\IOController@show")->name("web-api.$type.show");
             Route::patch("/{id}", "WebAPI\IOController@update")->name("web-api.$type.update");
             Route::delete("/{id}", "WebAPI\IOController@destroy")->name("web-api.$type.destroy");
 
             Route::prefix("/currency/{currency}")->group(function () use ($type) {
                 Route::get("/", "WebAPI\IOController@index")->name("web-api.$type.currency");
+                Route::post("/", "WebAPI\IOController@store")->name("web-api.$type.currency.store");
                 Route::get("/data", "WebAPI\IOController@data")->name("web-api.$type.currency.data");
                 Route::get("/overview", "WebAPI\IOController@overview")->name("web-api.$type.currency.overview");
                 Route::get("/list", "WebAPI\IOController@list")->name("web-api.$type.currency.list");

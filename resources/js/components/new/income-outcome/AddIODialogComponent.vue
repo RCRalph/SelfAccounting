@@ -183,7 +183,6 @@ export default {
                 title: "",
                 amount: 1,
                 price: "",
-                currency_id: this.currencies.usedCurrency,
                 category_id: null,
                 mean_id: null
             },
@@ -282,10 +281,21 @@ export default {
                 if (typeof item.price == "string") {
                     dataNoComma[i].price = dataNoComma[i].price.replaceAll(",", ".");
                 }
+            });
+
+            const cashArray = [];
+            Object.keys(this.cash).forEach(item => {
+                cashArray.push({
+                    id: item,
+                    amount: this.cash[item]
+                });
             })
 
             axios
-                .post(`/web-api/${this.type}`, {data: dataNoComma})
+                .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, {
+                    data: dataNoComma,
+                    cash: cashArray
+                })
                 .then(() => {
                     this.$emit("added");
                     this.dialog = false;

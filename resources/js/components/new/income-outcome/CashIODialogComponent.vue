@@ -32,7 +32,7 @@
                 </v-select>
 
                 <v-form v-model="canSet">
-                    <div v-for="id in sortedSelectedValues" :key="id">
+                    <div v-for="(id, i) in sortedSelectedValues" :key="id">
                         <v-row>
                             <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                                 <div class="caption mb-2">Value</div>
@@ -49,11 +49,11 @@
                             </v-col>
                         </v-row>
 
-                        <v-divider v-if="$vuetify.breakpoint.xs" class="my-4"></v-divider>
+                        <v-divider v-if="$vuetify.breakpoint.xs && i < sortedSelectedValues.length - 1" class="my-4"></v-divider>
                     </div>
                 </v-form>
 
-                <v-divider class="mx-sm-6 mx-0 mb-4" v-if="selectedValues.length"></v-divider>
+                <v-divider class="mx-sm-6 mx-0 my-4 mt-sm-0" v-if="selectedValues.length"></v-divider>
 
                 <v-row v-if="selectedValues.length">
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -68,7 +68,7 @@
 
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                         <div class="caption mb-2">Difference</div>
-                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ (sum - sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ abs(sum - sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                     </v-col>
                 </v-row>
             </v-card-text>

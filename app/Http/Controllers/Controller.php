@@ -286,9 +286,7 @@ class Controller extends BaseController
             ->groupBy("category_id");
 
         foreach ($balanceByCategories->keys() as $categoryID) {
-            $category = $categories
-                ->where("id", $categoryID)
-                ->first();
+            $category = $categories->find($categoryID);
 
             foreach ($balanceByCategories[$categoryID] as $key => $value) {
                 $limitedByStart = (

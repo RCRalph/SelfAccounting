@@ -18,6 +18,8 @@ use App\Rules\ValidCategoryOrMeanUpdate;
 use App\Rules\ValidCategoryOrMean;
 use App\Rules\SameLengthAs;
 use App\Rules\DateBeforeOrEqualField;
+use App\Rules\CashBelongsToCurrency;
+use App\Rules\CashValidAmount;
 
 class IOController extends Controller
 {
@@ -278,20 +280,58 @@ class IOController extends Controller
         return response()->json([ ...compact("titles"), ...$meansAndCategories ]);
     }
 
-    public function store()
+    public function store(Currency $currency)
     {
         $data = request()->validate([
             "data.*.date" => ["required", "date", new CorrectDateIO],
             "data.*.title" => ["required", "string", "max:64"],
             "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "data.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type)],
-            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type)],
+            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type, $currency)],
+            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type, $currency)],
         ]);
 
         foreach ($data["data"] as $item) {
+            $item["currency_id"] = $currency->id;
             $this->getTypeRelation()->create($item);
+        }
+
+        if (auth()->user()->bundleCodes->contains("cashan") && request("cash")) {
+            $cash = request()->validate([
+                "cash" => ["required", "array"],
+                "cash.*.id" => ["required", "integer", new CashBelongsToCurrency($currency)],
+                "cash.*.amount" => ["required", "integer", "min:1", "max:1e7", "not_in:1e7", new CashValidAmount]
+            ])["cash"];
+
+            foreach($cash as $item) {
+                $attachedCash = auth()->user()->cash()->find($item["id"]);
+
+                if ($attachedCash) {
+                    $cashAmount = $attachedCash->pivot->amount + $item["amount"] * (request()->type == "income" ? 1 : -1);
+
+                    if ($cashAmount) {
+                        auth()->user()->cash()->updateExistingPivot(
+                            $item["id"],
+                            ["amount" => $cashAmount]
+                        );
+                    }
+                    else {
+                        auth()->user()->cash()->detach($item["id"]);
+                    }
+                }
+                else {
+                    /*
+                        This can only be reached if request()->type is "income",
+                        in outcome cash has to be already attached and this
+                        is checked inside CashValidAmount rule.
+                    */
+
+                    auth()->user()->cash()->attach(
+                        $item["id"],
+                        [ "amount" => $item["amount"] ]
+                    );
+                }
+            }
         }
 
         return response("");
