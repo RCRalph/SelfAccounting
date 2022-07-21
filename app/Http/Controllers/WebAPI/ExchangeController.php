@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Cache;
 
 use App\Rules\CorrectDateIOExchange;
 use App\Rules\ValidCategoryOrMeanExchange;
+use App\Rules\CashBelongsToCurrency;
+use App\Rules\CashValidAmount;
+
+use App\Currency;
 
 class ExchangeController extends Controller
 {
@@ -96,6 +100,55 @@ class ExchangeController extends Controller
 
         auth()->user()->outcome()->create($data["from"]);
         auth()->user()->income()->create($data["to"]);
+
+        if (auth()->user()->bundleCodes->contains("cashan")) {
+            if (request("fromCash")) {
+                $cash = request()->validate([
+                    "fromCash" => ["required", "array"],
+                    "fromCash.*.id" => ["required", "integer", new CashBelongsToCurrency(Currency::find($data["from"]["currency_id"]))],
+                    "fromCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("outcome", "fromCash")]
+                ])["fromCash"];
+
+                foreach ($cash as $item) {
+                    $cashAmount = auth()->user()->cash()->find($item["id"])->pivot->amount - $item["amount"];
+
+                    if ($cashAmount) {
+                        auth()->user()->cash()->updateExistingPivot(
+                            $item["id"],
+                            ["amount" => $cashAmount]
+                        );
+                    }
+                    else {
+                        auth()->user()->cash()->detach($item["id"]);
+                    }
+                }
+            }
+
+            if (request("toCash")) {
+                $cash = request()->validate([
+                    "toCash" => ["required", "array"],
+                    "toCash.*.id" => ["required", "integer", new CashBelongsToCurrency(Currency::find($data["to"]["currency_id"]))],
+                    "toCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("income", "toCash")]
+                ])["toCash"];
+
+                foreach ($cash as $item) {
+                    $attachedCash = auth()->user()->cash()->find($item["id"]);
+
+                    if ($attachedCash) {
+                        auth()->user()->cash()->updateExistingPivot(
+                            $item["id"],
+                            ["amount" => $attachedCash->pivot->amount + $item["amount"]]
+                        );
+                    }
+                    else {
+                        auth()->user()->cash()->attach(
+                            $item["id"],
+                            [ "amount" => $item["amount"] ]
+                        );
+                    }
+                }
+            }
+        }
 
         return response("");
     }

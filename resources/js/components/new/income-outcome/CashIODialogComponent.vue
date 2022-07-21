@@ -40,7 +40,7 @@
                             </v-col>
 
                             <v-col cols="12" sm="4">
-                                <v-text-field label="Amount" v-model="value[id]" :rules="[validation.cash(ownedCash[id])]"></v-text-field>
+                                <v-text-field label="Amount" v-model="value[id]" :rules="[validation.cash(ownedCash[id], type)]"></v-text-field>
                             </v-col>
 
                             <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -68,7 +68,7 @@
 
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                         <div class="caption mb-2">Difference</div>
-                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ abs(sum - sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ Math.abs(sum - sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -97,16 +97,14 @@
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
-import { useBundlesStore } from "&/stores/bundles";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
-        const bundles = useBundlesStore();
 
-        return { currencies, bundles };
+        return { currencies };
     },
     mixins: [validation, main],
     components: {
@@ -127,6 +125,10 @@ export default {
         sumByMeans: {
             required: true,
             type: Object
+        },
+        type: {
+            required: true,
+            type: String
         }
     },
     data() {
@@ -151,6 +153,11 @@ export default {
     },
     computed: {
         usesCash() {
+            if (!this.meanIDs.includes(this.cashMean)) {
+                this.$emit("input", {});
+                this.selectedValues = [];
+            }
+
             return this.meanIDs.includes(this.cashMean);
         },
         cashObject() {

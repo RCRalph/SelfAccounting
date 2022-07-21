@@ -11,7 +11,19 @@
                 <v-form v-model="canSubmit">
                     <v-row>
                         <v-col cols="12" md="6">
-                            <div :class="['font-weight-bold', 'text-center', 'text-h5', $vuetify.theme.dark ? 'white--text' : 'black--text']">From</div>
+                            <div class="d-flex justify-sm-space-between justify-center flex-sm-row flex-column">
+                                <div class="font-weight-bold text-h5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">From</div>
+
+                                <CashExchangeDialogComponent
+                                    v-if="bundles.hasBundle('cashan')"
+                                    v-model="fromCash"
+                                    :currency="fromData.currency"
+                                    :meanID="from.mean_id"
+                                    :disabled="loading"
+                                    :entryValue="fromData.value"
+                                    type="outcome"
+                                ></CashExchangeDialogComponent>
+                            </div>
 
                             <v-text-field type="date" label="Date" v-model="from.date" :min="fromData.mean.first_entry_date" :rules="[validation.date(false, fromData.mean.first_entry_date)]"></v-text-field>
 
@@ -37,7 +49,7 @@
                             ></v-select>
 
                             <div class="caption mb-2">Value</div>
-                            <h2 style='white-space: nowrap; font-weight: normal' :class="['mb-3', $vuetify.theme.dark ? 'white--text' : 'black--text']">{{ fromData.value | addSpaces }} {{ fromData.currency.ISO }}</h2>
+                            <h2 style="white-space: nowrap" class="font-weight-regular mb-3" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ fromData.value | addSpaces }} {{ fromData.currency.ISO }}</h2>
 
                             <v-select
                                 v-model="from.category_id"
@@ -58,7 +70,19 @@
                         </v-col>
 
                         <v-col cols="12" md="6">
-                            <div :class="['font-weight-bold', 'text-center', 'text-h5', $vuetify.theme.dark ? 'white--text' : 'black--text']">To</div>
+                            <div class="d-flex justify-sm-space-between justify-center flex-sm-row flex-column">
+                                <div class="font-weight-bold text-h5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">To</div>
+
+                                <CashExchangeDialogComponent
+                                    v-if="bundles.hasBundle('cashan')"
+                                    v-model="toCash"
+                                    :currency="toData.currency"
+                                    :meanID="to.mean_id"
+                                    :disabled="loading"
+                                    :entryValue="toData.value"
+                                    type="income"
+                                ></CashExchangeDialogComponent>
+                            </div>
 
                             <v-text-field type="date" label="Date" v-model="to.date" :min="toData.mean.first_entry_date" :rules="[validation.date(false, toData.mean.first_entry_date)]"></v-text-field>
 
@@ -84,7 +108,7 @@
                             ></v-select>
 
                             <div class="caption mb-2">Value</div>
-                            <h2 style='white-space: nowrap; font-weight: normal' :class="['mb-3', $vuetify.theme.dark ? 'white--text' : 'black--text']">{{ toData.value | addSpaces }} {{ toData.currency.ISO }}</h2>
+                            <h2 style="white-space: nowrap" class="font-weight-regular mb-3" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ toData.value | addSpaces }} {{ toData.currency.ISO }}</h2>
 
                             <v-select
                                 v-model="to.category_id"
@@ -107,8 +131,8 @@
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="submit" :loading="loading">
+            <v-card-actions class="d-flex justify-center">
+                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="submit" :loading="loading" width="80">
                     Submit
                 </v-btn>
             </v-card-actions>
@@ -131,20 +155,24 @@
 
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+import CashExchangeDialogComponent from "@/income-outcome/CashExchangeDialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
+import { useBundlesStore } from "&/stores/bundles";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
+        const bundles = useBundlesStore();
 
-        return { currencies };
+        return { currencies, bundles };
     },
     mixins: [validation, main],
     components: {
-        ErrorSnackbarComponent
+        ErrorSnackbarComponent,
+        CashExchangeDialogComponent
     },
     data() {
         return {
@@ -155,6 +183,8 @@ export default {
             categories: {},
             availableCurrencies: [],
             titles: [],
+            fromCash: {},
+            toCash: {},
 
             ready: false,
             error: false,
@@ -264,8 +294,29 @@ export default {
                 toNoComma.price = toNoComma.price.replaceAll(",", ".");
             }
 
+            const fromCashArray = [];
+            Object.keys(this.fromCash).forEach(item => {
+                fromCashArray.push({
+                    id: item,
+                    amount: this.fromCash[item]
+                });
+            })
+
+            const toCashArray = [];
+            Object.keys(this.toCash).forEach(item => {
+                toCashArray.push({
+                    id: item,
+                    amount: this.toCash[item]
+                });
+            })
+
             axios
-                .post(`/web-api/exchange`, { from: fromNoComma, to: toNoComma })
+                .post(`/web-api/exchange`, {
+                    from: fromNoComma,
+                    to: toNoComma,
+                    fromCash: fromCashArray,
+                    toCash: toCashArray
+                })
                 .then(() => {
                     this.$emit("exchanged");
                     this.dialog = false;

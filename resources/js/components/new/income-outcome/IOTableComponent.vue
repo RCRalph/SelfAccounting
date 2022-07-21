@@ -24,7 +24,7 @@
                         ></v-text-field>
                     </v-col>
 
-                    <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" :class="['d-flex', $vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end']">
+                    <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
                         <ExchangeIODialogComponent
                             @exchanged="getData"
                         ></ExchangeIODialogComponent>
