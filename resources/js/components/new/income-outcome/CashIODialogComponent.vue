@@ -40,7 +40,7 @@
                             </v-col>
 
                             <v-col cols="12" sm="4">
-                                <v-text-field label="Amount" v-model="value[id]" :rules="[validation.cash(ownedCash[id])]"></v-text-field>
+                                <v-text-field label="Amount" v-model="value[id]" :rules="[validation.cash(ownedCash[id], type)]"></v-text-field>
                             </v-col>
 
                             <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -125,6 +125,10 @@ export default {
         sumByMeans: {
             required: true,
             type: Object
+        },
+        type: {
+            required: true,
+            type: String
         }
     },
     data() {
@@ -149,6 +153,11 @@ export default {
     },
     computed: {
         usesCash() {
+            if (!this.meanIDs.includes(this.cashMean)) {
+                this.$emit("input", {});
+                this.selectedValues = [];
+            }
+
             return this.meanIDs.includes(this.cashMean);
         },
         cashObject() {

@@ -300,10 +300,10 @@ class IOController extends Controller
             $cash = request()->validate([
                 "cash" => ["required", "array"],
                 "cash.*.id" => ["required", "integer", new CashBelongsToCurrency($currency)],
-                "cash.*.amount" => ["required", "integer", "min:1", "max:1e7", "not_in:1e7", new CashValidAmount]
+                "cash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount(request()->type)]
             ])["cash"];
 
-            foreach($cash as $item) {
+            foreach ($cash as $item) {
                 $attachedCash = auth()->user()->cash()->find($item["id"]);
 
                 if ($attachedCash) {

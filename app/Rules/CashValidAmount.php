@@ -6,14 +6,16 @@ use Illuminate\Contracts\Validation\Rule;
 
 class CashValidAmount implements Rule
 {
+    private $type, $directory;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($type, $directory = "cash")
     {
-        //
+        $this->type = $type;
+        $this->directory = $directory;
     }
 
     /**
@@ -25,14 +27,15 @@ class CashValidAmount implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (request()->type == "income") {
+        if ($this->type == "income") {
             return true;
         }
 
         $index = explode(".", $attribute)[1];
-        $id = request("cash.$index.id");
+        $id = request("$this->directory.$index.id");
 
         $ownedCash = auth()->user()->cash()->find($id);
+
         if ($ownedCash) {
             return $ownedCash->pivot->amount >= $value;
         }
@@ -47,6 +50,6 @@ class CashValidAmount implements Rule
      */
     public function message()
     {
-        return "Given cash ID doesn't belong to given currency.";
+        return "Insufficient amount of cash.";
     }
 }

@@ -191,12 +191,9 @@ export default {
                         return true;
                     }
                 },
-                cash(owned = 0) {
+                cash(owned = 0, type) {
                     return amount => {
-                        if (!amount) {
-                            return true;
-                        }
-                        else if (isNaN(Number(amount))) {
+                        if (isNaN(Number(amount))) {
                             return "Amount has to be a number";
                         }
                         else if (amount < 0) {
@@ -208,7 +205,7 @@ export default {
                         else if (!Number.isInteger(Number(amount))) {
                             return "Amount has to be an integer";
                         }
-                        else if (owned < amount) {
+                        else if (type == "outcome" && owned < amount) {
                             return "Amount cannot be greater than currently owned amount";
                         }
 

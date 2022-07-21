@@ -21,6 +21,7 @@
                                     :meanID="from.mean_id"
                                     :disabled="loading"
                                     :entryValue="fromData.value"
+                                    type="outcome"
                                 ></CashExchangeDialogComponent>
                             </div>
 
@@ -79,6 +80,7 @@
                                     :meanID="to.mean_id"
                                     :disabled="loading"
                                     :entryValue="toData.value"
+                                    type="income"
                                 ></CashExchangeDialogComponent>
                             </div>
 

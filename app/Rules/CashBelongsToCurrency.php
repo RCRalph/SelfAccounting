@@ -26,7 +26,7 @@ class CashBelongsToCurrency implements Rule
      */
     public function passes($attribute, $value)
     {
-        return $this->currency->cash()->where("currency_id", $this->currency->id)->count();
+        return $this->currency->cash()->where("id", $value)->count();
     }
 
     /**
