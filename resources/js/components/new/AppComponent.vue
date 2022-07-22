@@ -165,14 +165,14 @@ export default {
                 const links = [{
                     icon: "mdi-view-list",
                     text: "Bundle list",
-                    link: "/bundles/list"
+                    link: "/bundles/"
                 }];
 
                 this.bundles.ownedBundlesObjects.forEach(item => {
                     links.push({
                         icon: item.icon,
                         text: item.title,
-                        link: `/bundles/${item.directory}`
+                        link: `/bundle/${item.directory}`
                     });
                 });
 
@@ -212,16 +212,11 @@ export default {
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
 
-                //this.bundles = data.bundles;
-
                 this.currencies.setCurrencies(data.currencies);
                 this.currencies.changeCurrency(data.currencies[0].id);
 
                 this.bundles.setBundles(data.bundles);
                 this.bundles.setOwnedBundles(data.ownedBundles);
-
-                this.currencies.currencies = data.currencies;
-                this.currencies.usedCurrency = data.currencies[0].id;
 
                 this.ready = true;
             });

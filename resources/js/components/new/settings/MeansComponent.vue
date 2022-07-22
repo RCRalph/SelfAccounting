@@ -40,17 +40,19 @@
                 </template>
 
                 <template v-slot:[`item.actions`]="{ item }">
-                    <td class="d-flex flex-nowrap justify-center align-center">
-                        <EditMeanDialogComponent
-                            :id="item.id"
-                            @updated="getData"
-                        ></EditMeanDialogComponent>
+                    <td>
+                        <div class="d-flex flex-nowrap justify-center align-center">
+                            <EditMeanDialogComponent
+                                :id="item.id"
+                                @updated="getData"
+                            ></EditMeanDialogComponent>
 
-                        <DeleteDialogComponent
-                            thing="mean of payment"
-                            :url="`settings/means/${item.id}`"
-                            @deleted="getData"
-                        ></DeleteDialogComponent>
+                            <DeleteDialogComponent
+                                thing="mean of payment"
+                                :url="`settings/means/${item.id}`"
+                                @deleted="getData"
+                            ></DeleteDialogComponent>
+                        </div>
                     </td>
                 </template>
             </v-data-table>
