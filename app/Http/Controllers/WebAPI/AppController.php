@@ -22,6 +22,11 @@ class AppController extends Controller
             "app-data-" . auth()->user()->id,
             now()->addMinutes(env("APP_DEBUG") ? 0 : 15),
             function () {
+                // Update user's last page visit
+                auth()->user()->update([
+                    "last_page_visit" => Carbon::now()
+                ]);
+
                 $currencies = $this->getCurrencies()->toArray();
                 $lastCurrencies = $this->getLastUsedCurrencies();
 
@@ -31,21 +36,14 @@ class AppController extends Controller
                     array_splice($currencies, $index + 1, 1);
                 }
 
-                $retArr = [
+                return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
                     "currencies" => $currencies,
-                    "bundles" => Bundle::all()->makeHidden("id", "created_at", "updated_at"),
+                    "bundles" => Bundle::all()->makeHidden(["id", "created_at", "updated_at"]),
                     "ownedBundles" => Bundle::whereIn("code", auth()->user()->bundleCodes)
                         ->orderBy("title")
                         ->pluck("code")
                 ];
-
-                // Update user's last page visit
-                auth()->user()->update([
-                    "last_page_visit" => Carbon::now()
-                ]);
-
-                return $retArr;
             }
         );
     }

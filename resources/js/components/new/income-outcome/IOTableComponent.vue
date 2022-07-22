@@ -166,20 +166,22 @@
                         :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
                     >{{ item.mean.value }}</td>
 
-                    <td class="d-flex flex-nowrap justify-center align-center" @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
+                    <td @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
                     >
-                        <EditIODialogComponent
-                            :type="type"
-                            :id="item.id.value"
-                            @updated="getData"
-                        ></EditIODialogComponent>
+                        <div class="d-flex flex-nowrap justify-center align-center">
+                            <EditIODialogComponent
+                                :type="type"
+                                :id="item.id.value"
+                                @updated="getData"
+                            ></EditIODialogComponent>
 
-                        <DeleteDialogComponent
-                            :thing="type"
-                            :url="`${type}/${item.id.value}`"
-                            @deleted="getData"
-                        ></DeleteDialogComponent>
+                            <DeleteDialogComponent
+                                :thing="type"
+                                :url="`${type}/${item.id.value}`"
+                                @deleted="getData"
+                            ></DeleteDialogComponent>
+                        </div>
                     </td>
                 </tr>
             </template>

@@ -72,7 +72,7 @@ class SettingsController extends Controller
     {
         $this->authorize("view", $category);
 
-        return response()->json([ "data" => $category->makeHidden("user_id", "currency_id", "created_at", "updated_at") ]);
+        return response()->json([ "data" => $category->makeHidden(["user_id", "currency_id", "created_at", "updated_at"]) ]);
     }
 
     public function updateCategory(Category $category)
@@ -130,7 +130,7 @@ class SettingsController extends Controller
     {
         $this->authorize("view", $mean);
 
-        $mean = $mean->makeHidden("user_id", "currency_id", "created_at", "updated_at");
+        $mean = $mean->makeHidden(["user_id", "currency_id", "created_at", "updated_at"]);
 
         $minDate = auth()->user()->income()
             ->select("date")
