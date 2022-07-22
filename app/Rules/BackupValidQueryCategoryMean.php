@@ -38,7 +38,7 @@ class BackupValidQueryCategoryMean implements Rule
             request("categories") : request("means")
         )[$value - 1];
 
-        return $selectedType["currency_id"] == request("bundleData.reports.$index1.$this->type.$index2.currency_id");
+        return $selectedType["currency_id"] == request("extensionData.reports.$index1.$this->type.$index2.currency_id");
     }
 
     /**

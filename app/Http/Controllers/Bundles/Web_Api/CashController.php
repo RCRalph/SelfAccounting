@@ -17,7 +17,7 @@ class CashController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(["auth", "bundle:cashan"]);
+        $this->middleware(["auth", "extension:cashan"]);
     }
 
     public function index()

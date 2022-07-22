@@ -63,8 +63,8 @@ class IncomeOutcomeController extends Controller
             "mean" => $incomeOutcome == null ? null : $incomeOutcome->mean_id
         ];
 
-        $hasCashBundle = $this->hasBundle("cashan");
-        if ($hasCashBundle) {
+        $hasCashExtension = $this->hasExtension("cashan");
+        if ($hasCashExtension) {
             $cash = $this->getCash();
             $cashMeans = $this->getCashMeans();
             $usersCash = auth()->user()->cash
@@ -74,7 +74,7 @@ class IncomeOutcomeController extends Controller
 
         return array_merge(
             compact("currencies", "categories", "means", "titles", "last"),
-            $hasCashBundle ? compact("cash", "cashMeans", "usersCash") : []
+            $hasCashExtension ? compact("cash", "cashMeans", "usersCash") : []
         );
     }
 
@@ -176,7 +176,7 @@ class IncomeOutcomeController extends Controller
             }
         }
 
-        if ($this->hasBundle("cashan") && isset($cash)) {
+        if ($this->hasExtension("cashan") && isset($cash)) {
             foreach ($cash as $cashToInsert) {
                 $foundCash = auth()->user()->cash()->find($cashToInsert["id"]);
                 if ($foundCash) {
@@ -310,7 +310,7 @@ class IncomeOutcomeController extends Controller
             ]
         ));
 
-        if ($this->hasBundle("cashan") && isset($data["cash"])) {
+        if ($this->hasExtension("cashan") && isset($data["cash"])) {
             $cashMeans = $this->getCashMeans();
             $outcomeCurrency = $data["outcome"]["currency_id"];
             $outcomeMean = $data["outcome"]["mean_id"];

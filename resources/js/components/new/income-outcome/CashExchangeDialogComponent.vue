@@ -207,7 +207,7 @@ export default {
         getData() {
             this.ready = false;
 
-            axios.get(`/web-api/bundles/cash/${this.currency.id}`)
+            axios.get(`/web-api/extensions/cash/${this.currency.id}`)
                 .then(response => {
                     const data = response.data;
 

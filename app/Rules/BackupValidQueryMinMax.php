@@ -28,8 +28,8 @@ class BackupValidQueryMinMax implements Rule
     {
         $index1 = explode(".", $attribute)[2];
         $index2 = explode(".", $attribute)[4];
-        $min = request("bundleData.reports.$index1.queries.$index2.min_$this->type");
-        $max = request("bundleData.reports.$index1.queries.$index2.min_$this->type");
+        $min = request("extensionData.reports.$index1.queries.$index2.min_$this->type");
+        $max = request("extensionData.reports.$index1.queries.$index2.min_$this->type");
 
         if ($min == null || $max == null) {
             return true;

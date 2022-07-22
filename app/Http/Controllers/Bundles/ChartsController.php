@@ -9,7 +9,7 @@ class ChartsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(["auth", "bundle:charts"]);
+        $this->middleware(["auth", "extension:charts"]);
     }
 
     public function index()

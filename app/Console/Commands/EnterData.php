@@ -6,8 +6,8 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
 use App\User;
-use App\Bundle;
-use App\BundleImage;
+use App\Extension;
+use App\ExtensionImage;
 use App\Currency;
 use App\Cash;
 use App\Chart;
@@ -39,7 +39,7 @@ class EnterData extends Command
     }
 
     private $dataToEnter = [
-        "bundles" => [
+        "extensions" => [
             [
                 "title" => "Chart pack",
                 "code" => "charts",
@@ -241,25 +241,25 @@ class EnterData extends Command
         $this->newLine(2);
     }
 
-    private function addBundles()
+    private function addExtensions()
     {
-        $progressBar = $this->output->createProgressBar(count($this->dataToEnter["bundles"]));
-        $this->outputMessage("Creating bundles");
+        $progressBar = $this->output->createProgressBar(count($this->dataToEnter["extensions"]));
+        $this->outputMessage("Creating extensions");
 
         $progressBar->start();
 
-        foreach ($this->dataToEnter["bundles"] as $bundle) {
-            $bundleInDB = Bundle::updateOrCreate(["code" => $bundle["code"]], $bundle);
+        foreach ($this->dataToEnter["extensions"] as $extension) {
+            $extensionInDB = Extension::updateOrCreate(["code" => $extension["code"]], $extension);
 
-            foreach ($bundle["gallery"] as $image) {
-                $imageInDB = $bundleInDB->gallery()->where("image", $image)->first();
+            foreach ($extension["gallery"] as $image) {
+                $imageInDB = $extensionInDB->gallery()->where("image", $image)->first();
 
                 if (!$imageInDB) {
-                    $bundleInDB->gallery()->create(["image" => $image]);
+                    $extensionInDB->gallery()->create(["image" => $image]);
                 }
             }
 
-            $bundleInDB->gallery()->whereNotIn("image", $bundle["gallery"])->delete();
+            $extensionInDB->gallery()->whereNotIn("image", $extension["gallery"])->delete();
 
             $progressBar->advance();
         }
@@ -293,7 +293,7 @@ class EnterData extends Command
     {
         $this->addUsers();
         $this->addCurrenciesAndCash();
-        $this->addBundles();
+        $this->addExtensions();
         $this->addCharts();
 
         $this->info("Finished!");

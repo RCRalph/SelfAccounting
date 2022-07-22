@@ -93,9 +93,9 @@ Route::prefix("/web-api")->group(function () {
         Route::post("/settings", "WebAPI\ProfileController@updateSettings")->name("web-api.profile.update.settings");
     });
 
-    Route::prefix("/bundles")->group(function () {
+    Route::prefix("/extensions")->group(function () {
         Route::prefix("/cash")->group(function () {
-            Route::get("/{currency}", "WebAPI\Bundles\CashController@index")->name("web-api.bundles.cash");
+            Route::get("/{currency}", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
         });
     });
 });

@@ -16,9 +16,9 @@ class PagesController extends Controller
     public function payment()
     {
         $data = request()->validate([
-            "bundle" => ["nullable", "integer", "exists:bundles,id"]
+            "extension" => ["nullable", "integer", "exists:extensions,id"]
         ]);
-        $id = array_key_exists("bundle", $data) ? $data["bundle"] : 0;
+        $id = array_key_exists("extension", $data) ? $data["extension"] : 0;
         $userId = auth()->user()->id;
 
         $pageData = $this->getDataForPageRender();

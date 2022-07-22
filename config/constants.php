@@ -8,9 +8,9 @@ return [
         "public" => [
             "profile_picture" => "avatars",
 
-            "bundles" => [
-                "thumbnail" => "bundles/thumbnails",
-                "gallery" => "bundles/gallery"
+            "extensions" => [
+                "thumbnail" => "extensions/thumbnails",
+                "gallery" => "extensions/gallery"
             ]
         ]
     ]

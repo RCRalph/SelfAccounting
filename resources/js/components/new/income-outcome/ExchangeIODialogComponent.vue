@@ -15,7 +15,7 @@
                                 <div class="font-weight-bold text-h5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">From</div>
 
                                 <CashExchangeDialogComponent
-                                    v-if="bundles.hasBundle('cashan')"
+                                    v-if="extensions.hasExtension('cashan')"
                                     v-model="fromCash"
                                     :currency="fromData.currency"
                                     :meanID="from.mean_id"
@@ -74,7 +74,7 @@
                                 <div class="font-weight-bold text-h5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">To</div>
 
                                 <CashExchangeDialogComponent
-                                    v-if="bundles.hasBundle('cashan')"
+                                    v-if="extensions.hasExtension('cashan')"
                                     v-model="toCash"
                                     :currency="toData.currency"
                                     :meanID="to.mean_id"
@@ -158,16 +158,16 @@ import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 import CashExchangeDialogComponent from "@/income-outcome/CashExchangeDialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
-import { useBundlesStore } from "&/stores/bundles";
+import { useExtensionsStore } from "&/stores/extensions";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
-        const bundles = useBundlesStore();
+        const extensions = useExtensionsStore();
 
-        return { currencies, bundles };
+        return { currencies, extensions };
     },
     mixins: [validation, main],
     components: {

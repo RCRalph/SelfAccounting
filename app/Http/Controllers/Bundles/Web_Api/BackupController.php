@@ -22,14 +22,14 @@ use App\Income;
 use App\Outcome;
 use App\Category;
 use App\MeanOfPayment;
-use App\Bundle;
+use App\Extension;
 use App\Cash;
 
 class BackupController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(["auth", "bundle:backup"]);
+        $this->middleware(["auth", "extension:backup"]);
     }
 
     public function index()
@@ -47,13 +47,13 @@ class BackupController extends Controller
         $canCreate = now()->subDays(1)->gte($backup->last_backup);
         $canRestore = now()->subDays(1)->gte($backup->last_restoration);
 
-        // Check if user has bundles
-        $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premiumBundles);
-        $hasBundles = [];
+        // Check if user has extensions
+        $extensions = auth()->user()->extensions
+            ->merge(auth()->user()->premiumExtensions);
+        $hasExtensions = [];
 
-        foreach (Bundle::all() as $bundle) {
-            $hasBundles[$bundle->code] = $bundles->contains($bundle);
+        foreach (Extension::all() as $extension) {
+            $hasExtensions[$extension->code] = $extensions->contains($extension);
         }
 
         $restoreDate = "";
@@ -64,27 +64,27 @@ class BackupController extends Controller
                 )[0];
         }
 
-        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate", "hasBundles"));
+        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate", "hasExtensions"));
     }
 
     public function createBackup()
     {
         $this->authorize("createBackup", Backup::class);
 
-        // Check if user has bundles
-        $bundles = auth()->user()->bundles
-            ->merge(auth()->user()->premiumBundles);
-        $hasBundles = [];
+        // Check if user has extensions
+        $extensions = auth()->user()->extensions
+            ->merge(auth()->user()->premiumExtensions);
+        $hasExtensions = [];
 
-        foreach (Bundle::all() as $bundle) {
-            $hasBundles[$bundle->code] = $bundles->contains($bundle);
+        foreach (Extension::all() as $extension) {
+            $hasExtensions[$extension->code] = $extensions->contains($extension);
         }
 
         // Gather categories
         $categories = auth()->user()->categories
             ->map(fn ($item) => collect($item)->except("user_id", "created_at", "updated_at"));
 
-        if (!$hasBundles["charts"]) {
+        if (!$hasExtensions["charts"]) {
             foreach ($categories as $i => $category) {
                 unset($categories[$i]["show_on_charts"]);
             }
@@ -98,9 +98,9 @@ class BackupController extends Controller
 
         // Gather means of payment
         $means = auth()->user()->meansOfPayment
-            ->map(function ($item) use ($hasBundles) {
+            ->map(function ($item) use ($hasExtensions) {
                 $item = collect($item)->except("user_id", "created_at", "updated_at");
-                if (!$hasBundles["charts"]) {
+                if (!$hasExtensions["charts"]) {
                     unset($item["show_on_charts"]);
                 }
                 $item["first_entry_amount"] *= 1;
@@ -135,11 +135,11 @@ class BackupController extends Controller
                 return $item;
             });
 
-        $bundleData = [];
+        $extensionData = [];
 
         // Gather cash
-        if ($hasBundles["cashan"]) {
-            $bundleData["cash"] = auth()->user()->cash
+        if ($hasExtensions["cashan"]) {
+            $extensionData["cash"] = auth()->user()->cash
                 ->map(fn ($item) => [
                         "currency_id" => $item->currency_id,
                         "value" => $item->value * 1,
@@ -147,10 +147,10 @@ class BackupController extends Controller
                     ]
                 );
 
-            $bundleData["cashMeans"] = [];
+            $extensionData["cashMeans"] = [];
             foreach ($this->getCashMeans() as $currency => $mean) {
                 if ($mean) {
-                    array_push($bundleData["cashMeans"], [
+                    array_push($extensionData["cashMeans"], [
                         "currency_id" => $currency,
                         "mean_id" => $meansIDs[$mean]
                     ]);
@@ -159,19 +159,19 @@ class BackupController extends Controller
         }
 
         // Gather reports
-        if ($hasBundles["report"]) {
-            $bundleData["reports"] = [];
+        if ($hasExtensions["report"]) {
+            $extensionData["reports"] = [];
             $reports = auth()->user()->reports;
 
             foreach ($reports as $i => $report) {
                 array_push(
-                    $bundleData["reports"],
+                    $extensionData["reports"],
                     $report->only("title", "income_addition", "sort_dates_desc", "calculate_sum", "show_columns")
                 );
 
-                $bundleData["reports"][$i]["queries"] = [];
-                $bundleData["reports"][$i]["additionalEntries"] = [];
-                $bundleData["reports"][$i]["users"] = [];
+                $extensionData["reports"][$i]["queries"] = [];
+                $extensionData["reports"][$i]["additionalEntries"] = [];
+                $extensionData["reports"][$i]["users"] = [];
 
                 foreach ($report->queries as $query) {
                     unset($query["id"], $query["report_id"]);
@@ -183,7 +183,7 @@ class BackupController extends Controller
                     $query["category_id"] = $query["category_id"] === null ? 0 : $categoriesIDs[$query["category_id"]];
                     $query["mean_id"] = $query["mean_id"] === null ? 0 : $meansIDs[$query["mean_id"]];
 
-                    array_push($bundleData["reports"][$i]["queries"], $query->toArray());
+                    array_push($extensionData["reports"][$i]["queries"], $query->toArray());
                 }
 
                 foreach ($report->additionalEntries as $entry) {
@@ -194,11 +194,11 @@ class BackupController extends Controller
                     $entry["category_id"] = $entry["category_id"] === null ? 0 : $categoriesIDs[$entry["category_id"]];
                     $entry["mean_id"] = $entry["mean_id"] === null ? 0 : $meansIDs[$entry["mean_id"]];
 
-                    array_push($bundleData["reports"][$i]["additionalEntries"], $entry->toArray());
+                    array_push($extensionData["reports"][$i]["additionalEntries"], $entry->toArray());
                 }
 
                 foreach ($report->sharedUsers as $user) {
-                    array_push($bundleData["reports"][$i]["users"], $user->email);
+                    array_push($extensionData["reports"][$i]["users"], $user->email);
                 }
             }
         }
@@ -252,7 +252,7 @@ class BackupController extends Controller
             "outcome.*.category_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
             "outcome.*.mean_id" => ["present", "nullable", "integer", new BackupValidCategoryMean("outcome")],
 
-            // Bundle data
+            // Extension data
             "bundleData" => ["present", "array"],
 
             // Cash

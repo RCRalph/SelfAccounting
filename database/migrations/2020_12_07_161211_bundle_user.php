@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class BundleUser extends Migration
+class ExtensionUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class BundleUser extends Migration
      */
     public function up()
     {
-        Schema::create('bundle_user', function (Blueprint $table) {
+        Schema::create('extension_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bundle_id')->constrained()->onDelete('cascade');
+            $table->foreignId('extension_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('enabled')->default(true);
             $table->timestamps();
 
-            $table->index(['id', 'bundle_id', 'user_id']);
+            $table->index(['id', 'extension_id', 'user_id']);
         });
     }
 
@@ -31,6 +31,6 @@ class BundleUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bundle_user');
+        Schema::dropIfExists('extension_user');
     }
 }

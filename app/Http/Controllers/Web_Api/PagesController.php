@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\User;
-use App\Bundle;
+use App\Extension;
 
 class PagesController extends Controller
 {
@@ -17,8 +17,8 @@ class PagesController extends Controller
 
     public function payment()
     {
-        $bundles = Bundle::all()->map(fn($item) => $item->only(["id", "price", "title"]));
+        $extensions = Extension::all()->map(fn($item) => $item->only(["id", "price", "title"]));
 
-        return response()->json(compact("bundles"));
+        return response()->json(compact("extensions"));
     }
 }

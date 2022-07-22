@@ -23,7 +23,7 @@ class ReportsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(["auth", "bundle:report"]);
+        $this->middleware(["auth", "extension:report"]);
     }
 
     private function getReportCreationData()

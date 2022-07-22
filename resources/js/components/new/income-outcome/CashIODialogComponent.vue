@@ -196,7 +196,7 @@ export default {
     mounted() {
         this.ready = false;
 
-        axios.get(`/web-api/bundles/cash/${this.currencies.usedCurrency}`)
+        axios.get(`/web-api/extensions/cash/${this.currencies.usedCurrency}`)
             .then(response => {
                 const data = response.data;
 
