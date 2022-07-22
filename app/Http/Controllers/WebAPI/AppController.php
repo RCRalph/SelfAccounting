@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
-use App\Bundle;
+use App\Extension;
 
 class AppController extends Controller
 {
@@ -39,8 +39,8 @@ class AppController extends Controller
                 return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
                     "currencies" => $currencies,
-                    "bundles" => Bundle::all()->makeHidden(["id", "created_at", "updated_at"]),
-                    "ownedBundles" => Bundle::whereIn("code", auth()->user()->bundleCodes)
+                    "extensions" => Extension::all()->makeHidden(["id", "created_at", "updated_at"]),
+                    "ownedExtensions" => Extension::whereIn("code", auth()->user()->ExtensionCodes)
                         ->orderBy("title")
                         ->pluck("code")
                 ];

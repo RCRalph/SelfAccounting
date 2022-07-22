@@ -97,7 +97,7 @@
 
                 <div class="add-income-buttons">
                     <CashIODialogComponent
-                        v-if="bundles.hasBundle('cashan')"
+                        v-if="extensions.hasExtension('cashan')"
                         v-model="cash"
                         :meanIDs="meanIDs"
                         :disabled="loading"
@@ -151,16 +151,16 @@ import SetCommonValuesComponent from "@/income-outcome/SetCommonValuesComponent.
 import CashIODialogComponent from "@/income-outcome/CashIODialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
-import { useBundlesStore } from "&/stores/bundles";
+import { useExtensionsStore } from "&/stores/extensions";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
-        const bundles = useBundlesStore();
+        const extensions = useExtensionsStore();
 
-        return { currencies, bundles };
+        return { currencies, extensions };
     },
     mixins: [validation, main],
     components: {

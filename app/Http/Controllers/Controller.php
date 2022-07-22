@@ -12,7 +12,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
-use App\Bundle;
+use App\Extension;
 use App\Currency;
 use App\Cash;
 use App\User;
@@ -21,7 +21,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public $BUNDLE_INFO_LIST = [
+    public $EXTENSION_INFO_LIST = [
         "charts" => [
             "icon" => "fas fa-chart-bar",
             "directory" => "charts"
@@ -45,8 +45,8 @@ class Controller extends BaseController
     ];
 
     public $PUBLIC_DIRECTORIES = [
-        "bundles/thumbnails",
-        "bundles/gallery"
+        "extensions/thumbnails",
+        "extensions/gallery"
     ];
 
     public $TABLE_HEAD = ["date", "title", "amount", "price", "value", "category", "mean"];
@@ -72,11 +72,11 @@ class Controller extends BaseController
             function () {
                 $retArr = auth()->user()->only("darkmode", "profile_picture", "id", "hide_all_tutorials");
                 $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
-                $retArr["bundle_info"] = $this->BUNDLE_INFO_LIST;
+                $retArr["bundle_info"] = $this->EXTENSION_INFO_LIST;
 
-                // Select bundles available to the user
-                $retArr["bundles"] = auth()->user()->premiumBundles
-                    ->merge(auth()->user()->bundles)
+                // Select extensions available to the user
+                $retArr["bundles"] = auth()->user()->premiumExtensions
+                    ->merge(auth()->user()->extensions)
                     ->filter(
                         fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
                     );
@@ -161,13 +161,13 @@ class Controller extends BaseController
         );
     }
 
-    public function hasBundle($code, $id = null)
+    public function hasExtension($code, $id = null)
     {
         $user = $id == null ? auth()->user() : User::find($id);
 
-        $bundle = Bundle::firstWhere("code", $code);
-        return $user->bundles->contains($bundle) ||
-            $user->premiumBundles->contains($bundle);
+        $extension = Extension::firstWhere("code", $code);
+        return $user->extensions->contains($extension) ||
+            $user->premiumExtensions->contains($extension);
     }
 
     public function getCurrencies()

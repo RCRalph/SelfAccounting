@@ -65,14 +65,14 @@ class User extends Authenticatable
         return $this->hasMany(Outcome::class);
     }
 
-    public function bundles()
+    public function extensions()
     {
-        return $this->belongsToMany(Bundle::class, 'bundle_user', 'user_id', 'bundle_id')->withPivot('enabled');
+        return $this->belongsToMany(Extension::class, 'extension_user', 'user_id', 'extension_id')->withPivot('enabled');
     }
 
-    public function premiumBundles()
+    public function premiumExtensions()
     {
-        return $this->belongsToMany(Bundle::class, 'bundle_user_premium', 'user_id', 'bundle_id');
+        return $this->belongsToMany(Extension::class, 'extension_user_premium', 'user_id', 'extension_id');
     }
 
     public function backup()
@@ -146,12 +146,12 @@ class User extends Authenticatable
         );
     }
 
-    protected function bundleCodes(): Attribute
+    protected function extensionCodes(): Attribute
     {
         return Attribute::make(
             get: function () {
-                $codes = auth()->user()->bundles->whereInStrict("pivot_enabled", [null, true])->pluck("code");
-                $premiumCodes = auth()->user()->premiumBundles()->pluck("bundles.code");
+                $codes = auth()->user()->extensions->whereInStrict("pivot_enabled", [null, true])->pluck("code");
+                $premiumCodes = auth()->user()->premiumExtensions()->pluck("extensions.code");
 
                 return $codes->merge($premiumCodes)->unique();
             }

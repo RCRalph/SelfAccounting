@@ -9,7 +9,7 @@ class BackupController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(["auth", "bundle:backup"]);
+        $this->middleware(["auth", "extension:backup"]);
     }
 
     public function index()

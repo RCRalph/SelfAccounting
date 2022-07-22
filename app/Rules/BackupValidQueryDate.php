@@ -27,8 +27,8 @@ class BackupValidQueryDate implements Rule
     {
         $index1 = explode(".", $attribute)[2];
         $index2 = explode(".", $attribute)[4];
-        $minDate = request("bundleData.reports.$index1.queries.$index2.min_date");
-        $maxDate = request("bundleData.reports.$index1.queries.$index2.max_date");
+        $minDate = request("extensionData.reports.$index1.queries.$index2.min_date");
+        $maxDate = request("extensionData.reports.$index1.queries.$index2.max_date");
 
         if ($minDate == null || $maxDate == null) {
             return true;

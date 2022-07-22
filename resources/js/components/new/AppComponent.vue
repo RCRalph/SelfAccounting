@@ -131,14 +131,14 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
-import { useBundlesStore } from "&/stores/bundles";
+import { useExtensionsStore } from "&/stores/extensions";
 
 export default {
     setup() {
         const currencies = useCurrenciesStore();
-        const bundles = useBundlesStore();
+        const extensions = useExtensionsStore();
 
-        return { currencies, bundles };
+        return { currencies, extensions };
     },
     data() {
         return {
@@ -161,25 +161,25 @@ export default {
                 { title: "Settings", icon: "fas fa-cog", link: "/settings" }
             ];
 
-            if (this.bundles.ownedBundlesObjects.length) {
+            if (this.extensions.ownedExtensionsObjects.length) {
                 const links = [{
-                    icon: "mdi-view-list",
-                    text: "Bundle list",
-                    link: "/bundles/"
+                    icon: "mdi-shopping",
+                    text: "Marketplace",
+                    link: "/extensions/"
                 }];
 
-                this.bundles.ownedBundlesObjects.forEach(item => {
+                this.extensions.ownedExtensionsObjects.forEach(item => {
                     links.push({
                         icon: item.icon,
                         text: item.title,
-                        link: `/bundle/${item.directory}`
+                        link: `/extension/${item.directory}`
                     });
                 });
 
-                retArr.push({ title: "Bundles", icon: "mdi-package-variant", links });
+                retArr.push({ title: "Extensions", icon: "mdi-package-variant", links });
             }
             else {
-                retArr.push({ title: "Bundles", icon: "mdi-package-variant", link: "/bundles" });
+                retArr.push({ title: "Extensions", icon: "mdi-package-variant", link: "/extensions" });
             }
 
             if (!this.user.hide_all_tutorials) {
@@ -215,8 +215,8 @@ export default {
                 this.currencies.setCurrencies(data.currencies);
                 this.currencies.changeCurrency(data.currencies[0].id);
 
-                this.bundles.setBundles(data.bundles);
-                this.bundles.setOwnedBundles(data.ownedBundles);
+                this.extensions.setExtensions(data.extensions);
+                this.extensions.setOwnedExtensions(data.ownedExtensions);
 
                 this.ready = true;
             });

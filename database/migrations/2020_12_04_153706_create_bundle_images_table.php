@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBundleImagesTable extends Migration
+class CreateExtensionImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateBundleImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('bundle_images', function (Blueprint $table) {
+        Schema::create('extension_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bundle_id')->constrained()->onDelete('cascade');
+            $table->foreignId('extension_id')->constrained()->onDelete('cascade');
             $table->string('image', 64)->unique();
             $table->timestamps();
 
-            $table->index(['id', 'bundle_id']);
+            $table->index(['id', 'extension_id']);
         });
     }
 
@@ -30,6 +30,6 @@ class CreateBundleImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bundle_images');
+        Schema::dropIfExists('extension_images');
     }
 }

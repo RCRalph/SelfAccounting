@@ -296,7 +296,7 @@ class IOController extends Controller
             $this->getTypeRelation()->create($item);
         }
 
-        if (auth()->user()->bundleCodes->contains("cashan") && request("cash")) {
+        if (auth()->user()->extensionCodes->contains("cashan") && request("cash")) {
             $cash = request()->validate([
                 "cash" => ["required", "array"],
                 "cash.*.id" => ["required", "integer", new CashBelongsToCurrency($currency)],

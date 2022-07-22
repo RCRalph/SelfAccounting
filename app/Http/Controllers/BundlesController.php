@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Bundle;
-use App\BundleImage;
+use App\Extension;
+use App\ExtensionImage;
 
 class BundlesController extends Controller
 {
@@ -18,7 +18,7 @@ class BundlesController extends Controller
     {
         $pageData = $this->getDataForPageRender();
         $tutorial = $this->getTutorial("bundles.md");
-        $bundles = Bundle::all()->sortBy("created_at")->map(function ($item) {
+        $bundles = Extension::all()->sortBy("created_at")->map(function ($item) {
             $item->thumbnail = $this->getLocalImageLink(
                 $this->PUBLIC_DIRECTORIES[0],
                 $item->thumbnail
@@ -29,15 +29,15 @@ class BundlesController extends Controller
         return view("bundles.index", compact("pageData", "bundles", "tutorial"));
     }
 
-    public function show(Bundle $bundle) {
+    public function show(Extension $bundle) {
         $pageData = $this->getDataForPageRender();
 
-        $hasBundle = auth()->user()->bundles->contains($bundle);
-        $hasBundlePremium = auth()->user()->premiumBundles->contains($bundle);
+        $hasBundle = auth()->user()->extensions->contains($bundle);
+        $hasBundlePremium = auth()->user()->premiumExtensions->contains($bundle);
 
         $bundleEnabled = false;
         if ($hasBundle) {
-            $bundleEnabled = auth()->user()->bundles
+            $bundleEnabled = auth()->user()->extensions
                 ->where("id", $bundle->id)
                 ->first()->pivot->enabled;
         }

@@ -29,7 +29,7 @@ class CorrectValueForCash implements Rule
     {
         $id = explode(".", $attribute)[2];
         return Cash::where([
-            "currency_id" => request("bundleData.cash.$id.currency_id"),
+            "currency_id" => request("extensionData.cash.$id.currency_id"),
             "value" => $value
         ])->count();
     }

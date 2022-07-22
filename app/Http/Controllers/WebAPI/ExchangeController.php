@@ -101,7 +101,7 @@ class ExchangeController extends Controller
         auth()->user()->outcome()->create($data["from"]);
         auth()->user()->income()->create($data["to"]);
 
-        if (auth()->user()->bundleCodes->contains("cashan")) {
+        if (auth()->user()->extensionCodes->contains("cashan")) {
             if (request("fromCash")) {
                 $cash = request()->validate([
                     "fromCash" => ["required", "array"],
