@@ -151,6 +151,10 @@ class User extends Authenticatable
         return Attribute::make(
             get: function () {
                 $codes = auth()->user()->extensions->whereInStrict("pivot_enabled", [null, true])->pluck("code");
+                if (!in_array(strtolower($this->account_type), ["admin", "premium"])) {
+                    return $codes;
+                }
+
                 $premiumCodes = auth()->user()->premiumExtensions()->pluck("extensions.code");
 
                 return $codes->merge($premiumCodes)->unique();

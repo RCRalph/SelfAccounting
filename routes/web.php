@@ -94,6 +94,8 @@ Route::prefix("/web-api")->group(function () {
     });
 
     Route::prefix("/extensions")->group(function () {
+        Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");
+
         Route::prefix("/cash")->group(function () {
             Route::get("/{currency}", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
         });
