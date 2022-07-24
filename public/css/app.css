@@ -29712,6 +29712,13 @@ tr:hover {
   justify-content: center;
 }
 
+.extension-description {
+  font-size: 1rem;
+}
+.extension-description p, .extension-description ul {
+  margin-bottom: 8px;
+}
+
 /*!
  * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors

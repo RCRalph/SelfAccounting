@@ -19,7 +19,12 @@ class ExtensionsController extends Controller
     public function index()
     {
         $extensions = Extension::all()->load("gallery")
-            ->makeHidden(["id", "thumbnail", "created_at", "updated_at", "icon", "directory"]);
+            ->makeHidden(["id", "thumbnail", "created_at", "updated_at", "icon", "directory"])
+            ->toArray();
+
+        foreach ($extensions as $key => $item) {
+            $extensions[$key]["gallery"] = array_column($item["gallery"], "image_link");
+        }
 
         $ownedExtensions = auth()->user()->extensions()
             ->select("code", "enabled")->get()
@@ -31,5 +36,27 @@ class ExtensionsController extends Controller
         $isPremium = in_array(strtolower(auth()->user()->account_type), ["admin", "premium"]);
 
         return response()->json(compact("extensions", "ownedExtensions", "premiumExtensions", "isPremium"));
+    }
+
+    public function toggle()
+    {
+        $this->authorize("toggle", request()->extension);
+
+        $currentlyEnabled = auth()->user()->extensions()
+            ->find(request()->extension)->pivot->enabled;
+
+        auth()->user()->extensions()
+            ->updateExistingPivot(request()->extension, ["enabled" => !$currentlyEnabled]);
+
+        return response()->json(["extensions" => auth()->user()->refresh()->extensionCodes]);
+    }
+
+    public function togglePremium()
+    {
+        $this->authorize("togglePremium", request()->extension);
+
+        auth()->user()->premiumExtensions()->toggle(request()->extension);
+
+        return response()->json(["extensions" => auth()->user()->refresh()->extensionCodes]);
     }
 }

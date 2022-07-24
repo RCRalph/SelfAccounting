@@ -11,7 +11,31 @@ class ExtensionPolicy
     use HandlesAuthorization;
 
     public function hasExtension(User $user, Extension $extension) {
-        return $user->Extensions->contains($extension);
+        return $user->extensions->contains($extension);
+    }
+
+    /**
+     * Determine whether the user can toggle the model.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Extension  $extension
+     * @return mixed
+     */
+    public function toggle(User $user, Extension $extension)
+    {
+        return $user->extensions->contains($extension);
+    }
+
+    /**
+     * Determine whether the user can toggle the model using Premium.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Extension  $extension
+     * @return mixed
+     */
+    public function togglePremium(User $user, Extension $extension)
+    {
+        return in_array(strtolower($user->account_type), ["admin", "premium"]) && !$user->extensions->contains($extension);
     }
 
     /**

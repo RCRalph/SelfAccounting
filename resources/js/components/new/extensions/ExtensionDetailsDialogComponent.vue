@@ -4,45 +4,46 @@
             <v-btn outlined block v-on="on" v-bind="attrs">Details</v-btn>
         </template>
 
-        <v-card v-if="ready">
+        <v-card>
+            <v-card-title class="justify-center mb-3">{{ extension.title }}</v-card-title>
 
+            <v-carousel
+                cycle
+                height="400"
+                show-arrows-on-hover
+            >
+                <v-carousel-item
+                    v-for="(image, i) in extension.gallery"
+                    :key="i"
+                    :src="image"
+                ></v-carousel-item>
+            </v-carousel>
+
+            <v-card-text v-html="description" class="mt-6 extension-description"></v-card-text>
         </v-card>
-
-        <v-card v-else>
-            <v-card-title>Extension details</v-card-title>
-
-            <v-card-text class="d-flex justify-center">
-                <v-progress-circular
-                    indeterminate
-                    size="96"
-                ></v-progress-circular>
-            </v-card-text>
-        </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
 <script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-
-import { useExtensionsStore } from "&/stores/extensions";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 export default {
-    setup() {
-        const extensions = useExtensionsStore();
-
-        return { extensions };
-    },
-    components: {
-        ErrorSnackbarComponent
+    props: {
+        extension: {
+            required: true,
+            type: Object
+        }
     },
     data() {
         return {
-            dialog: false,
-            error: false,
-            ready: false
+            dialog: false
         }
+    },
+    computed: {
+        description() {
+            return DOMPurify.sanitize(marked(this.extension.description));
+        },
     }
 }
 </script>
