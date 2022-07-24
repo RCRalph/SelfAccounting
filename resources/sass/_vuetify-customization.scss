@@ -94,3 +94,11 @@ tr {
     display: flex;
     justify-content: center;
 }
+
+.extension-description {
+    font-size: 1rem;
+
+    p, ul {
+        margin-bottom: 8px;
+    }
+}

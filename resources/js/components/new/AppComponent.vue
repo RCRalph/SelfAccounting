@@ -164,7 +164,7 @@ export default {
             if (this.extensions.ownedExtensionsObjects.length) {
                 const links = [{
                     icon: "mdi-shopping",
-                    text: "Marketplace",
+                    text: "Store",
                     link: "/extensions/"
                 }];
 

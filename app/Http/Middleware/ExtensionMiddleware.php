@@ -15,11 +15,29 @@ class ExtensionMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $extensionCode)
+    public function handle(Request $request, Closure $next, $extensionCode = null)
     {
-        if (auth()->user()->extensionCodes->doesntContain($extensionCode)) {
-            abort(403);
+        if ($request->route("code")) {
+            if (Extension::all()->pluck("code")->doesntContain($request->route("code"))) {
+                abort(404);
+            }
+            else {
+                $extension = Extension::where("code", $request->route("code"))->first();
+            }
         }
+        else if ($extensionCode) {
+            if (auth()->user()->extensionCodes->doesntContain($extensionCode)) {
+                abort(403);
+            }
+            else {
+                $extension = Extension::where("code", $request->route("code"))->first();
+            }
+        }
+        else if (!$request->route("code") && !$extensionCode) {
+            abort(500);
+        }
+
+        $request->merge(compact("extension"));
 
         return $next($request);
     }

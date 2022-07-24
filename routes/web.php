@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+use App\Extension;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -94,6 +96,16 @@ Route::prefix("/web-api")->group(function () {
     });
 
     Route::prefix("/extensions")->group(function () {
+        Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");
+
+        Route::group([
+            "prefix" => "/{code}",
+            "middleware" => "extension"
+        ], function () {
+            Route::post("/toggle", "WebAPI\Extensions\ExtensionsController@toggle")->name("web-api.extensions.code.toggle");
+            Route::post("/toggle-premium", "WebAPI\Extensions\ExtensionsController@togglePremium")->name("web-api.extensions.code.toggle-premium");
+        });
+
         Route::prefix("/cash")->group(function () {
             Route::get("/{currency}", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
         });

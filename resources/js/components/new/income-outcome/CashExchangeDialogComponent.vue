@@ -163,12 +163,12 @@ export default {
     },
     computed: {
         usesCash() {
-            if (this.meanID != this.cashMean) {
+            if (this.meanID != this.cashMean || this.cashMean == null) {
                 this.$emit("input", {});
                 this.selectedValues = [];
             }
 
-            return this.meanID == this.cashMean;
+            return this.cashMean != null && this.meanID == this.cashMean;
         },
         cashObject() {
             return Object.entries(this.cash).map(item => ({
