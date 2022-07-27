@@ -112,6 +112,12 @@
             </template>
         </v-navigation-drawer>
 
+        <TutorialComponent
+            v-if="!user.hide_all_tutorials"
+            v-model="disabledTutorials"
+            @hideAll="updateUser"
+        ></TutorialComponent>
+
         <v-main>
             <div class="menu-margin">
                 <div class="ma-4">
@@ -133,6 +139,8 @@
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
 
+import TutorialComponent from "@/TutorialComponent.vue";
+
 export default {
     setup() {
         const currencies = useCurrenciesStore();
@@ -140,12 +148,16 @@ export default {
 
         return { currencies, extensions };
     },
+    components: {
+        TutorialComponent
+    },
     data() {
         return {
             drawer: true,
             profileItems: [
                 { title: "View profile", icon: "mdi-account", link: "/profile" }
             ],
+            disabledTutorials: [],
             mini: true,
             menuClicked: false,
             user: {},
@@ -211,6 +223,8 @@ export default {
 
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
+
+                this.disabledTutorials = data.disabledTutorials;
 
                 this.currencies.setCurrencies(data.currencies);
                 this.currencies.changeCurrency(data.currencies[0].id);

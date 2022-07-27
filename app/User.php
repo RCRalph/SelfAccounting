@@ -100,6 +100,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Report::class);
     }
 
+    public function disabledTutorials()
+    {
+        return $this->belongsToMany(Tutorial::class, 'tutorial_user', 'user_id', 'tutorial_id');
+    }
+
     protected function profilePictureLink(): Attribute
     {
         return Attribute::make(
@@ -150,12 +155,12 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function () {
-                $codes = auth()->user()->extensions->whereInStrict("pivot.enabled", [null, true])->pluck("code");
+                $codes = $this->extensions->whereInStrict("pivot.enabled", [null, true])->pluck("code");
                 if (!in_array(strtolower($this->account_type), ["admin", "premium"])) {
                     return $codes;
                 }
 
-                $premiumCodes = auth()->user()->premiumExtensions()->pluck("extensions.code");
+                $premiumCodes = $this->premiumExtensions()->pluck("extensions.code");
 
                 return $codes->merge($premiumCodes)->unique();
             }

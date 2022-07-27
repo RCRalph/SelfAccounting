@@ -29638,6 +29638,31 @@ tr:hover {
   margin-bottom: 8px;
 }
 
+.tutorial-text {
+  padding-top: 20px !important;
+  padding-bottom: 10px !important;
+  font-size: 1rem;
+  text-align: justify;
+}
+.tutorial-text h1 {
+  padding: 12px 0;
+  text-align: center;
+  font-weight: bold;
+}
+.tutorial-text h2 {
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+.tutorial-text p {
+  margin: 8px 0;
+}
+.tutorial-text img {
+  margin: 12px auto;
+  max-width: 100%;
+  display: block;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;

@@ -95,6 +95,12 @@ Route::prefix("/web-api")->group(function () {
         Route::post("/settings", "WebAPI\ProfileController@updateSettings")->name("web-api.profile.update.settings");
     });
 
+    Route::prefix("/tutorials")->group(function () {
+        Route::get("/", "WebAPI\TutorialController@index")->name("web-api.tutorials");
+        Route::post("/hide", "WebAPI\TutorialController@hide")->name("web-api.tutorials.hide");
+        Route::post("/hide-all", "WebAPI\TutorialController@hideAll")->name("web-api.tutorials.hideAll");
+    });
+
     Route::prefix("/extensions")->group(function () {
         Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");
 

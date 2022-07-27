@@ -11,6 +11,7 @@ use App\ExtensionImage;
 use App\Currency;
 use App\Cash;
 use App\Chart;
+use App\Tutorial;
 
 class EnterData extends Command
 {
@@ -151,6 +152,18 @@ class EnterData extends Command
                 "id" => 5,
                 "name" => "Outcome by means of payment"
             ]
+        ],
+        "tutorials" => [
+            [
+                "id" => 1,
+                "route" => "/",
+                "filename" => "dashboard.md"
+            ],
+            [
+                "id" => 2,
+                "route" => "/settings",
+                "filename" => "settings.md"
+            ]
         ]
     ];
 
@@ -284,6 +297,22 @@ class EnterData extends Command
         $this->newLine(2);
     }
 
+    private function addTutorials()
+    {
+        $progressBar = $this->output->createProgressBar(count($this->dataToEnter["tutorials"]));
+        $this->outputMessage("Creating tutorials");
+
+        $progressBar->start();
+
+        foreach ($this->dataToEnter["tutorials"] as $tutorial) {
+            Tutorial::updateOrCreate(["id" => $tutorial["id"]], $tutorial);
+
+            $progressBar->advance();
+        }
+        $progressBar->finish();
+        $this->newLine(2);
+    }
+
     /**
      * Execute the console command.
      *
@@ -295,6 +324,7 @@ class EnterData extends Command
         $this->addCurrenciesAndCash();
         $this->addExtensions();
         $this->addCharts();
+        $this->addTutorials();
 
         $this->info("Finished!");
 
