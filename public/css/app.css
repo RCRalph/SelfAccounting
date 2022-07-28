@@ -29655,6 +29655,11 @@ tr:hover {
   margin-top: 16px;
   margin-bottom: 8px;
 }
+.tutorial-text h3, .tutorial-text .h3, .tutorial-text .tutorial-wrapper .tutorial-content h2, .tutorial-wrapper .tutorial-content .tutorial-text h2, .tutorial-text .tutorial-wrapper .tutorial-content .h2, .tutorial-wrapper .tutorial-content .tutorial-text .h2, .tutorial-text .chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .chart-title, .chart-gallery-wrapper .chart-gallery-block .chart-gallery-element .tutorial-text .chart-title, .tutorial-text .profile-wrapper .username, .profile-wrapper .tutorial-text .username, .tutorial-text .trashbin {
+  font-weight: bold;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
 .tutorial-text p {
   margin: 8px 0;
 }

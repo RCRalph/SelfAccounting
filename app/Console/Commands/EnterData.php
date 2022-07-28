@@ -155,14 +155,24 @@ class EnterData extends Command
         ],
         "tutorials" => [
             [
-                "id" => 1,
                 "route" => "/",
                 "filename" => "dashboard.md"
             ],
             [
-                "id" => 2,
                 "route" => "/settings",
                 "filename" => "settings.md"
+            ],
+            [
+                "route" => "/income",
+                "filename" => "income.md"
+            ],
+            [
+                "route" => "/outcome",
+                "filename" => "outcome.md"
+            ],
+            [
+                "route" => "/extensions/store",
+                "filename" => "extensions.md"
             ]
         ]
     ];
@@ -305,7 +315,7 @@ class EnterData extends Command
         $progressBar->start();
 
         foreach ($this->dataToEnter["tutorials"] as $tutorial) {
-            Tutorial::updateOrCreate(["id" => $tutorial["id"]], $tutorial);
+            Tutorial::updateOrCreate(["route" => $tutorial["route"]], $tutorial);
 
             $progressBar->advance();
         }

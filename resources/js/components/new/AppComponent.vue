@@ -177,21 +177,21 @@ export default {
                 const links = [{
                     icon: "mdi-shopping",
                     text: "Store",
-                    link: "/extensions/"
+                    link: "/extensions/store"
                 }];
 
                 this.extensions.ownedExtensionsObjects.forEach(item => {
                     links.push({
                         icon: item.icon,
                         text: item.title,
-                        link: `/extension/${item.directory}`
+                        link: `/extensions/${item.directory}`
                     });
                 });
 
                 retArr.push({ title: "Extensions", icon: "mdi-package-variant", links });
             }
             else {
-                retArr.push({ title: "Extensions", icon: "mdi-package-variant", link: "/extensions" });
+                retArr.push({ title: "Extensions", icon: "mdi-package-variant", link: "/extensions/store" });
             }
 
             if (!this.user.hide_all_tutorials) {

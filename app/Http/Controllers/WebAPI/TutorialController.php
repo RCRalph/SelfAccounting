@@ -23,7 +23,7 @@ class TutorialController extends Controller
         ])["route"];
 
         $tutorial = Tutorial::where("route", $route)->first();
-        $tutorialText = Storage::disk("local")->get("/files/tutorials/$tutorial->filename");
+        $tutorialText = Storage::disk("local")->get("/files/tutorials/new/$tutorial->filename");
 
         if (!$tutorialText) {
             abort(404, "Tutorial doesn't exist");

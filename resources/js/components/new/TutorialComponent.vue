@@ -3,10 +3,10 @@
         <v-card>
             <v-card-text v-html="tutorial" class="tutorial-text"></v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around flex-wrap">
+            <v-card-actions class="d-flex justify-space-around flex-wrap flex-md-row flex-column-reverse">
                 <v-btn
                     outlined
-                    class="mx-3 my-2"
+                    class="mx-0 my-1"
                     :block="$vuetify.breakpoint.smAndDown"
                     width="190"
                     color="error"
@@ -16,7 +16,7 @@
 
                 <v-btn
                     outlined
-                    class="mx-3 my-2"
+                    class="mx-0 my-1"
                     :block="$vuetify.breakpoint.smAndDown"
                     width="190"
                     color="primary"
@@ -26,7 +26,7 @@
 
                 <v-btn
                     outlined
-                    class="mx-3 my-2"
+                    class="mx-0 my-1"
                     :block="$vuetify.breakpoint.smAndDown"
                     width="190"
                     @click="close"
