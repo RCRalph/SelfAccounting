@@ -102,6 +102,7 @@
                         :meanIDs="meanIDs"
                         :disabled="loading"
                         :sumByMeans="sumByMeans"
+                        :type="type"
                     ></CashIODialogComponent>
 
                     <v-btn color="error" class="mx-1" width="90" outlined :disabled="data.length == 1 || loading" @click="removeData">

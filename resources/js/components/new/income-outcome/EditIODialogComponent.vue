@@ -172,10 +172,10 @@ export default {
 
             const dataNoComma = _.cloneDeep(this.data);
             if (typeof dataNoComma.amount == "string") {
-                dataNoComma.amount.replaceAll(",", ".");
+                dataNoComma.amount = dataNoComma.amount.replaceAll(",", ".");
             }
             if (typeof dataNoComma.price == "string") {
-                dataNoComma.price.replaceAll(",", ".");
+                dataNoComma.price = dataNoComma.price.replaceAll(",", ".");
             }
 
             axios

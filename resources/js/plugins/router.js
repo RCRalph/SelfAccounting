@@ -15,7 +15,7 @@ const routes = [
     { path: "/outcome", component: IOComponent, props: { type: "outcome" } },
     { path: "/settings", component: SettingsComponent },
     { path: "/profile", component: ProfileComponent },
-    { path: "/extensions", component: ExtensionsComponent }
+    { path: "/extensions/store", component: ExtensionsComponent }
 ]
 
 export default new VueRouter({ routes/*, mode: "history"*/ })
