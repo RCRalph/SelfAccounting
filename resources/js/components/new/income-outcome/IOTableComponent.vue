@@ -361,14 +361,9 @@ export default {
         titleSearch() {
             this.updateWithOffset();
         },
-        'filteredData.dates'() {
-            this.updateWithOffset();
-        },
-        'filteredData.categories'() {
-            this.updateWithOffset();
-        },
-        'filteredData.means'() {
-            this.updateWithOffset();
+        filteredData: {
+            handler: "updateWithOffset",
+            deep: true
         }
     }
 }
