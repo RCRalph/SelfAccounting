@@ -18,4 +18,4 @@ const routes = [
     { path: "/extensions/store", component: ExtensionsComponent }
 ]
 
-export default new VueRouter({ routes/*, mode: "history"*/ })
+export default new VueRouter({ routes })
