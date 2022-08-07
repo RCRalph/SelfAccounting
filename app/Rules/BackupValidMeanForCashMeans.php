@@ -27,7 +27,7 @@ class BackupValidMeanForCashMeans implements Rule
     {
         $index = explode(".", $attribute)[2];
 
-        $currency = request("extensionData.cashMeans.$index.currency_id");
+        $currency = request("bundleData.cashMeans.$index.currency_id");
         $value--;
         $mean = request("means.$value");
 

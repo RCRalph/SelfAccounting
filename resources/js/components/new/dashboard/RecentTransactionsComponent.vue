@@ -29,8 +29,8 @@
                         :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
                     >{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
-                    <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                    <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.value.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.value.span) && 'table-hover-background'"
                     >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
                     <td v-if="item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"

@@ -32,12 +32,12 @@
                                 :items="titles"
                                 v-model="from.title"
                                 counter="64"
-                                :rules="[validation.title(false)]"
+                                :rules="[validation.title()]"
                             ></v-combobox>
 
-                            <v-text-field label="Amount" v-model="from.amount" :rules="[validation.amount(false)]"></v-text-field>
+                            <v-text-field label="Amount" v-model="from.amount" :rules="[validation.amount()]"></v-text-field>
 
-                            <v-text-field label="Price" v-model="from.price" :rules="[validation.price(false)]" :suffix="fromData.currency.ISO"></v-text-field>
+                            <v-text-field label="Price" v-model="from.price" :rules="[validation.price()]" :suffix="fromData.currency.ISO"></v-text-field>
 
                             <v-select
                                 v-model="from.currency_id"
@@ -91,12 +91,12 @@
                                 :items="titles"
                                 v-model="to.title"
                                 counter="64"
-                                :rules="[validation.title(false)]"
+                                :rules="[validation.title()]"
                             ></v-combobox>
 
-                            <v-text-field label="Amount" v-model="to.amount" :rules="[validation.amount(false)]"></v-text-field>
+                            <v-text-field label="Amount" v-model="to.amount" :rules="[validation.amount()]"></v-text-field>
 
-                            <v-text-field label="Price" v-model="to.price" :rules="[validation.price(false)]" :suffix="toData.currency.ISO"></v-text-field>
+                            <v-text-field label="Price" v-model="to.price" :rules="[validation.price()]" :suffix="toData.currency.ISO"></v-text-field>
 
                             <v-select
                                 v-model="to.currency_id"

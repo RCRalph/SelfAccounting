@@ -17,11 +17,9 @@
 <script>
 export default {
     props: {
-        value: Boolean
-    },
-    watch: {
-        value() {
-            this.$emit("input", this.value);
+        value: {
+            required: true,
+            type: Boolean
         }
     }
 }

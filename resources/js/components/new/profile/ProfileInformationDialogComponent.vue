@@ -15,7 +15,7 @@
                                 label="Username"
                                 v-model="data.username"
                                 counter="32"
-                                :rules="[validation.username(false)]"
+                                :rules="[validation.username()]"
                             ></v-text-field>
                         </v-col>
 
@@ -26,7 +26,7 @@
                                 v-model="data.email"
                                 counter="64"
                                 :rules="[
-                                    validation.email(false),
+                                    validation.email(),
                                     () => emailUnique || 'Email has already been taken'
                                 ]"
                             ></v-text-field>

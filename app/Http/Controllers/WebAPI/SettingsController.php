@@ -9,8 +9,8 @@ use App\Currency;
 use App\Category;
 use App\MeanOfPayment;
 
-use App\Rules\DateBeforeOrEqualField;
-use App\Rules\CorrectFirstEntryDate;
+use App\Rules\Common\DateBeforeOrEqualField;
+use App\Rules\Settings\CorrectFirstEntryDate;
 
 class SettingsController extends Controller
 {

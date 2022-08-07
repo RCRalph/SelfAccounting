@@ -92,6 +92,7 @@ export default {
                 .catch(err => {
                     console.error(err);
                     setTimeout(() => this.error = true, 1000);
+                    setTimeout(() => this.loading = false, 2000);
                 })
         }
     }

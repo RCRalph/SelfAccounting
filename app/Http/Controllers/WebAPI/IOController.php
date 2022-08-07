@@ -12,14 +12,14 @@ use App\Outcome;
 use App\Currency;
 use App\Chart;
 
-use App\Rules\CorrectDateIO;
-use App\Rules\CorrectDateIOUpdate;
-use App\Rules\ValidCategoryOrMeanUpdate;
-use App\Rules\ValidCategoryOrMean;
-use App\Rules\SameLengthAs;
-use App\Rules\DateBeforeOrEqualField;
-use App\Rules\CashBelongsToCurrency;
-use App\Rules\CashValidAmount;
+use App\Rules\Common\DateBeforeOrEqualField;
+use App\Rules\IO\CorrectDateIO;
+use App\Rules\IO\CorrectDateIOUpdate;
+use App\Rules\IO\ValidCategoryOrMean;
+use App\Rules\IO\ValidCategoryOrMeanUpdate;
+use App\Rules\Common\SameLengthAs;
+use App\Rules\Extensions\Cash\CorrectCashCurrency;
+use App\Rules\Extensions\Cash\CashValidAmount;
 
 class IOController extends Controller
 {
@@ -299,7 +299,7 @@ class IOController extends Controller
         if (auth()->user()->extensionCodes->contains("cashan") && request("cash")) {
             $cash = request()->validate([
                 "cash" => ["required", "array"],
-                "cash.*.id" => ["required", "integer", new CashBelongsToCurrency($currency)],
+                "cash.*.id" => ["required", "integer", new CorrectCashCurrency($currency)],
                 "cash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount(request()->type)]
             ])["cash"];
 

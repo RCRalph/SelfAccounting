@@ -50,10 +50,10 @@ class BackupController extends Controller
         // Check if user has extensions
         $extensions = auth()->user()->extensions
             ->merge(auth()->user()->premiumExtensions);
-        $hasExtensions = [];
+        $hasBundles = [];
 
         foreach (Extension::all() as $extension) {
-            $hasExtensions[$extension->code] = $extensions->contains($extension);
+            $hasBundles[$extension->code] = $extensions->contains($extension);
         }
 
         $restoreDate = "";
@@ -64,7 +64,7 @@ class BackupController extends Controller
                 )[0];
         }
 
-        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate", "hasExtensions"));
+        return response()->json(compact("currencies", "canCreate", "canRestore", "restoreDate", "hasBundles"));
     }
 
     public function createBackup()

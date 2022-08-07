@@ -113,7 +113,11 @@ Route::prefix("/web-api")->group(function () {
         });
 
         Route::prefix("/cash")->group(function () {
-            Route::get("/{currency}", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
+            Route::prefix("/{currency}")->group(function () {
+                Route::get("/", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
+                Route::post("/", "WebAPI\Extensions\CashController@update")->name("web-api.extensions.cash.update");
+                Route::get("/list", "WebAPI\Extensions\CashController@list")->name("web-api.extensions.cash.list");
+            });
         });
     });
 });
