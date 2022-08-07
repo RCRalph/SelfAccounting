@@ -10,8 +10,8 @@ use Carbon\Carbon;
 
 use App\Currency;
 
-use App\Rules\CorrectCashMean;
-use App\Rules\CorrectCashCurrency;
+use App\Rules\Extensions\Cash\CorrectCashMean;
+use App\Rules\Extensions\Cash\CorrectCashCurrency;
 
 class CashController extends Controller
 {

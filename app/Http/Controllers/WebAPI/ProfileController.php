@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
-use App\Rules\SameAsCurrentPassword;
+use App\Rules\Profile\SameAsCurrentPassword;
 class ProfileController extends Controller
 {
     public function __construct()

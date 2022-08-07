@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
-use App\Rules\CorrectDateIOExchange;
-use App\Rules\ValidCategoryOrMeanExchange;
-use App\Rules\CashBelongsToCurrency;
-use App\Rules\CashValidAmount;
+use App\Rules\Exchange\CorrectDateIOExchange;
+use App\Rules\Exchange\ValidCategoryOrMeanExchange;
+use App\Rules\Extensions\Cash\CashValidAmount;
+use App\Rules\Extensions\Cash\CorrectCashCurrency;
 
 use App\Currency;
 
@@ -105,7 +105,7 @@ class ExchangeController extends Controller
             if (request("fromCash")) {
                 $cash = request()->validate([
                     "fromCash" => ["required", "array"],
-                    "fromCash.*.id" => ["required", "integer", new CashBelongsToCurrency(Currency::find($data["from"]["currency_id"]))],
+                    "fromCash.*.id" => ["required", "integer", new CorrectCashCurrency(Currency::find($data["from"]["currency_id"]))],
                     "fromCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("outcome", "fromCash")]
                 ])["fromCash"];
 
@@ -127,7 +127,7 @@ class ExchangeController extends Controller
             if (request("toCash")) {
                 $cash = request()->validate([
                     "toCash" => ["required", "array"],
-                    "toCash.*.id" => ["required", "integer", new CashBelongsToCurrency(Currency::find($data["to"]["currency_id"]))],
+                    "toCash.*.id" => ["required", "integer", new CorrectCashCurrency(Currency::find($data["to"]["currency_id"]))],
                     "toCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("income", "toCash")]
                 ])["toCash"];
 
