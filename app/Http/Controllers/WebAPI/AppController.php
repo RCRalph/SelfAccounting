@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 use App\Extension;
+use App\Tutorial;
 
 class AppController extends Controller
 {
@@ -39,6 +40,7 @@ class AppController extends Controller
                 return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
                     "currencies" => $currencies,
+                    "tutorials" => Tutorial::select("route")->pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
                     "extensions" => Extension::all()->makeHidden(["id", "created_at", "updated_at", "description", "thumbnail"]),
                     "ownedExtensions" => Extension::whereIn("code", auth()->user()->extensionCodes)

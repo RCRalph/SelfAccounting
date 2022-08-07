@@ -115,6 +115,7 @@
         <TutorialComponent
             v-if="!user.hide_all_tutorials"
             v-model="disabledTutorials"
+            :tutorials="tutorials"
             @hideAll="updateUser"
         ></TutorialComponent>
 
@@ -157,6 +158,7 @@ export default {
             profileItems: [
                 { title: "View profile", icon: "mdi-account", link: "/profile" }
             ],
+            tutorials: [],
             disabledTutorials: [],
             mini: true,
             menuClicked: false,
@@ -235,6 +237,7 @@ export default {
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
 
+                this.tutorials = data.tutorials;
                 this.disabledTutorials = data.disabledTutorials;
 
                 this.currencies.setCurrencies(data.currencies);
