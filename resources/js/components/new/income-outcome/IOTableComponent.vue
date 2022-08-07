@@ -26,12 +26,12 @@
 
                     <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
                         <ExchangeIODialogComponent
-                            @exchanged="getData"
+                            @exchanged="exchanged"
                         ></ExchangeIODialogComponent>
 
                         <AddIODialogComponent
                             :type="type"
-                            @added="getData"
+                            @added="added"
                         ></AddIODialogComponent>
                     </v-col>
                 </v-row>
@@ -154,8 +154,8 @@
                         :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
                     >{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
-                    <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                    <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.value.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.value.span) && 'table-hover-background'"
                     >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
                     <td v-if="item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"
@@ -173,13 +173,13 @@
                             <EditIODialogComponent
                                 :type="type"
                                 :id="item.id.value"
-                                @updated="getData"
+                                @updated="updated"
                             ></EditIODialogComponent>
 
                             <DeleteDialogComponent
                                 :thing="type"
                                 :url="`${type}/${item.id.value}`"
-                                @deleted="getData"
+                                @deleted="deleted"
                             ></DeleteDialogComponent>
                         </div>
                     </td>
@@ -197,6 +197,8 @@
         >
             <div slot="no-more"></div>
         </InfiniteLoading>
+
+        <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
     </div>
 </template>
 
@@ -209,7 +211,8 @@ import AddIODialogComponent from "@/income-outcome/AddIODialogComponent.vue";
 import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import ExchangeIODialogComponent from "@/income-outcome/ExchangeIODialogComponent.vue";
-import InfiniteLoading from 'vue-infinite-loading';
+import InfiniteLoading from "vue-infinite-loading";
+import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
 export default {
     setup() {
@@ -223,7 +226,8 @@ export default {
         EditIODialogComponent,
         DeleteDialogComponent,
         ExchangeIODialogComponent,
-        InfiniteLoading
+        InfiniteLoading,
+        SuccessSnackbarComponent
     },
     props: {
         type: {
@@ -267,7 +271,9 @@ export default {
                 categories: [],
                 means: []
             },
-            lastChange: new Date()
+            lastChange: new Date(),
+            success: false,
+            thing: ""
         }
     },
     computed: {
@@ -350,6 +356,26 @@ export default {
                     this.getData();
                 }
             }, timeOffset + 1);
+        },
+        exchanged() {
+            this.thing = `exchanged`;
+            this.success = true;
+            this.getData();
+        },
+        added() {
+            this.thing = `added ${this.type}`;
+            this.success = true;
+            this.getData();
+        },
+        updated() {
+            this.thing = `updated ${this.type}`;
+            this.success = true;
+            this.getData();
+        },
+        deleted() {
+            this.thing = `deleted ${this.type}`;
+            this.success = true;
+            this.getData();
         }
     },
     watch: {

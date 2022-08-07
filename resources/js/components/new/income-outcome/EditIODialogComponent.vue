@@ -20,18 +20,18 @@
                                 :items="titles"
                                 v-model="data.title"
                                 counter="64"
-                                :rules="[validation.title(false)]"
+                                :rules="[validation.title()]"
                             ></v-combobox>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field label="Amount" v-model="data.amount" :rules="[validation.amount(false)]"></v-text-field>
+                            <v-text-field label="Amount" v-model="data.amount" :rules="[validation.amount()]"></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field label="Price" v-model="data.price" :rules="[validation.price(false)]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
+                            <v-text-field label="Price" v-model="data.price" :rules="[validation.price()]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>

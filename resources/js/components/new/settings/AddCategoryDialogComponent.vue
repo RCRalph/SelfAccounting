@@ -15,7 +15,7 @@
                                 label="Name"
                                 v-model="data.name"
                                 counter="32"
-                                :rules="[validation.name(false)]"
+                                :rules="[validation.name()]"
                             ></v-text-field>
                         </v-col>
                     </v-row>

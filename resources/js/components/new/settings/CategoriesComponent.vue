@@ -4,7 +4,7 @@
             <div class="mb-sm-0 mb-3">Categories</div>
 
             <AddCategoryDialogComponent
-                @added="getData"
+                @added="added"
             ></AddCategoryDialogComponent>
         </v-card-title>
 
@@ -44,19 +44,21 @@
                         <div class="d-flex flex-nowrap justify-center align-center">
                             <EditCategoryDialogComponent
                                 :id="item.id"
-                                @updated="getData"
+                                @updated="updated"
                             ></EditCategoryDialogComponent>
 
                             <DeleteDialogComponent
                                 thing="category"
                                 :url="`settings/categories/${item.id}`"
-                                @deleted="getData"
+                                @deleted="deleted"
                             ></DeleteDialogComponent>
                         </div>
                     </td>
                 </template>
             </v-data-table>
         </v-card-text>
+
+        <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
     </v-card>
 </template>
 
@@ -67,6 +69,7 @@ import main from "&/mixins/main";
 import AddCategoryDialogComponent from "@/settings/AddCategoryDialogComponent.vue";
 import EditCategoryDialogComponent from "@/settings/EditCategoryDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
+import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
 export default {
     setup() {
@@ -78,7 +81,8 @@ export default {
     components: {
         AddCategoryDialogComponent,
         EditCategoryDialogComponent,
-        DeleteDialogComponent
+        DeleteDialogComponent,
+        SuccessSnackbarComponent
     },
     props: {
         startData: {
@@ -98,7 +102,9 @@ export default {
             ],
             categories: [],
 
-            tableLoading: false
+            tableLoading: false,
+            success: false,
+            thing: ""
         }
     },
     methods: {
@@ -114,6 +120,21 @@ export default {
 
                     this.tableLoading = false;
                 })
+        },
+        added() {
+            this.thing = `added category`;
+            this.success = true;
+            this.getData();
+        },
+        updated() {
+            this.thing = `updated category`;
+            this.success = true;
+            this.getData();
+        },
+        deleted() {
+            this.thing = `deleted category`;
+            this.success = true;
+            this.getData();
         }
     },
     mounted() {

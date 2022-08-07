@@ -15,7 +15,7 @@
                                 label="Name"
                                 v-model="data.name"
                                 counter="32"
-                                :rules="[validation.name(false)]"
+                                :rules="[validation.name()]"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -58,7 +58,7 @@
                         </v-col>
 
                         <v-col cols="12" sm="4">
-                            <v-text-field label="Start balance" v-model="data.first_entry_amount" :rules="[validation.startBalance(false)]"></v-text-field>
+                            <v-text-field label="Start balance" v-model="data.first_entry_amount" :rules="[validation.startBalance()]"></v-text-field>
                         </v-col>
                     </v-row>
                 </v-form>

@@ -15,7 +15,7 @@
                                 label="Current password"
                                 v-model="data.current_password"
                                 :rules="[
-                                    validation.password(false),
+                                    validation.password(),
                                     () => currentPasswordMatch || `Password doesn't match our records`
                                 ]"
                                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -33,7 +33,7 @@
                                 label="New password"
                                 v-model="data.new_password"
                                 :rules="[
-                                    validation.password(false),
+                                    validation.password(),
                                     password => password != data.current_password || `New password can't be the same as old password`
                                 ]"
                                 :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -49,7 +49,7 @@
                                 label="Confirm password"
                                 v-model="data.new_password_confirmation"
                                 :rules="[
-                                    validation.password(false),
+                                    validation.password(),
                                     password => password == data.new_password || `Password don't match`
                                 ]"
                                 :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"

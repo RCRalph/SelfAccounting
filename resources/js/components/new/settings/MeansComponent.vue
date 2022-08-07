@@ -4,7 +4,7 @@
             <div class="mb-sm-0 mb-3">Means of payment</div>
 
             <AddMeanDialogComponent
-                @added="getData"
+                @added="added"
             ></AddMeanDialogComponent>
         </v-card-title>
 
@@ -44,19 +44,21 @@
                         <div class="d-flex flex-nowrap justify-center align-center">
                             <EditMeanDialogComponent
                                 :id="item.id"
-                                @updated="getData"
+                                @updated="updated"
                             ></EditMeanDialogComponent>
 
                             <DeleteDialogComponent
                                 thing="mean of payment"
                                 :url="`settings/means/${item.id}`"
-                                @deleted="getData"
+                                @deleted="deleted"
                             ></DeleteDialogComponent>
                         </div>
                     </td>
                 </template>
             </v-data-table>
         </v-card-text>
+
+        <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
     </v-card>
 </template>
 
@@ -67,6 +69,7 @@ import main from "&/mixins/main";
 import AddMeanDialogComponent from "@/settings/AddMeanDialogComponent.vue";
 import EditMeanDialogComponent from "@/settings/EditMeanDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
+import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
 export default {
     setup() {
@@ -78,7 +81,8 @@ export default {
     components: {
         AddMeanDialogComponent,
         EditMeanDialogComponent,
-        DeleteDialogComponent
+        DeleteDialogComponent,
+        SuccessSnackbarComponent
     },
     props: {
         startData: {
@@ -98,7 +102,9 @@ export default {
             ],
             means: [],
 
-            tableLoading: false
+            tableLoading: false,
+            success: false,
+            thing: ""
         }
     },
     methods: {
@@ -114,6 +120,21 @@ export default {
 
                     this.tableLoading = false;
                 })
+        },
+        added() {
+            this.thing = `added mean of payment`;
+            this.success = true;
+            this.getData();
+        },
+        updated() {
+            this.thing = `updated mean of payment`;
+            this.success = true;
+            this.getData();
+        },
+        deleted() {
+            this.thing = `deleted mean of payment`;
+            this.success = true;
+            this.getData();
         }
     },
     mounted() {

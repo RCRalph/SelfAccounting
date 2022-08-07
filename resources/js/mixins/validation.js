@@ -2,7 +2,7 @@ export default {
     data() {
         return {
             validation: {
-                date(allowNull, firstEntryDate = null) {
+                date(allowNull = false, firstEntryDate = null) {
                     return date => {
                         if (allowNull && !date) {
                             return true;
@@ -17,7 +17,7 @@ export default {
                         return true;
                     }
                 },
-                title(allowNull) {
+                title(allowNull = false) {
                     return title => {
                         if (allowNull && !title) {
                             return true;
@@ -35,7 +35,7 @@ export default {
                         return true;
                     }
                 },
-                amount(allowNull) {
+                amount(allowNull = false) {
                     return amount => {
                         amount = String(amount).replaceAll(",", ".");
 
@@ -58,7 +58,7 @@ export default {
                         return true;
                     }
                 },
-                price(allowNull) {
+                price(allowNull = false) {
                     return price => {
                         price = String(price).replaceAll(",", ".");
 
@@ -93,7 +93,7 @@ export default {
                         return true;
                     }
                 },
-                name(allowNull) {
+                name(allowNull = false) {
                     return name => {
                         if (allowNull && !name) {
                             return true;
@@ -111,7 +111,7 @@ export default {
                         return true;
                     }
                 },
-                startBalance(allowNull) {
+                startBalance(allowNull = false) {
                     return balance => {
                         balance = String(balance).replaceAll(",", ".");
 
@@ -131,7 +131,7 @@ export default {
                         return true;
                     }
                 },
-                username(allowNull) {
+                username(allowNull = false) {
                     return username => {
                         if (allowNull && !username) {
                             return true;
@@ -149,7 +149,7 @@ export default {
                         return true;
                     }
                 },
-                email(allowNull) {
+                email(allowNull = false) {
                     return email => {
                         if (allowNull && !email) {
                             return true;
@@ -170,7 +170,7 @@ export default {
                         return true;
                     }
                 },
-                password(allowNull) {
+                password(allowNull = false) {
                     return password => {
                         if (allowNull && !password) {
                             return true;
@@ -191,8 +191,11 @@ export default {
                         return true;
                     }
                 },
-                cash(owned = 0, type) {
+                cash(owned = 0, type, allowNull = false) {
                     return amount => {
+                        if (allowNull && !amount) {
+                            return true;
+                        }
                         if (isNaN(Number(amount))) {
                             return "Amount has to be a number";
                         }
