@@ -170,7 +170,18 @@ export default {
                 { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
                 { title: "Income", icon: "fas fa-sign-in-alt", link: "/income" },
                 { title: "Outcome", icon: "fas fa-sign-out-alt", link: "/outcome" },
-                { title: "Settings", icon: "fas fa-cog", link: "/settings" }
+                { title: "Settings", icon: "fas fa-cog", link: "/settings" },
+                {
+                    title: "Charts",
+                    icon: "mdi-chart-bar",
+                    links: [
+                        {
+                            icon: "mdi-chart-line",
+                            text: "Balance history",
+                            link: "/charts/balance-history"
+                        }
+                    ]
+                }
             ];
 
             if (this.extensions.ownedExtensionsObjects.length) {
