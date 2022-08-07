@@ -12,12 +12,12 @@ use App\Outcome;
 use App\Currency;
 use App\Chart;
 
-use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\IO\CorrectDateIO;
 use App\Rules\IO\CorrectDateIOUpdate;
 use App\Rules\IO\ValidCategoryOrMean;
 use App\Rules\IO\ValidCategoryOrMeanUpdate;
 use App\Rules\Common\SameLengthAs;
+use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
 use App\Rules\Extensions\Cash\CashValidAmount;
 
