@@ -4,7 +4,7 @@ namespace App\Http\Controllers\WebAPI;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 use App\Currency;
@@ -99,29 +99,24 @@ class DashboardChartsController extends Controller
 
     public function balanceHistory(Currency $currency)
     {
-        $means = auth()->user()->meansOfPayment
+        $means = auth()->user()->meansOfPayment()
             ->where("currency_id", $currency->id)
-            ->where("show_on_charts", true);
+            ->where("show_on_charts", true)
+            ->get();
 
-        $meansToShow = $means
-            ->where("currency_id", $currency->id)
-            ->pluck("id")->toArray();
+        $meansToShow = $means->pluck("id")->toArray();
 
-        $income = auth()->user()->income
+        $income = auth()->user()->income()
+            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
             ->whereIn("mean_id", $meansToShow)
-            ->map(function ($item) {
-                $item->value = round($item->amount * $item->price, 2);
-                return $item->only("date", "value", "category_id", "mean_id");
-            });
+            ->get();
 
-        $outcome = auth()->user()->outcome
+        $outcome = auth()->user()->outcome()
+            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
             ->whereIn("mean_id", $meansToShow)
-            ->map(function ($item) {
-                $item->value = round($item->amount * $item->price, 2);
-                return $item->only("date", "value", "category_id", "mean_id");
-            });
+            ->get();
 
         $balanceBefore = $this->getBalance(
             $income->where("date", "<", Carbon::today()->subDays(30)),
@@ -140,7 +135,9 @@ class DashboardChartsController extends Controller
             ->groupBy("mean_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
-                ->map(fn ($item1) => $item1->pluck("value")->reduce(fn ($carry, $item) => $carry + $item))
+                ->map(fn ($item1) => $item1->count() ?
+                    $item1->pluck("value")->reduce(fn ($carry, $item) => $carry + $item) : 0
+                )
             );
 
         $outcomeLast30Days = $outcome
@@ -148,7 +145,9 @@ class DashboardChartsController extends Controller
             ->groupBy("mean_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
-                ->map(fn ($item1) => $item1->pluck("value")->reduce(fn ($carry, $item) => $carry + $item))
+                ->map(fn ($item1) => $item1->count() ?
+                    $item1->pluck("value")->reduce(fn ($carry, $item) => $carry + $item) : 0
+                )
             );
 
         foreach ($means as $mean) {
