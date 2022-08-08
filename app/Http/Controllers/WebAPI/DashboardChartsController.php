@@ -359,17 +359,26 @@ class DashboardChartsController extends Controller
     }
 
     public function index(Currency $currency, Chart $chart) {
-        $retArr = [];
+        $limits = request()->validate([
+            "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01", new DateBeforeOrEqualField("end")],
+            "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
+        ]);
 
-        if ($chart->id == 1) {
-            $retArr = $this->balanceHistory($currency);
-        }
-        else if ($chart->id <= 5) {
-            $data = $chart->id <= 3 ? "income" : "outcome";
-            $type = $chart->id % 2 ? "mean" : "category";
-            $retArr = $this->dataByType($currency, $data, $type);
-        }
+        switch ($chart->name) {
+            case "Balance history":
+                return response()->json($this->balanceHistory($currency, $limits));
 
-        return response()->json($retArr);
+            case "Income by categories":
+                return response()->json($this->dataByType("income", "category", $currency, $limits));
+            case "Outcome by categories":
+                return response()->json($this->dataByType("outcome", "category", $currency, $limits));
+            case "Income by means of payment":
+                return response()->json($this->dataByType("income", "mean", $currency, $limits));
+            case "Outcome by means of payment":
+                return response()->json($this->dataByType("outcome", "mean", $currency, $limits));
+
+            default:
+                abort(500);
+        }
     }
 }

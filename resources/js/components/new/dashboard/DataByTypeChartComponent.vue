@@ -39,12 +39,25 @@ export default {
             ready: false
         }
     },
+    computed: {
+        params() {
+            const retObj = {};
+
+            retObj.end = new Date().toISOString().split("T")[0];
+
+            retObj.start = new Date();
+            retObj.start.setDate(retObj.start.getDate() - 31);
+            retObj.start = retObj.start.toISOString().split("T")[0];
+
+            return retObj;
+        }
+    },
     methods: {
         getChartData() {
             this.ready = false;
 
             axios
-                .get(`/web-api/dashboard/${this.currencies.usedCurrency}/charts/${this.id}`)
+                .get(`/web-api/charts/${this.id}/currency/${this.currencies.usedCurrency}`, { params: this.params })
                 .then(response => {
                     const data = response.data;
                     this.chartData = data.data;

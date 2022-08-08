@@ -101,10 +101,7 @@ Route::prefix("/web-api")->group(function () {
         Route::post("/hide-all", "WebAPI\TutorialController@hideAll")->name("web-api.tutorials.hideAll");
     });
 
-    Route::prefix("/charts")->group(function () {
-        Route::get("/balance-history/{currency}", "WebAPI\ChartsController@balanceHistory")->name("web-api.charts.balance-history");
-
-    });
+    Route::get("/charts/{chart}/currency/{currency}", "WebAPI\ChartsController@index")->name("web-api.charts");
 
     Route::prefix("/extensions")->group(function () {
         Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");

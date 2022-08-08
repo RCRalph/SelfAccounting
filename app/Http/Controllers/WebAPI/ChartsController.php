@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 use App\Currency;
+use App\Chart;
 
 use App\Rules\Common\DateBeforeOrEqualField;
 
@@ -18,13 +19,88 @@ class ChartsController extends Controller
         $this->middleware("auth");
     }
 
-    public function balanceHistory(Currency $currency)
+    private function dataByType($io, $type, Currency $currency, $limits)
     {
-        $limits = request()->validate([
-            "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01", new DateBeforeOrEqualField("end")],
-            "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
-        ]);
+        // Get type data
+        $typeData = $type == "category" ?
+            auth()->user()->categories() :
+            auth()->user()->meansOfPayment();
 
+        $typeData = $typeData
+            ->select("id", "name")
+            ->where("currency_id", $currency->id)
+            ->where("show_on_charts", true)
+            ->where($io . "_". $type, true)
+            ->get();
+
+        // Get type IDs to get from io
+        $toShow = $typeData->pluck("id")->toArray();
+
+        $ioData = $this->getTypeRelation($io);
+
+        if ($limits["start"]) {
+            $ioData = $ioData->whereDate("date", ">=", $limits["start"]);
+        }
+
+        if ($limits["end"]) {
+            $ioData = $ioData->whereDate("date", "<=", $limits["end"]);
+        }
+
+        $ioData = $ioData
+            ->select($type . "_id", DB::raw("round(amount * price, 2) AS value"))
+            ->where("currency_id", $currency->id)
+            ->whereIn($type . "_id", $toShow)
+            ->get()
+            ->groupBy($type . "_id")
+            ->map(fn ($item) => $item->sum("value"));
+
+        $count = $typeData->count();
+        $colors = $this->getColors($count);
+        $data = [
+            "datasets" => [
+                [
+                    "data" => [],
+                    "backgroundColor" => []
+                ]
+            ],
+            "labels" => []
+        ];
+
+        foreach ($ioData as $typeID => $amount) {
+            array_push(
+                $data["datasets"][0]["data"],
+                round($amount, 2)
+            );
+
+            array_push(
+                $data["datasets"][0]["backgroundColor"],
+                $colors[--$count]
+            );
+
+            array_push(
+                $data["labels"],
+                $typeData->firstWhere("id", $typeID)["name"]
+            );
+        }
+
+        $options = [
+            "responsive" => true,
+            "maintainAspectRatio" => false,
+            "legend" => [
+                "display" => true,
+                "labels" => [
+                    "fontColor" => "#3490dc"
+                ]
+            ],
+            "circumference" => pi(),
+            "rotation" => -pi()
+        ];
+
+        return compact("data", "options");
+    }
+
+    private function balanceHistory(Currency $currency, $limits)
+    {
         $means = auth()->user()->meansOfPayment()
             ->where("currency_id", $currency->id)
             ->where("show_on_charts", true)
@@ -43,8 +119,8 @@ class ChartsController extends Controller
             ->whereIn("mean_id", $meansToShow);
 
         if ($limits["end"]) {
-            $income = $income->where("date", "<", $limits["end"]);
-            $outcome = $outcome->where("date", "<", $limits["end"]);
+            $income = $income->whereDate("date", "<=", $limits["end"]);
+            $outcome = $outcome->whereDate("date", "<=", $limits["end"]);
         }
 
         $income = $income->get();
@@ -72,8 +148,8 @@ class ChartsController extends Controller
         }
 
         if ($limits["start"]) {
-            $income = $income->where("date", ">", $limits["start"]);
-            $outcome = $outcome->where("date", ">", $limits["start"]);
+            $income = $income->where("date", ">=", $limits["start"]);
+            $outcome = $outcome->where("date", ">=", $limits["start"]);
         }
 
         $income = $income
@@ -107,7 +183,7 @@ class ChartsController extends Controller
                     $incomeByMean
                         ->prepend(
                             $firstEntries[$mean->id] * 1,
-                            $limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d")
+                            $limits["start"] ? $limits["start"] : Carbon::today()->format("Y-m-d")
                         );
                 }
 
@@ -116,10 +192,16 @@ class ChartsController extends Controller
                 }
             }
             else {
+                $startDate = $mean->first_entry_date;
+                if ($limits["start"] && strtotime($limits["start"]) > strtotime($startDate)) {
+                    $startDate = $limits["start"];
+                }
+
                 $income->put(
                     $mean->id,
                     collect([
-                        ($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d")) => $firstEntries[$mean->id]
+                        $startDate => $firstEntries[$mean->id],
+                        Carbon::today()->format("Y-m-d") => 0
                     ])
                 );
             }
@@ -297,6 +379,30 @@ class ChartsController extends Controller
 			]
 		];
 
-        return response()->json(compact("data", "options"));
+        return compact("data", "options");
+    }
+
+    public function index(Chart $chart, Currency $currency) {
+        $limits = request()->validate([
+            "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01", new DateBeforeOrEqualField("end")],
+            "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
+        ]);
+
+        switch ($chart->name) {
+            case "Balance history":
+                return response()->json(["info" => $chart->only("id", "name"), ...$this->balanceHistory($currency, $limits)]);
+
+            case "Income by categories":
+                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("income", "category", $currency, $limits)]);
+            case "Outcome by categories":
+                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("outcome", "category", $currency, $limits)]);
+            case "Income by means of payment":
+                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("income", "mean", $currency, $limits)]);
+            case "Outcome by means of payment":
+                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("outcome", "mean", $currency, $limits)]);
+
+            default:
+                abort(500);
+        }
     }
 }

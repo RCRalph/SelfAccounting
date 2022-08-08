@@ -28,13 +28,6 @@ class IOController extends Controller
         $this->middleware("auth");
     }
 
-    private function getTypeRelation()
-    {
-        return request()->type == "income" ?
-            auth()->user()->income() :
-            auth()->user()->outcome();
-    }
-
     private function getCategoriesAndMeans($currency)
     {
         $categories = auth()->user()->categories()

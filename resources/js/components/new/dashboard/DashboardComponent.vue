@@ -57,9 +57,9 @@
                             </v-card-title>
 
                             <div class="mx-3" v-if="currentBalance.length">
-                                <BalanceHistoryChartComponent v-if="currentChart == 1" :id="1"></BalanceHistoryChartComponent>
+                                <BalanceHistoryChartComponent v-if="showBalanceHistory" :id="currentChart"></BalanceHistoryChartComponent>
 
-                                <DataByTypeChartComponent v-else-if="currentChart <= 5" :id="currentChart"></DataByTypeChartComponent>
+                                <DataByTypeChartComponent v-else-if="showDataByType" :id="currentChart"></DataByTypeChartComponent>
                             </div>
 
                             <v-card-text>
@@ -169,6 +169,25 @@ export default {
                     .map(item => item.balance)
                     .reduce((item1, item2) => item1 + item2)
                 : 0
+        },
+        showBalanceHistory() {
+            if (!this.currentChart) {
+                return false;
+            }
+
+            return this.chartTypes.find(item => item.id == this.currentChart).name == "Balance history";
+        },
+        showDataByType() {
+            if (!this.currentChart) {
+                return false;
+            }
+
+            return [
+                "Income by categories",
+                "Income by means of payment",
+                "Outcome by categories",
+                "Outcome by means of payment"
+            ].includes(this.chartTypes.find(item => item.id == this.currentChart).name);
         }
     },
     methods: {

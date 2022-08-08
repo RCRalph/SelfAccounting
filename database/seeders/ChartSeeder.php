@@ -10,25 +10,61 @@ class ChartSeeder extends Seeder
 {
     private $charts = [
         [
-            "id" => 1,
-            "name" => "Balance history"
+            "name" => "Balance history",
+            "route" => "/"
         ],
         [
-            "id" => 2,
-            "name" => "Income by categories"
+            "name" => "Income by categories",
+            "route" => "/"
         ],
         [
-            "id" => 3,
-            "name" => "Income by means of payment"
+            "name" => "Income by means of payment",
+            "route" => "/"
         ],
         [
-            "id" => 4,
-            "name" => "Outcome by categories"
+            "name" => "Outcome by categories",
+            "route" => "/"
         ],
         [
-            "id" => 5,
-            "name" => "Outcome by means of payment"
-        ]
+            "name" => "Outcome by means of payment",
+            "route" => "/"
+        ],
+        [
+            "name" => "Balance history",
+            "route" => "/dashboard"
+        ],
+        [
+            "name" => "Income by categories",
+            "route" => "/dashboard"
+        ],
+        [
+            "name" => "Income by means of payment",
+            "route" => "/dashboard"
+        ],
+        [
+            "name" => "Outcome by categories",
+            "route" => "/dashboard"
+        ],
+        [
+            "name" => "Outcome by means of payment",
+            "route" => "/dashboard"
+        ],
+        [
+            "name" => "Income by categories",
+            "route" => "/income"
+        ],
+        [
+            "name" => "Income by means of payment",
+            "route" => "/income"
+        ],
+        [
+            "name" => "Outcome by categories",
+            "route" => "/outcome"
+        ],
+        [
+            "name" => "Outcome by means of payment",
+            "route" => "/outcome"
+        ],
     ];
 
     /**
@@ -39,7 +75,7 @@ class ChartSeeder extends Seeder
     public function run()
     {
         foreach ($this->charts as $chart) {
-            Chart::updateOrCreate([ "id" => $chart["id"] ], $chart);
+            Chart::firstOrCreate($chart);
         }
     }
 }

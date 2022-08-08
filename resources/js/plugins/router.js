@@ -7,7 +7,7 @@ import SettingsComponent from "@/settings/SettingsComponent.vue";
 import ProfileComponent from "@/profile/ProfileComponent.vue";
 import ExtensionsComponent from "@/extensions/ExtensionsComponent.vue";
 import GettingStartedComponent from "@/GettingStartedComponent.vue";
-import BalanceHistoryComponent from "@/charts/BalanceHistoryComponent.vue";
+import ChartComponent from "@/charts/ChartComponent.vue";
 
 import CashComponent from "@/extensions/cash/CashComponent.vue";
 
@@ -20,7 +20,7 @@ const routes = [
     { path: "/settings", component: SettingsComponent },
     { path: "/profile", component: ProfileComponent },
     { path: "/getting-started", component: GettingStartedComponent },
-    { path: "/charts/balance-history", component: BalanceHistoryComponent },
+    { path: "/charts/:id", component: ChartComponent },
 
     { path: "/extensions/store", component: ExtensionsComponent },
     { path: "/extensions/cash", component: CashComponent }

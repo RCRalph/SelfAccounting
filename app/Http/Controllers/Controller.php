@@ -427,6 +427,19 @@ class Controller extends BaseController
         return $retArr;
     }
 
+    public function getTypeRelation($type = null)
+    {
+        $type = $type ? $type : request()->type;
+
+        if (!in_array($type, ["income", "outcome"])) {
+            abort(500, "Unspecified type");
+        }
+
+        return $type == "income" ?
+            auth()->user()->income() :
+            auth()->user()->outcome();
+    }
+
     public function removeFile($disk, $directory, $name)
     {
         Storage::disk($disk)->delete("$directory/$name");

@@ -41,12 +41,12 @@
                             :key="sublink.text"
                             :to="sublink.link"
                         >
-                            <v-list-item-icon>
+                            <v-list-item-icon v-if="sublink.icon">
                                 <v-icon>{{ sublink.icon }}</v-icon>
                             </v-list-item-icon>
 
                             <v-list-item-content>
-                                <v-list-item-title v-text="sublink.text"></v-list-item-title>
+                                <v-list-item-title v-text="sublink.text" :style="!sublink.icon && 'padding-left: 18px !important'"></v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
@@ -158,6 +158,7 @@ export default {
             profileItems: [
                 { title: "View profile", icon: "mdi-account", link: "/profile" }
             ],
+            charts: [],
             tutorials: [],
             disabledTutorials: [],
             mini: true,
@@ -172,36 +173,35 @@ export default {
                 { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
                 { title: "Income", icon: "fas fa-sign-in-alt", link: "/income" },
                 { title: "Outcome", icon: "fas fa-sign-out-alt", link: "/outcome" },
-                { title: "Settings", icon: "fas fa-cog", link: "/settings" },
-                {
-                    title: "Charts",
-                    icon: "mdi-chart-bar",
-                    links: [
-                        {
-                            icon: "mdi-chart-line",
-                            text: "Balance history",
-                            link: "/charts/balance-history"
-                        }
-                    ]
-                }
+                { title: "Settings", icon: "fas fa-cog", link: "/settings" }
             ];
 
+            if (this.charts.length) {
+                const chartLinks = this.charts.map(item => ({ text: item.name, link: `/charts/${item.id}` }));
+
+                retArr.push({
+                    title: "Charts",
+                    icon: "mdi-chart-bar",
+                    links: chartLinks
+                })
+            }
+
             if (this.extensions.ownedExtensionsObjects.length) {
-                const links = [{
+                const extensionLinks = [{
                     icon: "mdi-shopping",
                     text: "Store",
                     link: "/extensions/store"
                 }];
 
                 this.extensions.ownedExtensionsObjects.forEach(item => {
-                    links.push({
+                    extensionLinks.push({
                         icon: item.icon,
                         text: item.title,
                         link: `/extensions/${item.directory}`
                     });
                 });
 
-                retArr.push({ title: "Extensions", icon: "mdi-package-variant", links });
+                retArr.push({ title: "Extensions", icon: "mdi-package-variant", links: extensionLinks });
             }
             else {
                 retArr.push({ title: "Extensions", icon: "mdi-package-variant", link: "/extensions/store" });
@@ -237,6 +237,7 @@ export default {
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
 
+                this.charts = data.charts;
                 this.tutorials = data.tutorials;
                 this.disabledTutorials = data.disabledTutorials;
 
