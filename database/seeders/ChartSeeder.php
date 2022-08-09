@@ -10,24 +10,43 @@ class ChartSeeder extends Seeder
 {
     private $charts = [
         [
-            "id" => 1,
-            "name" => "Balance history"
+            "name" => "Balance history",
+            "routes" => [
+                "/",
+                "/dashboard"
+            ]
         ],
         [
-            "id" => 2,
-            "name" => "Income by categories"
+            "name" => "Income by categories",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/income"
+            ]
         ],
         [
-            "id" => 3,
-            "name" => "Income by means of payment"
+            "name" => "Outcome by categories",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/outcome"
+            ]
         ],
         [
-            "id" => 4,
-            "name" => "Outcome by categories"
+            "name" => "Income by means of payment",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/income"
+            ]
         ],
         [
-            "id" => 5,
-            "name" => "Outcome by means of payment"
+            "name" => "Outcome by means of payment",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/outcome"
+            ]
         ]
     ];
 
@@ -38,8 +57,15 @@ class ChartSeeder extends Seeder
      */
     public function run()
     {
+        Chart::whereNotIn("name", array_column($this->charts, "name"))->delete();
+
         foreach ($this->charts as $chart) {
-            Chart::updateOrCreate([ "id" => $chart["id"] ], $chart);
+            $chartInDB = Chart::firstOrCreate(["name" => $chart["name"]]);
+
+            $chartInDB->routes()->whereNotIn("route", $chart["routes"])->delete();
+            foreach ($chart["routes"] as $route) {
+                $chartInDB->routes()->firstOrCreate([ "route" => $route ]);
+            }
         }
     }
 }

@@ -28,13 +28,6 @@ class IOController extends Controller
         $this->middleware("auth");
     }
 
-    private function getTypeRelation()
-    {
-        return request()->type == "income" ?
-            auth()->user()->income() :
-            auth()->user()->outcome();
-    }
-
     private function getCategoriesAndMeans($currency)
     {
         $categories = auth()->user()->categories()
@@ -54,73 +47,6 @@ class IOController extends Controller
             ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
 
         return compact("categories", "means");
-    }
-
-    private function overviewChartData($data, $type, Currency $currency)
-    {
-        $typeData = $type == "category" ?
-            auth()->user()->categories :
-            auth()->user()->meansOfPayment;
-
-        $typeData = $typeData
-            ->where("currency_id", $currency->id)
-            ->where("show_on_charts", true)
-            ->where(request()->type . "_". $type, true)
-            ->map(fn ($item) => $item->only("id", "name"));
-
-        $toShow = $typeData->pluck("id")->toArray();
-
-        $data = $data->whereIn($type . "_id", $toShow)
-            ->groupBy($type . "_id")
-            ->map(
-                fn ($item) => round($item->sum("value"), 2)
-            );
-
-        $count = $typeData->count();
-        $colors = $this->getColors($count);
-
-        $retArr = [
-            "data" => [
-                "datasets" => [
-                    [
-                        "data" => [],
-                        "backgroundColor" => []
-                    ]
-                ],
-                "labels" => []
-            ],
-            "options" => [
-                "responsive" => true,
-                "maintainAspectRatio" => false,
-                "legend" => [
-                    "display" => true,
-                    "labels" => [
-                        "fontColor" => "#3490dc"
-                    ]
-                ],
-                "circumference" => pi(),
-                "rotation" => -pi()
-            ]
-        ];
-
-        foreach ($data as $id => $value) {
-            array_push(
-                $retArr["data"]["datasets"][0]["data"],
-                $value
-            );
-
-            array_push(
-                $retArr["data"]["datasets"][0]["backgroundColor"],
-                $colors[--$count]
-            );
-
-            array_push(
-                $retArr["data"]["labels"],
-                $typeData->where("id", $id)->first()["name"]
-            );
-        }
-
-        return $retArr;
     }
 
     public function show($id)
@@ -185,35 +111,9 @@ class IOController extends Controller
             ->where(request()->type . "_mean", true)
             ->get();
 
-        $charts = Chart::where("name", "ilike", "%" . request()->type . "%")->get();
+        $charts = $this->getCharts("/" . request()->type);
 
         return response()->json(compact("categories", "means", "charts"));
-    }
-
-    public function overview(Currency $currency)
-    {
-        $limits = request()->validate([
-            "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01", new DateBeforeOrEqualField("end")],
-            "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
-        ]);
-
-        $data = $this->getTypeRelation()
-            ->select("date", DB::raw("round(amount * price, 2) AS value"), "category_id", "mean_id")
-            ->where("currency_id", $currency->id);
-
-        if ($limits["start"]) {
-            $data = $data->whereDate("date", ">=", $limits["start"]);
-        }
-
-        if ($limits["end"]) {
-            $data = $data->whereDate("date", "<=", $limits["end"]);
-        }
-
-        $data = $data->get();
-        $means = $this->overviewChartData($data, "mean", $currency);
-        $categories = $this->overviewChartData($data, "category", $currency);
-
-        return response()->json(compact("categories", "means"));
     }
 
     public function list(Currency $currency)

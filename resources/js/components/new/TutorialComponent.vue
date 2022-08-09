@@ -49,6 +49,10 @@ export default {
         value: {
             required: true,
             type: Array
+        },
+        tutorials: {
+            required: true,
+            type: Array
         }
     },
     data() {
@@ -71,7 +75,7 @@ export default {
         getTutorial() {
             this.dialog = false;
 
-            if (!this.value.includes(this.$route.path)) {
+            if (!this.value.includes(this.$route.path) && this.tutorials.includes(this.$route.path)) {
                 axios.get("/web-api/tutorials", { params: { route: this.$route.path } })
                     .then(response => {
                         const data = response.data;
@@ -79,9 +83,7 @@ export default {
                         this.dialog = true;
                     })
                     .catch(err => {
-                        if (!(err.response.status == 422 && err.response.data.message == "The selected route is invalid.")) {
-                            console.error(err);
-                        }
+                        console.error(err);
                     });
             }
         },

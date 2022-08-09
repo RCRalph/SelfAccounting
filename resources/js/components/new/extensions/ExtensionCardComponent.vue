@@ -91,7 +91,7 @@ export default {
         },
         ownedExtensions: {
             required: true,
-            type: Object
+            type: Array
         },
         premiumExtensions: {
             required: true,

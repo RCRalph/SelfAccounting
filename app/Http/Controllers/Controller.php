@@ -16,6 +16,7 @@ use App\Extension;
 use App\Currency;
 use App\Cash;
 use App\User;
+use App\Chart;
 
 class Controller extends BaseController
 {
@@ -425,6 +426,26 @@ class Controller extends BaseController
         }
 
         return $retArr;
+    }
+
+    public function getTypeRelation($type = null)
+    {
+        $type = $type ? $type : request()->type;
+
+        if (!in_array($type, ["income", "outcome"])) {
+            abort(500, "Unspecified type");
+        }
+
+        return $type == "income" ?
+            auth()->user()->income() :
+            auth()->user()->outcome();
+    }
+
+    public function getCharts($route) {
+        return Chart::select("charts.id", "charts.name")
+            ->join("chart_routes", "chart_routes.chart_id", "=", "charts.id")
+            ->where("chart_routes.route", $route)
+            ->get();
     }
 
     public function removeFile($disk, $directory, $name)

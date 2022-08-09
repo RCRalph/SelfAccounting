@@ -99,7 +99,7 @@ class DashboardController extends Controller
         $currentBalance = $this->getBalance($income, $outcome, $means, $categories, $meansToShow, $categoriesToShow);
         $last30Days = $this->getLast30DaysBalance($income, $outcome, $meansToShow, $categoriesToShow);
 
-        $charts = Chart::all();
+        $charts = $this->getCharts("/dashboard");
 
         return response()->json(compact("currentBalance", "last30Days", "charts"));
     }

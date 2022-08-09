@@ -38,7 +38,6 @@ Route::prefix("/web-api")->group(function () {
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\DashboardController@index")->name("web-api.dashboard");
             Route::get("/recent-transactions", "WebAPI\DashboardController@getRecentTransactions")->name("web-api.dashboard.recent-transactions");
-            Route::get("/charts/{chart}", "WebAPI\DashboardChartsController@index")->name("web-api.dashboard.charts");
         });
     });
 
@@ -53,7 +52,6 @@ Route::prefix("/web-api")->group(function () {
                 Route::get("/", "WebAPI\IOController@index")->name("web-api.$type.currency");
                 Route::post("/", "WebAPI\IOController@store")->name("web-api.$type.currency.store");
                 Route::get("/data", "WebAPI\IOController@data")->name("web-api.$type.currency.data");
-                Route::get("/overview", "WebAPI\IOController@overview")->name("web-api.$type.currency.overview");
                 Route::get("/list", "WebAPI\IOController@list")->name("web-api.$type.currency.list");
             });
         });
@@ -101,6 +99,8 @@ Route::prefix("/web-api")->group(function () {
         Route::post("/hide-all", "WebAPI\TutorialController@hideAll")->name("web-api.tutorials.hideAll");
     });
 
+    Route::get("/charts/{chart}/currency/{currency}", "WebAPI\ChartsController@index")->name("web-api.charts");
+
     Route::prefix("/extensions")->group(function () {
         Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");
 
@@ -112,12 +112,10 @@ Route::prefix("/web-api")->group(function () {
             Route::post("/toggle-premium", "WebAPI\Extensions\ExtensionsController@togglePremium")->name("web-api.extensions.code.toggle-premium");
         });
 
-        Route::prefix("/cash")->group(function () {
-            Route::prefix("/{currency}")->group(function () {
-                Route::get("/", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
-                Route::post("/", "WebAPI\Extensions\CashController@update")->name("web-api.extensions.cash.update");
-                Route::get("/list", "WebAPI\Extensions\CashController@list")->name("web-api.extensions.cash.list");
-            });
+        Route::prefix("/cash/{currency}")->group(function () {
+            Route::get("/", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
+            Route::post("/", "WebAPI\Extensions\CashController@update")->name("web-api.extensions.cash.update");
+            Route::get("/list", "WebAPI\Extensions\CashController@list")->name("web-api.extensions.cash.list");
         });
     });
 });

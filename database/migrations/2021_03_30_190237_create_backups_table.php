@@ -19,7 +19,7 @@ class CreateBackupsTable extends Migration
             $table->dateTime('last_backup')->useCurrent();
             $table->dateTime('last_restoration')->useCurrent();
 
-            $table->index(["user_id"]);
+            $table->index(['user_id']);
         });
     }
 

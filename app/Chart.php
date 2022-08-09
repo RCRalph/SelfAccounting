@@ -12,4 +12,9 @@ class Chart extends Model
     protected $guarded = [];
 
     public $timestamps = false;
+
+    public function routes()
+    {
+        return $this->hasMany(ChartRoute::class);
+    }
 }
