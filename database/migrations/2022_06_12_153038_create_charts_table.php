@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('charts', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 64)->nullable();
-            $table->string('route', 128)->default('/');
+            $table->string('name', 64)->unique();
 
-            $table->index("id");
+            $table->index('id');
         });
     }
 

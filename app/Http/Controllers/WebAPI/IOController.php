@@ -178,7 +178,7 @@ class IOController extends Controller
             ->where(request()->type . "_mean", true)
             ->get();
 
-        $charts = Chart::where("name", "ilike", "%" . request()->type . "%")->get();
+        $charts = $this->getCharts("/" . request()->type);
 
         return response()->json(compact("categories", "means", "charts"));
     }

@@ -41,7 +41,7 @@ class AppController extends Controller
                 return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
                     "currencies" => $currencies,
-                    "charts" => Chart::select("id", "name")->where("route", "/")->get(),
+                    "charts" => $this->getCharts("/"),
                     "tutorials" => Tutorial::select("route")->pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
                     "extensions" => Extension::all()->makeHidden(["id", "created_at", "updated_at", "description", "thumbnail"]),

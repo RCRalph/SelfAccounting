@@ -11,60 +11,43 @@ class ChartSeeder extends Seeder
     private $charts = [
         [
             "name" => "Balance history",
-            "route" => "/"
+            "routes" => [
+                "/",
+                "/dashboard"
+            ]
         ],
         [
             "name" => "Income by categories",
-            "route" => "/"
-        ],
-        [
-            "name" => "Income by means of payment",
-            "route" => "/"
-        ],
-        [
-            "name" => "Outcome by categories",
-            "route" => "/"
-        ],
-        [
-            "name" => "Outcome by means of payment",
-            "route" => "/"
-        ],
-        [
-            "name" => "Balance history",
-            "route" => "/dashboard"
-        ],
-        [
-            "name" => "Income by categories",
-            "route" => "/dashboard"
-        ],
-        [
-            "name" => "Income by means of payment",
-            "route" => "/dashboard"
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/income"
+            ]
         ],
         [
             "name" => "Outcome by categories",
-            "route" => "/dashboard"
-        ],
-        [
-            "name" => "Outcome by means of payment",
-            "route" => "/dashboard"
-        ],
-        [
-            "name" => "Income by categories",
-            "route" => "/income"
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/outcome"
+            ]
         ],
         [
             "name" => "Income by means of payment",
-            "route" => "/income"
-        ],
-        [
-            "name" => "Outcome by categories",
-            "route" => "/outcome"
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/income"
+            ]
         ],
         [
             "name" => "Outcome by means of payment",
-            "route" => "/outcome"
-        ],
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/outcome"
+            ]
+        ]
     ];
 
     /**
@@ -74,8 +57,15 @@ class ChartSeeder extends Seeder
      */
     public function run()
     {
+        Chart::whereNotIn("name", array_column($this->charts, "name"))->delete();
+
         foreach ($this->charts as $chart) {
-            Chart::firstOrCreate($chart);
+            $chartInDB = Chart::firstOrCreate(["name" => $chart["name"]]);
+
+            $chartInDB->routes()->whereNotIn("route", $chart["routes"])->delete();
+            foreach ($chart["routes"] as $route) {
+                $chartInDB->routes()->firstOrCreate([ "route" => $route ]);
+            }
         }
     }
 }
