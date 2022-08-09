@@ -197,13 +197,12 @@ class ChartsController extends Controller
                     $startDate = $limits["start"];
                 }
 
-                $income->put(
-                    $mean->id,
-                    collect([
-                        $startDate => $firstEntries[$mean->id],
-                        Carbon::today()->format("Y-m-d") => 0
-                    ])
-                );
+                $retArr = [$startDate => $firstEntries[$mean->id]];
+                if (Carbon::today()->gt($startDate)) {
+                    $retArr[Carbon::today()->format("Y-m-d")] = 0;
+                }
+
+                $income->put($mean->id, collect($retArr));
             }
         }
 
@@ -388,21 +387,30 @@ class ChartsController extends Controller
             "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
         ]);
 
+        $retArr = [];
+
         switch ($chart->name) {
             case "Balance history":
-                return response()->json(["info" => $chart->only("id", "name"), ...$this->balanceHistory($currency, $limits)]);
+                $retArr = $this->balanceHistory($currency, $limits);
+                break;
 
             case "Income by categories":
-                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("income", "category", $currency, $limits)]);
             case "Outcome by categories":
-                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("outcome", "category", $currency, $limits)]);
             case "Income by means of payment":
-                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("income", "mean", $currency, $limits)]);
             case "Outcome by means of payment":
-                return response()->json(["info" => $chart->only("id", "name"), ...$this->dataByType("outcome", "mean", $currency, $limits)]);
+                $name = explode(" ", $chart->name);
+                $retArr = $this->dataByType(
+                    strtolower($name[0]),
+                    $name[2] == "categories" ? "category" : "mean",
+                    $currency, $limits
+                );
+                break;
+
 
             default:
                 abort(500);
         }
+
+        return response()->json(["info" => $chart->only("id", "name"), ...$retArr]);
     }
 }

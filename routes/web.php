@@ -38,7 +38,6 @@ Route::prefix("/web-api")->group(function () {
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\DashboardController@index")->name("web-api.dashboard");
             Route::get("/recent-transactions", "WebAPI\DashboardController@getRecentTransactions")->name("web-api.dashboard.recent-transactions");
-            Route::get("/charts/{chart}", "WebAPI\DashboardChartsController@index")->name("web-api.dashboard.charts");
         });
     });
 
@@ -53,7 +52,6 @@ Route::prefix("/web-api")->group(function () {
                 Route::get("/", "WebAPI\IOController@index")->name("web-api.$type.currency");
                 Route::post("/", "WebAPI\IOController@store")->name("web-api.$type.currency.store");
                 Route::get("/data", "WebAPI\IOController@data")->name("web-api.$type.currency.data");
-                Route::get("/overview", "WebAPI\IOController@overview")->name("web-api.$type.currency.overview");
                 Route::get("/list", "WebAPI\IOController@list")->name("web-api.$type.currency.list");
             });
         });

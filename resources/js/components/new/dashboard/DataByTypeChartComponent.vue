@@ -60,6 +60,7 @@ export default {
                 .get(`/web-api/charts/${this.id}/currency/${this.currencies.usedCurrency}`, { params: this.params })
                 .then(response => {
                     const data = response.data;
+
                     this.chartData = data.data;
                     this.options = data.options;
 

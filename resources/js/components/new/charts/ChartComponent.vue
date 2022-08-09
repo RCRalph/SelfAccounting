@@ -33,12 +33,14 @@
         </div>
     </v-card>
 
-    <v-overlay v-else :value="true" opacity="1" absolute>
-        <v-progress-circular
-            indeterminate
-            size="96"
-        ></v-progress-circular>
-    </v-overlay>
+    <v-card v-else>
+        <v-card-text class="d-flex justify-center">
+            <v-progress-circular
+                indeterminate
+                size="96"
+            ></v-progress-circular>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
