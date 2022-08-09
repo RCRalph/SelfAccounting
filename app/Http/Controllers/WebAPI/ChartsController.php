@@ -180,11 +180,12 @@ class ChartsController extends Controller
                     );
                 }
                 else {
-                    $incomeByMean
-                        ->prepend(
-                            $firstEntries[$mean->id] * 1,
-                            $mean->first_entry_date
-                        );
+                    $startDate = $mean->first_entry_date;
+                    if ($limits["start"] && strtotime($limits["start"]) > strtotime($startDate)) {
+                        $startDate = $limits["start"];
+                    }
+
+                    $incomeByMean->prepend($firstEntries[$mean->id] * 1, $startDate);
                 }
 
                 if (!$incomeByMean->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
