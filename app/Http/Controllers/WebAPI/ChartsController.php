@@ -183,7 +183,7 @@ class ChartsController extends Controller
                     $incomeByMean
                         ->prepend(
                             $firstEntries[$mean->id] * 1,
-                            $limits["start"] ? $limits["start"] : Carbon::today()->format("Y-m-d")
+                            $mean->first_entry_date
                         );
                 }
 
