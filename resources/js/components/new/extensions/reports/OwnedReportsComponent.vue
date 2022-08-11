@@ -10,19 +10,24 @@
                 :loading="tableLoading"
                 :server-items-length="total"
                 :options.sync="options"
+                :footer-props="{
+                    'items-per-page-options': [10, 15, 20, 25, 30]
+                }"
             >
                 <template v-slot:top>
                     <v-row class="align-center mb-0">
                         <v-col cols="12" sm="6" lg="5">
-                            <v-text-field
-                                v-model="search"
-                                append-icon="mdi-magnify"
-                                label="Search"
-                                dense
-                                single-line
-                                counter="64"
-                                :rules="[validation.search(64)]"
-                            ></v-text-field>
+                            <v-form v-model="canRefresh">
+                                <v-text-field
+                                    v-model="search"
+                                    append-icon="mdi-magnify"
+                                    label="Search"
+                                    dense
+                                    single-line
+                                    counter="64"
+                                    :rules="[validation.search(64)]"
+                                ></v-text-field>
+                            </v-form>
                         </v-col>
 
                         <v-col cols="12" sm="6" lg="7" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
@@ -50,17 +55,19 @@
                                 :id="item.id"
                                 @updated="updated"
                             ></EditMeanDialogComponent>-->
+                            <v-icon class="mx-1 cursor-pointer">mdi-open-in-app</v-icon>
+
+                            <v-icon class="mx-1 cursor-pointer" @click="share(item.id)">mdi-share</v-icon>
 
                             <v-icon class="mx-1 cursor-pointer">mdi-pencil</v-icon>
+
+                            <v-icon class="mx-1 cursor-pointer">mdi-content-duplicate</v-icon>
 
                             <DeleteDialogComponent
                                 thing="report"
                                 :url="`extensions/reports/${item.id}`"
                                 @deleted="deleted"
                             ></DeleteDialogComponent>
-
-                            <v-icon class="mx-1 cursor-pointer">mdi-content-duplicate</v-icon>
-                            <v-icon class="mx-1 cursor-pointer" @click="share(item.id)">mdi-share</v-icon>
                         </div>
                     </td>
                 </template>
@@ -114,6 +121,7 @@ export default {
             total: null,
             lastChange: new Date(),
 
+            canRefresh: true,
             tableLoading: false,
             ready: false,
             success: false,
