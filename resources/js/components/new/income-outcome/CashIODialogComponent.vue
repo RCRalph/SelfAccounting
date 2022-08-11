@@ -81,7 +81,7 @@
         </v-card>
 
         <v-card v-else>
-            <v-card-title>Cash</v-card-title>
+            <v-card-title>Set Cash</v-card-title>
 
             <v-card-text class="d-flex justify-center">
                 <v-progress-circular

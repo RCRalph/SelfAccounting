@@ -20,7 +20,8 @@
                             label="Search"
                             dense
                             single-line
-                            hide-details
+                            counter="64"
+                            :rules="[validation.search(64)]"
                         ></v-text-field>
                     </v-col>
 
@@ -205,6 +206,7 @@
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
+import validation from "&/mixins/validation";
 import customTableMerged from "&/mixins/customTableMerged";
 
 import AddIODialogComponent from "@/income-outcome/AddIODialogComponent.vue";
@@ -220,7 +222,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [main, customTableMerged],
+    mixins: [main, customTableMerged, validation],
     components: {
         AddIODialogComponent,
         EditIODialogComponent,

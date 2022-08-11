@@ -185,7 +185,7 @@ export default {
                             return "Password has to have more than 8 characters";
                         }
                         else if (password.length > 64) {
-                            return "Password can't hqave more than 64 characters";
+                            return "Password can't have more than 64 characters";
                         }
 
                         return true;
@@ -210,6 +210,21 @@ export default {
                         }
                         else if (type == "outcome" && owned < amount) {
                             return "Amount cannot be greater than currently owned amount";
+                        }
+
+                        return true;
+                    }
+                },
+                search(length = 64) {
+                    return search => {
+                        if (!search) {
+                            return true;
+                        }
+                        else if (typeof search != "string") {
+                            return "Search has to be a string";
+                        }
+                        else if (search.length > 64) {
+                            return "Search can't have more than 64 characters";
                         }
 
                         return true;

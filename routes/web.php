@@ -117,6 +117,12 @@ Route::prefix("/web-api")->group(function () {
             Route::post("/", "WebAPI\Extensions\CashController@update")->name("web-api.extensions.cash.update");
             Route::get("/list", "WebAPI\Extensions\CashController@list")->name("web-api.extensions.cash.list");
         });
+
+        Route::prefix("/reports")->group(function () {
+            Route::get("/", "WebAPI\Extensions\ReportsController@index")->name("web-api.extensions.reports");
+            Route::get("/owned-reports", "WebAPI\Extensions\ReportsController@ownedReports")->name("web-api.extensions.reports.owned-reports");
+            Route::get("/shared-reports", "WebAPI\Extensions\ReportsController@sharedReports")->name("web-api.extensions.reports.shared-reports");
+        });
     });
 });
 
