@@ -11,6 +11,7 @@ import ChartComponent from "@/charts/ChartComponent.vue";
 
 import CashComponent from "@/extensions/cash/CashComponent.vue";
 import ReportsComponent from "@/extensions/reports/ReportsComponent.vue";
+import ViewReportComponent from "@/extensions/reports/ViewReportComponent.vue";
 
 Vue.use(VueRouter)
 
@@ -25,7 +26,8 @@ const routes = [
 
     { path: "/extensions/store", component: ExtensionsComponent },
     { path: "/extensions/cash", component: CashComponent },
-    { path: "/extensions/reports", component: ReportsComponent }
+    { path: "/extensions/reports", component: ReportsComponent },
+    { path: "/extensions/reports/:id", component: ViewReportComponent }
 ]
 
 export default new VueRouter({ routes })

@@ -1,14 +1,12 @@
 <template>
     <div v-if="ready">
         <v-row>
-            <v-col lg="5" cols="12">
+            <v-col xl="5" lg="6" cols="12">
                 <OwnedReportsComponent></OwnedReportsComponent>
             </v-col>
 
-            <v-col lg="7" cols="12">
-                <SharedReportsComponent
-                    :owners="owners"
-                ></SharedReportsComponent>
+            <v-col xl="7" lg="6" cols="12">
+                <SharedReportsComponent :owners="owners"></SharedReportsComponent>
             </v-col>
         </v-row>
     </div>

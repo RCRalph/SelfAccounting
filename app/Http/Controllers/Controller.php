@@ -171,15 +171,6 @@ class Controller extends BaseController
             $user->premiumExtensions->contains($extension);
     }
 
-    public function getCurrencies()
-    {
-        return Cache::remember(
-            "currencies",
-            now()->addHours(1),
-            fn () => Currency::all()
-        );
-    }
-
     public function getCash()
     {
         return Cache::remember(
@@ -234,6 +225,11 @@ class Controller extends BaseController
     }
 
     /* ----- Common functions for new design ----- */
+
+    public function getCurrencies()
+    {
+        return Cache::rememberForever("currencies", fn () => Currency::all());
+    }
 
     public function getLastUsedCurrencies()
     {
