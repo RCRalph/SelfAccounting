@@ -186,8 +186,6 @@
                     </td>
                 </tr>
             </template>
-
-            <template slot:bottom></template>
         </v-data-table>
 
         <InfiniteLoading

@@ -359,16 +359,16 @@ class Controller extends BaseController
         $paginatedData = $items->getCollection()->toArray();
 
         $categories = auth()->user()->categories()
-            ->where("currency_id", $currency->id)
             ->select("id", "name")
+            ->where("currency_id", $currency->id)
             ->get()
-            ->keyBy("id");
+            ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]]);
 
         $means = auth()->user()->meansOfPayment()
-            ->where("currency_id", $currency->id)
             ->select("id", "name")
+            ->where("currency_id", $currency->id)
             ->get()
-            ->keyBy("id");
+            ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]]);
 
         foreach ($paginatedData as $i => $item) {
             $paginatedData[$i]["amount"] *= 1;

@@ -12,6 +12,21 @@ use App\Rules\Common\SameLengthAs;
 
 class ReportsController extends Controller
 {
+    private $columns = ["date", "title", "amount", "price", "value", "category_id", "mean_id"];
+
+    private $queryFields = [
+        [ "column" => "date", "operator" => ">=", "name" => "min_date" ],
+        [ "column" => "amount", "operator" => ">=", "name" => "min_amount" ],
+        [ "column" => "price", "operator" => ">=", "name" => "min_price" ],
+        [ "column" => "date", "operator" => "<=", "name" => "max_date" ],
+        [ "column" => "amount", "operator" => "<=", "name" => "max_amount" ],
+        [ "column" => "price", "operator" => "<=", "name" => "max_price" ],
+        [ "column" => "title", "operator" => "=" ],
+        [ "column" => "currency_id", "operator" => "=" ],
+        [ "column" => "category_id", "operator" => "=" ],
+        [ "column" => "mean_id", "operator" => "=" ]
+    ];
+
     public function __construct()
     {
         $this->middleware(["auth", "extension:report"]);
@@ -20,7 +35,7 @@ class ReportsController extends Controller
     private function getColumnBinary($columns)
     {
         $columnNumber = 0;
-        foreach ($this->TABLE_HEAD as $key) {
+        foreach ($this->columns as $key) {
             $columnNumber <<= 1;
             $columnNumber += $columns[$key];
         }
@@ -31,12 +46,26 @@ class ReportsController extends Controller
     private function getColumnsToShow($columnNumber)
     {
         $columns = [];
-        foreach (array_reverse($this->TABLE_HEAD) as $key) {
+        foreach (array_reverse($this->columns) as $key) {
             $columns[$key] = !!($columnNumber % 2);
             $columnNumber >>= 1;
         }
 
         return $columns;
+    }
+
+    private function addFields(&$data, $columnsToShow, $valueFieldMultiplier = 1)
+    {
+        foreach ($this->getColumnsToShow($columnsToShow) as $column => $show) {
+            if ($show) {
+                if ($column == "value") {
+                    $data->addSelect(DB::raw("round(amount * price * $valueFieldMultiplier, 2) AS value"));
+                }
+                else {
+                    $data->addSelect($column);
+                }
+            }
+        }
     }
 
     public function index()
@@ -121,60 +150,79 @@ class ReportsController extends Controller
     {
         $this->authorize("view", $report);
 
-        $reportData = [
-            "title" => $report->title,
-            "columns" => $this->getColumnsToShow($report->show_columns)
+        $information = [
+            "title" => $report->title
         ];
 
-        $categories = $report->user->categories()
-            ->select("id", "name", "currency_id")
-            ->get()
-            ->groupBy("currency_id");
-
-        $means = $report->user->meansOfPayment()
-            ->select("id", "name", "currency_id")
-            ->get()
-            ->groupBy("currency_id");
-
-        $rows = $report->additionalEntries()->select(
-            "date", "title", "amount", "price",
-            DB::raw("round(amount * price, 2) AS value"),
-            "currency_id", "category_id", "mean_id"
-        );
+        $valueSign = 1;
+        $rows = $report->additionalEntries();
+        $this->addFields($rows, $report->show_columns);
 
         foreach ($report->queries as $query) {
             $data = $query->query_data == "income" ?
                 $report->user->income() :
                 $report->user->outcome();
 
-            $valueSign = ($report->income_addition xor $query->query_data == "income") ? -1 : 1;
+            foreach ($this->queryFields as $field) {
+                $queryFieldName = $field["name"] ?? $field["column"];
 
-            $queryFieldsToCheck = [
-                [ "column" => "date", "operator" => ">=", "name" => "min_date" ],
-                [ "column" => "date", "operator" => "<=", "name" => "max_date" ],
-                [ "column" => "title", "operator" => "=", "name" => "title" ],
-                [ "column" => "amount", "operator" => ">=", "name" => "min_amount" ],
-                [ "column" => "amount", "operator" => "<=", "name" => "max_amount" ],
-                [ "column" => "price", "operator" => ">=", "name" => "min_price" ],
-                [ "column" => "price", "operator" => "<=", "name" => "max_price" ],
-                [ "column" => "currency_id", "operator" => "=", "name" => "currency_id" ],
-                [ "column" => "category_id", "operator" => "=", "name" => "category_id" ],
-                [ "column" => "mean_id", "operator" => "=", "name" => "mean_id" ]
-            ];
-
-            foreach ($queryFieldsToCheck as $field) {
-                if ($query[$field["name"]]) {
-                    $data->where($field["column"], $field["operator"], $query[$field["name"]]);
+                if ($query[$queryFieldName]) {
+                    $data->where($field["column"], $field["operator"], $query[$queryFieldName]);
                 }
             }
 
-            $rows->union($data->select(
-                "date", "title", DB::raw("amount * $valueSign AS amount"),
-                "price", DB::raw("round(amount * price * $valueSign, 2) AS value"),
-                "currency_id", "category_id", "mean_id"
-            ));
+            $this->addFields($data, $report->show_columns,
+                ($report->income_addition xor $query->query_data == "income") ? -1 : 1
+            );
+
+            $rows->union($data);
         }
 
-        dd($rows->get());
+        $items = $rows->orderBy("date")->get();
+
+        if ($report->calculate_sum) {
+            $information["sum"] = [];
+
+            foreach ($items as $row) {
+                if (isset($information["sum"][$row["currency_id"]])) {
+                    $information["sum"][$row["currency_id"]] += $row["value"];
+                }
+                else {
+                    $information["sum"][$row["currency_id"]] = $row["value"];
+                }
+            }
+
+            foreach ($information["sum"] as $i => $s) {
+                $information["sum"][$i] = round($information["sum"][$i], 2);
+            }
+        }
+
+        $categories = $report->user->categories()
+            ->select("id", "name")
+            ->get()
+            ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]])
+            ->toArray();
+
+        $means = $report->user->meansOfPayment()
+            ->select("id", "name")
+            ->get()
+            ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]])
+            ->toArray();
+
+        $showColumns = $this->getColumnsToShow($report->show_columns);
+
+        foreach ($items as $i => $item) {
+            if ($showColumns["category_id"]) {
+                $items[$i]["category"] = $categories[$item["category_id"]] ?? "N/A";
+                unset($items[$i]["category_id"]);
+            }
+
+            if ($showColumns["mean_id"]) {
+                $items[$i]["mean"] = $means[$item["mean_id"]] ?? "N/A";
+                unset($items[$i]["mean_id"]);
+            }
+        }
+
+        return response()->json(compact("information", "items"));
     }
 }

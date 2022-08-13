@@ -133,6 +133,7 @@ Route::prefix("/web-api")->group(function () {
 
             Route::prefix("/{report}")->group(function () {
                 Route::get("/", "WebAPI\Extensions\ReportsController@show")->name("web-api.extensions.reports.show");
+                Route::get("/content", "WebAPI\Extensions\ReportsController@content")->name("web-api.extensions.reports.content");
             });
         });
     });

@@ -226,12 +226,8 @@ export default {
                     this.reports = data.reports.data;
                     this.total = data.total;
 
-                    if (this.ready) {
-                        this.tableLoading = false;
-                    }
-                    else {
-                        this.ready = true;
-                    }
+                    this.ready = true;
+                    this.tableLoading = false;
                 })
         },
         updateWithOffset() {
