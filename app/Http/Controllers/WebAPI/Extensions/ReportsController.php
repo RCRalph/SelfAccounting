@@ -56,6 +56,8 @@ class ReportsController extends Controller
 
     private function addFields(&$data, $columnsToShow, $valueFieldMultiplier = 1)
     {
+        $data->select("currency_id");
+
         foreach ($this->getColumnsToShow($columnsToShow) as $column => $show) {
             if ($show) {
                 if ($column == "value") {
@@ -151,7 +153,8 @@ class ReportsController extends Controller
         $this->authorize("view", $report);
 
         $information = [
-            "title" => $report->title
+            "title" => $report->title,
+            "owner" => $report->user->only("username", "profile_picture_link")
         ];
 
         $valueSign = 1;
@@ -212,6 +215,18 @@ class ReportsController extends Controller
         $showColumns = $this->getColumnsToShow($report->show_columns);
 
         foreach ($items as $i => $item) {
+            if ($showColumns["amount"]) {
+                $items[$i]["amount"] *= 1;
+            }
+
+            if ($showColumns["price"]) {
+                $items[$i]["price"] *= 1;
+            }
+
+            if ($showColumns["value"]) {
+                $items[$i]["value"] *= 1;
+            }
+
             if ($showColumns["category_id"]) {
                 $items[$i]["category"] = $categories[$item["category_id"]] ?? "N/A";
                 unset($items[$i]["category_id"]);

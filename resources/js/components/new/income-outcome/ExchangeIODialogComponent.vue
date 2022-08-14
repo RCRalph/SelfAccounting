@@ -240,7 +240,7 @@ export default {
                 price = typeof this.from.price == "string" ? this.from.price.replaceAll(",", ".") : this.from.price;
 
             return {
-                currency: this.currencies.selectCurrencies([this.from.currency_id])[0],
+                currency: this.currencies.findCurrency(this.from.currency_id),
                 value: Math.round(amount * price * 100) / 100,
                 categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
@@ -261,7 +261,7 @@ export default {
                 price = typeof this.to.price == "string" ? this.to.price.replaceAll(",", ".") : this.to.price;
 
             return {
-                currency: this.currencies.selectCurrencies([this.to.currency_id])[0],
+                currency: this.currencies.findCurrency(this.to.currency_id),
                 value: Math.round(amount * price * 100) / 100,
                 categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
