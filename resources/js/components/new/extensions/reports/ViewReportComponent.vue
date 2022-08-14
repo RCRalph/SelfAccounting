@@ -98,14 +98,16 @@
                             <v-card style="height: 100%;">
                                 <v-card-title class="font-weight-bold justify-center text-h5">Owner</v-card-title>
 
-                                <v-card-text class="d-flex align-center justify-center">
-                                    <v-avatar size="64">
-                                        <v-img
-                                            :src="information.owner.profile_picture_link">
-                                        </v-img>
-                                    </v-avatar>
+                                <v-card-text class="d-flex align-center justify-center" style="height: calc(100% - 64px)">
+                                    <div class="d-flex align-center justify-center">
+                                        <v-avatar size="64">
+                                            <v-img
+                                                :src="information.owner.profile_picture_link">
+                                            </v-img>
+                                        </v-avatar>
 
-                                    <h2 class="ml-4">{{ information.owner.username }}</h2>
+                                        <h2 class="ml-4">{{ information.owner.username }}</h2>
+                                    </div>
                                 </v-card-text>
                             </v-card>
                         </v-col>
@@ -142,10 +144,12 @@
                             <v-card style="height: 100%;">
                                 <v-card-title class="font-weight-bold justify-center text-h5">Export</v-card-title>
 
-                                <v-card-text class="d-flex justify-space-around flex-wrap">
-                                    <v-btn outlined class="mx-2 my-1">Export to .csv</v-btn>
+                                <v-card-text class="d-flex align-center justify-center" style="height: calc(100% - 64px)">
+                                    <div class="d-flex justify-space-around flex-wrap">
+                                        <v-btn outlined class="mx-2 my-1" @click="exportToCSV">Export to .csv</v-btn>
 
-                                    <v-btn outlined class="mx-2 my-1" color="success">Export to .xlsx</v-btn>
+                                        <v-btn outlined class="mx-2 my-1" @click="exportToXLSX" color="success">Export to .xlsx</v-btn>
+                                    </div>
                                 </v-card-text>
                             </v-card>
                         </v-col>
@@ -198,14 +202,14 @@ export default {
 
             let items = _.cloneDeep(this.content);
 
-            if (this.titleSearch != "") {
+            if (this.titleSearch != "" && Object.keys(this.content[0]).includes("title")) {
                 const regex = new RegExp(this.titleSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 
                 items = items.filter(item => regex.test(item.title));
             }
 
             Object.keys(this.filteredData).forEach(key => {
-                if (this.filteredData[key].length) {
+                if (this.filteredData[key].length && Object.keys(this.content[0].includes(key))) {
                     items = items.filter(item => this.filteredData[key].includes(item[key]));
                 }
             })
@@ -254,6 +258,57 @@ export default {
         },
         showColumn(column) {
             return this.columnsToShow.includes(column);
+        },
+        exportToCSV() {
+            let file = [
+                this.headers.map(item => item.text).join(",")
+            ];
+
+            this.items.forEach(item => {
+                file.push(this.headers.map(item1 => {
+                    if (["Price", "Value"].includes(item1.text)) {
+                        return item[item1.value] + " " + this.currencies.findCurrency(item.currency_id).ISO;
+                    }
+                    else {
+                        return '"' + item[item1.value] + '"';
+                    }
+                }).join(","));
+            });
+
+            let result = file.join("%0A");
+
+            const download = document.createElement("a");
+            download.style.display = "none;"
+            download.href = `data:text/csv;charset:utf-8,${result}`;
+            download.download = `${this.information.title}.csv`
+
+            document.body.appendChild(download);
+            download.click();
+            document.body.removeChild(download);
+        },
+        exportToXLSX() {
+            const workbook = XLSX.utils.book_new();
+
+            const data = [this.headers.map(item => item.text)];
+
+            this.items.forEach(item => {
+                data.push(this.headers.map(item1 => item[item1.value]));
+            });
+
+            const sheet = XLSX.utils.aoa_to_sheet(data);
+
+            ["Price", "Value"].forEach(column => {
+                if (data[0].includes(column)) {
+                const range = XLSX.utils.decode_range(sheet["!ref"]);
+                const columnIndex = data[0].findIndex(item => item == column);
+
+                for (let i = range.s.r + 1; i <= range.e.r; i++) {
+                    sheet[XLSX.utils.encode_cell({ r: i, c: columnIndex })].z = '0.00\" ' + this.currencies.findCurrency(this.items[i - 1].currency_id).ISO + '"';
+                }
+            }})
+
+            XLSX.utils.book_append_sheet(workbook, sheet, this.information.title);
+            XLSX.writeFile(workbook, `${this.information.title}.xlsx`);
         }
     },
     mounted() {
