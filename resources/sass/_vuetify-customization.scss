@@ -137,3 +137,18 @@ tr {
         display: block;
     }
 }
+
+.checkbox-centered {
+    display: flex;
+    justify-content: center;
+
+    .v-input--selection-controls__input {
+        margin-right: 0 !important;
+    }
+}
+
+.disable-hover {
+    tr:hover {
+        background-color: transparent !important;
+    }
+}

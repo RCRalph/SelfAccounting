@@ -92,9 +92,23 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <td>
                         <div class="d-flex flex-nowrap justify-center align-center">
-                            <v-icon class="mx-1 cursor-pointer">mdi-open-in-app</v-icon>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <router-link :to="`/extensions/reports/${item.id}`">
+                                        <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs">mdi-open-in-app</v-icon>
+                                    </router-link>
+                                </template>
 
-                            <v-icon class="mx-1 cursor-pointer" @click="share(item.id)">mdi-share</v-icon>
+                                <span>View report</span>
+                            </v-tooltip>
+
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs" @click="share(item.id)">mdi-share</v-icon>
+                                </template>
+
+                                <span>Share report</span>
+                            </v-tooltip>
 
                             <DeleteDialogComponent
                                 thing="report"

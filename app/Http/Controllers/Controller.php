@@ -373,9 +373,9 @@ class Controller extends BaseController
         foreach ($paginatedData as $i => $item) {
             $paginatedData[$i]["amount"] *= 1;
             $paginatedData[$i]["price"] *= 1;
-            $paginatedData[$i]["value"] = round($item["amount"] * $item["price"] * ($item["type"] ?? 1), 2);
-            $paginatedData[$i]["category"] = $categories[$item["category_id"]]->name ?? "N/A";
-            $paginatedData[$i]["mean"] = $means[$item["mean_id"]]->name ?? "N/A";
+            $paginatedData[$i]["value"] *= $item["type"] ?? 1;
+            $paginatedData[$i]["category"] = $categories[$item["category_id"]] ?? "N/A";
+            $paginatedData[$i]["mean"] = $means[$item["mean_id"]] ?? "N/A";
 
             unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["mean_id"]);
         }

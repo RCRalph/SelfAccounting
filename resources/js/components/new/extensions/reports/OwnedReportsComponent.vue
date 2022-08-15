@@ -31,14 +31,7 @@
                         </v-col>
 
                         <v-col cols="12" sm="6" lg="7" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
-                            <!--<ExchangeIODialogComponent
-                                @exchanged="exchanged"
-                            ></ExchangeIODialogComponent>
-
-                            <AddIODialogComponent
-                                :type="type"
-                                @added="added"
-                            ></AddIODialogComponent>-->
+                            <CreateReportDialogComponent></CreateReportDialogComponent>
                         </v-col>
                     </v-row>
                 </template>
@@ -51,17 +44,39 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <td>
                         <div class="d-flex flex-nowrap justify-center align-center">
-                            <!--<EditMeanDialogComponent
-                                :id="item.id"
-                                @updated="updated"
-                            ></EditMeanDialogComponent>-->
-                            <v-icon class="mx-1 cursor-pointer">mdi-open-in-app</v-icon>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <router-link :to="`/extensions/reports/${item.id}`">
+                                        <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs">mdi-open-in-app</v-icon>
+                                    </router-link>
+                                </template>
 
-                            <v-icon class="mx-1 cursor-pointer" @click="share(item.id)">mdi-share</v-icon>
+                                <span>View report</span>
+                            </v-tooltip>
 
-                            <v-icon class="mx-1 cursor-pointer">mdi-pencil</v-icon>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs" @click="share(item.id)">mdi-share</v-icon>
+                                </template>
 
-                            <v-icon class="mx-1 cursor-pointer">mdi-content-duplicate</v-icon>
+                                <span>Share report</span>
+                            </v-tooltip>
+
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs">mdi-pencil</v-icon>
+                                </template>
+
+                                <span>Edit report</span>
+                            </v-tooltip>
+
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs">mdi-content-duplicate</v-icon>
+                                </template>
+
+                                <span>Duplicate report</span>
+                            </v-tooltip>
 
                             <DeleteDialogComponent
                                 thing="report"
@@ -94,8 +109,10 @@ import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 import validation from "&/mixins/validation";
 
+import CreateReportDialogComponent from "@/extensions/reports/CreateReportDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
+
 
 export default {
     setup() {
@@ -105,6 +122,7 @@ export default {
     },
     mixins: [main, validation],
     components: {
+        CreateReportDialogComponent,
         DeleteDialogComponent,
         SuccessSnackbarComponent
     },

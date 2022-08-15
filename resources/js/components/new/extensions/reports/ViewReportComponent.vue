@@ -29,6 +29,10 @@
                                             :rules="[validation.search(64)]"
                                         ></v-text-field>
                                     </v-col>
+
+                                    <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
+                                        <v-btn outlined>Edit report</v-btn>
+                                    </v-col>
                                 </v-row>
                             </template>
 
@@ -113,11 +117,15 @@
                         </v-col>
 
                         <v-col xl="12" md="4" cols="12" class="mb-xl-4">
-                            <v-card v-if="information.sum" style="height: 100%;">
+                            <v-card style="height: 100%;">
                                 <v-card-title class="font-weight-bold justify-center text-h5">Sum</v-card-title>
 
+                                <v-card-text v-if="!information.sum" class="d-flex align-center justify-center" style="height: calc(100% - 64px)">
+                                    <h3 class="font-weight-regular">Sum not calculated</h3>
+                                </v-card-text>
+
                                 <v-card-text
-                                    v-if="Object.keys(information.sum).length == 1"
+                                    v-else-if="Object.keys(information.sum).length == 1"
                                     class="text-h4 text-center font-weight-regular mb-6"
                                     :class="$vuetify.theme.dark ? 'white--text' : 'black--text'"
                                 >

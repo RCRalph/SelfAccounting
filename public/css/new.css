@@ -29668,6 +29668,18 @@ tr:hover {
   display: block;
 }
 
+.checkbox-centered {
+  display: flex;
+  justify-content: center;
+}
+.checkbox-centered .v-input--selection-controls__input {
+  margin-right: 0 !important;
+}
+
+.disable-hover tr:hover {
+  background-color: transparent !important;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;

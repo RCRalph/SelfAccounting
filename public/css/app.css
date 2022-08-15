@@ -29669,6 +29669,18 @@ tr:hover {
   display: block;
 }
 
+.checkbox-centered {
+  display: flex;
+  justify-content: center;
+}
+.checkbox-centered .v-input--selection-controls__input {
+  margin-right: 0 !important;
+}
+
+.disable-hover tr:hover {
+  background-color: transparent !important;
+}
+
 /*!
  * Bootstrap  v5.2.0 (https://getbootstrap.com/)
  * Copyright 2011-2022 The Bootstrap Authors

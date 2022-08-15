@@ -1,7 +1,13 @@
 <template>
     <v-dialog v-model="dialog" width="unset">
-        <template v-slot:activator="{ on, attrs }">
-            <v-icon class="mx-1 cursor-pointer" v-bind="attrs" v-on="on">mdi-delete</v-icon>
+        <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
+            <v-tooltip bottom >
+                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
+                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-delete</v-icon>
+                </template>
+
+                <span>Delete {{ thing }}</span>
+            </v-tooltip>
         </template>
 
         <v-card>

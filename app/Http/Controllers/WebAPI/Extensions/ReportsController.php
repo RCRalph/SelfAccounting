@@ -181,7 +181,7 @@ class ReportsController extends Controller
             $rows->union($data);
         }
 
-        $items = $rows->orderBy("date")->get();
+        $items = $rows->orderBy("date", $report->sort_dates_desc ? "desc" : "asc")->get();
 
         if ($report->calculate_sum) {
             $information["sum"] = [];

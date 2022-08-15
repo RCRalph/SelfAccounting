@@ -1,7 +1,13 @@
 <template>
     <v-dialog v-model="dialog" max-width="700">
-        <template v-slot:activator="{ on, attrs }">
-            <v-icon class="mx-1 cursor-pointer" v-bind="attrs" v-on="on">mdi-pencil</v-icon>
+        <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
+            <v-tooltip bottom >
+                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
+                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-pencil</v-icon>
+                </template>
+
+                <span>Edit mean of payment</span>
+            </v-tooltip>
         </template>
 
         <v-card v-if="ready">
