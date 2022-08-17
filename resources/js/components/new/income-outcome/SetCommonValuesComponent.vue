@@ -1,7 +1,14 @@
 <template>
     <v-dialog v-model="dialog" max-width="700">
         <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined color="primary" v-bind="attrs" v-on="on" :class="$vuetify.breakpoint.xs && 'mt-2'">Set common values</v-btn>
+            <v-btn
+                outlined
+                color="primary"
+                :class="$vuetify.breakpoint.xs && 'mt-2'"
+                v-bind="attrs" v-on="on"
+            >
+                Set common values
+            </v-btn>
         </template>
 
         <v-card>
@@ -69,8 +76,6 @@
 </template>
 
 <script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-
 import { useCurrenciesStore } from "&/stores/currencies";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
@@ -82,9 +87,6 @@ export default {
         return { currencies };
     },
     mixins: [validation, main],
-    components: {
-        ErrorSnackbarComponent
-    },
     props: {
         means: {
             required: true,

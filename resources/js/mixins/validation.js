@@ -37,12 +37,13 @@ export default {
                 },
                 amount(allowNull = false) {
                     return amount => {
-                        amount = String(amount).replaceAll(",", ".");
-
                         if (allowNull && !amount) {
                             return true;
                         }
-                        else if (!amount) {
+
+                        amount = String(amount).replaceAll(",", ".");
+
+                        if (!amount) {
                             return "Amount is required";
                         }
                         else if (isNaN(Number(amount))) {
@@ -60,12 +61,13 @@ export default {
                 },
                 price(allowNull = false) {
                     return price => {
-                        price = String(price).replaceAll(",", ".");
-
                         if (allowNull && !price) {
                             return true;
                         }
-                        else if (!price) {
+
+                        price = String(price).replaceAll(",", ".");
+
+                        if (!price) {
                             return "Price is required";
                         }
                         else if (isNaN(Number(price))) {
@@ -223,8 +225,8 @@ export default {
                         else if (typeof search != "string") {
                             return "Search has to be a string";
                         }
-                        else if (search.length > 64) {
-                            return "Search can't have more than 64 characters";
+                        else if (search.length > length) {
+                            return `Search can't have more than ${length} characters`;
                         }
 
                         return true;

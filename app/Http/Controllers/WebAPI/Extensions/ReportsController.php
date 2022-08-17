@@ -240,4 +240,21 @@ class ReportsController extends Controller
 
         return response()->json(compact("information", "items"));
     }
+
+    public function create()
+    {
+        $titles = $this->getTitles();
+
+        $categories = auth()->user()->categories()
+            ->select("id", "name", "currency_id")
+            ->get()
+            ->groupBy("currency_id");
+
+        $means = auth()->user()->meansOfPayment()
+            ->select("id", "name", "currency_id")
+            ->get()
+            ->groupBy("currency_id");
+
+        return response()->json(compact("titles", "categories", "means"));
+    }
 }

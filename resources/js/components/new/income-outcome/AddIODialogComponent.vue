@@ -115,19 +115,19 @@
                 </div>
 
                 <div :class="$vuetify.breakpoint.xs && 'd-flex flex-wrap flex-column'">
-                    <v-btn outlined rounded fab small class="ma-1" @click="nextPage" :disabled="this.page == this.data.length - 1">
+                    <v-btn outlined rounded fab small class="ma-1" @click="nextPage" :disabled="page == data.length - 1">
                         <v-icon>mdi-arrow-right</v-icon>
                     </v-btn>
 
-                    <v-btn outlined rounded fab small class="ma-1" @click="lastPage" :color="this.page == this.data.length - 1 ? 'primary' : undefined">
-                        <v-icon v-if="this.page != this.data.length - 1">mdi-arrow-collapse-right</v-icon>
+                    <v-btn outlined rounded fab small class="ma-1" @click="lastPage" :color="page == data.length - 1 ? 'primary' : undefined">
+                        <v-icon v-if="page != data.length - 1">mdi-arrow-collapse-right</v-icon>
                         <v-icon v-else>mdi-plus</v-icon>
                     </v-btn>
                 </div>
             </v-card-actions>
 
             <div class="text-center text-caption pb-2 text--secondary">
-                {{ page + 1 }} / {{ this.data.length }}
+                {{ page + 1 }} / {{ data.length }}
             </div>
         </v-card>
 

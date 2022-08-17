@@ -1,11 +1,15 @@
 <template>
-    <v-dialog v-model="dialog" max-width="700">
+    <v-dialog v-model="dialog" max-width="800">
         <template v-slot:activator="{ on, attrs }">
             <v-btn outlined v-bind="attrs" v-on="on">Create report</v-btn>
         </template>
 
-        <v-card>
-            <v-card-title>Create report</v-card-title>
+        <v-card v-if="ready">
+            <v-card-title class="d-flex justify-space-between">
+                <div>Create report</div>
+
+                <v-btn outlined>Share</v-btn>
+            </v-card-title>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
@@ -82,49 +86,61 @@
                                 <tr>
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox v-model="data.columns.date"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.date"></v-checkbox>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox v-model="data.columns.title"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.title"></v-checkbox>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox v-model="data.columns.amount"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.amount"></v-checkbox>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox v-model="data.columns.price"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.price"></v-checkbox>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox v-model="data.columns.value"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.value"></v-checkbox>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox v-model="data.columns.category_id"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.category_id"></v-checkbox>
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox v-model="data.columns.mean_id"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.mean_id"></v-checkbox>
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </template>
                     </v-simple-table>
+
+                    <div class="d-flex justify-space-around flex-wrap flex-sm-row flex-column mt-2">
+                        <ReportQueriesDialogComponent
+                            v-model="data.queries"
+                            :titles="titles"
+                            :categories="categories"
+                            :means="means"
+                            :disableUpdate="!canSubmit || loading"
+                        ></ReportQueriesDialogComponent>
+
+                        <v-btn outlined :block="$vuetify.breakpoint.xs" width="205" class="my-1">Additional entries</v-btn>
+                    </div>
                 </v-form>
             </v-card-text>
 
@@ -135,30 +151,37 @@
             </v-card-actions>
         </v-card>
 
+        <v-card v-else>
+            <v-card-title>Create report</v-card-title>
+
+            <v-card-text class="d-flex justify-center">
+                <v-progress-circular
+                    indeterminate
+                    size="96"
+                ></v-progress-circular>
+            </v-card-text>
+        </v-card>
+
         <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
 <script>
+import ReportQueriesDialogComponent from "@/extensions/reports/ReportQueriesDialogComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
-import { useCurrenciesStore } from "&/stores/currencies";
 import validation from "&/mixins/validation";
-import main from "&/mixins/main";
 
 export default {
-    setup() {
-        const currencies = useCurrenciesStore();
-
-        return { currencies };
-    },
-    mixins: [validation, main],
+    mixins: [validation],
     components: {
+        ReportQueriesDialogComponent,
         ErrorSnackbarComponent
     },
     data() {
         return {
             dialog: false,
+            ready: false,
             startData: {
                 title: "",
                 calculate_sum: true,
@@ -178,6 +201,9 @@ export default {
                 users: []
             },
             data: {},
+            titles: [],
+            categories: {},
+            means: {},
 
             error: false,
             loading: false,
@@ -192,7 +218,7 @@ export default {
                 .post(`/web-api/settings/categories`, this.data)
                 .then(() => {
                     this.data = _.cloneDeep(this.startData);
-                    this.$emit("added");
+                    this.$emit("created");
                     this.dialog = false;
                     this.loading = false;
                 })
@@ -203,8 +229,28 @@ export default {
                 })
         }
     },
-    mounted() {
-        this.data = _.cloneDeep(this.startData);
+    watch: {
+        dialog() {
+            if (!this.dialog) return;
+            this.ready = false;
+
+            axios
+                .get("/web-api/extensions/reports/create")
+                .then(response => {
+                    const data = response.data;
+
+                    this.titles = data.titles;
+                    this.means = data.means;
+                    this.categories = data.categories;
+                    this.data = _.cloneDeep(this.startData);
+
+                    this.ready = true;
+                })
+                .catch(err => {
+                    console.error(err);
+                    setTimeout(() => this.error = true, 1000);
+                })
+        }
     }
 }
 </script>
