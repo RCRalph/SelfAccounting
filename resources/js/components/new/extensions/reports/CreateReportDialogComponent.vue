@@ -8,7 +8,9 @@
             <v-card-title class="d-flex justify-space-between">
                 <div>Create report</div>
 
-                <v-btn outlined>Share</v-btn>
+                <ShareReportDialogComponent
+                    v-model="data.users"
+                ></ShareReportDialogComponent>
             </v-card-title>
 
             <v-card-text>
@@ -136,10 +138,14 @@
                             :titles="titles"
                             :categories="categories"
                             :means="means"
-                            :disableUpdate="!canSubmit || loading"
                         ></ReportQueriesDialogComponent>
 
-                        <v-btn outlined :block="$vuetify.breakpoint.xs" width="205" class="my-1">Additional entries</v-btn>
+                        <ReportAdditionalEntriesDialogComponent
+                            v-model="data.additionalEntries"
+                            :titles="titles"
+                            :categories="categories"
+                            :means="means"
+                        ></ReportAdditionalEntriesDialogComponent>
                     </div>
                 </v-form>
             </v-card-text>
@@ -167,7 +173,9 @@
 </template>
 
 <script>
+import ShareReportDialogComponent from "@/extensions/reports/ShareReportDialogComponent.vue";
 import ReportQueriesDialogComponent from "@/extensions/reports/ReportQueriesDialogComponent.vue";
+import ReportAdditionalEntriesDialogComponent from "@/extensions/reports/ReportAdditionalEntriesDialogComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import validation from "&/mixins/validation";
@@ -175,7 +183,9 @@ import validation from "&/mixins/validation";
 export default {
     mixins: [validation],
     components: {
+        ShareReportDialogComponent,
         ReportQueriesDialogComponent,
+        ReportAdditionalEntriesDialogComponent,
         ErrorSnackbarComponent
     },
     data() {

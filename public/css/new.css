@@ -29680,6 +29680,17 @@ tr:hover {
   background-color: transparent !important;
 }
 
+.large-chip-avatar .v-avatar {
+  height: 48px !important;
+  min-width: 48px !important;
+  width: 48px !important;
+  margin-right: 12px !important;
+  margin-left: -8px !important;
+}
+.large-chip-avatar .v-chip__close {
+  margin-left: 12px !important;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;

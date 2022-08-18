@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="750">
+    <v-dialog v-model="dialog" max-width="750" persistent>
         <template v-slot:activator="{ on, attrs }">
             <v-btn
                 outlined
@@ -13,9 +13,7 @@
         </template>
 
         <v-card>
-            <v-card-title class="d-flex" :class="$vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between'">
-                <div>Queries</div>
-            </v-card-title>
+            <v-card-title>Queries</v-card-title>
 
             <v-card-text v-if="value.length">
                 <v-form v-model="canUpdate">
@@ -141,7 +139,7 @@
                 </v-form>
             </v-card-text>
 
-            <v-card-text v-else class="text-center text-h6 pb-0">No data</v-card-text>
+            <v-card-text v-else class="text-center text-h6 pb-0">Press + to add a query</v-card-text>
 
             <v-card-actions class="d-flex justify-space-between">
                 <div :class="$vuetify.breakpoint.xs && 'd-flex flex-wrap flex-column-reverse'">
@@ -206,10 +204,6 @@ export default {
         means: {
             required: true,
             type: Object
-        },
-        disableUpdate: {
-            required: true,
-            type: Boolean
         }
     },
     data() {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 use App\Report;
+use App\User;
 
 use App\Rules\Common\SameLengthAs;
 
@@ -256,5 +257,18 @@ class ReportsController extends Controller
             ->groupBy("currency_id");
 
         return response()->json(compact("titles", "categories", "means"));
+    }
+
+    public function userInfo()
+    {
+        $email = request()->validate([
+            "email" => ["required", "email", "max:64", "exists:users,email", "not_in:" . auth()->user()->email]
+        ])["email"];
+
+        $user = User::select("email", "username", "profile_picture")
+            ->where("email", $email)->first()
+            ->only("email", "username", "profile_picture_link");
+
+        return response()->json(compact("user"));
     }
 }
