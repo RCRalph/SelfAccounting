@@ -57,7 +57,7 @@
                                     <v-text-field
                                         label="Minimal amount"
                                         v-model="value[i - 1].min_amount"
-                                        :rules="[validation.amount(true), validationArray[i - 1].minAmount]"
+                                        :rules="[validation.amount(true, true), validationArray[i - 1].minAmount]"
                                         @input="validateFields"
                                     ></v-text-field>
                                 </v-col>
@@ -66,7 +66,7 @@
                                     <v-text-field
                                         label="Maximal amount"
                                         v-model="value[i - 1].max_amount"
-                                        :rules="[validation.amount(true), validationArray[i - 1].maxAmount]"
+                                        :rules="[validation.amount(true, true), validationArray[i - 1].maxAmount]"
                                         @input="validateFields"
                                     ></v-text-field>
                                 </v-col>
@@ -75,7 +75,7 @@
                                     <v-text-field
                                         label="Minimal price"
                                         v-model="value[i - 1].min_price"
-                                        :rules="[validation.price(true), validationArray[i - 1].minPrice]"
+                                        :rules="[validation.price(true, true), validationArray[i - 1].minPrice]"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
                                         @input="validateFields"
                                     ></v-text-field>
@@ -85,7 +85,7 @@
                                     <v-text-field
                                         label="Maximal price"
                                         v-model="value[i - 1].max_price"
-                                        :rules="[validation.price(true), validationArray[i - 1].maxPrice]"
+                                        :rules="[validation.price(true, true), validationArray[i - 1].maxPrice]"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
                                         @input="validateFields"
                                     ></v-text-field>
@@ -128,7 +128,7 @@
 
                                 <v-col cols="12" md="3">
                                     <v-select
-                                        v-model="value[i - 1].type"
+                                        v-model="value[i - 1].query_data"
                                         :items="queryTypes"
                                         label="Query type"
                                     ></v-select>
@@ -210,7 +210,7 @@ export default {
         return {
             page: 0,
             startData: {
-                type: "income",
+                query_data: "income",
                 min_date: null,
                 max_date: null,
                 title: null,

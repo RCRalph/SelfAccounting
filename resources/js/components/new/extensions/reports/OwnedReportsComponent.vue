@@ -72,10 +72,10 @@
 
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on, attrs }">
-                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs">mdi-content-duplicate</v-icon>
+                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs" @click="duplicate(item.id)">mdi-content-duplicate</v-icon>
                                 </template>
 
-                                <span>Duplicate report</span>
+                                <span>{{ duplicateLoading == item.id ? "Duplicating..." : "Duplicate report" }}</span>
                             </v-tooltip>
 
                             <DeleteDialogComponent
@@ -90,6 +90,8 @@
         </v-card-text>
 
         <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
+
+        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-card>
 
     <v-card v-else>
@@ -112,7 +114,7 @@ import validation from "&/mixins/validation";
 import CreateReportDialogComponent from "@/extensions/reports/CreateReportDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
-
+import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 export default {
     setup() {
@@ -124,7 +126,8 @@ export default {
     components: {
         CreateReportDialogComponent,
         DeleteDialogComponent,
-        SuccessSnackbarComponent
+        SuccessSnackbarComponent,
+        ErrorSnackbarComponent
     },
     data() {
         return {
@@ -141,8 +144,10 @@ export default {
 
             canRefresh: true,
             tableLoading: false,
+            duplicateLoading: null,
             ready: false,
             success: false,
+            error: false,
             thing: ""
         }
     },
@@ -219,6 +224,20 @@ export default {
             await navigator.clipboard.writeText(`${window.location.href}/${id}`)
             this.thing = `copied report link`;
             this.success = true;
+        },
+        duplicate(id) {
+            this.duplicateLoading = id;
+
+            axios
+                .post(`/web-api/extensions/reports/${id}/duplicate`)
+                .then(response => {
+                    this.$router.push(`/extensions/reports/${response.data.id}`);
+                })
+                .catch(err => {
+                    console.error(err);
+                    setTimeout(() => this.error = true, 1000);
+                    setTimeout(() => this.duplicateLoading = null, 2000);
+                })
         }
     },
     watch: {

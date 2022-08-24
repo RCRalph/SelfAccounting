@@ -35,7 +35,7 @@ export default {
                         return true;
                     }
                 },
-                amount(allowNull = false) {
+                amount(allowNull = false, allowZero = false) {
                     return amount => {
                         if (allowNull && !amount) {
                             return true;
@@ -49,8 +49,11 @@ export default {
                         else if (isNaN(Number(amount))) {
                             return "Amount has to be a number";
                         }
-                        else if (Number(amount) <= 0) {
-                            return "Amount has to be positive";
+                        else if (!Number(amount) && !allowZero) {
+                            return "Amount can't be equal to 0";
+                        }
+                        else if (Number(amount) < 0) {
+                            return "Amount can't be negative";
                         }
                         else if (!amount.match(/^\s*(\d{1,6})?(\.\d{1,3})?\s*$/)) {
                             return "Amount is an invalid number";
@@ -59,7 +62,7 @@ export default {
                         return true;
                     }
                 },
-                price(allowNull = false) {
+                price(allowNull = false, allowNegativeAndZero = false) {
                     return price => {
                         if (allowNull && !price) {
                             return true;
@@ -73,7 +76,7 @@ export default {
                         else if (isNaN(Number(price))) {
                             return "Price has to be a number";
                         }
-                        else if (Number(price) <= 0) {
+                        else if (Number(price) <= 0 && !allowNegativeAndZero) {
                             return "Price has to be positive";
                         }
                         else if (!price.match(/^\s*(\d{1,11})?(\.\d{1,2})?\s*$/)) {

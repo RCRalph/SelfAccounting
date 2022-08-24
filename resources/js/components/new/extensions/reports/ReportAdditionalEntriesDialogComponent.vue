@@ -37,11 +37,11 @@
 
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Amount" v-model="value[i - 1].amount" :rules="[validation.amount()]"></v-text-field>
+                                    <v-text-field label="Amount" v-model="value[i - 1].amount" :rules="[validation.amount(false, true)]"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Price" v-model="value[i - 1].price" :rules="[validation.price()]" :suffix="currencies.findCurrency(value[i - 1].currency_id).ISO"></v-text-field>
+                                    <v-text-field label="Price" v-model="value[i - 1].price" :rules="[validation.price(false, true)]" :suffix="currencies.findCurrency(value[i - 1].currency_id).ISO"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>

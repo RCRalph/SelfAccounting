@@ -28,6 +28,11 @@ class DateBeforeOrEqualField implements Rule
      */
     public function passes($attribute, $value)
     {
+        $prefix = substr($attribute, 0, strrpos($attribute, "."));
+        if ($prefix) {
+            $this->otherField = "$prefix.$this->otherField";
+        }
+
         if ($value == null || request($this->otherField) == null) {
             return true;
         }

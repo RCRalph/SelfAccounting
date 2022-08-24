@@ -98,54 +98,58 @@ class ExchangeController extends Controller
             "to.mean_id" => ["required", "integer", "different:from.mean_id", new ValidCategoryOrMeanExchange("to")],
         ]);
 
-        auth()->user()->outcome()->create($data["from"]);
-        auth()->user()->income()->create($data["to"]);
-
         if (auth()->user()->extensionCodes->contains("cashan")) {
             if (request("fromCash")) {
-                $cash = request()->validate([
+                $fromCash = request()->validate([
                     "fromCash" => ["required", "array"],
                     "fromCash.*.id" => ["required", "integer", new CorrectCashCurrency(Currency::find($data["from"]["currency_id"]))],
                     "fromCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("outcome", "fromCash")]
                 ])["fromCash"];
-
-                foreach ($cash as $item) {
-                    $cashAmount = auth()->user()->cash()->find($item["id"])->pivot->amount - $item["amount"];
-
-                    if ($cashAmount) {
-                        auth()->user()->cash()->updateExistingPivot(
-                            $item["id"],
-                            ["amount" => $cashAmount]
-                        );
-                    }
-                    else {
-                        auth()->user()->cash()->detach($item["id"]);
-                    }
-                }
             }
 
             if (request("toCash")) {
-                $cash = request()->validate([
+                $toCash = request()->validate([
                     "toCash" => ["required", "array"],
                     "toCash.*.id" => ["required", "integer", new CorrectCashCurrency(Currency::find($data["to"]["currency_id"]))],
                     "toCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("income", "toCash")]
                 ])["toCash"];
+            }
+        }
 
-                foreach ($cash as $item) {
-                    $attachedCash = auth()->user()->cash()->find($item["id"]);
+        auth()->user()->outcome()->create($data["from"]);
+        auth()->user()->income()->create($data["to"]);
 
-                    if ($attachedCash) {
-                        auth()->user()->cash()->updateExistingPivot(
-                            $item["id"],
-                            ["amount" => $attachedCash->pivot->amount + $item["amount"]]
-                        );
-                    }
-                    else {
-                        auth()->user()->cash()->attach(
-                            $item["id"],
-                            [ "amount" => $item["amount"] ]
-                        );
-                    }
+        if (isset($fromCash)) {
+            foreach ($fromCash as $item) {
+                $cashAmount = auth()->user()->cash()->find($item["id"])->pivot->amount - $item["amount"];
+
+                if ($cashAmount) {
+                    auth()->user()->cash()->updateExistingPivot(
+                        $item["id"],
+                        ["amount" => $cashAmount]
+                    );
+                }
+                else {
+                    auth()->user()->cash()->detach($item["id"]);
+                }
+            }
+        }
+
+        if (isset($toCash)) {
+            foreach ($toCash as $item) {
+                $attachedCash = auth()->user()->cash()->find($item["id"]);
+
+                if ($attachedCash) {
+                    auth()->user()->cash()->updateExistingPivot(
+                        $item["id"],
+                        ["amount" => $attachedCash->pivot->amount + $item["amount"]]
+                    );
+                }
+                else {
+                    auth()->user()->cash()->attach(
+                        $item["id"],
+                        [ "amount" => $item["amount"] ]
+                    );
                 }
             }
         }

@@ -130,12 +130,16 @@ Route::prefix("/web-api")->group(function () {
             Route::get("/", "WebAPI\Extensions\ReportsController@index")->name("web-api.extensions.reports");
             Route::get("/owned-reports", "WebAPI\Extensions\ReportsController@ownedReports")->name("web-api.extensions.reports.owned-reports");
             Route::get("/shared-reports", "WebAPI\Extensions\ReportsController@sharedReports")->name("web-api.extensions.reports.shared-reports");
+
             Route::get("/create", "WebAPI\Extensions\ReportsController@create")->name("web-api.extensions.reports.create");
+            Route::post("/create", "WebAPI\Extensions\ReportsController@store")->name("web-api.extensions.reports.store");
+
             Route::post("/user-info", "WebAPI\Extensions\ReportsController@userInfo")->name("web-api.extensions.reports.user-info");
 
             Route::prefix("/{report}")->group(function () {
                 Route::get("/", "WebAPI\Extensions\ReportsController@show")->name("web-api.extensions.reports.show");
-                Route::get("/content", "WebAPI\Extensions\ReportsController@content")->name("web-api.extensions.reports.content");
+                Route::delete("/", "WebAPI\Extensions\ReportsController@destroy")->name("web-api.extensions.reports.destroy");
+                Route::post("/duplicate", "WebAPI\Extensions\ReportsController@duplicate")->name("web-api.extensions.reports.duplicate");
             });
         });
     });

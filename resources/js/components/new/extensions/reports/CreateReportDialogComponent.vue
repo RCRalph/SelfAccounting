@@ -224,13 +224,12 @@ export default {
         submit() {
             this.loading = true;
 
+            const users = this.data.users.map(item => item.email);
+
             axios
-                .post(`/web-api/settings/categories`, this.data)
-                .then(() => {
-                    this.data = _.cloneDeep(this.startData);
-                    this.$emit("created");
-                    this.dialog = false;
-                    this.loading = false;
+                .post("/web-api/extensions/reports/create", {...this.data, users})
+                .then(response => {
+                    this.$router.push(`/extensions/reports/${response.data.id}`);
                 })
                 .catch(err => {
                     console.error(err);

@@ -57,6 +57,18 @@ class ReportPolicy
     }
 
     /**
+     * Determine whether the user can duplicate the model.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Report  $report
+     * @return mixed
+     */
+    public function duplicate(User $user, Report $report)
+    {
+        return $report->user_id == $user->id;
+    }
+
+    /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
@@ -65,7 +77,7 @@ class ReportPolicy
      */
     public function delete(User $user, Report $report)
     {
-        //
+        return $report->user_id == $user->id;
     }
 
     /**

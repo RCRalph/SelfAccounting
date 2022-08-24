@@ -6,15 +6,14 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCategoryOrMeanUpdate implements Rule
 {
-    private $type, $checkForIncomeOutcome, $nestedArrayName;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($type)
+    public function __construct()
     {
-        $this->type = $type;
+        //
     }
 
     /**
@@ -29,10 +28,11 @@ class ValidCategoryOrMeanUpdate implements Rule
         if ($value == null) {
             return true;
         }
+
         return (str_contains($attribute, "category") ? auth()->user()->categories() : auth()->user()->meansOfPayment())
-            ->where("id", $value)
             ->where("currency_id", request("currency_id"))
-            ->where($this->type . "_" . (str_contains($attribute, "category") ? "category" : "mean"), true)
+            ->where("id", $value)
+            ->where(request()->type . "_" . (str_contains($attribute, "category") ? "category" : "mean"), true)
             ->count();
     }
 

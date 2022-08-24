@@ -81,8 +81,8 @@ class IOController extends Controller
             "amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "currency_id" => ["required", "integer", "exists:currencies,id"],
-            "category_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanUpdate(request()->type)],
-            "mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanUpdate(request()->type)]
+            "category_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanUpdate],
+            "mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanUpdate]
         ]);
 
         $toUpdate->update($data);
@@ -92,9 +92,10 @@ class IOController extends Controller
 
     public function destroy($id)
     {
-        $toDestroy = $this->getTypeRelation()
+        $this->getTypeRelation()
             ->where("id", $id)
-            ->get()->firstOrFail()->delete();
+            ->get()->firstOrFail()
+            ->delete();
 
         return response("", 200);
     }
@@ -187,14 +188,9 @@ class IOController extends Controller
             "data.*.title" => ["required", "string", "max:64"],
             "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type, $currency)],
-            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean(request()->type, $currency)],
+            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($currency)],
+            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($currency)],
         ]);
-
-        foreach ($data["data"] as $item) {
-            $item["currency_id"] = $currency->id;
-            $this->getTypeRelation()->create($item);
-        }
 
         if (auth()->user()->extensionCodes->contains("cashan") && request("cash")) {
             $cash = request()->validate([
@@ -232,6 +228,11 @@ class IOController extends Controller
                     );
                 }
             }
+        }
+
+        foreach ($data["data"] as $item) {
+            $item["currency_id"] = $currency->id;
+            $this->getTypeRelation()->create($item);
         }
 
         return response("");

@@ -302,6 +302,7 @@ export default {
                     this.dialog = false;
                     this.loading = false;
                     this.data = [];
+                    this.page = 0;
                 })
                 .catch(err => {
                     console.error(err);

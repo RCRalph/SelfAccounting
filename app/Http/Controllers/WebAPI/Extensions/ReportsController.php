@@ -10,6 +10,9 @@ use App\Report;
 use App\User;
 
 use App\Rules\Common\SameLengthAs;
+use App\Rules\Common\DateBeforeOrEqualField;
+use App\Rules\Common\ValueLessOrEqualField;
+use App\Rules\Extensions\Reports\ValidCategoryOrMean;
 
 class ReportsController extends Controller
 {
@@ -270,5 +273,105 @@ class ReportsController extends Controller
             ->only("email", "username", "profile_picture_link");
 
         return response()->json(compact("user"));
+    }
+
+    public function store()
+    {
+        $data = request()->validate([
+            "title" => ["required", "string", "max:64"],
+            "income_addition" => ["required", "boolean"],
+            "sort_dates_desc" => ["required", "boolean"],
+            "calculate_sum" => ["required", "boolean"]
+        ]);
+
+        $columns = request()->validate([
+            "columns" => ["required", "array"],
+            "columns.date" => ["required", "boolean"],
+            "columns.title" => ["required", "boolean"],
+            "columns.amount" => ["required", "boolean"],
+            "columns.price" => ["required", "boolean"],
+            "columns.value" => ["required", "boolean"],
+            "columns.category_id" => ["required", "boolean"],
+            "columns.mean_id" => ["required", "boolean"]
+        ])["columns"];
+
+        $queries = request()->validate([
+            "queries" => ["present", "array"],
+            "queries.*.query_data" => ["required", "string", "in:income,outcome"],
+            "queries.*.min_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("max_date")],
+            "queries.*.max_date" => ["present", "nullable", "date"],
+            "queries.*.title" => ["present", "nullable", "string", "max:64"],
+            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", new ValueLessOrEqualField("max_amount")],
+            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", new ValueLessOrEqualField("max_price")],
+            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
+            "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
+            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+        ])["queries"];
+
+        $additionalEntries = request()->validate([
+            "additionalEntries" => ["present", "array"],
+            "additionalEntries.*.date" => ["required", "date"],
+            "additionalEntries.*.title" => ["required", "string", "max:64"],
+            "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+        ])["additionalEntries"];
+
+        $users = request()->validate([
+            "users" => ["present", "array"],
+            "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
+        ])["users"];
+
+        $data["show_columns"] = $this->getColumnBinary($columns);
+        $report = auth()->user()->reports()->create($data);
+
+        foreach ($queries as $query) {
+            $report->queries()->create($query);
+        }
+
+        foreach ($additionalEntries as $entry) {
+            $report->additionalEntries()->create($entry);
+        }
+
+        $report->sharedUsers()->attach(User::whereIn("email", $users)->pluck("id"));
+
+        return response()->json(["id" => $report->id]);
+    }
+
+    public function destroy(Report $report)
+    {
+        $this->authorize("view", $report);
+
+        if ($report->user_id == auth()->user()->id) {
+            $report->delete();
+        }
+        else {
+            $report->sharedUsers()->detach(auth()->user()->id);
+        }
+
+        return response("", 200);
+    }
+
+    public function duplicate(Report $report)
+    {
+        $this->authorize("duplicate", $report);
+
+        $duplicate = Report::create($report->makeHidden(["id", "created_at", "updated_at"])->toArray());
+
+        foreach ($report->queries as $query) {
+            $duplicate->queries()->create($query->makeHidden(["id", "report_id", "created_at", "updated_at"])->toArray());
+        }
+
+        foreach ($report->additionalEntries as $entry) {
+            $duplicate->additionalEntries()->create($entry->makeHidden(["id", "report_id", "created_at", "updated_at"])->toArray());
+        }
+
+        $duplicate->sharedUsers()->attach($report->sharedUsers()->pluck("id"));
+
+        return response()->json(["id" => $duplicate->id]);
     }
 }
