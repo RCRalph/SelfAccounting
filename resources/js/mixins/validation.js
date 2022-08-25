@@ -35,21 +35,25 @@ export default {
                         return true;
                     }
                 },
-                amount(allowNull = false) {
+                amount(allowNull = false, allowZero = false) {
                     return amount => {
-                        amount = String(amount).replaceAll(",", ".");
-
                         if (allowNull && !amount) {
                             return true;
                         }
-                        else if (!amount) {
+
+                        amount = String(amount).replaceAll(",", ".");
+
+                        if (!amount) {
                             return "Amount is required";
                         }
                         else if (isNaN(Number(amount))) {
                             return "Amount has to be a number";
                         }
-                        else if (Number(amount) <= 0) {
-                            return "Amount has to be positive";
+                        else if (!Number(amount) && !allowZero) {
+                            return "Amount can't be equal to 0";
+                        }
+                        else if (Number(amount) < 0) {
+                            return "Amount can't be negative";
                         }
                         else if (!amount.match(/^\s*(\d{1,6})?(\.\d{1,3})?\s*$/)) {
                             return "Amount is an invalid number";
@@ -58,20 +62,21 @@ export default {
                         return true;
                     }
                 },
-                price(allowNull = false) {
+                price(allowNull = false, allowNegativeAndZero = false) {
                     return price => {
-                        price = String(price).replaceAll(",", ".");
-
                         if (allowNull && !price) {
                             return true;
                         }
-                        else if (!price) {
+
+                        price = String(price).replaceAll(",", ".");
+
+                        if (!price) {
                             return "Price is required";
                         }
                         else if (isNaN(Number(price))) {
                             return "Price has to be a number";
                         }
-                        else if (Number(price) <= 0) {
+                        else if (Number(price) <= 0 && !allowNegativeAndZero) {
                             return "Price has to be positive";
                         }
                         else if (!price.match(/^\s*(\d{1,11})?(\.\d{1,2})?\s*$/)) {
@@ -185,7 +190,7 @@ export default {
                             return "Password has to have more than 8 characters";
                         }
                         else if (password.length > 64) {
-                            return "Password can't hqave more than 64 characters";
+                            return "Password can't have more than 64 characters";
                         }
 
                         return true;
@@ -210,6 +215,21 @@ export default {
                         }
                         else if (type == "outcome" && owned < amount) {
                             return "Amount cannot be greater than currently owned amount";
+                        }
+
+                        return true;
+                    }
+                },
+                search(length = 64) {
+                    return search => {
+                        if (!search) {
+                            return true;
+                        }
+                        else if (typeof search != "string") {
+                            return "Search has to be a string";
+                        }
+                        else if (search.length > length) {
+                            return `Search can't have more than ${length} characters`;
                         }
 
                         return true;

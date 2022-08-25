@@ -44,9 +44,11 @@ Route::prefix("/web-api")->group(function () {
     // Income and outcome routes
     foreach (["income", "outcome"] as $type) {
         Route::group(["prefix" => "/$type", "middleware" => "IO:$type"], function () use ($type) {
-            Route::get("/{id}", "WebAPI\IOController@show")->name("web-api.$type.show");
-            Route::patch("/{id}", "WebAPI\IOController@update")->name("web-api.$type.update");
-            Route::delete("/{id}", "WebAPI\IOController@destroy")->name("web-api.$type.destroy");
+            Route::prefix("/{id}")->group(function () use ($type) {
+                Route::get("/", "WebAPI\IOController@show")->name("web-api.$type.show");
+                Route::patch("/", "WebAPI\IOController@update")->name("web-api.$type.update");
+                Route::delete("/", "WebAPI\IOController@destroy")->name("web-api.$type.destroy");
+            });
 
             Route::prefix("/currency/{currency}")->group(function () use ($type) {
                 Route::get("/", "WebAPI\IOController@index")->name("web-api.$type.currency");
@@ -71,16 +73,22 @@ Route::prefix("/web-api")->group(function () {
 
         Route::prefix("/categories")->group(function () {
             Route::post("/", "WebAPI\SettingsController@createCategory")->name("web-api.settings.categories.create");
-            Route::get("/{category}", "WebAPI\SettingsController@showCategory")->name("web-api.settings.categories.show");
-            Route::patch("/{category}", "WebAPI\SettingsController@updateCategory")->name("web-api.settings.categories.update");
-            Route::delete("/{category}", "WebAPI\SettingsController@deleteCategory")->name("web-api.settings.categories.delete");
+
+            Route::prefix("/{category}")->group(function () {
+                Route::get("/", "WebAPI\SettingsController@showCategory")->name("web-api.settings.categories.show");
+                Route::patch("/", "WebAPI\SettingsController@updateCategory")->name("web-api.settings.categories.update");
+                Route::delete("/", "WebAPI\SettingsController@deleteCategory")->name("web-api.settings.categories.delete");
+            });
         });
 
         Route::prefix("/means")->group(function () {
             Route::post("/", "WebAPI\SettingsController@createMean")->name("web-api.settings.means.create");
-            Route::get("/{mean}", "WebAPI\SettingsController@showMean")->name("web-api.settings.means.show");
-            Route::patch("/{mean}", "WebAPI\SettingsController@updateMean")->name("web-api.settings.means.update");
-            Route::delete("/{mean}", "WebAPI\SettingsController@deleteMean")->name("web-api.settings.means.delete");
+
+            Route::prefix("/{mean}")->group(function () {
+                Route::get("/", "WebAPI\SettingsController@showMean")->name("web-api.settings.means.show");
+                Route::patch("/", "WebAPI\SettingsController@updateMean")->name("web-api.settings.means.update");
+                Route::delete("/", "WebAPI\SettingsController@deleteMean")->name("web-api.settings.means.delete");
+            });
         });
     });
 
@@ -116,6 +124,25 @@ Route::prefix("/web-api")->group(function () {
             Route::get("/", "WebAPI\Extensions\CashController@index")->name("web-api.extensions.cash");
             Route::post("/", "WebAPI\Extensions\CashController@update")->name("web-api.extensions.cash.update");
             Route::get("/list", "WebAPI\Extensions\CashController@list")->name("web-api.extensions.cash.list");
+        });
+
+        Route::prefix("/reports")->group(function () {
+            Route::get("/", "WebAPI\Extensions\ReportsController@index")->name("web-api.extensions.reports");
+            Route::get("/owned-reports", "WebAPI\Extensions\ReportsController@ownedReports")->name("web-api.extensions.reports.owned-reports");
+            Route::get("/shared-reports", "WebAPI\Extensions\ReportsController@sharedReports")->name("web-api.extensions.reports.shared-reports");
+
+            Route::get("/create", "WebAPI\Extensions\ReportsController@create")->name("web-api.extensions.reports.create");
+            Route::post("/create", "WebAPI\Extensions\ReportsController@store")->name("web-api.extensions.reports.store");
+
+            Route::post("/user-info", "WebAPI\Extensions\ReportsController@userInfo")->name("web-api.extensions.reports.user-info");
+
+            Route::prefix("/{report}")->group(function () {
+                Route::get("/", "WebAPI\Extensions\ReportsController@show")->name("web-api.extensions.reports.show");
+                Route::delete("/", "WebAPI\Extensions\ReportsController@destroy")->name("web-api.extensions.reports.destroy");
+                Route::get("/edit", "WebAPI\Extensions\ReportsController@edit")->name("web-api.extensions.reports.edit");
+                Route::post("/update", "WebAPI\Extensions\ReportsController@update")->name("web-api.extensions.reports.update");
+                Route::post("/duplicate", "WebAPI\Extensions\ReportsController@duplicate")->name("web-api.extensions.reports.duplicate");
+            });
         });
     });
 });

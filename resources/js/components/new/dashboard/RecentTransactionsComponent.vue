@@ -126,12 +126,8 @@ export default {
     },
     methods: {
         getData() {
-            if (this.ready) {
-                this.tableLoading = true
-            }
-            else {
-                this.ready = false;
-            }
+            this.ready = false;
+            this.tableLoading = true;
 
             axios
                 .get(`/web-api/dashboard/${this.currencies.usedCurrency}/recent-transactions?page=${this.pagination.page}`)
@@ -142,12 +138,8 @@ export default {
                     this.pagination.last = data.items.last_page;
                     this.pagination.perPage = data.items.per_page;
 
-                    if (this.ready) {
-                        this.tableLoading = false;
-                    }
-                    else {
-                        this.ready = true;
-                    }
+                    this.tableLoading = false;
+                    this.ready = true;
                 })
         }
     },

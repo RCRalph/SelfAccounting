@@ -7,6 +7,9 @@ export const useCurrenciesStore = defineStore("currencies", {
     }),
     getters: {
         usedCurrencyObject: state => state.currencies.find(item => item.id == state.usedCurrency),
+        findCurrency: state => {
+            return currencyID => state.currencies.find(item => currencyID == item.id)
+        },
         selectCurrencies: state => {
             return currencyIDs => state.currencies.filter(item => currencyIDs.includes(item.id));
         }

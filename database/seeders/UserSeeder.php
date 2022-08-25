@@ -32,10 +32,9 @@ class UserSeeder extends Seeder
     {
         if (env("CREATE_ADMIN", false)) {
             User::updateOrCreate(
-                [ "id" => 1 ],
+                [ "email" => env("ADMIN_EMAIL", "admin@selfaccounting.com") ],
                 [
                     "username" => "Admin",
-                    "email" => env("ADMIN_EMAIL", "admin@selfaccounting.com"),
                     "password" => Hash::make(env("ADMIN_PASSWORD", "1234567890")),
                     "admin" => true,
                     "darkmode" => true,

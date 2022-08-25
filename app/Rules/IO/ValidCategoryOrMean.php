@@ -6,16 +6,15 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCategoryOrMean implements Rule
 {
-    private $type, $currency;
+    private $currency;
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($type, $currency)
+    public function __construct($currency)
     {
-        $this->type = $type;
         $this->currency = $currency;
     }
 
@@ -32,11 +31,10 @@ class ValidCategoryOrMean implements Rule
             return true;
         }
 
-        $index = explode(".", $attribute)[1];
-
         return (str_contains($attribute, "category") ? auth()->user()->categories() : auth()->user()->meansOfPayment())
             ->where("currency_id", $this->currency->id)
             ->where("id", $value)
+            ->where(request()->type . "_" . (str_contains($attribute, "category") ? "category" : "mean"), true)
             ->count();
     }
 

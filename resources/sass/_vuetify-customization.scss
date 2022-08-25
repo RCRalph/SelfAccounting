@@ -137,3 +137,32 @@ tr {
         display: block;
     }
 }
+
+.checkbox-centered {
+    display: flex;
+    justify-content: center;
+
+    .v-input--selection-controls__input {
+        margin-right: 0 !important;
+    }
+}
+
+.disable-hover {
+    tr:hover {
+        background-color: transparent !important;
+    }
+}
+
+.large-chip-avatar {
+    .v-avatar {
+        height: 48px !important;
+        min-width: 48px !important;
+        width: 48px !important;
+        margin-right: 12px !important;
+        margin-left: -8px !important
+    }
+
+    .v-chip__close {
+        margin-left: 12px !important;
+    }
+}

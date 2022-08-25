@@ -32,7 +32,7 @@ export default {
 
                 let foundChangeInSeparatorKeys = false;
                 this.separatorKeys.forEach(key => {
-                    if (item[key] != counters[key].value) {
+                    if (item[key] != undefined && item[key] != counters[key].value) {
                         foundChangeInSeparatorKeys = true;
                     }
                 })

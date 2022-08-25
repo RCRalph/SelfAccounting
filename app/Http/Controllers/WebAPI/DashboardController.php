@@ -45,10 +45,10 @@ class DashboardController extends Controller
     {
         $income = auth()->user()->income()
             ->where("currency_id", $currency->id)
-            ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", DB::raw("1 AS type"));
+            ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "mean_id", DB::raw("1 AS type"));
         $outcome = auth()->user()->outcome()
             ->where("currency_id", $currency->id)
-            ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", DB::raw("-1 AS type"));
+            ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "mean_id", DB::raw("-1 AS type"));
 
         $items = $income
             ->union($outcome)
