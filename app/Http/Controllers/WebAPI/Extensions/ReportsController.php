@@ -111,6 +111,9 @@ class ReportsController extends Controller
                 $reports = $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
             }
         }
+        else {
+            $reports = $reports->orderBy("id", "desc");
+        }
 
         $reports = $reports->paginate($data["items"]);
 
@@ -146,6 +149,9 @@ class ReportsController extends Controller
             foreach ($data["orderFields"] as $i => $item) {
                 $reports = $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
             }
+        }
+        else {
+            $reports = $reports->orderBy("id", "desc");
         }
 
         $reports = $reports->paginate($data["items"]);

@@ -29,17 +29,6 @@
                                 ></v-text-field>
                             </v-form>
                         </v-col>
-
-                        <v-col cols="12" sm="6" lg="7" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
-                            <!--<ExchangeIODialogComponent
-                                @exchanged="exchanged"
-                            ></ExchangeIODialogComponent>
-
-                            <AddIODialogComponent
-                                :type="type"
-                                @added="added"
-                            ></AddIODialogComponent>-->
-                        </v-col>
                     </v-row>
                 </template>
 
@@ -238,7 +227,7 @@ export default {
                     const data = response.data;
 
                     this.reports = data.reports.data;
-                    this.total = data.total;
+                    this.total = data.reports.total;
 
                     this.ready = true;
                     this.tableLoading = false;

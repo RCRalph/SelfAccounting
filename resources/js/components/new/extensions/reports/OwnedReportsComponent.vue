@@ -194,7 +194,7 @@ export default {
                     const data = response.data;
 
                     this.reports = data.reports.data;
-                    this.total = data.total;
+                    this.total = data.reports.total;
 
                     this.ready = true;
                     this.tableLoading = false;
