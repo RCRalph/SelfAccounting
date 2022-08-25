@@ -79,7 +79,7 @@ export default {
                         else if (Number(price) <= 0 && !allowNegativeAndZero) {
                             return "Price has to be positive";
                         }
-                        else if (!price.match(/^\s*(\d{1,11})?(\.\d{1,2})?\s*$/)) {
+                        else if (!price.match(/^\s*(-)?(\d{1,11})?(\.\d{1,2})?\s*$/)) {
                             return "Price is an invalid number";
                         }
 
