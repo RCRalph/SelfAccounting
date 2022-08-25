@@ -304,6 +304,16 @@ export default {
                 }
             })
         }
+    },
+    beforeMount() {
+        this.value.forEach(() => {
+            this.validationArray.push({
+                minAmount: true,
+                maxAmount: true,
+                minPrice: true,
+                maxPrice: true
+            });
+        });
     }
 }
 </script>

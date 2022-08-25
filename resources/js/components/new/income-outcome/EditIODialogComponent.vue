@@ -71,11 +71,11 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1">
+                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1" width="85">
                     Reset
                 </v-btn>
 
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1">
+                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1" width="85">
                     Update
                 </v-btn>
             </v-card-actions>

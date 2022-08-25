@@ -62,13 +62,11 @@
                                 <span>Share report</span>
                             </v-tooltip>
 
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs">mdi-pencil</v-icon>
-                                </template>
-
-                                <span>Edit report</span>
-                            </v-tooltip>
+                            <EditReportDialogComponent
+                                :id="item.id"
+                                icon
+                                @updated="updated"
+                            ></EditReportDialogComponent>
 
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on, attrs }">
@@ -112,6 +110,7 @@ import main from "&/mixins/main";
 import validation from "&/mixins/validation";
 
 import CreateReportDialogComponent from "@/extensions/reports/CreateReportDialogComponent.vue";
+import EditReportDialogComponent from "@/extensions/reports/EditReportDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
@@ -125,6 +124,7 @@ export default {
     mixins: [main, validation],
     components: {
         CreateReportDialogComponent,
+        EditReportDialogComponent,
         DeleteDialogComponent,
         SuccessSnackbarComponent,
         ErrorSnackbarComponent

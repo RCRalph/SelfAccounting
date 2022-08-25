@@ -39,7 +39,7 @@ class ValidCategoryOrMean implements Rule
             $query = $query->where(request("$prefix.query_data") . "_" . (str_contains($attribute, "category") ? "category" : "mean"), true);
         }
 
-        return $query->count();
+        return $query->exists();
     }
 
     /**

@@ -139,6 +139,8 @@ Route::prefix("/web-api")->group(function () {
             Route::prefix("/{report}")->group(function () {
                 Route::get("/", "WebAPI\Extensions\ReportsController@show")->name("web-api.extensions.reports.show");
                 Route::delete("/", "WebAPI\Extensions\ReportsController@destroy")->name("web-api.extensions.reports.destroy");
+                Route::get("/edit", "WebAPI\Extensions\ReportsController@edit")->name("web-api.extensions.reports.edit");
+                Route::post("/update", "WebAPI\Extensions\ReportsController@update")->name("web-api.extensions.reports.update");
                 Route::post("/duplicate", "WebAPI\Extensions\ReportsController@duplicate")->name("web-api.extensions.reports.duplicate");
             });
         });

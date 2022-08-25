@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" width="unset">
         <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
-            <v-tooltip bottom >
+            <v-tooltip bottom>
                 <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
                     <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-delete</v-icon>
                 </template>

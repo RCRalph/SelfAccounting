@@ -13,6 +13,7 @@ use App\Rules\Common\SameLengthAs;
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Common\ValueLessOrEqualField;
 use App\Rules\Extensions\Reports\ValidCategoryOrMean;
+use App\Rules\Extensions\Reports\BelongsToReport;
 
 class ReportsController extends Controller
 {
@@ -373,5 +374,150 @@ class ReportsController extends Controller
         $duplicate->sharedUsers()->attach($report->sharedUsers()->pluck("id"));
 
         return response()->json(["id" => $duplicate->id]);
+    }
+
+    public function edit(Report $report)
+    {
+        $this->authorize("update", $report);
+
+        $data = $report->only("title", "income_addition", "sort_dates_desc", "calculate_sum");
+
+        $data["columns"] = $this->getColumnsToShow($report->show_columns);
+
+        $data["users"] = $report->sharedUsers
+            ->map(fn ($item) => $item->only("username", "email", "profile_picture_link"));
+
+        $data["queries"] = $report->queries
+            ->makeHidden(["report_id", "created_at", "updated_at"])
+            ->map(function ($item) {
+                foreach (["min_amount", "max_amount", "min_price", "max_price"] as $key) {
+                    if ($item[$key] !== null) {
+                        $item[$key] *= 1;
+                    }
+                }
+
+                return $item;
+            });
+
+        $data["additionalEntries"] = $report->additionalEntries
+            ->makeHidden(["report_id", "created_at", "updated_at"])
+            ->map(function ($item) {
+                foreach (["amount", "price"] as $key) {
+                    if ($item[$key] !== null) {
+                        $item[$key] *= 1;
+                    }
+                }
+
+                return $item;
+            });
+
+        $titles = $this->getTitles();
+
+        $categories = auth()->user()->categories()
+            ->select("id", "name", "currency_id")
+            ->get()
+            ->groupBy("currency_id");
+
+        $means = auth()->user()->meansOfPayment()
+            ->select("id", "name", "currency_id")
+            ->get()
+            ->groupBy("currency_id");
+
+        return response()->json(compact("data", "titles", "categories", "means"));
+    }
+
+    public function update(Report $report)
+    {
+        $data = request()->validate([
+            "title" => ["required", "string", "max:64"],
+            "income_addition" => ["required", "boolean"],
+            "sort_dates_desc" => ["required", "boolean"],
+            "calculate_sum" => ["required", "boolean"]
+        ]);
+
+        $columns = request()->validate([
+            "columns" => ["required", "array"],
+            "columns.date" => ["required", "boolean"],
+            "columns.title" => ["required", "boolean"],
+            "columns.amount" => ["required", "boolean"],
+            "columns.price" => ["required", "boolean"],
+            "columns.value" => ["required", "boolean"],
+            "columns.category_id" => ["required", "boolean"],
+            "columns.mean_id" => ["required", "boolean"]
+        ])["columns"];
+
+        $queries = request()->validate([
+            "queries" => ["present", "array"],
+            "queries.*.id" => ["nullable", "integer", "distinct", "exists:report_queries,id", new BelongsToReport($report)],
+            "queries.*.query_data" => ["required", "string", "in:income,outcome"],
+            "queries.*.min_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("max_date")],
+            "queries.*.max_date" => ["present", "nullable", "date"],
+            "queries.*.title" => ["present", "nullable", "string", "max:64"],
+            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", new ValueLessOrEqualField("max_amount")],
+            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", new ValueLessOrEqualField("max_price")],
+            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
+            "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
+            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+        ])["queries"];
+
+        $additionalEntries = request()->validate([
+            "additionalEntries" => ["present", "array"],
+            "additionalEntries.*.id" => ["nullable", "integer", "distinct", "exists:report_additional_entries,id", new BelongsToReport($report)],
+            "additionalEntries.*.date" => ["required", "date"],
+            "additionalEntries.*.title" => ["required", "string", "max:64"],
+            "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+        ])["additionalEntries"];
+
+        $users = request()->validate([
+            "users" => ["present", "array"],
+            "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
+        ])["users"];
+
+        // Save queries
+        $report->queries()
+            ->whereNotIn("id", array_column($queries, "id"))
+            ->delete();
+
+        foreach ($queries as $query) {
+            if (isset($query["id"])) {
+                $report->queries()->find($query["id"])->update($query);
+            }
+            else {
+                $report->queries()->create($query);
+            }
+        }
+
+        // Save additional entries
+        $report->additionalEntries()
+            ->whereNotIn("id", array_column($additionalEntries, "id"))
+            ->delete();
+
+        foreach ($additionalEntries as $entry) {
+            if (isset($entry["id"])) {
+                $report->additionalEntries()->find($entry["id"])->update($entry);
+            }
+            else {
+                $report->additionalEntries()->create($entry);
+            }
+        }
+
+        // Save users
+        $report->sharedUsers()
+            ->whereNotIn("email", $users)
+            ->detach();
+
+        $report->sharedUsers()->attach(
+            User::whereIn("email", $users)
+                ->whereNotIn("email", $report->sharedUsers()->pluck("email"))
+                ->pluck("id")
+        );
+
+        return response("");
     }
 }

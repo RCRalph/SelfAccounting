@@ -68,7 +68,23 @@
                         </v-col>
                     </v-row>
 
-                    <v-divider></v-divider>
+                    <div class="d-flex justify-space-around flex-wrap flex-sm-row flex-column mt-2">
+                        <ReportQueriesDialogComponent
+                            v-model="data.queries"
+                            :titles="titles"
+                            :categories="categories"
+                            :means="means"
+                        ></ReportQueriesDialogComponent>
+
+                        <ReportAdditionalEntriesDialogComponent
+                            v-model="data.additionalEntries"
+                            :titles="titles"
+                            :categories="categories"
+                            :means="means"
+                        ></ReportAdditionalEntriesDialogComponent>
+                    </div>
+
+                    <v-divider class="mt-3"></v-divider>
 
                     <v-simple-table>
                         <template v-slot:default>
@@ -131,22 +147,6 @@
                             </tbody>
                         </template>
                     </v-simple-table>
-
-                    <div class="d-flex justify-space-around flex-wrap flex-sm-row flex-column mt-2">
-                        <ReportQueriesDialogComponent
-                            v-model="data.queries"
-                            :titles="titles"
-                            :categories="categories"
-                            :means="means"
-                        ></ReportQueriesDialogComponent>
-
-                        <ReportAdditionalEntriesDialogComponent
-                            v-model="data.additionalEntries"
-                            :titles="titles"
-                            :categories="categories"
-                            :means="means"
-                        ></ReportAdditionalEntriesDialogComponent>
-                    </div>
                 </v-form>
             </v-card-text>
 

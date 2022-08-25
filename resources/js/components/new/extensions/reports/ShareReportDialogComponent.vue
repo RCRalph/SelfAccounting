@@ -7,9 +7,9 @@
         <v-card>
             <v-card-title>Share</v-card-title>
 
-            <v-card-text v-if="value.length" class="d-flex justify-center flex-wrap">
+            <v-card-text v-if="users.length" class="d-flex justify-center flex-wrap">
                 <v-chip
-                    v-for="(item, i) in value"
+                    v-for="(item, i) in users"
                     :key="i"
                     pill close outlined large
                     class="large-chip-avatar"
@@ -37,7 +37,7 @@
                                 :rules="[
                                     validation.email(),
                                     () => emailExists || `This user doesn't exist`,
-                                    email => !value.map(item => item.email).includes(email) || `This user is already added`
+                                    email => !users.map(item => item.email).includes(email) || `This user is already added`
                                 ]"
                             ></v-text-field>
                         </v-form>
@@ -87,6 +87,7 @@ export default {
     },
     data() {
         return {
+            users: [],
             dialog: false,
             error: false,
             loading: false,
@@ -97,7 +98,7 @@ export default {
     },
     methods: {
         update() {
-            this.$emit("update", this.value);
+            this.$emit("input", this.users);
             this.dialog = false;
         },
         addUser() {
@@ -109,7 +110,7 @@ export default {
                     const data = response.data;
 
                     this.$refs.form.reset();
-                    this.value.push(data.user);
+                    this.users.push(data.user);
 
                     this.loading = false;
                 })
@@ -127,8 +128,11 @@ export default {
                 })
         },
         removeUser(email) {
-            this.value = this.value.filter(item => item.email != email);
+            this.users = this.users.filter(item => item.email != email);
         }
+    },
+    mounted() {
+        this.users = _.cloneDeep(this.value);
     }
 }
 </script>
