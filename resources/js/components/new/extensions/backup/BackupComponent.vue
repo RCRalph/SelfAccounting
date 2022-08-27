@@ -5,7 +5,14 @@
                 <v-card-title class="justify-center text-capitalize pb-lg-0 text-h5">Backup</v-card-title>
 
                 <v-card-actions class="d-flex justify-space-around flex-wrap px-3">
-                    <v-btn outlined width="185" class="ma-1" large :block="$vuetify.breakpoint.xs">Create backup</v-btn>
+                    <v-btn
+                        outlined width="185"
+                        class="ma-1" large
+                        :disabled="loading"
+                        :block="$vuetify.breakpoint.xs"
+                        :loading="loading"
+                        @click="create"
+                    >Create backup</v-btn>
 
                     <v-btn outlined width="185" class="ma-1" large :block="$vuetify.breakpoint.xs">Restore from file</v-btn>
                 </v-card-actions>
@@ -73,16 +80,12 @@ export default {
     data() {
         return {
             data: {},
+            loading: false,
 
             ready: false,
             success: false,
             thing: "",
             error: false
-        }
-    },
-    computed: {
-        backupDate() {
-            return this.dateWithCurrentTimeZone(this.data.backup.last, true);
         }
     },
     methods: {
@@ -96,6 +99,32 @@ export default {
                     this.data = data.data;
 
                     this.ready = true;
+                })
+        },
+        create() {
+            this.loading = true;
+
+            axios.get(`/web-api/extensions/backup/create`)
+                .then(response => {
+                    const data = response.data;
+
+                    const download = document.createElement("a");
+                    download.style.display = "none";
+                    download.href = `data:application/octet-stream;charset:utf-8,${encodeURIComponent(JSON.stringify(data))}`;
+                    download.download = `${new Date().toISOString().split("T")[0]}.selfacc2`;
+
+                    document.body.appendChild(download);
+                    download.click();
+                    document.body.removeChild(download);
+
+                    this.thing = "created backup";
+                    this.success = true;
+                    this.loading = false;
+                })
+                .catch(err => {
+                    console.error(err);
+                    setTimeout(() => this.error = true, 1000);
+                    setTimeout(() => this.loading = false, 2000);
                 })
         }
     },
