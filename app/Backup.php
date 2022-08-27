@@ -17,6 +17,11 @@ class Backup extends Model
         'user_id', 'last_backup', 'last_restoration'
     ];
 
+    protected $casts = [
+        'last_backup' => 'datetime',
+        'last_restoration' => 'datetime'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

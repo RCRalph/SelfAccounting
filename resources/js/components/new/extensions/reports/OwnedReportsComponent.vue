@@ -1,6 +1,6 @@
 <template>
     <v-card v-if="ready" class="loading-height">
-        <v-card-title class="justify-center text-capitalize pb-lg-0">Owned reports</v-card-title>
+        <v-card-title class="justify-center text-capitalize pb-lg-0 text-h5">Owned reports</v-card-title>
 
         <v-card-text>
             <v-data-table

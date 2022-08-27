@@ -1,6 +1,6 @@
 <template>
     <v-card v-if="ready">
-        <v-card-title class="font-weight-bold justify-center text-h5">{{ chartInfo.name }}</v-card-title>
+        <v-card-title class="justify-center text-h5">{{ chartInfo.name }}</v-card-title>
 
         <v-card-text class="d-flex justify-center flex-nowrap align-end">
             <div class="me-2 ms-0" style="width: 145px">

@@ -1,6 +1,6 @@
 <template>
     <v-card class="sticky-panel loading-height">
-        <v-card-title class="font-weight-bold justify-center text-h5">Overview</v-card-title>
+        <v-card-title class="justify-center text-h5">Overview</v-card-title>
 
         <v-card-text>
             <v-row>

@@ -1,6 +1,6 @@
 <template>
     <v-card class="loading-height">
-        <v-card-title class="font-weight-bold justify-sm-space-between justify-center text-h5 text-capitalize pb-lg-0 flex-sm-row flex-column align-center">
+        <v-card-title class="justify-sm-space-between justify-center text-h5 text-capitalize pb-lg-0 flex-sm-row flex-column align-center">
             <div class="mb-sm-0 mb-3">Means of payment</div>
 
             <AddMeanDialogComponent

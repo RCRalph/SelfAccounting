@@ -5,7 +5,7 @@
                 <v-row>
                     <v-col xl="12" lg="4" md="6" cols="12">
                         <v-card class="mb-4" height="100%">
-                            <v-card-title class="font-weight-bold justify-center text-h5">Current balance</v-card-title>
+                            <v-card-title class="justify-center text-h5">Current balance</v-card-title>
 
                             <v-card-text>
                                 <div class="text-h4 text-center font-weight-regular mb-6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">
@@ -39,7 +39,7 @@
                                         'd-flex', 'align-center',
                                         !currentBalance.length && 'justify-center'
                                     ]">
-                                        <span class="font-weight-bold text-h5">Last 30 days</span>
+                                        <span class="text-h5">Last 30 days</span>
                                     </v-col>
 
                                     <v-col sm="6" cols="12" v-if="currentBalance.length">
@@ -110,7 +110,7 @@
 
             <v-col xl="8" cols="12">
                 <v-card class="sticky-panel loading-height">
-                    <v-card-title class="font-weight-bold justify-center text-h5">Recent transactions</v-card-title>
+                    <v-card-title class="justify-center text-h5">Recent transactions</v-card-title>
 
                     <v-card-text>
                         <RecentTransactionsComponent></RecentTransactionsComponent>

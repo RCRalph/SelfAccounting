@@ -20,7 +20,7 @@
                                     <tbody>
                                         <tr>
                                             <td class="text-end text-h6" width="50%">With us since</td>
-                                            <td class="text-h6">{{ data.since }}</td>
+                                            <td class="text-h6">{{ dateWithCurrentTimeZone(data.since) }}</td>
                                         </tr>
 
                                         <tr>
@@ -74,6 +74,8 @@ import ProfilePasswordDialogComponent from "@/profile/ProfilePasswordDialogCompo
 import ProfileSettingsDialogComponent from "@/profile/ProfileSettingsDialogComponent.vue"
 import ProfileDeleteDialogComponent from "@/profile/ProfileDeleteDialogComponent.vue";
 
+import main from "&/mixins/main";
+
 export default {
     components: {
         ProfilePictureDialogComponent,
@@ -82,6 +84,7 @@ export default {
         ProfileSettingsDialogComponent,
         ProfileDeleteDialogComponent
     },
+    mixins: [main],
     data() {
         return {
             data: {},

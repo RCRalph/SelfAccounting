@@ -112,10 +112,7 @@ Route::prefix("/web-api")->group(function () {
     Route::prefix("/extensions")->group(function () {
         Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");
 
-        Route::group([
-            "prefix" => "/{code}",
-            "middleware" => "extension"
-        ], function () {
+        Route::group([ "prefix" => "/{code}", "middleware" => "extension" ], function () {
             Route::post("/toggle", "WebAPI\Extensions\ExtensionsController@toggle")->name("web-api.extensions.code.toggle");
             Route::post("/toggle-premium", "WebAPI\Extensions\ExtensionsController@togglePremium")->name("web-api.extensions.code.toggle-premium");
         });
@@ -143,6 +140,10 @@ Route::prefix("/web-api")->group(function () {
                 Route::post("/update", "WebAPI\Extensions\ReportsController@update")->name("web-api.extensions.reports.update");
                 Route::post("/duplicate", "WebAPI\Extensions\ReportsController@duplicate")->name("web-api.extensions.reports.duplicate");
             });
+        });
+
+        Route::prefix("/backup")->group(function () {
+            Route::get("/", "WebAPI\Extensions\BackupController@index")->name("web-api.extensions.backup");
         });
     });
 });

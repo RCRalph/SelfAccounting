@@ -41,6 +41,28 @@ export default {
                     return -sortDirection;
                 }
             }
+        },
+        dateWithCurrentTimeZone(date, showTime = false) {
+            date = new Date(date);
+
+            if (isNaN(date)) {
+                return "N/A";
+            }
+
+            let retStr = [
+                date.getFullYear(),
+                (date.getMonth() + 1).toString().padStart(2, '0'),
+                date.getDate().toString().padStart(2, '0')
+            ].join("-");
+
+            if (showTime) {
+                retStr += " " + [
+                    date.getHours().toString().padStart(2, '0'),
+                    date.getMinutes().toString().padStart(2, '0')
+                ].join(":");
+            }
+
+            return retStr;
         }
     }
 }
