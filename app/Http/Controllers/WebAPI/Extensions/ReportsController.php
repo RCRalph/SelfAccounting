@@ -319,7 +319,7 @@ class ReportsController extends Controller
 
         $additionalEntries = request()->validate([
             "additionalEntries" => ["present", "array"],
-            "additionalEntries.*.date" => ["required", "date"],
+            "additionalEntries.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
             "additionalEntries.*.title" => ["required", "string", "max:64"],
             "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
             "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
@@ -484,6 +484,9 @@ class ReportsController extends Controller
             "users" => ["present", "array"],
             "users.*" => ["required", "email", "max:64", "distinct", "exists:users,email", "not_in:" . auth()->user()->email]
         ])["users"];
+
+        // Update report
+        $report->update($data);
 
         // Save queries
         $report->queries()

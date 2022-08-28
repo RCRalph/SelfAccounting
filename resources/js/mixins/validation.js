@@ -2,7 +2,7 @@ export default {
     data() {
         return {
             validation: {
-                date(allowNull = false, firstEntryDate = null) {
+                date(allowNull = false, minDate = "1970-01-01") {
                     return date => {
                         if (allowNull && !date) {
                             return true;
@@ -10,8 +10,8 @@ export default {
                         else if (isNaN(Date.parse(date))) {
                             return "Date has to be a date";
                         }
-                        else if (firstEntryDate != null && new Date(date).getTime() < new Date(firstEntryDate).getTime()) {
-                            return "Date can't be earlier than first entry date set for the current mean";
+                        else if (!isNaN(Date.parse(minDate)) && new Date(date).getTime() < new Date(minDate).getTime()) {
+                            return `Date can't be earlier than ${minDate}`;
                         }
 
                         return true;
@@ -116,26 +116,6 @@ export default {
                         return true;
                     }
                 },
-                startBalance(allowNull = false) {
-                    return balance => {
-                        balance = String(balance).replaceAll(",", ".");
-
-                        if (allowNull && !balance) {
-                            return true;
-                        }
-                        else if (!balance) {
-                            return "Balance is required";
-                        }
-                        else if (isNaN(Number(balance))) {
-                            return "Balance has to be a number";
-                        }
-                        else if (!balance.match(/^\s*(-)?(\d{1,11})?(\.\d{1,2})?\s*$/)) {
-                            return "Balance is an invalid number";
-                        }
-
-                        return true;
-                    }
-                },
                 username(allowNull = false) {
                     return username => {
                         if (allowNull && !username) {
@@ -196,7 +176,7 @@ export default {
                         return true;
                     }
                 },
-                cash(owned = 0, type, allowNull = false) {
+                cash(owned = 0, type = "income", allowNull = false) {
                     return amount => {
                         if (allowNull && !amount) {
                             return true;

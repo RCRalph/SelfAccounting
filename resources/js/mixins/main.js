@@ -63,6 +63,22 @@ export default {
             }
 
             return retStr;
+        },
+        arrayHasUniqueEntries(array, keys) {
+            let retVal = true;
+
+            array.forEach(item => {
+                let arrayCopy = _.cloneDeep(array);
+                keys.forEach(key => {
+                    arrayCopy = arrayCopy.filter(item2 => item2[key] == item[key]);
+                });
+
+                if (arrayCopy.length != 1) {
+                    retVal = false;
+                }
+            });
+
+            return retVal;
         }
     }
 }

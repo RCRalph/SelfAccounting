@@ -5,16 +5,27 @@
                 <v-card-title class="justify-center text-capitalize pb-lg-0 text-h5">Backup</v-card-title>
 
                 <v-card-actions class="d-flex justify-space-around flex-wrap px-3">
-                    <v-btn
-                        outlined width="185"
-                        class="ma-1" large
-                        :disabled="loading"
-                        :block="$vuetify.breakpoint.xs"
-                        :loading="loading"
-                        @click="create"
-                    >Create backup</v-btn>
+                    <v-tooltip bottom :disabled="!data.backup.tooltip">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                outlined width="185"
+                                class="ma-1" large
+                                :disabled="loading"
+                                :block="$vuetify.breakpoint.xs"
+                                :loading="loading"
+                                @click="create"
+                                v-on="on" v-bind="attrs"
+                            >
+                                Create backup
+                            </v-btn>
+                        </template>
 
-                    <v-btn outlined width="185" class="ma-1" large :block="$vuetify.breakpoint.xs">Restore from file</v-btn>
+                        <span>{{ data.backup.tooltip }}</span>
+                    </v-tooltip>
+
+                    <RestoreBackupDialogComponent
+                        :tooltip="data.restore.tooltip"
+                    ></RestoreBackupDialogComponent>
                 </v-card-actions>
 
                 <v-card-text class="pt-0">
@@ -57,6 +68,7 @@
 </template>
 
 <script>
+import RestoreBackupDialogComponent from "@/extensions/backup/RestoreBackupDialogComponent.vue";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
@@ -74,6 +86,7 @@ export default {
     },
     mixins: [validation, main],
     components: {
+        RestoreBackupDialogComponent,
         SuccessSnackbarComponent,
         ErrorSnackbarComponent
     },
