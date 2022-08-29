@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="900">
+    <v-dialog v-model="dialog" max-width="1300">
         <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
             <v-tooltip bottom :disabled="!tooltip">
                 <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
@@ -21,7 +21,7 @@
 
             <v-card-text>
                 <v-row>
-                    <v-col cols="12" md="10" offset-md="1" lg="8" offset-lg="2">
+                    <v-col cols="12" md="8" offset-md="2" lg="6" offset-lg="3" offset-xl="4" xl="4">
                         <v-file-input
                             v-model="file"
                             accept=".selfacc2"
@@ -31,9 +31,307 @@
                     </v-col>
                 </v-row>
 
+                <div v-if="data">
+                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Categories</div>
+                    <v-data-table
+                        :headers="headers.categories"
+                        :items="data.categories"
+                        :mobile-breakpoint="0"
+                        :items-per-page="5"
+                        disable-sort
+                    >
+                        <template v-slot:[`item.title`]="{ item }">
+                            <span style="white-space: nowrap">{{ item.title }}</span>
+                        </template>
+
+                        <template v-slot:[`item.income_category`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.income_category" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.outcome_category`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.outcome_category" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.show_on_charts`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.show_on_charts" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.count_to_summary`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.count_to_summary" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.start_date`]="{ item }">
+                            {{ item.start_date || "N/A" }}
+                        </template>
+
+                        <template v-slot:[`item.end_date`]="{ item }">
+                            {{ item.end_date || "N/A" }}
+                        </template>
+                    </v-data-table>
+
+                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Means of payment</div>
+                    <v-data-table
+                        :headers="headers.means"
+                        :items="data.means"
+                        :mobile-breakpoint="0"
+                        :items-per-page="5"
+                        disable-sort
+                    >
+                        <template v-slot:[`item.title`]="{ item }">
+                            <span style="white-space: nowrap">{{ item.title }}</span>
+                        </template>
+
+                        <template v-slot:[`item.income_mean`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.income_mean" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.outcome_mean`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.outcome_mean" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.show_on_charts`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.show_on_charts" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.count_to_summary`]="{ item }">
+                            <div class="checkbox-centered">
+                                <v-checkbox v-model="item.count_to_summary" disabled></v-checkbox>
+                            </div>
+                        </template>
+
+                        <template v-slot:[`item.first_entry_amount`]="{ item }">
+                            {{ item.first_entry_amount }}&nbsp;{{ item.currency }}
+                        </template>
+                    </v-data-table>
+
+                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Income</div>
+                    <v-data-table
+                        :headers="headers.IO"
+                        :items="data.income"
+                        :mobile-breakpoint="0"
+                        :items-per-page="5"
+                        disable-sort
+                    >
+                        <template v-slot:[`item.title`]="{ item }">
+                            <span style="white-space: nowrap">{{ item.title }}</span>
+                        </template>
+
+                        <template v-slot:[`item.price`]="{ item }">
+                            {{ item.price }}&nbsp;{{ item.currency }}
+                        </template>
+
+                        <template v-slot:[`item.category_id`]="{ item }">
+                            {{ item.category_id ? mappedValues.categories[item.category_id].name : "N/A" }}
+                        </template>
+
+                        <template v-slot:[`item.mean_id`]="{ item }">
+                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "N/A" }}
+                        </template>
+                    </v-data-table>
+
+                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Outcome</div>
+                    <v-data-table
+                        :headers="headers.IO"
+                        :items="data.outcome"
+                        :mobile-breakpoint="0"
+                        :items-per-page="5"
+                        disable-sort
+                    >
+                        <template v-slot:[`item.title`]="{ item }">
+                            <span style="white-space: nowrap">{{ item.title }}</span>
+                        </template>
+
+                        <template v-slot:[`item.price`]="{ item }">
+                            {{ item.price }}&nbsp;{{ item.currency }}
+                        </template>
+
+                        <template v-slot:[`item.category_id`]="{ item }">
+                            {{ item.category_id ? mappedValues.categories[item.category_id].name : "N/A" }}
+                        </template>
+
+                        <template v-slot:[`item.mean_id`]="{ item }">
+                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "N/A" }}
+                        </template>
+                    </v-data-table>
+
+                    <div v-if="data.extensions.cashan">
+                        <v-row>
+                            <v-col cols="12" md="6">
+                                <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Cash</div>
+
+                                <v-data-table
+                                    :headers="headers.cashan.cash"
+                                    :items="data.extensions.cashan.cash"
+                                    :mobile-breakpoint="0"
+                                    :items-per-page="5"
+                                    disable-sort
+                                >
+                                    <template v-slot:[`item.value`]="{ item }">
+                                        {{ item.value }}&nbsp;{{ item.currency }}
+                                    </template>
+                                </v-data-table>
+                            </v-col>
+
+                            <v-col cols="12" md="6">
+                                <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Means of payment</div>
+
+                                <v-data-table
+                                    :headers="headers.cashan.means"
+                                    :items="data.extensions.cashan.means"
+                                    :mobile-breakpoint="0"
+                                    :items-per-page="5"
+                                    disable-sort
+                                >
+                                    <template v-slot:[`item.mean_id`]="{ item }">
+                                        {{ mappedValues.means[item.mean_id].name }}
+                                    </template>
+                                </v-data-table>
+                            </v-col>
+                        </v-row>
+                    </div>
+
+                    <div v-if="data.extensions.report">
+                        <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Reports</div>
+
+                        <v-data-table
+                            :headers="headers.report.reports"
+                            :items="data.extensions.report.reports"
+                            :mobile-breakpoint="0"
+                            :items-per-page="5"
+                            disable-sort
+                            show-expand
+                            single-expand
+                        >
+                            <template v-slot:[`item.income_addition`]="{ item }">
+                                <div class="checkbox-centered">
+                                    <v-checkbox v-model="item.income_addition" disabled></v-checkbox>
+                                </div>
+                            </template>
+
+                            <template v-slot:[`item.sort_dates_desc`]="{ item }">
+                                <div class="checkbox-centered">
+                                    <v-checkbox v-model="item.sort_dates_desc" disabled></v-checkbox>
+                                </div>
+                            </template>
+
+                            <template v-slot:[`item.calculate_sum`]="{ item }">
+                                <div class="checkbox-centered">
+                                    <v-checkbox v-model="item.calculate_sum" disabled></v-checkbox>
+                                </div>
+                            </template>
+
+                            <template v-slot:expanded-item="{ headers: head, item }">
+                                <td :colspan="head.length" class="py-2">
+                                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Queries</div>
+                                    <v-data-table
+                                        :headers="headers.report.queries"
+                                        :items="item.queries"
+                                        :mobile-breakpoint="0"
+                                        :items-per-page="5"
+                                        disable-sort
+                                    >
+                                        <template v-slot:[`item.query_data`]="{ item }">
+                                            <span class="text-capitalize">{{ item.query_data }}</span>
+                                        </template>
+
+                                        <template v-slot:[`item.min_date`]="{ item }">
+                                            {{ item.min_date || "N/A" }}
+                                        </template>
+
+                                        <template v-slot:[`item.max_date`]="{ item }">
+                                            {{ item.max_date || "N/A" }}
+                                        </template>
+
+                                        <template v-slot:[`item.title`]="{ item }">
+                                            <span style="white-space: nowrap">{{ item.title || "All titles" }}</span>
+                                        </template>
+
+                                        <template v-slot:[`item.min_amount`]="{ item }">
+                                            {{ item.min_amount || "N/A" }}
+                                        </template>
+
+                                        <template v-slot:[`item.max_amount`]="{ item }">
+                                            {{ item.max_amount || "N/A" }}
+                                        </template>
+
+                                        <template v-slot:[`item.min_price`]="{ item }">
+                                            {{ item.min_price || "N/A" }}&nbsp;{{ item.min_price && item.currency || "" }}
+                                        </template>
+
+                                        <template v-slot:[`item.max_price`]="{ item }">
+                                            {{ item.max_price || "N/A" }}&nbsp;{{ item.max_price && item.currency || "" }}
+                                        </template>
+
+                                        <template v-slot:[`item.currency`]="{ item }">
+                                            {{ item.currency || "All currencies" }}
+                                        </template>
+
+                                        <template v-slot:[`item.category_id`]="{ item }">
+                                            {{ item.category_id ? mappedValues.categories[item.category_id].name : "All categories" }}
+                                        </template>
+
+                                        <template v-slot:[`item.mean_id`]="{ item }">
+                                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "All means of payment" }}
+                                        </template>
+                                    </v-data-table>
+
+                                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Additional Entries</div>
+                                    <v-data-table
+                                        :headers="headers.report.additionalEntries"
+                                        :items="item.additionalEntries"
+                                        :mobile-breakpoint="0"
+                                        :items-per-page="5"
+                                        disable-sort
+                                    >
+                                        <template v-slot:[`item.title`]="{ item }">
+                                            <span style="white-space: nowrap">{{ item.title }}</span>
+                                        </template>
+
+                                        <template v-slot:[`item.price`]="{ item }">
+                                            {{ item.price }}&nbsp;{{ item.currency }}
+                                        </template>
+
+                                        <template v-slot:[`item.category_id`]="{ item }">
+                                            {{ item.category_id ? mappedValues.categories[item.category_id].name : "N/A" }}
+                                        </template>
+
+                                        <template v-slot:[`item.mean_id`]="{ item }">
+                                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "N/A" }}
+                                        </template>
+                                    </v-data-table>
+
+                                    <div class="text-center text-capitalize pb-1 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Users</div>
+
+                                    <div class="d-flex justify-center flex-wrap">
+                                        <v-chip
+                                            v-for="(item1, i) in item.users"
+                                            :key="i" pill outlined large
+                                        >
+                                            {{ item1 }}
+                                        </v-chip>
+                                    </div>
+                                </td>
+                            </template>
+                        </v-data-table>
+                    </div>
+                </div>
             </v-card-text>
 
-            <v-card-actions v-if="file">
+            <v-card-actions v-if="data">
 
             </v-card-actions>
         </v-card>
@@ -69,6 +367,78 @@ export default {
     },
     data() {
         return {
+            headers: {
+                categories: [
+                    { text: "Currency", align: "center", value: "currency" },
+                    { text: "Name", align: "center", value: "name" },
+                    { text: "Show in income", align: "center", value: "income_category" },
+                    { text: "Show in outcome", align: "center", value: "outcome_category" },
+                    { text: "Show on charts", align: "center", value: "show_on_charts" },
+                    { text: "Count to summary", align: "center", value: "count_to_summary" },
+                    { text: "Start date", align: "center", value: "start_date" },
+                    { text: "End date", align: "center", value: "end_date" }
+                ],
+                means: [
+                    { text: "Currency", align: "center", value: "currency" },
+                    { text: "Name", align: "center", value: "name" },
+                    { text: "Show in income", align: "center", value: "income_mean" },
+                    { text: "Show in outcome", align: "center", value: "outcome_mean" },
+                    { text: "Show on charts", align: "center", value: "show_on_charts" },
+                    { text: "Count to summary", align: "center", value: "count_to_summary" },
+                    { text: "First entry date", align: "center", value: "first_entry_date" },
+                    { text: "Start balance", align: "center", value: "first_entry_amount" }
+                ],
+                IO: [
+                    { text: "Date", align: "center", value: "date" },
+                    { text: "Title", align: "center", value: "title" },
+                    { text: "Amount", align: "center", value: "amount" },
+                    { text: "Price", align: "center", value: "price" },
+                    { text: "Category", align: "center", value: "category_id" },
+                    { text: "Mean of payment", align: "center", value: "mean_id" }
+                ],
+                cashan: {
+                    cash: [
+                        { text: "Value", align: "center", value: "value" },
+                        { text: "Amount", align: "center", value: "amount" },
+                    ],
+                    means: [
+                        { text: "Currency", align: "center", value: "currency" },
+                        { text: "Mean of payment", align: "center", value: "mean_id" }
+                    ]
+                },
+                report: {
+                    reports: [
+                        { text: "Title", align: "center", value: "title" },
+                        { text: "Show sum", align: "center", value: "calculate_sum" },
+                        { text: "Add income", align: "center", value: "income_addition" },
+                        { text: "Sort dates desc", align: "center", value: "sort_dates_desc" },
+                        { text: "Show columns", align: "center", value: "show_columns" },
+                        { text: "", align: "center", value: "data-table-expand" }
+                    ],
+                    queries: [
+                        { text: "Min date", align: "center", value: "min_date" },
+                        { text: "Max date", align: "center", value: "max_date" },
+                        { text: "Title", align: "center", value: "title" },
+                        { text: "Min amount", align: "center", value: "min_amount" },
+                        { text: "Max amount", align: "center", value: "max_amount" },
+                        { text: "Min price", align: "center", value: "min_price" },
+                        { text: "Max price", align: "center", value: "max_price" },
+                        { text: "Currency", align: "center", value: "currency" },
+                        { text: "Category", align: "center", value: "category_id" },
+                        { text: "Mean of payment", align: "center", value: "mean_id" },
+                        { text: "Query type", align: "center", value: "query_data" }
+                    ],
+                    additionalEntries: [
+                        { text: "Date", align: "center", value: "date" },
+                        { text: "Title", align: "center", value: "title" },
+                        { text: "Amount", align: "center", value: "amount" },
+                        { text: "Price", align: "center", value: "price" },
+                        { text: "Category", align: "center", value: "category_id" },
+                        { text: "Mean of payment", align: "center", value: "mean_id" }
+                    ]
+                }
+            },
+
             file: null,
             data: null,
             mappedValues: {

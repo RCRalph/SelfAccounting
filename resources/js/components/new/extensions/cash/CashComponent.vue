@@ -150,11 +150,7 @@ export default {
             }
         },
         currentBalance() {
-            if (this.means[this.cashMean]) {
-                return this.means[this.cashMean].balance;
-            }
-
-            return 0;
+            return this.means.find(item => item.id == this.cashMean).balance;
         }
     },
     methods: {

@@ -131,7 +131,7 @@ class BackupController extends Controller
                     ...$report->only("title", "income_addition", "sort_dates_desc", "calculate_sum", "show_columns"),
 
                     "queries" => $report->queries
-                        ->makeHidden("id", "report_id", "created_at", "updated_at")
+                        ->makeHidden(["id", "report_id", "created_at", "updated_at"])
                         ->map(function ($item) use ($currencies) {
                             $item["currency"] = $currencies[$item["currency_id"]] ?? null;
                             unset($item["currency_id"]);
@@ -148,7 +148,7 @@ class BackupController extends Controller
                         }),
 
                     "additionalEntries" => $report->additionalEntries
-                        ->makeHidden("id", "report_id", "created_at", "updated_at")
+                        ->makeHidden(["id", "report_id", "created_at", "updated_at"])
                         ->map(function ($item) use ($currencies) {
                             $item["currency"] = $currencies[$item["currency_id"]] ?? null;
                             unset($item["currency_id"]);
