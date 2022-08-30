@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="1300">
+    <v-dialog v-model="dialog" max-width="1300" :persistent="loading">
         <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
             <v-tooltip bottom :disabled="!tooltip">
                 <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
@@ -27,6 +27,7 @@
                             accept=".selfacc2"
                             show-size
                             placeholder="Choose backup file"
+                            :disabled="loading"
                         ></v-file-input>
                     </v-col>
                 </v-row>
@@ -168,7 +169,7 @@
                         </template>
                     </v-data-table>
 
-                    <div v-if="data.extensions.cashan">
+                    <div v-if="data.extensions.cashan && !disabledExtensions.includes('cashan')">
                         <v-row>
                             <v-col cols="12" md="6">
                                 <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Cash</div>
@@ -204,7 +205,7 @@
                         </v-row>
                     </div>
 
-                    <div v-if="data.extensions.report">
+                    <div v-if="data.extensions.report && !disabledExtensions.includes('report')">
                         <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Reports</div>
 
                         <v-data-table
@@ -319,7 +320,7 @@
                                     <div class="d-flex justify-center flex-wrap">
                                         <v-chip
                                             v-for="(item1, i) in item.users"
-                                            :key="i" pill outlined large
+                                            :key="i" pill outlined
                                         >
                                             {{ item1 }}
                                         </v-chip>
@@ -329,10 +330,17 @@
                         </v-data-table>
                     </div>
                 </div>
+
+                <div class="text-center error--text" v-if="disabledExtensionNames.length">
+                    Your file includes data for extensions that aren't currently enabled, which means that their data won't be restored.<br>
+                    Please enable the following extensions: <strong>{{ disabledExtensionNames }}</strong>
+                </div>
             </v-card-text>
 
-            <v-card-actions v-if="data">
-
+            <v-card-actions v-if="data" class="d-flex justify-center">
+                <v-btn color="success" outlined :disabled="loading" @click="submit" :loading="loading">
+                    Submit
+                </v-btn>
             </v-card-actions>
         </v-card>
 
@@ -445,13 +453,42 @@ export default {
                 categories: {},
                 means: {}
             },
-            notOwnedExtensionNames: [],
+            disabledExtensions: [],
 
             dialog: false,
             error: false,
+            loading: false
+        }
+    },
+    computed: {
+        disabledExtensionNames() {
+            return this.extensions.extensions
+                .filter(item => this.disabledExtensions.includes(item.code))
+                .map(item => item.title).join(", ");
         }
     },
     methods: {
+        submit() {
+            this.loading = true;
+
+            axios
+                .post(`/web-api/extensions/backup/restore`, this.data)
+                .then(() => {
+                    this.$emit("restored");
+                    this.dialog = false;
+                    this.data = null;
+                    this.file = null;
+                    this.mappedValues = {
+                        categories: {},
+                        means: {}
+                    };
+                    this.disabledExtensions = [];
+                })
+                .catch(err => {
+                    console.error(err);
+                    this.error = true;
+                });
+        },
         validateCategories(categories) {
             if (!Array.isArray(categories)) {
                 return false;
@@ -617,10 +654,10 @@ export default {
                 categories: {},
                 means: {}
             };
-            this.notOwnedExtensionNames = [];
+            this.disabledExtensions = [];
 
             if (!this.file) {
-                return null;
+                return;
             }
 
             this.file.text()
@@ -658,7 +695,7 @@ export default {
                                 }
                             }
                             else if (this.extensions.extensions.map(item1 => item1.code).includes(item)) {
-                                this.notOwnedExtensionNames.push(this.extensions.extensions.find(item1 => item1.code == item).title)
+                                this.disabledExtensions.push(item);
                             }
                         });
                     }
@@ -667,6 +704,7 @@ export default {
                 })
                 .catch(err => {
                     console.error(err);
+                    this.file = null;
                     this.error = true;
                 });
         }

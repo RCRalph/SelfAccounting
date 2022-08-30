@@ -145,6 +145,7 @@ Route::prefix("/web-api")->group(function () {
         Route::prefix("/backup")->group(function () {
             Route::get("/", "WebAPI\Extensions\BackupController@index")->name("web-api.extensions.backup");
             Route::get("/create", "WebAPI\Extensions\BackupController@create")->name("web-api.extensions.backup.create");
+            Route::post("/restore", "WebAPI\Extensions\BackupController@restore")->name("web-api.extensions.backup.restore");
         });
     });
 });

@@ -4,7 +4,7 @@ export default {
             validation: {
                 date(allowNull = false, minDate = "1970-01-01") {
                     return date => {
-                        if (allowNull && !date) {
+                        if (allowNull && !date && date !== undefined) {
                             return true;
                         }
                         else if (isNaN(Date.parse(date))) {
@@ -19,7 +19,7 @@ export default {
                 },
                 title(allowNull = false) {
                     return title => {
-                        if (allowNull && !title) {
+                        if (allowNull && !title && title !== undefined) {
                             return true;
                         }
                         else if (!title) {
@@ -37,7 +37,7 @@ export default {
                 },
                 amount(allowNull = false, allowZero = false) {
                     return amount => {
-                        if (allowNull && !amount) {
+                        if (allowNull && !amount && amount !== undefined) {
                             return true;
                         }
 
@@ -64,7 +64,7 @@ export default {
                 },
                 price(allowNull = false, allowNegativeAndZero = false) {
                     return price => {
-                        if (allowNull && !price) {
+                        if (allowNull && !price && price !== undefined) {
                             return true;
                         }
 
@@ -100,7 +100,7 @@ export default {
                 },
                 name(allowNull = false) {
                     return name => {
-                        if (allowNull && !name) {
+                        if (allowNull && !name && name !== undefined) {
                             return true;
                         }
                         else if (!name) {
@@ -118,7 +118,7 @@ export default {
                 },
                 username(allowNull = false) {
                     return username => {
-                        if (allowNull && !username) {
+                        if (allowNull && !username && username != undefined) {
                             return true;
                         }
                         else if (!username) {
@@ -136,7 +136,7 @@ export default {
                 },
                 email(allowNull = false) {
                     return email => {
-                        if (allowNull && !email) {
+                        if (allowNull && !email && email !== undefined) {
                             return true;
                         }
                         else if (!email) {
@@ -157,7 +157,7 @@ export default {
                 },
                 password(allowNull = false) {
                     return password => {
-                        if (allowNull && !password) {
+                        if (allowNull && !password && password !== undefined) {
                             return true;
                         }
                         else if (!password) {
@@ -178,7 +178,7 @@ export default {
                 },
                 cash(owned = 0, type = "income", allowNull = false) {
                     return amount => {
-                        if (allowNull && !amount) {
+                        if (allowNull && !amount && amount !== undefined) {
                             return true;
                         }
                         if (isNaN(Number(amount))) {

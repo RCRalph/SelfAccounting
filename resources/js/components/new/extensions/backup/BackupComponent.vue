@@ -25,6 +25,7 @@
 
                     <RestoreBackupDialogComponent
                         :tooltip="data.restore.tooltip"
+                        @restored="restored"
                     ></RestoreBackupDialogComponent>
                 </v-card-actions>
 
@@ -139,6 +140,10 @@ export default {
                     setTimeout(() => this.error = true, 1000);
                     setTimeout(() => this.loading = false, 2000);
                 })
+        },
+        restored() {
+            this.thing = "restored the backup";
+            this.success = true;
         }
     },
     mounted() {

@@ -175,4 +175,9 @@ class BackupController extends Controller
 
         return response()->json(compact("categories", "means", "income", "outcome", "extensions"));
     }
+
+    public function restore()
+    {
+        return response("");
+    }
 }
