@@ -176,12 +176,12 @@ export default {
                         return true;
                     }
                 },
-                cash(owned = 0, type = "income", allowNull = false) {
+                cash(owned = 0, type = "income", allowNull = false, allowUndefined = false) {
                     return amount => {
-                        if (allowNull && !amount && amount !== undefined) {
+                        if (allowNull && !amount || allowUndefined && amount == undefined) {
                             return true;
                         }
-                        if (isNaN(Number(amount))) {
+                        else if (isNaN(Number(amount))) {
                             return "Amount has to be a number";
                         }
                         else if (amount < 0) {

@@ -485,8 +485,8 @@ export default {
                     this.disabledExtensions = [];
                 })
                 .catch(err => {
-                    console.error(err);
-                    this.error = true;
+                    setTimeout(() => this.error = true, 1000);
+                    setTimeout(() => this.loading = false, 2000);
                 });
         },
         validateCategories(categories) {
@@ -575,6 +575,7 @@ export default {
             let validationArray = cash.cash.map(item => [
                 this.currencies.findByISO(item.currency) !== undefined,
                 this.validation.cash()(item.amount) === true,
+                item.amount > 0,
                 !isNaN(Number(item.value))
             ].reduce((item1, item2) => item1 && item2));
 

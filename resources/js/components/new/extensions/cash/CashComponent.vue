@@ -23,7 +23,7 @@
                                     </v-col>
 
                                     <v-col cols="12" sm="4">
-                                        <v-text-field label="Amount" v-model="ownedCash[item.id]" :rules="[validation.cash(ownedCash[item.id], 'income', true)]"></v-text-field>
+                                        <v-text-field label="Amount" v-model="ownedCash[item.id]" :rules="[validation.cash(ownedCash[item.id], 'income', true, true)]"></v-text-field>
                                     </v-col>
 
                                     <v-col cols="12" sm="4" class="d-flex flex-wrap flex-column align-center" style="overflow-x: hidden">
