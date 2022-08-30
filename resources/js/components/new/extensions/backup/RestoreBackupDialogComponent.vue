@@ -618,8 +618,8 @@ export default {
                     (isNaN(Number(item1.min_price)) || isNaN(Number(item1.max_price))) ? true :
                         Number(item1.min_price) <= Number(item1.max_price),
                     item1.currency == null || this.currencies.findByISO(item1.currency) !== undefined,
-                    item1.currency ? (this.mappedValues.categories[item1.category_id].currency == item1.currency) : !item1.category_id,
-                    item1.currency ? (this.mappedValues.means[item1.mean_id].currency == item1.currency) : !item1.mean_id
+                    item1.currency ? (!item1.category_id || this.mappedValues.categories[item1.category_id].currency == item1.currency) : !item1.category_id,
+                    item1.currency ? (!item1.mean_id || this.mappedValues.means[item1.mean_id].currency == item1.currency) : !item1.mean_id
                 ].reduce((item1, item2) => item1 && item2)),
 
                 Array.isArray(item.additionalEntries) && item.additionalEntries.map(item1 => [
