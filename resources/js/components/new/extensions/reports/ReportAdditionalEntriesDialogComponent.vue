@@ -21,7 +21,7 @@
                         <div v-show="page == i - 1">
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-text-field type="date" label="Date" v-model="value[i - 1].date" :min="usedMean.first_entry_date" :rules="[validation.date(false, usedMean.first_entry_date)]"></v-text-field>
+                                    <v-text-field type="date" label="Date" v-model="value[i - 1].date" min="1970-01-01" :rules="[validation.date(false)]"></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="8">

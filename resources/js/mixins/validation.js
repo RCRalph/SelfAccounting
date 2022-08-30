@@ -2,16 +2,16 @@ export default {
     data() {
         return {
             validation: {
-                date(allowNull = false, firstEntryDate = null) {
+                date(allowNull = false, minDate = "1970-01-01") {
                     return date => {
-                        if (allowNull && !date) {
+                        if (allowNull && !date && date !== undefined) {
                             return true;
                         }
                         else if (isNaN(Date.parse(date))) {
                             return "Date has to be a date";
                         }
-                        else if (firstEntryDate != null && new Date(date).getTime() < new Date(firstEntryDate).getTime()) {
-                            return "Date can't be earlier than first entry date set for the current mean";
+                        else if (!isNaN(Date.parse(minDate)) && new Date(date).getTime() < new Date(minDate).getTime()) {
+                            return `Date can't be earlier than ${minDate}`;
                         }
 
                         return true;
@@ -19,7 +19,7 @@ export default {
                 },
                 title(allowNull = false) {
                     return title => {
-                        if (allowNull && !title) {
+                        if (allowNull && !title && title !== undefined) {
                             return true;
                         }
                         else if (!title) {
@@ -37,7 +37,7 @@ export default {
                 },
                 amount(allowNull = false, allowZero = false) {
                     return amount => {
-                        if (allowNull && !amount) {
+                        if (allowNull && !amount && amount !== undefined) {
                             return true;
                         }
 
@@ -64,7 +64,7 @@ export default {
                 },
                 price(allowNull = false, allowNegativeAndZero = false) {
                     return price => {
-                        if (allowNull && !price) {
+                        if (allowNull && !price && price !== undefined) {
                             return true;
                         }
 
@@ -100,7 +100,7 @@ export default {
                 },
                 name(allowNull = false) {
                     return name => {
-                        if (allowNull && !name) {
+                        if (allowNull && !name && name !== undefined) {
                             return true;
                         }
                         else if (!name) {
@@ -116,29 +116,9 @@ export default {
                         return true;
                     }
                 },
-                startBalance(allowNull = false) {
-                    return balance => {
-                        balance = String(balance).replaceAll(",", ".");
-
-                        if (allowNull && !balance) {
-                            return true;
-                        }
-                        else if (!balance) {
-                            return "Balance is required";
-                        }
-                        else if (isNaN(Number(balance))) {
-                            return "Balance has to be a number";
-                        }
-                        else if (!balance.match(/^\s*(-)?(\d{1,11})?(\.\d{1,2})?\s*$/)) {
-                            return "Balance is an invalid number";
-                        }
-
-                        return true;
-                    }
-                },
                 username(allowNull = false) {
                     return username => {
-                        if (allowNull && !username) {
+                        if (allowNull && !username && username != undefined) {
                             return true;
                         }
                         else if (!username) {
@@ -156,7 +136,7 @@ export default {
                 },
                 email(allowNull = false) {
                     return email => {
-                        if (allowNull && !email) {
+                        if (allowNull && !email && email !== undefined) {
                             return true;
                         }
                         else if (!email) {
@@ -177,7 +157,7 @@ export default {
                 },
                 password(allowNull = false) {
                     return password => {
-                        if (allowNull && !password) {
+                        if (allowNull && !password && password !== undefined) {
                             return true;
                         }
                         else if (!password) {
@@ -196,12 +176,12 @@ export default {
                         return true;
                     }
                 },
-                cash(owned = 0, type, allowNull = false) {
+                cash(owned = 0, type = "income", allowNull = false, allowUndefined = false) {
                     return amount => {
-                        if (allowNull && !amount) {
+                        if (allowNull && !amount || allowUndefined && amount == undefined) {
                             return true;
                         }
-                        if (isNaN(Number(amount))) {
+                        else if (isNaN(Number(amount))) {
                             return "Amount has to be a number";
                         }
                         else if (amount < 0) {

@@ -4,7 +4,7 @@
             <v-row>
                 <v-col xl="9" cols="12" order="last" order-xl="first">
                     <v-card class="sticky-panel">
-                        <v-card-title class="font-weight-bold justify-center text-h5">{{ information.title }}</v-card-title>
+                        <v-card-title class="justify-center text-h5">{{ information.title }}</v-card-title>
 
                         <v-card-text>
                             <v-data-table

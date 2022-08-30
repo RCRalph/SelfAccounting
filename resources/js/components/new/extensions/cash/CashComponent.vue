@@ -3,7 +3,7 @@
         <v-col xl="8" offset-xl="2" lg="12" offset-lg="0" md="10" offset-md="1" cols="12">
             <v-card v-if="ready">
                 <v-card-title class="d-flex" :class="$vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between'">
-                    <div class="font-weight-bold text-h5">Cash handling</div>
+                    <div class="text-h5">Cash handling</div>
 
                     <SetCashMeanComponent
                         v-model="cashMean"
@@ -23,7 +23,7 @@
                                     </v-col>
 
                                     <v-col cols="12" sm="4">
-                                        <v-text-field label="Amount" v-model="ownedCash[item.id]" :rules="[validation.cash(ownedCash[item.id], 'income', true)]"></v-text-field>
+                                        <v-text-field label="Amount" v-model="ownedCash[item.id]" :rules="[validation.cash(ownedCash[item.id], 'income', true, true)]"></v-text-field>
                                     </v-col>
 
                                     <v-col cols="12" sm="4" class="d-flex flex-wrap flex-column align-center" style="overflow-x: hidden">
@@ -150,11 +150,7 @@ export default {
             }
         },
         currentBalance() {
-            if (this.means[this.cashMean]) {
-                return this.means[this.cashMean].balance;
-            }
-
-            return 0;
+            return this.means.find(item => item.id == this.cashMean).balance;
         }
     },
     methods: {

@@ -24,7 +24,7 @@ class ProfileController extends Controller
     {
         $data = auth()->user()->only("profile_picture_link", "account_type", "email", "username", "darkmode", "hide_all_tutorials");
 
-        $data["since"] = auth()->user()->created_at->format("Y-m-d");
+        $data["since"] = auth()->user()->created_at;
 
         if ($data["account_type"] == "Premium" && auth()->user()->premium_expiration) {
             $differenceInHours = auth()->user()->premium_expiration->endOfDay()->diffInHours(now());

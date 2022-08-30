@@ -3,7 +3,7 @@
         <v-row>
             <v-col xl="8" cols="12" order="last" order-xl="first">
                 <v-card class="sticky-panel loading-height">
-                    <v-card-title class="font-weight-bold justify-center text-h5 text-capitalize pb-lg-0">{{ type }}</v-card-title>
+                    <v-card-title class="justify-center text-h5 text-capitalize pb-lg-0">{{ type }}</v-card-title>
 
                     <v-card-text>
                         <IOTableComponent

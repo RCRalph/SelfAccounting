@@ -5,16 +5,10 @@ namespace App\Policies;
 use App\Backup;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Carbon\Carbon;
 
 class BackupPolicy
 {
     use HandlesAuthorization;
-
-    public function createBackup(User $user)
-    {
-        return Carbon::now()->subDays(1)->gte($user->backup->last_backup);
-    }
 
     /**
      * Determine whether the user can view any models.
@@ -47,7 +41,12 @@ class BackupPolicy
      */
     public function create(User $user)
     {
-        //
+        if (!$user->backup) {
+            return false;
+        }
+
+        return !$user->backup->last_backup ||
+            now()->subDays(1)->gte($user->backup->last_backup);
     }
 
     /**
@@ -81,9 +80,15 @@ class BackupPolicy
      * @param  \App\Backup  $backup
      * @return mixed
      */
-    public function restore(User $user, Backup $backup)
+    public function restore(User $user)
     {
-        //
+        if (!$user->backup) {
+            return false;
+        }
+
+        return !$user->backup->last_restoration ||
+            now()->subDays(1)->gte($user->backup->last_restoration) &&
+            now()->subDays(7)->gte($user->created_at);
     }
 
     /**
