@@ -1,15 +1,18 @@
 <template>
     <v-dialog v-model="dialog" max-width="1300" :persistent="loading">
         <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
-            <v-tooltip bottom :disabled="!tooltip">
+            <v-tooltip bottom>
                 <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
-                    <v-btn
-                        outlined large width="185"
-                        v-bind="{ ...dialogAttrs, ...tooltipAttrs }"
-                        v-on="{ ...dialogOn, ...tooltipOn }"
-                    >
-                        Restore backup
-                    </v-btn>
+                    <div v-on="tooltipOn" v-bind="tooltipAttrs">
+                        <v-btn
+                            outlined large width="185"
+                            :disabled="!!tooltip"
+                            v-bind="dialogAttrs"
+                            v-on="dialogOn"
+                        >
+                            Restore backup
+                        </v-btn>
+                    </div>
                 </template>
 
                 <span>{{ tooltip }}</span>

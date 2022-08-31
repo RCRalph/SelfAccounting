@@ -35,6 +35,7 @@
                                         v-model="data[i - 1].title"
                                         counter="64"
                                         :rules="[validation.title()]"
+                                        ref="title"
                                     ></v-combobox>
                                 </v-col>
                             </v-row>
@@ -273,42 +274,45 @@ export default {
     methods: {
         submit() {
             this.loading = true;
+            this.$refs.title.forEach(item => item.blur());
 
-            const dataNoComma = _.cloneDeep(this.data);
-            dataNoComma.forEach((item, i) => {
-                if (typeof item.amount == "string") {
-                    dataNoComma[i].amount = dataNoComma[i].amount.replaceAll(",", ".");
-                }
-                if (typeof item.price == "string") {
-                    dataNoComma[i].price = dataNoComma[i].price.replaceAll(",", ".");
-                }
-            });
-
-            const cashArray = [];
-            Object.keys(this.cash).forEach(item => {
-                cashArray.push({
-                    id: item,
-                    amount: this.cash[item]
+            this.$nextTick(() => {
+                const dataNoComma = _.cloneDeep(this.data);
+                dataNoComma.forEach((item, i) => {
+                    if (typeof item.amount == "string") {
+                        dataNoComma[i].amount = dataNoComma[i].amount.replaceAll(",", ".");
+                    }
+                    if (typeof item.price == "string") {
+                        dataNoComma[i].price = dataNoComma[i].price.replaceAll(",", ".");
+                    }
                 });
-            })
 
-            axios
-                .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, {
-                    data: dataNoComma,
-                    cash: cashArray
+                const cashArray = [];
+                Object.keys(this.cash).forEach(item => {
+                    cashArray.push({
+                        id: item,
+                        amount: this.cash[item]
+                    });
                 })
-                .then(() => {
-                    this.$emit("added");
-                    this.dialog = false;
-                    this.loading = false;
-                    this.data = [];
-                    this.page = 0;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
+
+                axios
+                    .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, {
+                        data: dataNoComma,
+                        cash: cashArray
+                    })
+                    .then(() => {
+                        this.$emit("added");
+                        this.dialog = false;
+                        this.loading = false;
+                        this.data = [];
+                        this.page = 0;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        setTimeout(() => this.error = true, 1000);
+                        setTimeout(() => this.loading = false, 2000);
+                    })
+            });
         },
         appendData() {
             this.data.push(_.cloneDeep(this.commonValues))

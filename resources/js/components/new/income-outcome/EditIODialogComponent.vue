@@ -27,6 +27,7 @@
                                 v-model="data.title"
                                 counter="64"
                                 :rules="[validation.title()]"
+                                ref="title"
                             ></v-combobox>
                         </v-col>
                     </v-row>
@@ -175,28 +176,31 @@ export default {
         },
         update() {
             this.loading = true;
+            this.$refs.title.blur();
 
-            const dataNoComma = _.cloneDeep(this.data);
-            if (typeof dataNoComma.amount == "string") {
-                dataNoComma.amount = dataNoComma.amount.replaceAll(",", ".");
-            }
-            if (typeof dataNoComma.price == "string") {
-                dataNoComma.price = dataNoComma.price.replaceAll(",", ".");
-            }
+            this.$nextTick(() => {
+                const dataNoComma = _.cloneDeep(this.data);
+                if (typeof dataNoComma.amount == "string") {
+                    dataNoComma.amount = dataNoComma.amount.replaceAll(",", ".");
+                }
+                if (typeof dataNoComma.price == "string") {
+                    dataNoComma.price = dataNoComma.price.replaceAll(",", ".");
+                }
 
-            axios
-                .patch(`/web-api/${this.type}/${this.id}`, dataNoComma)
-                .then(() => {
-                    this.dataCopy = _.cloneDeep(this.data);
-                    this.$emit("updated");
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
+                axios
+                    .patch(`/web-api/${this.type}/${this.id}`, dataNoComma)
+                    .then(() => {
+                        this.dataCopy = _.cloneDeep(this.data);
+                        this.$emit("updated");
+                        this.dialog = false;
+                        this.loading = false;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        setTimeout(() => this.error = true, 1000);
+                        setTimeout(() => this.loading = false, 2000);
+                    })
+            })
         }
     }
 }

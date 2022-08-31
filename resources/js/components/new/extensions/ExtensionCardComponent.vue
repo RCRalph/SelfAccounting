@@ -1,12 +1,14 @@
 <template>
     <v-card>
-        <v-img height="250" :src="extension.thumbnail_link"></v-img>
+        <router-link :to="`/extensions/${extension.directory}`" style="text-decoration: none; color: inherit;">
+            <v-img height="250" :src="extension.thumbnail_link"></v-img>
 
-        <v-card-title class="d-flex justify-center">{{ extension.title }}</v-card-title>
+            <v-card-title class="d-flex justify-center">{{ extension.title }}</v-card-title>
 
-        <v-card-text>
-            <div class="text-center">{{ extension.short_description }}</div>
-        </v-card-text>
+            <v-card-text>
+                <div class="text-center">{{ extension.short_description }}</div>
+            </v-card-text>
+        </router-link>
 
         <v-card-actions>
             <v-row v-if="ownsExtension">

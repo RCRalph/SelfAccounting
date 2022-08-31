@@ -28,6 +28,7 @@
                                 v-model="value.title"
                                 counter="64"
                                 :rules="[validation.title(true)]"
+                                ref="title"
                             ></v-combobox>
                         </v-col>
                     </v-row>
@@ -125,8 +126,12 @@ export default {
     },
     methods: {
         update() {
-            this.$emit("update", this.value);
-            this.dialog = false;
+            this.$refs.title.blur();
+
+            this.$nextTick(() => {
+                this.$emit("update", this.value);
+                this.dialog = false;
+            });
         }
     }
 }

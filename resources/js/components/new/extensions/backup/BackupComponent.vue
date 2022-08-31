@@ -7,17 +7,18 @@
                 <v-card-actions class="d-flex justify-space-around flex-wrap px-3">
                     <v-tooltip bottom :disabled="!data.backup.tooltip">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                                outlined width="185"
-                                class="ma-1" large
-                                :disabled="loading"
-                                :block="$vuetify.breakpoint.xs"
-                                :loading="loading"
-                                @click="create"
-                                v-on="on" v-bind="attrs"
-                            >
-                                Create backup
-                            </v-btn>
+                            <div v-on="on" v-bind="attrs">
+                                <v-btn
+                                    outlined width="185"
+                                    class="ma-1" large
+                                    :disabled="loading || !!data.backup.tooltip"
+                                    :block="$vuetify.breakpoint.xs"
+                                    :loading="loading"
+                                    @click="create"
+                                >
+                                    Create backup
+                                </v-btn>
+                            </div>
                         </template>
 
                         <span>{{ data.backup.tooltip }}</span>
@@ -134,6 +135,7 @@ export default {
                     this.thing = "created backup";
                     this.success = true;
                     this.loading = false;
+                    this.getData();
                 })
                 .catch(err => {
                     console.error(err);
@@ -144,6 +146,7 @@ export default {
         restored() {
             this.thing = "restored the backup";
             this.success = true;
+            this.getData();
         }
     },
     mounted() {

@@ -48,6 +48,7 @@
                                         v-model="value[i - 1].title"
                                         counter="64"
                                         :rules="[validation.title(true)]"
+                                        ref="title"
                                     ></v-combobox>
                                 </v-col>
                             </v-row>
@@ -258,8 +259,12 @@ export default {
     },
     methods: {
         update() {
-            this.$emit("update", this.value);
-            this.dialog = false;
+            this.$refs.title.forEach(item => item.blur());
+
+            this.$nextTick(() => {
+                this.$emit("update", this.value);
+                this.dialog = false;
+            });
         },
         appendData() {
             this.value.push(_.cloneDeep(this.startData));

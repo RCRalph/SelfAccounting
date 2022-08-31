@@ -33,6 +33,7 @@
                                 v-model="from.title"
                                 counter="64"
                                 :rules="[validation.title()]"
+                                ref="title"
                             ></v-combobox>
 
                             <v-text-field label="Amount" v-model="from.amount" :rules="[validation.amount()]"></v-text-field>
@@ -92,6 +93,7 @@
                                 v-model="to.title"
                                 counter="64"
                                 :rules="[validation.title()]"
+                                ref="title"
                             ></v-combobox>
 
                             <v-text-field label="Amount" v-model="to.amount" :rules="[validation.amount()]"></v-text-field>
@@ -277,56 +279,59 @@ export default {
     methods: {
         submit() {
             this.loading = true;
+            this.$refs.title.forEach(item => item.blur());
 
-            const fromNoComma = _.cloneDeep(this.from);
-            if (typeof fromNoComma.amount == "string") {
-                fromNoComma.amount = fromNoComma.amount.replaceAll(",", ".");
-            }
-            if (typeof fromNoComma.price == "string") {
-                fromNoComma.price =fromNoComma.price.replaceAll(",", ".");
-            }
+            this.$nextTick(() => {
+                const fromNoComma = _.cloneDeep(this.from);
+                if (typeof fromNoComma.amount == "string") {
+                    fromNoComma.amount = fromNoComma.amount.replaceAll(",", ".");
+                }
+                if (typeof fromNoComma.price == "string") {
+                    fromNoComma.price =fromNoComma.price.replaceAll(",", ".");
+                }
 
-            const toNoComma = _.cloneDeep(this.to);
-            if (typeof toNoComma.amount == "string") {
-                toNoComma.amount = toNoComma.amount.replaceAll(",", ".");
-            }
-            if (typeof toNoComma.price == "string") {
-                toNoComma.price = toNoComma.price.replaceAll(",", ".");
-            }
+                const toNoComma = _.cloneDeep(this.to);
+                if (typeof toNoComma.amount == "string") {
+                    toNoComma.amount = toNoComma.amount.replaceAll(",", ".");
+                }
+                if (typeof toNoComma.price == "string") {
+                    toNoComma.price = toNoComma.price.replaceAll(",", ".");
+                }
 
-            const fromCashArray = [];
-            Object.keys(this.fromCash).forEach(item => {
-                fromCashArray.push({
-                    id: item,
-                    amount: this.fromCash[item]
-                });
-            })
-
-            const toCashArray = [];
-            Object.keys(this.toCash).forEach(item => {
-                toCashArray.push({
-                    id: item,
-                    amount: this.toCash[item]
-                });
-            })
-
-            axios
-                .post(`/web-api/exchange`, {
-                    from: fromNoComma,
-                    to: toNoComma,
-                    fromCash: fromCashArray,
-                    toCash: toCashArray
+                const fromCashArray = [];
+                Object.keys(this.fromCash).forEach(item => {
+                    fromCashArray.push({
+                        id: item,
+                        amount: this.fromCash[item]
+                    });
                 })
-                .then(() => {
-                    this.$emit("exchanged");
-                    this.dialog = false;
-                    this.loading = false;
+
+                const toCashArray = [];
+                Object.keys(this.toCash).forEach(item => {
+                    toCashArray.push({
+                        id: item,
+                        amount: this.toCash[item]
+                    });
                 })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
+
+                axios
+                    .post(`/web-api/exchange`, {
+                        from: fromNoComma,
+                        to: toNoComma,
+                        fromCash: fromCashArray,
+                        toCash: toCashArray
+                    })
+                    .then(() => {
+                        this.$emit("exchanged");
+                        this.dialog = false;
+                        this.loading = false;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        setTimeout(() => this.error = true, 1000);
+                        setTimeout(() => this.loading = false, 2000);
+                    })
+            });
         },
         resetSelects(key) {
             this[key].category_id = null;
