@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
-    public function __construct()
+    public function app()
     {
-        $this->middleware("auth");
+        return view("app");
     }
 
     public function index()
     {
-        return view("app");
+        if (Auth::check()) {
+            return redirect()->route('app');
+        }
+
+        return view('index');
     }
 }

@@ -1,78 +1,70 @@
 <template>
-    <div class="card">
-        <div class="card-header-flex">
-            <div class="card-header-text">
-                <i class="fas fa-cog"></i>
-                Settings
-            </div>
-
-            <div class="d-flex" v-if="ready">
-                <div class="currency-text">Currency:</div>
-                <select class="form-control" v-model="currentCurrency">
-                    <option
-                        v-for="currency in currencies"
-                        :key="currency.id"
-                        :value="currency.id"
-                    >
-                        {{ currency.ISO }}
-                    </option>
-                </select>
-            </div>
-        </div>
-
-        <div class="card-body">
-            <div v-if="ready">
+    <div v-if="ready">
+        <v-row>
+            <v-col xl="6" cols="12">
                 <CategoriesComponent
-                    :categories="categories"
-                    :currency="currentCurrency"
+                    :startData="categories"
                 ></CategoriesComponent>
+            </v-col>
 
-                <MeansOfPaymentComponent
-                    :means="means"
-                    :currency="currentCurrency"
-                    class="mt-3"
-                ></MeansOfPaymentComponent>
-            </div>
-
-            <Loading v-else></Loading>
-        </div>
+            <v-col xl="6" cols="12">
+                <MeansComponent
+                    :startData="means"
+                ></MeansComponent>
+            </v-col>
+        </v-row>
     </div>
+
+    <v-overlay v-else :value="true" opacity="1" absolute>
+        <v-progress-circular
+            indeterminate
+            size="96"
+        ></v-progress-circular>
+    </v-overlay>
 </template>
 
 <script>
-import Loading from "../Loading.vue"
-import CategoriesComponent from "./CategoriesComponent.vue";
-import MeansOfPaymentComponent from "./MeansOfPaymentComponent.vue";
+import { useCurrenciesStore } from "&/stores/currencies";
+
+import CategoriesComponent from "@/settings/CategoriesComponent.vue";
+import MeansComponent from "@/settings/MeansComponent.vue";
 
 export default {
     components: {
-        Loading,
         CategoriesComponent,
-        MeansOfPaymentComponent
+        MeansComponent
+    },
+    setup() {
+        const currencies = useCurrenciesStore();
+
+        return { currencies };
     },
     data() {
         return {
             ready: false,
-            currentCurrency: 1,
+            categories: [],
+            means: []
+        }
+    },
+    methods: {
+        getData() {
+            this.ready = false;
 
-            currencies: [],
-            categories: {},
-            means: {}
+            axios
+                .get(`/web-api/settings/${this.currencies.usedCurrency}`)
+                .then(response => {
+                    const data = response.data;
+
+                    this.categories = data.categories;
+                    this.means = data.means;
+
+                    this.ready = true;
+                })
         }
     },
     mounted() {
-        axios
-            .get("/webapi/settings", {})
-            .then(response => {
-                const data = response.data;
-
-                this.currencies = data.currencies;
-                this.categories = data.categories;
-                this.means = data.means;
-                this.currentCurrency = data.lastCurrency;
-
-                this.ready = true;
-            })
+        this.getData();
+        this.currencies.$subscribe(() => this.getData());
     }
 }
 </script>

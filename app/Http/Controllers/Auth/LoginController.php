@@ -37,4 +37,28 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * Handle an authentication attempt.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return Response
+     */
+    public function authenticate()
+    {
+        if (Auth::attempt(["email" => request("email"), "password" => request("password")], request("remember"))) {
+            return response("");
+        }
+        else {
+            return response("", 422);
+        }
+    }
+
+    public function showLoginForm()
+    {
+        $intended = redirect()->intended("/login")->getTargetUrl();
+
+        return view("auth.login", compact("intended"));
+    }
 }

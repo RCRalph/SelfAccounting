@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:map";
 
 // Fonts
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,400;1,700&display=swap');
@@ -6,32 +7,10 @@
 // Vuetify configuration
 @import url('https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css');
 @import '~vuetify/dist/vuetify.css';
+
 @import 'vuetify-customization';
-
-// Variables
-@import 'variables';
-
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
-// Carousel
-@import "~@glidejs/glide/src/assets/sass/glide.core";
-@import "~@glidejs/glide/src/assets/sass/glide.theme";
-
-// Own styling
-@import 'own-mixins';
-@import 'own-classes';
-@import 'own-customization';
-@import 'landing-page';
-@import 'mixin-classes';
-@import 'chart-gallery';
-@import 'tutorial-modal';
-
-// Light-mode styles
-@import 'light-mode';
-
-// Media queries
-@import 'responsive';
+@import 'vuetify-responsive';
+@import 'vuetify-lightmode';
 
 // Font Awesome
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';

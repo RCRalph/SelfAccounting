@@ -1,222 +1,144 @@
 <template>
-    <div class="card">
-        <div class="card-header-flex">
-            <div class="card-header-text">
-                <i class="fab fa-buffer"></i>
-                Categories
-            </div>
-        </div>
+    <v-card class="loading-height">
+        <v-card-title class="justify-sm-space-between justify-center text-h5 text-capitalize pb-lg-0 flex-sm-row flex-column align-center">
+            <div class="mb-sm-0 mb-3">Categories</div>
 
-        <div class="card-body">
-            <div>
-                <div v-if="content[currency].length" class="table-responsive">
-                    <table class="table-themed responsive-table-hover">
-                        <TableHeader
-                            :cells="header"
-                        ></TableHeader>
+            <AddCategoryDialogComponent
+                @added="added"
+            ></AddCategoryDialogComponent>
+        </v-card-title>
 
-                        <tbody>
-                            <CategoriesTableRow
-                                v-for="(item, i) in content[currency]"
-                                :key="i"
-                                v-model="content[currency][i]"
-                                :index="i"
-                                @delete="remove(i)"
-                            >
-                            </CategoriesTableRow>
-                        </tbody>
-                    </table>
-                </div>
+        <v-card-text>
+            <v-data-table
+                hide-default-footer
+                :headers="headers"
+                :items="categories"
+                :mobile-breakpoint="0"
+                :loading="tableLoading"
+                disable-filtering
+                disable-sort
+                disable-pagination
+            >
+                <template v-slot:[`item.name`]="{ item }">
+                    <span style="white-space: nowrap">{{ item.name }}</span>
+                </template>
 
-                <EmptyPlaceholder v-else></EmptyPlaceholder>
-            </div>
+                <template v-slot:[`item.income_category`]="{ item }">
+                    <v-simple-checkbox v-model="item.income_category" disabled off-icon="mdi-close"></v-simple-checkbox>
+                </template>
 
-            <hr class="hr">
+                <template v-slot:[`item.outcome_category`]="{ item }">
+                    <v-simple-checkbox v-model="item.outcome_category" disabled off-icon="mdi-close"></v-simple-checkbox>
+                </template>
 
-            <div class="row">
-                <div class="col-md-4">
-                    <button
-                        class="big-button-primary"
-                        :disabled="submitted"
-                        @click="create"
-                    >
-                        New category
-                    </button>
-                </div>
+                <template v-slot:[`item.show_on_charts`]="{ item }">
+                    <v-simple-checkbox v-model="item.show_on_charts" disabled off-icon="mdi-close"></v-simple-checkbox>
+                </template>
 
-                <div class="col-md-4 my-2 my-md-0">
-                    <button
-                        class="big-button-danger"
-                        :disabled="submitted"
-                        @click="reset"
-                    >
-                        Reset changes
-                    </button>
-                </div>
+                <template v-slot:[`item.count_to_summary`]="{ item }">
+                    <v-simple-checkbox v-model="item.count_to_summary" disabled off-icon="mdi-close"></v-simple-checkbox>
+                </template>
 
-                <div class="col-md-4">
-                    <button
-                        :class="[
-                            'big-button-success',
-                            !equalContent && !submitted && 'text-stand-out'
-                        ]"
-                        :disabled="!canSave || submitted"
-                        @click="submit"
-                    >
-                        <div v-if="!submitted">
-                            Save changes
+                <template v-slot:[`item.actions`]="{ item }">
+                    <td>
+                        <div class="d-flex flex-nowrap justify-center align-center">
+                            <EditCategoryDialogComponent
+                                :id="item.id"
+                                @updated="updated"
+                            ></EditCategoryDialogComponent>
+
+                            <DeleteDialogComponent
+                                thing="category"
+                                :url="`settings/categories/${item.id}`"
+                                @deleted="deleted"
+                            ></DeleteDialogComponent>
                         </div>
+                    </td>
+                </template>
+            </v-data-table>
+        </v-card-text>
 
-                        <span
-                            v-else
-                            class="spinner-border spinner-border-sm"
-                            role="status"
-                            aria-hidden="true"
-                        ></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+        <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
+    </v-card>
 </template>
 
 <script>
-import TableHeader from "../TableHeader.vue";
-import EmptyPlaceholder from  "../EmptyPlaceholder.vue";
-import CategoriesTableRow from "./CategoriesTableRow.vue";
+import { useCurrenciesStore } from "&/stores/currencies";
+import main from "&/mixins/main";
+
+import AddCategoryDialogComponent from "@/settings/AddCategoryDialogComponent.vue";
+import EditCategoryDialogComponent from "@/settings/EditCategoryDialogComponent.vue";
+import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
+import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
 export default {
-    props: {
-        categories: {
-            required: true,
-            type: Object
-        },
-        currency: {
-            required: true,
-            type: Number
-        }
+    setup() {
+        const currencies = useCurrenciesStore();
+
+        return { currencies };
     },
+    mixins: [main],
     components: {
-        TableHeader,
-        EmptyPlaceholder,
-        CategoriesTableRow
+        AddCategoryDialogComponent,
+        EditCategoryDialogComponent,
+        DeleteDialogComponent,
+        SuccessSnackbarComponent
+    },
+    props: {
+        startData: {
+            type: Array,
+            required: true
+        }
     },
     data() {
         return {
-            header: [
-                {
-                    text: "Name",
-                    tooltip: "The name of your category"
-                },
-                {
-                    text: "Income",
-                    tooltip: "Use in income"
-                },
-                {
-                    text: "Outcome",
-                    tooltip: "Use in outcome"
-                },
-                {
-                    text: "Summary",
-                    tooltip: "Count to summary"
-                },
-                {
-                    text: "Start date",
-                    tooltip: "Count from this date"
-                },
-                {
-                    text: "End date",
-                    tooltip: "Count to this date"
-                },
-                {}
+            headers: [
+                { text: "Name", align: "center", value: "name" },
+                { text: "Show in income", align: "center", value: "income_category" },
+                { text: "Show in outcome", align: "center", value: "outcome_category" },
+                { text: "Show on charts", align: "center", value: "show_on_charts" },
+                { text: "Count to summary", align: "center", value: "count_to_summary" },
+                { text: "Actions", align: "center", value: "actions" }
             ],
-            content: {},
-            contentCopy: {},
+            categories: [],
 
-            submitted: false
-        }
-    },
-    computed: {
-        equalContent() {
-            return _.isEqual(this.content, this.contentCopy);
-        },
-        canSave() {
-            let validArray = [];
-
-            for (let i in this.content) {
-                validArray = validArray.concat(
-                    this.content[i].map(item => {
-                        const validName = item.name && item.name.length <= 32;
-                        const validDates = !(item.start_date && item.end_date) ||
-                            new Date(item.start_date).getTime() <= new Date(item.end_date).getTime();
-
-                        return validName && validDates;
-                    })
-                );
-            }
-
-            return validArray.length ?
-                !!validArray.reduce((item1, item2) => item1 && item2) :
-                true;
+            tableLoading: false,
+            success: false,
+            thing: ""
         }
     },
     methods: {
-        create() {
-            if (this.content[this.currency] === undefined) {
-                this.content[this.currency] = [];
-            }
-
-            this.content[this.currency].push({
-                id: 0,
-                currency_id: this.currency,
-                name: "",
-                income_category: false,
-                outcome_category: false,
-                count_to_summary: false,
-                start_date: "",
-                end_date: ""
-            })
-        },
-        remove(index) {
-            this.content[this.currency].splice(index, 1);
-        },
-        reset() {
-            this.content = _.cloneDeep(this.contentCopy);
-        },
-        submit() {
-            this.submitted = true;
+        getData() {
+            this.tableLoading = true;
 
             axios
-                .post("/webapi/settings/categories", {
-                    data: this.content
-                })
+                .get(`/web-api/settings/${this.currencies.usedCurrency}/categories`)
                 .then(response => {
                     const data = response.data;
-                    this.content = data.data;
-                    this.contentCopy = _.cloneDeep(data.data);
 
-                    this.submitted = false;
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.submitted = false;
+                    this.categories = data;
+
+                    this.tableLoading = false;
                 })
         },
-        refreshTooltip() {
-            this.$nextTick(() => {
-                updateTooltips();
-            });
+        added() {
+            this.thing = `added category`;
+            this.success = true;
+            this.getData();
+        },
+        updated() {
+            this.thing = `updated category`;
+            this.success = true;
+            this.getData();
+        },
+        deleted() {
+            this.thing = `deleted category`;
+            this.success = true;
+            this.getData();
         }
     },
-    beforeMount() {
-        this.content = _.cloneDeep(this.categories);
-        this.contentCopy = _.cloneDeep(this.categories);
-    },
     mounted() {
-        this.refreshTooltip();
-    },
-    updated() {
-        this.refreshTooltip();
+        this.categories = this.startData;
     }
 }
 </script>

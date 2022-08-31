@@ -13,11 +13,6 @@ Vue.use(vuetify);
 Vue.use(router);
 Vue.use(PiniaVuePlugin)
 
-Vue.component("app-component", require("./components/new/AppComponent.vue").default);
+Vue.component("app-component", require("@/AppComponent.vue").default);
 
-const app = new Vue({
-    el: '#app',
-    vuetify: new Vuetify(),
-    router,
-    pinia
-});
+new Vue({ el: '#app', vuetify: new Vuetify(), router, pinia });
