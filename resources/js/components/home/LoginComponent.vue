@@ -1,44 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar fixed height="64">
-            <a href="/" class="text-decoration-none white--text d-flex flex-nowrap align-center ml-0 ml-sm-3">
-                <v-avatar size="40">
-                    <v-img src="/storage/SelfAccounting.svg"></v-img>
-                </v-avatar>
-
-                <v-toolbar-title class="text-h5 ml-3">SelfAccounting</v-toolbar-title>
-            </a>
-
-            <v-spacer></v-spacer>
-
-            <v-menu
-                v-if="$vuetify.breakpoint.xs"
-                rounded bottom
-                transition="slide-y-transition"
-            >
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-menu</v-icon>
-                    </v-btn>
-                </template>
-
-                <v-list>
-                    <v-list-item link href="/login">
-                        <v-list-item-title>Login</v-list-item-title>
-                    </v-list-item>
-
-                    <v-list-item link href="/register">
-                        <v-list-item-title>Register</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-
-            <div v-else>
-                <v-btn depressed large rounded href="/login">Login</v-btn>
-
-                <v-btn depressed large rounded href="/register">Register</v-btn>
-            </div>
-        </v-app-bar>
+        <NavbarComponent></NavbarComponent>
 
         <v-main style="margin-top: 64px">
             <v-row class="ma-4" no-gutters>
@@ -51,7 +13,6 @@
                                 <v-row no-gutters>
                                     <v-col cols="12" sm="6" offset-sm="3">
                                         <v-text-field
-                                            name="email"
                                             prepend-icon="mdi-email"
                                             type="email"
                                             label="E-Mail Address"
@@ -66,7 +27,6 @@
 
                                     <v-col cols="12" sm="6" offset-sm="3">
                                         <v-text-field
-                                            name="password"
                                             prepend-icon="mdi-lock"
                                             label="Password"
                                             v-model="data.password"
@@ -99,14 +59,22 @@
                 </v-col>
             </v-row>
         </v-main>
+
+        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-app>
 </template>
 
 <script>
+import NavbarComponent from "@/home/NavbarComponent.vue";
+import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 import validation from "&/mixins/validation";
 
 export default {
     mixins: [validation],
+    components: {
+        NavbarComponent,
+        ErrorSnackbarComponent
+    },
     props: {
         intended: {
             required: true,
@@ -119,7 +87,8 @@ export default {
             show: false,
             loading: false,
             canSubmit: true,
-            correctCredentials: true
+            correctCredentials: true,
+            error: false
         }
     },
     methods: {

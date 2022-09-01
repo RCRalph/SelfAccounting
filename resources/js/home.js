@@ -12,5 +12,8 @@ Vue.use(vuetify);
 
 Vue.component("home-component", require("@/home/HomeComponent.vue").default);
 Vue.component("login-component", require("@/home/LoginComponent.vue").default);
+Vue.component("register-component", require("@/home/RegisterComponent.vue").default);
+Vue.component("email-component", require("@/home/EmailComponent.vue").default);
+Vue.component("reset-component", require("@/home/ResetComponent.vue").default);
 
 new Vue({ el: '#app', vuetify: new Vuetify() });

@@ -73,4 +73,11 @@ class RegisterController extends Controller
             'last_page_visit' => now()
         ]);
     }
+
+    public function showRegistrationForm()
+    {
+        $redirect = $this->redirectTo;
+
+        return view("auth.register", compact("redirect"));
+    }
 }

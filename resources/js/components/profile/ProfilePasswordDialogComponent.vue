@@ -50,7 +50,7 @@
                                 v-model="data.new_password_confirmation"
                                 :rules="[
                                     validation.password(),
-                                    password => password == data.new_password || `Password don't match`
+                                    password => password == data.new_password || `Passwords don't match`
                                 ]"
                                 :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="show3 ? 'text' : 'password'"
