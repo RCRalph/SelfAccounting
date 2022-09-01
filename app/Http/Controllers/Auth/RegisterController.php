@@ -8,7 +8,6 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -30,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = "/app#/getting-started";
+    protected $redirectTo = RouteServiceProvider::HOME . "#/getting-started";
 
     /**
      * Create a new controller instance.
@@ -70,8 +69,15 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'profile_picture' => 'Emoji' . rand(1, 6) . '.png',
-            'premium_expiration' => Carbon::now()->addDay(30),
-            'last_page_visit' => Carbon::now()
+            'premium_expiration' => now()->addDay(30),
+            'last_page_visit' => now()
         ]);
+    }
+
+    public function showRegistrationForm()
+    {
+        $redirect = $this->redirectTo;
+
+        return view("auth.register", compact("redirect"));
     }
 }

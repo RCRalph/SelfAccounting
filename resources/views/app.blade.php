@@ -11,7 +11,7 @@
         <link rel="icon" href="{{ URL::asset('favicon.ico') }}" type="image/x-icon"/>
 
         <!-- Styles -->
-        <link href="{{ mix('css/new.css') }}" rel="stylesheet">
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     </head>
 
     <body>
@@ -23,6 +23,6 @@
             @csrf
         </form>
 
-        <script src="{{ mix('js/new/app.js') }}"></script>
+        <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>
