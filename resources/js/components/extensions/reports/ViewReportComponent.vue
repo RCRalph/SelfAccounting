@@ -169,6 +169,12 @@
                     </div>
                 </v-col>
             </v-row>
+
+            <v-pagination
+                class="mt-3"
+                v-model="currentReport"
+                :length="reports.length"
+            ></v-pagination>
         </div>
 
         <v-overlay v-else :value="true" opacity="1" absolute>
@@ -212,6 +218,8 @@ export default {
                 date: []
             },
             lastChange: new Date(),
+            reports: [],
+            currentReport: null,
 
             ready: false,
             success: false,
@@ -276,6 +284,8 @@ export default {
 
                     this.information = data.information;
                     this.content = data.items;
+                    this.reports = data.reports;
+                    this.currentReport = this.reports.indexOf(Number(this.$route.params.id)) + 1;
 
                     this.ready = true;
                 })
@@ -338,7 +348,18 @@ export default {
             this.thing = `updated report`;
             this.success = true;
             this.getData();
-        },
+        }
+    },
+    watch: {
+        currentReport() {
+            if (this.currentReport && this.$route.params.id != this.reports[this.currentReport - 1]) {
+                this.$router.push(`/extensions/reports/${this.reports[this.currentReport - 1]}`);
+                this.options = {};
+                this.titleSearch = "";
+                this.filteredData = { date: [] };
+                this.getData();
+            }
+        }
     },
     mounted() {
         this.getData();

@@ -33,7 +33,7 @@ class ExtensionMiddleware
                 $extension = Extension::where("code", $request->route("code"))->first();
             }
         }
-        else if (!$request->route("code") && !$extensionCode) {
+        else {
             abort(500);
         }
 

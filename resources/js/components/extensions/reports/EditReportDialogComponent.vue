@@ -2,8 +2,8 @@
     <v-dialog v-model="dialog" max-width="800">
         <template v-slot:activator="{ on, attrs }">
             <v-tooltip bottom v-if="icon">
-                <template v-slot:activator="{ tooltipOn, tooltipAttrs }">
-                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...attrs, ...tooltipAttrs }" v-on="{ ...on, ...tooltipOn }">mdi-pencil</v-icon>
+                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
+                    <v-icon class="mx-1 cursor-pointer" v-on="{ ...tooltipOn, ...on }" v-bind="{ ...tooltipAttrs, ...attrs }">mdi-pencil</v-icon>
                 </template>
 
                 <span>Edit report</span>

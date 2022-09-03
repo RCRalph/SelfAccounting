@@ -34,13 +34,13 @@
                     <v-simple-table>
                         <template v-slot:default>
                             <tbody>
-                                <tr>
+                                <tr v-if="data.backup.last">
                                     <td class="text-right text-h6" style="width: 50%">Last backup</td>
 
                                     <td class="text-h6" style="width: 50%">{{ dateWithCurrentTimeZone(data.backup.last, true) }}</td>
                                 </tr>
 
-                                <tr>
+                                <tr v-if="data.restore.last">
                                     <td class="text-right text-h6" style="width: 50%">Last restoration</td>
 
                                     <td class="text-h6" style="width: 50%">{{ dateWithCurrentTimeZone(data.restore.last, true) }}</td>

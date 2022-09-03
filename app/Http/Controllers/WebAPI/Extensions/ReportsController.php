@@ -163,6 +163,10 @@ class ReportsController extends Controller
     {
         $this->authorize("view", $report);
 
+        $reports = auth()->user()->reports()
+            ->orderBy("id", "asc")
+            ->pluck("id");
+
         $information = [
             "title" => $report->title,
             "owner" => $report->user->only("username", "profile_picture_link")
@@ -249,7 +253,7 @@ class ReportsController extends Controller
             }
         }
 
-        return response()->json(compact("information", "items"));
+        return response()->json(compact("information", "items", "reports"));
     }
 
     public function create()
