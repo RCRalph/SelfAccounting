@@ -88,7 +88,7 @@ class BackupPolicy
 
         return !$user->backup->last_restoration ||
             now()->subDays(1)->gte($user->backup->last_restoration) &&
-            now()->subDays(7)->gte($user->created_at);
+            now()->subDays(30)->gte($user->created_at);
     }
 
     /**

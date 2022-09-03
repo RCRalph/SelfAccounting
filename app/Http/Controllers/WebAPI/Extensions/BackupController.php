@@ -44,7 +44,7 @@ class BackupController extends Controller
         ];
 
         if (!$backup->last_restoration && now()->subDays(7)->lt(auth()->user()->created_at)) {
-            $data["restore"]["tooltip"] = "You can only restore a backup 7 days after creating an account.";
+            $data["restore"]["tooltip"] = "You can only restore a backup 30 days after creating an account.";
         }
 
         return response()->json(compact("data"));

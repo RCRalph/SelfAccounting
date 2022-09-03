@@ -12,219 +12,12 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
-use App\Extension;
 use App\Currency;
-use App\Cash;
-use App\User;
 use App\Chart;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    public $EXTENSION_INFO_LIST = [
-        "charts" => [
-            "icon" => "fas fa-chart-bar",
-            "directory" => "charts"
-        ],
-        "backup" => [
-            "icon" => "fas fa-hdd",
-            "directory" => "backup"
-        ],
-        "cashan" => [
-            "icon" => "fas fa-money-bill-wave",
-            "directory" => "cash"
-        ],
-        "report" => [
-            "icon" => "fas fa-newspaper",
-            "directory" => "reports"
-        ]
-    ];
-
-    public $COS_DIRECTORIES = [
-        "profile_pictures"
-    ];
-
-    public $PUBLIC_DIRECTORIES = [
-        "extensions/thumbnails",
-        "extensions/gallery"
-    ];
-
-    public $TABLE_HEAD = ["date", "title", "amount", "price", "value", "category", "mean"];
-
-    public function getProfilePictureLink($profile_picture)
-    {
-        if (preg_match("/Emoji([1-6]|Admin).png/", $profile_picture)) {
-            return "/storage/avatars/$profile_picture";
-        }
-
-        return $this->getCosLink(
-            $this->COS_DIRECTORIES[0],
-            $profile_picture
-        );
-    }
-
-    public function getDataForPageRender()
-    {
-        $id = auth()->user()->id;
-        return Cache::remember(
-            "page-render-data-$id",
-            now()->addMinutes(15),
-            function () {
-                $retArr = auth()->user()->only("darkmode", "profile_picture", "id", "hide_all_tutorials");
-                $retArr["profile_picture"] = $this->getProfilePictureLink(auth()->user()->profile_picture);
-                $retArr["bundle_info"] = $this->EXTENSION_INFO_LIST;
-
-                // Select extensions available to the user
-                $retArr["bundles"] = auth()->user()->premiumExtensions
-                    ->merge(auth()->user()->extensions)
-                    ->filter(
-                        fn ($item) => $item->pivot->enabled === null ? true : $item->pivot->enabled
-                    );
-
-                // Update user's last page visit
-                auth()->user()->update([
-                    "last_page_visit" => Carbon::now()
-                ]);
-
-                return $retArr;
-            }
-        );
-    }
-
-    public function checkPremium($user)
-    {
-        return $user->admin ||
-            $user->premium_expiration == null ||
-            Carbon::parse($user->premium_expiration)
-                ->addDay(1)
-                ->timestamp >= Carbon::now()->timestamp;
-    }
-
-    public function deleteImage($directory, $name, $disk = "s3")
-    {
-        Storage::disk($disk)->delete("$directory/$name");
-    }
-
-    public function uploadImage($image, $directory, $delete = false, $fit = [], $disk = "s3")
-    {
-        $img = Image::make($image);
-        if (count($fit) == 2) {
-            $img->fit($fit[0], $fit[1]);
-        }
-
-        do {
-            $filename = Str::random(50) . "." . $image->extension();
-        } while (Storage::disk($disk)->has("$directory/$filename"));
-
-        if ($delete) {
-            $this->deleteImage($directory, $delete, $disk);
-        }
-        Storage::disk($disk)->put("$directory/$filename", $img->stream());
-
-        return $filename;
-    }
-
-    public function getCosLink($directory, $filename)
-    {
-        $endpoint = config("filesystems.disks.s3.endpoint");
-        $bucket = config("filesystems.disks.s3.bucket");
-
-        return "$endpoint/$bucket/$directory/$filename";
-    }
-
-    public function getLocalImageLink($directory, $filename)
-    {
-        return "/storage/$directory/$filename";
-    }
-
-    public function getTextColorOnBackgroundRGB($rgb)
-    {
-        return $rgb[0] * 0.299 + $rgb[1] * 0.587 + $rgb[2] * 0.114 > 150 ? "black" : "white";
-    }
-
-    public function getLastCurrency()
-    {
-        $userId = auth()->user()->id;
-
-        return Cache::remember(
-            "last-currency-$userId",
-            now()->addMinutes(15),
-            function () {
-                $income = auth()->user()->income;
-                $outcome = auth()->user()->outcome;
-
-                $last = $income->merge($outcome)
-                    ->sortBy("updated_at")->last();
-
-                return $last != null ? $last->currency_id : 1;
-            }
-        );
-    }
-
-    public function hasExtension($code, $id = null)
-    {
-        $user = $id == null ? auth()->user() : User::find($id);
-
-        $extension = Extension::firstWhere("code", $code);
-        return $user->extensions->contains($extension) ||
-            $user->premiumExtensions->contains($extension);
-    }
-
-    public function getCash()
-    {
-        return Cache::remember(
-            "cash",
-            now()->addHours(1),
-            fn () => Cash::all()
-                ->sortByDesc("value")
-                ->groupBy("currency_id")
-        );
-    }
-
-    public function getCashMeans()
-    {
-        $cashMeansList = auth()->user()->cashMeans
-            ->map(fn ($item) => $item->only("currency_id", "id"))
-            ->groupBy("currency_id");
-
-        $cashMeans = [];
-        foreach ($cashMeansList as $currency => $value) {
-            $cashMeans[$currency] = $value[0]["id"];
-        }
-
-        foreach ($this->getCurrencies() as $currency) {
-            if (!isset($cashMeans[$currency->id])) {
-                $cashMeans[$currency->id] = null;
-            }
-        }
-
-        return $cashMeans;
-    }
-
-    public function addNoBreakSpaces($text)
-    {
-        $text = explode(" ", $text);
-
-        for ($i = count($text) - 2; $i >= 0; $i--) {
-            if (strlen($text[$i]) == 1 && !in_array($text[$i], ["#", "-"])) {
-                $text[$i + 1] = $text[$i] . "&nbsp;" . $text[$i + 1];
-                array_splice($text, $i, 1);
-                $i++;
-            }
-        }
-
-        return implode(" ", $text);
-    }
-
-    public function getTutorial($directory)
-    {
-        return $this->addNoBreakSpaces(
-            Storage::disk("local")->get("files/tutorials/$directory")
-        );
-    }
-
-    /* ----- Common functions for new design ----- */
 
     public function getCurrencies()
     {
@@ -233,10 +26,8 @@ class Controller extends BaseController
 
     public function getLastUsedCurrencies()
     {
-        $id = auth()->user()->id;
-
         return Cache::remember(
-            "last-used-currencies-$id",
+            "last-used-currencies-" . auth()->user()->id,
             now()->addMinutes(15),
             function () {
                 $data = auth()->user()->income
@@ -387,10 +178,8 @@ class Controller extends BaseController
 
     public function getTitles()
     {
-        $userID = auth()->user()->id;
-
         return Cache::remember(
-            "titles-$userID",
+            "titles_" . auth()->user()->id,
             now()->addMinutes(15),
             function () {
                 $incomeTitles = auth()->user()->income()->pluck("title");
