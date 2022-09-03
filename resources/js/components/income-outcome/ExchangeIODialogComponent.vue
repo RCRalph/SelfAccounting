@@ -33,7 +33,7 @@
                                 v-model="from.title"
                                 counter="64"
                                 :rules="[validation.title()]"
-                                ref="title"
+                                ref="title1"
                             ></v-combobox>
 
                             <v-text-field label="Amount" v-model="from.amount" :rules="[validation.amount()]"></v-text-field>
@@ -93,7 +93,7 @@
                                 v-model="to.title"
                                 counter="64"
                                 :rules="[validation.title()]"
-                                ref="title"
+                                ref="title2"
                             ></v-combobox>
 
                             <v-text-field label="Amount" v-model="to.amount" :rules="[validation.amount()]"></v-text-field>
@@ -278,8 +278,10 @@ export default {
     },
     methods: {
         submit() {
+            console.log(this.$refs);
             this.loading = true;
-            this.$refs.title.forEach(item => item.blur());
+            this.$refs.title1.blur();
+            this.$refs.title2.blur();
 
             this.$nextTick(() => {
                 const fromNoComma = _.cloneDeep(this.from);
