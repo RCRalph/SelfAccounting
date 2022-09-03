@@ -38,7 +38,7 @@ export default {
                 })
 
                 keys.forEach(key => {
-                    if (foundChangeInSeparatorKeys || index && (item[key] != counters[key].value || key == "id")) {
+                    if (foundChangeInSeparatorKeys || index && (item[key] != counters[key].value || ["id", "value"].includes(key))) {
                         retArr[index - counters[key].count][key].span = counters[key].count;
                         counters[key] = {
                             value: item[key],

@@ -348,7 +348,18 @@ export default {
             this.thing = `updated report`;
             this.success = true;
             this.getData();
-        },
+        }
+    },
+    watch: {
+        currentReport() {
+            if (this.currentReport && this.$route.params.id != this.reports[this.currentReport - 1]) {
+                this.$router.push(`/extensions/reports/${this.reports[this.currentReport - 1]}`);
+                this.options = {};
+                this.titleSearch = "";
+                this.filteredData = { date: [] };
+                this.getData();
+            }
+        }
     },
     mounted() {
         this.getData();
