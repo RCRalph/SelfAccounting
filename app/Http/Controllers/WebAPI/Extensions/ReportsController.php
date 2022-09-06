@@ -167,6 +167,8 @@ class ReportsController extends Controller
             ->orderBy("id", "asc")
             ->pluck("id");
 
+        $canEdit = $report->user_id == auth()->user()->id;
+
         $information = [
             "title" => $report->title,
             "owner" => $report->user->only("username", "profile_picture_link")
@@ -253,7 +255,7 @@ class ReportsController extends Controller
             }
         }
 
-        return response()->json(compact("information", "items", "reports"));
+        return response()->json(compact("information", "items", "reports", "canEdit"));
     }
 
     public function create()

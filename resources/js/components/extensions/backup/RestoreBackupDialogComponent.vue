@@ -5,7 +5,8 @@
                 <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
                     <div v-on="tooltipOn" v-bind="tooltipAttrs">
                         <v-btn
-                            outlined large width="185"
+                            outlined large width="185" class="ma-1"
+                            :block="$vuetify.breakpoint.xs"
                             :disabled="!!tooltip"
                             v-bind="dialogAttrs"
                             v-on="dialogOn"
@@ -694,9 +695,16 @@ export default {
                                     throw new Error("Invalid cash");
                                 }
 
-                                if (item == "report" && !this.validateReports(data.extensions.report)) {
-                                    throw new Error("Invalid reports");
+                                if (item == "report") {
+                                    if (!this.validateReports(data.extensions.report)) {
+                                        throw new Error("Invalid reports");
+                                    }
+
+                                    data.extensions.report.reports.forEach((item, i) => {
+                                        data.extensions.report.reports[i].id = i;
+                                    })
                                 }
+
                             }
                             else if (this.extensions.extensions.map(item1 => item1.code).includes(item)) {
                                 this.disabledExtensions.push(item);
