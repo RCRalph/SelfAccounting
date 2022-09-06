@@ -33,6 +33,7 @@
 
                                         <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
                                             <EditReportDialogComponent
+                                                v-if="canEdit"
                                                 :id="Number($route.params.id)"
                                                 @updated="updated"
                                             ></EditReportDialogComponent>
@@ -220,6 +221,7 @@ export default {
             lastChange: new Date(),
             reports: [],
             currentReport: null,
+            canEdit: false,
 
             ready: false,
             success: false,
@@ -286,6 +288,7 @@ export default {
                     this.content = data.items;
                     this.reports = data.reports;
                     this.currentReport = this.reports.indexOf(Number(this.$route.params.id)) + 1;
+                    this.canEdit = data.canEdit;
 
                     this.ready = true;
                 })

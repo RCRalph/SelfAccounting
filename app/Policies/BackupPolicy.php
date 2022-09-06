@@ -45,7 +45,7 @@ class BackupPolicy
             return false;
         }
 
-        return !$user->backup->last_backup ||
+        return env("APP_DEBUG") || !$user->backup->last_backup ||
             now()->subDays(1)->gte($user->backup->last_backup);
     }
 
@@ -86,7 +86,7 @@ class BackupPolicy
             return false;
         }
 
-        return !$user->backup->last_restoration ||
+        return env("APP_DEBUG") || !$user->backup->last_restoration ||
             now()->subDays(1)->gte($user->backup->last_restoration) &&
             now()->subDays(30)->gte($user->created_at);
     }
