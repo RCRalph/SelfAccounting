@@ -22,6 +22,7 @@ class BackupController extends Controller
 
     public function index()
     {
+        // Get backup information (create on first visit)
         $backup = auth()->user()->backup;
         if (!$backup) {
             $backup = auth()->user()->backup()->create([
@@ -33,17 +34,26 @@ class BackupController extends Controller
         $data = [
             "backup" => [
                 "last" => $backup->last_backup,
+
+                // Tooltip will be shown when creating a backup is disallowed, informing the user why they can't do that.
+                // To disable the tooltip, set it's value to false.
                 "tooltip" => (!$backup->last_backup || now()->subDays(1)->gte($backup->last_backup)) ?
                     false : "You can only create a backup once every 24 hours."
             ],
             "restore" => [
                 "last" => $backup->last_restoration,
+
+                // Tooltip will be shown when restoring the backup is disallowed, informing the user why they can't do that.
+                // To disable the tooltip, set it's value to false.
                 "tooltip" => (!$backup->last_restoration || now()->subDays(1)->gte($backup->last_restoration)) ?
                     false : "You can only restore a backup once every 24 hours."
             ]
         ];
 
-        if (!$backup->last_restoration && now()->subDays(7)->lt(auth()->user()->created_at) && !env("APP_DEBUG")) {
+        // Backup restoration is disabled until 30 days after account creation.
+        // The reason is that the user gets 30 days of premium for free so they could theoretically never pay for premium but still have it.
+        // The admin might allow restoration for particular users, hence the first condition.
+        if (!$backup->last_restoration && now()->subDays(30)->lt(auth()->user()->created_at) && !env("APP_DEBUG")) {
             $data["restore"]["tooltip"] = "You can only restore a backup 30 days after creating an account.";
         }
 
@@ -54,6 +64,7 @@ class BackupController extends Controller
     {
         $this->authorize("create", Backup::class);
 
+        // Get currency array as ID: ISO
         $currencies = $this->getCurrencies()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
 
@@ -63,11 +74,12 @@ class BackupController extends Controller
             ->orderBy("created_at")
             ->get();
 
+        // $categoryIDs is an array which maps the id of a category to their index in the $categories array.// $categoryIDs is an array which maps the id of a category to their index in the $categories array.
         $categoryIDs = [];
         foreach ($categories as $i => $category) {
             $categories[$i]["currency"] = $currencies[$category["currency"]];
 
-            $categoryIDs[$category["id"]] = $i + 1;
+            $categoryIDs[$category["id"]] = $i + 1; // + 1 because the 0th category is considered as null
             unset($category["id"]);
         }
 
@@ -77,11 +89,12 @@ class BackupController extends Controller
             ->orderBy("created_at")
             ->get();
 
+        // $meanIDs is an array which maps the id of a mean of payment to their index in the $means array.
         $meanIDs = [];
         foreach ($means as $i => $mean) {
             $means[$i]["currency"] = $currencies[$mean["currency"]];
 
-            $meanIDs[$mean["id"]] = $i + 1;
+            $meanIDs[$mean["id"]] = $i + 1; // + 1 because the 0th mean is considered as null
             unset($mean["id"]);
         }
 
@@ -111,6 +124,7 @@ class BackupController extends Controller
 
         $extensions = [];
 
+        // Gather cash handling data
         if (auth()->user()->extensionCodes->contains("cashan")) {
             $extensions["cashan"] = [
                 "cash" => auth()->user()->cash()
@@ -129,6 +143,7 @@ class BackupController extends Controller
             ];
         }
 
+        // Gather report management data
         if (auth()->user()->extensionCodes->contains("report")) {
             $extensions["report"] = [
                 "reports" => []
@@ -158,7 +173,7 @@ class BackupController extends Controller
                     "additionalEntries" => $report->additionalEntries
                         ->makeHidden(["id", "report_id", "created_at", "updated_at"])
                         ->map(function ($item) use ($currencies, $categoryIDs, $meanIDs) {
-                            $item["currency"] = $currencies[$item["currency_id"]] ?? null;
+                            $item["currency"] = $currencies[$item["currency_id"]];
                             unset($item["currency_id"]);
 
                             if ($item["category_id"]) {
@@ -177,6 +192,7 @@ class BackupController extends Controller
             }
         }
 
+        // For debugging purposes disallowing backups for 24 hours is disabled.
         if (!env("APP_DEBUG")) {
             auth()->user()->backup()->update(["last_backup" => now()]);
         }
@@ -188,6 +204,7 @@ class BackupController extends Controller
     {
         $this->authorize("restore", Backup::class);
 
+        // This function may take a long time because of its complexity, which required extending the max execution time.
         ini_set("max_execution_time", "300");
 
         $categories = request()->validate([
@@ -236,15 +253,20 @@ class BackupController extends Controller
             "outcome.*.mean_id" => ["required", "integer", new ValidCategoryOrMean($means, true)]
         ])["outcome"];
 
+        // Delete all data from the account
         auth()->user()->categories()->delete();
         auth()->user()->meansOfPayment()->delete();
         auth()->user()->income()->delete();
         auth()->user()->outcome()->delete();
 
+        // Get currency array as ID: ISO
         $currencies = $this->getCurrencies()
             ->mapWithKeys(fn ($item) => [$item["ISO"] => $item["id"]]);
 
+        // $categoryIDs is an array which maps the index in the $categories array to the id of a category.
         $categoryIDs = [ 0 => null ];
+
+        // Restore categories
         foreach ($categories as $category) {
             array_push($categoryIDs,
                 auth()->user()->categories()->create([
@@ -254,7 +276,10 @@ class BackupController extends Controller
             );
         }
 
+        // $meanIDs is an array which maps the index in the $means array to the id of a mean of payment.
         $meanIDs = [ 0 => null ];
+
+        // Restore means of payment
         foreach ($means as $mean) {
             array_push($meanIDs,
                 auth()->user()->meansOfPayment()->create([
@@ -264,6 +289,7 @@ class BackupController extends Controller
             );
         }
 
+        // Restore income
         foreach ($income as $item) {
             auth()->user()->income()->create([
                 ...$item,
@@ -273,6 +299,7 @@ class BackupController extends Controller
             ]);
         }
 
+        // Restore outcome
         foreach ($outcome as $item) {
             auth()->user()->outcome()->create([
                 ...$item,
@@ -282,9 +309,11 @@ class BackupController extends Controller
             ]);
         }
 
+        // Restore extensions
         if (request()->has("extensions")) {
             request()->validate(["extensions" => ["required", "array"]]);
 
+            // Restore cash handling
             if (request()->has("extensions.cashan") && auth()->user()->extensionCodes->contains("cashan")) {
                 $extensionData = request()->validate([
                     "extensions.cashan" => ["required", "array"],
@@ -299,9 +328,11 @@ class BackupController extends Controller
                     "extensions.cashan.means.*.mean_id" => ["required", "integer", new ValidCategoryOrMean($means)]
                 ])["extensions"]["cashan"];
 
+                // Delete account's cash data
                 auth()->user()->cash()->detach();
                 auth()->user()->cashMeans()->detach();
 
+                // Restore cash
                 foreach ($extensionData["cash"] as $item) {
                     $cashInDB = Cash::firstWhere([
                         "currency_id" => $currencies[$item["currency"]],
@@ -313,11 +344,13 @@ class BackupController extends Controller
                     }
                 }
 
+                // Restore cash means
                 foreach ($extensionData["means"] as $item) {
                     auth()->user()->cashMeans()->attach($meanIDs[$item["mean_id"]]);
                 }
             }
 
+            // Restore report management
             if (request()->has("extensions.report") && auth()->user()->extensionCodes->contains("report")) {
                 $extensionData = request()->validate([
                     "extensions.report.reports.*.title" => ["required", "string", "max:64"],
@@ -352,8 +385,10 @@ class BackupController extends Controller
                     "extensions.report.reports.*.users.*" => ["required", "email", "max:64", "not_in:" . auth()->user()->email]
                 ])["extensions"]["report"];
 
+                // Delete all account's reports
                 auth()->user()->reports()->delete();
 
+                // Restore reports
                 foreach ($extensionData["reports"] as $report) {
                     $queries = $report["queries"];
                     $entries = $report["additionalEntries"];
@@ -361,8 +396,10 @@ class BackupController extends Controller
 
                     unset($report["queries"], $report["additionalEntries"], $report["users"]);
 
+                    // Restore report information
                     $reportInDB = auth()->user()->reports()->create($report);
 
+                    // Restore report queries
                     foreach ($queries as $query) {
                         $currency = $query["currency"] ? $currencies[$query["currency"]] : null;
                         unset($query["currency"]);
@@ -375,6 +412,7 @@ class BackupController extends Controller
                         ]);
                     }
 
+                    // Restore report additional entries
                     foreach ($entries as $entry) {
                         $currency = $entry["currency"] ? $currencies[$entry["currency"]] : null;
                         unset($entry["currency"]);
@@ -387,6 +425,7 @@ class BackupController extends Controller
                         ]);
                     }
 
+                    // Restore report shared users
                     foreach ($users as $user) {
                         $userInDB = User::firstWhere("email", $user);
 
@@ -398,6 +437,7 @@ class BackupController extends Controller
             }
         }
 
+        // For debugging purposes disallowing restorations for 24 hours is disabled.
         if (!env("APP_DEBUG")) {
             auth()->user()->backup()->update(["last_restoration" => now()]);
         }
