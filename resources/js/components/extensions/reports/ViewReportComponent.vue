@@ -171,11 +171,14 @@
                 </v-col>
             </v-row>
 
-            <v-pagination
-                class="mt-3"
-                v-model="currentReport"
-                :length="reports.length"
-            ></v-pagination>
+            <div class="pagination-fixed">
+                <v-card class="pa-1">
+                    <v-pagination
+                        v-model="currentReport"
+                        :length="reports.length"
+                    ></v-pagination>
+                </v-card>
+            </div>
         </div>
 
         <v-overlay v-else :value="true" opacity="1" absolute>
