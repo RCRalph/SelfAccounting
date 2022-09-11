@@ -25,7 +25,7 @@ class CheckPremiumExpiration extends Command
      *
      * @var string
      */
-    protected $description = "Sends emails if user has 7 or 1 day until premium expiration";
+    protected $description = "Sends emails if user has 7, 3 or 1 day until premium expiration";
 
     /**
      * Create a new command instance.

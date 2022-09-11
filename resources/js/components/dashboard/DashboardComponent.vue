@@ -4,7 +4,7 @@
             <v-col xl="4" cols="12">
                 <v-row>
                     <v-col xl="12" lg="4" md="6" cols="12">
-                        <v-card class="mb-4" height="100%">
+                        <v-card class="mb-4 d-flex justify-center flex-column" height="100%">
                             <v-card-title class="justify-center text-h5">Current balance</v-card-title>
 
                             <v-card-text>
@@ -32,7 +32,7 @@
                     </v-col>
 
                     <v-col xl="12" lg="8" md="6" cols="12">
-                        <v-card height="100%">
+                        <v-card class="d-flex flex-column justify-space-between" height="100%">
                             <v-card-title>
                                 <v-row>
                                     <v-col cols="12" :sm="currentBalance.length && 6" :class="[

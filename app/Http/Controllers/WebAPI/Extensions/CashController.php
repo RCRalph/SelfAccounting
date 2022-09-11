@@ -22,18 +22,21 @@ class CashController extends Controller
 
     public function index(Currency $currency)
     {
+        // Cash as id: value array
         $cash = $currency->cash()->select("id", "value")
             ->orderBy("value", "DESC")->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["value"] * 1]);
 
+        // Means of payment used as cash
         $cashMean = auth()->user()->cashMeans()
             ->where("currency_id", $currency->id)
             ->pluck("mean_of_payments.id")
+            ->first()
             ->toArray();
 
-        $cashMean = $cashMean ? $cashMean[0] : null;
-
-        $ownedCash = auth()->user()->cash()->where("currency_id", $currency->id)->get()
+        // Owned cash as id: amount array
+        $ownedCash = auth()->user()->cash()
+            ->where("currency_id", $currency->id)->get()
             ->mapWithKeys(fn ($item) => [$item->id => $item->pivot->amount]);
 
         return response()->json(compact("cash", "cashMean", "ownedCash"));

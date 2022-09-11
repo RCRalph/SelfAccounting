@@ -166,3 +166,11 @@ tr {
         margin-left: 12px !important;
     }
 }
+
+.pagination-fixed {
+    position: fixed;
+    bottom: 12px;
+    width: calc(100vw - 56px - 16px - 16px);
+    display: flex;
+    justify-content: center;
+}
