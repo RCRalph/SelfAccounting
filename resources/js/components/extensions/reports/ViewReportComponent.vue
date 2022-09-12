@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="ready">
-            <v-row>
+            <v-row class="pagination-fixed-margin">
                 <v-col xl="9" cols="12" order="last" order-xl="first">
                     <v-card class="sticky-panel">
                         <v-card-title class="justify-center text-h5">{{ information.title }}</v-card-title>
@@ -159,9 +159,9 @@
 
                                     <v-card-text class="d-flex align-center justify-center" style="height: calc(100% - 64px)">
                                         <div class="d-flex justify-space-around flex-wrap">
-                                            <v-btn outlined class="mx-2 my-1" @click="exportToCSV">Export to .csv</v-btn>
+                                            <v-btn outlined class="mx-2 my-1" @click="exportToCSV" width="172">Export to .csv</v-btn>
 
-                                            <v-btn outlined class="mx-2 my-1" @click="exportToXLSX" color="success">Export to .xlsx</v-btn>
+                                            <v-btn outlined class="mx-2 my-1" @click="exportToXLSX" width="172" color="success">Export to .xlsx</v-btn>
                                         </div>
                                     </v-card-text>
                                 </v-card>
