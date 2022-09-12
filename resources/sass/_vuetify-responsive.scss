@@ -16,6 +16,10 @@
     .menu-margin {
         margin-left: 0;
     }
+
+    .pagination-fixed {
+        width: calc(100vw - 16px - 16px);
+    }
 }
 
 @media (max-width: 475px) {

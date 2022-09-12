@@ -173,4 +173,8 @@ tr {
     width: calc(100vw - 56px - 16px - 16px);
     display: flex;
     justify-content: center;
+
+    &-margin {
+        margin-bottom: 65px;
+    }
 }
