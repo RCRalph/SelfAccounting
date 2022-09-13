@@ -31,8 +31,7 @@ class CashController extends Controller
         $cashMean = auth()->user()->cashMeans()
             ->where("currency_id", $currency->id)
             ->pluck("mean_of_payments.id")
-            ->first()
-            ->toArray();
+            ->first();
 
         // Owned cash as id: amount array
         $ownedCash = auth()->user()->cash()
