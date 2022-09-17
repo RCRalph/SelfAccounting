@@ -10,9 +10,7 @@ use App\User;
 
 class Extension extends Model
 {
-    protected $fillable = [
-        "title", "price", "thumbnail", "short_description", "description", "code", "icon", "directory"
-    ];
+    protected $guarded = [];
 
     protected $appends = ["thumbnail_link"];
 
