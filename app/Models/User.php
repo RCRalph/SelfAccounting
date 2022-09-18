@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -143,7 +143,10 @@ class User extends Authenticatable
                     return "Admin";
                 }
 
-                if ($attributes["premium_expiration"] == null || today()->lte(Carbon::parse($attributes["premium_expiration"]))) {
+                if ($attributes["premium_expiration"] == null ||
+                    today()->lte(Carbon::parse($attributes["premium_expiration"])) ||
+                    $this->subscribed("premium")
+                ) {
                     return "Premium";
                 }
 

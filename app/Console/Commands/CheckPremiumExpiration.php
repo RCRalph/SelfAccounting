@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Mail;
 
-use App\User;
+use App\Models\User;
 use App\Mail\RemindOfPremiumExpiration;
 
 class CheckPremiumExpiration extends Command

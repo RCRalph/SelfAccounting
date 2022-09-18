@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ChartRoute extends Model
+class Chart extends Model
 {
     use HasFactory;
 
@@ -13,8 +13,8 @@ class ChartRoute extends Model
 
     public $timestamps = false;
 
-    public function chart()
+    public function routes()
     {
-        return $this->belongsTo(Chart::class);
+        return $this->hasMany(ChartRoute::class);
     }
 }

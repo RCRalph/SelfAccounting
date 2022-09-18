@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-use App\Currency;
+use App\Models\Currency;
 
 use App\Rules\Extensions\Cash\CorrectCashMean;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;

@@ -1,14 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-use App\User;
-use App\Income;
-use App\Outcome;
-use App\Currency;
 
 class MeanOfPayment extends Model
 {

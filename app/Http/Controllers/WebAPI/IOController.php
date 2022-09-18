@@ -7,10 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-use App\Income;
-use App\Outcome;
-use App\Currency;
-use App\Chart;
+use App\Models\Income;
+use App\Models\Outcome;
+use App\Models\Currency;
+use App\Models\Chart;
 
 use App\Rules\IO\CorrectDateIO;
 use App\Rules\IO\CorrectDateIOUpdate;

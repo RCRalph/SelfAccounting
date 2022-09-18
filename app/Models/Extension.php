@@ -1,12 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
-use App\ExtensionImage;
-use App\User;
 
 class Extension extends Model
 {

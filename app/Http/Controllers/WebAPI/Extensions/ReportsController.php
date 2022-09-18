@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-use App\Report;
-use App\User;
+use App\Models\Report;
+use App\Models\User;
 
 use App\Rules\Common\SameLengthAs;
 use App\Rules\Common\DateBeforeOrEqualField;

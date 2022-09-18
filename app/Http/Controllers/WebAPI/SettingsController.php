@@ -5,9 +5,9 @@ namespace App\Http\Controllers\WebAPI;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Currency;
-use App\Category;
-use App\MeanOfPayment;
+use App\Models\Currency;
+use App\Models\Category;
+use App\Models\MeanOfPayment;
 
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Settings\CorrectFirstEntryDate;

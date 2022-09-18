@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
-use App\MeanOfPayment;
-use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\MeanOfPayment;
+use App\Models\User;
 
 class MeanOfPaymentPolicy
 {
@@ -13,7 +13,7 @@ class MeanOfPaymentPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function viewAny(User $user)
@@ -24,8 +24,8 @@ class MeanOfPaymentPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\MeanOfPayment  $meanOfPayment
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\MeanOfPayment  $meanOfPayment
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, MeanOfPayment $meanOfPayment)
@@ -36,7 +36,7 @@ class MeanOfPaymentPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(User $user)
@@ -47,8 +47,8 @@ class MeanOfPaymentPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\MeanOfPayment  $meanOfPayment
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\MeanOfPayment  $meanOfPayment
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user, MeanOfPayment $meanOfPayment)
@@ -59,8 +59,8 @@ class MeanOfPaymentPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\MeanOfPayment  $meanOfPayment
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\MeanOfPayment  $meanOfPayment
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, MeanOfPayment $meanOfPayment)
@@ -71,8 +71,8 @@ class MeanOfPaymentPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\MeanOfPayment  $meanOfPayment
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\MeanOfPayment  $meanOfPayment
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function restore(User $user, MeanOfPayment $meanOfPayment)
@@ -83,8 +83,8 @@ class MeanOfPaymentPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\MeanOfPayment  $meanOfPayment
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\MeanOfPayment  $meanOfPayment
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function forceDelete(User $user, MeanOfPayment $meanOfPayment)

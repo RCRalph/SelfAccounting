@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Admin;
 
-use App\User;
-use App\Extension;
+use App\Models\User;
+use App\Models\Extension;
 
 class UsersController extends Controller
 {

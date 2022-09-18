@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-use App\Currency;
-use App\Chart;
+use App\Models\Currency;
+use App\Models\Chart;
 
 use App\Rules\Common\DateBeforeOrEqualField;
 

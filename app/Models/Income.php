@@ -1,17 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-use App\User;
-use App\Method;
-use App\Category;
-use App\Currency;
-use App\MeanOfPayment;
-
-class Outcome extends Model
+class Income extends Model
 {
     use HasFactory;
 

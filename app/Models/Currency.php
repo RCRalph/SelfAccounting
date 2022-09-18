@@ -1,14 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-use App\Income;
-use App\Outcome;
-use App\Category;
-use App\MeanOfPayment;
-use App\Cash;
 
 class Currency extends Model
 {

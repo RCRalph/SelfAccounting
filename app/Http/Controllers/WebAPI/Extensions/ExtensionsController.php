@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
-use App\Extension;
+use App\Models\Extension;
 
 class ExtensionsController extends Controller
 {

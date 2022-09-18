@@ -5,8 +5,8 @@ namespace App\Http\Controllers\WebAPI\Extensions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Cash;
-use App\User;
+use App\Models\Cash;
+use App\Models\User;
 
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Common\ValueLessOrEqualField;

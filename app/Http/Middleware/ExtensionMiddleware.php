@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Extension;
+use App\Models\Extension;
 
 class ExtensionMiddleware
 {

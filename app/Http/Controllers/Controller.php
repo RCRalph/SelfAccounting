@@ -12,8 +12,8 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 
-use App\Currency;
-use App\Chart;
+use App\Models\Currency;
+use App\Models\Chart;
 
 class Controller extends BaseController
 {
