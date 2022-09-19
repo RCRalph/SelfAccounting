@@ -143,19 +143,13 @@ Route::prefix("/web-api")->group(function () {
 });
 
 Route::prefix("/payment")->group(function () {
+    Route::get("/premium/{length}", "PaymentController@premium");
     Route::get("/failure", "PaymentController@failure")->name("payment.failure");
 
     Route::prefix("/extensions/{extension}")->group(function () {
         Route::get("/", "PaymentController@extensions")->name("payment.extensions");
         Route::get("/success", "PaymentController@extensionsSuccess")->name("payment.extensions.success");
     });
-
-    Route::prefix("/premium/{length}")->group(function () {
-        Route::get("/", "PaymentController@premium")->name("payment.premium");
-        Route::get("/success", "PaymentController@premiumSuccess")->name("payment.premium.success");
-    });
 });
 
 Route::get('/premium', 'PagesController@premium')->name('premium');
-
-

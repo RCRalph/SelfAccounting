@@ -14,6 +14,11 @@ class PaymentController extends Controller
         $this->middleware("auth");
     }
 
+    public function failure()
+    {
+        return redirect()->route("app");
+    }
+
     public function extensions(Extension $extension)
     {
         if (auth()->user()->extensions()->where("extensions.id", $extension->id)->exists()) {
@@ -43,27 +48,24 @@ class PaymentController extends Controller
 
     public function premium($length)
     {
-        if ($length == 1) {
-            return auth()->user()
-                ->newSubscription("premium", "price_1LiOD9AmJbobJ1Gs4sXJhXvJ")
-                ->checkout([
-                    "success_url" => route("payment.premium.success", $length) . "?session_id={CHECKOUT_SESSION_ID}",
-                    "cancel_url" => route("payment.failure")
-                ]);
-        }
-        else if ($length == 12) {
-
+        if (auth()->user()->subscribed("premium")) {
+            return redirect(route("app") . "#/profile");
         }
 
-        return redirect()->route("payment.failure");
-    }
-
-    public function premiumSuccess()
-    {
-        if (request("session_id") && auth()->user()->stripe()->checkout->sessions->retrieve(request("session_id"))->payment_status == "paid") {
-            return redirect("/app#/profile");
+        switch ($length) {
+            case 1:
+            case 12:
+                return auth()->user()
+                    ->newSubscription("premium", [
+                        1 => env("STRIPE_PREMIUM_MONTH_PRICE"),
+                        12 => env("STRIPE_PREMIUM_YEAR_PRICE")
+                    ][$length])
+                    ->checkout([
+                        "success_url" => route("app") . "#/profile",
+                        "cancel_url" => route("payment.failure")
+                    ]);
+            default:
+                return redirect()->route("payment.failure");
         }
-
-        return redirect()->route("payment.failure");
     }
 }

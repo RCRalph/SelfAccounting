@@ -128,8 +128,8 @@ class ChartsController extends Controller
 
         if ($limits["start"]) {
             $balanceBefore = $this->getBalance(
-                $income->where("date", "<", $limits["start"]),
-                $outcome->where("date", "<", $limits["start"]),
+                $income->where("date", "<=", $limits["start"]),
+                $outcome->where("date", "<=", $limits["start"]),
                 $means, [], $meansToShow, []
             );
         }
@@ -148,8 +148,8 @@ class ChartsController extends Controller
         }
 
         if ($limits["start"]) {
-            $income = $income->where("date", ">=", $limits["start"]);
-            $outcome = $outcome->where("date", ">=", $limits["start"]);
+            $income = $income->where("date", ">", $limits["start"]);
+            $outcome = $outcome->where("date", ">", $limits["start"]);
         }
 
         $income = $income
