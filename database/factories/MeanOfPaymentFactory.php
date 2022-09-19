@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\MeanOfPayment;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\MeanOfPayment;
 use Carbon\Carbon;
 
 class MeanOfPaymentFactory extends Factory

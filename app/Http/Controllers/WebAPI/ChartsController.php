@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-use App\Currency;
-use App\Chart;
+use App\Models\Currency;
+use App\Models\Chart;
 
 use App\Rules\Common\DateBeforeOrEqualField;
 
@@ -128,8 +128,8 @@ class ChartsController extends Controller
 
         if ($limits["start"]) {
             $balanceBefore = $this->getBalance(
-                $income->where("date", "<", $limits["start"]),
-                $outcome->where("date", "<", $limits["start"]),
+                $income->where("date", "<=", $limits["start"]),
+                $outcome->where("date", "<=", $limits["start"]),
                 $means, [], $meansToShow, []
             );
         }
@@ -148,8 +148,8 @@ class ChartsController extends Controller
         }
 
         if ($limits["start"]) {
-            $income = $income->where("date", ">=", $limits["start"]);
-            $outcome = $outcome->where("date", ">=", $limits["start"]);
+            $income = $income->where("date", ">", $limits["start"]);
+            $outcome = $outcome->where("date", ">", $limits["start"]);
         }
 
         $income = $income

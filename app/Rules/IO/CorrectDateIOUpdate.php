@@ -4,7 +4,7 @@ namespace App\Rules\IO;
 
 use Illuminate\Contracts\Validation\Rule;
 
-use App\MeanOfPayment;
+use App\Models\MeanOfPayment;
 
 class CorrectDateIOUpdate implements Rule
 {

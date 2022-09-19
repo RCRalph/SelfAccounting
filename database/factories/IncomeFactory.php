@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Income;
-use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
+use App\Models\Income;
+use App\Models\User;
 
 class IncomeFactory extends Factory
 {

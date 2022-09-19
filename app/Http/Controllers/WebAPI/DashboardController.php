@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-use App\Currency;
-use App\Chart;
+use App\Models\Currency;
+use App\Models\Chart;
 
 class DashboardController extends Controller
 {

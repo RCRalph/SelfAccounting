@@ -16,6 +16,7 @@ class CreateExtensionsTable extends Migration
         Schema::create('extensions', function (Blueprint $table) {
             $table->id();
             $table->string('code', 6);
+            $table->string('stripe_product_code', 64);
             $table->string('title', 64);
             $table->string('icon', 32);
             $table->string('directory', 32)->unique();

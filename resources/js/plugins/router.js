@@ -31,7 +31,9 @@ const routes = [
     { path: "/extensions/reports/:id", component: ViewReportComponent },
     { path: "/extensions/backup", component: BackupComponent },
 
-    { path: "/admin/telescope", beforeEnter: () => window.location.href = "/telescope" }
+    { path: "/admin/telescope", beforeEnter: () => window.location.href = "/telescope" },
+
+    { path: "/payment/extensions/:id", beforeEnter: (to) => window.location.href = "/payment/extensions/" + to.params.id }
 ]
 
 export default new VueRouter({ routes })

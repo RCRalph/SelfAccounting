@@ -5,7 +5,7 @@ It's been {{ $daysSince }} days since your last activity. Is everything alright?
 
 Remember to visit SelfAccounting from time to time!
 
-@component('mail::button', ["url" => config("app.url") . "/summary"])
+@component('mail::button', ["url" => config("app.url")])
     Visit SelfAccouting
 @endcomponent
 

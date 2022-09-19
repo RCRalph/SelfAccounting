@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
-use App\Extension;
+use App\Models\Extension;
 
 class ExtensionsController extends Controller
 {
@@ -19,7 +19,7 @@ class ExtensionsController extends Controller
     public function index()
     {
         $extensions = Extension::all()->load("gallery")
-            ->makeHidden(["id", "thumbnail", "created_at", "updated_at", "icon"])
+            ->makeHidden(["thumbnail", "created_at", "updated_at", "icon"])
             ->toArray();
 
         foreach ($extensions as $key => $item) {

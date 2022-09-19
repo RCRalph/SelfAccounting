@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-use App\Tutorial;
+use App\Models\Tutorial;
 
 class TutorialController extends Controller
 {

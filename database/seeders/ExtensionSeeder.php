@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Extension;
+use App\Models\Extension;
 
 class ExtensionSeeder extends Seeder
 {
@@ -12,6 +12,7 @@ class ExtensionSeeder extends Seeder
         [
             "title" => "Backup data",
             "code" => "backup",
+            "stripe_product_code" => "price_1LiOFhAmJbobJ1GsRjpZWlU2",
             "icon" => "mdi-content-save",
             "directory" => "backup",
             "price" => 2.5,
@@ -30,6 +31,7 @@ class ExtensionSeeder extends Seeder
         [
             "title" => "Cash handling",
             "code" => "cashan",
+            "stripe_product_code" => "price_1LiPK1AmJbobJ1GsxUlTQ7Fq",
             "icon" => "mdi-cash-multiple",
             "directory" => "cash",
             "price" => 5,
@@ -45,6 +47,7 @@ class ExtensionSeeder extends Seeder
         [
             "title" => "Report management",
             "code" => "report",
+            "stripe_product_code" => "price_1LiPKdAmJbobJ1GsdPCCl89p",
             "icon" => "mdi-newspaper",
             "directory" => "reports",
             "price" => 5,

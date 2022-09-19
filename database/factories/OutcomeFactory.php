@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Outcome;
-use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Outcome;
+use App\Models\User;
 use Carbon\Carbon;
 
 class OutcomeFactory extends Factory

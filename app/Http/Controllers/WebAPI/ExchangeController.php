@@ -11,7 +11,7 @@ use App\Rules\Exchange\ValidCategoryOrMeanExchange;
 use App\Rules\Extensions\Cash\CashValidAmount;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
 
-use App\Currency;
+use App\Models\Currency;
 
 class ExchangeController extends Controller
 {

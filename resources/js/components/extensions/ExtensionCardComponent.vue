@@ -31,7 +31,7 @@
                 <v-col cols="12" sm="4">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" outlined block v-on="on" v-bind="attrs">
+                            <v-btn color="primary" outlined block v-on="on" v-bind="attrs" :to="`/payment/extensions/${extension.id}`">
                                 Buy
                             </v-btn>
                         </template>

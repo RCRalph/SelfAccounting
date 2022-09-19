@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\Admin;
 use Illuminate\Validation\Rule;
 
-use App\User;
-use App\Extension;
-use App\ExtensionImage;
+use App\Models\User;
+use App\Models\Extension;
+use App\Models\ExtensionImage;
 
 class ExtensionsController extends Controller
 {

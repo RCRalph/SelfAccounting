@@ -4,7 +4,7 @@ namespace App\Rules\Extensions\Cash;
 
 use Illuminate\Contracts\Validation\Rule;
 
-use App\Cash;
+use App\Models\Cash;
 
 class CorrectCashCurrency implements Rule
 {

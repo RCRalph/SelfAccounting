@@ -73,15 +73,10 @@ export default {
         }
     },
     watch: {
-        start() {
-            this.updateWithOffset();
-        },
-        end() {
-            this.updateWithOffset();
-        },
-        '$route.params.id'() {
-            this.getData();
-        }
+        start: "updateWithOffset",
+        end: "updateWithOffset",
+        "$route.params.id": "getData",
+        "currencies.usedCurrency": "getData"
     },
     computed: {
         showLineChart() {

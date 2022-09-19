@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 use App\Rules\Profile\SameAsCurrentPassword;
+
 class ProfileController extends Controller
 {
     public function __construct()
@@ -27,7 +29,20 @@ class ProfileController extends Controller
         $data["since"] = auth()->user()->created_at;
 
         if ($data["account_type"] == "Premium" && auth()->user()->premium_expiration) {
-            $differenceInHours = auth()->user()->premium_expiration->endOfDay()->diffInHours(now());
+            $endDate = auth()->user()->premium_expiration;
+
+            if (auth()->user()->subscription("premium")) {
+                $endDate = max($endDate,
+                    Carbon::createFromTimeStamp(
+                        auth()->user()
+                            ->subscription("premium")
+                            ->asStripeSubscription()
+                            ->current_period_end
+                    )
+                );
+            }
+
+            $differenceInHours = $endDate->endOfDay()->diffInHours(now());
 
             $data["expiration"] = $differenceInHours >= 24 ?
                 $this->expirationText(intdiv($differenceInHours, 24), "day") :

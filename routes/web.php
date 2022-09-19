@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-use App\Extension;
+use App\Models\Extension;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,5 +142,14 @@ Route::prefix("/web-api")->group(function () {
     });
 });
 
-Route::get('/payment', 'PagesController@payment')->name('payment');
+Route::prefix("/payment")->group(function () {
+    Route::get("/premium/{length}", "PaymentController@premium");
+    Route::get("/failure", "PaymentController@failure")->name("payment.failure");
+
+    Route::prefix("/extensions/{extension}")->group(function () {
+        Route::get("/", "PaymentController@extensions")->name("payment.extensions");
+        Route::get("/success", "PaymentController@extensionsSuccess")->name("payment.extensions.success");
+    });
+});
+
 Route::get('/premium', 'PagesController@premium')->name('premium');

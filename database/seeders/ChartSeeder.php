@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Chart;
+use App\Models\Chart;
 
 class ChartSeeder extends Seeder
 {

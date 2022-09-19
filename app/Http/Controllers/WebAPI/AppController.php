@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
-use App\Chart;
-use App\Extension;
-use App\Tutorial;
+use App\Models\Chart;
+use App\Models\Extension;
+use App\Models\Tutorial;
 
 class AppController extends Controller
 {
