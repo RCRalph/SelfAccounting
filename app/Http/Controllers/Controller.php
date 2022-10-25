@@ -134,12 +134,17 @@ class Controller extends BaseController
 
         // Sort by balance DESC
         usort($currentBalance, function ($a, $b) {
-            return $b["balance"] - $a["balance"];
+            if ($b["balance"] == $a["balance"]) {
+                return 0;
+            }
+
+            return $b["balance"] - $a["balance"] < 0 ? -1 : 1;
         });
 
         // Round to 2 decimal places
         foreach ($currentBalance as $i => $val) {
-            $currentBalance[$i]["balance"] = round($val["balance"], 2);
+            $balance = round($val["balance"], 2);
+            $currentBalance[$i]["balance"] = $balance == 0 ? 0 : $balance;
         }
 
         return $currentBalance;
