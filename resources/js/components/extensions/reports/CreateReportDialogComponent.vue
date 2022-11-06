@@ -179,9 +179,10 @@ import ReportAdditionalEntriesDialogComponent from "@/extensions/reports/ReportA
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import validation from "&/mixins/validation";
+import main from "&/mixins/main";
 
 export default {
-    mixins: [validation],
+    mixins: [main, validation],
     components: {
         ShareReportDialogComponent,
         ReportQueriesDialogComponent,
@@ -225,35 +226,10 @@ export default {
             this.loading = true;
 
             const users = this.data.users.map(item => item.email),
-                queries = this.data.queries.map(item => {
-                    if (typeof item.min_amount == "string") {
-                        item.min_amount = item.min_amount.replaceAll(",", ".");
-                    }
-                    if (typeof item.min_price == "string") {
-                        item.min_price = item.min_price.replaceAll(",", ".");
-                    }
-
-                    if (typeof item.max_amount == "string") {
-                        item.max_amount = item.max_amount.replaceAll(",", ".");
-                    }
-                    if (typeof item.max_price == "string") {
-                        item.max_price = item.max_price.replaceAll(",", ".");
-                    }
-                }),
-                additionalEntries = this.data.additionalEntries.map(item => {
-                    if (typeof item.amount == "string") {
-                        item.amount = item.amount.replaceAll(",", ".");
-                    }
-                    if (typeof item.price == "string") {
-                        item.price = item.price.replaceAll(",", ".");
-                    }
-                })
+                dataToSubmit = this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["REPORT"]);
 
             axios
-                .post("/web-api/extensions/reports/create", {
-                    ...this.data, queries,
-                    additionalEntries, users
-                })
+                .post("/web-api/extensions/reports/create", { ...dataToSubmit, users })
                 .then(response => {
                     this.$router.push(`/extensions/reports/${response.data.id}`);
                 })

@@ -237,13 +237,14 @@ export default {
             if (!this.ready) return {};
 
             const categories = this.categories[this.from.currency_id].find(item => item.id == this.from.category_id),
-                mean = this.means[this.from.currency_id].find(item => item.id == this.from.mean_id),
-                amount = typeof this.from.amount == "string" ? this.from.amount.replaceAll(",", ".") : this.from.amount,
-                price = typeof this.from.price == "string" ? this.from.price.replaceAll(",", ".") : this.from.price;
+                mean = this.means[this.from.currency_id].find(item => item.id == this.from.mean_id);
 
             return {
                 currency: this.currencies.findCurrency(this.from.currency_id),
-                value: Math.round(amount * price * 100) / 100,
+                value: Math.round(100 *
+                    this.numberWithoutComma(this.from.amount) *
+                    this.numberWithoutComma(this.from.price)
+                ) / 100,
                 categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
             }
@@ -258,13 +259,14 @@ export default {
             if (!this.ready) return {};
 
             const categories = this.categories[this.to.currency_id].find(item => item.id == this.to.category_id),
-                mean = this.means[this.to.currency_id].find(item => item.id == this.to.mean_id),
-                amount = typeof this.to.amount == "string" ? this.to.amount.replaceAll(",", ".") : this.to.amount,
-                price = typeof this.to.price == "string" ? this.to.price.replaceAll(",", ".") : this.to.price;
+                mean = this.means[this.to.currency_id].find(item => item.id == this.to.mean_id);
 
             return {
                 currency: this.currencies.findCurrency(this.to.currency_id),
-                value: Math.round(amount * price * 100) / 100,
+                value: Math.round(100 *
+                    this.numberWithoutComma(this.to.amount) *
+                    this.numberWithoutComma(this.to.price)
+                ) / 100,
                 categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
             }
@@ -284,22 +286,6 @@ export default {
             this.$refs.title2.blur();
 
             this.$nextTick(() => {
-                const fromNoComma = _.cloneDeep(this.from);
-                if (typeof fromNoComma.amount == "string") {
-                    fromNoComma.amount = fromNoComma.amount.replaceAll(",", ".");
-                }
-                if (typeof fromNoComma.price == "string") {
-                    fromNoComma.price =fromNoComma.price.replaceAll(",", ".");
-                }
-
-                const toNoComma = _.cloneDeep(this.to);
-                if (typeof toNoComma.amount == "string") {
-                    toNoComma.amount = toNoComma.amount.replaceAll(",", ".");
-                }
-                if (typeof toNoComma.price == "string") {
-                    toNoComma.price = toNoComma.price.replaceAll(",", ".");
-                }
-
                 const fromCashArray = [];
                 Object.keys(this.fromCash).forEach(item => {
                     fromCashArray.push({
@@ -318,8 +304,8 @@ export default {
 
                 axios
                     .post(`/web-api/exchange`, {
-                        from: fromNoComma,
-                        to: toNoComma,
+                        from: this.replaceCommas(_.cloneDeep(this.from), this.COMMA_ARRAY_STRUCTURES["IO"]),
+                        to: this.replaceCommas(_.cloneDeep(this.to), this.COMMA_ARRAY_STRUCTURES["IO"]),
                         fromCash: fromCashArray,
                         toCash: toCashArray
                     })

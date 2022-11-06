@@ -194,10 +194,10 @@ export default {
             return [nullObj];
         },
         valueField() {
-            const amount = typeof this.value[this.page].amount == "string" ? this.value[this.page].amount.replaceAll(",", ".") : this.value[this.page].amount,
-                price = typeof this.value[this.page].price == "string" ? this.value[this.page].price.replaceAll(",", ".") : this.value[this.page].price;
-
-            return Math.round(amount * price * 100) / 100;
+            return Math.round(100 *
+                this.numberWithoutComma(this.value[this.page].amount) *
+                this.numberWithoutComma(this.value[this.page].price)
+            ) / 100;
         },
     },
     methods: {

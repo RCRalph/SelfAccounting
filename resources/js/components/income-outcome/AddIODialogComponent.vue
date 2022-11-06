@@ -230,18 +230,19 @@ export default {
             return this.means.find(item => item.id == this.data[this.page].mean_id);
         },
         valueField() {
-            const amount = typeof this.data[this.page].amount == "string" ? this.data[this.page].amount.replaceAll(",", ".") : this.data[this.page].amount,
-                price = typeof this.data[this.page].price == "string" ? this.data[this.page].price.replaceAll(",", ".") : this.data[this.page].price;
-
-            return Math.round(amount * price * 100) / 100;
+            return Math.round(100 *
+                this.numberWithoutComma(this.data[this.page].amount) *
+                this.numberWithoutComma(this.data[this.page].price)
+            ) / 100;
         },
         sum() {
-            let sum = 0;
-            this.data.forEach(item => sum +=
-                (typeof item.amount == "string" ? item.amount.replaceAll(",", ".") : item.amount) *
-                (typeof item.price == "string" ? item.price.replaceAll(",", ".") : item.price)
-            );
-            return Math.round(sum * 100) / 100;
+            this.data.map(item => this.numberWithoutComma(item.amount) * this.numberWithoutComma(item.price));
+
+            if (this.data.length) {
+                return Math.round(this.data.reduce((item1, item2) => item1 + item2) * 100) / 100;
+            }
+
+            return 0;
         },
         clonedCommonValues() {
             return _.cloneDeep(this.commonValues);
@@ -254,10 +255,10 @@ export default {
 
             this.data.forEach(item => {
                 if (item.mean_id != null) {
-                    const amount = typeof this.data[this.page].amount == "string" ? this.data[this.page].amount.replaceAll(",", ".") : this.data[this.page].amount,
-                        price = typeof this.data[this.page].price == "string" ? this.data[this.page].price.replaceAll(",", ".") : this.data[this.page].price;
-
-                    const value = Math.round(amount * price * 100) / 100;
+                    const value = Math.round(100 *
+                        this.numberWithoutComma(item.amount) *
+                        this.numberWithoutComma(item.price)
+                    ) / 100;
 
                     if (sumObj[item.mean_id] == undefined) {
                         sumObj[item.mean_id] = value
@@ -277,15 +278,7 @@ export default {
             this.$refs.title.forEach(item => item.blur());
 
             this.$nextTick(() => {
-                const dataNoComma = _.cloneDeep(this.data);
-                dataNoComma.forEach((item, i) => {
-                    if (typeof item.amount == "string") {
-                        dataNoComma[i].amount = dataNoComma[i].amount.replaceAll(",", ".");
-                    }
-                    if (typeof item.price == "string") {
-                        dataNoComma[i].price = dataNoComma[i].price.replaceAll(",", ".");
-                    }
-                });
+                const dataToSubmit = this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["IO"]);
 
                 const cashArray = [];
                 Object.keys(this.cash).forEach(item => {
@@ -297,7 +290,7 @@ export default {
 
                 axios
                     .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, {
-                        data: dataNoComma,
+                        data: dataToSubmit,
                         cash: cashArray
                     })
                     .then(() => {
