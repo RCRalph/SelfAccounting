@@ -191,9 +191,10 @@ import ReportAdditionalEntriesDialogComponent from "@/extensions/reports/ReportA
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import validation from "&/mixins/validation";
+import main from "&/mixins/main";
 
 export default {
-    mixins: [validation],
+    mixins: [main, validation],
     components: {
         ShareReportDialogComponent,
         ReportQueriesDialogComponent,
@@ -226,10 +227,11 @@ export default {
         update() {
             this.loading = true;
 
-            const users = this.data.users.map(item => item.email);
+            const users = this.data.users.map(item => item.email),
+                dataToSubmit = this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["REPORT"]);
 
             axios
-                .post(`/web-api/extensions/reports/${this.id}/update`, {...this.data, users})
+                .post(`/web-api/extensions/reports/${this.id}/update`, { ...dataToSubmit, users })
                 .then(() => {
                     this.dataCopy = _.cloneDeep(this.data);
                     this.$emit("updated");

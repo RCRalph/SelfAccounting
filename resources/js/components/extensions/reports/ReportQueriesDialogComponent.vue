@@ -292,16 +292,26 @@ export default {
             this.value[this.page].category_id = null;
             this.value[this.page].mean_id = null;
         },
+        compareMinMax(min, max) {
+            if (!min || !max) {
+                return true;
+            }
+
+            min = Number(String(min).replaceAll(",", "."));
+            max = Number(String(max).replaceAll(",", "."));
+
+            return min <= max
+        },
         validateFields() {
             this.value.forEach((item, i) => {
-                if (!item.min_amount || !item.max_amount || Number(item.min_amount) <= Number(item.max_amount)) {
+                if (this.compareMinMax(item.min_amount, item.max_amount)) {
                     this.validationArray[i].minAmount = this.validationArray[i].maxAmount = true;
                 }
                 else {
                     this.validationArray[i].minAmount = this.validationArray[i].maxAmount = "Minimal amount has to be less than maximal amount";
                 }
 
-                if (!item.min_price || !item.max_price || Number(item.min_price) <= Number(item.max_price)) {
+                if (this.compareMinMax(item.min_price, item.max_price)) {
                     this.validationArray[i].minPrice = this.validationArray[i].maxPrice = true;
                 }
                 else {

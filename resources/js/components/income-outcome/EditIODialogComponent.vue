@@ -164,11 +164,11 @@ export default {
             return this.means.find(item => item.id == this.data.mean_id);
         },
         valueField() {
-            const amount = typeof this.data.amount == "string" ? this.data.amount.replaceAll(",", ".") : this.data.amount,
-                price = typeof this.data.price == "string" ? this.data.price.replaceAll(",", ".") : this.data.price;
-
-            return Math.round(amount * price * 100) / 100;
-        }
+            return Math.round(100 *
+                this.numberWithoutComma(this.data.amount) *
+                this.numberWithoutComma(this.data.price)
+            ) / 100;
+        },
     },
     methods: {
         reset() {
@@ -179,16 +179,10 @@ export default {
             this.$refs.title.blur();
 
             this.$nextTick(() => {
-                const dataNoComma = _.cloneDeep(this.data);
-                if (typeof dataNoComma.amount == "string") {
-                    dataNoComma.amount = dataNoComma.amount.replaceAll(",", ".");
-                }
-                if (typeof dataNoComma.price == "string") {
-                    dataNoComma.price = dataNoComma.price.replaceAll(",", ".");
-                }
-
                 axios
-                    .patch(`/web-api/${this.type}/${this.id}`, dataNoComma)
+                    .patch(`/web-api/${this.type}/${this.id}`,
+                        this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["IO"])
+                    )
                     .then(() => {
                         this.dataCopy = _.cloneDeep(this.data);
                         this.$emit("updated");
