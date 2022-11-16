@@ -236,10 +236,10 @@ export default {
             ) / 100;
         },
         sum() {
-            this.data.map(item => this.numberWithoutComma(item.amount) * this.numberWithoutComma(item.price));
+            const sums = this.data.map(item => this.numberWithoutComma(item.amount) * this.numberWithoutComma(item.price));
 
-            if (this.data.length) {
-                return Math.round(this.data.reduce((item1, item2) => item1 + item2) * 100) / 100;
+            if (sums.length) {
+                return Math.round(sums.reduce((item1, item2) => item1 + item2) * 100) / 100;
             }
 
             return 0;
