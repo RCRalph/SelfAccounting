@@ -103,9 +103,13 @@ class ChartsController extends Controller
     {
         $means = auth()->user()->meansOfPayment()
             ->where("currency_id", $currency->id)
-            ->where("show_on_charts", true)
-            ->get();
+            ->where("show_on_charts", true);
 
+        if ($limits["end"]) {
+            $means = $means->whereDate("start_date", "<=", $limits["end"]);
+        }
+
+        $means = $means->get();
         $meansToShow = $means->pluck("id")->toArray();
 
         $income = auth()->user()->income()
