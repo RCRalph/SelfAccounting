@@ -106,7 +106,7 @@ class ChartsController extends Controller
             ->where("show_on_charts", true);
 
         if ($limits["end"]) {
-            $means = $means->whereDate("start_date", "<=", $limits["end"]);
+            $means = $means->whereDate("first_entry_date", "<=", $limits["end"]);
         }
 
         $means = $means->get();
