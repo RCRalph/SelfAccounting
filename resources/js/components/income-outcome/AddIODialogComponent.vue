@@ -244,6 +244,10 @@ export default {
                     console.error(err);
                     setTimeout(() => this.error = true, 1000);
                 })
+        },
+        page() {
+            this.keys.amount = 0;
+            this.keys.price = 0;
         }
     },
     computed: {

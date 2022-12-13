@@ -34,11 +34,24 @@
 
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field label="Amount" v-model="data.amount" :rules="[validation.amount()]"></v-text-field>
+                            <v-text-field
+                                label="Amount"
+                                v-model="data.amount"
+                                :error-messages="keys.amount ? amount.error : undefined"
+                                :hint="amount.hint"
+                                @input="keys.amount++"
+                            ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field label="Price" v-model="data.price" :rules="[validation.price()]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
+                            <v-text-field
+                                label="Price"
+                                v-model="data.price"
+                                :error-messages="keys.price ? price.error : undefined"
+                                :hint="price.hint"
+                                @input="keys.price++"
+                                :suffix="currencies.usedCurrencyObject.ISO"
+                            ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -101,6 +114,7 @@
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
+import calculator from "&/mixins/calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -110,7 +124,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [validation, main],
+    mixins: [validation, main, calculator],
     components: {
         ErrorSnackbarComponent
     },
@@ -126,6 +140,10 @@ export default {
             means: [],
             categories: [],
             titles: [],
+            keys: {
+                amount: 0,
+                price: 0
+            },
 
             ready: false,
             error: false,
@@ -157,6 +175,14 @@ export default {
         }
     },
     computed: {
+        amount() {
+            this.keys.amount;
+            return this.getCalculationResult(this.data.amount, this.CALCULATOR.FIELDS.amount);
+        },
+        price() {
+            this.keys.price;
+            return this.getCalculationResult(this.data.price, this.CALCULATOR.FIELDS.price);
+        },
         usedCategory() {
             return this.categories.find(item => item.id == this.data.category_id);
         },
@@ -164,10 +190,7 @@ export default {
             return this.means.find(item => item.id == this.data.mean_id);
         },
         valueField() {
-            return Math.round(100 *
-                this.numberWithoutComma(this.data.amount) *
-                this.numberWithoutComma(this.data.price)
-            ) / 100;
+            return _.round(this.amount.value * this.price.value, 2) || 0;
         },
     },
     methods: {
@@ -180,9 +203,11 @@ export default {
 
             this.$nextTick(() => {
                 axios
-                    .patch(`/web-api/${this.type}/${this.id}`,
-                        this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["IO"])
-                    )
+                    .patch(`/web-api/${this.type}/${this.id}`, {
+                        ...this.data,
+                        amount: this.amount.value,
+                        price: this.price.value
+                    })
                     .then(() => {
                         this.dataCopy = _.cloneDeep(this.data);
                         this.$emit("updated");

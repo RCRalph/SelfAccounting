@@ -36,9 +36,22 @@
                                 ref="title1"
                             ></v-combobox>
 
-                            <v-text-field label="Amount" v-model="from.amount" :rules="[validation.amount()]"></v-text-field>
+                            <v-text-field
+                                label="Amount"
+                                v-model="from.amount"
+                                :error-messages="keys.fromAmount ? fromAmount.error : undefined"
+                                :hint="fromAmount.hint"
+                                @input="keys.fromAmount++"
+                            ></v-text-field>
 
-                            <v-text-field label="Price" v-model="from.price" :rules="[validation.price()]" :suffix="fromData.currency.ISO"></v-text-field>
+                            <v-text-field
+                                label="Price"
+                                v-model="from.price"
+                                :error-messages="keys.fromPrice ? fromPrice.error : undefined"
+                                :hint="fromAmount.hint"
+                                @input="keys.fromPrice++"
+                                :suffix="fromData.currency.ISO"
+                            ></v-text-field>
 
                             <v-select
                                 v-model="from.currency_id"
@@ -96,9 +109,22 @@
                                 ref="title2"
                             ></v-combobox>
 
-                            <v-text-field label="Amount" v-model="to.amount" :rules="[validation.amount()]"></v-text-field>
+                            <v-text-field
+                                label="Amount"
+                                v-model="to.amount"
+                                :error-messages="keys.toAmount ? toAmount.error : undefined"
+                                :hint="toAmount.hint"
+                                @input="keys.toAmount++"
+                            ></v-text-field>
 
-                            <v-text-field label="Price" v-model="to.price" :rules="[validation.price()]" :suffix="toData.currency.ISO"></v-text-field>
+                            <v-text-field
+                                label="Price"
+                                v-model="to.price"
+                                :error-messages="keys.toPrice ? toPrice.error : undefined"
+                                :hint="toAmount.hint"
+                                @input="keys.toPrice++"
+                                :suffix="toData.currency.ISO"
+                            ></v-text-field>
 
                             <v-select
                                 v-model="to.currency_id"
@@ -161,6 +187,7 @@ import CashExchangeDialogComponent from "@/income-outcome/CashExchangeDialogComp
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
+import calculator from "&/mixins/calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -171,7 +198,7 @@ export default {
 
         return { currencies, extensions };
     },
-    mixins: [validation, main],
+    mixins: [validation, main, calculator],
     components: {
         ErrorSnackbarComponent,
         CashExchangeDialogComponent
@@ -187,6 +214,12 @@ export default {
             titles: [],
             fromCash: {},
             toCash: {},
+            keys: {
+                fromAmount: 0,
+                fromPrice: 0,
+                toAmount: 0,
+                toPrice: 0
+            },
 
             ready: false,
             error: false,
@@ -233,6 +266,22 @@ export default {
         currencySelectData() {
             return this.currencies.selectCurrencies(this.availableCurrencies);
         },
+        fromAmount() {
+            this.keys.fromAmount;
+            return this.getCalculationResult(this.from.amount, this.CALCULATOR.FIELDS.amount);
+        },
+        fromPrice() {
+            this.keys.fromPrice;
+            return this.getCalculationResult(this.from.price, this.CALCULATOR.FIELDS.price);
+        },
+        toAmount() {
+            this.keys.toAmount;
+            return this.getCalculationResult(this.to.amount, this.CALCULATOR.FIELDS.amount);
+        },
+        toPrice() {
+            this.keys.toPrice;
+            return this.getCalculationResult(this.to.price, this.CALCULATOR.FIELDS.price);
+        },
         fromData() {
             if (!this.ready) return {};
 
@@ -241,10 +290,7 @@ export default {
 
             return {
                 currency: this.currencies.findCurrency(this.from.currency_id),
-                value: Math.round(100 *
-                    this.numberWithoutComma(this.from.amount) *
-                    this.numberWithoutComma(this.from.price)
-                ) / 100,
+                value: _.round(this.fromAmount.value * this.fromPrice.value, 2) || 0,
                 categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
             }
@@ -263,10 +309,7 @@ export default {
 
             return {
                 currency: this.currencies.findCurrency(this.to.currency_id),
-                value: Math.round(100 *
-                    this.numberWithoutComma(this.to.amount) *
-                    this.numberWithoutComma(this.to.price)
-                ) / 100,
+                value: _.round(this.toAmount.value * this.toPrice.value, 2) || 0,
                 categories: categories !== undefined ? categories : [],
                 mean: mean !== undefined ? mean : []
             }
@@ -304,8 +347,16 @@ export default {
 
                 axios
                     .post(`/web-api/exchange`, {
-                        from: this.replaceCommas(_.cloneDeep(this.from), this.COMMA_ARRAY_STRUCTURES["IO"]),
-                        to: this.replaceCommas(_.cloneDeep(this.to), this.COMMA_ARRAY_STRUCTURES["IO"]),
+                        from: {
+                            ...this.from,
+                            amount: this.fromAmount.value,
+                            price: this.fromPrice.value
+                        },
+                        to: {
+                            ...this.to,
+                            amount: this.toAmount.value,
+                            price: this.toPrice.value
+                        },
                         fromCash: fromCashArray,
                         toCash: toCashArray
                     })
