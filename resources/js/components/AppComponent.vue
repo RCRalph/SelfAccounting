@@ -143,7 +143,6 @@ import { useExtensionsStore } from "&/stores/extensions";
 import TutorialComponent from "@/TutorialComponent.vue";
 
 export default {
-    mixins: [calculator],
     setup() {
         const currencies = useCurrenciesStore();
         const extensions = useExtensionsStore();

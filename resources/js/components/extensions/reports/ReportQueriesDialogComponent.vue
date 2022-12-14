@@ -198,7 +198,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [validation, main, calculator],
+    mixins: [validation, main],
     props: {
         value: {
             required: true,
