@@ -58,8 +58,10 @@
                                     <v-text-field
                                         label="Minimal amount"
                                         v-model="value[i - 1].min_amount"
-                                        :rules="[validation.amount(true, true), validationArray[i - 1].minAmount]"
-                                        @input="validateFields"
+                                        :rules="[validationArray[i - 1].amount]"
+                                        :error-messages="keys.minAmount ? minAmount.error : undefined"
+                                        :hint="minAmount.hint"
+                                        @input="keys.minAmount++; validateFields()"
                                     ></v-text-field>
                                 </v-col>
 
@@ -67,8 +69,10 @@
                                     <v-text-field
                                         label="Maximal amount"
                                         v-model="value[i - 1].max_amount"
-                                        :rules="[validation.amount(true, true), validationArray[i - 1].maxAmount]"
-                                        @input="validateFields"
+                                        :rules="[validationArray[i - 1].amount]"
+                                        :error-messages="keys.maxAmount ? maxAmount.error : undefined"
+                                        :hint="maxAmount.hint"
+                                        @input="keys.maxAmount++; validateFields()"
                                     ></v-text-field>
                                 </v-col>
 
@@ -76,9 +80,11 @@
                                     <v-text-field
                                         label="Minimal price"
                                         v-model="value[i - 1].min_price"
-                                        :rules="[validation.price(true, true), validationArray[i - 1].minPrice]"
+                                        :rules="[validationArray[i - 1].price]"
+                                        :error-messages="keys.minPrice ? minPrice.error : undefined"
+                                        :hint="minPrice.hint"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
-                                        @input="validateFields"
+                                        @input="keys.minPrice++; validateFields()"
                                     ></v-text-field>
                                 </v-col>
 
@@ -86,9 +92,11 @@
                                     <v-text-field
                                         label="Maximal price"
                                         v-model="value[i - 1].max_price"
-                                        :rules="[validation.price(true, true), validationArray[i - 1].maxPrice]"
+                                        :rules="[validationArray[i - 1].price]"
+                                        :error-messages="keys.maxPrice ? maxPrice.error : undefined"
+                                        :hint="maxPrice.hint"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
-                                        @input="validateFields"
+                                        @input="keys.maxPrice++; validateFields()"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -181,6 +189,7 @@
 import { useCurrenciesStore } from "&/stores/currencies";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
+import calculator from "&/mixins/calculator";
 
 export default {
     setup() {
@@ -188,7 +197,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [validation, main],
+    mixins: [validation, main, calculator],
     props: {
         value: {
             required: true,
@@ -229,12 +238,38 @@ export default {
                 { value: "outcome", text: "Outcome" }
             ],
             validationArray: [],
+            validationArrayObject: {
+                amount: true,
+                price: true
+            },
+            keys: {
+                minAmount: 0,
+                maxAmount: 0,
+                minPrice: 0,
+                maxPrice: 0
+            },
 
             dialog: false,
             canUpdate: true
         }
     },
     computed: {
+        minAmount() {
+            this.keys.minAmount;
+            return this.getCalculationResult(this.value[this.page].min_amount, this.CALCULATOR.FIELDS.amount, true, true);
+        },
+        maxAmount() {
+            this.keys.maxAmount;
+            return this.getCalculationResult(this.value[this.page].max_amount, this.CALCULATOR.FIELDS.amount, true, true);
+        },
+        minPrice() {
+            this.keys.minPrice;
+            return this.getCalculationResult(this.value[this.page].min_price, this.CALCULATOR.FIELDS.price, true, true);
+        },
+        maxPrice() {
+            this.keys.maxPrice;
+            return this.getCalculationResult(this.value[this.page].max_price, this.CALCULATOR.FIELDS.price, true, true);
+        },
         currenciesForSelect() {
             return [{ id: null, ISO: "All currencies" }, ...this.currencies.currencies];
         },
@@ -268,13 +303,7 @@ export default {
         },
         appendData() {
             this.value.push(_.cloneDeep(this.startData));
-
-            this.validationArray.push({
-                minAmount: true,
-                maxAmount: true,
-                minPrice: true,
-                maxPrice: true
-            });
+            this.validationArray.push(_.cloneDeep(this.validationArrayObject));
 
             this.page = this.value.length - 1;
         },
@@ -297,37 +326,25 @@ export default {
                 return true;
             }
 
-            min = Number(String(min).replaceAll(",", "."));
-            max = Number(String(max).replaceAll(",", "."));
-
-            return min <= max
+            try {
+                return this.calculate(min) <= this.calculate(max);
+            } catch {
+                return true;
+            }
         },
         validateFields() {
             this.value.forEach((item, i) => {
-                if (this.compareMinMax(item.min_amount, item.max_amount)) {
-                    this.validationArray[i].minAmount = this.validationArray[i].maxAmount = true;
-                }
-                else {
-                    this.validationArray[i].minAmount = this.validationArray[i].maxAmount = "Minimal amount has to be less than maximal amount";
-                }
+                this.validationArray[i].amount = !this.compareMinMax(item.min_amount, item.max_amount) ?
+                    "Minimal amount has to be less than maximal amount" : true;
 
-                if (this.compareMinMax(item.min_price, item.max_price)) {
-                    this.validationArray[i].minPrice = this.validationArray[i].maxPrice = true;
-                }
-                else {
-                    this.validationArray[i].minPrice = this.validationArray[i].maxPrice = "Minimal price has to be less than maximal price";
-                }
-            })
+                this.validationArray[i].price = !this.compareMinMax(item.min_price, item.max_price) ?
+                    "Minimal price has to be less than maximal price" : true;
+            });
         }
     },
     beforeMount() {
         this.value.forEach(() => {
-            this.validationArray.push({
-                minAmount: true,
-                maxAmount: true,
-                minPrice: true,
-                maxPrice: true
-            });
+            this.validationArray.push(_.cloneDeep(this.validationArrayObject));
         });
     }
 }

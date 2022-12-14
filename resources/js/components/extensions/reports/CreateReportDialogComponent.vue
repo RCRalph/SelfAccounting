@@ -178,11 +178,12 @@ import ReportQueriesDialogComponent from "@/extensions/reports/ReportQueriesDial
 import ReportAdditionalEntriesDialogComponent from "@/extensions/reports/ReportAdditionalEntriesDialogComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
+import calculator from "&/mixins/calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
 export default {
-    mixins: [main, validation],
+    mixins: [main, validation, calculator],
     components: {
         ShareReportDialogComponent,
         ReportQueriesDialogComponent,
@@ -225,11 +226,22 @@ export default {
         submit() {
             this.loading = true;
 
-            const users = this.data.users.map(item => item.email),
-                dataToSubmit = this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["REPORT"]);
+            const users = this.data.users.map(item => item.email);
+            const data = _.cloneDeep(this.data);
+            for (let item of data.queries) {
+                item.min_amount = item.min_amount != null ? this.calculate(String(item.min_amount)) : null;
+                item.max_amount = item.max_amount != null ? this.calculate(String(item.max_amount)) : null;
+                item.min_price = item.min_price != null ? this.calculate(String(item.min_price)) : null;
+                item.max_price = item.max_price != null ? this.calculate(String(item.max_price)) : null;
+            }
+
+            for (let item of data.additionalEntries) {
+                item.amount = this.calculate(String(item.amount));
+                item.price = this.calculate(String(item.price));
+            }
 
             axios
-                .post("/web-api/extensions/reports/create", { ...dataToSubmit, users })
+                .post("/web-api/extensions/reports/create", { ...data, users })
                 .then(response => {
                     this.$router.push(`/extensions/reports/${response.data.id}`);
                 })

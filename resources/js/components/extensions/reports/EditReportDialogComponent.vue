@@ -192,9 +192,10 @@ import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
+import calculator from "&/mixins/calculator";
 
 export default {
-    mixins: [main, validation],
+    mixins: [main, validation, calculator],
     components: {
         ShareReportDialogComponent,
         ReportQueriesDialogComponent,
@@ -227,11 +228,22 @@ export default {
         update() {
             this.loading = true;
 
-            const users = this.data.users.map(item => item.email),
-                dataToSubmit = this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["REPORT"]);
+            const users = this.data.users.map(item => item.email);
+            const data = _.cloneDeep(this.data);
+            for (let item of data.queries) {
+                item.min_amount = item.min_amount != null ? this.calculate(String(item.min_amount)) : null;
+                item.max_amount = item.max_amount != null ? this.calculate(String(item.max_amount)) : null;
+                item.min_price = item.min_price != null ? this.calculate(String(item.min_price)) : null;
+                item.max_price = item.max_price != null ? this.calculate(String(item.max_price)) : null;
+            }
+
+            for (let item of data.additionalEntries) {
+                item.amount = this.calculate(String(item.amount));
+                item.price = this.calculate(String(item.price));
+            }
 
             axios
-                .post(`/web-api/extensions/reports/${this.id}/update`, { ...dataToSubmit, users })
+                .post(`/web-api/extensions/reports/${this.id}/update`, { ...data, users })
                 .then(() => {
                     this.dataCopy = _.cloneDeep(this.data);
                     this.$emit("updated");

@@ -87,7 +87,7 @@ export default {
 
             return operation;
         },
-        calculate(operation) {
+        calculate(operation, field = null) {
             operation = this.getOperationString(operation);
 
             if (!operation) {
@@ -95,7 +95,7 @@ export default {
             }
 
             if (!this.CALCULATOR.OPERATION_REGEX.test(operation)) {
-                throw new Error("Invalid syntax");
+                throw new Error(field == null ? "Invalid syntax": `${field.name} is invalid`);
             }
 
             /*
@@ -204,7 +204,7 @@ export default {
                 }
             } else {
                 try {
-                    let value = this.calculate(operation);
+                    let value = this.calculate(operation, field);
 
                     if (value === null) {
                         result.error = this.validateField(value, field, allowNull, allowZero, allowNegative);
@@ -213,7 +213,7 @@ export default {
                         let roundedValue = _.round(Number(value), field.precision),
                             errorMargin = 1e-2 * Math.pow(10, -field.precision);
 
-                        result.error = this.validateField(String(roundedValue), field);
+                        result.error = this.validateField(String(roundedValue), field, allowNull, allowZero, allowNegative);
                         if (!result.error) {
                             result.value = roundedValue;
                         }
