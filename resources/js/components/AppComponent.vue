@@ -140,8 +140,6 @@
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
 
-import calculator from "&/mixins/calculator";
-
 import TutorialComponent from "@/TutorialComponent.vue";
 
 export default {

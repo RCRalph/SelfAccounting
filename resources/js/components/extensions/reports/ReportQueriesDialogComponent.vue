@@ -187,9 +187,10 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
-import calculator from "&/mixins/calculator";
 
 export default {
     setup() {
@@ -256,19 +257,19 @@ export default {
     computed: {
         minAmount() {
             this.keys.minAmount;
-            return this.getCalculationResult(this.value[this.page].min_amount, this.CALCULATOR.FIELDS.amount, true, true);
+            return new Calculator(this.value[this.page].min_amount, Calculator.FIELDS.amount, true, true).resultObject;
         },
         maxAmount() {
             this.keys.maxAmount;
-            return this.getCalculationResult(this.value[this.page].max_amount, this.CALCULATOR.FIELDS.amount, true, true);
+            return new Calculator(this.value[this.page].max_amount, Calculator.FIELDS.amount, true, true).resultObject;
         },
         minPrice() {
             this.keys.minPrice;
-            return this.getCalculationResult(this.value[this.page].min_price, this.CALCULATOR.FIELDS.price, true, true);
+            return new Calculator(this.value[this.page].min_price, Calculator.FIELDS.price, true, true).resultObject;
         },
         maxPrice() {
             this.keys.maxPrice;
-            return this.getCalculationResult(this.value[this.page].max_price, this.CALCULATOR.FIELDS.price, true, true);
+            return new Calculator(this.value[this.page].max_price, Calculator.FIELDS.price, true, true).resultObject;
         },
         currenciesForSelect() {
             return [{ id: null, ISO: "All currencies" }, ...this.currencies.currencies];
@@ -326,11 +327,13 @@ export default {
                 return true;
             }
 
-            try {
-                return this.calculate(min) <= this.calculate(max);
-            } catch {
+            min = new Calculator(min).resultValue;
+            max = new Calculator(max).resultValue;
+            if (isNaN(min) || isNaN(max)) {
                 return true;
             }
+
+            return min <= max;
         },
         validateFields() {
             this.value.forEach((item, i) => {

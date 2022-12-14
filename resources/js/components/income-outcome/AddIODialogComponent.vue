@@ -173,7 +173,7 @@ import CashIODialogComponent from "@/income-outcome/CashIODialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
-import calculator from "&/mixins/calculator";
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -184,7 +184,7 @@ export default {
 
         return { currencies, extensions };
     },
-    mixins: [validation, main, calculator],
+    mixins: [validation, main],
     components: {
         ErrorSnackbarComponent,
         SetCommonValuesComponent,
@@ -253,11 +253,11 @@ export default {
     computed: {
         amount() {
             this.keys.amount;
-            return this.getCalculationResult(this.data[this.page].amount, this.CALCULATOR.FIELDS.amount);
+            return new Calculator(this.data[this.page].amount, Calculator.FIELDS.amount).resultObject;
         },
         price() {
             this.keys.price;
-            return this.getCalculationResult(this.data[this.page].price, this.CALCULATOR.FIELDS.price);
+            return new Calculator(this.data[this.page].price, Calculator.FIELDS.price).resultObject;
         },
         usedCategory() {
             return this.categories.find(item => item.id == this.data[this.page].category_id);
@@ -272,7 +272,8 @@ export default {
             this.keys.amount; this.keys.price;
 
             const sums = this.data.map(item =>
-                this.getCalculationResult(`(${item.amount})*(${item.price})`, this.CALCULATOR.FIELDS.price).value
+                new Calculator(item.amount, Calculator.FIELDS.amount).resultValue
+                * new Calculator(item.price, Calculator.FIELDS.price).resultValue
             );
 
             if (sums.length) {
@@ -292,12 +293,11 @@ export default {
 
             this.data.forEach(item => {
                 if (item.mean_id != null) {
-                    const value = _.round(this.getCalculationResult(
-                        `(${item.amount})*(${item.price})`,
-                        this.CALCULATOR.FIELDS.price
-                    ).value, 2);
+                    let value = new Calculator(item.amount, Calculator.FIELDS.amount).resultValue
+                        * new Calculator(item.price, Calculator.FIELDS.price).resultValue;
 
-                    if (sumObj[item.mean_id] == undefined) {
+                    value = _.round(value, 2);
+                    if (sumObj[item.mean_id] === undefined) {
                         sumObj[item.mean_id] = value;
                     } else {
                         sumObj[item.mean_id] += value;
@@ -306,7 +306,7 @@ export default {
             });
 
             for (let i in sumObj) {
-                sumObj[i] = _.round(sumObj, 2);
+                sumObj[i] = _.round(sumObj[i], 2);
             }
 
             return sumObj;
@@ -320,8 +320,8 @@ export default {
             this.$nextTick(() => {
                 const data = _.cloneDeep(this.data);
                 for (let item of data) {
-                    item.amount = this.calculate(item.amount);
-                    item.price = this.calculate(item.price);
+                    item.amount = new Calculator(item.amount, Calculator.FIELDS.amount).resultValue;
+                    item.price = new Calculator(item.price, Calculator.FIELDS.price).resultValue;
                 }
 
                 const cashArray = [];
@@ -330,7 +330,7 @@ export default {
                         id: item,
                         amount: this.cash[item]
                     });
-                })
+                });
 
                 axios
                     .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, { data, cash: cashArray })
@@ -372,13 +372,13 @@ export default {
             this.page = this.data.length - 1;
         },
         updateCommonValues(newValues) {
-            this.data.forEach((item, i) => {
+            for (let item of this.data) {
                 Object.keys(newValues).forEach(item1 => {
                     if (this.commonValues[item1] != newValues[item1] && newValues[item1] !== "") {
-                        this.data[i][item1] = newValues[item1];
+                        item[item1] = newValues[item1];
                     }
-                })
-            })
+                });
+            }
 
             this.commonValues = newValues;
         }

@@ -142,9 +142,10 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
-import calculator from "&/mixins/calculator";
 
 export default {
     setup() {
@@ -152,7 +153,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [validation, main, calculator],
+    mixins: [validation, main],
     props: {
         value: {
             required: true,
@@ -219,11 +220,11 @@ export default {
         },
         amount() {
             this.keys.amount;
-            return this.getCalculationResult(this.value[this.page].amount, this.CALCULATOR.FIELDS.amount, false, true);
+            return new Calculator(this.value[this.page].amount, Calculator.FIELDS.amount, false, true).resultObject;
         },
         price() {
             this.keys.price;
-            return this.getCalculationResult(this.value[this.page].price, this.CALCULATOR.FIELDS.price, false, true, true);
+            return new Calculator(this.value[this.page].price, Calculator.FIELDS.price, false, true, true).resultObject;
         },
         valueField() {
             return _.round(this.amount.value * this.price.value, 2) || 0;

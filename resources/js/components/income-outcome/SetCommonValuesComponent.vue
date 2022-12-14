@@ -97,7 +97,8 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
-import calculator from "&/mixins/calculator";
+
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -107,7 +108,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [calculator, validation, main],
+    mixins: [validation, main],
     props: {
         means: {
             required: true,
@@ -143,11 +144,11 @@ export default {
     computed: {
         amount() {
             this.keys.amount;
-            return this.getCalculationResult(this.value.amount, this.CALCULATOR.FIELDS.amount, true);
+            return new Calculator(this.value.amount, Calculator.FIELDS.amount, true).resultObject;
         },
         price() {
             this.keys.price;
-            return this.getCalculationResult(this.value.price, this.CALCULATOR.FIELDS.price, true);
+            return new Calculator(this.value.price, Calculator.FIELDS.price, true).resultObject;
         },
         usedCategory() {
             return this.categories.find(item => item.id == this.value.category_id);

@@ -114,7 +114,7 @@
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
-import calculator from "&/mixins/calculator";
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -124,7 +124,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [validation, main, calculator],
+    mixins: [validation, main],
     components: {
         ErrorSnackbarComponent
     },
@@ -177,11 +177,11 @@ export default {
     computed: {
         amount() {
             this.keys.amount;
-            return this.getCalculationResult(this.data.amount, this.CALCULATOR.FIELDS.amount);
+            return new Calculator(this.data.amount, Calculator.FIELDS.amount).resultObject;
         },
         price() {
             this.keys.price;
-            return this.getCalculationResult(this.data.price, this.CALCULATOR.FIELDS.price);
+            return new Calculator(this.data.price, Calculator.FIELDS.price).resultObject;
         },
         usedCategory() {
             return this.categories.find(item => item.id == this.data.category_id);

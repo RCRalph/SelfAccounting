@@ -187,7 +187,7 @@ import CashExchangeDialogComponent from "@/income-outcome/CashExchangeDialogComp
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
-import calculator from "&/mixins/calculator";
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -198,7 +198,7 @@ export default {
 
         return { currencies, extensions };
     },
-    mixins: [validation, main, calculator],
+    mixins: [validation, main],
     components: {
         ErrorSnackbarComponent,
         CashExchangeDialogComponent
@@ -268,19 +268,19 @@ export default {
         },
         fromAmount() {
             this.keys.fromAmount;
-            return this.getCalculationResult(this.from.amount, this.CALCULATOR.FIELDS.amount);
+            return new Calculator(this.from.amount, Calculator.FIELDS.amount).resultObject;
         },
         fromPrice() {
             this.keys.fromPrice;
-            return this.getCalculationResult(this.from.price, this.CALCULATOR.FIELDS.price);
+            return new Calculator(this.from.price, Calculator.FIELDS.price).resultObject;
         },
         toAmount() {
             this.keys.toAmount;
-            return this.getCalculationResult(this.to.amount, this.CALCULATOR.FIELDS.amount);
+            return new Calculator(this.to.amount, Calculator.FIELDS.amount).resultObject;
         },
         toPrice() {
             this.keys.toPrice;
-            return this.getCalculationResult(this.to.price, this.CALCULATOR.FIELDS.price);
+            return new Calculator(this.to.price, Calculator.FIELDS.price).resultObject;
         },
         fromData() {
             if (!this.ready) return {};
