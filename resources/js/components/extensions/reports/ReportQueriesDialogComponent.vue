@@ -62,7 +62,19 @@
                                         :error-messages="keys.minAmount ? minAmount.error : undefined"
                                         :hint="minAmount.hint"
                                         @input="keys.minAmount++; validateFields()"
-                                    ></v-text-field>
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" sm="6" md="3">
@@ -73,7 +85,19 @@
                                         :error-messages="keys.maxAmount ? maxAmount.error : undefined"
                                         :hint="maxAmount.hint"
                                         @input="keys.maxAmount++; validateFields()"
-                                    ></v-text-field>
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" sm="6" md="3">
@@ -85,7 +109,19 @@
                                         :hint="minPrice.hint"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
                                         @input="keys.minPrice++; validateFields()"
-                                    ></v-text-field>
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" sm="6" md="3">
@@ -97,7 +133,19 @@
                                         :hint="maxPrice.hint"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
                                         @input="keys.maxPrice++; validateFields()"
-                                    ></v-text-field>
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
                             </v-row>
 

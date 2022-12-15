@@ -42,7 +42,19 @@
                                 :error-messages="keys.fromAmount ? fromAmount.error : undefined"
                                 :hint="fromAmount.hint"
                                 @input="keys.fromAmount++"
-                            ></v-text-field>
+                            >
+                                <template v-slot:append>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon v-on="on" class="ml-1">
+                                                mdi-calculator
+                                            </v-icon>
+                                        </template>
+
+                                        Allowed operations: <strong>+ - * / ^</strong>
+                                    </v-tooltip>
+                                </template>
+                            </v-text-field>
 
                             <v-text-field
                                 label="Price"
@@ -51,7 +63,19 @@
                                 :hint="fromAmount.hint"
                                 @input="keys.fromPrice++"
                                 :suffix="fromData.currency.ISO"
-                            ></v-text-field>
+                            >
+                                <template v-slot:append>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon v-on="on" class="ml-1">
+                                                mdi-calculator
+                                            </v-icon>
+                                        </template>
+
+                                        Allowed operations: <strong>+ - * / ^</strong>
+                                    </v-tooltip>
+                                </template>
+                            </v-text-field>
 
                             <v-select
                                 v-model="from.currency_id"
@@ -115,7 +139,19 @@
                                 :error-messages="keys.toAmount ? toAmount.error : undefined"
                                 :hint="toAmount.hint"
                                 @input="keys.toAmount++"
-                            ></v-text-field>
+                            >
+                                <template v-slot:append>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon v-on="on" class="ml-1">
+                                                mdi-calculator
+                                            </v-icon>
+                                        </template>
+
+                                        Allowed operations: <strong>+ - * / ^</strong>
+                                    </v-tooltip>
+                                </template>
+                            </v-text-field>
 
                             <v-text-field
                                 label="Price"
@@ -124,7 +160,19 @@
                                 :hint="toAmount.hint"
                                 @input="keys.toPrice++"
                                 :suffix="toData.currency.ISO"
-                            ></v-text-field>
+                            >
+                                <template v-slot:append>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon v-on="on" class="ml-1">
+                                                mdi-calculator
+                                            </v-icon>
+                                        </template>
+
+                                        Allowed operations: <strong>+ - * / ^</strong>
+                                    </v-tooltip>
+                                </template>
+                            </v-text-field>
 
                             <v-select
                                 v-model="to.currency_id"

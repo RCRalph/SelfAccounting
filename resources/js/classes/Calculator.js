@@ -50,10 +50,10 @@ export default class Calculator {
     /*
         Explanation of regex below:
         1) -?(\d+|\d*\.\d+|\d+\.\d*) - number regex, explained above
-        2) (\+|-|\*\*|\*|\/) - valid operations: +, -, *, /, ** (it's important to check for ** before * or else it won't match)
-        3) ((\+|-|\*\*|\*|\/)-?(\d+|\d*\.\d+|\d+\.\d*))* - enforce that operations have two arguments, before and after operator
+        2) (\+|-|\*|\/|\^) - valid operations: +, -, *, /, ^
+        3) ((\+|-|\*|\/|\^)-?(\d+|\d*\.\d+|\d+\.\d*))* - enforce that operations have two arguments, before and after operator
     */
-    static OPERATION_REGEX = /^-?(\d+|\d*\.\d+|\d+\.\d*)((\+|-|\*\*|\*|\/)-?(\d+|\d*\.\d+|\d+\.\d*))*$/;
+    static OPERATION_REGEX = /^-?(\d+|\d*\.\d+|\d+\.\d*)((\+|-|\*|\/|\^)-?(\d+|\d*\.\d+|\d+\.\d*))*$/;
 
     #operationString(operation) {
         for (let i = 0; i < operation.length; i++) {
@@ -123,7 +123,7 @@ export default class Calculator {
         /*
             Next few lines require extensive explaination.
 
-            By doing operation.split(/(\d(\+|-|\*\*|\*|\/))/) we divide the array into following elements:
+            By doing operation.split(/(\d(\+|-|\*|\/|\^))/) we divide the array into following elements:
                 - numbers without their last digit
                 - last digit of a previous number combined with the operator to the right of the number
                 - the operator itself
@@ -137,25 +137,25 @@ export default class Calculator {
             The for loop checks if elements are in the form of "5*" or "5+", appends the digit to the previous
             number and removes the given element. This way we end up with an array of numbers and operators.
 
-            Example: "12345*-5**-3" -> ["12345", "*", "-5", "**", "-3"]
+            Example: "12345*-5^-3" -> ["12345", "*", "-5", "^", "-3"]
         */
 
-        let operationArray = operation.split(/(\d(\+|-|\*\*|\*|\/))/);
+        let operationArray = operation.split(/(\d(\+|-|\*|\/|\^))/);
         for (let i = 1; i < operationArray.length; i++) {
-            if (/\d(\+|-|\*\*|\*|\/)/.test(operationArray[i])) {
+            if (/\d(\+|-|\*|\/|\^)/.test(operationArray[i])) {
                 operationArray[i - 1] += operationArray[i][0];
                 operationArray.splice(i, 1);
             }
         }
 
-        // Handle **
+        // Handle ^
         let i = 1, num1, num2;
         while (i < operationArray.length) {
             num1 = Number(operationArray[i - 1]);
             num2 = Number(operationArray[i + 1]);
 
             switch (operationArray[i]) {
-                case "**":
+                case "^":
                     operationArray[i - 1] = Math.pow(num1, num2).toString();
                     operationArray.splice(i, 2);
                     break

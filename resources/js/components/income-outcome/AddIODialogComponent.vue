@@ -54,7 +54,19 @@
                                         :error-messages="keys.amount ? amount.error : undefined"
                                         :hint="amount.hint"
                                         @input="keys.amount++"
-                                    ></v-text-field>
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4">
@@ -65,7 +77,19 @@
                                         :hint="price.hint"
                                         @input="keys.price++"
                                         :suffix="currencies.usedCurrencyObject.ISO"
-                                    ></v-text-field>
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
