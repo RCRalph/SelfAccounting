@@ -38,11 +38,48 @@
 
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Amount" v-model="value[i - 1].amount" :rules="[validation.amount(false, true)]"></v-text-field>
+                                    <v-text-field
+                                        label="Amount"
+                                        v-model="value[i - 1].amount"
+                                        :error-messages="keys.amount ? amount.error : undefined"
+                                        :hint="amount.hint"
+                                        @input="keys.amount++"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Price" v-model="value[i - 1].price" :rules="[validation.price(false, true)]" :suffix="currencies.findCurrency(value[i - 1].currency_id).ISO"></v-text-field>
+                                    <v-text-field
+                                        label="Price"
+                                        v-model="value[i - 1].price"
+                                        :error-messages="keys.price ? price.error : undefined"
+                                        :hint="price.hint"
+                                        @input="keys.price++"
+                                        :suffix="currencies.findCurrency(value[i - 1].currency_id).ISO"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -129,6 +166,8 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -169,9 +208,19 @@ export default {
                 category_id: null,
                 mean_id: null
             },
+            keys: {
+                amount: 0,
+                price: 0
+            },
 
             dialog: false,
             canUpdate: true
+        }
+    },
+    watch: {
+        page() {
+            this.keys.amount = 0;
+            this.keys.price = 0;
         }
     },
     computed: {
@@ -193,11 +242,16 @@ export default {
 
             return [nullObj];
         },
+        amount() {
+            this.keys.amount;
+            return new Calculator(this.value[this.page].amount, Calculator.FIELDS.amount, false, true).resultObject;
+        },
+        price() {
+            this.keys.price;
+            return new Calculator(this.value[this.page].price, Calculator.FIELDS.price, false, true, true).resultObject;
+        },
         valueField() {
-            return Math.round(100 *
-                this.numberWithoutComma(this.value[this.page].amount) *
-                this.numberWithoutComma(this.value[this.page].price)
-            ) / 100;
+            return _.round(this.amount.value * this.price.value, 2) || 0;
         },
     },
     methods: {

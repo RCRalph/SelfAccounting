@@ -58,38 +58,94 @@
                                     <v-text-field
                                         label="Minimal amount"
                                         v-model="value[i - 1].min_amount"
-                                        :rules="[validation.amount(true, true), validationArray[i - 1].minAmount]"
-                                        @input="validateFields"
-                                    ></v-text-field>
+                                        :rules="[validationArray[i - 1].amount]"
+                                        :error-messages="keys.minAmount ? minAmount.error : undefined"
+                                        :hint="minAmount.hint"
+                                        @input="keys.minAmount++; validateFields()"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" sm="6" md="3">
                                     <v-text-field
                                         label="Maximal amount"
                                         v-model="value[i - 1].max_amount"
-                                        :rules="[validation.amount(true, true), validationArray[i - 1].maxAmount]"
-                                        @input="validateFields"
-                                    ></v-text-field>
+                                        :rules="[validationArray[i - 1].amount]"
+                                        :error-messages="keys.maxAmount ? maxAmount.error : undefined"
+                                        :hint="maxAmount.hint"
+                                        @input="keys.maxAmount++; validateFields()"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" sm="6" md="3">
                                     <v-text-field
                                         label="Minimal price"
                                         v-model="value[i - 1].min_price"
-                                        :rules="[validation.price(true, true), validationArray[i - 1].minPrice]"
+                                        :rules="[validationArray[i - 1].price]"
+                                        :error-messages="keys.minPrice ? minPrice.error : undefined"
+                                        :hint="minPrice.hint"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
-                                        @input="validateFields"
-                                    ></v-text-field>
+                                        @input="keys.minPrice++; validateFields()"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" sm="6" md="3">
                                     <v-text-field
                                         label="Maximal price"
                                         v-model="value[i - 1].max_price"
-                                        :rules="[validation.price(true, true), validationArray[i - 1].maxPrice]"
+                                        :rules="[validationArray[i - 1].price]"
+                                        :error-messages="keys.maxPrice ? maxPrice.error : undefined"
+                                        :hint="maxPrice.hint"
                                         :suffix="value[i - 1].currency_id && currencies.findCurrency(value[i - 1].currency_id).ISO"
-                                        @input="validateFields"
-                                    ></v-text-field>
+                                        @input="keys.maxPrice++; validateFields()"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
                             </v-row>
 
@@ -179,6 +235,8 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -229,12 +287,38 @@ export default {
                 { value: "outcome", text: "Outcome" }
             ],
             validationArray: [],
+            validationArrayObject: {
+                amount: true,
+                price: true
+            },
+            keys: {
+                minAmount: 0,
+                maxAmount: 0,
+                minPrice: 0,
+                maxPrice: 0
+            },
 
             dialog: false,
             canUpdate: true
         }
     },
     computed: {
+        minAmount() {
+            this.keys.minAmount;
+            return new Calculator(this.value[this.page].min_amount, Calculator.FIELDS.amount, true, true).resultObject;
+        },
+        maxAmount() {
+            this.keys.maxAmount;
+            return new Calculator(this.value[this.page].max_amount, Calculator.FIELDS.amount, true, true).resultObject;
+        },
+        minPrice() {
+            this.keys.minPrice;
+            return new Calculator(this.value[this.page].min_price, Calculator.FIELDS.price, true, true).resultObject;
+        },
+        maxPrice() {
+            this.keys.maxPrice;
+            return new Calculator(this.value[this.page].max_price, Calculator.FIELDS.price, true, true).resultObject;
+        },
         currenciesForSelect() {
             return [{ id: null, ISO: "All currencies" }, ...this.currencies.currencies];
         },
@@ -268,13 +352,7 @@ export default {
         },
         appendData() {
             this.value.push(_.cloneDeep(this.startData));
-
-            this.validationArray.push({
-                minAmount: true,
-                maxAmount: true,
-                minPrice: true,
-                maxPrice: true
-            });
+            this.validationArray.push(_.cloneDeep(this.validationArrayObject));
 
             this.page = this.value.length - 1;
         },
@@ -297,37 +375,27 @@ export default {
                 return true;
             }
 
-            min = Number(String(min).replaceAll(",", "."));
-            max = Number(String(max).replaceAll(",", "."));
+            min = new Calculator(min).resultValue;
+            max = new Calculator(max).resultValue;
+            if (isNaN(min) || isNaN(max)) {
+                return true;
+            }
 
-            return min <= max
+            return min <= max;
         },
         validateFields() {
             this.value.forEach((item, i) => {
-                if (this.compareMinMax(item.min_amount, item.max_amount)) {
-                    this.validationArray[i].minAmount = this.validationArray[i].maxAmount = true;
-                }
-                else {
-                    this.validationArray[i].minAmount = this.validationArray[i].maxAmount = "Minimal amount has to be less than maximal amount";
-                }
+                this.validationArray[i].amount = !this.compareMinMax(item.min_amount, item.max_amount) ?
+                    "Minimal amount has to be less than maximal amount" : true;
 
-                if (this.compareMinMax(item.min_price, item.max_price)) {
-                    this.validationArray[i].minPrice = this.validationArray[i].maxPrice = true;
-                }
-                else {
-                    this.validationArray[i].minPrice = this.validationArray[i].maxPrice = "Minimal price has to be less than maximal price";
-                }
-            })
+                this.validationArray[i].price = !this.compareMinMax(item.min_price, item.max_price) ?
+                    "Minimal price has to be less than maximal price" : true;
+            });
         }
     },
     beforeMount() {
         this.value.forEach(() => {
-            this.validationArray.push({
-                minAmount: true,
-                maxAmount: true,
-                minPrice: true,
-                maxPrice: true
-            });
+            this.validationArray.push(_.cloneDeep(this.validationArrayObject));
         });
     }
 }

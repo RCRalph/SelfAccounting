@@ -18,7 +18,13 @@
                 <v-form v-model="canUpdate">
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field type="date" label="Date" v-model="value.date" :min="usedMean.first_entry_date" :rules="[validation.date(true, usedMean.first_entry_date, true)]"></v-text-field>
+                            <v-text-field
+                                type="date"
+                                label="Date"
+                                v-model="value.date"
+                                :min="usedMean.first_entry_date"
+                                :rules="[validation.date(true, usedMean.first_entry_date, true)]"
+                            ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="8">
@@ -35,11 +41,48 @@
 
                     <v-row>
                         <v-col cols="12" md="6">
-                            <v-text-field label="Amount" v-model="value.amount" :rules="[validation.amount(true)]"></v-text-field>
+                            <v-text-field
+                                label="Amount"
+                                v-model="value.amount"
+                                :error-messages="amount.error"
+                                :hint="amount.hint"
+                                @input="keys.amount++"
+                            >
+                                <template v-slot:append>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon v-on="on" class="ml-1">
+                                                mdi-calculator
+                                            </v-icon>
+                                        </template>
+
+                                        Allowed operations: <strong>+ - * / ^</strong>
+                                    </v-tooltip>
+                                </template>
+                            </v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="6">
-                            <v-text-field label="Price" v-model="value.price" :rules="[validation.price(true)]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
+                            <v-text-field
+                                label="Price"
+                                v-model="value.price"
+                                :error-messages="price.error"
+                                :hint="price.hint"
+                                @input="keys.price++"
+                                :suffix="currencies.usedCurrencyObject.ISO"
+                            >
+                                <template v-slot:append>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon v-on="on" class="ml-1">
+                                                mdi-calculator
+                                            </v-icon>
+                                        </template>
+
+                                        Allowed operations: <strong>+ - * / ^</strong>
+                                    </v-tooltip>
+                                </template>
+                            </v-text-field>
                         </v-col>
                     </v-row>
 
@@ -78,6 +121,8 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -113,10 +158,22 @@ export default {
     data() {
         return {
             dialog: false,
-            canUpdate: true
+            canUpdate: true,
+            keys: {
+                amount: 0,
+                price: 0
+            }
         }
     },
     computed: {
+        amount() {
+            this.keys.amount;
+            return new Calculator(this.value.amount, Calculator.FIELDS.amount, true).resultObject;
+        },
+        price() {
+            this.keys.price;
+            return new Calculator(this.value.price, Calculator.FIELDS.price, true).resultObject;
+        },
         usedCategory() {
             return this.categories.find(item => item.id == this.value.category_id);
         },

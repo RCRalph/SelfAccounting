@@ -190,6 +190,7 @@ import ReportQueriesDialogComponent from "@/extensions/reports/ReportQueriesDial
 import ReportAdditionalEntriesDialogComponent from "@/extensions/reports/ReportAdditionalEntriesDialogComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -227,11 +228,22 @@ export default {
         update() {
             this.loading = true;
 
-            const users = this.data.users.map(item => item.email),
-                dataToSubmit = this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["REPORT"]);
+            const users = this.data.users.map(item => item.email);
+            const data = _.cloneDeep(this.data);
+            for (let item of data.queries) {
+                item.min_amount = item.min_amount === null ? null : new Calculator(item.min_amount, Calculator.FIELDS.amount).resultValue;
+                item.max_amount = item.max_amount === null ? null : new Calculator(item.max_amount, Calculator.FIELDS.amount).resultValue;
+                item.min_price = item.min_price === null ? null : new Calculator(item.min_price, Calculator.FIELDS.price).resultValue;
+                item.max_price = item.max_price === null ? null : new Calculator(item.max_price, Calculator.FIELDS.price).resultValue;
+            }
+
+            for (let item of data.additionalEntries) {
+                item.amount = new Calculator(item.amount, Calculator.FIELDS.amount).resultValue;
+                item.price = new Calculator(item.price, Calculator.FIELDS.price).resultValue;
+            }
 
             axios
-                .post(`/web-api/extensions/reports/${this.id}/update`, { ...dataToSubmit, users })
+                .post(`/web-api/extensions/reports/${this.id}/update`, { ...data, users })
                 .then(() => {
                     this.dataCopy = _.cloneDeep(this.data);
                     this.$emit("updated");

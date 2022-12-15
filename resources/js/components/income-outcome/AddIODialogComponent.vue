@@ -25,7 +25,13 @@
                         <div v-show="page == i - 1">
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-text-field type="date" label="Date" v-model="data[i - 1].date" :min="usedMean.first_entry_date" :rules="[validation.date(false, usedMean.first_entry_date)]"></v-text-field>
+                                    <v-text-field
+                                        type="date"
+                                        label="Date"
+                                        v-model="data[i - 1].date"
+                                        :min="usedMean.first_entry_date"
+                                        :rules="[validation.date(false, usedMean.first_entry_date)]"
+                                    ></v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="8">
@@ -42,11 +48,48 @@
 
                             <v-row>
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Amount" v-model="data[i - 1].amount" :rules="[validation.amount()]"></v-text-field>
+                                    <v-text-field
+                                        label="Amount"
+                                        v-model="data[i - 1].amount"
+                                        :error-messages="keys.amount ? amount.error : undefined"
+                                        :hint="amount.hint"
+                                        @input="keys.amount++"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4">
-                                    <v-text-field label="Price" v-model="data[i - 1].price" :rules="[validation.price()]" :suffix="currencies.usedCurrencyObject.ISO"></v-text-field>
+                                    <v-text-field
+                                        label="Price"
+                                        v-model="data[i - 1].price"
+                                        :error-messages="keys.price ? price.error : undefined"
+                                        :hint="price.hint"
+                                        @input="keys.price++"
+                                        :suffix="currencies.usedCurrencyObject.ISO"
+                                    >
+                                        <template v-slot:append>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-on="on" class="ml-1">
+                                                        mdi-calculator
+                                                    </v-icon>
+                                                </template>
+
+                                                Allowed operations: <strong>+ - * / ^</strong>
+                                            </v-tooltip>
+                                        </template>
+                                    </v-text-field>
                                 </v-col>
 
                                 <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
@@ -154,6 +197,7 @@ import CashIODialogComponent from "@/income-outcome/CashIODialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
+import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
 
@@ -190,6 +234,10 @@ export default {
             },
             titles: [],
             cash: {},
+            keys: {
+                amount: 0,
+                price: 0
+            },
 
             ready: false,
             error: false,
@@ -220,9 +268,21 @@ export default {
                     console.error(err);
                     setTimeout(() => this.error = true, 1000);
                 })
+        },
+        page() {
+            this.keys.amount = 0;
+            this.keys.price = 0;
         }
     },
     computed: {
+        amount() {
+            this.keys.amount;
+            return new Calculator(this.data[this.page].amount, Calculator.FIELDS.amount).resultObject;
+        },
+        price() {
+            this.keys.price;
+            return new Calculator(this.data[this.page].price, Calculator.FIELDS.price).resultObject;
+        },
         usedCategory() {
             return this.categories.find(item => item.id == this.data[this.page].category_id);
         },
@@ -230,16 +290,18 @@ export default {
             return this.means.find(item => item.id == this.data[this.page].mean_id);
         },
         valueField() {
-            return Math.round(100 *
-                this.numberWithoutComma(this.data[this.page].amount) *
-                this.numberWithoutComma(this.data[this.page].price)
-            ) / 100;
+            return _.round(this.amount.value * this.price.value, 2) || 0;
         },
         sum() {
-            const sums = this.data.map(item => this.numberWithoutComma(item.amount) * this.numberWithoutComma(item.price));
+            this.keys.amount; this.keys.price;
+
+            const sums = this.data.map(item =>
+                new Calculator(item.amount, Calculator.FIELDS.amount).resultValue
+                * new Calculator(item.price, Calculator.FIELDS.price).resultValue
+            );
 
             if (sums.length) {
-                return Math.round(sums.reduce((item1, item2) => item1 + item2) * 100) / 100;
+                return _.round(sums.reduce((item1, item2) => item1 + item2), 2) || 0;
             }
 
             return 0;
@@ -255,19 +317,21 @@ export default {
 
             this.data.forEach(item => {
                 if (item.mean_id != null) {
-                    const value = Math.round(100 *
-                        this.numberWithoutComma(item.amount) *
-                        this.numberWithoutComma(item.price)
-                    ) / 100;
+                    let value = new Calculator(item.amount, Calculator.FIELDS.amount).resultValue
+                        * new Calculator(item.price, Calculator.FIELDS.price).resultValue;
 
-                    if (sumObj[item.mean_id] == undefined) {
-                        sumObj[item.mean_id] = value
-                    }
-                    else {
+                    value = _.round(value, 2);
+                    if (sumObj[item.mean_id] === undefined) {
+                        sumObj[item.mean_id] = value;
+                    } else {
                         sumObj[item.mean_id] += value;
                     }
                 }
             });
+
+            for (let i in sumObj) {
+                sumObj[i] = _.round(sumObj[i], 2);
+            }
 
             return sumObj;
         }
@@ -278,7 +342,11 @@ export default {
             this.$refs.title.forEach(item => item.blur());
 
             this.$nextTick(() => {
-                const dataToSubmit = this.replaceCommas(_.cloneDeep(this.data), this.COMMA_ARRAY_STRUCTURES["IO"]);
+                const data = _.cloneDeep(this.data);
+                for (let item of data) {
+                    item.amount = new Calculator(item.amount, Calculator.FIELDS.amount).resultValue;
+                    item.price = new Calculator(item.price, Calculator.FIELDS.price).resultValue;
+                }
 
                 const cashArray = [];
                 Object.keys(this.cash).forEach(item => {
@@ -286,13 +354,10 @@ export default {
                         id: item,
                         amount: this.cash[item]
                     });
-                })
+                });
 
                 axios
-                    .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, {
-                        data: dataToSubmit,
-                        cash: cashArray
-                    })
+                    .post(`/web-api/${this.type}/currency/${this.currencies.usedCurrency}`, { data, cash: cashArray })
                     .then(() => {
                         this.$emit("added");
                         this.dialog = false;
@@ -331,13 +396,13 @@ export default {
             this.page = this.data.length - 1;
         },
         updateCommonValues(newValues) {
-            this.data.forEach((item, i) => {
+            for (let item of this.data) {
                 Object.keys(newValues).forEach(item1 => {
                     if (this.commonValues[item1] != newValues[item1] && newValues[item1] !== "") {
-                        this.data[i][item1] = newValues[item1];
+                        item[item1] = newValues[item1];
                     }
-                })
-            })
+                });
+            }
 
             this.commonValues = newValues;
         }
