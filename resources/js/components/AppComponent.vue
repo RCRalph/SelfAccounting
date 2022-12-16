@@ -119,6 +119,10 @@
             @hideAll="updateUser"
         ></TutorialComponent>
 
+        <PremiumExpiredComponent
+            v-model="premiumExpired"
+        ></PremiumExpiredComponent>
+
         <v-main>
             <div class="menu-margin">
                 <div class="ma-4">
@@ -141,6 +145,7 @@ import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
 
 import TutorialComponent from "@/TutorialComponent.vue";
+import PremiumExpiredComponent from "@/PremiumExpiredComponent.vue";
 
 export default {
     setup() {
@@ -150,7 +155,8 @@ export default {
         return { currencies, extensions };
     },
     components: {
-        TutorialComponent
+        TutorialComponent,
+        PremiumExpiredComponent
     },
     data() {
         return {
@@ -164,6 +170,7 @@ export default {
             mini: true,
             menuClicked: false,
             user: {},
+            premiumExpired: false,
             ready: false
         }
     },
@@ -243,6 +250,7 @@ export default {
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
 
+                this.premiumExpired = data.premiumExpired;
                 this.charts = data.charts;
                 this.tutorials = data.tutorials;
                 this.disabledTutorials = data.disabledTutorials;
