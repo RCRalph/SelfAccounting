@@ -151,5 +151,3 @@ Route::prefix("/payment")->group(function () {
         Route::get("/success", "PaymentController@extensionsSuccess")->name("payment.extensions.success");
     });
 });
-
-Route::get('/premium', 'PagesController@premium')->name('premium');

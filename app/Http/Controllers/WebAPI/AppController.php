@@ -18,6 +18,15 @@ class AppController extends Controller
         $this->middleware("auth");
     }
 
+    private function showPremiumExpiredDialog() {
+        if (auth()->user()->account_type != "Normal") {
+            return false;
+        }
+
+        return auth()->user()->premium_expiration
+            ->isAfter(auth()->user()->last_page_visit);
+    }
+
     private function getAppStartData()
     {
         return Cache::remember(
@@ -55,7 +64,9 @@ class AppController extends Controller
 
     public function index()
     {
+        $premiumExpired = $this->showPremiumExpiredDialog();
         $data = $this->getAppStartData();
-        return response()->json($data);
+
+        return response()->json(array_merge($data, compact("premiumExpired")));
     }
 }
