@@ -1,15 +1,4 @@
 export default {
-    data() {
-        return {
-            COMMA_ARRAY_STRUCTURES: {
-                "REPORT": {
-                    queries: ["min_amount", "max_amount", "min_price", "max_price"],
-                    additionalEntries: ["amount", "price"]
-                },
-                "IO": ["amount", "price"],
-            }
-        }
-    },
     filters: {
         addSpaces(value) {
             return value
@@ -90,34 +79,6 @@ export default {
             });
 
             return retVal;
-        },
-        numberWithoutComma(number) {
-            if (typeof number == "string") {
-                number = number.replaceAll(",", ".");
-            }
-
-            return number;
-        },
-        replaceCommas(data, keys) {
-            if (Array.isArray(keys)) {
-                keys.forEach(item => {
-                    if (Array.isArray(data)) {
-                        for (const item1 of data) {
-                            item1[item] = this.numberWithoutComma(item1[item]);
-                        }
-                    } else {
-                        data[item] = this.numberWithoutComma(data[item]);
-                    }
-                });
-            } else if (_.isPlainObject(keys)) {
-                Object.keys(keys).forEach(item => {
-                    data[item] = this.replaceCommas(data[item], keys[item])
-                });
-            } else {
-                data[keys] = this.numberWithoutComma(data[keys])
-            }
-
-            return data;
         }
     }
 }

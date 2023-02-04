@@ -2,7 +2,7 @@
 {{-- Header --}}
     @slot('header')
         @component('mail::header', ['url' => config('app.url')])
-            <img src="https://selfaccounting.rcralph.me/favicon.ico" alt="{{ config("app.name") }}">
+            <img src="{{ Storage::disk('public')->url('Logo square.svg') }}" alt="{{ config("app.name") }}" width="256">
         @endcomponent
     @endslot
 

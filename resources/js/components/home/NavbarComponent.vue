@@ -1,11 +1,11 @@
 <template>
     <v-app-bar fixed height="64">
         <a href="/" class="text-decoration-none white--text d-flex flex-nowrap align-center ml-0 ml-sm-3">
-            <v-avatar size="40">
-                <v-img src="/storage/SelfAccounting.svg"></v-img>
+            <v-avatar size="48" tile>
+                <img src="/storage/Logo square.svg">
             </v-avatar>
 
-            <v-toolbar-title class="text-h5 ml-3">SelfAccounting</v-toolbar-title>
+            <v-img class="ml-3" :width="logoTextWidth" :src="logoTextSource"></v-img>
         </a>
 
         <v-spacer></v-spacer>
@@ -39,3 +39,17 @@
         </div>
     </v-app-bar>
 </template>
+
+<script>
+export default {
+    computed: {
+        logoTextWidth() {
+            return this.$vuetify.breakpoint.xs ? 200 :
+                (this.$vuetify.breakpoint.sm ? 250 : 300);
+        },
+        logoTextSource() {
+            return `/storage/Logo text ${this.$vuetify.theme.dark ? 'dark' : 'light'}.svg`;
+        }
+    }
+}
+</script>
