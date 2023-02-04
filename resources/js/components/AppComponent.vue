@@ -4,11 +4,13 @@
             :expand-on-hover="$vuetify.breakpoint.mdAndUp && !menuClicked" fixed
         >
             <v-list-item class="pa-2">
-                <v-list-item-avatar>
-                    <v-img src="/storage/SelfAccounting.svg"></v-img>
+                <v-list-item-avatar tile>
+                    <img src="/storage/Logo square.svg">
                 </v-list-item-avatar>
 
-                <v-list-item-title class="font-weight-black h5 m-0">SelfAccounting</v-list-item-title>
+                <v-list-item-title class="m-0">
+                    <v-img :src="logoTextSource"></v-img>
+                </v-list-item-title>
 
                 <v-btn icon @click.stop="mini = !mini" v-if="$vuetify.breakpoint.smAndDown">
                     <v-icon>mdi-chevron-left</v-icon>
@@ -229,6 +231,9 @@ export default {
             }
 
             return retArr;
+        },
+        logoTextSource() {
+            return `/storage/Logo text ${this.$vuetify.theme.dark ? 'dark' : 'light'}.svg`;
         }
     },
     methods: {

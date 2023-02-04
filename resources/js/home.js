@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuetify from 'vuetify';
+import "particles.js";
 
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -17,3 +18,7 @@ Vue.component("email-component", require("@/home/EmailComponent.vue").default);
 Vue.component("reset-component", require("@/home/ResetComponent.vue").default);
 
 new Vue({ el: '#app', vuetify: new Vuetify() });
+
+if (document.getElementById("particles-js")) {
+	particlesJS.load("particles-js", "particles.json");
+}

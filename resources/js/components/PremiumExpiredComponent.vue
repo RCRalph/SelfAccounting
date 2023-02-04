@@ -1,12 +1,6 @@
 <template>
     <v-dialog :value="value" @input="$emit('input', value)" max-width="550" persistent>
         <v-card>
-            <div class="d-flex justify-center pt-4">
-                <v-avatar size="113">
-                    <img src="favicon.ico" alt="SelfAccounting">
-                </v-avatar>
-            </div>
-
             <v-card-title class="justify-center text-h5">
                 <div style="word-break: break-word" class="text-center">
                 Your SelfAccounting Premium has expired.

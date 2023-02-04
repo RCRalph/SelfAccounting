@@ -3,29 +3,25 @@
         <NavbarComponent></NavbarComponent>
 
         <v-main>
-            <section>
-                <v-parallax src="/storage/welcome/welcome.jpg" :height="parallaxHeight">
-                    <v-layout column align-center justify-center class="white--text">
-                        <h1
-                            class="white--text mb-2 text-center font-weight-black"
-                            style="text-shadow: 3px 3px #000000" :class="headerFontSize"
-                        >
-                            SelfAccounting
-                        </h1>
+            <section class="d-flex justify-center align-center" style="height: 100vh">
+                <div id="particles-js" style="width: 100%; height: 100%;"></div>
 
-                        <div
-                            class="white--text mb-3 text-center font-weight-black"
-                            style="font-weight: 900; text-shadow: 2px 2px #000000"
-                            :class="subheaderFontSize"
-                        >
-                            Your personal accounting&nbsp;platform
-                        </div>
+                <div class="d-flex justify-center align-center flex-column" style="position: absolute; margin-top: 64px">
+                    <div class="mb-2">
+                        <v-img src="/storage/Logo text dark.svg" :width="imageWidth" contain></v-img>
+                    </div>
 
-                        <v-btn class="mt-5" dark x-large rounded href="/register">
-                            Register now
-                        </v-btn>
-                    </v-layout>
-                </v-parallax>
+                    <div style="font-weight: 900; user-select: none"
+                        class="white--text mb-3 text-center font-weight-black"
+                        :class="subheaderFontSize"
+                    >
+                        Your personal accounting&nbsp;platform
+                    </div>
+
+                    <v-btn class="mt-5" dark x-large rounded href="/register">
+                        Register now
+                    </v-btn>
+                </div>
             </section>
 
             <section>
@@ -94,21 +90,9 @@ export default {
     components: {
         NavbarComponent
     },
-    data() {
-        return {
-            parallaxHeight: self.innerHeight
-        }
-    },
     computed: {
-        headerFontSize() {
-            if (this.$vuetify.breakpoint.xs) {
-                return "text-h3";
-            }
-            else if (this.$vuetify.breakpoint.sm) {
-                return "text-h2"
-            }
-
-            return "text-h1";
+        imageWidth() {
+            return this.$vuetify.breakpoint.mdAndUp ? 700 : this.$vuetify.breakpoint.width - 30;
         },
         subheaderFontSize() {
             if (this.$vuetify.breakpoint.xs) {
@@ -120,11 +104,6 @@ export default {
 
             return "text-h4";
         }
-    },
-    mounted() {
-        this.$nextTick(() => {
-            window.addEventListener('resize', () => this.parallaxHeight = self.innerHeight);
-        })
     }
 };
 </script>
