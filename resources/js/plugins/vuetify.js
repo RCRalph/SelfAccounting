@@ -21,7 +21,6 @@ export default new Vuetify({
         }
     },
     theme: {
-        dark: true,
         themes: {
             light: { success: "#4caf50" },
             dark: { success: "#4caf50" }

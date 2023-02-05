@@ -53,6 +53,7 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:32'],
             'email' => ['required', 'string', 'email', 'max:64', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed', 'max:64'],
+            'darkmode' => ['required', 'boolean'],
         ]);
     }
 
@@ -70,7 +71,8 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'profile_picture' => 'Emoji' . rand(1, 6) . '.png',
             'premium_expiration' => now()->addDay(30),
-            'last_page_visit' => now()
+            'last_page_visit' => now(),
+            'darkmode' => $data['darkmode'],
         ]);
     }
 

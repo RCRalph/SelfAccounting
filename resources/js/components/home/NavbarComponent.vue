@@ -50,6 +50,11 @@ export default {
         logoTextSource() {
             return `/storage/Logo text ${this.$vuetify.theme.dark ? 'dark' : 'light'}.svg`;
         }
+    },
+    mounted() {
+        if (window.matchMedia) {
+            this.$vuetify.theme.dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        }
     }
 }
 </script>
