@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="Logo circle.svg"
+   inkscape:export-filename="Logo lightmode wide.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="193.04015"
+     inkscape:cy="255.97265"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient3090"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#00b8ff;stop-opacity:1;"
+         offset="0"
+         id="stop3088" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient934"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop932" />
+    </linearGradient>
+    <rect
+       x="15"
+       y="15"
+       width="482"
+       height="482"
+       id="rect2364" />
+    <linearGradient
+       id="linearGradient1464"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#06ffff;stop-opacity:1;"
+         offset="0"
+         id="stop1462" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect949"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,256,0,1 @ F,0,0,1,0,256,0,1 @ F,0,0,1,0,256,0,1 @ F,0,0,1,0,256,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="256"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect949-3-2"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,196,0,1 @ F,0,0,1,0,196,0,1 @ F,0,0,1,0,196,0,1 @ F,0,0,1,0,196,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="196"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect949-3-4-7"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,226,0,1 @ F,0,0,1,0,226,0,1 @ F,0,0,1,0,226,0,1 @ F,0,0,1,0,226,0,1"
+       unit="px"
+       method="auto"
+       mode="F"
+       radius="226"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#4caf50;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="rect947"
+       width="512"
+       height="512"
+       x="0"
+       y="0"
+       ry="0"
+       inkscape:path-effect="#path-effect949"
+       d="M 256,0 A 256,256 45 0 1 512,256 256,256 135 0 1 256,512 256,256 45 0 1 0,256 256,256 135 0 1 256,0 Z"
+       sodipodi:type="rect"
+       inkscape:label="Square1" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="rect947-7-5-4"
+       width="452"
+       height="452"
+       x="29.999985"
+       y="30"
+       ry="0"
+       inkscape:path-effect="#path-effect949-3-4-7"
+       d="m 255.99998,30 a 226,226 45 0 1 226,226 226,226 135 0 1 -226,226 A 226,226 45 0 1 29.999985,256 226,226 135 0 1 255.99998,30 Z"
+       sodipodi:type="rect"
+       inkscape:label="Square2" />
+    <path
+       style="fill:#4caf50;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="rect947-7-54"
+       width="392"
+       height="392"
+       x="60"
+       y="60"
+       ry="0"
+       inkscape:path-effect="#path-effect949-3-2"
+       d="M 256,60 A 196,196 45 0 1 452,256 196,196 135 0 1 256,452 196,196 45 0 1 60,256 196,196 135 0 1 256,60 Z"
+       sodipodi:type="rect"
+       inkscape:label="Square3" />
+    <g
+       aria-label="SA"
+       transform="translate(-2.25,95.408422)"
+       id="text2362"
+       style="font-size:256px;font-family:'Allerta Stencil';-inkscape-font-specification:'Allerta Stencil, Normal';text-align:center;white-space:pre;shape-inside:url(#rect2364);display:inline;fill:#ffffff;fill-opacity:1;stroke-width:0;stroke-linecap:square;stroke-linejoin:round"
+       inkscape:label="Text">
+      <path
+         d="m 201.125,97.966578 q -1.25,-0.5 -3,-1.75 -1.75,-1.25 -5,-2.25 -3.25,-1.25 -8.25,-2 -5,-0.75 -12.75,-0.25 v -25.25 q 11,0.25 22.25,2.5 11.5,2 18.5,6.5 -1.5,3.25 -3.5,7.25 -2,3.75 -3.75,7.25 -1.75,3.25 -3,5.5 -1.25,2.25 -1.5,2.5 z m -86.25,20.000002 q 0,-11 3.75,-19.750002 3.75,-8.75 10,-15.25 6.5,-6.75 15,-10.5 8.75,-4 18.25,-5.25 v 26.25 q -8,2.75 -13.25,9.750002 -5.25,6.75 -5.25,13.75 0,9.75 5.25,15.75 5.25,6 13.25,10.5 v 28.5 q -8.25,-4 -16.5,-8.5 -8.25,-4.75 -15,-11 -6.75,-6.25 -11.25,-14.5 -4.25,-8.25 -4.25,-19.75 z m 4,102 q 3.5,2 8.75,4 5.5,1.75 11.25,3.5 5.75,1.5 11.5,2.5 5.75,1 10.75,1 h 0.75 v 23.75 h -0.5 q -6,0 -12.5,-0.75 -6.25,-0.5 -12.75,-2 -6.5,-1.5 -12.5,-4 -5.75,-2.75 -10,-6.5 z m 53.25,-71.75 q 8.25,3.75 16.75,8 8.75,4.25 15.75,10.5 7,6 11.5,14.75 4.5,8.75 4.5,21.75 0,9 -3.5,17.5 -3.25,8.5 -9.5,15.5 -6,6.75 -15,11.5 -9,4.75 -20.5,6.25 v -24 q 20.5,-5 20.5,-27.25 0,-8.75 -5.75,-14.5 -5.75,-5.75 -14.75,-10.75 z"
+         id="path46803"
+         style="fill:#ffffff;fill-opacity:1"
+         inkscape:label="S" />
+      <path
+         d="m 402.875,253.71658 h -31 l -47.75,-138 -48.25,138 h -31.25 l 64.5,-184.000002 h 29.75 z m -62.25,-58.5 7.25,20.25 h -47.75 l 7,-20.25 z"
+         id="path46805"
+         style="fill:#ffffff;fill-opacity:1"
+         inkscape:label="A" />
+    </g>
+  </g>
+</svg>

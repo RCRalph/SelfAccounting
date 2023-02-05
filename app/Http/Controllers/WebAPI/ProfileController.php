@@ -52,6 +52,15 @@ class ProfileController extends Controller
         return response()->json(compact("data"));
     }
 
+    public function toggleDarkmode()
+    {
+        auth()->user()->update([
+            "darkmode" => !auth()->user()->darkmode
+        ]);
+
+        return response()->json([ "darkmode" => auth()->user()->darkmode ]);
+    }
+
     public function updatePicture()
     {
         $picture = request()->validate([
@@ -98,7 +107,6 @@ class ProfileController extends Controller
     public function updateSettings()
     {
         $data = request()->validate([
-            "darkmode" => ["required", "boolean"],
             "show_tutorials" => ["required", "boolean"]
         ]);
 
