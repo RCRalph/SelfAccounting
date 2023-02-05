@@ -113,8 +113,10 @@ export default {
     methods: {
         submit() {
             this.loading = true;
+            const darkmode = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)").matches : false;
 
-            axios.post("/register", this.data)
+            axios
+                .post("/register", { ...this.data, darkmode })
                 .then(() => window.location.href = this.redirect)
                 .catch(err => {
                     if (err.response.status == 422 && err.response.data.errors.email.includes("The email has already been taken.")) {
