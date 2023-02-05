@@ -57,21 +57,34 @@
 
             <v-divider class="my-1"></v-divider>
 
-            <v-list>
-                <v-list-item>
+            <template v-slot:append>
+                <v-list-item style="height: 60px">
                     <v-list-item-icon>
-                        <v-icon>mdi-currency-usd</v-icon>
+                        <v-icon>mdi-settings</v-icon>
                     </v-list-item-icon>
 
                     <v-list-item-content>
-                        <v-select v-model="currencies.usedCurrency" :items="currencies.currencies" label="Currency" item-text="ISO"
-                            item-value="id" @click="menuClicked = true" @input="menuClicked = false" dense
-                            @blur="menuClicked = false"></v-select>
+                        <v-row dense class="py-0">
+                            <v-col cols="9">
+                                <v-select
+                                    v-model="currencies.usedCurrency"
+                                    :items="currencies.currencies"
+                                    label="Currency" item-text="ISO"
+                                    item-value="id" style="min-width: 70px"
+                                    dense hide-details
+                                    @click="menuClicked = true"
+                                    @input="menuClicked = false"
+                                    @blur="menuClicked = false"
+                                ></v-select>
+                            </v-col>
+
+                            <v-col cols="3">
+                                <ThemeToggleComponent v-model="user.darkmode"></ThemeToggleComponent>
+                            </v-col>
+                        </v-row>
                     </v-list-item-content>
                 </v-list-item>
-            </v-list>
 
-            <template v-slot:append>
                 <v-menu rounded="lg" offset-y top transition="scale-transition">
                     <template v-slot:activator="{ attrs, on }">
                         <v-list-item class="pa-2" v-bind="attrs" v-on="on">
@@ -148,6 +161,7 @@ import { useExtensionsStore } from "&/stores/extensions";
 
 import TutorialComponent from "@/TutorialComponent.vue";
 import PremiumExpiredComponent from "@/PremiumExpiredComponent.vue";
+import ThemeToggleComponent from "@/ThemeToggleComponent.vue";
 
 export default {
     setup() {
@@ -158,7 +172,8 @@ export default {
     },
     components: {
         TutorialComponent,
-        PremiumExpiredComponent
+        PremiumExpiredComponent,
+        ThemeToggleComponent
     },
     data() {
         return {
@@ -182,7 +197,7 @@ export default {
                 { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
                 { title: "Income", icon: "fas fa-sign-in-alt", link: "/income" },
                 { title: "Outcome", icon: "fas fa-sign-out-alt", link: "/outcome" },
-                { title: "Settings", icon: "fas fa-cog", link: "/settings" }
+                { title: "Settings", icon: "mdi-settings", link: "/settings" }
             ];
 
             if (this.charts.length) {
@@ -241,8 +256,7 @@ export default {
             document.getElementById("logout-form").submit();
         },
         updateUser(newUser) {
-            this.user = {...this.user, ...newUser}
-            this.$vuetify.theme.dark = this.user.darkmode;
+            this.user = {...this.user, ...newUser};
         }
     },
     mounted() {
