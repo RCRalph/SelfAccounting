@@ -17,7 +17,7 @@
                 <v-form v-model="canSubmit">
                     <v-row>
                         <v-col cols="12" md="4">
-                            <v-text-field type="date" label="Date" v-model="data.date" :min="usedMean.first_entry_date" :rules="[validation.date(false, usedMean.first_entry_date)]"></v-text-field>
+                            <v-text-field type="date" label="Date" v-model="data.date" :min="usedAccount.start_date" :rules="[validation.date(false, usedAccount.start_date)]"></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="8">
@@ -97,11 +97,11 @@
 
                         <v-col cols="12" md="6">
                             <v-select
-                                v-model="data.mean_id"
-                                :items="means"
+                                v-model="data.account_id"
+                                :items="accounts"
                                 item-text="name"
                                 item-value="id"
-                                label="Mean of payment"
+                                label="Account"
                             ></v-select>
                         </v-col>
                     </v-row>
@@ -161,7 +161,7 @@ export default {
             dialog: false,
             data: {},
             dataCopy: {},
-            means: [],
+            accounts: [],
             categories: [],
             titles: [],
             keys: {
@@ -187,7 +187,7 @@ export default {
                     this.titles = data.titles;
                     this.data = data.data;
                     this.dataCopy = _.cloneDeep(data.data);
-                    this.means = data.means;
+                    this.accounts = data.accounts;
                     this.categories = data.categories;
 
                     this.ready = true;
@@ -210,8 +210,8 @@ export default {
         usedCategory() {
             return this.categories.find(item => item.id == this.data.category_id);
         },
-        usedMean() {
-            return this.means.find(item => item.id == this.data.mean_id);
+        usedAccount() {
+            return this.accounts.find(item => item.id == this.data.account_id);
         },
         valueField() {
             return _.round(this.amount.value * this.price.value, 2) || 0;

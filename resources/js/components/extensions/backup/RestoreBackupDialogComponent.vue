@@ -49,15 +49,15 @@
                             <span style="white-space: nowrap">{{ item.title }}</span>
                         </template>
 
-                        <template v-slot:[`item.income_category`]="{ item }">
+                        <template v-slot:[`item.used_in_income`]="{ item }">
                             <div class="checkbox-centered">
-                                <v-checkbox v-model="item.income_category" disabled></v-checkbox>
+                                <v-checkbox v-model="item.used_in_income" disabled></v-checkbox>
                             </div>
                         </template>
 
-                        <template v-slot:[`item.outcome_category`]="{ item }">
+                        <template v-slot:[`item.used_in_outcome`]="{ item }">
                             <div class="checkbox-centered">
-                                <v-checkbox v-model="item.outcome_category" disabled></v-checkbox>
+                                <v-checkbox v-model="item.used_in_outcome" disabled></v-checkbox>
                             </div>
                         </template>
 
@@ -82,10 +82,10 @@
                         </template>
                     </v-data-table>
 
-                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Means of payment</div>
+                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Accounts</div>
                     <v-data-table
-                        :headers="headers.means"
-                        :items="data.means"
+                        :headers="headers.accounts"
+                        :items="data.accounts"
                         :mobile-breakpoint="0"
                         :items-per-page="5"
                         disable-sort
@@ -94,15 +94,15 @@
                             <span style="white-space: nowrap">{{ item.title }}</span>
                         </template>
 
-                        <template v-slot:[`item.income_mean`]="{ item }">
+                        <template v-slot:[`item.used_in_income`]="{ item }">
                             <div class="checkbox-centered">
-                                <v-checkbox v-model="item.income_mean" disabled></v-checkbox>
+                                <v-checkbox v-model="item.used_in_income" disabled></v-checkbox>
                             </div>
                         </template>
 
-                        <template v-slot:[`item.outcome_mean`]="{ item }">
+                        <template v-slot:[`item.used_in_outcome`]="{ item }">
                             <div class="checkbox-centered">
-                                <v-checkbox v-model="item.outcome_mean" disabled></v-checkbox>
+                                <v-checkbox v-model="item.used_in_outcome" disabled></v-checkbox>
                             </div>
                         </template>
 
@@ -118,8 +118,8 @@
                             </div>
                         </template>
 
-                        <template v-slot:[`item.first_entry_amount`]="{ item }">
-                            {{ item.first_entry_amount }}&nbsp;{{ item.currency }}
+                        <template v-slot:[`item.start_balance`]="{ item }">
+                            {{ item.start_balance }}&nbsp;{{ item.currency }}
                         </template>
                     </v-data-table>
 
@@ -143,8 +143,8 @@
                             {{ item.category_id ? mappedValues.categories[item.category_id].name : "N/A" }}
                         </template>
 
-                        <template v-slot:[`item.mean_id`]="{ item }">
-                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "N/A" }}
+                        <template v-slot:[`item.account_id`]="{ item }">
+                            {{ item.account_id ? mappedValues.accounts[item.account_id].name : "N/A" }}
                         </template>
                     </v-data-table>
 
@@ -168,8 +168,8 @@
                             {{ item.category_id ? mappedValues.categories[item.category_id].name : "N/A" }}
                         </template>
 
-                        <template v-slot:[`item.mean_id`]="{ item }">
-                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "N/A" }}
+                        <template v-slot:[`item.account_id`]="{ item }">
+                            {{ item.account_id ? mappedValues.accounts[item.account_id].name : "N/A" }}
                         </template>
                     </v-data-table>
 
@@ -192,17 +192,17 @@
                             </v-col>
 
                             <v-col cols="12" md="6">
-                                <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Means of payment</div>
+                                <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Accounts</div>
 
                                 <v-data-table
-                                    :headers="headers.cashan.means"
-                                    :items="data.extensions.cashan.means"
+                                    :headers="headers.cashan.accounts"
+                                    :items="data.extensions.cashan.accounts"
                                     :mobile-breakpoint="0"
                                     :items-per-page="5"
                                     disable-sort
                                 >
-                                    <template v-slot:[`item.mean_id`]="{ item }">
-                                        {{ mappedValues.means[item.mean_id].name }}
+                                    <template v-slot:[`item.account_id`]="{ item }">
+                                        {{ mappedValues.accounts[item.account_id].name }}
                                     </template>
                                 </v-data-table>
                             </v-col>
@@ -289,8 +289,8 @@
                                             {{ item.category_id ? mappedValues.categories[item.category_id].name : "All categories" }}
                                         </template>
 
-                                        <template v-slot:[`item.mean_id`]="{ item }">
-                                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "All means of payment" }}
+                                        <template v-slot:[`item.account_id`]="{ item }">
+                                            {{ item.account_id ? mappedValues.accounts[item.account_id].name : "All accounts" }}
                                         </template>
                                     </v-data-table>
 
@@ -314,8 +314,8 @@
                                             {{ item.category_id ? mappedValues.categories[item.category_id].name : "N/A" }}
                                         </template>
 
-                                        <template v-slot:[`item.mean_id`]="{ item }">
-                                            {{ item.mean_id ? mappedValues.means[item.mean_id].name : "N/A" }}
+                                        <template v-slot:[`item.account_id`]="{ item }">
+                                            {{ item.account_id ? mappedValues.accounts[item.account_id].name : "N/A" }}
                                         </template>
                                     </v-data-table>
 
@@ -336,7 +336,7 @@
                 </div>
 
                 <div class="text-center error--text" v-if="disabledExtensionNames.length">
-                    Your file includes data for extensions that aren't currently enabled, which means that their data won't be restored.<br>
+                    Your file includes data for extensions that aren't currently enabled, which accounts that their data won't be restored.<br>
                     Please enable the following extensions: <strong>{{ disabledExtensionNames }}</strong>
                 </div>
             </v-card-text>
@@ -383,22 +383,22 @@ export default {
                 categories: [
                     { text: "Currency", align: "center", value: "currency" },
                     { text: "Name", align: "center", value: "name" },
-                    { text: "Show in income", align: "center", value: "income_category" },
-                    { text: "Show in outcome", align: "center", value: "outcome_category" },
+                    { text: "Show in income", align: "center", value: "used_in_income" },
+                    { text: "Show in outcome", align: "center", value: "used_in_outcome" },
                     { text: "Show on charts", align: "center", value: "show_on_charts" },
                     { text: "Count to summary", align: "center", value: "count_to_summary" },
                     { text: "Start date", align: "center", value: "start_date" },
                     { text: "End date", align: "center", value: "end_date" }
                 ],
-                means: [
+                accounts: [
                     { text: "Currency", align: "center", value: "currency" },
                     { text: "Name", align: "center", value: "name" },
-                    { text: "Show in income", align: "center", value: "income_mean" },
-                    { text: "Show in outcome", align: "center", value: "outcome_mean" },
+                    { text: "Show in income", align: "center", value: "used_in_income" },
+                    { text: "Show in outcome", align: "center", value: "used_in_outcome" },
                     { text: "Show on charts", align: "center", value: "show_on_charts" },
                     { text: "Count to summary", align: "center", value: "count_to_summary" },
-                    { text: "First entry date", align: "center", value: "first_entry_date" },
-                    { text: "Start balance", align: "center", value: "first_entry_amount" }
+                    { text: "Start date", align: "center", value: "start_date" },
+                    { text: "Start balance", align: "center", value: "start_balance" }
                 ],
                 IO: [
                     { text: "Date", align: "center", value: "date" },
@@ -406,16 +406,16 @@ export default {
                     { text: "Amount", align: "center", value: "amount" },
                     { text: "Price", align: "center", value: "price" },
                     { text: "Category", align: "center", value: "category_id" },
-                    { text: "Mean of payment", align: "center", value: "mean_id" }
+                    { text: "Account", align: "center", value: "account_id" }
                 ],
                 cashan: {
                     cash: [
                         { text: "Value", align: "center", value: "value" },
                         { text: "Amount", align: "center", value: "amount" },
                     ],
-                    means: [
+                    accounts: [
                         { text: "Currency", align: "center", value: "currency" },
-                        { text: "Mean of payment", align: "center", value: "mean_id" }
+                        { text: "Account", align: "center", value: "account_id" }
                     ]
                 },
                 report: {
@@ -437,7 +437,7 @@ export default {
                         { text: "Max price", align: "center", value: "max_price" },
                         { text: "Currency", align: "center", value: "currency" },
                         { text: "Category", align: "center", value: "category_id" },
-                        { text: "Mean of payment", align: "center", value: "mean_id" },
+                        { text: "Account", align: "center", value: "account_id" },
                         { text: "Query type", align: "center", value: "query_data" }
                     ],
                     additionalEntries: [
@@ -446,7 +446,7 @@ export default {
                         { text: "Amount", align: "center", value: "amount" },
                         { text: "Price", align: "center", value: "price" },
                         { text: "Category", align: "center", value: "category_id" },
-                        { text: "Mean of payment", align: "center", value: "mean_id" }
+                        { text: "Account", align: "center", value: "account_id" }
                     ]
                 }
             },
@@ -455,7 +455,7 @@ export default {
             data: null,
             mappedValues: {
                 categories: {},
-                means: {}
+                accounts: {}
             },
             disabledExtensions: [],
 
@@ -484,7 +484,7 @@ export default {
                     this.file = null;
                     this.mappedValues = {
                         categories: {},
-                        means: {}
+                        accounts: {}
                     };
                     this.disabledExtensions = [];
                 })
@@ -501,8 +501,8 @@ export default {
             let validationArray = categories.map(item => [
                 this.currencies.findByISO(item.currency) !== undefined,
                 this.validation.name()(item.name) === true,
-                typeof item.income_category == "boolean",
-                typeof item.outcome_category == "boolean",
+                typeof item.used_in_income == "boolean",
+                typeof item.used_in_outcome == "boolean",
                 typeof item.count_to_summary == "boolean",
                 typeof item.show_on_charts == "boolean",
                 this.validation.date(true)(item.start_date) === true,
@@ -522,31 +522,31 @@ export default {
 
             return true;
         },
-        validateMeans(means) {
-            if (!Array.isArray(means)) {
+        validateAccounts(accounts) {
+            if (!Array.isArray(accounts)) {
                 return false;
             }
 
-            let validationArray = means.map(item => [
+            let validationArray = accounts.map(item => [
                 this.currencies.findByISO(item.currency) !== undefined,
                 this.validation.name()(item.name) === true,
-                typeof item.income_mean == "boolean",
-                typeof item.outcome_mean == "boolean",
+                typeof item.used_in_income == "boolean",
+                typeof item.used_in_outcome == "boolean",
                 typeof item.count_to_summary == "boolean",
                 typeof item.show_on_charts == "boolean",
-                this.validation.date(false)(item.first_entry_date) === true,
-                this.validation.price(false, true)(item.first_entry_amount) === true
+                this.validation.date(false)(item.start_date) === true,
+                this.validation.price(false, true)(item.start_balance) === true
             ].reduce((item1, item2) => item1 && item2));
 
             if (validationArray.length && !validationArray.reduce((item1, item2) => item1 && item2)) {
                 return false;
             }
 
-            means.forEach((item, index) => {
-                this.mappedValues.means[index + 1] = {
+            accounts.forEach((item, index) => {
+                this.mappedValues.accounts[index + 1] = {
                     currency: item.currency,
                     name: item.name,
-                    firstEntry: item.first_entry_date
+                    firstEntry: item.start_date
                 };
             });
 
@@ -559,20 +559,20 @@ export default {
 
             let validationArray = data.map(item => [
                 item.category ? (this.mappedValues.categories[item.category].currency == item.currency) : true,
-                item.mean ? (this.mappedValues.means[item.mean].currency == item.currency) : true,
+                item.account ? (this.mappedValues.accounts[item.account].currency == item.currency) : true,
                 this.currencies.findByISO(item.currency) !== undefined,
-                this.validation.date(false, item.mean ? this.mappedValues.means[item.mean].firstEntry : null)(item.date),
+                this.validation.date(false, item.account ? this.mappedValues.accounts[item.account].firstEntry : null)(item.date),
                 this.validation.title()(item.title) === true,
                 this.validation.amount()(item.amount) === true,
                 this.validation.price()(item.price) === true,
                 item.category_id ? (this.mappedValues.categories[item.category_id].currency == item.currency) : true,
-                item.mean_id ? (this.mappedValues.means[item.mean_id].currency == item.currency) : true
+                item.account_id ? (this.mappedValues.accounts[item.account_id].currency == item.currency) : true
             ].reduce((item1, item2) => item1 && item2));
 
             return !validationArray.length || validationArray.reduce((item1, item2) => item1 && item2);
         },
         validateCash(cash) {
-            if (!Array.isArray(cash.cash) || !Array.isArray(cash.means)) {
+            if (!Array.isArray(cash.cash) || !Array.isArray(cash.accounts)) {
                 return false;
             }
 
@@ -588,13 +588,13 @@ export default {
                 !this.arrayHasUniqueEntries(cash.cash, ["currency", "value"])
             ) { return false }
 
-            validationArray = cash.means.map(item => [
+            validationArray = cash.accounts.map(item => [
                 this.currencies.findByISO(item.currency) !== undefined,
-                item.mean_id && this.mappedValues.means[item.mean_id].currency == item.currency
+                item.account_id && this.mappedValues.accounts[item.account_id].currency == item.currency
             ].reduce((item1, item2) => item1 && item2));
 
             return (!validationArray.length || validationArray.reduce((item1, item2) => item1 && item2)) &&
-                this.arrayHasUniqueEntries(cash.means, ["currency"]);
+                this.arrayHasUniqueEntries(cash.accounts, ["currency"]);
         },
         validateReports(reports) {
             if (!Array.isArray(reports.reports)) {
@@ -623,7 +623,7 @@ export default {
                         Number(item1.min_price) <= Number(item1.max_price),
                     item1.currency == null || this.currencies.findByISO(item1.currency) !== undefined,
                     item1.currency ? (!item1.category_id || this.mappedValues.categories[item1.category_id].currency == item1.currency) : !item1.category_id,
-                    item1.currency ? (!item1.mean_id || this.mappedValues.means[item1.mean_id].currency == item1.currency) : !item1.mean_id
+                    item1.currency ? (!item1.account_id || this.mappedValues.accounts[item1.account_id].currency == item1.currency) : !item1.account_id
                 ].reduce((item1, item2) => item1 && item2)),
 
                 Array.isArray(item.additionalEntries) && item.additionalEntries.map(item1 => [
@@ -633,7 +633,7 @@ export default {
                     this.validation.amount()(item1.amount) === true,
                     this.validation.price()(item1.price) === true,
                     item1.category_id ? (this.mappedValues.categories[item1.category_id].currency == item1.currency) : true,
-                    item1.mean_id ? (this.mappedValues.means[item1.mean_id].currency == item1.currency) : true
+                    item1.account_id ? (this.mappedValues.accounts[item1.account_id].currency == item1.currency) : true
                 ].reduce((item2, item3) => item2 && item3)),
 
                 Array.isArray(item.users) &&
@@ -657,7 +657,7 @@ export default {
             this.data = null;
             this.mappedValues = {
                 categories: {},
-                means: {}
+                accounts: {}
             };
             this.disabledExtensions = [];
 
@@ -676,8 +676,8 @@ export default {
                         throw new Error("Invalid categories");
                     }
 
-                    if (!this.validateMeans(data.means)) {
-                        throw new Error("Invalid means");
+                    if (!this.validateAccounts(data.accounts)) {
+                        throw new Error("Invalid accounts");
                     }
 
                     if (!this.validateIO(data.income)) {

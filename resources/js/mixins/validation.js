@@ -86,13 +86,13 @@ export default {
                         return true;
                     }
                 },
-                differentMeans(otherMean) {
-                    return mean => {
-                        if (!mean) {
-                            return "Mean of payment is required";
+                differentAccounts(otherAccount) {
+                    return account => {
+                        if (!account) {
+                            return "Account is required";
                         }
-                        else if (mean == otherMean) {
-                            return "Means of payment cannot be the same";
+                        else if (account == otherAccount) {
+                            return "Accounts cannot be the same";
                         }
 
                         return true;

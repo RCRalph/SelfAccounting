@@ -15,8 +15,8 @@ class CashUser extends Migration
     {
         Schema::create('cash_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('cash_id')->constrained('cash')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('cash_id')->constrained('cash')->cascadeOnDelete();
             $table->bigInteger('amount');
             $table->timestamps();
 

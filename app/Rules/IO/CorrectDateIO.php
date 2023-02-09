@@ -26,18 +26,18 @@ class CorrectDateIO implements Rule
     public function passes($attribute, $value)
     {
         $index = explode(".", $attribute)[1];
-        $id = request("data.$index.mean_id");
+        $id = request("data.$index.account_id");
 
         if ($id == 0) {
             return true;
         }
 
-        $mean = auth()->user()->meansOfPayment()->where("id", $id)->first();
-        if (!$mean) {
+        $account = auth()->user()->accounts()->where("id", $id)->first();
+        if (!$account) {
             return false;
         }
 
-        return strtotime($mean->first_entry_date) <= strtotime($value);
+        return strtotime($account->start_date) <= strtotime($value);
     }
 
     /**

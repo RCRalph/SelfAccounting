@@ -14,8 +14,12 @@ class TutorialSeeder extends Seeder
             "filename" => "dashboard.md"
         ],
         [
-            "route" => "/settings",
-            "filename" => "settings.md"
+            "route" => "/categories",
+            "filename" => "categories.md"
+        ],
+        [
+            "route" => "/accounts",
+            "filename" => "accounts.md"
         ],
         [
             "route" => "/income",

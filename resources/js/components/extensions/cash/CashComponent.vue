@@ -5,11 +5,11 @@
                 <v-card-title class="d-flex" :class="$vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between'">
                     <div class="text-h5">Cash handling</div>
 
-                    <SetCashMeanComponent
-                        v-model="cashMean"
-                        :means="means"
-                        @updated="updatedCashMean"
-                    ></SetCashMeanComponent>
+                    <SetCashAccountComponent
+                        v-model="cashAccount"
+                        :accounts="accounts"
+                        @updated="updatedCashAccount"
+                    ></SetCashAccountComponent>
                 </v-card-title>
 
                 <v-card-text>
@@ -87,7 +87,7 @@
 
 <script>
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
-import SetCashMeanComponent from "@/extensions/cash/SetCashMeanComponent.vue";
+import SetCashAccountComponent from "@/extensions/cash/SetCashAccountComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
@@ -102,7 +102,7 @@ export default {
     },
     mixins: [validation, main],
     components: {
-        SetCashMeanComponent,
+        SetCashAccountComponent,
         SuccessSnackbarComponent,
         ErrorSnackbarComponent
     },
@@ -111,8 +111,8 @@ export default {
             cash: {},
             ownedCash: {},
             ownedCashCopy: {},
-            means: [],
-            cashMean: null,
+            accounts: [],
+            cashAccount: null,
 
             ready: false,
             canSet: true,
@@ -150,7 +150,7 @@ export default {
             }
         },
         currentBalance() {
-            return this.means.find(item => item.id == this.cashMean).balance;
+            return this.accounts.find(item => item.id == this.cashAccount).balance;
         }
     },
     methods: {
@@ -162,16 +162,16 @@ export default {
                     const data = response.data;
 
                     this.cash = data.cash;
-                    this.cashMean = data.cashMean;
+                    this.cashAccount = data.cashAccount;
                     this.ownedCash = data.ownedCash;
                     this.ownedCashCopy = _.cloneDeep(data.ownedCash);
-                    this.means = data.means;
+                    this.accounts = data.accounts;
 
                     this.ready = true;
                 })
         },
-        updatedCashMean() {
-            this.thing = "updated mean of payment";
+        updatedCashAccount() {
+            this.thing = "updated account";
             this.success = true;
         },
         reset() {

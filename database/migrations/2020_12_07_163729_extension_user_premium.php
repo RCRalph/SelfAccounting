@@ -15,8 +15,8 @@ class ExtensionUserPremium extends Migration
     {
         Schema::create('extension_user_premium', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('extension_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('extension_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
             $table->index(['id', 'extension_id', 'user_id']);

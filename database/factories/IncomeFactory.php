@@ -26,13 +26,13 @@ class IncomeFactory extends Factory
         $category = User::find(1)
             ->categories
             ->where("currency_id", 1)
-            ->where("income_category", true)
+            ->where("used_in_income", true)
             ->random();
 
-        $mean = User::find(1)
-            ->meansOfPayment
+        $account = User::find(1)
+            ->accounts
             ->where("currency_id", 1)
-            ->where("income_mean", true)
+            ->where("used_in_income", true)
             ->random();
 
         return [
@@ -43,7 +43,7 @@ class IncomeFactory extends Factory
             "price" => $this->faker->randomFloat(2, 1, 100),
             "currency_id" => 1,
             "category_id" => $category->id,
-            "mean_id" => $mean->id
+            "account_id" => $account->id
         ];
     }
 }

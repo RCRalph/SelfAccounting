@@ -115,7 +115,7 @@ export default {
             type: Object,
             required: true
         },
-        meanID: {
+        accountID: {
             type: Number,
             required: false
         },
@@ -140,7 +140,7 @@ export default {
         return {
             dialog: false,
             canSet: true,
-            cashMean: null,
+            cashAccount: null,
             cash: {},
             ready: false,
             selectedValues: [],
@@ -163,12 +163,12 @@ export default {
     },
     computed: {
         usesCash() {
-            if (this.meanID != this.cashMean || this.cashMean == null) {
+            if (this.accountID != this.cashAccount || this.cashAccount == null) {
                 this.$emit("input", {});
                 this.selectedValues = [];
             }
 
-            return this.cashMean != null && this.meanID == this.cashMean;
+            return this.cashAccount != null && this.accountID == this.cashAccount;
         },
         cashObject() {
             return Object.entries(this.cash).map(item => ({
@@ -212,7 +212,7 @@ export default {
                     const data = response.data;
 
                     this.cash = data.cash;
-                    this.cashMean = data.cashMean;
+                    this.cashAccount = data.cashAccount;
                     this.ownedCash = data.ownedCash;
 
                     this.ready = true;

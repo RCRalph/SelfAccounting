@@ -174,12 +174,12 @@
 
                                 <v-col cols="12" md="3">
                                     <v-select
-                                        v-model="value[i - 1].mean_id"
-                                        :items="meansForSelect"
+                                        v-model="value[i - 1].account_id"
+                                        :items="accountsForSelect"
                                         item-text="name"
                                         item-value="id"
-                                        label="Mean of payment"
-                                        :disabled="!value[i - 1].currency_id || !meansForSelect"
+                                        label="Account"
+                                        :disabled="!value[i - 1].currency_id || !accountsForSelect"
                                     ></v-select>
                                 </v-col>
 
@@ -260,7 +260,7 @@ export default {
             required: true,
             type: Object
         },
-        means: {
+        accounts: {
             required: true,
             type: Object
         }
@@ -280,7 +280,7 @@ export default {
                 currency_id: null,
                 currency_id: null,
                 category_id: null,
-                mean_id: null
+                account_id: null
             },
             queryTypes: [
                 { value: "income", text: "Income" },
@@ -331,11 +331,11 @@ export default {
 
             return [nullObj];
         },
-        meansForSelect() {
-            let nullObj = { id: null, name: "All means of payment" };
+        accountsForSelect() {
+            let nullObj = { id: null, name: "All accounts" };
 
-            if (this.means[this.value[this.page].currency_id]) {
-                return [ nullObj, ...this.means[this.value[this.page].currency_id]];
+            if (this.accounts[this.value[this.page].currency_id]) {
+                return [ nullObj, ...this.accounts[this.value[this.page].currency_id]];
             }
 
             return [nullObj];
@@ -366,9 +366,9 @@ export default {
         },
         resetSelects() {
             this.value[this.page].category_id = undefined;
-            this.value[this.page].mean_id = undefined;
+            this.value[this.page].account_id = undefined;
             this.value[this.page].category_id = null;
-            this.value[this.page].mean_id = null;
+            this.value[this.page].account_id = null;
         },
         compareMinMax(min, max) {
             if (!min || !max) {

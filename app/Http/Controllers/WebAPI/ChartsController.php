@@ -24,13 +24,13 @@ class ChartsController extends Controller
         // Get type data
         $typeData = $type == "category" ?
             auth()->user()->categories() :
-            auth()->user()->meansOfPayment();
+            auth()->user()->accounts();
 
         $typeData = $typeData
             ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("show_on_charts", true)
-            ->where($io . "_". $type, true)
+            ->where("used_in_" . $io, true)
             ->get();
 
         // Get type IDs to get from io
@@ -101,26 +101,26 @@ class ChartsController extends Controller
 
     private function balanceHistory(Currency $currency, $limits)
     {
-        $means = auth()->user()->meansOfPayment()
+        $accounts = auth()->user()->accounts()
             ->where("currency_id", $currency->id)
             ->where("show_on_charts", true);
 
         if ($limits["end"]) {
-            $means = $means->whereDate("first_entry_date", "<=", $limits["end"]);
+            $accounts = $accounts->whereDate("start_date", "<=", $limits["end"]);
         }
 
-        $means = $means->get();
-        $meansToShow = $means->pluck("id")->toArray();
+        $accounts = $accounts->get();
+        $accountsToShow = $accounts->pluck("id")->toArray();
 
         $income = auth()->user()->income()
-            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
+            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
-            ->whereIn("mean_id", $meansToShow);
+            ->whereIn("account_id", $accountsToShow);
 
         $outcome = auth()->user()->outcome()
-            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
+            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
-            ->whereIn("mean_id", $meansToShow);
+            ->whereIn("account_id", $accountsToShow);
 
         if ($limits["end"]) {
             $income = $income->whereDate("date", "<=", $limits["end"]);
@@ -134,20 +134,20 @@ class ChartsController extends Controller
             $balanceBefore = $this->getBalance(
                 $income->where("date", "<=", $limits["start"]),
                 $outcome->where("date", "<=", $limits["start"]),
-                $means, [], $meansToShow, []
+                $accounts, [], $accountsToShow, []
             );
         }
         else {
             $balanceBefore = $this->getBalance(
                 collect([]), collect([]),
-                $means, [], $meansToShow, []
+                $accounts, [], $accountsToShow, []
             );
         }
 
         $firstEntries = [];
         foreach ($balanceBefore as $balance) {
-            if (isset($balance["mean_id"])) {
-                $firstEntries[$balance["mean_id"]] = $balance["balance"];
+            if (isset($balance["account_id"])) {
+                $firstEntries[$balance["account_id"]] = $balance["balance"];
             }
         }
 
@@ -157,7 +157,7 @@ class ChartsController extends Controller
         }
 
         $income = $income
-            ->groupBy("mean_id")
+            ->groupBy("account_id")
             ->map(fn ($item) => $item->groupBy("date")
                 ->map(fn ($item1) => $item1->count() ?
                     $item1->pluck("value")->reduce(fn ($carry, $item) => $carry + $item) : 0
@@ -165,7 +165,7 @@ class ChartsController extends Controller
             );
 
         $outcome = $outcome
-            ->groupBy("mean_id")
+            ->groupBy("account_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
                 ->map(fn ($item1) => $item1->count() ?
@@ -173,72 +173,72 @@ class ChartsController extends Controller
                 )
             );
 
-        foreach ($means as $mean) {
-            if ($income->has($mean->id)) {
-                $incomeByMean = $income->get($mean->id);
+        foreach ($accounts as $account) {
+            if ($income->has($account->id)) {
+                $incomeByAccount = $income->get($account->id);
 
-                if ($incomeByMean->has($mean->first_entry_date)) {
-                    $incomeByMean->put(
-                        $mean->first_entry_date,
-                        $incomeByMean->get($mean->first_entry_date) + $firstEntries[$mean->id]
+                if ($incomeByAccount->has($account->start_date)) {
+                    $incomeByAccount->put(
+                        $account->start_date,
+                        $incomeByAccount->get($account->start_date) + $firstEntries[$account->id]
                     );
                 }
                 else {
-                    $startDate = $mean->first_entry_date;
+                    $startDate = $account->start_date;
                     if ($limits["start"] && strtotime($limits["start"]) > strtotime($startDate)) {
                         $startDate = $limits["start"];
                     }
 
-                    $incomeByMean->prepend($firstEntries[$mean->id] * 1, $startDate);
+                    $incomeByAccount->prepend($firstEntries[$account->id] * 1, $startDate);
                 }
 
-                if (!$incomeByMean->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
-                    $incomeByMean->put($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"), 0);
+                if (!$incomeByAccount->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
+                    $incomeByAccount->put($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"), 0);
                 }
             }
             else {
-                $startDate = $mean->first_entry_date;
+                $startDate = $account->start_date;
                 if ($limits["start"] && strtotime($limits["start"]) > strtotime($startDate)) {
                     $startDate = $limits["start"];
                 }
 
-                $retArr = [$startDate => $firstEntries[$mean->id]];
+                $retArr = [$startDate => $firstEntries[$account->id]];
                 if (Carbon::today()->gt($startDate)) {
                     $retArr[Carbon::today()->format("Y-m-d")] = 0;
                 }
 
-                $income->put($mean->id, collect($retArr));
+                $income->put($account->id, collect($retArr));
             }
         }
 
-        $differenceByMeans = $income;
-        foreach ($outcome as $meanID => $dates) {
+        $differenceByAccounts = $income;
+        foreach ($outcome as $accountID => $dates) {
             foreach ($dates as $date => $difference) {
-                $differenceMean = $differenceByMeans->get($meanID);
+                $differenceAccount = $differenceByAccounts->get($accountID);
 
-                if ($differenceMean->has($date)) {
-                    $differenceMean->put(
+                if ($differenceAccount->has($date)) {
+                    $differenceAccount->put(
                         $date,
-                        $differenceMean->get($date) - $difference
+                        $differenceAccount->get($date) - $difference
                     );
                 }
                 else {
-                    $differenceMean->put(
+                    $differenceAccount->put(
                         $date,
                         -$difference
                     );
                 }
             }
 
-            $differenceByMeans->put(
-                $meanID,
-                $differenceByMeans->get($meanID)
+            $differenceByAccounts->put(
+                $accountID,
+                $differenceByAccounts->get($accountID)
                     ->sortBy(fn ($val, $key) => strtotime($key))
             );
         }
 
-        $balanceByMeans = collect();
-        foreach ($differenceByMeans as $meanID => $differences) {
+        $balanceByAccounts = collect();
+        foreach ($differenceByAccounts as $accountID => $differences) {
             $differences = $differences->sortKeys();
             $firstKey = $differences->keys()->first();
             $retArr = collect([
@@ -250,32 +250,32 @@ class ChartsController extends Controller
                 $retArr->put($date, $retArr->last() + $difference);
             }
 
-            $balanceByMeans->put($meanID, $retArr);
+            $balanceByAccounts->put($accountID, $retArr);
         }
 
 		$data = ["datasets" => []];
 
         $lastDate = null;
-        foreach ($balanceByMeans as $meanData) {
-            foreach ($meanData->keys() as $date) {
+        foreach ($balanceByAccounts as $accountData) {
+            foreach ($accountData->keys() as $date) {
                 if ($lastDate === null || strtotime($lastDate) > strtotime($date)) {
                     $lastDate = $date;
                 }
             }
         }
 
-        $count = $balanceByMeans->count() + $means
+        $count = $balanceByAccounts->count() + $accounts
             ->map(fn ($item) => $item->currency_id)
             ->unique()->count();
 
         $colors = $count ? $this->getColors($count) : [];
 
-        foreach ($balanceByMeans as $meanID => $balance) {
-			$mean = $means->where("id", $meanID)->first();
+        foreach ($balanceByAccounts as $accountID => $balance) {
+			$account = $accounts->where("id", $accountID)->first();
 
             $count--;
             $retArr = [
-                "label" => $mean->name,
+                "label" => $account->name,
                 "steppedLine" => true,
 				"data" => [],
 				"fill" => false,
@@ -298,7 +298,7 @@ class ChartsController extends Controller
 		}
 
         $datesAndDifferences = [];
-        foreach ($differenceByMeans as $differencesByDate) {
+        foreach ($differenceByAccounts as $differencesByDate) {
             foreach ($differencesByDate as $date => $value) {
                 array_push($datesAndDifferences, [
                     "t" => $date,
@@ -401,12 +401,12 @@ class ChartsController extends Controller
 
             case "Income by categories":
             case "Outcome by categories":
-            case "Income by means of payment":
-            case "Outcome by means of payment":
+            case "Income by accounts":
+            case "Outcome by accounts":
                 $name = explode(" ", $chart->name);
                 $retArr = $this->dataByType(
                     strtolower($name[0]),
-                    $name[2] == "categories" ? "category" : "mean",
+                    $name[2] == "categories" ? "category" : "account",
                     $currency, $limits
                 );
                 break;

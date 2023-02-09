@@ -90,9 +90,9 @@
                                             :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'"
                                         >{{ item.category.value }}</td>
 
-                                        <td v-if="showColumn('mean') && item.mean.span" :rowspan="item.mean.span" @mouseover="setRowsToHighlight(index, item.mean.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
-                                        >{{ item.mean.value }}</td>
+                                        <td v-if="showColumn('account') && item.account.span" :rowspan="item.account.span" @mouseover="setRowsToHighlight(index, item.account.span)" @mouseleave="resetRowsToHighlight()"
+                                            :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'"
+                                        >{{ item.account.value }}</td>
                                     </tr>
                                 </template>
                             </v-data-table>
@@ -272,7 +272,7 @@ export default {
                 { text: "Price", align: "center", value: "price" },
                 { text: "Value", align: "center", value: "value" },
                 { text: "Category", align: "center", value: "category" },
-                { text: "Mean of payment", align: "center", value: "mean" }
+                { text: "Account", align: "center", value: "account" }
             ];
 
             return headers.filter(item => this.columnsToShow.includes(item.value));

@@ -15,11 +15,11 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('currency_id')->constrained()->onDelete('cascade');;
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
             $table->string('name', 32);
-            $table->boolean('income_category')->default(true);
-            $table->boolean('outcome_category')->default(true);
+            $table->boolean('used_in_income')->default(true);
+            $table->boolean('used_in_outcome')->default(true);
             $table->boolean('count_to_summary')->default(false);
             $table->boolean('show_on_charts')->default(true);
             $table->date('start_date')->nullable();

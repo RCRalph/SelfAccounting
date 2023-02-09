@@ -99,12 +99,12 @@
                 </v-menu>
             </template>
 
-            <template v-slot:[`header.mean`]="{ header }">
+            <template v-slot:[`header.account`]="{ header }">
                 {{ header.text }}
                 <v-menu offset-y :close-on-content-click="false">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn small icon v-bind="attrs" v-on="on">
-                            <v-icon small :color="filteredData.means.length ? 'primary' : ''">
+                            <v-icon small :color="filteredData.accounts.length ? 'primary' : ''">
                                 mdi-filter
                             </v-icon>
                         </v-btn>
@@ -113,8 +113,8 @@
                     <v-card max-width="350">
                         <v-card-text>
                             <v-select
-                                v-model="filteredData.means"
-                                :items="means"
+                                v-model="filteredData.accounts"
+                                :items="accounts"
                                 item-text="name"
                                 item-value="id"
                                 multiple
@@ -129,7 +129,7 @@
                                     <span
                                         v-if="index === 1"
                                         class="grey--text text-caption"
-                                    >(+{{ filteredData.means.length - 1 }} other{{ filteredData.means.length > 2 ? "s" : "" }})</span>
+                                    >(+{{ filteredData.accounts.length - 1 }} other{{ filteredData.accounts.length > 2 ? "s" : "" }})</span>
                                 </template>
                             </v-select>
                         </v-card-text>
@@ -163,9 +163,9 @@
                         :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'"
                     >{{ item.category.value }}</td>
 
-                    <td v-if="item.mean.span" :rowspan="item.mean.span" @mouseover="setRowsToHighlight(index, item.mean.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
-                    >{{ item.mean.value }}</td>
+                    <td v-if="item.account.span" :rowspan="item.account.span" @mouseover="setRowsToHighlight(index, item.account.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'"
+                    >{{ item.account.value }}</td>
 
                     <td @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
@@ -239,7 +239,7 @@ export default {
             type: Array,
             required: true
         },
-        means: {
+        accounts: {
             type: Array,
             required: true
         }
@@ -253,7 +253,7 @@ export default {
                 { text: "Price", align: "center", value: "price" },
                 { text: "Value", align: "center", value: "value" },
                 { text: "Category", align: "center", value: "category", sortable: false },
-                { text: "Mean of payment", align: "center", value: "mean", sortable: false },
+                { text: "Account", align: "center", value: "account", sortable: false },
                 { text: "Actions", align: "center", value: "", sortable: false }
             ],
             items: [],
@@ -269,7 +269,7 @@ export default {
             filteredData: {
                 dates: [],
                 categories: [],
-                means: []
+                accounts: []
             },
             lastChange: new Date(),
             success: false,

@@ -15,7 +15,7 @@ class CreateCashTable extends Migration
     {
         Schema::create('cash', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('currency_id')->constrained()->onDelete('cascade');
+            $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
             $table->decimal('value', 9, 2);
 
             $table->index(['id', 'currency_id']);

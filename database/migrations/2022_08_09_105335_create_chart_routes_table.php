@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('chart_routes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chart_id')->constrained()->onDelete('cascade');
+            $table->foreignId('chart_id')->constrained()->cascadeOnDelete();
             $table->string('route', 128);
 
             $table->index(['id', 'chart_id']);

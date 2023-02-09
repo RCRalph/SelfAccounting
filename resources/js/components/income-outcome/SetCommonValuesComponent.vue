@@ -22,8 +22,8 @@
                                 type="date"
                                 label="Date"
                                 v-model="value.date"
-                                :min="usedMean.first_entry_date"
-                                :rules="[validation.date(true, usedMean.first_entry_date, true)]"
+                                :min="usedAccount.start_date"
+                                :rules="[validation.date(true, usedAccount.start_date, true)]"
                             ></v-text-field>
                         </v-col>
 
@@ -99,11 +99,11 @@
 
                         <v-col cols="12" md="6">
                             <v-select
-                                v-model="value.mean_id"
-                                :items="means"
+                                v-model="value.account_id"
+                                :items="accounts"
                                 item-text="name"
                                 item-value="id"
-                                label="Mean of payment"
+                                label="Account"
                             ></v-select>
                         </v-col>
                     </v-row>
@@ -134,7 +134,7 @@ export default {
     },
     mixins: [validation, main],
     props: {
-        means: {
+        accounts: {
             required: true,
             type: Array
         },
@@ -177,8 +177,8 @@ export default {
         usedCategory() {
             return this.categories.find(item => item.id == this.value.category_id);
         },
-        usedMean() {
-            return this.means.find(item => item.id == this.value.mean_id);
+        usedAccount() {
+            return this.accounts.find(item => item.id == this.value.account_id);
         }
     },
     methods: {

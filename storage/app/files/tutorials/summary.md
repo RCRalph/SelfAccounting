@@ -1,2 +1,0 @@
-# Summary
-To access the **Summary** view, click on the SelfAccounting logo on the navigation bar. The point of this view is to show your current balance. If you entered your first entry amounts in the means of payment correctly and you precisely monitored your income and outcome, you should see the amounts corresponding to your actual balance. This view will update every time you enter income or outcome.

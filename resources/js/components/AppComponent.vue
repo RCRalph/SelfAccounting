@@ -5,7 +5,7 @@
         >
             <v-list-item class="pa-2">
                 <v-list-item-avatar tile>
-                    <img src="/storage/Logo square.svg">
+                    <img src="/storage/Logo.svg">
                 </v-list-item-avatar>
 
                 <v-list-item-title class="m-0">
@@ -197,7 +197,8 @@ export default {
                 { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
                 { title: "Income", icon: "fas fa-sign-in-alt", link: "/income" },
                 { title: "Outcome", icon: "fas fa-sign-out-alt", link: "/outcome" },
-                { title: "Settings", icon: "mdi-settings", link: "/settings" }
+                { title: "Categories", icon: "mdi-tag", link: "/categories" },
+                { title: "Accounts", icon: "mdi-wallet", link: "/accounts" },
             ];
 
             if (this.charts.length) {

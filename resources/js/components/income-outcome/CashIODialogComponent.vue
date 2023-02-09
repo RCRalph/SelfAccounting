@@ -63,12 +63,12 @@
 
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                         <div class="caption mb-2">Entered sum</div>
-                        <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                        <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (sumByAccounts[cashAccount] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                     </v-col>
 
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                         <div class="caption mb-2">Difference</div>
-                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ Math.abs(sum - sumByMeans[cashMean] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                        <h2 style='white-space: nowrap; font-weight: normal' :class="sumSign == '' ? 'success--text' : 'error--text'">{{ sumSign }}{{ Math.abs(sum - sumByAccounts[cashAccount] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -111,7 +111,7 @@ export default {
         ErrorSnackbarComponent
     },
     props: {
-        meanIDs: {
+        accountIDs: {
             type: Array
         },
         value: {
@@ -122,7 +122,7 @@ export default {
             required: true,
             type: Boolean
         },
-        sumByMeans: {
+        sumByAccounts: {
             required: true,
             type: Object
         },
@@ -135,7 +135,7 @@ export default {
         return {
             dialog: false,
             canSet: true,
-            cashMean: null,
+            cashAccount: null,
             cash: {},
             ready: false,
             selectedValues: [],
@@ -153,12 +153,12 @@ export default {
     },
     computed: {
         usesCash() {
-            if (!this.meanIDs.includes(this.cashMean) || this.cashMean == null) {
+            if (!this.accountIDs.includes(this.cashAccount) || this.cashAccount == null) {
                 this.$emit("input", {});
                 this.selectedValues = [];
             }
 
-            return this.cashMean != null && this.meanIDs.includes(this.cashMean);
+            return this.cashAccount != null && this.accountIDs.includes(this.cashAccount);
         },
         cashObject() {
             return Object.entries(this.cash).map(item => ({
@@ -182,10 +182,10 @@ export default {
             return Math.round(sum * 100) / 100;
         },
         sumSign() {
-            if (this.sum > this.sumByMeans[this.cashMean]) {
+            if (this.sum > this.sumByAccounts[this.cashAccount]) {
                 return "+";
             }
-            else if (this.sum < this.sumByMeans[this.cashMean]) {
+            else if (this.sum < this.sumByAccounts[this.cashAccount]) {
                 return "-";
             }
             else {
@@ -201,7 +201,7 @@ export default {
                 const data = response.data;
 
                 this.cash = data.cash;
-                this.cashMean = data.cashMean;
+                this.cashAccount = data.cashAccount;
                 this.ownedCash = data.ownedCash;
 
                 this.ready = true;

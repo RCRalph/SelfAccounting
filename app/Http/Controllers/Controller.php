@@ -45,27 +45,27 @@ class Controller extends BaseController
         );
     }
 
-    public function getBalance($income, $outcome, $means, $categories, $meansToShow, $categoriesToShow)
+    public function getBalance($income, $outcome, $accounts, $categories, $accountsToShow, $categoriesToShow)
     {
-        $incomeByMeans = $income
-            ->whereIn("mean_id", $meansToShow)
-            ->groupBy("mean_id")
+        $incomeByAccounts = $income
+            ->whereIn("account_id", $accountsToShow)
+            ->groupBy("account_id")
             ->map(fn ($item) => $item->sum("value"))
             ->toArray();
 
-        $outcomeByMeans = $outcome
-            ->whereIn("mean_id", $meansToShow)
-            ->groupBy("mean_id")
+        $outcomeByAccounts = $outcome
+            ->whereIn("account_id", $accountsToShow)
+            ->groupBy("account_id")
             ->map(fn ($item) => $item->sum("value"))
             ->toArray();
 
-        $balanceByMeans = $incomeByMeans;
-        foreach ($outcomeByMeans as $mean => $balance) {
-            if (array_key_exists($mean, $balanceByMeans)) {
-                $balanceByMeans[$mean] -= $balance;
+        $balanceByAccounts = $incomeByAccounts;
+        foreach ($outcomeByAccounts as $account => $balance) {
+            if (array_key_exists($account, $balanceByAccounts)) {
+                $balanceByAccounts[$account] -= $balance;
             }
             else {
-                $balanceByMeans[$mean] = -$balance;
+                $balanceByAccounts[$account] = -$balance;
             }
         }
 
@@ -98,26 +98,26 @@ class Controller extends BaseController
             ->toArray();
 
         $currentBalance = [];
-        $foundMeanIDs = [];
+        $foundAccountIDs = [];
 
-        foreach ($balanceByMeans as $meanID => $balance) {
-            $foundMean = $means->where("id", $meanID)->first();
+        foreach ($balanceByAccounts as $accountID => $balance) {
+            $foundAccount = $accounts->where("id", $accountID)->first();
 
             array_push($currentBalance, [
-                "mean_id" => $foundMean->id,
-                "name" => $foundMean->name,
-                "balance" => $balance + $foundMean->first_entry_amount
+                "account_id" => $foundAccount->id,
+                "name" => $foundAccount->name,
+                "balance" => $balance + $foundAccount->start_balance
             ]);
 
-            array_push($foundMeanIDs, $foundMean->id);
+            array_push($foundAccountIDs, $foundAccount->id);
         }
 
-        // Add means without any entries
-        foreach ($means->whereNotIn("id", $foundMeanIDs) as $mean) {
+        // Add accounts without any entries
+        foreach ($accounts->whereNotIn("id", $foundAccountIDs) as $account) {
             array_push($currentBalance, [
-                "mean_id" => $mean->id,
-                "name" => $mean->name,
-                "balance" => $mean->first_entry_amount * 1 // Convert string to number
+                "account_id" => $account->id,
+                "name" => $account->name,
+                "balance" => $account->start_balance * 1 // Convert string to number
             ]);
         }
 
@@ -160,7 +160,7 @@ class Controller extends BaseController
             ->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]]);
 
-        $means = auth()->user()->meansOfPayment()
+        $accounts = auth()->user()->accounts()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->get()
@@ -171,9 +171,9 @@ class Controller extends BaseController
             $paginatedData[$i]["price"] *= 1;
             $paginatedData[$i]["value"] *= $item["type"] ?? 1;
             $paginatedData[$i]["category"] = $categories[$item["category_id"]] ?? "N/A";
-            $paginatedData[$i]["mean"] = $means[$item["mean_id"]] ?? "N/A";
+            $paginatedData[$i]["account"] = $accounts[$item["account_id"]] ?? "N/A";
 
-            unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["mean_id"]);
+            unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["account_id"]);
         }
 
         $items->setCollection(collect($paginatedData));

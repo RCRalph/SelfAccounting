@@ -15,14 +15,14 @@ class CreateReportAdditionalEntriesTable extends Migration
     {
         Schema::create('report_additional_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report_id')->constrained()->onDelete('cascade');
+            $table->foreignId('report_id')->constrained()->cascadeOnDelete();
             $table->date('date');
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('mean_id')->nullable()->constrained('mean_of_payments')->onDelete('set null');
-            $table->foreignId('currency_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('account_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
 
             $table->index(['id', 'report_id']);
         });

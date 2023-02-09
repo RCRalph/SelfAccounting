@@ -6,16 +6,16 @@ use Illuminate\Contracts\Validation\Rule;
 
 class CorrectDateIO implements Rule
 {
-    private $means;
+    private $accounts;
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($means)
+    public function __construct($accounts)
     {
-       $this->means = $means;
+       $this->accounts = $accounts;
     }
 
     /**
@@ -28,16 +28,16 @@ class CorrectDateIO implements Rule
     public function passes($attribute, $value)
     {
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
-        $id = request("$prefix.mean_id");
+        $id = request("$prefix.account_id");
 
         if ($id == 0) {
             return true;
         }
-        else if (count($this->means) < $id) {
+        else if (count($this->accounts) < $id) {
             return false;
         }
 
-        return strtotime($this->means[$id - 1]["first_entry_date"]) <= strtotime($value);
+        return strtotime($this->accounts[$id - 1]["start_date"]) <= strtotime($value);
     }
 
     /**

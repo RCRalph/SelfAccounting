@@ -15,17 +15,17 @@ class CreateIncomesTable extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('date');
             $table->string('title', 64);
             $table->decimal('amount', 9, 3);
             $table->decimal('price', 13, 2);
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('mean_id')->nullable()->constrained('mean_of_payments')->onDelete('set null');
-            $table->foreignId('currency_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('account_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
             $table->timestamps(6);
 
-            $table->index(['id', 'user_id', 'category_id', 'mean_id', 'currency_id']);
+            $table->index(['id', 'user_id', 'category_id', 'account_id', 'currency_id']);
         });
     }
 
