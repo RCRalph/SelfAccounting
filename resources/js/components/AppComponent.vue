@@ -5,7 +5,7 @@
         >
             <v-list-item class="pa-2">
                 <v-list-item-avatar tile>
-                    <img src="/storage/Logo square.svg">
+                    <img src="/storage/Logo.svg">
                 </v-list-item-avatar>
 
                 <v-list-item-title class="m-0">
