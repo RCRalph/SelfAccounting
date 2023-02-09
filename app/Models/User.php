@@ -114,7 +114,7 @@ class User extends Authenticatable
                     return "";
                 }
 
-                if (preg_match("/Emoji([1-6]|Admin).png/", $attributes["profile_picture"])) {
+                if (preg_match("/(Emoji[1-6]|admin).png/", $attributes["profile_picture"])) {
                     return getFileLink(
                         "public",
                         config("constants.directories.public.profile_picture"),

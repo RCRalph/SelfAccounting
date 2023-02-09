@@ -3,7 +3,8 @@ import VueRouter from "vue-router";
 
 import DashboardComponent from "@/dashboard/DashboardComponent.vue";
 import IOComponent from "@/income-outcome/IOComponent.vue";
-import SettingsComponent from "@/settings/SettingsComponent.vue";
+import CategoriesComponent from "@/categories/CategoriesComponent.vue";
+import MeansComponent from "@/accounts/MeansComponent.vue";
 import ProfileComponent from "@/profile/ProfileComponent.vue";
 import ExtensionsComponent from "@/extensions/ExtensionsComponent.vue";
 import GettingStartedComponent from "@/GettingStartedComponent.vue";
@@ -20,7 +21,8 @@ const routes = [
     { path: "/", component: DashboardComponent },
     { path: "/income", component: IOComponent, props: { type: "income" } },
     { path: "/outcome", component: IOComponent, props: { type: "outcome" } },
-    { path: "/settings", component: SettingsComponent },
+    { path: "/categories", component: CategoriesComponent },
+    { path: "/accounts", component: MeansComponent },
     { path: "/profile", component: ProfileComponent },
     { path: "/getting-started", component: GettingStartedComponent },
     { path: "/charts/:id", component: ChartComponent },

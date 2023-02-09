@@ -56,31 +56,29 @@ Route::prefix("/web-api")->group(function () {
         Route::post("/", "WebAPI\ExchangeController@store")->name("web-api.exchange.store");
     });
 
-    Route::prefix("/settings")->group(function () {
+    Route::prefix("/categories")->group(function () {
         Route::prefix("/{currency}")->group(function () {
-            Route::get("/", "WebAPI\SettingsController@index")->name("web-api.settings");
-            Route::get("/categories", "WebAPI\SettingsController@getCategories")->name("web-api.settings.categories");
-            Route::get("/means", "WebAPI\SettingsController@getMeans")->name("web-api.settings.means");
+            Route::get("/", "WebAPI\CategoriesController@index")->name("web-api.categories");
+            Route::post("/", "WebAPI\CategoriesController@create")->name("web-api.categories.create");
         });
 
-        Route::prefix("/categories")->group(function () {
-            Route::post("/", "WebAPI\SettingsController@createCategory")->name("web-api.settings.categories.create");
+        Route::prefix("/category/{category}")->group(function () {
+            Route::get("/", "WebAPI\CategoriesController@show")->name("web-api.categories.show");
+            Route::patch("/", "WebAPI\CategoriesController@update")->name("web-api.categories.update");
+            Route::delete("/", "WebAPI\CategoriesController@delete")->name("web-api.categories.delete");
+        });
+    });
 
-            Route::prefix("/{category}")->group(function () {
-                Route::get("/", "WebAPI\SettingsController@showCategory")->name("web-api.settings.categories.show");
-                Route::patch("/", "WebAPI\SettingsController@updateCategory")->name("web-api.settings.categories.update");
-                Route::delete("/", "WebAPI\SettingsController@deleteCategory")->name("web-api.settings.categories.delete");
-            });
+    Route::prefix("/means")->group(function () {
+        Route::prefix("/{currency}")->group(function () {
+            Route::get("/", "WebAPI\AccountsController@index")->name("web-api.accounts");
+            Route::post("/", "WebAPI\AccountsController@create")->name("web-api.accounts.create");
         });
 
-        Route::prefix("/means")->group(function () {
-            Route::post("/", "WebAPI\SettingsController@createMean")->name("web-api.settings.means.create");
-
-            Route::prefix("/{mean}")->group(function () {
-                Route::get("/", "WebAPI\SettingsController@showMean")->name("web-api.settings.means.show");
-                Route::patch("/", "WebAPI\SettingsController@updateMean")->name("web-api.settings.means.update");
-                Route::delete("/", "WebAPI\SettingsController@deleteMean")->name("web-api.settings.means.delete");
-            });
+        Route::prefix("/mean/{mean}")->group(function () {
+            Route::get("/", "WebAPI\AccountsController@show")->name("web-api.accounts.show");
+            Route::patch("/", "WebAPI\AccountsController@update")->name("web-api.accounts.update");
+            Route::delete("/", "WebAPI\AccountsController@delete")->name("web-api.accounts.delete");
         });
     });
 

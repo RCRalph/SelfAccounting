@@ -184,9 +184,7 @@ export default {
     },
     methods: {
         getData() {
-            if (this.ready) {
-                this.tableLoading = true;
-            }
+            this.tableLoading = true;
 
             axios
                 .get(`/web-api/extensions/reports/owned-reports`, { params: this.dataQuery })
@@ -196,8 +194,8 @@ export default {
                     this.reports = data.reports.data;
                     this.total = data.reports.total;
 
-                    this.ready = true;
                     this.tableLoading = false;
+                    this.ready = true;
                 })
         },
         updateWithOffset() {

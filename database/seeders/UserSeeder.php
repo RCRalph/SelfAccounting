@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
                     "admin" => true,
                     "darkmode" => true,
                     "premium_expiration" => null,
-                    "profile_picture" => "EmojiAdmin.png",
+                    "profile_picture" => "admin.png",
                     "last_page_visit" => "1970-01-01",
                     "send_activity_reminders" => true
                 ]
