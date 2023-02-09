@@ -28,8 +28,8 @@ class ReportQuery extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function meanOfPayment()
+    public function account()
     {
-        return $this->belongsTo(MeanOfPayment::class, "mean_id");
+        return $this->belongsTo(Account::class);
     }
 }

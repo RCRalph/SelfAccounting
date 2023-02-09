@@ -28,8 +28,8 @@ class ReportAdditionalEntry extends Model
         return $this->belongsTo(Currency::class);
     }
 
-    public function meanOfPayment()
+    public function account()
     {
-        return $this->belongsTo(MeanOfPayment::class);
+        return $this->belongsTo(Account::class);
     }
 }

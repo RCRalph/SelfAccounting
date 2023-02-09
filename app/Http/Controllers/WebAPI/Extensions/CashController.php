@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 use App\Models\Currency;
 
-use App\Rules\Extensions\Cash\CorrectCashMean;
+use App\Rules\Extensions\Cash\CorrectCashAccount;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
 
 class CashController extends Controller
@@ -27,10 +27,10 @@ class CashController extends Controller
             ->orderBy("value", "DESC")->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["value"] * 1]);
 
-        // Means of payment used as cash
-        $cashMean = auth()->user()->cashMeans()
+        // Accounts used as cash
+        $cashAccount = auth()->user()->cashAccounts()
             ->where("currency_id", $currency->id)
-            ->pluck("mean_of_payments.id")
+            ->pluck("accounts.id")
             ->first();
 
         // Owned cash as id: amount array
@@ -38,7 +38,7 @@ class CashController extends Controller
             ->where("currency_id", $currency->id)->get()
             ->mapWithKeys(fn ($item) => [$item->id => $item->pivot->amount]);
 
-        return response()->json(compact("cash", "cashMean", "ownedCash"));
+        return response()->json(compact("cash", "cashAccount", "ownedCash"));
     }
 
     public function list(Currency $currency)
@@ -47,26 +47,26 @@ class CashController extends Controller
             ->orderBy("value", "DESC")->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["value"] * 1]);
 
-        $cashMean = auth()->user()->cashMeans()
+        $cashAccount = auth()->user()->cashAccounts()
             ->where("currency_id", $currency->id)
-            ->pluck("mean_of_payments.id")
+            ->pluck("accounts.id")
             ->toArray();
 
-        $cashMean = $cashMean ? $cashMean[0] : null;
+        $cashAccount = $cashAccount ? $cashAccount[0] : null;
 
         $ownedCash = auth()->user()->cash()->where("currency_id", $currency->id)->get()
             ->mapWithKeys(fn ($item) => [$item->id => $item->pivot->amount]);
 
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "name", "first_entry_amount")
+        $accounts = auth()->user()->accounts()
+            ->select("id", "name", "start_balance")
             ->where("currency_id", $currency->id)
             ->get();
 
-        foreach ($means as $mean) {
-            $balance = $mean->first_entry_amount;
+        foreach ($accounts as $account) {
+            $balance = $account->start_balance;
 
             $income = auth()->user()->income()
-                ->where("mean_id", $mean->id)
+                ->where("account_id", $account->id)
                 ->where("currency_id", $currency->id)
                 ->select(DB::raw("round(amount * price, 2) AS value"))
                 ->get();
@@ -76,7 +76,7 @@ class CashController extends Controller
             }
 
             $outcome = auth()->user()->outcome()
-                ->where("mean_id", $mean->id)
+                ->where("account_id", $account->id)
                 ->where("currency_id", $currency->id)
                 ->select(DB::raw("round(amount * price, 2) AS value"))
                 ->get();
@@ -85,10 +85,10 @@ class CashController extends Controller
                 $balance -= $item->value;
             }
 
-            $mean->balance = round($balance, 2);
+            $account->balance = round($balance, 2);
         }
 
-        $means = $means
+        $accounts = $accounts
             ->prepend(["id" => null, "name" => "N/A", "balance" => 0])
             ->map(fn ($item) => [
                 "id" => $item["id"],
@@ -96,29 +96,29 @@ class CashController extends Controller
                 "balance" => $item["balance"]
             ]);
 
-        return response()->json(compact("cash", "cashMean", "ownedCash", "means"));
+        return response()->json(compact("cash", "cashAccount", "ownedCash", "accounts"));
     }
 
     public function update(Currency $currency)
     {
-        if (request()->has("mean")) {
-            $mean = request()->validate([
-                "mean" => ["present", "nullable", "exists:mean_of_payments,id", new CorrectCashMean($currency)]
-            ])["mean"];
+        if (request()->has("account")) {
+            $account = request()->validate([
+                "account" => ["present", "nullable", "exists:accounts,id", new CorrectCashAccount($currency)]
+            ])["account"];
 
-            $currentMean = auth()->user()->cashMeans()->where("currency_id", $currency->id)->first();
+            $currentAccount = auth()->user()->cashAccounts()->where("currency_id", $currency->id)->first();
 
-            if ($currentMean) {
-                $currentMean = $currentMean->id;
+            if ($currentAccount) {
+                $currentAccount = $currentAccount->id;
             }
 
-            if ($mean != $currentMean) {
-                if ($currentMean) {
-                    auth()->user()->cashMeans()->detach($currentMean);
+            if ($account != $currentAccount) {
+                if ($currentAccount) {
+                    auth()->user()->cashAccounts()->detach($currentAccount);
                 }
 
-                if ($mean) {
-                    auth()->user()->cashMeans()->attach($mean);
+                if ($account) {
+                    auth()->user()->cashAccounts()->attach($account);
                 }
             }
         }

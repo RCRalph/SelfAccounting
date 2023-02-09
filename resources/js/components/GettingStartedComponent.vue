@@ -17,7 +17,8 @@
                 <h3>When you're done</h3>
                 <p>Explore this website in its entirety. The recommended way of your journey is:</p>
                 <ol>
-                    <li>Visit the <strong>Settings</strong> page and enter your categories and means of payment.</li>
+                    <li>Visit the <strong>Categories</strong> page and enter your categories.</li>
+                    <li>Visit the <strong>Accounts</strong> page and enter your accounts (make a separate account for cash if you have any).</li>
                     <li>Visit the <strong>Income</strong> and <strong>Outcome</strong> pages and add your income and outcome. You might not have anything to enter just yet, so you can skip this step for now and return to it later.</li>
                     <li>Visit the <strong>Dashboard</strong> page to confirm everything is working for you.</li>
                     <li>Visit the <strong>Extensions</strong> page to look for ways to make your SelfAccounting experience even better.</li>

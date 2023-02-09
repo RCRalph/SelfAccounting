@@ -25,8 +25,8 @@ class CategoryFactory extends Factory
             "user_id" => 1,
             "currency_id" => 1,
             "name" => $this->faker->realText(rand(10, 32)),
-            "income_category" => $this->faker->boolean,
-            "outcome_category" => $this->faker->boolean,
+            "used_in_income" => $this->faker->boolean,
+            "used_in_outcome" => $this->faker->boolean,
             "count_to_summary" => $this->faker->boolean,
             "show_on_charts" => $this->faker->boolean
         ];

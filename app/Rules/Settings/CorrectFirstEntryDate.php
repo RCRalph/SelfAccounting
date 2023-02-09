@@ -6,16 +6,16 @@ use Illuminate\Contracts\Validation\Rule;
 
 class CorrectFirstEntryDate implements Rule
 {
-    private $mean;
+    private $account;
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($mean)
+    public function __construct($account)
     {
-        $this->mean = $mean;
+        $this->account = $account;
     }
 
     /**
@@ -29,10 +29,10 @@ class CorrectFirstEntryDate implements Rule
     {
         $minDate = auth()->user()->income()
             ->select("date")
-            ->where("mean_id", $this->mean->id)
+            ->where("account_id", $this->account->id)
             ->union(auth()->user()->outcome()
                 ->select("date")
-                ->where("mean_id", $this->mean->id)
+                ->where("account_id", $this->account->id)
             )
             ->orderBy("date")
             ->first();

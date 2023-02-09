@@ -25,9 +25,9 @@ class Currency extends Model
         return $this->hasMany(Category::class);
     }
 
-    public function meansOfPayment()
+    public function accounts()
     {
-        return $this->hasMany(MeanOfPayment::class);
+        return $this->hasMany(Account::class);
     }
 
     public function cash()

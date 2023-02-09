@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
 use App\Rules\Exchange\CorrectDateIOExchange;
-use App\Rules\Exchange\ValidCategoryOrMeanExchange;
+use App\Rules\Exchange\ValidCategoryOrAccountExchange;
 use App\Rules\Extensions\Cash\CashValidAmount;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
 
@@ -23,7 +23,7 @@ class ExchangeController extends Controller
     public function show()
     {
         $categories = auth()->user()->categories()
-            ->select("id", "name", "income_category", "outcome_category", "currency_id")
+            ->select("id", "name", "used_in_income", "used_in_outcome", "currency_id")
             ->orderBy("name")
             ->get()
             ->groupBy("currency_id");
@@ -39,43 +39,43 @@ class ExchangeController extends Controller
                 $categories[$currency->id]->prepend([
                     "id" => null,
                     "name" => "N/A",
-                    "income_category" => true,
-                    "outcome_category" => true
+                    "used_in_income" => true,
+                    "used_in_outcome" => true
                 ]);
             }
             else {
                 $categories[$currency->id] = collect([[
                     "id" => null,
                     "name" => "N/A",
-                    "income_category" => true,
-                    "outcome_category" => true
+                    "used_in_income" => true,
+                    "used_in_outcome" => true
                 ]]);
             }
         }
 
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "name", "income_mean", "outcome_mean", "currency_id")
+        $accounts = auth()->user()->accounts()
+            ->select("id", "name", "used_in_income", "used_in_outcome", "currency_id")
             ->orderBy("name")
             ->get()
             ->groupBy("currency_id");
 
-        $availableCurrencies = $means->keys();
+        $availableCurrencies = $accounts->keys();
 
-        foreach ($means as $currency => $meansByCurrency) {
-            foreach ($meansByCurrency as $mean) {
-                $mean = $mean->makeHidden("currency_id");
+        foreach ($accounts as $currency => $accountsByCurrency) {
+            foreach ($accountsByCurrency as $account) {
+                $account = $account->makeHidden("currency_id");
             }
         }
 
         foreach ($this->getCurrencies() as $currency) {
-            if (!$means->has($currency->id)) {
-                $means[$currency->id] = collect([]);
+            if (!$accounts->has($currency->id)) {
+                $accounts[$currency->id] = collect([]);
             }
         }
 
         $titles = $this->getTitles();
 
-        return response()->json(compact("categories", "means", "availableCurrencies", "titles"));
+        return response()->json(compact("categories", "accounts", "availableCurrencies", "titles"));
     }
 
     public function store()
@@ -86,16 +86,16 @@ class ExchangeController extends Controller
             "from.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "from.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "from.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "from.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanExchange("from")],
-            "from.mean_id" => ["required", "integer", "different:to.mean_id", new ValidCategoryOrMeanExchange("from")],
+            "from.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountExchange("from")],
+            "from.account_id" => ["required", "integer", "different:to.account_id", new ValidCategoryOrAccountExchange("from")],
 
             "to.date" => ["required", "date", new CorrectDateIOExchange("to")],
             "to.title" => ["required", "string", "max:64"],
             "to.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "to.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "to.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "to.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanExchange("to")],
-            "to.mean_id" => ["required", "integer", "different:from.mean_id", new ValidCategoryOrMeanExchange("to")],
+            "to.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountExchange("to")],
+            "to.account_id" => ["required", "integer", "different:from.account_id", new ValidCategoryOrAccountExchange("to")],
         ]);
 
         if (auth()->user()->extensionCodes->contains("cashan")) {

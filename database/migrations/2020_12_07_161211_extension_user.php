@@ -15,8 +15,8 @@ class ExtensionUser extends Migration
     {
         Schema::create('extension_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('extension_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('extension_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->boolean('enabled')->default(true);
             $table->timestamps();
 

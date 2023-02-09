@@ -18,16 +18,16 @@ class DashboardController extends Controller
         $this->middleware("auth");
     }
 
-    private function getLast30DaysBalance($income, $outcome, $meansToShow, $categoriesToShow)
+    private function getLast30DaysBalance($income, $outcome, $accountsToShow, $categoriesToShow)
     {
         $incomeToSum = $income
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
-            ->whereIn("mean_id", $meansToShow)
+            ->whereIn("account_id", $accountsToShow)
             ->sum("value");
 
         $outcomeToSum = $outcome
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
-            ->whereIn("mean_id", $meansToShow)
+            ->whereIn("account_id", $accountsToShow)
             ->sum("value");
 
         $outcomeCategorySum = $outcome
@@ -45,10 +45,10 @@ class DashboardController extends Controller
     {
         $income = auth()->user()->income()
             ->where("currency_id", $currency->id)
-            ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "mean_id", DB::raw("1 AS type"));
+            ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("1 AS type"));
         $outcome = auth()->user()->outcome()
             ->where("currency_id", $currency->id)
-            ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "mean_id", DB::raw("-1 AS type"));
+            ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("-1 AS type"));
 
         $items = $income
             ->union($outcome)
@@ -57,7 +57,7 @@ class DashboardController extends Controller
             ->orderBy("amount")
             ->orderBy("price")
             ->orderBy("category_id")
-            ->orderBy("mean_id")
+            ->orderBy("account_id")
             ->paginate(20);
 
         $items = $this->addNamesToPaginatedIOItems($items, $currency);
@@ -71,7 +71,7 @@ class DashboardController extends Controller
             ->select("id")
             ->where("currency_id", $currency->id);
 
-        $means = auth()->user()->meansOfPayment()
+        $accounts = auth()->user()->accounts()
             ->select("id")
             ->where("currency_id", $currency->id);
 
@@ -79,25 +79,25 @@ class DashboardController extends Controller
             ->where("count_to_summary", true)->get()
             ->pluck("id")->toArray();
 
-        $meansToShow = $means
+        $accountsToShow = $accounts
             ->where("count_to_summary", true)->get()
             ->pluck("id")->toArray();
 
-        $means = $means->addSelect("name", "first_entry_date", "first_entry_amount")->get();
+        $accounts = $accounts->addSelect("name", "start_date", "start_balance")->get();
         $categories = $categories->addSelect("name", "count_to_summary", "start_date", "end_date")->get();
 
         $income = auth()->user()->income()
             ->where("currency_id", $currency->id)
-            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
+            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->get();
 
         $outcome = auth()->user()->outcome()
             ->where("currency_id", $currency->id)
-            ->select("date", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"))
+            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->get();
 
-        $currentBalance = $this->getBalance($income, $outcome, $means, $categories, $meansToShow, $categoriesToShow);
-        $last30Days = $this->getLast30DaysBalance($income, $outcome, $meansToShow, $categoriesToShow);
+        $currentBalance = $this->getBalance($income, $outcome, $accounts, $categories, $accountsToShow, $categoriesToShow);
+        $last30Days = $this->getLast30DaysBalance($income, $outcome, $accountsToShow, $categoriesToShow);
 
         $charts = $this->getCharts("/dashboard");
 

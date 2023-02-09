@@ -9,7 +9,7 @@
                         <IOTableComponent
                             :type="type"
                             :categories="categories"
-                            :means="means"
+                            :accounts="accounts"
                         ></IOTableComponent>
                     </v-card-text>
                 </v-card>
@@ -60,7 +60,7 @@ export default {
     data() {
         return {
             categories: [],
-            means: [],
+            accounts: [],
             charts: [],
 
             ready: false
@@ -76,7 +76,7 @@ export default {
                     const data = response.data;
 
                     this.categories = data.categories;
-                    this.means = data.means;
+                    this.accounts = data.accounts;
                     this.charts = data.charts;
 
                     this.ready = true;

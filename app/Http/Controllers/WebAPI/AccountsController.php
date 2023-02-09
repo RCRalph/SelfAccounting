@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Currency;
-use App\Models\MeanOfPayment;
+use App\Models\Account;
 
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Settings\CorrectFirstEntryDate;
@@ -18,10 +18,10 @@ class AccountsController extends Controller
         $this->middleware("auth");
     }
 
-    private function index(Currency $currency)
+    public function index(Currency $currency)
     {
-        $data = auth()->user()->meansOfPayment()
-            ->select("id", "name", "income_mean", "outcome_mean", "show_on_charts", "count_to_summary", "first_entry_date", "first_entry_amount")
+        $data = auth()->user()->accounts()
+            ->select("id", "name", "used_in_income", "used_in_outcome", "show_on_charts", "count_to_summary", "start_date", "start_balance")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
@@ -33,64 +33,64 @@ class AccountsController extends Controller
     {
         $data = request()->validate([
             "name" => ["required", "string", "max:32"],
-            "income_mean" => ["required", "boolean"],
-            "outcome_mean" => ["required", "boolean"],
+            "used_in_income" => ["required", "boolean"],
+            "used_in_outcome" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
-            "first_entry_date" => ["required", "date", "after_or_equal:1970-01-01"],
-            "first_entry_amount" => ["required", "numeric", "min:-1e11", "max:1e11", "not_in:-1e11,1e11"]
+            "start_date" => ["required", "date", "after_or_equal:1970-01-01"],
+            "start_balance" => ["required", "numeric", "min:-1e11", "max:1e11", "not_in:-1e11,1e11"]
         ]);
 
-        auth()->user()->meansOfPayment()->create([ ...$data, "currency_id" => $currency->id ]);
+        auth()->user()->accounts()->create([ ...$data, "currency_id" => $currency->id ]);
 
         return response("");
     }
 
-    public function show(MeanOfPayment $mean)
+    public function show(Account $account)
     {
-        $this->authorize("view", $mean);
+        $this->authorize("view", $account);
 
-        $mean = $mean->makeHidden(["user_id", "currency_id", "created_at", "updated_at"]);
+        $account = $account->makeHidden(["user_id", "currency_id", "created_at", "updated_at"]);
 
         $minDate = auth()->user()->income()
             ->select("date")
-            ->where("mean_id", $mean->id)
+            ->where("account_id", $account->id)
             ->union(auth()->user()->outcome()
                 ->select("date")
-                ->where("mean_id", $mean->id)
+                ->where("account_id", $account->id)
             )
             ->orderBy("date")
             ->first();
 
-        $mean->max_date = $minDate->date ?? null;
+        $account->max_date = $minDate->date ?? null;
 
-        return response()->json([ "data" => $mean ]);
+        return response()->json([ "data" => $account ]);
     }
 
-    public function update(MeanOfPayment $mean)
+    public function update(Account $account)
     {
-        $this->authorize("update", $mean);
+        $this->authorize("update", $account);
 
         $data = request()->validate([
             "name" => ["required", "string", "max:32"],
-            "income_mean" => ["required", "boolean"],
-            "outcome_mean" => ["required", "boolean"],
+            "used_in_income" => ["required", "boolean"],
+            "used_in_outcome" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
-            "first_entry_date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectFirstEntryDate($mean)],
-            "first_entry_amount" => ["required", "numeric", "min:-1e11", "max:1e11", "not_in:-1e11,1e11"]
+            "start_date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectFirstEntryDate($account)],
+            "start_balance" => ["required", "numeric", "min:-1e11", "max:1e11", "not_in:-1e11,1e11"]
         ]);
 
-        $mean->update($data);
+        $account->update($data);
 
         return response("");
     }
 
-    public function delete(MeanOfPayment $mean)
+    public function delete(Account $account)
     {
-        $this->authorize("delete", $mean);
+        $this->authorize("delete", $account);
 
-        $mean->delete();
+        $account->delete();
 
         return response("");
     }

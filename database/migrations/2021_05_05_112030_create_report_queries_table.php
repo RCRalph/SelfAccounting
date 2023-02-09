@@ -15,7 +15,7 @@ class CreateReportQueriesTable extends Migration
     {
         Schema::create('report_queries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report_id')->constrained()->onDelete('cascade');
+            $table->foreignId('report_id')->constrained()->cascadeOnDelete();
             $table->string('query_data', 8);
             $table->date('min_date')->nullable();
             $table->date('max_date')->nullable();
@@ -24,9 +24,9 @@ class CreateReportQueriesTable extends Migration
             $table->decimal('max_amount', 9, 3)->nullable();
             $table->decimal('min_price', 13, 2)->nullable();
             $table->decimal('max_price', 13, 2)->nullable();
-            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('mean_id')->nullable()->constrained('mean_of_payments')->onDelete('set null');
+            $table->foreignId('currency_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('account_id')->nullable()->constrained()->nullOnDelete();
 
             $table->index(['id', 'report_id']);
         });

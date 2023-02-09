@@ -14,8 +14,8 @@ class ReportUser extends Migration
     public function up()
     {
         Schema::create('report_user', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('report_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('report_id')->constrained()->cascadeOnDelete();
 
             $table->index(['user_id', 'report_id']);
         });

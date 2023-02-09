@@ -14,8 +14,8 @@ use App\Models\Chart;
 
 use App\Rules\IO\CorrectDateIO;
 use App\Rules\IO\CorrectDateIOUpdate;
-use App\Rules\IO\ValidCategoryOrMean;
-use App\Rules\IO\ValidCategoryOrMeanUpdate;
+use App\Rules\IO\ValidCategoryOrAccount;
+use App\Rules\IO\ValidCategoryOrAccountUpdate;
 use App\Rules\Common\SameLengthAs;
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
@@ -28,45 +28,45 @@ class IOController extends Controller
         $this->middleware("auth");
     }
 
-    private function getCategoriesAndMeans($currency)
+    private function getCategoriesAndAccounts($currency)
     {
         $categories = auth()->user()->categories()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
-            ->where(request()->type . "_category", true)
+            ->where("used_in_" . request()->type, true)
             ->orderBy("name")
             ->get()
             ->prepend(["id" => null, "name" => "N/A"]);
 
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "name", "first_entry_date")
+        $accounts = auth()->user()->accounts()
+            ->select("id", "name", "start_date")
             ->where("currency_id", $currency->id)
-            ->where(request()->type . "_mean", true)
+            ->where("used_in_" . request()->type, true)
             ->orderBy("name")
             ->get()
-            ->prepend(["id" => null, "name" => "N/A", "first_entry_date" => "1970-01-01"]);
+            ->prepend(["id" => null, "name" => "N/A", "start_date" => "1970-01-01"]);
 
-        return compact("categories", "means");
+        return compact("categories", "accounts");
     }
 
     public function show($id)
     {
         $data = $this->getTypeRelation()
-            ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", "currency_id")
+            ->select("id", "date", "title", "amount", "price", "category_id", "account_id", "currency_id")
             ->where("id", $id)
             ->get()->firstOrFail();
 
         $data->price *= 1;
         $data->amount *= 1;
 
-        $meansAndCategories = $this->getCategoriesAndMeans($data->currency);
+        $accountsAndCategories = $this->getCategoriesAndAccounts($data->currency);
 
         $titles = $this->getTitles();
 
         $data = collect($data);
         $data->forget("currency");
 
-        return response()->json([ ...compact("data", "titles"), ...$meansAndCategories ]);
+        return response()->json([ ...compact("data", "titles"), ...$accountsAndCategories ]);
     }
 
     public function update($id)
@@ -81,8 +81,8 @@ class IOController extends Controller
             "amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "currency_id" => ["required", "integer", "exists:currencies,id"],
-            "category_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanUpdate],
-            "mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMeanUpdate]
+            "category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountUpdate],
+            "account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountUpdate]
         ]);
 
         $toUpdate->update($data);
@@ -104,24 +104,24 @@ class IOController extends Controller
     {
         $categories = auth()->user()->categories()
             ->where("currency_id", $currency->id)
-            ->where(request()->type . "_category", true)
+            ->where("used_in_" . request()->type, true)
             ->get();
 
-        $means = auth()->user()->meansOfPayment()
+        $accounts = auth()->user()->accounts()
             ->where("currency_id", $currency->id)
-            ->where(request()->type . "_mean", true)
+            ->where("used_in_" . request()->type, true)
             ->get();
 
         $charts = $this->getCharts("/" . request()->type);
 
-        return response()->json(compact("categories", "means", "charts"));
+        return response()->json(compact("categories", "accounts", "charts"));
     }
 
     public function list(Currency $currency)
     {
         $items = $this->getTypeRelation()
             ->where("currency_id", $currency->id)
-            ->select("id", "date", "title", "amount", "price", "category_id", "mean_id", DB::raw("round(amount * price, 2) AS value"));
+            ->select("id", "date", "title", "amount", "price", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"));
 
         $fields = ["date", "title", "amount", "price", "value"];
 
@@ -131,8 +131,8 @@ class IOController extends Controller
             "dates.*" => ["required", "date", "distinct"],
             "categories" => ["nullable", "array"],
             "categories.*" => ["required", "integer", "exists:categories,id"],
-            "means" => ["nullable", "array"],
-            "means.*" => ["required", "integer", "exists:mean_of_payments,id"],
+            "accounts" => ["nullable", "array"],
+            "accounts.*" => ["required", "integer", "exists:accounts,id"],
             "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
             "orderFields.*" => ["required", "string", "in:" . implode(",", $fields), "distinct"],
             "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
@@ -151,8 +151,8 @@ class IOController extends Controller
             $items->whereIn("category_id", $data["categories"]);
         }
 
-        if (isset($data["means"])) {
-            $items->whereIn("mean_id", $data["means"]);
+        if (isset($data["accounts"])) {
+            $items->whereIn("account_id", $data["accounts"]);
         }
 
         $fields = ["date", "title", "amount", "price", "value"];
@@ -175,10 +175,10 @@ class IOController extends Controller
 
     public function data(Currency $currency)
     {
-        $meansAndCategories = $this->getCategoriesAndMeans($currency);
+        $accountsAndCategories = $this->getCategoriesAndAccounts($currency);
         $titles = $this->getTitles();
 
-        return response()->json([ ...compact("titles"), ...$meansAndCategories ]);
+        return response()->json([ ...compact("titles"), ...$accountsAndCategories ]);
     }
 
     public function store(Currency $currency)
@@ -188,8 +188,8 @@ class IOController extends Controller
             "data.*.title" => ["required", "string", "max:64"],
             "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($currency)],
-            "data.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($currency)],
+            "data.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount($currency)],
+            "data.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount($currency)],
         ]);
 
         if (auth()->user()->extensionCodes->contains("cashan") && request("cash")) {

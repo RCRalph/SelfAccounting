@@ -28,7 +28,7 @@
 
                     <v-row>
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.income_category">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_income">
                                 <template v-slot:label>
                                     Show in income
                                 </template>
@@ -36,7 +36,7 @@
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.outcome_category">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_outcome">
                                 <template v-slot:label>
                                     Show in outcome
                                 </template>

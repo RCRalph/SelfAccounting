@@ -69,13 +69,13 @@ Route::prefix("/web-api")->group(function () {
         });
     });
 
-    Route::prefix("/means")->group(function () {
+    Route::prefix("/accounts")->group(function () {
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\AccountsController@index")->name("web-api.accounts");
             Route::post("/", "WebAPI\AccountsController@create")->name("web-api.accounts.create");
         });
 
-        Route::prefix("/mean/{mean}")->group(function () {
+        Route::prefix("/account/{account}")->group(function () {
             Route::get("/", "WebAPI\AccountsController@show")->name("web-api.accounts.show");
             Route::patch("/", "WebAPI\AccountsController@update")->name("web-api.accounts.update");
             Route::delete("/", "WebAPI\AccountsController@delete")->name("web-api.accounts.delete");

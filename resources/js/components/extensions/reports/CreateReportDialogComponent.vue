@@ -73,14 +73,14 @@
                             v-model="data.queries"
                             :titles="titles"
                             :categories="categories"
-                            :means="means"
+                            :accounts="accounts"
                         ></ReportQueriesDialogComponent>
 
                         <ReportAdditionalEntriesDialogComponent
                             v-model="data.additionalEntries"
                             :titles="titles"
                             :categories="categories"
-                            :means="means"
+                            :accounts="accounts"
                         ></ReportAdditionalEntriesDialogComponent>
                     </div>
 
@@ -96,7 +96,7 @@
                                     <th class="text-center">Price</th>
                                     <th class="text-center">Value</th>
                                     <th class="text-center">Category</th>
-                                    <th class="text-center">Mean of payment</th>
+                                    <th class="text-center">Account</th>
                                 </tr>
                             </thead>
 
@@ -140,7 +140,7 @@
 
                                     <td>
                                         <div class="checkbox-centered">
-                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.mean_id"></v-checkbox>
+                                            <v-checkbox :color="$vuetify.theme.dark ? 'white' : 'grey'"  v-model="data.columns.account_id"></v-checkbox>
                                         </div>
                                     </td>
                                 </tr>
@@ -206,7 +206,7 @@ export default {
                     price: true,
                     value: true,
                     category_id: true,
-                    mean_id: true
+                    account_id: true
                 },
                 queries: [],
                 additionalEntries: [],
@@ -215,7 +215,7 @@ export default {
             data: {},
             titles: [],
             categories: {},
-            means: {},
+            accounts: {},
 
             error: false,
             loading: false,
@@ -263,7 +263,7 @@ export default {
                     const data = response.data;
 
                     this.titles = data.titles;
-                    this.means = data.means;
+                    this.accounts = data.accounts;
                     this.categories = data.categories;
                     this.data = _.cloneDeep(this.startData);
 

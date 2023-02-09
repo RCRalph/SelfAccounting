@@ -15,7 +15,7 @@ class CreateBackupsTable extends Migration
     {
         Schema::create('backups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->dateTime('last_backup')->nullable()->useCurrent();
             $table->dateTime('last_restoration')->nullable()->useCurrent();
 

@@ -11,7 +11,7 @@
                 <SetCommonValuesComponent
                     :value="clonedCommonValues"
                     :categories="categories"
-                    :means="means"
+                    :accounts="accounts"
                     :disableUpdate="loading"
                     :titles="titles"
 
@@ -29,8 +29,8 @@
                                         type="date"
                                         label="Date"
                                         v-model="data[i - 1].date"
-                                        :min="usedMean.first_entry_date"
-                                        :rules="[validation.date(false, usedMean.first_entry_date)]"
+                                        :min="usedAccount.start_date"
+                                        :rules="[validation.date(false, usedAccount.start_date)]"
                                     ></v-text-field>
                                 </v-col>
 
@@ -111,11 +111,11 @@
 
                                 <v-col cols="12" md="6">
                                     <v-select
-                                        v-model="data[i - 1].mean_id"
-                                        :items="means"
+                                        v-model="data[i - 1].account_id"
+                                        :items="accounts"
                                         item-text="name"
                                         item-value="id"
-                                        label="Mean of payment"
+                                        label="Account"
                                     ></v-select>
                                 </v-col>
                             </v-row>
@@ -143,9 +143,9 @@
                     <CashIODialogComponent
                         v-if="extensions.hasExtension('cashan')"
                         v-model="cash"
-                        :meanIDs="meanIDs"
+                        :accountIDs="accountIDs"
                         :disabled="loading"
-                        :sumByMeans="sumByMeans"
+                        :sumByAccounts="sumByAccounts"
                         :type="type"
                     ></CashIODialogComponent>
 
@@ -221,7 +221,7 @@ export default {
         return {
             dialog: false,
             data: [],
-            means: [],
+            accounts: [],
             categories: [],
             page: 0,
             commonValues: {
@@ -230,7 +230,7 @@ export default {
                 amount: 1,
                 price: "",
                 category_id: null,
-                mean_id: null
+                account_id: null
             },
             titles: [],
             cash: {},
@@ -256,7 +256,7 @@ export default {
                     const data = response.data;
 
                     this.titles = data.titles;
-                    this.means = data.means;
+                    this.accounts = data.accounts;
                     this.categories = data.categories;
                     if (!this.data.length) {
                         this.appendData();
@@ -286,8 +286,8 @@ export default {
         usedCategory() {
             return this.categories.find(item => item.id == this.data[this.page].category_id);
         },
-        usedMean() {
-            return this.means.find(item => item.id == this.data[this.page].mean_id);
+        usedAccount() {
+            return this.accounts.find(item => item.id == this.data[this.page].account_id);
         },
         valueField() {
             return _.round(this.amount.value * this.price.value, 2) || 0;
@@ -309,22 +309,22 @@ export default {
         clonedCommonValues() {
             return _.cloneDeep(this.commonValues);
         },
-        meanIDs() {
-            return this.data.map(item => item.mean_id);
+        accountIDs() {
+            return this.data.map(item => item.account_id);
         },
-        sumByMeans() {
+        sumByAccounts() {
             let sumObj = {};
 
             this.data.forEach(item => {
-                if (item.mean_id != null) {
+                if (item.account_id != null) {
                     let value = new Calculator(item.amount, Calculator.FIELDS.amount).resultValue
                         * new Calculator(item.price, Calculator.FIELDS.price).resultValue;
 
                     value = _.round(value, 2);
-                    if (sumObj[item.mean_id] === undefined) {
-                        sumObj[item.mean_id] = value;
+                    if (sumObj[item.account_id] === undefined) {
+                        sumObj[item.account_id] = value;
                     } else {
-                        sumObj[item.mean_id] += value;
+                        sumObj[item.account_id] += value;
                     }
                 }
             });

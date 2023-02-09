@@ -15,7 +15,7 @@ class CreateExtensionImagesTable extends Migration
     {
         Schema::create('extension_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('extension_id')->constrained()->onDelete('cascade');
+            $table->foreignId('extension_id')->constrained()->cascadeOnDelete();
             $table->string('image', 64)->unique();
             $table->timestamps();
 

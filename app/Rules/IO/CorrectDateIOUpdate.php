@@ -4,7 +4,7 @@ namespace App\Rules\IO;
 
 use Illuminate\Contracts\Validation\Rule;
 
-use App\Models\MeanOfPayment;
+use App\Models\Account;
 
 class CorrectDateIOUpdate implements Rule
 {
@@ -27,18 +27,18 @@ class CorrectDateIOUpdate implements Rule
      */
     public function passes($attribute, $value)
     {
-        $id = request("mean_id");
+        $id = request("account_id");
 
         if ($id == 0) {
             return true;
         }
 
-        $mean = auth()->user()->meansOfPayment()->where("id", $id)->first();
-        if (!$mean) {
+        $account = auth()->user()->accounts()->where("id", $id)->first();
+        if (!$account) {
             return false;
         }
 
-        return strtotime($mean->first_entry_date) <= strtotime($value);
+        return strtotime($account->start_date) <= strtotime($value);
     }
 
     /**

@@ -70,7 +70,7 @@ class BackupController extends Controller
 
         // Gather categories
         $categories = auth()->user()->categories()
-            ->select("id", "currency_id AS currency", "name", "income_category", "outcome_category", "count_to_summary", "show_on_charts", "start_date", "end_date")
+            ->select("id", "currency_id AS currency", "name", "used_in_income", "used_in_outcome", "count_to_summary", "show_on_charts", "start_date", "end_date")
             ->orderBy("created_at")
             ->get();
 
@@ -83,43 +83,43 @@ class BackupController extends Controller
             unset($category["id"]);
         }
 
-        // Gather means
-        $means = auth()->user()->meansOfPayment()
-            ->select("id", "currency_id AS currency", "name", "income_mean", "outcome_mean", "count_to_summary", "show_on_charts", "first_entry_date", "first_entry_amount")
+        // Gather accounts
+        $accounts = auth()->user()->accounts()
+            ->select("id", "currency_id AS currency", "name", "used_in_income", "used_in_outcome", "count_to_summary", "show_on_charts", "start_date", "start_balance")
             ->orderBy("created_at")
             ->get();
 
-        // $meanIDs is an array which maps the id of a mean of payment to their index in the $means array.
-        $meanIDs = [];
-        foreach ($means as $i => $mean) {
-            $means[$i]["currency"] = $currencies[$mean["currency"]];
+        // $accountIDs is an array which maps the id of a account to their index in the $accounts array.
+        $accountIDs = [];
+        foreach ($accounts as $i => $account) {
+            $accounts[$i]["currency"] = $currencies[$account["currency"]];
 
-            $meanIDs[$mean["id"]] = $i + 1; // + 1 because the 0th mean is considered as null
-            unset($mean["id"]);
+            $accountIDs[$account["id"]] = $i + 1; // + 1 because the 0th account is considered as null
+            unset($account["id"]);
         }
 
         // Gather income
         $income = auth()->user()->income()
-            ->select("date", "title", "amount", "price", "category_id", "mean_id", "currency_id AS currency")
+            ->select("date", "title", "amount", "price", "category_id", "account_id", "currency_id AS currency")
             ->orderBy("date")
             ->get();
 
         foreach ($income as $i => $item) {
             $income[$i]["currency"] = $currencies[$item["currency"]];
             $income[$i]["category_id"] = !$item["category_id"] ? 0 : $categoryIDs[$item["category_id"]];
-            $income[$i]["mean_id"] = !$item["mean_id"] ? 0 : $meanIDs[$item["mean_id"]];
+            $income[$i]["account_id"] = !$item["account_id"] ? 0 : $accountIDs[$item["account_id"]];
         }
 
         // Gather outcome
         $outcome = auth()->user()->outcome()
-            ->select("date", "title", "amount", "price", "category_id", "mean_id", "currency_id AS currency")
+            ->select("date", "title", "amount", "price", "category_id", "account_id", "currency_id AS currency")
             ->orderBy("date")
             ->get();
 
         foreach ($outcome as $i => $item) {
             $outcome[$i]["currency"] = $currencies[$item["currency"]];
             $outcome[$i]["category_id"] = !$item["category_id"] ? 0 : $categoryIDs[$item["category_id"]];
-            $outcome[$i]["mean_id"] = !$item["mean_id"] ? 0 : $meanIDs[$item["mean_id"]];
+            $outcome[$i]["account_id"] = !$item["account_id"] ? 0 : $accountIDs[$item["account_id"]];
         }
 
         $extensions = [];
@@ -133,12 +133,12 @@ class BackupController extends Controller
                     ->makeHidden("pivot")
                     ->map(fn ($item) => [ ...$item->toArray(), "currency" => $currencies[$item["currency"]] ]),
 
-                "means" => auth()->user()->cashMeans()
-                    ->select("currency_id", "mean_id")
+                "accounts" => auth()->user()->cashMeans()
+                    ->select("currency_id", "account_id")
                     ->get()
                     ->map(fn ($item) => [
                         "currency" => $currencies[$item->currency_id],
-                        "mean_id" => $meanIDs[$item->mean_id]
+                        "account_id" => $accountIDs[$item->account_id]
                     ])
             ];
         }
@@ -155,7 +155,7 @@ class BackupController extends Controller
 
                     "queries" => $report->queries
                         ->makeHidden(["id", "report_id", "created_at", "updated_at"])
-                        ->map(function ($item) use ($currencies, $categoryIDs, $meanIDs) {
+                        ->map(function ($item) use ($currencies, $categoryIDs, $accountIDs) {
                             $item["currency"] = $currencies[$item["currency_id"]] ?? null;
                             unset($item["currency_id"]);
 
@@ -163,8 +163,8 @@ class BackupController extends Controller
                                 $item["category_id"] = $categoryIDs[$item["category_id"]];
                             }
 
-                            if ($item["mean_id"]) {
-                                $item["mean_id"] = $meanIDs[$item["mean_id"]];
+                            if ($item["account_id"]) {
+                                $item["account_id"] = $accountIDs[$item["account_id"]];
                             }
 
                             return $item;
@@ -172,7 +172,7 @@ class BackupController extends Controller
 
                     "additionalEntries" => $report->additionalEntries
                         ->makeHidden(["id", "report_id", "created_at", "updated_at"])
-                        ->map(function ($item) use ($currencies, $categoryIDs, $meanIDs) {
+                        ->map(function ($item) use ($currencies, $categoryIDs, $accountIDs) {
                             $item["currency"] = $currencies[$item["currency_id"]];
                             unset($item["currency_id"]);
 
@@ -180,8 +180,8 @@ class BackupController extends Controller
                                 $item["category_id"] = $categoryIDs[$item["category_id"]];
                             }
 
-                            if ($item["mean_id"]) {
-                                $item["mean_id"] = $meanIDs[$item["mean_id"]];
+                            if ($item["account_id"]) {
+                                $item["account_id"] = $accountIDs[$item["account_id"]];
                             }
 
                             return $item;
@@ -197,7 +197,7 @@ class BackupController extends Controller
             auth()->user()->backup()->update(["last_backup" => now()]);
         }
 
-        return response()->json(compact("categories", "means", "income", "outcome", "extensions"));
+        return response()->json(compact("categories", "accounts", "income", "outcome", "extensions"));
     }
 
     public function restore()
@@ -211,51 +211,51 @@ class BackupController extends Controller
             "categories" => ["required", "array"],
             "categories.*.currency" => ["required", "exists:currencies,ISO"],
             "categories.*.name" => ["required", "string", "max:32"],
-            "categories.*.income_category" => ["required", "boolean"],
-            "categories.*.outcome_category" => ["required", "boolean"],
+            "categories.*.used_in_income" => ["required", "boolean"],
+            "categories.*.used_in_outcome" => ["required", "boolean"],
             "categories.*.count_to_summary" => ["required", "boolean"],
             "categories.*.show_on_charts" => ["required", "boolean"],
             "categories.*.start_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("end_date")],
             "categories.*.end_date" => ["present", "nullable", "date"]
         ])["categories"];
 
-        $means = request()->validate([
-            "means" => ["required", "array"],
-            "means.*.currency" => ["required", "exists:currencies,ISO"],
-            "means.*.name" => ["required", "string", "max:32"],
-            "means.*.income_mean" => ["required", "boolean"],
-            "means.*.outcome_mean" => ["required", "boolean"],
-            "means.*.count_to_summary" => ["required", "boolean"],
-            "means.*.show_on_charts" => ["required", "boolean"],
-            "means.*.first_entry_date" => ["required", "date", "after_or_equal:1970-01-01"],
-            "means.*.first_entry_amount" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:-1e11,1e11"]
-        ])["means"];
+        $accounts = request()->validate([
+            "accounts" => ["required", "array"],
+            "accounts.*.currency" => ["required", "exists:currencies,ISO"],
+            "accounts.*.name" => ["required", "string", "max:32"],
+            "accounts.*.used_in_income" => ["required", "boolean"],
+            "accounts.*.used_in_outcome" => ["required", "boolean"],
+            "accounts.*.count_to_summary" => ["required", "boolean"],
+            "accounts.*.show_on_charts" => ["required", "boolean"],
+            "accounts.*.start_date" => ["required", "date", "after_or_equal:1970-01-01"],
+            "accounts.*.start_balance" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:-1e11,1e11"]
+        ])["accounts"];
 
         $income = request()->validate([
             "income" => ["required", "array"],
-            "income.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIO($means)],
+            "income.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIO($accounts)],
             "income.*.title" => ["required", "string", "max:64"],
             "income.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "income.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "income.*.currency" => ["required", "exists:currencies,ISO"],
             "income.*.category_id" => ["required", "integer", new ValidCategoryOrMean($categories, true)],
-            "income.*.mean_id" => ["required", "integer", new ValidCategoryOrMean($means, true)]
+            "income.*.account_id" => ["required", "integer", new ValidCategoryOrMean($accounts, true)]
         ])["income"];
 
         $outcome = request()->validate([
             "outcome" => ["required", "array"],
-            "outcome.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIO($means)],
+            "outcome.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIO($accounts)],
             "outcome.*.title" => ["required", "string", "max:64"],
             "outcome.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "outcome.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "outcome.*.currency" => ["required", "exists:currencies,ISO"],
             "outcome.*.category_id" => ["required", "integer", new ValidCategoryOrMean($categories, true)],
-            "outcome.*.mean_id" => ["required", "integer", new ValidCategoryOrMean($means, true)]
+            "outcome.*.account_id" => ["required", "integer", new ValidCategoryOrMean($accounts, true)]
         ])["outcome"];
 
         // Delete all data from the account
         auth()->user()->categories()->delete();
-        auth()->user()->meansOfPayment()->delete();
+        auth()->user()->accounts()->delete();
         auth()->user()->income()->delete();
         auth()->user()->outcome()->delete();
 
@@ -276,15 +276,15 @@ class BackupController extends Controller
             );
         }
 
-        // $meanIDs is an array which maps the index in the $means array to the id of a mean of payment.
-        $meanIDs = [ 0 => null ];
+        // $accountIDs is an array which maps the index in the $accounts array to the id of a account.
+        $accountIDs = [ 0 => null ];
 
-        // Restore means of payment
-        foreach ($means as $mean) {
-            array_push($meanIDs,
-                auth()->user()->meansOfPayment()->create([
-                    ...$mean,
-                    "currency_id" => $currencies[$mean["currency"]]
+        // Restore accounts
+        foreach ($accounts as $account) {
+            array_push($accountIDs,
+                auth()->user()->accounts()->create([
+                    ...$account,
+                    "currency_id" => $currencies[$account["currency"]]
                 ])->id
             );
         }
@@ -295,7 +295,7 @@ class BackupController extends Controller
                 ...$item,
                 "currency_id" => $currencies[$item["currency"]],
                 "category_id" => $categoryIDs[$item["category_id"]],
-                "mean_id" => $meanIDs[$item["mean_id"]]
+                "account_id" => $accountIDs[$item["account_id"]]
             ]);
         }
 
@@ -305,7 +305,7 @@ class BackupController extends Controller
                 ...$item,
                 "currency_id" => $currencies[$item["currency"]],
                 "category_id" => $categoryIDs[$item["category_id"]],
-                "mean_id" => $meanIDs[$item["mean_id"]]
+                "account_id" => $accountIDs[$item["account_id"]]
             ]);
         }
 
@@ -323,9 +323,9 @@ class BackupController extends Controller
                     "extensions.cashan.cash.*.value" => ["required", "numeric", "min:0", "max:1e8", "not_in:0,1e8"],
                     "extensions.cashan.cash.*.amount" => ["required", "integer", "min:1", "max:1e7"],
 
-                    "extensions.cashan.means" => ["required", "array"],
-                    "extensions.cashan.means.*.currency" => ["required", "exists:currencies,ISO", "distinct"],
-                    "extensions.cashan.means.*.mean_id" => ["required", "integer", new ValidCategoryOrMean($means)]
+                    "extensions.cashan.accounts" => ["required", "array"],
+                    "extensions.cashan.accounts.*.currency" => ["required", "exists:currencies,ISO", "distinct"],
+                    "extensions.cashan.accounts.*.account_id" => ["required", "integer", new ValidCategoryOrMean($accounts)]
                 ])["extensions"]["cashan"];
 
                 // Delete account's cash data
@@ -344,9 +344,9 @@ class BackupController extends Controller
                     }
                 }
 
-                // Restore cash means
-                foreach ($extensionData["means"] as $item) {
-                    auth()->user()->cashMeans()->attach($meanIDs[$item["mean_id"]]);
+                // Restore cash accounts
+                foreach ($extensionData["accounts"] as $item) {
+                    auth()->user()->cashMeans()->attach($accountIDs[$item["account_id"]]);
                 }
             }
 
@@ -370,7 +370,7 @@ class BackupController extends Controller
                     "extensions.report.reports.*.queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
                     "extensions.report.reports.*.queries.*.currency" => ["present", "nullable", "exists:currencies,ISO"],
                     "extensions.report.reports.*.queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($categories, "query_data")],
-                    "extensions.report.reports.*.queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($means)],
+                    "extensions.report.reports.*.queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($accounts)],
 
                     "extensions.report.reports.*.additionalEntries" => ["present", "array"],
                     "extensions.report.reports.*.additionalEntries.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
@@ -379,7 +379,7 @@ class BackupController extends Controller
                     "extensions.report.reports.*.additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
                     "extensions.report.reports.*.additionalEntries.*.currency" => ["required", "exists:currencies,ISO"],
                     "extensions.report.reports.*.additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($categories)],
-                    "extensions.report.reports.*.additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($means)],
+                    "extensions.report.reports.*.additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrMean($accounts)],
 
                     "extensions.report.reports.*.users" => ["present", "array"],
                     "extensions.report.reports.*.users.*" => ["required", "email", "max:64", "not_in:" . auth()->user()->email]
@@ -408,7 +408,7 @@ class BackupController extends Controller
                             ...$query,
                             "currency_id" => $currency,
                             "category_id" => $query["category_id"] ? $categoryIDs[$query["category_id"]] : null,
-                            "mean_id" => $query["mean_id"] ? $meanIDs[$query["mean_id"]] : null
+                            "account_id" => $query["account_id"] ? $accountIDs[$query["account_id"]] : null
                         ]);
                     }
 
@@ -421,7 +421,7 @@ class BackupController extends Controller
                             ...$entry,
                             "currency_id" => $currency,
                             "category_id" => $entry["category_id"] ? $categoryIDs[$entry["category_id"]] : null,
-                            "mean_id" => $entry["mean_id"] ? $meanIDs[$entry["mean_id"]] : null
+                            "account_id" => $entry["account_id"] ? $accountIDs[$entry["account_id"]] : null
                         ]);
                     }
 

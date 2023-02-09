@@ -12,12 +12,12 @@ use App\Models\User;
 use App\Rules\Common\SameLengthAs;
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Common\ValueLessOrEqualField;
-use App\Rules\Extensions\Reports\ValidCategoryOrMean;
+use App\Rules\Extensions\Reports\ValidCategoryOrAccount;
 use App\Rules\Extensions\Reports\BelongsToReport;
 
 class ReportsController extends Controller
 {
-    private $columns = ["date", "title", "amount", "price", "value", "category_id", "mean_id"];
+    private $columns = ["date", "title", "amount", "price", "value", "category_id", "account_id"];
 
     private $queryFields = [
         [ "column" => "date", "operator" => ">=", "name" => "min_date" ],
@@ -29,7 +29,7 @@ class ReportsController extends Controller
         [ "column" => "title", "operator" => "=" ],
         [ "column" => "currency_id", "operator" => "=" ],
         [ "column" => "category_id", "operator" => "=" ],
-        [ "column" => "mean_id", "operator" => "=" ]
+        [ "column" => "account_id", "operator" => "=" ]
     ];
 
     public function __construct()
@@ -223,7 +223,7 @@ class ReportsController extends Controller
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]])
             ->toArray();
 
-        $means = $report->user->meansOfPayment()
+        $accounts = $report->user->accounts()
             ->select("id", "name")
             ->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]])
@@ -249,9 +249,9 @@ class ReportsController extends Controller
                 unset($items[$i]["category_id"]);
             }
 
-            if ($showColumns["mean_id"]) {
-                $items[$i]["mean"] = $means[$item["mean_id"]] ?? "N/A";
-                unset($items[$i]["mean_id"]);
+            if ($showColumns["account_id"]) {
+                $items[$i]["account"] = $accounts[$item["account_id"]] ?? "N/A";
+                unset($items[$i]["account_id"]);
             }
         }
 
@@ -267,12 +267,12 @@ class ReportsController extends Controller
             ->get()
             ->groupBy("currency_id");
 
-        $means = auth()->user()->meansOfPayment()
+        $accounts = auth()->user()->accounts()
             ->select("id", "name", "currency_id")
             ->get()
             ->groupBy("currency_id");
 
-        return response()->json(compact("titles", "categories", "means"));
+        return response()->json(compact("titles", "categories", "accounts"));
     }
 
     public function userInfo()
@@ -305,7 +305,7 @@ class ReportsController extends Controller
             "columns.price" => ["required", "boolean"],
             "columns.value" => ["required", "boolean"],
             "columns.category_id" => ["required", "boolean"],
-            "columns.mean_id" => ["required", "boolean"]
+            "columns.account_id" => ["required", "boolean"]
         ])["columns"];
 
         $queries = request()->validate([
@@ -319,8 +319,8 @@ class ReportsController extends Controller
             "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", new ValueLessOrEqualField("max_price")],
             "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
-            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
-            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["queries"];
 
         $additionalEntries = request()->validate([
@@ -330,8 +330,8 @@ class ReportsController extends Controller
             "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
             "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
             "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
-            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["additionalEntries"];
 
         $users = request()->validate([
@@ -430,12 +430,12 @@ class ReportsController extends Controller
             ->get()
             ->groupBy("currency_id");
 
-        $means = auth()->user()->meansOfPayment()
+        $accounts = auth()->user()->accounts()
             ->select("id", "name", "currency_id")
             ->get()
             ->groupBy("currency_id");
 
-        return response()->json(compact("data", "titles", "categories", "means"));
+        return response()->json(compact("data", "titles", "categories", "accounts"));
     }
 
     public function update(Report $report)
@@ -455,7 +455,7 @@ class ReportsController extends Controller
             "columns.price" => ["required", "boolean"],
             "columns.value" => ["required", "boolean"],
             "columns.category_id" => ["required", "boolean"],
-            "columns.mean_id" => ["required", "boolean"]
+            "columns.account_id" => ["required", "boolean"]
         ])["columns"];
 
         $queries = request()->validate([
@@ -470,8 +470,8 @@ class ReportsController extends Controller
             "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", new ValueLessOrEqualField("max_price")],
             "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
-            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
-            "queries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["queries"];
 
         $additionalEntries = request()->validate([
@@ -482,8 +482,8 @@ class ReportsController extends Controller
             "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
             "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
             "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
-            "additionalEntries.*.mean_id" => ["present", "nullable", "integer", new ValidCategoryOrMean],
+            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["additionalEntries"];
 
         $users = request()->validate([

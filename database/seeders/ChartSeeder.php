@@ -33,7 +33,7 @@ class ChartSeeder extends Seeder
             ]
         ],
         [
-            "name" => "Income by means of payment",
+            "name" => "Income by accounts",
             "routes" => [
                 "/",
                 "/dashboard",
@@ -41,7 +41,7 @@ class ChartSeeder extends Seeder
             ]
         ],
         [
-            "name" => "Outcome by means of payment",
+            "name" => "Outcome by accounts",
             "routes" => [
                 "/",
                 "/dashboard",

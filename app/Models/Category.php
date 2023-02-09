@@ -14,7 +14,7 @@ class Category extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'user_id', 'currency_id', 'name', 'income_category', 'outcome_category', 'show_on_charts', 'count_to_summary', 'start_date', 'end_date'
+        'user_id', 'currency_id', 'name', 'used_in_income', 'used_in_outcome', 'show_on_charts', 'count_to_summary', 'start_date', 'end_date'
     ];
 
     public function user()

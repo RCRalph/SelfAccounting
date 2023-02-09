@@ -37,9 +37,9 @@
                         :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'"
                     >{{ item.category.value }}</td>
 
-                    <td v-if="item.mean.span" :rowspan="item.mean.span" @mouseover="setRowsToHighlight(index, item.mean.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.mean.span) && 'table-hover-background'"
-                    >{{ item.mean.value }}</td>
+                    <td v-if="item.account.span" :rowspan="item.account.span" @mouseover="setRowsToHighlight(index, item.account.span)" @mouseleave="resetRowsToHighlight()"
+                        :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'"
+                    >{{ item.account.value }}</td>
 
                     <td @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
@@ -106,7 +106,7 @@ export default {
                 { text: "Price", align: "center" },
                 { text: "Value", align: "center" },
                 { text: "Category", align: "center" },
-                { text: "Mean of payment", align: "center" },
+                { text: "Account", align: "center" },
                 { text: "Actions", align: "center" }
             ],
             items: [],

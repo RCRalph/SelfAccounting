@@ -18,14 +18,14 @@
                                     v-if="extensions.hasExtension('cashan')"
                                     v-model="fromCash"
                                     :currency="fromData.currency"
-                                    :meanID="from.mean_id"
+                                    :accountID="from.account_id"
                                     :disabled="loading"
                                     :entryValue="fromData.value"
                                     type="outcome"
                                 ></CashExchangeDialogComponent>
                             </div>
 
-                            <v-text-field type="date" label="Date" v-model="from.date" :min="fromData.mean.first_entry_date" :rules="[validation.date(false, fromData.mean.first_entry_date)]"></v-text-field>
+                            <v-text-field type="date" label="Date" v-model="from.date" :min="fromData.account.start_date" :rules="[validation.date(false, fromData.account.start_date)]"></v-text-field>
 
                             <v-combobox
                                 label="Title"
@@ -98,12 +98,12 @@
                             ></v-select>
 
                             <v-select
-                                v-model="from.mean_id"
-                                :items="fromSelects.means"
-                                :rules="[validation.differentMeans(to.mean_id)]"
+                                v-model="from.account_id"
+                                :items="fromSelects.accounts"
+                                :rules="[validation.differentAccounts(to.account_id)]"
                                 item-text="name"
                                 item-value="id"
-                                label="Mean of payment"
+                                label="Account"
                             ></v-select>
                         </v-col>
 
@@ -115,14 +115,14 @@
                                     v-if="extensions.hasExtension('cashan')"
                                     v-model="toCash"
                                     :currency="toData.currency"
-                                    :meanID="to.mean_id"
+                                    :accountID="to.account_id"
                                     :disabled="loading"
                                     :entryValue="toData.value"
                                     type="income"
                                 ></CashExchangeDialogComponent>
                             </div>
 
-                            <v-text-field type="date" label="Date" v-model="to.date" :min="toData.mean.first_entry_date" :rules="[validation.date(false, toData.mean.first_entry_date)]"></v-text-field>
+                            <v-text-field type="date" label="Date" v-model="to.date" :min="toData.account.start_date" :rules="[validation.date(false, toData.account.start_date)]"></v-text-field>
 
                             <v-combobox
                                 label="Title"
@@ -195,12 +195,12 @@
                             ></v-select>
 
                             <v-select
-                                v-model="to.mean_id"
-                                :items="toSelects.means"
-                                :rules="[validation.differentMeans(from.mean_id)]"
+                                v-model="to.account_id"
+                                :items="toSelects.accounts"
+                                :rules="[validation.differentAccounts(from.account_id)]"
                                 item-text="name"
                                 item-value="id"
-                                label="Mean of payment"
+                                label="Account"
                             ></v-select>
                         </v-col>
                     </v-row>
@@ -256,7 +256,7 @@ export default {
             dialog: false,
             from: {},
             to: {},
-            means: {},
+            accounts: {},
             categories: {},
             availableCurrencies: [],
             titles: [],
@@ -286,7 +286,7 @@ export default {
                     const data = response.data;
 
                     this.titles = data.titles;
-                    this.means = data.means;
+                    this.accounts = data.accounts;
                     this.categories = data.categories;
                     this.availableCurrencies = data.availableCurrencies;
 
@@ -297,7 +297,7 @@ export default {
                         price: "",
                         currency_id: this.currencies.usedCurrency,
                         category_id: null,
-                        mean_id: undefined
+                        account_id: undefined
                     }
                     this.from = _.cloneDeep(dataObject);
                     this.to = _.cloneDeep(dataObject);
@@ -334,38 +334,38 @@ export default {
             if (!this.ready) return {};
 
             const categories = this.categories[this.from.currency_id].find(item => item.id == this.from.category_id),
-                mean = this.means[this.from.currency_id].find(item => item.id == this.from.mean_id);
+                account = this.accounts[this.from.currency_id].find(item => item.id == this.from.account_id);
 
             return {
                 currency: this.currencies.findCurrency(this.from.currency_id),
                 value: _.round(this.fromAmount.value * this.fromPrice.value, 2) || 0,
                 categories: categories !== undefined ? categories : [],
-                mean: mean !== undefined ? mean : []
+                account: account !== undefined ? account : []
             }
         },
         fromSelects() {
             return {
-                categories: this.categories[this.from.currency_id].filter(item => item.outcome_category),
-                means: this.means[this.from.currency_id].filter(item => item.outcome_mean)
+                categories: this.categories[this.from.currency_id].filter(item => item.used_in_outcome),
+                accounts: this.accounts[this.from.currency_id].filter(item => item.used_in_outcome)
             }
         },
         toData() {
             if (!this.ready) return {};
 
             const categories = this.categories[this.to.currency_id].find(item => item.id == this.to.category_id),
-                mean = this.means[this.to.currency_id].find(item => item.id == this.to.mean_id);
+                account = this.accounts[this.to.currency_id].find(item => item.id == this.to.account_id);
 
             return {
                 currency: this.currencies.findCurrency(this.to.currency_id),
                 value: _.round(this.toAmount.value * this.toPrice.value, 2) || 0,
                 categories: categories !== undefined ? categories : [],
-                mean: mean !== undefined ? mean : []
+                account: account !== undefined ? account : []
             }
         },
         toSelects() {
             return {
-                categories: this.categories[this.to.currency_id].filter(item => item.income_category),
-                means: this.means[this.to.currency_id].filter(item => item.income_mean)
+                categories: this.categories[this.to.currency_id].filter(item => item.used_in_income),
+                accounts: this.accounts[this.to.currency_id].filter(item => item.used_in_income)
             }
         }
     },
@@ -422,7 +422,7 @@ export default {
         },
         resetSelects(key) {
             this[key].category_id = null;
-            this[key].mean_id = null;
+            this[key].account_id = null;
         }
     }
 }

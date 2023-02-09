@@ -51,9 +51,9 @@ class User extends Authenticatable
         return $this->hasMany(Category::class);
     }
 
-    public function meansOfPayment()
+    public function accounts()
     {
-        return $this->hasMany(MeanOfPayment::class);
+        return $this->hasMany(Account::class);
     }
 
     public function income()
@@ -81,9 +81,9 @@ class User extends Authenticatable
         return $this->hasOne(Backup::class);
     }
 
-    public function cashMeans()
+    public function cashAccounts()
     {
-        return $this->belongsToMany(MeanOfPayment::class, 'cash_mean_user', 'user_id', 'mean_id');
+        return $this->belongsToMany(Account::class, 'cash_account_user', 'user_id', 'account_id');
     }
 
     public function cash()

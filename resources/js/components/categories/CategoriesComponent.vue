@@ -25,12 +25,12 @@
                             <span style="white-space: nowrap">{{ item.name }}</span>
                         </template>
 
-                        <template v-slot:[`item.income_category`]="{ item }">
-                            <v-simple-checkbox v-model="item.income_category" disabled off-icon="mdi-close"></v-simple-checkbox>
+                        <template v-slot:[`item.used_in_income`]="{ item }">
+                            <v-simple-checkbox v-model="item.used_in_income" disabled off-icon="mdi-close"></v-simple-checkbox>
                         </template>
 
-                        <template v-slot:[`item.outcome_category`]="{ item }">
-                            <v-simple-checkbox v-model="item.outcome_category" disabled off-icon="mdi-close"></v-simple-checkbox>
+                        <template v-slot:[`item.used_in_outcome`]="{ item }">
+                            <v-simple-checkbox v-model="item.used_in_outcome" disabled off-icon="mdi-close"></v-simple-checkbox>
                         </template>
 
                         <template v-slot:[`item.show_on_charts`]="{ item }">
@@ -99,8 +99,8 @@ export default {
         return {
             headers: [
                 { text: "Name", align: "center", value: "name" },
-                { text: "Show in income", align: "center", value: "income_category" },
-                { text: "Show in outcome", align: "center", value: "outcome_category" },
+                { text: "Show in income", align: "center", value: "used_in_income" },
+                { text: "Show in outcome", align: "center", value: "used_in_outcome" },
                 { text: "Show on charts", align: "center", value: "show_on_charts" },
                 { text: "Count to summary", align: "center", value: "count_to_summary" },
                 { text: "Actions", align: "center", value: "actions" }
