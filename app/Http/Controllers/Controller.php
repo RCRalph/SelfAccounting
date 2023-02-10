@@ -24,27 +24,6 @@ class Controller extends BaseController
         return Cache::rememberForever("currencies", fn () => Currency::all());
     }
 
-    public function getLastUsedCurrencies()
-    {
-        return Cache::remember(
-            "last-used-currencies-" . auth()->user()->id,
-            now()->addMinutes(15),
-            function () {
-                $data = auth()->user()->income
-                    ->concat(auth()->user()->outcome)
-                    ->sortBy("updated_at")
-                    ->groupBy("currency_id");
-
-                $retArr = [];
-                foreach ($data as $currency => $entries) {
-                    $retArr[$currency] = collect($entries)->last()["updated_at"];
-                }
-
-                return collect($retArr)->sortDesc()->keys()->toArray();
-            }
-        );
-    }
-
     public function getBalance($income, $outcome, $accounts, $categories, $accountsToShow, $categoriesToShow)
     {
         $incomeByAccounts = $income

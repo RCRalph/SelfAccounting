@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Chart;
 use App\Models\Extension;
@@ -16,6 +17,22 @@ class AppController extends Controller
     public function __construct()
     {
         $this->middleware("auth");
+    }
+
+    private function getLastUsedCurrencies()
+    {
+        $income = auth()->user()->income()
+            ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
+            ->groupBy("currency_id");
+
+        $outcome = auth()->user()->outcome()
+            ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
+            ->groupBy("currency_id");
+
+        return $income->union($outcome)->get()
+            ->sortByDesc("last_accessed")
+            ->unique("currency_id")
+            ->pluck("currency_id");
     }
 
     private function showPremiumExpiredDialog() {
@@ -41,7 +58,7 @@ class AppController extends Controller
                 $currencies = $this->getCurrencies()->toArray();
                 $lastCurrencies = $this->getLastUsedCurrencies();
 
-                foreach (array_reverse($lastCurrencies) as $currency) {
+                foreach ($lastCurrencies->reverse() as $currency) {
                     $index = array_search($currency, array_column($currencies, "id"));
                     array_unshift($currencies, $currencies[$index]);
                     array_splice($currencies, $index + 1, 1);

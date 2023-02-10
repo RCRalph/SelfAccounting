@@ -17,7 +17,7 @@ class IO
     public function handle(Request $request, Closure $next, $type)
     {
         if (!in_array($type, ["income", "outcome"])) {
-            abort(404);
+            abort(404, "Invalid type");
         }
 
         $request->merge(compact("type"));
