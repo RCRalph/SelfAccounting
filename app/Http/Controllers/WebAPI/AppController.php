@@ -53,7 +53,7 @@ class AppController extends Controller
                     "charts" => $this->getCharts("/"),
                     "tutorials" => Tutorial::select("route")->pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
-                    "extensions" => Extension::all()->makeHidden(["id", "created_at", "updated_at", "description", "thumbnail"]),
+                    "extensions" => Extension::select("code", "title", "icon", "directory")->orderBy("title")->get(),
                     "ownedExtensions" => Extension::whereIn("code", auth()->user()->extensionCodes)
                         ->orderBy("title")
                         ->pluck("code")

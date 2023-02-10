@@ -10,7 +10,7 @@ class ExtensionSeeder extends Seeder
 {
     private $extensions = [
         [
-            "title" => "Create backups",
+            "title" => "Backup creator",
             "code" => "backup",
             "stripe_product_code" => "price_1LiOFhAmJbobJ1GsRjpZWlU2",
             "icon" => "mdi-content-save",
