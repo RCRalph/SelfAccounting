@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import DashboardComponent from "@/dashboard/DashboardComponent.vue";
-import IOComponent from "@/income-outcome/IOComponent.vue";
+import IncomeExpencesComponent from "@/income-expences/IncomeExpencesComponent.vue";
 import CategoriesComponent from "@/categories/CategoriesComponent.vue";
 import AccountsComponent from "@/accounts/AccountsComponent.vue";
 import ProfileComponent from "@/profile/ProfileComponent.vue";
@@ -19,8 +19,8 @@ Vue.use(VueRouter)
 
 const routes = [
     { path: "/", component: DashboardComponent },
-    { path: "/income", component: IOComponent, props: { type: "income" } },
-    { path: "/outcome", component: IOComponent, props: { type: "outcome" } },
+    { path: "/income", component: IncomeExpencesComponent, props: { type: "income" } },
+    { path: "/expences", component: IncomeExpencesComponent, props: { type: "expences" } },
     { path: "/categories", component: CategoriesComponent },
     { path: "/accounts", component: AccountsComponent },
     { path: "/profile", component: ProfileComponent },

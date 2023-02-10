@@ -20,7 +20,7 @@ class CategoriesController extends Controller
     public function index(Currency $currency)
     {
         $data = auth()->user()->categories()
-            ->select("id", "name", "used_in_income", "used_in_outcome", "show_on_charts", "count_to_summary", "start_date", "end_date")
+            ->select("id", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "end_date")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
@@ -33,7 +33,7 @@ class CategoriesController extends Controller
         $data = request()->validate([
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
-            "used_in_outcome" => ["required", "boolean"],
+            "used_in_expences" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
             "start_date" => ["present", "date", "nullable", new DateBeforeOrEqualField("end_date")],
@@ -59,7 +59,7 @@ class CategoriesController extends Controller
         $data = request()->validate([
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
-            "used_in_outcome" => ["required", "boolean"],
+            "used_in_expences" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
             "start_date" => ["present", "date", "nullable", new DateBeforeOrEqualField("end_date")],

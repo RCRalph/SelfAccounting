@@ -19,7 +19,7 @@ class ExtensionMiddleware
     {
         if ($request->route("code")) {
             if (Extension::all()->pluck("code")->doesntContain($request->route("code"))) {
-                abort(404);
+                abort(404, "Extension doesn't exist");
             }
             else {
                 $extension = Extension::where("code", $request->route("code"))->first();
@@ -27,14 +27,14 @@ class ExtensionMiddleware
         }
         else if ($extensionCode) {
             if (auth()->user()->extensionCodes->doesntContain($extensionCode)) {
-                abort(403);
+                abort(403, "Invalid permission to access extension");
             }
             else {
                 $extension = Extension::where("code", $request->route("code"))->first();
             }
         }
         else {
-            abort(500);
+            abort(500, "Invalid extension");
         }
 
         $request->merge(compact("extension"));

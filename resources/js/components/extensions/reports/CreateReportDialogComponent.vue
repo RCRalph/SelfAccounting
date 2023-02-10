@@ -38,7 +38,7 @@
                         <v-col cols="12" sm="6" class="d-flex justify-sm-center justify-start">
                             <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.income_addition">
                                 <template v-slot:label>
-                                    Add&nbsp;income, subtract&nbsp;outcome
+                                    Add&nbsp;income, subtract&nbsp;expences
                                 </template>
                             </v-switch>
                         </v-col>
@@ -46,7 +46,7 @@
                         <v-col cols="12" sm="6" class="d-flex justify-sm-center justify-start">
                             <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" :false-value="true" :true-value="false" v-model="data.income_addition">
                                 <template v-slot:label>
-                                    Add&nbsp;outcome, subtract&nbsp;income
+                                    Add&nbsp;expences, subtract&nbsp;income
                                 </template>
                             </v-switch>
                         </v-col>

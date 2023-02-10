@@ -30,9 +30,9 @@
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_outcome">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_expences">
                                 <template v-slot:label>
-                                    Show in outcome
+                                    Show in expences
                                 </template>
                             </v-switch>
                         </v-col>
@@ -98,7 +98,7 @@ export default {
             startData: {
                 name: "",
                 used_in_income: true,
-                used_in_outcome: true,
+                used_in_expences: true,
                 show_on_charts: true,
                 count_to_summary: true,
                 start_date: new Date().toISOString().split("T")[0],

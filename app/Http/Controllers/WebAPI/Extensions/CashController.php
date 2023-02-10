@@ -75,13 +75,13 @@ class CashController extends Controller
                 $balance += $item->value;
             }
 
-            $outcome = auth()->user()->outcome()
+            $expences = auth()->user()->expences()
                 ->where("account_id", $account->id)
                 ->where("currency_id", $currency->id)
                 ->select(DB::raw("round(amount * price, 2) AS value"))
                 ->get();
 
-            foreach ($outcome as $item) {
+            foreach ($expences as $item) {
                 $balance -= $item->value;
             }
 

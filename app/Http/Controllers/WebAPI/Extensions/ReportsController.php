@@ -181,7 +181,7 @@ class ReportsController extends Controller
         foreach ($report->queries as $query) {
             $data = $query->query_data == "income" ?
                 $report->user->income() :
-                $report->user->outcome();
+                $report->user->expences();
 
             foreach ($this->queryFields as $field) {
                 $queryFieldName = $field["name"] ?? $field["column"];
@@ -310,7 +310,7 @@ class ReportsController extends Controller
 
         $queries = request()->validate([
             "queries" => ["present", "array"],
-            "queries.*.query_data" => ["required", "string", "in:income,outcome"],
+            "queries.*.query_data" => ["required", "string", "in:income,expences"],
             "queries.*.min_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("max_date")],
             "queries.*.max_date" => ["present", "nullable", "date"],
             "queries.*.title" => ["present", "nullable", "string", "max:64"],
@@ -461,7 +461,7 @@ class ReportsController extends Controller
         $queries = request()->validate([
             "queries" => ["present", "array"],
             "queries.*.id" => ["nullable", "integer", "distinct", "exists:report_queries,id", new BelongsToReport($report)],
-            "queries.*.query_data" => ["required", "string", "in:income,outcome"],
+            "queries.*.query_data" => ["required", "string", "in:income,expences"],
             "queries.*.min_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("max_date")],
             "queries.*.max_date" => ["present", "nullable", "date"],
             "queries.*.title" => ["present", "nullable", "string", "max:64"],

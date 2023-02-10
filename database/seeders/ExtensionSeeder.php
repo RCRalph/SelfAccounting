@@ -10,7 +10,7 @@ class ExtensionSeeder extends Seeder
 {
     private $extensions = [
         [
-            "title" => "Create backups",
+            "title" => "Backup creator",
             "code" => "backup",
             "stripe_product_code" => "price_1LiOFhAmJbobJ1GsRjpZWlU2",
             "icon" => "mdi-content-save",
@@ -18,7 +18,7 @@ class ExtensionSeeder extends Seeder
             "price" => 2.5,
             "short_description" => "Create backups of your data",
             "thumbnail" => "XzOiqpBrzhFDMVBuFLKhYvvhdkkyDTaHWkNmwHPlajEGkPgxqn.png",
-            "description" => "This extension allows you to easily backup your data and then restore it in case of an emergency. The backup includes:\n - **Your categories**\n - **Your accounts**\n - **Your income**\n - **Your outcome**\n\nAs more extensions are developed, this extension will be updated with all data stored by them.\n\nBare in mind that you can only restore your data if your account is older than 30 days old. In case of an emergency you of course can contact the developer, who will allow you to restore your data. This feature prevents new users from overloading the database.",
+            "description" => "This extension allows you to easily backup your data and then restore it in case of an emergency. The backup includes:\n - **Your categories**\n - **Your accounts**\n - **Your income**\n - **Your expences**\n\nAs more extensions are developed, this extension will be updated with all data stored by them.\n\nBare in mind that you can only restore your data if your account is older than 30 days old. In case of an emergency you of course can contact the developer, who will allow you to restore your data. This feature prevents new users from overloading the database.",
             "gallery" => [
                 "XzOiqpBrzhFDMVBuFLKhYvvhdkkyDTaHWkNmwHPlajEGkPgxqn.png",
                 "DfyHLPNjRLTGAhhnmauXdvptraTFSKlJcAigEpTCuWwCEmfOjj.png",
@@ -37,7 +37,7 @@ class ExtensionSeeder extends Seeder
             "price" => 5,
             "short_description" => "Monitor how much cash you have",
             "thumbnail" => "SBifCTbjVEhZdDmNamVQNbVpUUdabJEspBvJvamWgePgtIRkKr.png",
-            "description" => "This extension allows you to monitor how much cash you have at the current moment and it will tell you if you lost any when you count it all up from time to time. All currencies in the app are supported.\n\nYou can immidately change how much cash you own while entering income or outcome. A special **cash** account is required.",
+            "description" => "This extension allows you to monitor how much cash you have at the current moment and it will tell you if you lost any when you count it all up from time to time. All currencies in the app are supported.\n\nYou can immidately change how much cash you own while entering income or expences. A special **cash** account is required.",
             "gallery" => [
                 "SBifCTbjVEhZdDmNamVQNbVpUUdabJEspBvJvamWgePgtIRkKr.png",
                 "GPUIHRnrqtwibGmoybLfXWrfwfsSJcQMkCQkbsmIggTvfzgcQd.png",

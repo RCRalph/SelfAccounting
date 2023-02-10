@@ -33,7 +33,7 @@ class ValidCategoryOrAccountExchange implements Rule
         return (str_contains($attribute, "category") ? auth()->user()->categories() : auth()->user()->accounts())
             ->where("id", $value)
             ->where("currency_id", request("$this->key.currency_id"))
-            ->where(($this->key == "from" ? "outcome" : "income") . "_" . (str_contains($attribute, "category") ? "category" : "account"), true)
+            ->where(($this->key == "from" ? "expence" : "income") . "_" . (str_contains($attribute, "category") ? "category" : "account"), true)
             ->count();
     }
 

@@ -33,20 +33,20 @@ Route::prefix("/web-api")->group(function () {
         });
     });
 
-    // Income and outcome routes
-    foreach (["income", "outcome"] as $type) {
-        Route::group(["prefix" => "/$type", "middleware" => "IO:$type"], function () use ($type) {
+    // Income and expences routes
+    foreach (["income", "expences"] as $type) {
+        Route::group(["prefix" => "/$type", "middleware" => "income-expences:$type"], function () use ($type) {
             Route::prefix("/{id}")->group(function () use ($type) {
-                Route::get("/", "WebAPI\IOController@show")->name("web-api.$type.show");
-                Route::patch("/", "WebAPI\IOController@update")->name("web-api.$type.update");
-                Route::delete("/", "WebAPI\IOController@destroy")->name("web-api.$type.destroy");
+                Route::get("/", "WebAPI\IncomeExpencesController@show")->name("web-api.$type.show");
+                Route::patch("/", "WebAPI\IncomeExpencesController@update")->name("web-api.$type.update");
+                Route::delete("/", "WebAPI\IncomeExpencesController@destroy")->name("web-api.$type.destroy");
             });
 
             Route::prefix("/currency/{currency}")->group(function () use ($type) {
-                Route::get("/", "WebAPI\IOController@index")->name("web-api.$type.currency");
-                Route::post("/", "WebAPI\IOController@store")->name("web-api.$type.currency.store");
-                Route::get("/data", "WebAPI\IOController@data")->name("web-api.$type.currency.data");
-                Route::get("/list", "WebAPI\IOController@list")->name("web-api.$type.currency.list");
+                Route::get("/", "WebAPI\IncomeExpencesController@index")->name("web-api.$type.currency");
+                Route::post("/", "WebAPI\IncomeExpencesController@store")->name("web-api.$type.currency.store");
+                Route::get("/data", "WebAPI\IncomeExpencesController@data")->name("web-api.$type.currency.data");
+                Route::get("/list", "WebAPI\IncomeExpencesController@list")->name("web-api.$type.currency.list");
             });
         });
     }

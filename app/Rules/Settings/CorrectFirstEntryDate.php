@@ -30,7 +30,7 @@ class CorrectFirstEntryDate implements Rule
         $minDate = auth()->user()->income()
             ->select("date")
             ->where("account_id", $this->account->id)
-            ->union(auth()->user()->outcome()
+            ->union(auth()->user()->expences()
                 ->select("date")
                 ->where("account_id", $this->account->id)
             )
@@ -47,6 +47,6 @@ class CorrectFirstEntryDate implements Rule
      */
     public function message()
     {
-        return 'The first entry starting date must be before the first income / outcome entry.';
+        return 'The first entry starting date must be before the first income / expence entry.';
     }
 }

@@ -78,11 +78,11 @@
 
                                             <tr>
                                                 <td class="text-right text-h6">
-                                                    Outcome
+                                                    Expences
                                                 </td>
 
                                                 <td class="text-h6">
-                                                    {{ last30Days.outcome | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    {{ last30Days.expences | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
                                                 </td>
                                             </tr>
 
@@ -96,7 +96,7 @@
                                                     last30DaysSummarySign == '+' && 'success--text',
                                                     last30DaysSummarySign == '-' && 'error--text'
                                                 ]">
-                                                    {{ last30DaysSummarySign }}{{ Math.round(Math.abs(last30Days.income - last30Days.outcome) * 100) / 100 | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    {{ last30DaysSummarySign }}{{ Math.round(Math.abs(last30Days.income - last30Days.expences) * 100) / 100 | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -160,7 +160,7 @@ export default {
     },
     computed: {
         last30DaysSummarySign() {
-            const sum = this.last30Days.income - this.last30Days.outcome;
+            const sum = this.last30Days.income - this.last30Days.expences;
             return sum > 0 ? "+" : ( sum < 0 ? "-" : "" )
         },
         currentBalanceSum() {
@@ -185,8 +185,8 @@ export default {
             return [
                 "Income by categories",
                 "Income by accounts",
-                "Outcome by categories",
-                "Outcome by accounts"
+                "Expences by categories",
+                "Expences by accounts"
             ].includes(this.chartTypes.find(item => item.id == this.currentChart).name);
         }
     },

@@ -117,23 +117,23 @@ class ChartsController extends Controller
             ->where("currency_id", $currency->id)
             ->whereIn("account_id", $accountsToShow);
 
-        $outcome = auth()->user()->outcome()
+        $expences = auth()->user()->expences()
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
             ->whereIn("account_id", $accountsToShow);
 
         if ($limits["end"]) {
             $income = $income->whereDate("date", "<=", $limits["end"]);
-            $outcome = $outcome->whereDate("date", "<=", $limits["end"]);
+            $expences = $expences->whereDate("date", "<=", $limits["end"]);
         }
 
         $income = $income->get();
-        $outcome = $outcome->get();
+        $expences = $expences->get();
 
         if ($limits["start"]) {
             $balanceBefore = $this->getBalance(
                 $income->where("date", "<=", $limits["start"]),
-                $outcome->where("date", "<=", $limits["start"]),
+                $expences->where("date", "<=", $limits["start"]),
                 $accounts, [], $accountsToShow, []
             );
         }
@@ -153,7 +153,7 @@ class ChartsController extends Controller
 
         if ($limits["start"]) {
             $income = $income->where("date", ">", $limits["start"]);
-            $outcome = $outcome->where("date", ">", $limits["start"]);
+            $expences = $expences->where("date", ">", $limits["start"]);
         }
 
         $income = $income
@@ -164,7 +164,7 @@ class ChartsController extends Controller
                 )
             );
 
-        $outcome = $outcome
+        $expences = $expences
             ->groupBy("account_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
@@ -212,7 +212,7 @@ class ChartsController extends Controller
         }
 
         $differenceByAccounts = $income;
-        foreach ($outcome as $accountID => $dates) {
+        foreach ($expences as $accountID => $dates) {
             foreach ($dates as $date => $difference) {
                 $differenceAccount = $differenceByAccounts->get($accountID);
 
@@ -400,9 +400,9 @@ class ChartsController extends Controller
                 break;
 
             case "Income by categories":
-            case "Outcome by categories":
+            case "Expences by categories":
             case "Income by accounts":
-            case "Outcome by accounts":
+            case "Expences by accounts":
                 $name = explode(" ", $chart->name);
                 $retArr = $this->dataByType(
                     strtolower($name[0]),
@@ -413,7 +413,7 @@ class ChartsController extends Controller
 
 
             default:
-                abort(500);
+                abort(500, "Invalid chart name");
         }
 
         return response()->json(["info" => $chart->only("id", "name"), ...$retArr]);
