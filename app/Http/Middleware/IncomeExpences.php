@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class IO
+class IncomeExpences
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class IO
      */
     public function handle(Request $request, Closure $next, $type)
     {
-        if (!in_array($type, ["income", "outcome"])) {
+        if (!in_array($type, ["income", "expences"])) {
             abort(404, "Invalid type");
         }
 

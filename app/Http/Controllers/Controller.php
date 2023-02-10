@@ -24,7 +24,7 @@ class Controller extends BaseController
         return Cache::rememberForever("currencies", fn () => Currency::all());
     }
 
-    public function getBalance($income, $outcome, $accounts, $categories, $accountsToShow, $categoriesToShow)
+    public function getBalance($income, $expences, $accounts, $categories, $accountsToShow, $categoriesToShow)
     {
         $incomeByAccounts = $income
             ->whereIn("account_id", $accountsToShow)
@@ -32,14 +32,14 @@ class Controller extends BaseController
             ->map(fn ($item) => $item->sum("value"))
             ->toArray();
 
-        $outcomeByAccounts = $outcome
+        $expencesByAccounts = $expences
             ->whereIn("account_id", $accountsToShow)
             ->groupBy("account_id")
             ->map(fn ($item) => $item->sum("value"))
             ->toArray();
 
         $balanceByAccounts = $incomeByAccounts;
-        foreach ($outcomeByAccounts as $account => $balance) {
+        foreach ($expencesByAccounts as $account => $balance) {
             if (array_key_exists($account, $balanceByAccounts)) {
                 $balanceByAccounts[$account] -= $balance;
             }
@@ -48,7 +48,7 @@ class Controller extends BaseController
             }
         }
 
-        $balanceByCategories = $outcome
+        $balanceByCategories = $expences
             ->whereIn("category_id", $categoriesToShow)
             ->groupBy("category_id");
 
@@ -129,7 +129,7 @@ class Controller extends BaseController
         return $currentBalance;
     }
 
-    public function addNamesToPaginatedIOItems($items, Currency $currency)
+    public function addNamesToPaginatedIncomeOrExpencesItems($items, Currency $currency)
     {
         $paginatedData = $items->getCollection()->toArray();
 
@@ -167,10 +167,10 @@ class Controller extends BaseController
             now()->addMinutes(15),
             function () {
                 $incomeTitles = auth()->user()->income()->pluck("title");
-                $outcomeTitles = auth()->user()->outcome()->pluck("title");
+                $expenceTitles = auth()->user()->expences()->pluck("title");
 
                 return $incomeTitles
-                    ->merge($outcomeTitles)
+                    ->merge($expenceTitles)
                     ->unique()
                     ->values();
             }
@@ -201,13 +201,13 @@ class Controller extends BaseController
     {
         $type = $type ? $type : request()->type;
 
-        if (!in_array($type, ["income", "outcome"])) {
+        if (!in_array($type, ["income", "expences"])) {
             abort(500, "Unspecified type");
         }
 
         return $type == "income" ?
             auth()->user()->income() :
-            auth()->user()->outcome();
+            auth()->user()->expences();
     }
 
     public function getCharts($route) {

@@ -7,21 +7,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Income;
-use App\Models\Outcome;
 use App\Models\Currency;
-use App\Models\Chart;
 
-use App\Rules\IO\CorrectDateIO;
-use App\Rules\IO\CorrectDateIOUpdate;
-use App\Rules\IO\ValidCategoryOrAccount;
-use App\Rules\IO\ValidCategoryOrAccountUpdate;
+use App\Rules\IncomeExpences\CorrectDateIncomeExpences;
+use App\Rules\IncomeExpences\CorrectDateIncomeExpencesUpdate;
+use App\Rules\IncomeExpences\ValidCategoryOrAccount;
+use App\Rules\IncomeExpences\ValidCategoryOrAccountUpdate;
 use App\Rules\Common\SameLengthAs;
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
 use App\Rules\Extensions\Cash\CashValidAmount;
 
-class IOController extends Controller
+class IncomeExpencesController extends Controller
 {
     public function __construct()
     {
@@ -76,7 +73,7 @@ class IOController extends Controller
             ->get()->firstOrFail();
 
         $data = request()->validate([
-            "date" => ["required", "date", new CorrectDateIOUpdate],
+            "date" => ["required", "date", new CorrectDateIncomeExpencesUpdate],
             "title" => ["required", "string", "max:64"],
             "amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
@@ -168,7 +165,7 @@ class IOController extends Controller
             $items = $items->orderBy($field, $field == "date" ? "desc" : "asc");
         }
 
-        $items = $this->addNamesToPaginatedIOItems($items->paginate(20), $currency);
+        $items = $this->addNamesToPaginatedIncomeOrExpencesItems($items->paginate(20), $currency);
 
         return response()->json(compact("items"));
     }
@@ -184,7 +181,7 @@ class IOController extends Controller
     public function store(Currency $currency)
     {
         $data = request()->validate([
-            "data.*.date" => ["required", "date", new CorrectDateIO],
+            "data.*.date" => ["required", "date", new CorrectDateIncomeExpences],
             "data.*.title" => ["required", "string", "max:64"],
             "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
@@ -218,7 +215,7 @@ class IOController extends Controller
                 else {
                     /*
                         This can only be reached if request()->type is "income",
-                        in outcome cash has to be already attached and this
+                        in expences cash has to be already attached and this
                         is checked inside CashValidAmount rule.
                     */
 

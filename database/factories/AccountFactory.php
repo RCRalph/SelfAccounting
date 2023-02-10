@@ -27,7 +27,7 @@ class AccountFactory extends Factory
             "currency_id" => 1,
             "name" => $this->faker->realText(rand(10, 32)),
             "used_in_income" => $this->faker->boolean,
-            "used_in_outcome" => $this->faker->boolean,
+            "used_in_expences" => $this->faker->boolean,
             "count_to_summary" => $this->faker->boolean,
             "show_on_charts" => $this->faker->boolean,
             "start_date" => Carbon::now()->subDays(30),

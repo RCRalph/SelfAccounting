@@ -25,11 +25,11 @@ class ChartSeeder extends Seeder
             ]
         ],
         [
-            "name" => "Outcome by categories",
+            "name" => "Expences by categories",
             "routes" => [
                 "/",
                 "/dashboard",
-                "/outcome"
+                "/expences"
             ]
         ],
         [
@@ -41,11 +41,11 @@ class ChartSeeder extends Seeder
             ]
         ],
         [
-            "name" => "Outcome by accounts",
+            "name" => "Expences by accounts",
             "routes" => [
                 "/",
                 "/dashboard",
-                "/outcome"
+                "/expences"
             ]
         ]
     ];

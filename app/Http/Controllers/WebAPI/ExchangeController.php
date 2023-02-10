@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
-use App\Rules\Exchange\CorrectDateIOExchange;
+use App\Rules\Exchange\CorrectDateIncomeExpencesExchange;
 use App\Rules\Exchange\ValidCategoryOrAccountExchange;
 use App\Rules\Extensions\Cash\CashValidAmount;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
@@ -23,7 +23,7 @@ class ExchangeController extends Controller
     public function show()
     {
         $categories = auth()->user()->categories()
-            ->select("id", "name", "used_in_income", "used_in_outcome", "currency_id")
+            ->select("id", "name", "used_in_income", "used_in_expences", "currency_id")
             ->orderBy("name")
             ->get()
             ->groupBy("currency_id");
@@ -40,7 +40,7 @@ class ExchangeController extends Controller
                     "id" => null,
                     "name" => "N/A",
                     "used_in_income" => true,
-                    "used_in_outcome" => true
+                    "used_in_expences" => true
                 ]);
             }
             else {
@@ -48,13 +48,13 @@ class ExchangeController extends Controller
                     "id" => null,
                     "name" => "N/A",
                     "used_in_income" => true,
-                    "used_in_outcome" => true
+                    "used_in_expences" => true
                 ]]);
             }
         }
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name", "used_in_income", "used_in_outcome", "currency_id")
+            ->select("id", "name", "used_in_income", "used_in_expences", "currency_id")
             ->orderBy("name")
             ->get()
             ->groupBy("currency_id");
@@ -81,7 +81,7 @@ class ExchangeController extends Controller
     public function store()
     {
         $data = request()->validate([
-            "from.date" => ["required", "date", new CorrectDateIOExchange("from")],
+            "from.date" => ["required", "date", new CorrectDateIncomeExpencesExchange("from")],
             "from.title" => ["required", "string", "max:64"],
             "from.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "from.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
@@ -89,7 +89,7 @@ class ExchangeController extends Controller
             "from.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountExchange("from")],
             "from.account_id" => ["required", "integer", "different:to.account_id", new ValidCategoryOrAccountExchange("from")],
 
-            "to.date" => ["required", "date", new CorrectDateIOExchange("to")],
+            "to.date" => ["required", "date", new CorrectDateIncomeExpencesExchange("to")],
             "to.title" => ["required", "string", "max:64"],
             "to.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "to.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
@@ -103,7 +103,7 @@ class ExchangeController extends Controller
                 $fromCash = request()->validate([
                     "fromCash" => ["required", "array"],
                     "fromCash.*.id" => ["required", "integer", new CorrectCashCurrency(Currency::find($data["from"]["currency_id"]))],
-                    "fromCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("outcome", "fromCash")]
+                    "fromCash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount("expences", "fromCash")]
                 ])["fromCash"];
             }
 
@@ -116,7 +116,7 @@ class ExchangeController extends Controller
             }
         }
 
-        auth()->user()->outcome()->create($data["from"]);
+        auth()->user()->expences()->create($data["from"]);
         auth()->user()->income()->create($data["to"]);
 
         if (isset($fromCash)) {

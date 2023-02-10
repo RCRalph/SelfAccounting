@@ -36,9 +36,9 @@
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_outcome">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_expences">
                                 <template v-slot:label>
-                                    Show in outcome
+                                    Show in expences
                                 </template>
                             </v-switch>
                         </v-col>

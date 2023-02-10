@@ -96,8 +96,8 @@ export default {
             return [
                 "Income by categories",
                 "Income by accounts",
-                "Outcome by categories",
-                "Outcome by accounts"
+                "Expences by categories",
+                "Expences by accounts"
             ].includes(this.chartInfo.name);
         }
     },

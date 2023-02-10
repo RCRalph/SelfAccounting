@@ -26,8 +26,8 @@ class TutorialSeeder extends Seeder
             "filename" => "income.md"
         ],
         [
-            "route" => "/outcome",
-            "filename" => "outcome.md"
+            "route" => "/expences",
+            "filename" => "expences.md"
         ],
         [
             "route" => "/extensions/store",

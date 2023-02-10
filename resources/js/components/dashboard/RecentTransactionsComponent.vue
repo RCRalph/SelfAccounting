@@ -45,15 +45,15 @@
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
                     >
                         <div class="d-flex flex-nowrap justify-center align-center">
-                            <EditIODialogComponent
-                                :type="item.value.value < 0 ? 'outcome' : 'income'"
+                            <EditIncomeExpencesDialogComponent
+                                :type="item.value.value < 0 ? 'expences' : 'income'"
                                 :id="item.id.value"
                                 @updated="getData"
-                            ></EditIODialogComponent>
+                            ></EditIncomeExpencesDialogComponent>
 
                             <DeleteDialogComponent
-                                :thing="item.value.value < 0 ? 'outcome' : 'income'"
-                                :url="`${item.value.value < 0 ? 'outcome' : 'income'}/${item.id.value}`"
+                                :thing="item.value.value < 0 ? 'expences' : 'income'"
+                                :url="`${item.value.value < 0 ? 'expences' : 'income'}/${item.id.value}`"
                                 @deleted="getData"
                             ></DeleteDialogComponent>
                         </div>
@@ -83,7 +83,7 @@ import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 import customTableMerged from "&/mixins/customTableMerged";
 
-import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
+import EditIncomeExpencesDialogComponent from "@/income-expences/EditIncomeExpencesDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 
 export default {
@@ -94,7 +94,7 @@ export default {
     },
     mixins: [main, customTableMerged],
     components: {
-        EditIODialogComponent,
+        EditIncomeExpencesDialogComponent,
         DeleteDialogComponent
     },
     data() {

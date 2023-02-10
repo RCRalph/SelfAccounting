@@ -18,26 +18,26 @@ class DashboardController extends Controller
         $this->middleware("auth");
     }
 
-    private function getLast30DaysBalance($income, $outcome, $accountsToShow, $categoriesToShow)
+    private function getLast30DaysBalance($income, $expences, $accountsToShow, $categoriesToShow)
     {
         $incomeToSum = $income
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
             ->whereIn("account_id", $accountsToShow)
             ->sum("value");
 
-        $outcomeToSum = $outcome
+        $expencesToSum = $expences
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
             ->whereIn("account_id", $accountsToShow)
             ->sum("value");
 
-        $outcomeCategorySum = $outcome
+        $expencesCategorySum = $expences
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
             ->whereIn("category_id", $categoriesToShow)
             ->sum("value");
 
         return [
             "income" => $incomeToSum,
-            "outcome" => $outcomeToSum - $outcomeCategorySum
+            "expences" => $expencesToSum - $expencesCategorySum
         ];
     }
 
@@ -46,12 +46,12 @@ class DashboardController extends Controller
         $income = auth()->user()->income()
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("1 AS type"));
-        $outcome = auth()->user()->outcome()
+        $expences = auth()->user()->expences()
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("-1 AS type"));
 
         $items = $income
-            ->union($outcome)
+            ->union($expences)
             ->orderBy("date", "desc")
             ->orderBy("title")
             ->orderBy("amount")
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             ->orderBy("account_id")
             ->paginate(20);
 
-        $items = $this->addNamesToPaginatedIOItems($items, $currency);
+        $items = $this->addNamesToPaginatedIncomeOrExpencesItems($items, $currency);
 
         return response()->json(compact("items"));
     }
@@ -91,13 +91,13 @@ class DashboardController extends Controller
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->get();
 
-        $outcome = auth()->user()->outcome()
+        $expences = auth()->user()->expences()
             ->where("currency_id", $currency->id)
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->get();
 
-        $currentBalance = $this->getBalance($income, $outcome, $accounts, $categories, $accountsToShow, $categoriesToShow);
-        $last30Days = $this->getLast30DaysBalance($income, $outcome, $accountsToShow, $categoriesToShow);
+        $currentBalance = $this->getBalance($income, $expences, $accounts, $categories, $accountsToShow, $categoriesToShow);
+        $last30Days = $this->getLast30DaysBalance($income, $expences, $accountsToShow, $categoriesToShow);
 
         $charts = $this->getCharts("/dashboard");
 

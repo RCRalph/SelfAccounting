@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Rules\IO;
+namespace App\Rules\Exchange;
 
 use Illuminate\Contracts\Validation\Rule;
 
-use App\Models\Account;
-
-class CorrectDateIOUpdate implements Rule
+class CorrectDateIncomeExpencesExchange implements Rule
 {
+    private $key;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($key)
     {
-        //
+        $this->key = $key;
     }
 
     /**
@@ -27,7 +26,7 @@ class CorrectDateIOUpdate implements Rule
      */
     public function passes($attribute, $value)
     {
-        $id = request("account_id");
+        $id = request("$this->key.account_id");
 
         if ($id == 0) {
             return true;

@@ -19,7 +19,7 @@ class CreateAccountsTable extends Migration
             $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
             $table->string('name', 32);
             $table->boolean('used_in_income')->default(true);
-            $table->boolean('used_in_outcome')->default(true);
+            $table->boolean('used_in_expences')->default(true);
             $table->boolean('count_to_summary')->default(true);
             $table->boolean('show_on_charts')->default(true);
             $table->date('start_date');

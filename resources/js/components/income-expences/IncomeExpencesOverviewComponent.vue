@@ -22,11 +22,11 @@
                     v-for="chart in charts" :key="chart.id"
                     xl="12" lg="6" cols="12"
                 >
-                    <IOOverviewChartComponent
+                    <IncomeExpencesOverviewChartComponent
                         :chart="chart"
                         :start="start"
                         :end="end"
-                    ></IOOverviewChartComponent>
+                    ></IncomeExpencesOverviewChartComponent>
                 </v-col>
             </v-row>
         </v-card-text>
@@ -36,7 +36,7 @@
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
 
-import IOOverviewChartComponent from "@/income-outcome/IOOverviewChartComponent.vue";
+import IncomeExpencesOverviewChartComponent from "@/income-expences/IncomeExpencesOverviewChartComponent.vue";
 
 
 export default {
@@ -46,7 +46,7 @@ export default {
         return { currencies };
     },
     components: {
-        IOOverviewChartComponent
+        IncomeExpencesOverviewChartComponent
     },
     props: {
         charts: {

@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Rules\Exchange;
+namespace App\Rules\Extensions\Backup;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class CorrectDateIOExchange implements Rule
+class CorrectDateIncomeExpences implements Rule
 {
-    private $key;
+    private $accounts;
+
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($key)
+    public function __construct($accounts)
     {
-        $this->key = $key;
+       $this->accounts = $accounts;
     }
 
     /**
@@ -26,18 +27,17 @@ class CorrectDateIOExchange implements Rule
      */
     public function passes($attribute, $value)
     {
-        $id = request("$this->key.account_id");
+        $prefix = substr($attribute, 0, strrpos($attribute, "."));
+        $id = request("$prefix.account_id");
 
         if ($id == 0) {
             return true;
         }
-
-        $account = auth()->user()->accounts()->where("id", $id)->first();
-        if (!$account) {
+        else if (count($this->accounts) < $id) {
             return false;
         }
 
-        return strtotime($account->start_date) <= strtotime($value);
+        return strtotime($this->accounts[$id - 1]["start_date"]) <= strtotime($value);
     }
 
     /**

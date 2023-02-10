@@ -25,11 +25,11 @@ class AppController extends Controller
             ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
             ->groupBy("currency_id");
 
-        $outcome = auth()->user()->outcome()
+        $expences = auth()->user()->expences()
             ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
             ->groupBy("currency_id");
 
-        return $income->union($outcome)->get()
+        return $income->union($expences)->get()
             ->sortByDesc("last_accessed")
             ->unique("currency_id")
             ->pluck("currency_id");

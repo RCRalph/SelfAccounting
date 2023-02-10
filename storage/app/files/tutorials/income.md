@@ -24,7 +24,7 @@ Clicking the **Set common values** button will open a dialog, which will enable 
 ### Exchange
 Clicking the **Exchange** button will open a dialog, which will allow you to exchange between two accounts. 
 
-The **From** section will enter an outcome, and the **To** section will enter an income. Fill in the fields in the dialog and if everything is correct, the **Submit** button will be green and after clicking it you will submit your exchange.
+The **From** section will enter an expence, and the **To** section will enter an income. Fill in the fields in the dialog and if everything is correct, the **Submit** button will be green and after clicking it you will submit your exchange.
 
 ## Overview
 The overview panel displays charts that visualize your income. You can limit the date range by choosing dates at the top of the panel, by default it will visualize the entire dataset.

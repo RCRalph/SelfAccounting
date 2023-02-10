@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Rules\IO;
+namespace App\Rules\IncomeExpences;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidCategoryOrAccount implements Rule
+class ValidCategoryOrAccountUpdate implements Rule
 {
-    private $currency;
-
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($currency)
+    public function __construct()
     {
-        $this->currency = $currency;
+        //
     }
 
     /**
@@ -32,7 +30,7 @@ class ValidCategoryOrAccount implements Rule
         }
 
         return (str_contains($attribute, "category") ? auth()->user()->categories() : auth()->user()->accounts())
-            ->where("currency_id", $this->currency->id)
+            ->where("currency_id", request("currency_id"))
             ->where("id", $value)
             ->where("used_in_" . request()->type, true)
             ->count();

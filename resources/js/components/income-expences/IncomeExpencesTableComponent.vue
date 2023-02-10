@@ -26,14 +26,14 @@
                     </v-col>
 
                     <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
-                        <ExchangeIODialogComponent
+                        <ExchangeIncomeExpencesDialogComponent
                             @exchanged="exchanged"
-                        ></ExchangeIODialogComponent>
+                        ></ExchangeIncomeExpencesDialogComponent>
 
-                        <AddIODialogComponent
+                        <AddIncomeExpencesDialogComponent
                             :type="type"
                             @added="added"
-                        ></AddIODialogComponent>
+                        ></AddIncomeExpencesDialogComponent>
                     </v-col>
                 </v-row>
             </template>
@@ -171,11 +171,11 @@
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
                     >
                         <div class="d-flex flex-nowrap justify-center align-center">
-                            <EditIODialogComponent
+                            <EditIncomeExpencesDialogComponent
                                 :type="type"
                                 :id="item.id.value"
                                 @updated="updated"
-                            ></EditIODialogComponent>
+                            ></EditIncomeExpencesDialogComponent>
 
                             <DeleteDialogComponent
                                 :thing="type"
@@ -207,10 +207,10 @@ import main from "&/mixins/main";
 import validation from "&/mixins/validation";
 import customTableMerged from "&/mixins/customTableMerged";
 
-import AddIODialogComponent from "@/income-outcome/AddIODialogComponent.vue";
-import EditIODialogComponent from "@/income-outcome/EditIODialogComponent.vue";
+import AddIncomeExpencesDialogComponent from "@/income-expences/AddIncomeExpencesDialogComponent.vue";
+import EditIncomeExpencesDialogComponent from "@/income-expences/EditIncomeExpencesDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
-import ExchangeIODialogComponent from "@/income-outcome/ExchangeIODialogComponent.vue";
+import ExchangeIncomeExpencesDialogComponent from "@/income-expences/ExchangeIncomeExpencesDialogComponent.vue";
 import InfiniteLoading from "vue-infinite-loading";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
@@ -222,10 +222,10 @@ export default {
     },
     mixins: [main, customTableMerged, validation],
     components: {
-        AddIODialogComponent,
-        EditIODialogComponent,
+        AddIncomeExpencesDialogComponent,
+        EditIncomeExpencesDialogComponent,
         DeleteDialogComponent,
-        ExchangeIODialogComponent,
+        ExchangeIncomeExpencesDialogComponent,
         InfiniteLoading,
         SuccessSnackbarComponent
     },
@@ -233,7 +233,7 @@ export default {
         type: {
             type: String,
             required: true,
-            validator: value => ["income", "outcome"].includes(value)
+            validator: value => ["income", "expences"].includes(value)
         },
         categories: {
             type: Array,
@@ -368,12 +368,12 @@ export default {
             this.getData();
         },
         updated() {
-            this.thing = `updated ${this.type}`;
+            this.thing = `updated ${this.type == 'expences' ? 'expence' : 'income'}`;
             this.success = true;
             this.getData();
         },
         deleted() {
-            this.thing = `deleted ${this.type}`;
+            this.thing = `deleted ${this.type == 'expences' ? 'expence' : 'income'}`;
             this.success = true;
             this.getData();
         }

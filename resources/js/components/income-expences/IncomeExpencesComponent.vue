@@ -6,20 +6,20 @@
                     <v-card-title class="justify-center text-h5 text-capitalize pb-lg-0">{{ type }}</v-card-title>
 
                     <v-card-text>
-                        <IOTableComponent
+                        <IncomeExpencesTableComponent
                             :type="type"
                             :categories="categories"
                             :accounts="accounts"
-                        ></IOTableComponent>
+                        ></IncomeExpencesTableComponent>
                     </v-card-text>
                 </v-card>
             </v-col>
 
             <v-col xl="4" cols="12" order-xl="last">
-                <IOOverviewComponent
+                <IncomeExpencesOverviewComponent
                     :type="type"
                     :charts="charts"
-                ></IOOverviewComponent>
+                ></IncomeExpencesOverviewComponent>
             </v-col>
         </v-row>
     </div>
@@ -36,13 +36,13 @@
 import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 
-import IOTableComponent from "@/income-outcome/IOTableComponent.vue";
-import IOOverviewComponent from "@/income-outcome/IOOverviewComponent.vue";
+import IncomeExpencesTableComponent from "@/income-expences/IncomeExpencesTableComponent.vue";
+import IncomeExpencesOverviewComponent from "@/income-expences/IncomeExpencesOverviewComponent.vue";
 
 export default {
     components: {
-        IOTableComponent,
-        IOOverviewComponent
+        IncomeExpencesTableComponent,
+        IncomeExpencesOverviewComponent
     },
     mixins: [main],
     setup() {
@@ -54,7 +54,7 @@ export default {
         type: {
             type: String,
             required: true,
-            validator: value => ["income", "outcome"].includes(value)
+            validator: value => ["income", "expences"].includes(value)
         }
     },
     data() {

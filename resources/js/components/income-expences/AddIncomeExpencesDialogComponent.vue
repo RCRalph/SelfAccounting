@@ -140,14 +140,14 @@
                 </div>
 
                 <div class="add-income-buttons">
-                    <CashIODialogComponent
+                    <CashIncomeExpencesDialogComponent
                         v-if="extensions.hasExtension('cashan')"
                         v-model="cash"
                         :accountIDs="accountIDs"
                         :disabled="loading"
                         :sumByAccounts="sumByAccounts"
                         :type="type"
-                    ></CashIODialogComponent>
+                    ></CashIncomeExpencesDialogComponent>
 
                     <v-btn color="error" class="mx-1" width="90" outlined :disabled="data.length == 1 || loading" @click="removeData">
                         Delete
@@ -192,8 +192,8 @@
 
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-import SetCommonValuesComponent from "@/income-outcome/SetCommonValuesComponent.vue";
-import CashIODialogComponent from "@/income-outcome/CashIODialogComponent.vue";
+import SetCommonValuesComponent from "@/income-expences/SetCommonValuesComponent.vue";
+import CashIncomeExpencesDialogComponent from "@/income-expences/CashIncomeExpencesDialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
@@ -212,7 +212,7 @@ export default {
     components: {
         ErrorSnackbarComponent,
         SetCommonValuesComponent,
-        CashIODialogComponent
+        CashIncomeExpencesDialogComponent
     },
     props: {
         type: String

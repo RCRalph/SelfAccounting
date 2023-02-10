@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Rules\IO;
+namespace App\Rules\IncomeExpences;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidCategoryOrAccountUpdate implements Rule
+use App\Models\Account;
+
+class CorrectDateIncomeExpencesUpdate implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,15 +27,18 @@ class ValidCategoryOrAccountUpdate implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value == null) {
+        $id = request("account_id");
+
+        if ($id == 0) {
             return true;
         }
 
-        return (str_contains($attribute, "category") ? auth()->user()->categories() : auth()->user()->accounts())
-            ->where("currency_id", request("currency_id"))
-            ->where("id", $value)
-            ->where("used_in_" . request()->type, true)
-            ->count();
+        $account = auth()->user()->accounts()->where("id", $id)->first();
+        if (!$account) {
+            return false;
+        }
+
+        return strtotime($account->start_date) <= strtotime($value);
     }
 
     /**
@@ -43,6 +48,6 @@ class ValidCategoryOrAccountUpdate implements Rule
      */
     public function message()
     {
-        return "This category / account doesn't exist.";
+        return 'The date must be before the first entry starting date.';
     }
 }

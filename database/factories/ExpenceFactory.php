@@ -3,18 +3,18 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Outcome;
+use App\Models\Expence;
 use App\Models\User;
 use Carbon\Carbon;
 
-class OutcomeFactory extends Factory
+class ExpenceFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Outcome::class;
+    protected $model = Expence::class;
 
     /**
      * Define the model's default state.
@@ -26,13 +26,13 @@ class OutcomeFactory extends Factory
         $category = User::find(1)
             ->categories
             ->where("currency_id", 1)
-            ->where("used_in_outcome", true)
+            ->where("used_in_expences", true)
             ->random();
 
         $account = User::find(1)
             ->accounts
             ->where("currency_id", 1)
-            ->where("used_in_outcome", true)
+            ->where("used_in_expences", true)
             ->random();
 
         return [

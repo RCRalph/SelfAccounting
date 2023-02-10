@@ -21,7 +21,7 @@
                                     :accountID="from.account_id"
                                     :disabled="loading"
                                     :entryValue="fromData.value"
-                                    type="outcome"
+                                    type="expences"
                                 ></CashExchangeDialogComponent>
                             </div>
 
@@ -231,7 +231,7 @@
 
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-import CashExchangeDialogComponent from "@/income-outcome/CashExchangeDialogComponent.vue";
+import CashExchangeDialogComponent from "@/income-expences/CashExchangeDialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
@@ -345,8 +345,8 @@ export default {
         },
         fromSelects() {
             return {
-                categories: this.categories[this.from.currency_id].filter(item => item.used_in_outcome),
-                accounts: this.accounts[this.from.currency_id].filter(item => item.used_in_outcome)
+                categories: this.categories[this.from.currency_id].filter(item => item.used_in_expences),
+                accounts: this.accounts[this.from.currency_id].filter(item => item.used_in_expences)
             }
         },
         toData() {
