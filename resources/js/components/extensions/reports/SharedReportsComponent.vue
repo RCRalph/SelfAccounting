@@ -114,7 +114,7 @@
     </v-card>
 
     <v-card v-else>
-        <v-card-title class="justify-center text-capitalize pb-lg-3">Owned reports</v-card-title>
+        <v-card-title class="justify-center text-capitalize pb-lg-3 text-h5">Shared reports</v-card-title>
 
         <v-card-text class="d-flex justify-center">
             <v-progress-circular

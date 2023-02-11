@@ -9,7 +9,13 @@ Please note that all accounts that you enter should point to a different place w
 
 Clicking on the pen in the actions column will allow you to edit the given record. There you can change its properties. To reset your changes click the reset button. To update your changes click the update button.
 
-Clicking on the trash bin in the actions column will allow you to delete the given record. You have to confirm your decision by clicking the **Yes** button in the dialog.
+You can **archive** your account by disabling the following options:
+- Show in income
+- Show in expences
+- Count to summary
+This way your account name will still be visible in the overviews, but you will not be able to use that account any further. You can restore its functionality by enabling at least one of the options mentioned above.
+
+Clicking on the trash bin in the actions column will allow you to delete the given record. You have to confirm your decision by clicking the **Yes** button in the dialog. Doing this isn't preferable, as it might break some of your records. For most of the users **archiving** an account will be the best option.
 
 ## Add account
 Clicking the **Add category** button will open a dialog, which will allow you to enter a new category. Fill in the fields in the dialog and if everything is correct, the **Submit** button will be green and after clicking it you will submit your category.

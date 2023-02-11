@@ -192,7 +192,7 @@ class ChartsController extends Controller
                     $incomeByAccount->prepend($firstEntries[$account->id] * 1, $startDate);
                 }
 
-                if (!$incomeByAccount->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
+                if ($account->count_to_summary && !$incomeByAccount->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
                     $incomeByAccount->put($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"), 0);
                 }
             }
@@ -268,10 +268,10 @@ class ChartsController extends Controller
             ->map(fn ($item) => $item->currency_id)
             ->unique()->count();
 
-        $colors = $count ? $this->getColors($count) : [];
+        $colors = $this->getColors($count);
 
         foreach ($balanceByAccounts as $accountID => $balance) {
-			$account = $accounts->where("id", $accountID)->first();
+			$account = $accounts->firstWhere("id", $accountID);
 
             $count--;
             $retArr = [
