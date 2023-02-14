@@ -6,12 +6,12 @@
                     <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-pencil</v-icon>
                 </template>
 
-                <span>Edit {{ type }}</span>
+                <span>Edit {{ type == 'expences' ? 'expence' : 'income' }}</span>
             </v-tooltip>
         </template>
 
         <v-card v-if="ready">
-            <v-card-title>Edit {{ type }}</v-card-title>
+            <v-card-title>Edit {{ type == 'expences' ? 'expence' : 'income' }}</v-card-title>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
@@ -49,7 +49,7 @@
                                             </v-icon>
                                         </template>
 
-                                        Allowed operations: <strong>+ - * / ^</strong>
+                                        Supported operations: <strong>+ - * / ^</strong>
                                     </v-tooltip>
                                 </template>
                             </v-text-field>
@@ -72,7 +72,7 @@
                                             </v-icon>
                                         </template>
 
-                                        Allowed operations: <strong>+ - * / ^</strong>
+                                        Supported operations: <strong>+ - * / ^</strong>
                                     </v-tooltip>
                                 </template>
                             </v-text-field>

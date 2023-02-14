@@ -17,13 +17,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('date');
-            $table->foreignId('source_account')->constrained('accounts')->cascadeOnDelete();
+            $table->foreignId('source_account_id')->constrained('accounts')->cascadeOnDelete();
             $table->decimal('source_value', 13, 2);
-            $table->foreignId('target_account')->constrained('accounts')->cascadeOnDelete();
+            $table->foreignId('target_account_id')->constrained('accounts')->cascadeOnDelete();
             $table->decimal('target_value', 13, 2);
             $table->timestamps(6);
 
-            $table->index(['id', 'user_id', 'source_account', 'target_account']);
+            $table->index(['id', 'user_id', 'source_account_id', 'target_account_id']);
         });
     }
 

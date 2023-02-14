@@ -187,8 +187,8 @@ export default {
                         else if (amount < 0) {
                             return "Amount cannot be negative";
                         }
-                        else if (amount >= 1e7) {
-                            return "Amount has to be less than 1000000";
+                        else if (amount >= Number.MAX_SAFE_INTEGER) {
+                            return `Amount has to be less than ${Number.MAX_SAFE_INTEGER}`;
                         }
                         else if (!Number.isInteger(Number(amount))) {
                             return "Amount has to be an integer";

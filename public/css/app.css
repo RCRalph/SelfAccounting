@@ -29703,6 +29703,11 @@ tr:hover {
   margin-bottom: 65px;
 }
 
+.text-h5-5 {
+  font-size: 1.3rem !important;
+  font-weight: 400;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;

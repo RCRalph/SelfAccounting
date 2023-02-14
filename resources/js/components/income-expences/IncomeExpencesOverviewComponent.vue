@@ -10,7 +10,7 @@
                     </div>
 
                     <div>
-                        <v-icon>mdi-arrow-right-bold</v-icon>
+                        <v-icon>mdi-arrow-right-thick</v-icon>
                     </div>
 
                     <div class="ms-2 me-0" style="width: 145px">

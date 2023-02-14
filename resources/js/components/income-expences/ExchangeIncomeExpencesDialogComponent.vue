@@ -51,7 +51,7 @@
                                             </v-icon>
                                         </template>
 
-                                        Allowed operations: <strong>+ - * / ^</strong>
+                                        Supported operations: <strong>+ - * / ^</strong>
                                     </v-tooltip>
                                 </template>
                             </v-text-field>
@@ -72,7 +72,7 @@
                                             </v-icon>
                                         </template>
 
-                                        Allowed operations: <strong>+ - * / ^</strong>
+                                        Supported operations: <strong>+ - * / ^</strong>
                                     </v-tooltip>
                                 </template>
                             </v-text-field>
@@ -148,7 +148,7 @@
                                             </v-icon>
                                         </template>
 
-                                        Allowed operations: <strong>+ - * / ^</strong>
+                                        Supported operations: <strong>+ - * / ^</strong>
                                     </v-tooltip>
                                 </template>
                             </v-text-field>
@@ -169,7 +169,7 @@
                                             </v-icon>
                                         </template>
 
-                                        Allowed operations: <strong>+ - * / ^</strong>
+                                        Supported operations: <strong>+ - * / ^</strong>
                                     </v-tooltip>
                                 </template>
                             </v-text-field>

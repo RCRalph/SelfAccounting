@@ -2,24 +2,16 @@
     <div v-if="ready">
         <v-row>
             <v-col xl="8" cols="12" order="last" order-xl="first">
-                <v-card class="sticky-panel loading-height">
-                    <v-card-title class="justify-center text-h5 text-capitalize pb-lg-0">Transfers</v-card-title>
-
-                    <v-card-text>
-                        <TransferTableComponent
-                            :type="type"
-                            :categories="categories"
-                            :accounts="accounts"
-                        ></TransferTableComponent>
-                    </v-card-text>
-                </v-card>
+                <TransfersTableComponent
+                    :accounts="accounts"
+                ></TransfersTableComponent>
             </v-col>
 
             <v-col xl="4" cols="12" order-xl="last">
-                <TransferOverviewComponent
+                <!--<TransferOverviewComponent
                     :type="type"
                     :charts="charts"
-                ></TransferOverviewComponent>
+                ></TransferOverviewComponent>-->
             </v-col>
         </v-row>
     </div>
@@ -36,12 +28,12 @@
 import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 
-//import TransfersTableComponent from "@/income-expences/TransfersTableComponent.vue";
+import TransfersTableComponent from "@/transfers/TransfersTableComponent.vue";
 //import TransfersOverviewComponent from "@/income-expences/TransfersOverviewComponent.vue";
 
 export default {
     components: {
-        //TransfersTableComponent,
+        TransfersTableComponent,
         //TransfersOverviewComponent
     },
     mixins: [main],
