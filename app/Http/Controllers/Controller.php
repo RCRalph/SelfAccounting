@@ -211,7 +211,7 @@ class Controller extends BaseController
     }
 
     public function getCharts($route) {
-        return Chart::select("charts.id", "charts.name")
+        return Chart::select("charts.id", "charts.name", "charts.type")
             ->join("chart_routes", "chart_routes.chart_id", "=", "charts.id")
             ->where("chart_routes.route", $route)
             ->get();

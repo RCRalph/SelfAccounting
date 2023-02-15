@@ -17,7 +17,6 @@
 
             <v-col xl="4" cols="12" order-xl="last">
                 <OverviewComponent
-                    :type="type"
                     :charts="charts"
                 ></OverviewComponent>
             </v-col>

@@ -494,6 +494,6 @@ class ChartsController extends Controller
                 abort(500, "Invalid chart name");
         }
 
-        return response()->json(["info" => $chart->only("id", "name"), ...$result]);
+        return response()->json(["info" => $chart->only("id", "name", "type"), ...$result]);
     }
 }

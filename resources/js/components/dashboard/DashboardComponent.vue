@@ -45,7 +45,7 @@
                                     <v-col sm="6" cols="12" v-if="currentBalance.length">
                                         <v-select
                                             v-model="currentChart"
-                                            :items="chartTypes"
+                                            :items="charts"
                                             item-value="id"
                                             item-text="name"
                                             dense
@@ -57,9 +57,9 @@
                             </v-card-title>
 
                             <div class="mx-3" v-if="currentBalance.length">
-                                <BalanceHistoryChartComponent v-if="showBalanceHistory" :id="currentChart"></BalanceHistoryChartComponent>
+                                <BalanceHistoryChartComponent v-if="chartType == 'line'" :id="currentChart"></BalanceHistoryChartComponent>
 
-                                <DataByTypeChartComponent v-else-if="showDataByType" :id="currentChart"></DataByTypeChartComponent>
+                                <DataByTypeChartComponent v-else-if="chartType == 'doughnut'" :id="currentChart"></DataByTypeChartComponent>
                             </div>
 
                             <v-card-text>
@@ -150,7 +150,7 @@ export default {
     },
     data() {
         return {
-            chartTypes: [],
+            charts: [],
             currentChart: null,
             currentBalance: [],
             last30Days: {},
@@ -170,26 +170,9 @@ export default {
                     .reduce((item1, item2) => item1 + item2)
                 : 0
         },
-        showBalanceHistory() {
-            if (!this.currentChart) {
-                return false;
-            }
-
-            return this.chartTypes.find(item => item.id == this.currentChart).name == "Balance history";
-        },
-        showDataByType() {
-            if (!this.currentChart) {
-                return false;
-            }
-
-            return [
-                "Income by categories",
-                "Income by accounts",
-                "Expences by categories",
-                "Expences by accounts",
-                "Transfers by source accounts",
-                "Transfers by target accounts"
-            ].includes(this.chartTypes.find(item => item.id == this.currentChart).name);
+        chartType() {
+            console.log(this.charts, this.currentChart);
+            return this.ready ? this.charts.find(item => item.id == this.currentChart).type : ""
         }
     },
     methods: {
@@ -202,7 +185,7 @@ export default {
                     const data = response.data;
                     this.currentBalance = data.currentBalance;
                     this.last30Days = data.last30Days;
-                    this.chartTypes = data.charts;
+                    this.charts = data.charts;
                     if (data.charts.length) {
                         this.currentChart = data.charts[0].id
                     }
