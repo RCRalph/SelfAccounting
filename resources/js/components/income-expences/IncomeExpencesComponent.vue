@@ -16,10 +16,9 @@
             </v-col>
 
             <v-col xl="4" cols="12" order-xl="last">
-                <IncomeExpencesOverviewComponent
-                    :type="type"
+                <OverviewComponent
                     :charts="charts"
-                ></IncomeExpencesOverviewComponent>
+                ></OverviewComponent>
             </v-col>
         </v-row>
     </div>
@@ -37,12 +36,12 @@ import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 
 import IncomeExpencesTableComponent from "@/income-expences/IncomeExpencesTableComponent.vue";
-import IncomeExpencesOverviewComponent from "@/income-expences/IncomeExpencesOverviewComponent.vue";
+import OverviewComponent from "@/OverviewComponent.vue";
 
 export default {
     components: {
         IncomeExpencesTableComponent,
-        IncomeExpencesOverviewComponent
+        OverviewComponent
     },
     mixins: [main],
     setup() {

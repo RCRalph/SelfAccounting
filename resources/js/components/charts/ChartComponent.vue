@@ -18,14 +18,14 @@
 
         <div class="pa-4">
             <LineChart
-                v-if="showLineChart"
+                v-if="chartType == 'line'"
                 :options="chartData.options"
                 :chartData="chartData.data"
                 :style="'min-height: 70vh'"
             ></LineChart>
 
             <DoughnutChart
-                v-if="showDataByType"
+                v-if="chartType == 'doughnut'"
                 :options="chartData.options"
                 :chartData="chartData.data"
                 :style="'min-height: 70vh'"
@@ -79,26 +79,8 @@ export default {
         "currencies.usedCurrency": "getData"
     },
     computed: {
-        showLineChart() {
-            if (!this.ready) {
-                return false;
-            }
-
-            return [
-                "Balance history"
-            ].includes(this.chartInfo.name);
-        },
-        showDataByType() {
-            if (!this.ready) {
-                return false;
-            }
-
-            return [
-                "Income by categories",
-                "Income by accounts",
-                "Expences by categories",
-                "Expences by accounts"
-            ].includes(this.chartInfo.name);
+        chartType() {
+            return this.ready ? this.chartInfo.type : "";
         }
     },
     methods: {

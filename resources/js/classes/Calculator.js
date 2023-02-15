@@ -35,6 +35,11 @@ export default class Calculator {
             regex: /^-?(\d{1,11}|\d{0,11}\.\d+|\d{1,11}\.\d*)$/,
             precision: 2,
             name: "Price"
+        },
+        value: {
+            regex: /^-?(\d{1,11}|\d{0,11}\.\d+|\d{1,11}\.\d*)$/,
+            precision: 2,
+            name: "Value"
         }
     };
 

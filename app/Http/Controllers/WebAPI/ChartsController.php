@@ -19,7 +19,7 @@ class ChartsController extends Controller
         $this->middleware("auth");
     }
 
-    private function dataByType($io, $type, Currency $currency, $limits)
+    private function dataByType($incomeExpences, $type, Currency $currency, $limits)
     {
         // Get type data
         $typeData = $type == "category" ?
@@ -30,23 +30,23 @@ class ChartsController extends Controller
             ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("show_on_charts", true)
-            ->where("used_in_" . $io, true)
+            ->where("used_in_" . $incomeExpences, true)
             ->get();
 
-        // Get type IDs to get from io
+        // Get type IDs to get from income and expences
         $toShow = $typeData->pluck("id")->toArray();
 
-        $ioData = $this->getTypeRelation($io);
+        $incomeExpencesData = $this->getTypeRelation($incomeExpences);
 
         if ($limits["start"]) {
-            $ioData = $ioData->whereDate("date", ">=", $limits["start"]);
+            $incomeExpencesData = $incomeExpencesData->whereDate("date", ">=", $limits["start"]);
         }
 
         if ($limits["end"]) {
-            $ioData = $ioData->whereDate("date", "<=", $limits["end"]);
+            $incomeExpencesData = $incomeExpencesData->whereDate("date", "<=", $limits["end"]);
         }
 
-        $ioData = $ioData
+        $incomeExpencesData = $incomeExpencesData
             ->select($type . "_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
             ->whereIn($type . "_id", $toShow)
@@ -66,7 +66,7 @@ class ChartsController extends Controller
             "labels" => []
         ];
 
-        foreach ($ioData as $typeID => $amount) {
+        foreach ($incomeExpencesData as $typeID => $amount) {
             array_push(
                 $data["datasets"][0]["data"],
                 round($amount, 2)
@@ -80,6 +80,79 @@ class ChartsController extends Controller
             array_push(
                 $data["labels"],
                 $typeData->firstWhere("id", $typeID)["name"]
+            );
+        }
+
+        $options = [
+            "responsive" => true,
+            "maintainAspectRatio" => false,
+            "legend" => [
+                "display" => true,
+                "labels" => [
+                    "fontColor" => "#3490dc"
+                ]
+            ],
+            "circumference" => pi(),
+            "rotation" => -pi()
+        ];
+
+        return compact("data", "options");
+    }
+
+    private function transfersByAccount($type, Currency $currency, $limits)
+    {
+        if (!in_array($type, ["source", "target"])) {
+            abort(500, "Invalid type");
+        }
+
+        $accounts = auth()->user()->accounts()
+            ->select("id", "name")
+            ->where("currency_id", $currency->id)
+            ->get();
+
+        $items = auth()->user()->transfers()
+            ->select($type . "_account_id", $type . "_value")
+            ->whereIn($type . "_account_id", $accounts->pluck("id"));
+
+        if ($limits["start"]) {
+            $items = $items->whereDate("date", ">=", $limits["start"]);
+        }
+
+        if ($limits["end"]) {
+            $items = $items->whereDate("date", "<=", $limits["end"]);
+        }
+
+        $items = $items->get()
+            ->groupBy($type . "_account_id")
+            ->map(fn ($item) => $item->sum($type . "_value"));
+
+        $count = $accounts->count();
+        $colors = $this->getColors($count);
+
+        $data = [
+            "datasets" => [
+                [
+                    "data" => [],
+                    "backgroundColor" => []
+                ]
+            ],
+            "labels" => []
+        ];
+
+        foreach ($items as $accountID => $value) {
+            array_push(
+                $data["datasets"][0]["data"],
+                round($value, 2)
+            );
+
+            array_push(
+                $data["datasets"][0]["backgroundColor"],
+                $colors[--$count]
+            );
+
+            array_push(
+                $data["labels"],
+                $accounts->firstWhere("id", $accountID)->name
             );
         }
 
@@ -122,9 +195,18 @@ class ChartsController extends Controller
             ->where("currency_id", $currency->id)
             ->whereIn("account_id", $accountsToShow);
 
+        $transfers = auth()->user()->transfers()
+            ->select("date", "source_account_id", "source_value", "target_account_id", "target_value")
+            ->where(function ($query) use ($accountsToShow) {
+                $query->whereIn("source_account_id", $accountsToShow)
+                    ->orWhereIn("target_account_id", $accountsToShow);
+            })
+            ->get();
+
         if ($limits["end"]) {
-            $income = $income->whereDate("date", "<=", $limits["end"]);
-            $expences = $expences->whereDate("date", "<=", $limits["end"]);
+            $income = $income->where("date", "<=", $limits["end"]);
+            $expences = $expences->where("date", "<=", $limits["end"]);
+            $transfers = $transfers->where("date", "<=", $limits["end"]);
         }
 
         $income = $income->get();
@@ -134,12 +216,13 @@ class ChartsController extends Controller
             $balanceBefore = $this->getBalance(
                 $income->where("date", "<=", $limits["start"]),
                 $expences->where("date", "<=", $limits["start"]),
+                $transfers->where("date", "<=", $limits["start"]),
                 $accounts, [], $accountsToShow, []
             );
         }
         else {
             $balanceBefore = $this->getBalance(
-                collect([]), collect([]),
+                collect([]), collect([]), collect([]),
                 $accounts, [], $accountsToShow, []
             );
         }
@@ -154,6 +237,7 @@ class ChartsController extends Controller
         if ($limits["start"]) {
             $income = $income->where("date", ">", $limits["start"]);
             $expences = $expences->where("date", ">", $limits["start"]);
+            $transfers = $transfers->where("date", ">", $limits["start"]);
         }
 
         $income = $income
@@ -192,7 +276,7 @@ class ChartsController extends Controller
                     $incomeByAccount->prepend($firstEntries[$account->id] * 1, $startDate);
                 }
 
-                if (!$incomeByAccount->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
+                if ($account->count_to_summary && !$incomeByAccount->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
                     $incomeByAccount->put($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"), 0);
                 }
             }
@@ -213,6 +297,77 @@ class ChartsController extends Controller
 
         $differenceByAccounts = $income;
         foreach ($expences as $accountID => $dates) {
+            foreach ($dates as $date => $difference) {
+                $differenceAccount = $differenceByAccounts->get($accountID);
+
+                if ($differenceAccount->has($date)) {
+                    $differenceAccount->put(
+                        $date,
+                        $differenceAccount->get($date) - $difference
+                    );
+                }
+                else {
+                    $differenceAccount->put(
+                        $date,
+                        -$difference
+                    );
+                }
+            }
+
+            $differenceByAccounts->put(
+                $accountID,
+                $differenceByAccounts->get($accountID)
+                    ->sortBy(fn ($val, $key) => strtotime($key))
+            );
+        }
+
+        // Add transfers to differences
+        $transfersIn = $transfers
+            ->whereIn("target_account_id", $accountsToShow)
+            ->groupBy("target_account_id")
+            ->map(fn ($item) => $item
+                ->groupBy("date")
+                ->map(fn ($item1) => $item1->count() ?
+                    $item1->pluck("target_value")->reduce(fn ($carry, $item) => $carry + $item) : 0
+                )
+            );
+
+        foreach ($transfersIn as $accountID => $dates) {
+            foreach ($dates as $date => $difference) {
+                $differenceAccount = $differenceByAccounts->get($accountID);
+
+                if ($differenceAccount->has($date)) {
+                    $differenceAccount->put(
+                        $date,
+                        $differenceAccount->get($date) + $difference
+                    );
+                }
+                else {
+                    $differenceAccount->put(
+                        $date,
+                        $difference
+                    );
+                }
+            }
+
+            $differenceByAccounts->put(
+                $accountID,
+                $differenceByAccounts->get($accountID)
+                    ->sortBy(fn ($val, $key) => strtotime($key))
+            );
+        }
+
+        $transfersOut = $transfers
+            ->whereIn("source_account_id", $accountsToShow)
+            ->groupBy("source_account_id")
+            ->map(fn ($item) => $item
+                ->groupBy("date")
+                ->map(fn ($item1) => $item1->count() ?
+                    $item1->pluck("source_value")->reduce(fn ($carry, $item) => $carry + $item) : 0
+                )
+            );
+
+        foreach ($transfersOut as $accountID => $dates) {
             foreach ($dates as $date => $difference) {
                 $differenceAccount = $differenceByAccounts->get($accountID);
 
@@ -268,10 +423,10 @@ class ChartsController extends Controller
             ->map(fn ($item) => $item->currency_id)
             ->unique()->count();
 
-        $colors = $count ? $this->getColors($count) : [];
+        $colors = $this->getColors($count);
 
         foreach ($balanceByAccounts as $accountID => $balance) {
-			$account = $accounts->where("id", $accountID)->first();
+			$account = $accounts->firstWhere("id", $accountID);
 
             $count--;
             $retArr = [
@@ -392,11 +547,11 @@ class ChartsController extends Controller
             "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
         ]);
 
-        $retArr = [];
+        $result = [];
 
         switch ($chart->name) {
             case "Balance history":
-                $retArr = $this->balanceHistory($currency, $limits);
+                $result = $this->balanceHistory($currency, $limits);
                 break;
 
             case "Income by categories":
@@ -404,18 +559,23 @@ class ChartsController extends Controller
             case "Income by accounts":
             case "Expences by accounts":
                 $name = explode(" ", $chart->name);
-                $retArr = $this->dataByType(
+                $result = $this->dataByType(
                     strtolower($name[0]),
                     $name[2] == "categories" ? "category" : "account",
                     $currency, $limits
                 );
                 break;
 
+            case "Transfers by source accounts":
+            case "Transfers by target accounts":
+                $name = explode(" ", $chart->name);
+                $result = $this->transfersByAccount($name[2], $currency, $limits);
+                break;
 
             default:
                 abort(500, "Invalid chart name");
         }
 
-        return response()->json(["info" => $chart->only("id", "name"), ...$retArr]);
+        return response()->json(["info" => $chart->only("id", "name", "type"), ...$result]);
     }
 }

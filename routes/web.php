@@ -36,20 +36,36 @@ Route::prefix("/web-api")->group(function () {
     // Income and expences routes
     foreach (["income", "expences"] as $type) {
         Route::group(["prefix" => "/$type", "middleware" => "income-expences:$type"], function () use ($type) {
+            Route::prefix("/currency/{currency}")->group(function () use ($type) {
+                Route::get("/", "WebAPI\IncomeExpencesController@index")->name("web-api.$type");
+                Route::post("/", "WebAPI\IncomeExpencesController@store")->name("web-api.$type.store");
+                Route::get("/data", "WebAPI\IncomeExpencesController@data")->name("web-api.$type.data");
+                Route::get("/list", "WebAPI\IncomeExpencesController@list")->name("web-api.$type.list");
+            });
+
             Route::prefix("/{id}")->group(function () use ($type) {
                 Route::get("/", "WebAPI\IncomeExpencesController@show")->name("web-api.$type.show");
                 Route::patch("/", "WebAPI\IncomeExpencesController@update")->name("web-api.$type.update");
                 Route::delete("/", "WebAPI\IncomeExpencesController@destroy")->name("web-api.$type.destroy");
             });
-
-            Route::prefix("/currency/{currency}")->group(function () use ($type) {
-                Route::get("/", "WebAPI\IncomeExpencesController@index")->name("web-api.$type.currency");
-                Route::post("/", "WebAPI\IncomeExpencesController@store")->name("web-api.$type.currency.store");
-                Route::get("/data", "WebAPI\IncomeExpencesController@data")->name("web-api.$type.currency.data");
-                Route::get("/list", "WebAPI\IncomeExpencesController@list")->name("web-api.$type.currency.list");
-            });
         });
     }
+
+    Route::prefix("/transfers")->group(function () {
+        Route::get("/", "WebAPI\TransfersController@data")->name("web-api.transfers.data");
+        Route::post("/", "WebAPI\TransfersController@store")->name("web-api.transfers.store");
+
+        Route::prefix("/currency/{currency}")->group(function () {
+            Route::get("/", "WebAPI\TransfersController@index")->name("web-api.transfers");
+            Route::get("/list", "WebAPI\TransfersController@list")->name("web-api.transfers.list");
+        });
+
+        Route::prefix("/{transfer}")->group(function () {
+            Route::get("/", "WebAPI\TransfersController@show")->name("web-api.transfers.show");
+            Route::patch("/", "WebAPI\TransfersController@update")->name("web-api.transfers.update");
+            Route::delete("/", "WebAPI\TransfersController@destroy")->name("web-api.transfers.destroy");
+        });
+    });
 
     Route::prefix("/exchange")->group(function () {
         Route::get("/", "WebAPI\ExchangeController@show")->name("web-api.exchange.show");

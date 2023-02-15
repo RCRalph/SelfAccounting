@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(Expence::class);
     }
 
+    public function transfers()
+    {
+        return $this->hasMany(Transfer::class);
+    }
+
     public function extensions()
     {
         return $this->belongsToMany(Extension::class, 'extension_user', 'user_id', 'extension_id')->withPivot('enabled');

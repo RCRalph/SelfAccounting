@@ -24,7 +24,7 @@ class Controller extends BaseController
         return Cache::rememberForever("currencies", fn () => Currency::all());
     }
 
-    public function getBalance($income, $expences, $accounts, $categories, $accountsToShow, $categoriesToShow)
+    public function getBalance($income, $expences, $transfers, $accounts, $categories, $accountsToShow, $categoriesToShow)
     {
         $incomeByAccounts = $income
             ->whereIn("account_id", $accountsToShow)
@@ -40,6 +40,38 @@ class Controller extends BaseController
 
         $balanceByAccounts = $incomeByAccounts;
         foreach ($expencesByAccounts as $account => $balance) {
+            if (array_key_exists($account, $balanceByAccounts)) {
+                $balanceByAccounts[$account] -= $balance;
+            }
+            else {
+                $balanceByAccounts[$account] = -$balance;
+            }
+        }
+
+        // Add incoming transfers
+        $transfersInByAccounts = $transfers
+            ->whereIn("target_account_id", $accounts->pluck("id"))
+            ->groupBy("target_account_id")
+            ->map(fn ($item) => $item->sum("target_value"))
+            ->toArray();
+
+        foreach ($transfersInByAccounts as $account => $balance) {
+            if (array_key_exists($account, $balanceByAccounts)) {
+                $balanceByAccounts[$account] += $balance;
+            }
+            else {
+                $balanceByAccounts[$account] = $balance;
+            }
+        }
+
+        // Add outgoing transfers
+        $transfersOutByAccounts = $transfers
+            ->whereIn("source_account_id", $accounts->pluck("id"))
+            ->groupBy("source_account_id")
+            ->map(fn ($item) => $item->sum("source_value"))
+            ->toArray();
+
+        foreach ($transfersOutByAccounts as $account => $balance) {
             if (array_key_exists($account, $balanceByAccounts)) {
                 $balanceByAccounts[$account] -= $balance;
             }
@@ -80,7 +112,7 @@ class Controller extends BaseController
         $foundAccountIDs = [];
 
         foreach ($balanceByAccounts as $accountID => $balance) {
-            $foundAccount = $accounts->where("id", $accountID)->first();
+            $foundAccount = $accounts->firstWhere("id", $accountID);
 
             array_push($currentBalance, [
                 "account_id" => $foundAccount->id,
@@ -102,7 +134,7 @@ class Controller extends BaseController
 
         // Add categories marked as count to summary
         foreach ($balanceByCategories as $categoryID => $balance) {
-            $foundCategory = $categories->where("id", $categoryID)->first();
+            $foundCategory = $categories->firstWhere("id", $categoryID);
 
             array_push($currentBalance, [
                 "category_id" => $foundCategory->id,
@@ -211,7 +243,7 @@ class Controller extends BaseController
     }
 
     public function getCharts($route) {
-        return Chart::select("charts.id", "charts.name")
+        return Chart::select("charts.id", "charts.name", "charts.type")
             ->join("chart_routes", "chart_routes.chart_id", "=", "charts.id")
             ->where("chart_routes.route", $route)
             ->get();

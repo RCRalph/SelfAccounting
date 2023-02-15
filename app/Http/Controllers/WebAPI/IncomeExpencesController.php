@@ -152,8 +152,6 @@ class IncomeExpencesController extends Controller
             $items->whereIn("account_id", $data["accounts"]);
         }
 
-        $fields = ["date", "title", "amount", "price", "value"];
-
         if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
             foreach ($data["orderFields"] as $i => $item) {
                 $fields = array_diff($fields, [$item]);
@@ -193,7 +191,7 @@ class IncomeExpencesController extends Controller
             $cash = request()->validate([
                 "cash" => ["required", "array"],
                 "cash.*.id" => ["required", "integer", new CorrectCashCurrency($currency)],
-                "cash.*.amount" => ["required", "integer", "min:0", "max:1e7", "not_in:1e7", new CashValidAmount(request()->type)]
+                "cash.*.amount" => ["required", "integer", "min:0", new CashValidAmount(request()->type == "income")]
             ])["cash"];
 
             foreach ($cash as $item) {

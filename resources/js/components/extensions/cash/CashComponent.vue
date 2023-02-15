@@ -69,7 +69,7 @@
             </v-card>
 
             <v-card v-else>
-                <v-card-title>Cash handling</v-card-title>
+                <v-card-title class="text-h5">Cash handling</v-card-title>
 
                 <v-card-text class="d-flex justify-center">
                     <v-progress-circular

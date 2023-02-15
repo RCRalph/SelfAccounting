@@ -27,12 +27,22 @@ class Account extends Model
 
     public function income()
     {
-        return $this->hasMany(Income::class, "account_id");
+        return $this->hasMany(Income::class);
     }
 
     public function expences()
     {
-        return $this->hasMany(Expence::class, "account_id");
+        return $this->hasMany(Expence::class);
+    }
+
+    public function sourceOfTransfers()
+    {
+        return $this->hasMany(Transfer::class);
+    }
+
+    public function targetOfTransfers()
+    {
+        return $this->hasMany(Transfer::class);
     }
 
     public function cashUser()
@@ -42,11 +52,11 @@ class Account extends Model
 
     public function reportQueries()
     {
-        return $this->hasMany(ReportQuery::class, "account_id");
+        return $this->hasMany(ReportQuery::class);
     }
 
     public function reportAdditionalEntries()
     {
-        return $this->hasMany(ReportAdditionalEntry::class, "account_id");
+        return $this->hasMany(ReportAdditionalEntry::class);
     }
 }

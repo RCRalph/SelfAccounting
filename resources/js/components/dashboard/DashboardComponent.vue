@@ -45,7 +45,7 @@
                                     <v-col sm="6" cols="12" v-if="currentBalance.length">
                                         <v-select
                                             v-model="currentChart"
-                                            :items="chartTypes"
+                                            :items="charts"
                                             item-value="id"
                                             item-text="name"
                                             dense
@@ -57,9 +57,9 @@
                             </v-card-title>
 
                             <div class="mx-3" v-if="currentBalance.length">
-                                <BalanceHistoryChartComponent v-if="showBalanceHistory" :id="currentChart"></BalanceHistoryChartComponent>
+                                <BalanceHistoryChartComponent v-if="chartType == 'line'" :id="currentChart"></BalanceHistoryChartComponent>
 
-                                <DataByTypeChartComponent v-else-if="showDataByType" :id="currentChart"></DataByTypeChartComponent>
+                                <DataByTypeChartComponent v-else-if="chartType == 'doughnut'" :id="currentChart"></DataByTypeChartComponent>
                             </div>
 
                             <v-card-text>
@@ -67,7 +67,7 @@
                                     <template v-slot:default>
                                         <tbody>
                                             <tr>
-                                                <td class="text-right text-h6">
+                                                <td class="text-right text-h6" style="width: 50%">
                                                     Income
                                                 </td>
 
@@ -88,6 +88,26 @@
 
                                             <tr>
                                                 <td class="text-right text-h6">
+                                                    Incoming transfers
+                                                </td>
+
+                                                <td class="text-h6">
+                                                    {{ last30Days.transfersIn | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-right text-h6">
+                                                    Outgoing transfers
+                                                </td>
+
+                                                <td class="text-h6">
+                                                    {{ last30Days.transfersOut | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="text-right text-h6">
                                                     Total
                                                 </td>
 
@@ -96,7 +116,7 @@
                                                     last30DaysSummarySign == '+' && 'success--text',
                                                     last30DaysSummarySign == '-' && 'error--text'
                                                 ]">
-                                                    {{ last30DaysSummarySign }}{{ Math.round(Math.abs(last30Days.income - last30Days.expences) * 100) / 100 | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    {{ last30DaysSummarySign }}{{ Math.round(Math.abs(last30DaysTotal) * 100) / 100 | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -150,7 +170,7 @@ export default {
     },
     data() {
         return {
-            chartTypes: [],
+            charts: [],
             currentChart: null,
             currentBalance: [],
             last30Days: {},
@@ -159,9 +179,11 @@ export default {
         }
     },
     computed: {
+        last30DaysTotal() {
+            return this.last30Days.income + this.last30Days.transfersIn - this.last30Days.expences - this.last30Days.transfersOut;
+        },
         last30DaysSummarySign() {
-            const sum = this.last30Days.income - this.last30Days.expences;
-            return sum > 0 ? "+" : ( sum < 0 ? "-" : "" )
+            return this.last30DaysTotal > 0 ? "+" : ( this.last30DaysTotal < 0 ? "-" : "" )
         },
         currentBalanceSum() {
             return this.currentBalance.length ?
@@ -170,24 +192,9 @@ export default {
                     .reduce((item1, item2) => item1 + item2)
                 : 0
         },
-        showBalanceHistory() {
-            if (!this.currentChart) {
-                return false;
-            }
-
-            return this.chartTypes.find(item => item.id == this.currentChart).name == "Balance history";
-        },
-        showDataByType() {
-            if (!this.currentChart) {
-                return false;
-            }
-
-            return [
-                "Income by categories",
-                "Income by accounts",
-                "Expences by categories",
-                "Expences by accounts"
-            ].includes(this.chartTypes.find(item => item.id == this.currentChart).name);
+        chartType() {
+            console.log(this.charts, this.currentChart);
+            return this.ready ? this.charts.find(item => item.id == this.currentChart).type : ""
         }
     },
     methods: {
@@ -200,7 +207,7 @@ export default {
                     const data = response.data;
                     this.currentBalance = data.currentBalance;
                     this.last30Days = data.last30Days;
-                    this.chartTypes = data.charts;
+                    this.charts = data.charts;
                     if (data.charts.length) {
                         this.currentChart = data.charts[0].id
                     }

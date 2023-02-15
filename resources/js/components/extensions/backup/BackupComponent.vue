@@ -52,7 +52,7 @@
             </v-card>
 
             <v-card v-else>
-                <v-card-title>Backup data</v-card-title>
+                <v-card-title class="text-h5">Backup data</v-card-title>
 
                 <v-card-text class="d-flex justify-center">
                     <v-progress-circular

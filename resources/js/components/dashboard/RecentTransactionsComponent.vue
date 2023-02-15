@@ -52,7 +52,7 @@
                             ></EditIncomeExpencesDialogComponent>
 
                             <DeleteDialogComponent
-                                :thing="item.value.value < 0 ? 'expences' : 'income'"
+                                :thing="item.value.value < 0 ? 'expence' : 'income'"
                                 :url="`${item.value.value < 0 ? 'expences' : 'income'}/${item.id.value}`"
                                 @deleted="getData"
                             ></DeleteDialogComponent>

@@ -11,6 +11,7 @@ class ChartSeeder extends Seeder
     private $charts = [
         [
             "name" => "Balance history",
+            "type" => "line",
             "routes" => [
                 "/",
                 "/dashboard"
@@ -18,6 +19,7 @@ class ChartSeeder extends Seeder
         ],
         [
             "name" => "Income by categories",
+            "type" => "doughnut",
             "routes" => [
                 "/",
                 "/dashboard",
@@ -26,6 +28,7 @@ class ChartSeeder extends Seeder
         ],
         [
             "name" => "Expences by categories",
+            "type" => "doughnut",
             "routes" => [
                 "/",
                 "/dashboard",
@@ -34,6 +37,7 @@ class ChartSeeder extends Seeder
         ],
         [
             "name" => "Income by accounts",
+            "type" => "doughnut",
             "routes" => [
                 "/",
                 "/dashboard",
@@ -42,12 +46,31 @@ class ChartSeeder extends Seeder
         ],
         [
             "name" => "Expences by accounts",
+            "type" => "doughnut",
             "routes" => [
                 "/",
                 "/dashboard",
                 "/expences"
             ]
-        ]
+        ],
+        [
+            "name" => "Transfers by source accounts",
+            "type" => "doughnut",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/transfers"
+            ]
+        ],
+        [
+            "name" => "Transfers by target accounts",
+            "type" => "doughnut",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/transfers"
+            ]
+        ],
     ];
 
     /**
@@ -60,7 +83,10 @@ class ChartSeeder extends Seeder
         Chart::whereNotIn("name", array_column($this->charts, "name"))->delete();
 
         foreach ($this->charts as $chart) {
-            $chartInDB = Chart::firstOrCreate(["name" => $chart["name"]]);
+            $chartInDB = Chart::updateOrCreate(
+                [ "name" => $chart["name"] ],
+                [ "type" => $chart["type"] ]
+            );
 
             $chartInDB->routes()->whereNotIn("route", $chart["routes"])->delete();
             foreach ($chart["routes"] as $route) {
