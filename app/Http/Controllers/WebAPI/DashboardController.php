@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $this->middleware("auth");
     }
 
-    private function getLast30DaysBalance($income, $expences, $accountsToShow, $categoriesToShow)
+    private function getLast30DaysBalance($income, $expences, $transfers, $accountIDs, $accountsToShow, $categoriesToShow)
     {
         $incomeToSum = $income
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
@@ -35,9 +35,21 @@ class DashboardController extends Controller
             ->whereIn("category_id", $categoriesToShow)
             ->sum("value");
 
+        $transfersIn = $transfers
+            ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
+            ->whereIn("target_account_id", $accountIDs)
+            ->sum("target_value");
+
+        $transfersOut = $transfers
+            ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
+            ->whereIn("source_account_id", $accountIDs)
+            ->sum("source_value");
+
         return [
             "income" => $incomeToSum,
-            "expences" => $expencesToSum - $expencesCategorySum
+            "expences" => $expencesToSum - $expencesCategorySum,
+            "transfersIn" => $transfersIn,
+            "transfersOut" => $transfersOut
         ];
     }
 
@@ -46,6 +58,7 @@ class DashboardController extends Controller
         $income = auth()->user()->income()
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("1 AS type"));
+
         $expences = auth()->user()->expences()
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("-1 AS type"));
@@ -76,28 +89,38 @@ class DashboardController extends Controller
             ->where("currency_id", $currency->id);
 
         $categoriesToShow = $categories
-            ->where("count_to_summary", true)->get()
+            ->where("count_to_summary", true)
             ->pluck("id")->toArray();
 
         $accountsToShow = $accounts
-            ->where("count_to_summary", true)->get()
+            ->where("count_to_summary", true)
             ->pluck("id")->toArray();
+
+        $accountIDs = $accounts->pluck("id")->toArray();
 
         $accounts = $accounts->addSelect("name", "start_date", "start_balance")->get();
         $categories = $categories->addSelect("name", "count_to_summary", "start_date", "end_date")->get();
 
         $income = auth()->user()->income()
-            ->where("currency_id", $currency->id)
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
+            ->where("currency_id", $currency->id)
             ->get();
 
         $expences = auth()->user()->expences()
-            ->where("currency_id", $currency->id)
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
+            ->where("currency_id", $currency->id)
             ->get();
 
-        $currentBalance = $this->getBalance($income, $expences, $accounts, $categories, $accountsToShow, $categoriesToShow);
-        $last30Days = $this->getLast30DaysBalance($income, $expences, $accountsToShow, $categoriesToShow);
+        $transfers = auth()->user()->transfers()
+            ->select("date", "source_account_id", "source_value", "target_account_id", "target_value")
+            ->where(function ($query) use ($accountIDs) {
+                $query->whereIn("source_account_id", $accountIDs)
+                    ->orWhereIn("target_account_id", $accountIDs);
+            })
+            ->get();
+
+        $currentBalance = $this->getBalance($income, $expences, $transfers, $accounts, $categories, $accountsToShow, $categoriesToShow);
+        $last30Days = $this->getLast30DaysBalance($income, $expences, $transfers, $accountIDs, $accountsToShow, $categoriesToShow);
 
         $charts = $this->getCharts("/dashboard");
 

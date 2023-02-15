@@ -195,9 +195,18 @@ class ChartsController extends Controller
             ->where("currency_id", $currency->id)
             ->whereIn("account_id", $accountsToShow);
 
+        $transfers = auth()->user()->transfers()
+            ->select("date", "source_account_id", "source_value", "target_account_id", "target_value")
+            ->where(function ($query) use ($accountsToShow) {
+                $query->whereIn("source_account_id", $accountsToShow)
+                    ->orWhereIn("target_account_id", $accountsToShow);
+            })
+            ->get();
+
         if ($limits["end"]) {
-            $income = $income->whereDate("date", "<=", $limits["end"]);
-            $expences = $expences->whereDate("date", "<=", $limits["end"]);
+            $income = $income->where("date", "<=", $limits["end"]);
+            $expences = $expences->where("date", "<=", $limits["end"]);
+            $transfers = $transfers->where("date", "<=", $limits["end"]);
         }
 
         $income = $income->get();
@@ -207,12 +216,13 @@ class ChartsController extends Controller
             $balanceBefore = $this->getBalance(
                 $income->where("date", "<=", $limits["start"]),
                 $expences->where("date", "<=", $limits["start"]),
+                $transfers->where("date", "<=", $limits["start"]),
                 $accounts, [], $accountsToShow, []
             );
         }
         else {
             $balanceBefore = $this->getBalance(
-                collect([]), collect([]),
+                collect([]), collect([]), collect([]),
                 $accounts, [], $accountsToShow, []
             );
         }
@@ -227,6 +237,7 @@ class ChartsController extends Controller
         if ($limits["start"]) {
             $income = $income->where("date", ">", $limits["start"]);
             $expences = $expences->where("date", ">", $limits["start"]);
+            $transfers = $transfers->where("date", ">", $limits["start"]);
         }
 
         $income = $income
@@ -286,6 +297,77 @@ class ChartsController extends Controller
 
         $differenceByAccounts = $income;
         foreach ($expences as $accountID => $dates) {
+            foreach ($dates as $date => $difference) {
+                $differenceAccount = $differenceByAccounts->get($accountID);
+
+                if ($differenceAccount->has($date)) {
+                    $differenceAccount->put(
+                        $date,
+                        $differenceAccount->get($date) - $difference
+                    );
+                }
+                else {
+                    $differenceAccount->put(
+                        $date,
+                        -$difference
+                    );
+                }
+            }
+
+            $differenceByAccounts->put(
+                $accountID,
+                $differenceByAccounts->get($accountID)
+                    ->sortBy(fn ($val, $key) => strtotime($key))
+            );
+        }
+
+        // Add transfers to differences
+        $transfersIn = $transfers
+            ->whereIn("target_account_id", $accountsToShow)
+            ->groupBy("target_account_id")
+            ->map(fn ($item) => $item
+                ->groupBy("date")
+                ->map(fn ($item1) => $item1->count() ?
+                    $item1->pluck("target_value")->reduce(fn ($carry, $item) => $carry + $item) : 0
+                )
+            );
+
+        foreach ($transfersIn as $accountID => $dates) {
+            foreach ($dates as $date => $difference) {
+                $differenceAccount = $differenceByAccounts->get($accountID);
+
+                if ($differenceAccount->has($date)) {
+                    $differenceAccount->put(
+                        $date,
+                        $differenceAccount->get($date) + $difference
+                    );
+                }
+                else {
+                    $differenceAccount->put(
+                        $date,
+                        $difference
+                    );
+                }
+            }
+
+            $differenceByAccounts->put(
+                $accountID,
+                $differenceByAccounts->get($accountID)
+                    ->sortBy(fn ($val, $key) => strtotime($key))
+            );
+        }
+
+        $transfersOut = $transfers
+            ->whereIn("source_account_id", $accountsToShow)
+            ->groupBy("source_account_id")
+            ->map(fn ($item) => $item
+                ->groupBy("date")
+                ->map(fn ($item1) => $item1->count() ?
+                    $item1->pluck("source_value")->reduce(fn ($carry, $item) => $carry + $item) : 0
+                )
+            );
+
+        foreach ($transfersOut as $accountID => $dates) {
             foreach ($dates as $date => $difference) {
                 $differenceAccount = $differenceByAccounts->get($accountID);
 
