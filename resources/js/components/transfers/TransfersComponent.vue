@@ -8,10 +8,10 @@
             </v-col>
 
             <v-col xl="4" cols="12" order-xl="last">
-                <!--<TransferOverviewComponent
+                <OverviewComponent
                     :type="type"
                     :charts="charts"
-                ></TransferOverviewComponent>-->
+                ></OverviewComponent>
             </v-col>
         </v-row>
     </div>
@@ -29,12 +29,12 @@ import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 
 import TransfersTableComponent from "@/transfers/TransfersTableComponent.vue";
-//import TransfersOverviewComponent from "@/income-expences/TransfersOverviewComponent.vue";
+import OverviewComponent from "@/OverviewComponent.vue";
 
 export default {
     components: {
         TransfersTableComponent,
-        //TransfersOverviewComponent
+        OverviewComponent
     },
     mixins: [main],
     setup() {

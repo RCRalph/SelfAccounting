@@ -97,7 +97,9 @@ export default {
                 "Income by categories",
                 "Income by accounts",
                 "Expences by categories",
-                "Expences by accounts"
+                "Expences by accounts",
+                "Transfers by source accounts",
+                "Transfers by target accounts"
             ].includes(this.chartInfo.name);
         }
     },

@@ -47,7 +47,23 @@ class ChartSeeder extends Seeder
                 "/dashboard",
                 "/expences"
             ]
-        ]
+        ],
+        [
+            "name" => "Transfers by source accounts",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/transfers"
+            ]
+        ],
+        [
+            "name" => "Transfers by target accounts",
+            "routes" => [
+                "/",
+                "/dashboard",
+                "/transfers"
+            ]
+        ],
     ];
 
     /**
