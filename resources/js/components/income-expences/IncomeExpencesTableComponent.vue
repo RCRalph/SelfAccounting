@@ -178,7 +178,7 @@
                             ></EditIncomeExpencesDialogComponent>
 
                             <DeleteDialogComponent
-                                :thing="type"
+                                :thing="type == 'expences' ? 'expence' : 'income'"
                                 :url="`${type}/${item.id.value}`"
                                 @deleted="deleted"
                             ></DeleteDialogComponent>

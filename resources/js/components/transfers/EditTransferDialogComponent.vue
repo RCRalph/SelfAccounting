@@ -1,11 +1,17 @@
 <template>
     <v-dialog v-model="dialog" max-width="800">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined v-bind="attrs" v-on="on" class="me-3">Add transfer</v-btn>
+        <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
+            <v-tooltip bottom >
+                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
+                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-pencil</v-icon>
+                </template>
+
+                <span>Edit transfer</span>
+            </v-tooltip>
         </template>
 
         <v-card v-if="ready">
-            <v-card-title>Add transfer</v-card-title>
+            <v-card-title>Edit transfer</v-card-title>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
@@ -20,22 +26,7 @@
                         </v-col>
 
                         <v-col cols="12" md="6">
-                            <div
-                                class="d-flex align-center"
-                                :class="extensions.hasExtension('cashan') ? 'justify-space-between' : 'justify-center'"
-                            >
-                                <div class="text-h5-5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Source</div>
-
-                                <CashExchangeDialogComponent
-                                    v-if="extensions.hasExtension('cashan')"
-                                    v-model="sourceCash"
-                                    :currency="sourceData.currency"
-                                    :accountID="data.source.account_id"
-                                    :disabled="loading"
-                                    :entryValue="sourceValue.value"
-                                    type="expences"
-                                ></CashExchangeDialogComponent>
-                            </div>
+                            <div class="text-h5-5 text-center" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Source</div>
 
                             <v-text-field
                                 label="Value"
@@ -78,22 +69,7 @@
                         </v-col>
 
                         <v-col cols="12" md="6">
-                            <div
-                                class="d-flex align-center"
-                                :class="extensions.hasExtension('cashan') ? 'justify-space-between' : 'justify-center'"
-                            >
-                                <div class="text-h5-5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Target</div>
-
-                                <CashExchangeDialogComponent
-                                    v-if="extensions.hasExtension('cashan')"
-                                    v-model="targetCash"
-                                    :currency="targetData.currency"
-                                    :accountID="data.target.account_id"
-                                    :disabled="loading"
-                                    :entryValue="targetValue.value"
-                                    type="income"
-                                ></CashExchangeDialogComponent>
-                            </div>
+                            <div class="text-h5-5 text-center" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Target</div>
 
                             <v-text-field
                                 label="Value"
@@ -138,15 +114,19 @@
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-center">
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="submit" :loading="loading" width="80">
-                    Submit
+            <v-card-actions class="d-flex justify-space-around">
+                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1" width="85">
+                    Reset
+                </v-btn>
+
+                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1" width="85">
+                    Update
                 </v-btn>
             </v-card-actions>
         </v-card>
 
         <v-card v-else>
-            <v-card-title>Add transfer</v-card-title>
+            <v-card-title>Edit transfer</v-card-title>
 
             <v-card-text class="d-flex justify-center">
                 <v-progress-circular
@@ -162,10 +142,8 @@
 
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-import CashExchangeDialogComponent from "@/income-expences/CashExchangeDialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
-import { useExtensionsStore } from "&/stores/extensions";
 import Calculator from "&/classes/Calculator";
 import validation from "&/mixins/validation";
 import main from "&/mixins/main";
@@ -173,36 +151,23 @@ import main from "&/mixins/main";
 export default {
     setup() {
         const currencies = useCurrenciesStore();
-        const extensions = useExtensionsStore();
 
-        return { currencies, extensions };
+        return { currencies };
     },
     mixins: [validation, main],
     components: {
-        ErrorSnackbarComponent,
-        CashExchangeDialogComponent
+        ErrorSnackbarComponent
+    },
+    props: {
+        id: Number
     },
     data() {
         return {
             dialog: false,
-            startData: {
-                date: "",
-                source: {
-                    value: "",
-                    account_id: undefined,
-                    currency_id: undefined
-                },
-                target: {
-                    value: "",
-                    account_id: undefined,
-                    currency_id: undefined
-                }
-            },
             data: {},
+            dataCopy: {},
             accounts: {},
             availableCurrencies: [],
-            sourceCash: {},
-            targetCash: {},
             keys: {
                 source: 0,
                 target: 0
@@ -220,16 +185,14 @@ export default {
             this.ready = false;
 
             axios
-                .get(`/web-api/transfers`)
+                .get(`/web-api/transfers/${this.id}`)
                 .then(response => {
                     const data = response.data;
 
+                    this.data = data.data;
+                    this.dataCopy = _.cloneDeep(data.data);
                     this.accounts = data.accounts;
                     this.availableCurrencies = data.availableCurrencies;
-
-                    this.data = _.cloneDeep(this.startData)
-                    this.data.date = new Date().toISOString().split("T")[0];
-                    this.data.source.currency_id = this.data.target.currency_id = this.currencies.usedCurrency;
 
                     this.ready = true;
                 })
@@ -298,7 +261,10 @@ export default {
         },
     },
     methods: {
-        submit() {
+        reset() {
+            this.data = _.cloneDeep(this.dataCopy);
+        },
+        update() {
             this.loading = true;
 
             let data = _.cloneDeep(this.data);
@@ -307,29 +273,10 @@ export default {
             delete data.source.currency_id;
             delete data.target.currency_id;
 
-            if (!_.isEmpty(this.sourceCash)) {
-                data.source.cash = [];
-                Object.keys(this.sourceCash).forEach(item => {
-                    data.source.cash.push({
-                        id: item,
-                        amount: this.sourceCash[item]
-                    });
-                });
-            }
-
-            if (!_.isEmpty(this.targetCash)) {
-                data.target.cash = [];
-                Object.keys(this.targetCash).forEach(item => {
-                    data.target.cash.push({
-                        id: item,
-                        amount: this.targetCash[item]
-                    });
-                });
-            }
-
-            axios.post(`/web-api/transfers`, data)
+            axios.patch(`/web-api/transfers/${this.id}`, data)
                 .then(() => {
-                    this.$emit("added");
+                    this.dataCopy = _.cloneDeep(this.data);
+                    this.$emit("updated");
                     this.dialog = false;
                     this.loading = false;
                 })

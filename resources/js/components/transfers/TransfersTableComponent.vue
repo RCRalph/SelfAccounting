@@ -145,7 +145,16 @@
                             :class="isRowHighlighted(index, 1) && 'table-hover-background'"
                         >
                             <div class="d-flex flex-nowrap justify-center align-center">
+                                <EditTransferDialogComponent
+                                    :id="item.id.value"
+                                    @updated="updated"
+                                ></EditTransferDialogComponent>
 
+                                <DeleteDialogComponent
+                                    thing="transfer"
+                                    :url="`transfers/${item.id.value}`"
+                                    @deleted="deleted"
+                                ></DeleteDialogComponent>
                             </div>
                         </td>
                     </tr>
@@ -173,9 +182,8 @@ import validation from "&/mixins/validation";
 import customTableMerged from "&/mixins/customTableMerged";
 
 import AddTransferDialogComponent from "@/transfers/AddTransferDialogComponent.vue";
-//import EditIncomeExpencesDialogComponent from "@/income-expences/EditIncomeExpencesDialogComponent.vue";
+import EditTransferDialogComponent from "@/transfers/EditTransferDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
-//import ExchangeIncomeExpencesDialogComponent from "@/income-expences/ExchangeIncomeExpencesDialogComponent.vue";
 import InfiniteLoading from "vue-infinite-loading";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
@@ -188,9 +196,8 @@ export default {
     mixins: [main, customTableMerged, validation],
     components: {
         AddTransferDialogComponent,
-        //EditIncomeExpencesDialogComponent,
+        EditTransferDialogComponent,
         DeleteDialogComponent,
-        //ExchangeIncomeExpencesDialogComponent,
         InfiniteLoading,
         SuccessSnackbarComponent
     },

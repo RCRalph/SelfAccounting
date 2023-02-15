@@ -62,6 +62,8 @@ Route::prefix("/web-api")->group(function () {
 
         Route::prefix("/{transfer}")->group(function () {
             Route::get("/", "WebAPI\TransfersController@show")->name("web-api.transfers.show");
+            Route::patch("/", "WebAPI\TransfersController@update")->name("web-api.transfers.update");
+            Route::delete("/", "WebAPI\TransfersController@destroy")->name("web-api.transfers.destroy");
         });
     });
 

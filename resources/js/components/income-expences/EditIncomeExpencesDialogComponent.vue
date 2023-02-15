@@ -177,6 +177,7 @@ export default {
     },
     watch: {
         dialog() {
+            if (!this.dialog) return;
             this.ready = false;
 
             axios

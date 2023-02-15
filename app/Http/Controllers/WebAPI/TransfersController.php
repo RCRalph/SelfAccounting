@@ -146,9 +146,20 @@ class TransfersController extends Controller
     {
         $this->authorize("view", $transfer);
 
-        $data = $transfer->only(["id", "date", "source_account_id", "source_value", "target_account_id", "target_value"]);
-        $data["source_value"] *= 1;
-        $data["target_value"] *= 1;
+        $data = [
+            "id" => $transfer->id,
+            "date" => $transfer->date,
+            "source" => [
+                "value" => $transfer->source_value * 1,
+                "account_id" => $transfer->source_account_id,
+                "currency_id" => $transfer->sourceAccount->currency_id
+            ],
+            "target" => [
+                "value" => $transfer->target_value * 1,
+                "account_id" => $transfer->target_account_id,
+                "currency_id" => $transfer->targetAccount->currency_id
+            ]
+        ];
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name", "currency_id")
@@ -164,41 +175,39 @@ class TransfersController extends Controller
             }
         }
 
-        $data = collect($data);
-        $data->forget("currency");
-
         return response()->json(compact("data", "accounts", "availableCurrencies"));
     }
 
     public function update(Transfer $transfer)
     {
-        $toUpdate = $this->getTypeRelation()
-            ->where("id", $id)
-            ->get()->firstOrFail();
-
         $data = request()->validate([
-            "date" => ["required", "date", new CorrectDateIncomeExpencesUpdate],
-            "title" => ["required", "string", "max:64"],
-            "amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
-            "price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "currency_id" => ["required", "integer", "exists:currencies,id"],
-            "category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountUpdate],
-            "account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountUpdate]
+            "date" => ["required", "date", new CorrectTransferDate],
+
+            "source" => ["required", "array"],
+            "source.value" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "source.account_id" => ["required", "integer", "different:target.account_id", new ValidTransferAccount],
+
+            "target" => ["required", "array"],
+            "target.value" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "target.account_id" => ["required", "integer", "different:source.account_id", new ValidTransferAccount],
         ]);
 
-        $toUpdate->update($data);
+        $transfer->update([
+            "date" => $data["date"],
+            "source_value" => $data["source"]["value"],
+            "source_account_id" => $data["source"]["account_id"],
+            "target_value" => $data["target"]["value"],
+            "target_account_id" => $data["target"]["account_id"],
+        ]);
 
-        return response("", 200);
+        return response("");
     }
 
-    public function destroy($id)
+    public function destroy(Transfer $transfer)
     {
-        $this->getTypeRelation()
-            ->where("id", $id)
-            ->get()->firstOrFail()
-            ->delete();
+        $transfer->delete();
 
-        return response("", 200);
+        return response("");
     }
 
     public function store()

@@ -22,7 +22,7 @@
                     No
                 </v-btn>
 
-                <v-btn color="error" outlined @click="remove" :loading="loading" class="mx-1">
+                <v-btn color="error" outlined @click="remove" :disabled="loading" :loading="loading" class="mx-1">
                     Yes
                 </v-btn>
             </v-card-actions>

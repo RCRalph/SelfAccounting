@@ -18,11 +18,11 @@ class Transfer extends Model
 
     public function sourceAccount()
     {
-        return $this->belongsTo(Account::class, 'source_account');
+        return $this->belongsTo(Account::class, 'source_account_id');
     }
 
     public function targetAccount()
     {
-        return $this->belongsTo(Account::class, 'target_account');
+        return $this->belongsTo(Account::class, 'target_account_id');
     }
 }
