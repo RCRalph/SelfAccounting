@@ -67,11 +67,6 @@ Route::prefix("/web-api")->group(function () {
         });
     });
 
-    Route::prefix("/exchange")->group(function () {
-        Route::get("/", "WebAPI\ExchangeController@show")->name("web-api.exchange.show");
-        Route::post("/", "WebAPI\ExchangeController@store")->name("web-api.exchange.store");
-    });
-
     Route::prefix("/categories")->group(function () {
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\CategoriesController@index")->name("web-api.categories");

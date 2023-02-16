@@ -26,10 +26,6 @@
                     </v-col>
 
                     <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="d-flex" :class="$vuetify.breakpoint.xsOnly ? 'justify-center' : 'justify-end'">
-                        <ExchangeIncomeExpencesDialogComponent
-                            @exchanged="exchanged"
-                        ></ExchangeIncomeExpencesDialogComponent>
-
                         <AddIncomeExpencesDialogComponent
                             :type="type"
                             @added="added"
@@ -210,7 +206,6 @@ import customTableMerged from "&/mixins/customTableMerged";
 import AddIncomeExpencesDialogComponent from "@/income-expences/AddIncomeExpencesDialogComponent.vue";
 import EditIncomeExpencesDialogComponent from "@/income-expences/EditIncomeExpencesDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
-import ExchangeIncomeExpencesDialogComponent from "@/income-expences/ExchangeIncomeExpencesDialogComponent.vue";
 import InfiniteLoading from "vue-infinite-loading";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
@@ -225,7 +220,6 @@ export default {
         AddIncomeExpencesDialogComponent,
         EditIncomeExpencesDialogComponent,
         DeleteDialogComponent,
-        ExchangeIncomeExpencesDialogComponent,
         InfiniteLoading,
         SuccessSnackbarComponent
     },
@@ -356,11 +350,6 @@ export default {
                     this.getData();
                 }
             }, timeOffset + 1);
-        },
-        exchanged() {
-            this.thing = `exchanged`;
-            this.success = true;
-            this.getData();
         },
         added() {
             this.thing = `added ${this.type}`;
