@@ -11,7 +11,9 @@ use App\Models\User;
 use App\Rules\Common\DateBeforeOrEqualField;
 use App\Rules\Common\ValueLessOrEqualField;
 use App\Rules\Extensions\Backup\CorrectDateIncomeExpences;
+use App\Rules\Extensions\Backup\CorrectTransferDate;
 use App\Rules\Extensions\Backup\ValidCategoryOrAccount;
+use App\Rules\Extensions\Backup\ValidTransferAccount;
 
 class BackupController extends Controller
 {
@@ -122,6 +124,17 @@ class BackupController extends Controller
             $expences[$i]["account_id"] = !$item["account_id"] ? 0 : $accountIDs[$item["account_id"]];
         }
 
+        // Gather transfers
+        $transfers = auth()->user()->transfers()
+            ->select("date", "source_account_id", "source_value", "target_account_id", "target_value")
+            ->orderBy("date")
+            ->get();
+
+        foreach ($transfers as $i => $item) {
+            $transfers[$i]["source_account_id"] = $accountIDs[$item["source_account_id"]];
+            $transfers[$i]["target_account_id"] = $accountIDs[$item["target_account_id"]];
+        }
+
         $extensions = [];
 
         // Gather cash handling data
@@ -197,7 +210,7 @@ class BackupController extends Controller
             auth()->user()->backup()->update(["last_backup" => now()]);
         }
 
-        return response()->json(compact("categories", "accounts", "income", "expences", "extensions"));
+        return response()->json(compact("categories", "accounts", "income", "expences", "transfers", "extensions"));
     }
 
     public function restore()
@@ -253,11 +266,21 @@ class BackupController extends Controller
             "expences.*.account_id" => ["required", "integer", new ValidCategoryOrAccount($accounts, true)]
         ])["expences"];
 
+        $transfers = request()->validate([
+            "transfers" => ["required", "array"],
+            "transfers.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectTransferDate($accounts)],
+            "transfers.*.source_value" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "transfers.*.source_account_id" => ["required", "integer", "different:transfers.*.target_account_id", new ValidTransferAccount($accounts)],
+            "transfers.*.target_value" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "transfers.*.target_account_id" => ["required", "integer", "different:transfers.*.source_account_id", new ValidTransferAccount($accounts)],
+        ])["transfers"];
+
         // Delete all data from the account
         auth()->user()->categories()->delete();
         auth()->user()->accounts()->delete();
         auth()->user()->income()->delete();
         auth()->user()->expences()->delete();
+        auth()->user()->transfers()->delete();
 
         // Get currency array as ID: ISO
         $currencies = $this->getCurrencies()
@@ -306,6 +329,15 @@ class BackupController extends Controller
                 "currency_id" => $currencies[$item["currency"]],
                 "category_id" => $categoryIDs[$item["category_id"]],
                 "account_id" => $accountIDs[$item["account_id"]]
+            ]);
+        }
+
+        // Restore transfers
+        foreach ($transfers as $item) {
+            auth()->user()->transfers()->create([
+                ...$item,
+                "source_account_id" => $accountIDs[$item["source_account_id"]],
+                "target_account_id" => $accountIDs[$item["target_account_id"]]
             ]);
         }
 
