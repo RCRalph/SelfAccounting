@@ -32,7 +32,11 @@ class TutorialSeeder extends Seeder
         [
             "route" => "/extensions/store",
             "filename" => "extensions.md"
-        ]
+        ],
+        [
+            "route" => "/transfers",
+            "filename" => "transfers.md"
+        ],
     ];
 
     /**

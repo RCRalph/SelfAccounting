@@ -26,7 +26,7 @@
                             >
                                 <div class="text-h5-5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Source</div>
 
-                                <CashExchangeDialogComponent
+                                <CashTransferDialogComponent
                                     v-if="extensions.hasExtension('cashan')"
                                     v-model="sourceCash"
                                     :currency="sourceData.currency"
@@ -34,7 +34,7 @@
                                     :disabled="loading"
                                     :entryValue="sourceValue.value"
                                     type="expences"
-                                ></CashExchangeDialogComponent>
+                                ></CashTransferDialogComponent>
                             </div>
 
                             <v-text-field
@@ -84,7 +84,7 @@
                             >
                                 <div class="text-h5-5" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Target</div>
 
-                                <CashExchangeDialogComponent
+                                <CashTransferDialogComponent
                                     v-if="extensions.hasExtension('cashan')"
                                     v-model="targetCash"
                                     :currency="targetData.currency"
@@ -92,7 +92,7 @@
                                     :disabled="loading"
                                     :entryValue="targetValue.value"
                                     type="income"
-                                ></CashExchangeDialogComponent>
+                                ></CashTransferDialogComponent>
                             </div>
 
                             <v-text-field
@@ -162,7 +162,7 @@
 
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-import CashExchangeDialogComponent from "@/income-expences/CashExchangeDialogComponent.vue";
+import CashTransferDialogComponent from "@/transfers/CashTransferDialogComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import { useExtensionsStore } from "&/stores/extensions";
@@ -180,7 +180,7 @@ export default {
     mixins: [validation, main],
     components: {
         ErrorSnackbarComponent,
-        CashExchangeDialogComponent
+        CashTransferDialogComponent
     },
     data() {
         return {

@@ -35,6 +35,6 @@ class ValidTransferAccount implements Rule
      */
     public function message()
     {
-        return "This category / account doesn't exist.";
+        return "This account doesn't exist.";
     }
 }

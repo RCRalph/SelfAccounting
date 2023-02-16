@@ -21,10 +21,5 @@ You can add many expences at once by clicking the **+** button in the right bott
 
 Clicking the **Set common values** button will open a dialog, which will enable you to set values of all given expences into what you've entered. You can change these values later on a case-by-case basis. To update all the expences with entered values click the **Update** button. Any newly added expences will use the values entered using this method.
 
-### Exchange
-Clicking the **Exchange** button will open a dialog, which will allow you to exchange between two accounts. 
-
-The **From** section will enter an expence, and the **To** section will enter an income. Fill in the fields in the dialog and if everything is correct, the **Submit** button will be green and after clicking it you will submit your exchange.
-
 ## Overview
 The overview panel displays charts that visualize your expences. You can limit the date range by choosing dates at the top of the panel, by default it will visualize the entire dataset.

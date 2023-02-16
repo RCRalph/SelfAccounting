@@ -125,7 +125,7 @@
 
                     <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Income</div>
                     <v-data-table
-                        :headers="headers.IncomeExpences"
+                        :headers="headers.incomeExpences"
                         :items="data.income"
                         :mobile-breakpoint="0"
                         :items-per-page="5"
@@ -150,7 +150,7 @@
 
                     <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Expences</div>
                     <v-data-table
-                        :headers="headers.IncomeExpences"
+                        :headers="headers.incomeExpences"
                         :items="data.expences"
                         :mobile-breakpoint="0"
                         :items-per-page="5"
@@ -170,6 +170,31 @@
 
                         <template v-slot:[`item.account_id`]="{ item }">
                             {{ item.account_id ? mappedValues.accounts[item.account_id].name : "N/A" }}
+                        </template>
+                    </v-data-table>
+
+                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Transfers</div>
+                    <v-data-table
+                        :headers="headers.transfers"
+                        :items="data.transfers"
+                        :mobile-breakpoint="0"
+                        :items-per-page="5"
+                        disable-sort
+                    >
+                        <template v-slot:[`item.source_value`]="{ item }">
+                            {{ item.source_value }}&nbsp;{{ mappedValues.accounts[item.source_account_id].currency }}
+                        </template>
+
+                        <template v-slot:[`item.source_account_id`]="{ item }">
+                            {{ mappedValues.accounts[item.source_account_id].name }}
+                        </template>
+
+                        <template v-slot:[`item.target_value`]="{ item }">
+                            {{ item.target_value }}&nbsp;{{ mappedValues.accounts[item.target_account_id].currency }}
+                        </template>
+
+                        <template v-slot:[`item.target_account_id`]="{ item }">
+                            {{ mappedValues.accounts[item.target_account_id].name }}
                         </template>
                     </v-data-table>
 
@@ -400,13 +425,20 @@ export default {
                     { text: "Start date", align: "center", value: "start_date" },
                     { text: "Start balance", align: "center", value: "start_balance" }
                 ],
-                IncomeExpences: [
+                incomeExpences: [
                     { text: "Date", align: "center", value: "date" },
                     { text: "Title", align: "center", value: "title" },
                     { text: "Amount", align: "center", value: "amount" },
                     { text: "Price", align: "center", value: "price" },
                     { text: "Category", align: "center", value: "category_id" },
                     { text: "Account", align: "center", value: "account_id" }
+                ],
+                transfers: [
+                    { text: "Date", align: "center", value: "date" },
+                    { text: "Source value", align: "center", value: "source_value" },
+                    { text: "Source account", align: "center", value: "source_account_id" },
+                    { text: "Target value", align: "center", value: "target_value" },
+                    { text: "Target account", align: "center", value: "target_account_id" },
                 ],
                 cashan: {
                     cash: [
@@ -546,7 +578,7 @@ export default {
                 this.mappedValues.accounts[index + 1] = {
                     currency: item.currency,
                     name: item.name,
-                    firstEntry: item.start_date
+                    startDate: item.start_date
                 };
             });
 
@@ -561,13 +593,33 @@ export default {
                 item.category ? (this.mappedValues.categories[item.category].currency == item.currency) : true,
                 item.account ? (this.mappedValues.accounts[item.account].currency == item.currency) : true,
                 this.currencies.findByISO(item.currency) !== undefined,
-                this.validation.date(false, item.account ? this.mappedValues.accounts[item.account].firstEntry : null)(item.date),
+                this.validation.date(false, item.account ? this.mappedValues.accounts[item.account].startDate : null)(item.date),
                 this.validation.title()(item.title) === true,
                 this.validation.amount()(item.amount) === true,
                 this.validation.price()(item.price) === true,
                 item.category_id ? (this.mappedValues.categories[item.category_id].currency == item.currency) : true,
                 item.account_id ? (this.mappedValues.accounts[item.account_id].currency == item.currency) : true
             ].reduce((item1, item2) => item1 && item2));
+
+            return !validationArray.length || validationArray.reduce((item1, item2) => item1 && item2);
+        },
+        validateTransfers(data) {
+            if (!Array.isArray(data)) {
+                return false;
+            }
+
+            let validationArray = data.map(item => [
+                this.mappedValues.accounts.hasOwnProperty(item.source_account_id),
+                this.mappedValues.accounts.hasOwnProperty(item.target_account_id),
+                item.source_account_id != item.target_account_id,
+                this.validation.date(false,
+                    new Date(item.source_account_id).getTime() > new Date(item.target_account_id).getTime() ?
+                    this.mappedValues.accounts[item.source_account_id].startDate :
+                    this.mappedValues.accounts[item.target_account_id].startDate
+                )(item.date),
+                this.validation.price()(item.source_value) === true,
+                this.validation.price()(item.target_value) === true
+            ]).reduce((item1, item2) => item1 && item2);
 
             return !validationArray.length || validationArray.reduce((item1, item2) => item1 && item2);
         },
@@ -685,7 +737,11 @@ export default {
                     }
 
                     if (!this.validateIncomeExpences(data.expences)) {
-                        throw new Error("Invalid expence");
+                        throw new Error("Invalid expences");
+                    }
+
+                    if (!this.validateTransfers(data.transfers)) {
+                        throw new Error("Invalid transfers");
                     }
 
                     if (_.isPlainObject(data.extensions)) {
