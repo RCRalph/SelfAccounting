@@ -22,4 +22,4 @@ You can add many incomes at once by clicking the **+** button in the right botto
 Clicking the **Set common values** button will open a dialog, which will enable you to set values of all given incomes into what you've entered. You can change these values later on a case-by-case basis. To update all the incomes with entered values click the **Update** button. Any newly added incomes will use the values entered using this method.
 
 ## Overview
-The overview panel displays charts that visualize your expences. You can limit the date range by choosing dates at the top of the panel, by default it will visualize the entire dataset.
+The overview panel displays charts that visualize your income. You can limit the date range by choosing dates at the top of the panel, by default it will visualize the entire dataset.
