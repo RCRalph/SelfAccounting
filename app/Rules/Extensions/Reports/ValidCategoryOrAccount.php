@@ -36,7 +36,7 @@ class ValidCategoryOrAccount implements Rule
             ->where("id", $value);
 
         if (request("$prefix.query_data")) {
-            $query = $query->where(request("$prefix.query_data") . "_" . (str_contains($attribute, "category") ? "category" : "account"), true);
+            $query = $query->where("used_in_" . request("$prefix.query_data"), true);
         }
 
         return $query->exists();
