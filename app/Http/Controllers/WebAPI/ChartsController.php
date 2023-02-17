@@ -287,7 +287,9 @@ class ChartsController extends Controller
                 }
 
                 $retArr = [$startDate => $firstEntries[$account->id]];
-                if (Carbon::today()->gt($startDate)) {
+                if ($limits["end"] && strtotime($limits["end"]) >= strtotime($startDate)) {
+                    $retArr[$limits["end"]] = 0;
+                } else if (Carbon::today()->gt($startDate)) {
                     $retArr[Carbon::today()->format("Y-m-d")] = 0;
                 }
 
