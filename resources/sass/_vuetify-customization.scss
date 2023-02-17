@@ -183,3 +183,19 @@ tr {
     font-size: 1.3rem !important;
     font-weight: 400;
 }
+
+.overview-block {
+    overflow-y: scroll;
+    max-height: calc(100vh - 32px);
+
+    .charts {
+        max-height: calc(100vh - #{32px + 64px + 48px + 16px + 16px});
+
+        .chart-size {
+            max-width: calc(100% - 16px);
+            margin-left: 8px;
+            margin-bottom: 16px;
+            height: 335px;
+        }
+    }
+}

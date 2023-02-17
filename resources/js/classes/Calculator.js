@@ -21,7 +21,7 @@ export default class Calculator {
         this.#allow.negative = allowNegative;
 
         if (this.#field != null) {
-            this.#errorMargin = 1e-3 * Math.pow(10, -this.#field.precision);
+            this.#errorMargin = 0.001 / Math.pow(10, this.#field.precision);
         }
     }
 

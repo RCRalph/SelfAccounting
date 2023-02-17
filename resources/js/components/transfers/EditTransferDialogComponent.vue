@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="800">
+    <v-dialog v-model="dialog" max-width="700">
         <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
             <v-tooltip bottom >
                 <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">

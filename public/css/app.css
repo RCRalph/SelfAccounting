@@ -29502,12 +29502,37 @@ tr:hover {
   font-weight: 400;
 }
 
+.overview-block {
+  overflow-y: scroll;
+  max-height: calc(100vh - 32px);
+}
+.overview-block .charts {
+  max-height: calc(100vh - 176px);
+}
+.overview-block .charts .chart-size {
+  max-width: calc(100% - 16px);
+  margin-left: 8px;
+  margin-bottom: 16px;
+  height: 335px;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;
   }
   .v-application .text-h4 {
     font-size: 1.85rem !important;
+  }
+}
+@media (max-width: 1903.98px) {
+  .overview-block {
+    height: unset;
+  }
+  .overview-block .charts {
+    height: unset;
+  }
+  .overview-block .charts .chart-size {
+    height: 275px;
   }
 }
 @media (hover: none) {

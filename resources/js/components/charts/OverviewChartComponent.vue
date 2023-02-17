@@ -6,7 +6,7 @@
             v-if="chartData.labels.length"
             :options="options"
             :chartData="chartData"
-            :style="'height: 330px'"
+            class="chart-size"
         ></DoughnutChart>
 
         <div v-else class="text-h6 text-center">No data</div>

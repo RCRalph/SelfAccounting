@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="800">
+    <v-dialog v-model="dialog" max-width="700">
         <template v-slot:activator="{ on, attrs }">
             <v-btn outlined v-bind="attrs" v-on="on" class="me-3">Add transfer</v-btn>
         </template>
@@ -8,7 +8,7 @@
             <v-card-title>Add transfer</v-card-title>
 
             <v-card-text>
-                <v-form v-model="canSubmit">
+                <v-form v-model="formValidation">
                     <v-row>
                         <v-col cols="12" md="4" offset-md="4" class="pb-0">
                             <v-text-field
@@ -40,6 +40,7 @@
                             <v-text-field
                                 label="Value"
                                 v-model="data.source.value"
+                                :error="keys.source ? !!sourceValue.error : false"
                                 :error-messages="keys.source ? sourceValue.error : undefined"
                                 :hint="sourceValue.hint"
                                 @input="keys.source++"
@@ -98,7 +99,8 @@
                             <v-text-field
                                 label="Value"
                                 v-model="data.target.value"
-                                :error-messages="keys.targetVa ? targetValue.error : undefined"
+                                :error="keys.target ? !!targetValue.error : false"
+                                :error-messages="keys.target ? targetValue.error : undefined"
                                 :hint="targetValue.hint"
                                 @input="keys.target++"
                                 :suffix="targetData.currency.ISO"
@@ -139,7 +141,7 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-center">
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="submit" :loading="loading" width="80">
+                <v-btn color="success" outlined :disabled="!canSubmit" @click="submit" :loading="loading" width="80">
                     Submit
                 </v-btn>
             </v-card-actions>
@@ -211,7 +213,7 @@ export default {
             ready: false,
             error: false,
             loading: false,
-            canSubmit: false
+            formValidation: false,
         }
     },
     watch: {
@@ -230,6 +232,7 @@ export default {
                     this.data = _.cloneDeep(this.startData)
                     this.data.date = new Date().toISOString().split("T")[0];
                     this.data.source.currency_id = this.data.target.currency_id = this.currencies.usedCurrency;
+                    this.keys.source = this.keys.target = 0;
 
                     this.ready = true;
                 })
@@ -237,6 +240,16 @@ export default {
                     console.error(err);
                     setTimeout(() => this.error = true, 1000);
                 })
+        },
+        "data.source.value"() {
+            if (!this.keys.target) {
+                this.data.target.value = this.data.source.value;
+            }
+        },
+        "data.target.value"() {
+            if (!this.keys.source) {
+                this.data.source.value = this.data.target.value;
+            }
         }
     },
     computed: {
@@ -295,6 +308,13 @@ export default {
             }
 
             return result;
+        },
+        canSubmit() {
+            if (!this.formValidation || this.loading) {
+                return false;
+            }
+
+            return this.data.source.value && this.data.target.value;
         },
     },
     methods: {

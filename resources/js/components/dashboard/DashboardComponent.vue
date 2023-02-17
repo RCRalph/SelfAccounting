@@ -193,7 +193,6 @@ export default {
                 : 0
         },
         chartType() {
-            console.log(this.charts, this.currentChart);
             return this.ready ? this.charts.find(item => item.id == this.currentChart).type : ""
         }
     },
