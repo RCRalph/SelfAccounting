@@ -1,5 +1,5 @@
 <template>
-    <v-card class="sticky-panel loading-height overview-block">
+    <v-card class="loading-height overview-block">
         <v-card-title class="justify-center text-h5">Overview</v-card-title>
 
         <v-card-text>

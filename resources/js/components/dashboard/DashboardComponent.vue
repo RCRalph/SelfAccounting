@@ -2,134 +2,136 @@
     <div v-if="ready">
         <v-row>
             <v-col xl="4" cols="12">
-                <v-row>
-                    <v-col xl="12" lg="4" md="6" cols="12">
-                        <v-card class="mb-4 d-flex justify-center flex-column" height="100%">
-                            <v-card-title class="justify-center text-h5">Current balance</v-card-title>
+                <div class="overview-block" style="border-radius: 4px">
+                    <v-row no-gutters>
+                        <v-col xl="12" lg="4" md="6" cols="12" class="pb-4 pb-md-0 pb-xl-4 pr-xl-0 pr-md-3 pr-0">
+                            <v-card class="d-flex justify-center flex-column" height="100%">
+                                <v-card-title class="justify-center text-h5">Current balance</v-card-title>
 
-                            <v-card-text>
-                                <div class="text-h4 text-center font-weight-regular mb-6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">
-                                    {{ currentBalanceSum | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                <v-card-text>
+                                    <div class="text-h4 text-center font-weight-regular mb-6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">
+                                        {{ currentBalanceSum | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                    </div>
+
+                                    <v-simple-table v-if="currentBalance.length > 1">
+                                        <template v-slot:default>
+                                            <tbody>
+                                                <tr v-for="(item, i) in currentBalance" :key="i">
+                                                    <td class="text-right text-h6">
+                                                        {{ item.name | addNoBreakSpaces }}
+                                                    </td>
+
+                                                    <td class="text-h6">
+                                                        {{ item.balance | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </template>
+                                    </v-simple-table>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+
+                        <v-col xl="12" lg="8" md="6" cols="12">
+                            <v-card class="d-flex flex-column justify-space-between" height="100%">
+                                <v-card-title>
+                                    <v-row>
+                                        <v-col cols="12" :sm="currentBalance.length && 6" :class="[
+                                            'd-flex', 'align-center',
+                                            !currentBalance.length && 'justify-center'
+                                        ]">
+                                            <span class="text-h5">Last 30 days</span>
+                                        </v-col>
+
+                                        <v-col sm="6" cols="12" v-if="currentBalance.length">
+                                            <v-select
+                                                v-model="currentChart"
+                                                :items="charts"
+                                                item-value="id"
+                                                item-text="name"
+                                                dense
+                                                outlined
+                                                hide-details
+                                            ></v-select>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-title>
+
+                                <div class="mx-3" v-if="currentBalance.length">
+                                    <BalanceHistoryChartComponent v-if="chartType == 'line'" :id="currentChart"></BalanceHistoryChartComponent>
+
+                                    <DataByTypeChartComponent v-else-if="chartType == 'doughnut'" :id="currentChart"></DataByTypeChartComponent>
                                 </div>
 
-                                <v-simple-table v-if="currentBalance.length > 1">
-                                    <template v-slot:default>
-                                        <tbody>
-                                            <tr v-for="(item, i) in currentBalance" :key="i">
-                                                <td class="text-right text-h6">
-                                                    {{ item.name | addNoBreakSpaces }}
-                                                </td>
+                                <v-card-text>
+                                    <v-simple-table>
+                                        <template v-slot:default>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-right text-h6" style="width: 50%">
+                                                        Income
+                                                    </td>
 
-                                                <td class="text-h6">
-                                                    {{ item.balance | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </template>
-                                </v-simple-table>
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
+                                                    <td class="text-h6">
+                                                        {{ last30Days.income | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    </td>
+                                                </tr>
 
-                    <v-col xl="12" lg="8" md="6" cols="12">
-                        <v-card class="d-flex flex-column justify-space-between" height="100%">
-                            <v-card-title>
-                                <v-row>
-                                    <v-col cols="12" :sm="currentBalance.length && 6" :class="[
-                                        'd-flex', 'align-center',
-                                        !currentBalance.length && 'justify-center'
-                                    ]">
-                                        <span class="text-h5">Last 30 days</span>
-                                    </v-col>
+                                                <tr>
+                                                    <td class="text-right text-h6">
+                                                        Expences
+                                                    </td>
 
-                                    <v-col sm="6" cols="12" v-if="currentBalance.length">
-                                        <v-select
-                                            v-model="currentChart"
-                                            :items="charts"
-                                            item-value="id"
-                                            item-text="name"
-                                            dense
-                                            outlined
-                                            hide-details
-                                        ></v-select>
-                                    </v-col>
-                                </v-row>
-                            </v-card-title>
+                                                    <td class="text-h6">
+                                                        {{ last30Days.expences | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    </td>
+                                                </tr>
 
-                            <div class="mx-3" v-if="currentBalance.length">
-                                <BalanceHistoryChartComponent v-if="chartType == 'line'" :id="currentChart"></BalanceHistoryChartComponent>
+                                                <tr>
+                                                    <td class="text-right text-h6">
+                                                        Incoming transfers
+                                                    </td>
 
-                                <DataByTypeChartComponent v-else-if="chartType == 'doughnut'" :id="currentChart"></DataByTypeChartComponent>
-                            </div>
+                                                    <td class="text-h6">
+                                                        {{ last30Days.transfersIn | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    </td>
+                                                </tr>
 
-                            <v-card-text>
-                                <v-simple-table>
-                                    <template v-slot:default>
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-right text-h6" style="width: 50%">
-                                                    Income
-                                                </td>
+                                                <tr>
+                                                    <td class="text-right text-h6">
+                                                        Outgoing transfers
+                                                    </td>
 
-                                                <td class="text-h6">
-                                                    {{ last30Days.income | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
-                                                </td>
-                                            </tr>
+                                                    <td class="text-h6">
+                                                        {{ last30Days.transfersOut | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    </td>
+                                                </tr>
 
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Expences
-                                                </td>
+                                                <tr>
+                                                    <td class="text-right text-h6">
+                                                        Total
+                                                    </td>
 
-                                                <td class="text-h6">
-                                                    {{ last30Days.expences | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Incoming transfers
-                                                </td>
-
-                                                <td class="text-h6">
-                                                    {{ last30Days.transfersIn | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Outgoing transfers
-                                                </td>
-
-                                                <td class="text-h6">
-                                                    {{ last30Days.transfersOut | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Total
-                                                </td>
-
-                                                <td :class="[
-                                                    'text-h6',
-                                                    last30DaysSummarySign == '+' && 'success--text',
-                                                    last30DaysSummarySign == '-' && 'error--text'
-                                                ]">
-                                                    {{ last30DaysSummarySign }}{{ Math.round(Math.abs(last30DaysTotal) * 100) / 100 | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </template>
-                                </v-simple-table>
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
-                </v-row>
+                                                    <td :class="[
+                                                        'text-h6',
+                                                        last30DaysSummarySign == '+' && 'success--text',
+                                                        last30DaysSummarySign == '-' && 'error--text'
+                                                    ]">
+                                                        {{ last30DaysSummarySign }}{{ Math.round(Math.abs(last30DaysTotal) * 100) / 100 | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </template>
+                                    </v-simple-table>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </div>
             </v-col>
 
             <v-col xl="8" cols="12">
-                <v-card class="sticky-panel loading-height">
+                <v-card class="loading-height">
                     <v-card-title class="justify-center text-h5">Recent transactions</v-card-title>
 
                     <v-card-text>

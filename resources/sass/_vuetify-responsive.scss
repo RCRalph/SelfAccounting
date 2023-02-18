@@ -14,7 +14,8 @@
 
 @media (max-width: #{map-get($grid-breakpoints, "xl") - 0.02px}) {
     .overview-block {
-        height: unset;
+        max-height: unset;
+        overflow-y: unset;
 
         .charts {
             height: unset;
@@ -23,6 +24,10 @@
                 height: 275px;
             }
         }
+    }
+
+    .dashboard-block {
+        height: unset;
     }
 }
 

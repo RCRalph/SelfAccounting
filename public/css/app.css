@@ -29503,8 +29503,13 @@ tr:hover {
 }
 
 .overview-block {
-  overflow-y: scroll;
+  position: sticky;
+  top: 16px;
+  overflow-y: auto;
   max-height: calc(100vh - 32px);
+}
+.overview-block .v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none;
 }
 .overview-block .charts {
   max-height: calc(100vh - 176px);
@@ -29526,13 +29531,17 @@ tr:hover {
 }
 @media (max-width: 1903.98px) {
   .overview-block {
-    height: unset;
+    max-height: unset;
+    overflow-y: unset;
   }
   .overview-block .charts {
     height: unset;
   }
   .overview-block .charts .chart-size {
     height: 275px;
+  }
+  .dashboard-block {
+    height: unset;
   }
 }
 @media (hover: none) {

@@ -185,8 +185,14 @@ tr {
 }
 
 .overview-block {
-    overflow-y: scroll;
+    position: sticky;
+    top: 16px;
+    overflow-y: auto;
     max-height: calc(100vh - 32px);
+
+    .v-sheet.v-card:not(.v-sheet--outlined) {
+        box-shadow: none;
+    }
 
     .charts {
         max-height: calc(100vh - #{32px + 64px + 48px + 16px + 16px});
