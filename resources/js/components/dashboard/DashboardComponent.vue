@@ -1,7 +1,7 @@
 <template>
     <div v-if="ready">
         <v-row>
-            <v-col xl="4" cols="12">
+            <v-col xl="4" cols="12" class="pb-xl-3 pr-xl-0 pb-0 pr-4">
                 <div class="overview-block" style="border-radius: 4px">
                     <v-row no-gutters>
                         <v-col xl="12" lg="4" md="6" cols="12" class="pb-4 pb-md-0 pb-xl-4 pr-xl-0 pr-md-3 pr-0">

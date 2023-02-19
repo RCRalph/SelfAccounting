@@ -29521,6 +29521,21 @@ tr:hover {
   height: 335px;
 }
 
+.filtered-list {
+  min-width: 225px;
+  max-height: 300px;
+  padding-right: 12px;
+  overflow-y: auto;
+}
+
+.chart-card {
+  min-height: calc(100vh - 32px);
+}
+.chart-card .chart-block {
+  padding: 16px;
+  min-height: calc(100vh - 160px);
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;

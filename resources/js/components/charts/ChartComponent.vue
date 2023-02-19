@@ -1,5 +1,5 @@
 <template>
-    <v-card v-if="ready">
+    <v-card v-if="ready" class="chart-card">
         <v-card-title class="justify-center text-h5">{{ chartInfo.name }}</v-card-title>
 
         <v-card-text class="d-flex justify-center flex-nowrap align-end">
@@ -16,21 +16,21 @@
             </div>
         </v-card-text>
 
-        <div class="pa-4">
-            <LineChart
-                v-if="chartType == 'line'"
-                :options="chartData.options"
-                :chartData="chartData.data"
-                :style="'min-height: 70vh'"
-            ></LineChart>
+        <!-- Chart selection -->
 
-            <DoughnutChart
-                v-if="chartType == 'doughnut'"
-                :options="chartData.options"
-                :chartData="chartData.data"
-                :style="'min-height: 70vh'"
-            ></DoughnutChart>
-        </div>
+        <LineChart
+            v-if="chartInfo.type == 'line'"
+            :options="chartData.options"
+            :chartData="chartData.data"
+            class="chart-block"
+        ></LineChart>
+
+        <DoughnutChart
+            v-if="chartInfo.type == 'doughnut'"
+            :options="chartData.options"
+            :chartData="chartData.data"
+            class="chart-block"
+        ></DoughnutChart>
     </v-card>
 
     <v-card v-else>
@@ -77,11 +77,6 @@ export default {
         end: "updateWithOffset",
         "$route.params.id": "getData",
         "currencies.usedCurrency": "getData"
-    },
-    computed: {
-        chartType() {
-            return this.ready ? this.chartInfo.type : "";
-        }
     },
     methods: {
         getData() {

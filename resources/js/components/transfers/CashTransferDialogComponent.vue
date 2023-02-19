@@ -7,55 +7,34 @@
         </template>
 
         <v-card v-if="ready">
-            <v-card-title>Set Cash</v-card-title>
+            <v-card-title class="d-flex justify-center">Set Cash</v-card-title>
 
             <v-card-text>
-                <v-select
-                    class="mx-sm-6 mx-0"
-                    v-model="selectedValues"
-                    :items="cashObject"
-                    item-text="value"
-                    item-value="id"
-                    label="Cash in use"
-                    multiple
-                >
-                    <template v-slot:selection="{ item, index }">
-                        <v-chip v-if="index < 2">
-                            <span>{{ item.value }}</span>
-                        </v-chip>
-
-                        <span
-                            v-if="index == 2"
-                            class="grey--text text-caption"
-                        >(+{{ selectedValues.length - 2 }} other{{ selectedValues.length > 3 ? "s" : "" }})</span>
-                    </template>
-                </v-select>
-
                 <v-form v-model="canSet">
-                    <div v-for="(id, i) in sortedSelectedValues" :key="id">
+                    <div v-for="item, i in cashObject" :key="i">
                         <v-row>
                             <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                                 <div class="caption mb-2">Value</div>
-                                <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (cash[id] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                                <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ item.value }}</h2>
                             </v-col>
 
                             <v-col cols="12" sm="4">
-                                <v-text-field label="Amount" v-model="value[id]" :rules="[validation.cash(ownedCash[id], type)]"></v-text-field>
+                                <v-text-field label="Amount" v-model="value[item.id]" :rules="[validation.cash(ownedCash[item.id], type, true, true)]"></v-text-field>
                             </v-col>
 
                             <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                                 <div class="caption mb-2">Sum</div>
-                                <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (value[id] * cash[id] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                                <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (value[item.id] * cash[item.id] || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
                             </v-col>
                         </v-row>
 
-                        <v-divider v-if="$vuetify.breakpoint.xs && i < sortedSelectedValues.length - 1" class="my-4"></v-divider>
+                        <v-divider v-if="$vuetify.breakpoint.xs && i < cashObject.length - 1" class="my-4"></v-divider>
                     </div>
                 </v-form>
 
-                <v-divider class="mx-sm-6 mx-0 my-4 mt-sm-0" v-if="selectedValues.length"></v-divider>
+                <v-divider class="mx-sm-6 mx-0 my-4 mt-sm-0"></v-divider>
 
-                <v-row v-if="selectedValues.length">
+                <v-row>
                     <v-col cols="12" sm="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
                         <div class="caption mb-2">Sum</div>
                         <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ (sum || 0) | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
@@ -143,18 +122,10 @@ export default {
             cashAccount: null,
             cash: {},
             ready: false,
-            selectedValues: [],
             ownedCash: {}
         }
     },
     watch: {
-        selectedValues(newVal, oldVal) {
-            oldVal.forEach(item => {
-                if (!newVal.includes(item)) {
-                    delete this.value[item];
-                }
-            });
-        },
         currency() {
             this.$emit("input", {});
             this.selectedValues = [];
@@ -176,18 +147,12 @@ export default {
                 value: `${this.$options.filters.addSpaces(item[1])} ${this.currency.ISO}`
             }))
         },
-        sortedSelectedValues() {
-            const retVal = _.cloneDeep(this.selectedValues);
-            retVal.sort((a, b) => a - b);
-
-            return retVal;
-        },
         sum() {
             let sum = 0;
 
-            this.selectedValues.forEach(item => {
-                sum += this.cash[item] * (this.value[item] || 0);
-            });
+            for (let i of Object.keys(this.cash)) {
+                sum += this.cash[i] * (this.value[i] || 0);
+            }
 
             return Math.round(sum * 100) / 100;
         },
