@@ -183,3 +183,41 @@ tr {
     font-size: 1.3rem !important;
     font-weight: 400;
 }
+
+.overview-block {
+    position: sticky;
+    top: 16px;
+    overflow-y: auto;
+    max-height: calc(100vh - 32px);
+
+    .v-sheet.v-card:not(.v-sheet--outlined) {
+        box-shadow: none;
+    }
+
+    .charts {
+        max-height: calc(100vh - #{32px + 64px + 48px + 16px + 16px});
+
+        .chart-size {
+            max-width: calc(100% - 16px);
+            margin-left: 8px;
+            margin-bottom: 16px;
+            height: 335px;
+        }
+    }
+}
+
+.filtered-list {
+    min-width: 225px;
+    max-height: 300px;
+    padding-right: 12px;
+    overflow-y: auto;
+}
+
+.chart-card {
+    min-height: calc(100vh - 32px);
+
+    .chart-block {
+        padding: 16px;
+        min-height: calc(100vh - #{32px + 64px + 64px});
+    }
+}

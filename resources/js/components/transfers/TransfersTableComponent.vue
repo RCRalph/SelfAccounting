@@ -54,28 +54,22 @@
                             </v-btn>
                         </template>
 
-                        <v-card max-width="350">
+                        <v-card class="filtered-list">
                             <v-card-text>
-                                <v-select
+                                <v-checkbox
                                     v-model="filteredData.source_accounts"
-                                    :items="accounts"
-                                    item-text="name"
-                                    item-value="id"
-                                    multiple
+                                    v-for="item, i in accounts"
+                                    :value="item.id"
+                                    :key="item.id"
+                                    :class="i == 0 && 'mt-0 pt-0'"
                                     hide-details
-                                    filled
                                 >
-                                    <template v-slot:selection="{ item, index }">
-                                        <v-chip v-if="index === 0" small>
-                                            <span>{{ item.name }}</span>
-                                        </v-chip>
-
-                                        <span
-                                            v-if="index === 1"
-                                            class="grey--text text-caption"
-                                        >(+{{ filteredData.source_accounts.length - 1 }} other{{ filteredData.source_accounts.length > 2 ? "s" : "" }})</span>
+                                    <template v-slot:label>
+                                        <div>
+                                            {{ item.name }}
+                                        </div>
                                     </template>
-                                </v-select>
+                                </v-checkbox>
                             </v-card-text>
                         </v-card>
                     </v-menu>
@@ -92,28 +86,22 @@
                             </v-btn>
                         </template>
 
-                        <v-card max-width="350">
+                        <v-card class="filtered-list">
                             <v-card-text>
-                                <v-select
+                                <v-checkbox
                                     v-model="filteredData.target_accounts"
-                                    :items="accounts"
-                                    item-text="name"
-                                    item-value="id"
-                                    multiple
+                                    v-for="item, i in accounts"
+                                    :value="item.id"
+                                    :key="item.id"
+                                    :class="i == 0 && 'mt-0 pt-0'"
                                     hide-details
-                                    filled
                                 >
-                                    <template v-slot:selection="{ item, index }">
-                                        <v-chip v-if="index === 0" small>
-                                            <span>{{ item.name }}</span>
-                                        </v-chip>
-
-                                        <span
-                                            v-if="index === 1"
-                                            class="grey--text text-caption"
-                                        >(+{{ filteredData.target_accounts.length - 1 }} other{{ filteredData.target_accounts.length > 2 ? "s" : "" }})</span>
+                                    <template v-slot:label>
+                                        <div>
+                                            {{ item.name }}
+                                        </div>
                                     </template>
-                                </v-select>
+                                </v-checkbox>
                             </v-card-text>
                         </v-card>
                     </v-menu>

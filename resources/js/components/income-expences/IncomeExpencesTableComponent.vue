@@ -59,6 +59,7 @@
 
             <template v-slot:[`header.category`]="{ header }">
                 {{ header.text }}
+
                 <v-menu offset-y :close-on-content-click="false">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn small icon v-bind="attrs" v-on="on">
@@ -68,28 +69,22 @@
                         </v-btn>
                     </template>
 
-                    <v-card max-width="350">
+                    <v-card class="filtered-list">
                         <v-card-text>
-                            <v-select
+                            <v-checkbox
                                 v-model="filteredData.categories"
-                                :items="categories"
-                                item-text="name"
-                                item-value="id"
-                                multiple
+                                v-for="item, i in categories"
+                                :value="item.id"
+                                :key="item.id"
+                                :class="i == 0 && 'mt-0 pt-0'"
                                 hide-details
-                                filled
                             >
-                                <template v-slot:selection="{ item, index }">
-                                    <v-chip v-if="index === 0" small>
-                                        <span>{{ item.name }}</span>
-                                    </v-chip>
-
-                                    <span
-                                        v-if="index === 1"
-                                        class="grey--text text-caption"
-                                    >(+{{ filteredData.categories.length - 1 }} other{{ filteredData.categories.length > 2 ? "s" : "" }})</span>
+                                <template v-slot:label>
+                                    <div>
+                                        {{ item.name }}
+                                    </div>
                                 </template>
-                            </v-select>
+                            </v-checkbox>
                         </v-card-text>
                     </v-card>
                 </v-menu>
@@ -97,6 +92,7 @@
 
             <template v-slot:[`header.account`]="{ header }">
                 {{ header.text }}
+
                 <v-menu offset-y :close-on-content-click="false">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn small icon v-bind="attrs" v-on="on">
@@ -106,28 +102,22 @@
                         </v-btn>
                     </template>
 
-                    <v-card max-width="350">
+                    <v-card class="filtered-list">
                         <v-card-text>
-                            <v-select
+                            <v-checkbox
                                 v-model="filteredData.accounts"
-                                :items="accounts"
-                                item-text="name"
-                                item-value="id"
-                                multiple
+                                v-for="item, i in accounts"
+                                :value="item.id"
+                                :key="item.id"
+                                :class="i == 0 && 'mt-0 pt-0'"
                                 hide-details
-                                filled
                             >
-                                <template v-slot:selection="{ item, index }">
-                                    <v-chip v-if="index === 0" small>
-                                        <span>{{ item.name }}</span>
-                                    </v-chip>
-
-                                    <span
-                                        v-if="index === 1"
-                                        class="grey--text text-caption"
-                                    >(+{{ filteredData.accounts.length - 1 }} other{{ filteredData.accounts.length > 2 ? "s" : "" }})</span>
+                                <template v-slot:label>
+                                    <div>
+                                        {{ item.name }}
+                                    </div>
                                 </template>
-                            </v-select>
+                            </v-checkbox>
                         </v-card-text>
                     </v-card>
                 </v-menu>
