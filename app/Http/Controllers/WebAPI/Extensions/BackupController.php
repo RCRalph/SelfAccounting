@@ -221,7 +221,7 @@ class BackupController extends Controller
         ini_set("max_execution_time", "300");
 
         $categories = request()->validate([
-            "categories" => ["required", "array"],
+            "categories" => ["present", "array"],
             "categories.*.currency" => ["required", "exists:currencies,ISO"],
             "categories.*.name" => ["required", "string", "max:32"],
             "categories.*.used_in_income" => ["required", "boolean"],
@@ -233,7 +233,7 @@ class BackupController extends Controller
         ])["categories"];
 
         $accounts = request()->validate([
-            "accounts" => ["required", "array"],
+            "accounts" => ["present", "array"],
             "accounts.*.currency" => ["required", "exists:currencies,ISO"],
             "accounts.*.name" => ["required", "string", "max:32"],
             "accounts.*.used_in_income" => ["required", "boolean"],
@@ -245,7 +245,7 @@ class BackupController extends Controller
         ])["accounts"];
 
         $income = request()->validate([
-            "income" => ["required", "array"],
+            "income" => ["present", "array"],
             "income.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIncomeExpences($accounts)],
             "income.*.title" => ["required", "string", "max:64"],
             "income.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
@@ -256,7 +256,7 @@ class BackupController extends Controller
         ])["income"];
 
         $expences = request()->validate([
-            "expences" => ["required", "array"],
+            "expences" => ["present", "array"],
             "expences.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIncomeExpences($accounts)],
             "expences.*.title" => ["required", "string", "max:64"],
             "expences.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
@@ -267,7 +267,7 @@ class BackupController extends Controller
         ])["expences"];
 
         $transfers = request()->validate([
-            "transfers" => ["required", "array"],
+            "transfers" => ["present", "array"],
             "transfers.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectTransferDate($accounts)],
             "transfers.*.source_value" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "transfers.*.source_account_id" => ["required", "integer", "different:transfers.*.target_account_id", new ValidTransferAccount($accounts)],
@@ -350,12 +350,12 @@ class BackupController extends Controller
                 $extensionData = request()->validate([
                     "extensions.cashan" => ["required", "array"],
 
-                    "extensions.cashan.cash" => ["required", "array"],
+                    "extensions.cashan.cash" => ["present", "array"],
                     "extensions.cashan.cash.*.currency" => ["required", "exists:currencies,ISO"],
                     "extensions.cashan.cash.*.value" => ["required", "numeric", "min:0", "max:1e8", "not_in:0,1e8"],
                     "extensions.cashan.cash.*.amount" => ["required", "integer", "min:1", "max:1e7"],
 
-                    "extensions.cashan.accounts" => ["required", "array"],
+                    "extensions.cashan.accounts" => ["present", "array"],
                     "extensions.cashan.accounts.*.currency" => ["required", "exists:currencies,ISO", "distinct"],
                     "extensions.cashan.accounts.*.account_id" => ["required", "integer", new ValidCategoryOrAccount($accounts)]
                 ])["extensions"]["cashan"];
@@ -385,6 +385,7 @@ class BackupController extends Controller
             // Restore report management
             if (request()->has("extensions.report") && auth()->user()->extensionCodes->contains("report")) {
                 $extensionData = request()->validate([
+                    "extensions.report.reports" => ["present", "array"],
                     "extensions.report.reports.*.title" => ["required", "string", "max:64"],
                     "extensions.report.reports.*.income_addition" => ["required", "boolean"],
                     "extensions.report.reports.*.sort_dates_desc" => ["required", "boolean"],

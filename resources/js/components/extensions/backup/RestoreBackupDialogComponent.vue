@@ -530,6 +530,10 @@ export default {
                 return false;
             }
 
+            if (!categories.length) {
+                return true;
+            }
+
             let validationArray = categories.map(item => [
                 this.currencies.findByISO(item.currency) !== undefined,
                 this.validation.name()(item.name) === true,
@@ -541,7 +545,7 @@ export default {
                 this.validation.date(true, item.start_date)(item.end_date) === true
             ].reduce((item1, item2) => item1 && item2));
 
-            if (validationArray.length && !validationArray.reduce((item1, item2) => item1 && item2)) {
+            if (!validationArray.reduce((item1, item2) => item1 && item2)) {
                 return false;
             }
 
@@ -559,6 +563,10 @@ export default {
                 return false;
             }
 
+            if (!accounts.length) {
+                return true;
+            }
+
             let validationArray = accounts.map(item => [
                 this.currencies.findByISO(item.currency) !== undefined,
                 this.validation.name()(item.name) === true,
@@ -570,7 +578,7 @@ export default {
                 this.validation.price(false, true)(item.start_balance) === true
             ].reduce((item1, item2) => item1 && item2));
 
-            if (validationArray.length && !validationArray.reduce((item1, item2) => item1 && item2)) {
+            if (!validationArray.reduce((item1, item2) => item1 && item2)) {
                 return false;
             }
 
@@ -589,6 +597,10 @@ export default {
                 return false;
             }
 
+            if (!data.length) {
+                return true;
+            }
+
             let validationArray = data.map(item => [
                 item.category ? (this.mappedValues.categories[item.category].currency == item.currency) : true,
                 item.account ? (this.mappedValues.accounts[item.account].currency == item.currency) : true,
@@ -601,11 +613,15 @@ export default {
                 item.account_id ? (this.mappedValues.accounts[item.account_id].currency == item.currency) : true
             ].reduce((item1, item2) => item1 && item2));
 
-            return !validationArray.length || validationArray.reduce((item1, item2) => item1 && item2);
+            return validationArray.reduce((item1, item2) => item1 && item2);
         },
         validateTransfers(data) {
             if (!Array.isArray(data)) {
                 return false;
+            }
+
+            if (!data.length) {
+                return true;
             }
 
             let validationArray = data.map(item => [
@@ -621,7 +637,7 @@ export default {
                 this.validation.price()(item.target_value) === true
             ]).reduce((item1, item2) => item1 && item2);
 
-            return !validationArray.length || validationArray.reduce((item1, item2) => item1 && item2);
+            return validationArray.reduce((item1, item2) => item1 && item2);
         },
         validateCash(cash) {
             if (!Array.isArray(cash.cash) || !Array.isArray(cash.accounts)) {
