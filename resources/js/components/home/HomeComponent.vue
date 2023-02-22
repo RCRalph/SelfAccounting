@@ -8,7 +8,7 @@
 
                 <div class="d-flex justify-center align-center flex-column" style="position: absolute; margin-top: 64px">
                     <div class="mb-2">
-                        <v-img src="/storage/Logo text dark.svg" :width="imageWidth" contain></v-img>
+                        <v-img :src="logoTextImage" :width="imageWidth" contain></v-img>
                     </div>
 
                     <div style="font-weight: 900; user-select: none"
@@ -91,6 +91,9 @@ export default {
         NavbarComponent
     },
     computed: {
+        logoTextImage() {
+            return `/storage/Logo text ${this.$vuetify.theme.dark ? 'dark' : 'light'}`;
+        },
         imageWidth() {
             return this.$vuetify.breakpoint.mdAndUp ? 700 : this.$vuetify.breakpoint.width - 30;
         },
