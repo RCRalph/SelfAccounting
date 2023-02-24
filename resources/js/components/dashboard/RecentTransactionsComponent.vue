@@ -1,16 +1,133 @@
 <template>
-    <div v-if="ready">
+    <div>
         <v-data-table
-            disable-sort
+            class="table-bordered"
+            hide-default-footer
             :headers="headers"
             :items="mergedCells"
-            :items-per-page="pagination.perPage"
-            :loading="tableLoading"
-            hide-default-footer
             :mobile-breakpoint="0"
-
-            class="table-bordered"
+            :loading="tableLoading"
+            :server-items-length="pagination.perPage"
+            :options.sync="options"
+            multi-sort
         >
+            <template v-slot:top>
+                <v-row class="align-center mb-0">
+                    <v-col cols="12" sm="5" lg="4">
+                        <v-text-field
+                            v-model="titleSearch"
+                            append-icon="mdi-magnify"
+                            label="Search"
+                            dense
+                            single-line
+                            counter="64"
+                            :rules="[validation.search(64)]"
+                        ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="multi-button-table-top">
+                        <AddIncomeExpencesDialogComponent
+                            type="income"
+                            @added="added"
+                        ></AddIncomeExpencesDialogComponent>
+
+                        <AddIncomeExpencesDialogComponent
+                            type="expences"
+                            @added="added"
+                        ></AddIncomeExpencesDialogComponent>
+                    </v-col>
+                </v-row>
+            </template>
+
+            <template v-slot:[`header.date`]="{ header }">
+                {{ header.text }}
+
+                <v-menu offset-y :close-on-content-click="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn small icon v-bind="attrs" v-on="on">
+                            <v-icon small :color="filteredData.dates.length ? 'primary' : ''">
+                                mdi-filter
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-date-picker
+                        v-model="filteredData.dates"
+                        min="1970-01-01"
+                        multiple
+                        color="primary"
+                        prev-icon="mdi-skip-previous"
+                        next-icon="mdi-skip-next"
+                    ></v-date-picker>
+                </v-menu>
+            </template>
+
+            <template v-slot:[`header.category`]="{ header }">
+                {{ header.text }}
+
+                <v-menu offset-y :close-on-content-click="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn small icon v-bind="attrs" v-on="on">
+                            <v-icon small :color="filteredData.categories.length ? 'primary' : ''">
+                                mdi-filter
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-card class="filtered-list">
+                        <v-card-text>
+                            <v-checkbox
+                                v-model="filteredData.categories"
+                                v-for="item, i in categories"
+                                :value="item.id"
+                                :key="item.id"
+                                :class="i == 0 && 'mt-0 pt-0'"
+                                hide-details
+                            >
+                                <template v-slot:label>
+                                    <div>
+                                        {{ item.name }}
+                                    </div>
+                                </template>
+                            </v-checkbox>
+                        </v-card-text>
+                    </v-card>
+                </v-menu>
+            </template>
+
+            <template v-slot:[`header.account`]="{ header }">
+                {{ header.text }}
+
+                <v-menu offset-y :close-on-content-click="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn small icon v-bind="attrs" v-on="on">
+                            <v-icon small :color="filteredData.accounts.length ? 'primary' : ''">
+                                mdi-filter
+                            </v-icon>
+                        </v-btn>
+                    </template>
+
+                    <v-card class="filtered-list">
+                        <v-card-text>
+                            <v-checkbox
+                                v-model="filteredData.accounts"
+                                v-for="item, i in accounts"
+                                :value="item.id"
+                                :key="item.id"
+                                :class="i == 0 && 'mt-0 pt-0'"
+                                hide-details
+                            >
+                                <template v-slot:label>
+                                    <div>
+                                        {{ item.name }}
+                                    </div>
+                                </template>
+                            </v-checkbox>
+                        </v-card-text>
+                    </v-card>
+                </v-menu>
+            </template>
+
             <template v-slot:item="{item, index}">
                 <tr class="text-center">
                     <td v-if="item.date.span" :rowspan="item.date.span" @mouseover="setRowsToHighlight(index, item.date.span)" @mouseleave="resetRowsToHighlight()"
@@ -62,29 +179,30 @@
             </template>
         </v-data-table>
 
-        <div class="text-center pt-4">
-            <v-pagination
-                v-model="pagination.page"
-                :length="pagination.last"
-            ></v-pagination>
-        </div>
-    </div>
+        <InfiniteLoading
+            v-if="!tableLoading"
+            :force-use-infinite-wrapper="true"
+            @infinite="getData"
+            :key="currencies.usedCurrency && tableLoading"
+        >
+            <div slot="no-more"></div>
+        </InfiniteLoading>
 
-    <v-overlay v-else :value="true" opacity="1" absolute>
-        <v-progress-circular
-            indeterminate
-            size="96"
-        ></v-progress-circular>
-    </v-overlay>
+        <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
+    </div>
 </template>
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
 import main from "&/mixins/main";
 import customTableMerged from "&/mixins/customTableMerged";
+import validation from "&/mixins/validation";
 
+import AddIncomeExpencesDialogComponent from "@/income-expences/AddIncomeExpencesDialogComponent.vue";
 import EditIncomeExpencesDialogComponent from "@/income-expences/EditIncomeExpencesDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
+import InfiniteLoading from "vue-infinite-loading";
+import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
 
 export default {
     setup() {
@@ -92,22 +210,35 @@ export default {
 
         return { currencies };
     },
-    mixins: [main, customTableMerged],
+    mixins: [main, customTableMerged, validation],
     components: {
+        AddIncomeExpencesDialogComponent,
         EditIncomeExpencesDialogComponent,
-        DeleteDialogComponent
+        DeleteDialogComponent,
+        InfiniteLoading,
+        SuccessSnackbarComponent,
+    },
+    props: {
+        categories: {
+            type: Array,
+            required: true
+        },
+        accounts: {
+            type: Array,
+            required: true
+        }
     },
     data() {
         return {
             headers: [
-                { text: "Date", align: "center" },
-                { text: "Title", align: "center" },
-                { text: "Amount", align: "center" },
-                { text: "Price", align: "center" },
-                { text: "Value", align: "center" },
-                { text: "Category", align: "center" },
-                { text: "Account", align: "center" },
-                { text: "Actions", align: "center" }
+                { text: "Date", align: "center", value: "date" },
+                { text: "Title", align: "center", value: "title" },
+                { text: "Amount", align: "center", value: "amount" },
+                { text: "Price", align: "center", value: "price" },
+                { text: "Value", align: "center", value: "value" },
+                { text: "Category", align: "center", value: "category", sortable: false },
+                { text: "Account", align: "center", value: "account", sortable: false },
+                { text: "Actions", align: "center", value: "", sortable: false }
             ],
             items: [],
             pagination: {
@@ -115,37 +246,128 @@ export default {
                 last: null,
                 perPage: null
             },
+            options: {},
+            titleSearch: "",
+            filteredData: {
+                dates: [],
+                categories: [],
+                accounts: []
+            },
+            lastChange: new Date(),
 
             ready: false,
             tableLoading: false,
-            dialogs: {
-                delete: false,
-                edit: false
+            success: false,
+            thing: "",
+        }
+    },
+    computed: {
+        dataQuery() {
+            let query = {};
+
+            if (Object.keys(this.options).length) {
+                if (this.titleSearch != "") {
+                    query.title = this.titleSearch;
+                }
+
+                if (this.options.sortBy.length) {
+                    query.orderFields = [];
+                    query.orderDirections = [];
+
+                    this.options.sortBy.forEach((item, index) => {
+                        query.orderFields.push(item)
+                        query.orderDirections.push(this.options.sortDesc[index] ? "desc" : "asc");
+                    });
+                }
+
+                Object.keys(this.filteredData).forEach(key => {
+                    if (this.filteredData[key]) {
+                        query[key] = this.filteredData[key];
+                    }
+                })
             }
+
+            return query;
         }
     },
     methods: {
-        getData() {
-            this.ready = false;
-            this.tableLoading = true;
+        getData($state) {
+            if (!$state) {
+                this.tableLoading = true;
+                this.pagination.page = 1;
+                this.pagination.last = null;
+            }
 
-            axios
-                .get(`/web-api/dashboard/${this.currencies.usedCurrency}/recent-transactions?page=${this.pagination.page}`)
-                .then(response => {
-                    const data = response.data;
+            if (this.pagination.page <= this.pagination.last || this.pagination.last == null) {
+                axios
+                    .get(`/web-api/dashboard/${this.currencies.usedCurrency}/recent-transactions`, {
+                        params: { page: this.pagination.page, ...this.dataQuery }
+                    })
+                    .then(response => {
+                        const data = response.data;
 
-                    this.items = data.items.data;
-                    this.pagination.last = data.items.last_page;
-                    this.pagination.perPage = data.items.per_page;
+                        this.items = this.pagination.page == 1 ?
+                            data.items.data :
+                            this.items.concat(data.items.data);
 
-                    this.tableLoading = false;
-                    this.ready = true;
-                })
+                        this.pagination.last = data.items.last_page;
+                        this.pagination.perPage = data.items.per_page;
+
+                        if (!$state) {
+                            this.tableLoading = false;
+                        } else {
+                            if (data.items.current_page == data.items.last_page) {
+                                $state.complete();
+                            }
+                            $state.loaded();
+                        }
+
+                        this.pagination.page++;
+                    });
+            }
+            else if ($state) {
+                $state.complete();
+                $state.loaded();
+            }
+        },
+        updateWithOffset() {
+            const timeOffset = 250;
+            this.lastChange = new Date();
+
+            setTimeout(() => {
+                if (new Date() - this.lastChange >= timeOffset) {
+                    this.getData();
+                }
+            }, timeOffset + 1);
+        },
+        added() {
+            this.thing = `added ${this.type}`;
+            this.success = true;
+            this.getData();
+        },
+        updated() {
+            this.thing = `updated ${this.type == 'expences' ? 'expence' : 'income'}`;
+            this.success = true;
+            this.getData();
+        },
+        deleted() {
+            this.thing = `deleted ${this.type == 'expences' ? 'expence' : 'income'}`;
+            this.success = true;
+            this.getData();
         }
     },
     watch: {
-        'pagination.page'() {
-            this.getData()
+        options(newOptions, oldOptions) {
+            if (Object.keys(oldOptions).length) {
+                this.getData();
+            }
+        },
+        titleSearch() {
+            this.updateWithOffset();
+        },
+        filteredData: {
+            handler: "updateWithOffset",
+            deep: true
         }
     },
     mounted() {

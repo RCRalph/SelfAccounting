@@ -10,6 +10,15 @@
             font-size: 1.85rem !important;
         }
     }
+
+    .multi-button-table-top {
+        flex-direction: column;
+        justify-content: center;
+
+        button {
+            margin: 4px 0px;
+        }
+    }
 }
 
 @media (max-width: #{map-get($grid-breakpoints, "xl") - 0.02px}) {

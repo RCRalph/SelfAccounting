@@ -135,7 +135,10 @@
                     <v-card-title class="justify-center text-h5">Recent transactions</v-card-title>
 
                     <v-card-text>
-                        <RecentTransactionsComponent></RecentTransactionsComponent>
+                        <RecentTransactionsComponent
+                            :categories="categories"
+                            :accounts="accounts"
+                        ></RecentTransactionsComponent>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -173,6 +176,8 @@ export default {
     data() {
         return {
             charts: [],
+            categories: [],
+            accounts: [],
             currentChart: null,
             currentBalance: [],
             last30Days: {},
@@ -206,8 +211,13 @@ export default {
                 .get(`/web-api/dashboard/${this.currencies.usedCurrency}`)
                 .then(response => {
                     const data = response.data;
+
                     this.currentBalance = data.currentBalance;
                     this.last30Days = data.last30Days;
+
+                    this.categories = data.categories;
+                    this.accounts = data.accounts;
+
                     this.charts = data.charts;
                     if (data.charts.length) {
                         this.currentChart = data.charts[0].id
