@@ -29536,12 +29536,27 @@ tr:hover {
   min-height: calc(100vh - 160px);
 }
 
+.multi-button-table-top {
+  display: flex;
+  justify-content: end;
+}
+.multi-button-table-top button {
+  margin: 0px 4px;
+}
+
 @media (max-width: 599.98px) {
   .v-application .text-h6 {
     font-size: 0.85rem !important;
   }
   .v-application .text-h4 {
     font-size: 1.85rem !important;
+  }
+  .multi-button-table-top {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .multi-button-table-top button {
+    margin: 4px 0px;
   }
 }
 @media (max-width: 1903.98px) {

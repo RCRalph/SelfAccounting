@@ -13,7 +13,7 @@
 
                     <div style="font-weight: 900; user-select: none"
                         class="white--text mb-3 text-center font-weight-black"
-                        :class="subheaderFontSize"
+                        :class="subheaderFontStyle"
                     >
                         Your personal accounting&nbsp;platform
                     </div>
@@ -92,20 +92,23 @@ export default {
     },
     computed: {
         logoTextImage() {
-            return `/storage/Logo text ${this.$vuetify.theme.dark ? 'dark' : 'light'}`;
+            return `/storage/Logo text ${this.$vuetify.theme.dark ? 'dark' : 'light'}.svg`;
         },
         imageWidth() {
             return this.$vuetify.breakpoint.mdAndUp ? 700 : this.$vuetify.breakpoint.width - 30;
         },
-        subheaderFontSize() {
+        subheaderFontStyle() {
+            let size = "text-h4", color = "grey--text text--darken-4"
+
             if (this.$vuetify.breakpoint.xs) {
-                return "text-h5";
-            }
-            else if (this.$vuetify.breakpoint.sm) {
-                return "text-h4"
+                size =  "text-h5";
             }
 
-            return "text-h4";
+            if (this.$vuetify.theme.dark) {
+                color = "grey--text text--lighten-5";
+            }
+
+            return `${size} ${color}`;
         }
     }
 };

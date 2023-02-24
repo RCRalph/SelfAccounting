@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use App\Models\Currency;
 use App\Models\Chart;
 
+use App\Rules\Common\SameLengthAs;
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -63,17 +65,56 @@ class DashboardController extends Controller
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("-1 AS type"));
 
-        $items = $income
-            ->union($expences)
-            ->orderBy("date", "desc")
-            ->orderBy("title")
-            ->orderBy("amount")
-            ->orderBy("price")
-            ->orderBy("category_id")
-            ->orderBy("account_id")
-            ->paginate(20);
+        $fields = ["date", "title", "amount", "price", "value"];
 
-        $items = $this->addNamesToPaginatedIncomeOrExpencesItems($items, $currency);
+        $data = request()->validate([
+            "title" => ["nullable", "string", "min:1", "max:64"],
+            "dates" => ["nullable", "array"],
+            "dates.*" => ["required", "date", "distinct"],
+            "categories" => ["nullable", "array"],
+            "categories.*" => ["required", "integer", "exists:categories,id"],
+            "accounts" => ["nullable", "array"],
+            "accounts.*" => ["required", "integer", "exists:accounts,id"],
+            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields.*" => ["required", "string", "in:" . implode(",", $fields), "distinct"],
+            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections.*" => ["nullable", "string", "in:asc,desc"]
+        ]);
+
+        if (isset($data["title"])) {
+            $income->where("title", "ilike", "%" . $data["title"] . "%");
+            $expences->where("title", "ilike", "%" . $data["title"] . "%");
+        }
+
+        if (isset($data["dates"])) {
+            $income->whereIn("date", $data["dates"]);
+            $expences->whereIn("date", $data["dates"]);
+        }
+
+        if (isset($data["categories"])) {
+            $income->whereIn("category_id", $data["categories"]);
+            $expences->whereIn("category_id", $data["categories"]);
+        }
+
+        if (isset($data["accounts"])) {
+            $income->whereIn("account_id", $data["accounts"]);
+            $expences->whereIn("account_id", $data["accounts"]);
+        }
+
+        $items = $income->union($expences);
+
+        if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
+            foreach ($data["orderFields"] as $i => $item) {
+                $fields = array_diff($fields, [$item]);
+                $items = $items->orderBy($item, $data["orderDirections"][$i] ?? "asc");
+            }
+        }
+
+        foreach ($fields as $field) {
+            $items = $items->orderBy($field, $field == "date" ? "desc" : "asc");
+        }
+
+        $items = $this->addNamesToPaginatedIncomeOrExpencesItems($items->paginate(20), $currency);
 
         return response()->json(compact("items"));
     }
@@ -82,7 +123,8 @@ class DashboardController extends Controller
     {
         $categories = auth()->user()->categories()
             ->select("id")
-            ->where("currency_id", $currency->id);
+            ->where("currency_id", $currency->id)
+            ->orderBy("name");
 
         $accounts = auth()->user()->accounts()
             ->select("id")
@@ -122,8 +164,18 @@ class DashboardController extends Controller
         $currentBalance = $this->getBalance($income, $expences, $transfers, $accounts, $categories, $accountsToShow, $categoriesToShow);
         $last30Days = $this->getLast30DaysBalance($income, $expences, $transfers, $accountIDs, $accountsToShow, $categoriesToShow);
 
+        $categories = auth()->user()->categories()
+            ->select("id", "name")
+            ->where("currency_id", $currency->id)
+            ->get();
+
+        $accounts = auth()->user()->accounts()
+            ->select("id", "name")
+            ->where("currency_id", $currency->id)
+            ->get();
+
         $charts = $this->getCharts("/dashboard");
 
-        return response()->json(compact("currentBalance", "last30Days", "charts"));
+        return response()->json(compact("categories", "accounts", "currentBalance", "last30Days", "charts"));
     }
 }

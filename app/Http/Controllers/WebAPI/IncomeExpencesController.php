@@ -100,11 +100,13 @@ class IncomeExpencesController extends Controller
     public function index(Currency $currency)
     {
         $categories = auth()->user()->categories()
+            ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->get();
 
         $accounts = auth()->user()->accounts()
+            ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->get();

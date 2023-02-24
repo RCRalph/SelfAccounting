@@ -221,3 +221,12 @@ tr {
         min-height: calc(100vh - #{32px + 64px + 64px});
     }
 }
+
+.multi-button-table-top {
+    display: flex;
+    justify-content: end;
+
+    button {
+        margin: 0px 4px;
+    }
+}
