@@ -167,11 +167,13 @@ class DashboardController extends Controller
         $categories = auth()->user()->categories()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
+            ->orderBy("name")
             ->get();
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
+            ->orderBy("name")
             ->get();
 
         $charts = $this->getCharts("/dashboard");

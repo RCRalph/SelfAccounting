@@ -60,6 +60,7 @@ class TransfersController extends Controller
     {
         $accounts = auth()->user()->accounts()
             ->where("currency_id", $currency->id)
+            ->orderBy("name")
             ->get();
 
         $charts = $this->getCharts("/transfers");

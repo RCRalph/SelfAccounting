@@ -103,12 +103,14 @@ class IncomeExpencesController extends Controller
             ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
+            ->orderBy("name")
             ->get();
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
+            ->orderBy("name")
             ->get();
 
         $charts = $this->getCharts("/" . request()->type);
