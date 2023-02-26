@@ -138,8 +138,6 @@
             v-model="premiumExpired"
         ></PremiumExpiredComponent>
 
-        <IconPickerComponent></IconPickerComponent>
-
         <v-main>
             <div class="menu-margin">
                 <div class="ma-4">
@@ -192,7 +190,7 @@ export default {
             menuClicked: false,
             user: {},
             premiumExpired: false,
-            ready: false
+            ready: false,
         }
     },
     computed: {

@@ -26,10 +26,10 @@ class CategoriesController extends Controller
         "mdi-home-variant",
         "mdi-gift",
         "mdi-food-fork-drink",
+        "mdi-cash-multiple",
         "mdi-cart",
         "mdi-car-hatchback",
         "mdi-beach",
-        "fas fa-sack-dollar"
     ];
 
     public function __construct()
@@ -40,7 +40,7 @@ class CategoriesController extends Controller
     public function index(Currency $currency)
     {
         $data = auth()->user()->categories()
-            ->select("id", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "end_date")
+            ->select("id", "icon", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "end_date")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
@@ -51,6 +51,7 @@ class CategoriesController extends Controller
     public function create(Currency $currency)
     {
         $data = request()->validate([
+            "icon" => ["present", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],
@@ -77,6 +78,7 @@ class CategoriesController extends Controller
         $this->authorize("update", $category);
 
         $data = request()->validate([
+            "icon" => ["present", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],
