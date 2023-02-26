@@ -166,10 +166,13 @@ class Controller extends BaseController
         $paginatedData = $items->getCollection()->toArray();
 
         $categories = auth()->user()->categories()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]]);
+            ->mapWithKeys(fn ($item) => [$item["id"] => [
+                "name" => $item["name"],
+                "icon" => $item["icon"]
+            ]]);
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name")
@@ -181,7 +184,8 @@ class Controller extends BaseController
             $paginatedData[$i]["amount"] *= 1;
             $paginatedData[$i]["price"] *= 1;
             $paginatedData[$i]["value"] *= $item["type"] ?? 1;
-            $paginatedData[$i]["category"] = $categories[$item["category_id"]] ?? "N/A";
+            $paginatedData[$i]["category"] = $categories[$item["category_id"]]["name"] ?? "N/A";
+            $paginatedData[$i]["category_icon"] = $categories[$item["category_id"]]["icon"] ?? null;
             $paginatedData[$i]["account"] = $accounts[$item["account_id"]] ?? "N/A";
 
             unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["account_id"]);

@@ -92,7 +92,17 @@
                                 item-text="name"
                                 item-value="id"
                                 label="Category"
-                            ></v-select>
+                            >
+                                <template v-slot:item="{ item }">
+                                    <v-list-item-icon v-if="item.icon">
+                                        <v-icon>{{ item.icon }}</v-icon>
+                                    </v-list-item-icon>
+
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                            </v-select>
                         </v-col>
 
                         <v-col cols="12" md="6">

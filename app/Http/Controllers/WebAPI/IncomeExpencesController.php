@@ -28,7 +28,7 @@ class IncomeExpencesController extends Controller
     private function getCategoriesAndAccounts($currency)
     {
         $categories = auth()->user()->categories()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->orderBy("name")
@@ -100,7 +100,7 @@ class IncomeExpencesController extends Controller
     public function index(Currency $currency)
     {
         $categories = auth()->user()->categories()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->orderBy("name")

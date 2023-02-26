@@ -218,9 +218,12 @@ class ReportsController extends Controller
         }
 
         $categories = $report->user->categories()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => $item["name"]])
+            ->mapWithKeys(fn ($item) => [$item["id"] => [
+                "name" => $item["name"],
+                "icon" => $item["icon"]
+            ]])
             ->toArray();
 
         $accounts = $report->user->accounts()
@@ -245,7 +248,8 @@ class ReportsController extends Controller
             }
 
             if ($showColumns["category_id"]) {
-                $items[$i]["category"] = $categories[$item["category_id"]] ?? "N/A";
+                $items[$i]["category"] = $categories[$item["category_id"]]["name"] ?? "N/A";
+                $items[$i]["category_icon"] = $categories[$item["category_id"]]["icon"] ?? null;
                 unset($items[$i]["category_id"]);
             }
 
@@ -263,7 +267,7 @@ class ReportsController extends Controller
         $titles = $this->getTitles();
 
         $categories = auth()->user()->categories()
-            ->select("id", "name", "currency_id")
+            ->select("id", "name", "icon", "currency_id")
             ->get()
             ->groupBy("currency_id");
 
@@ -426,7 +430,7 @@ class ReportsController extends Controller
         $titles = $this->getTitles();
 
         $categories = auth()->user()->categories()
-            ->select("id", "name", "currency_id")
+            ->select("id", "name", "icon", "currency_id")
             ->get()
             ->groupBy("currency_id");
 
