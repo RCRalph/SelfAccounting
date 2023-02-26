@@ -14,10 +14,11 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();
+        $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
             $table->string('name', 32);
+            $table->string('icon', 64)->nullable();
             $table->boolean('used_in_income')->default(true);
             $table->boolean('used_in_expences')->default(true);
             $table->boolean('count_to_summary')->default(false);
