@@ -165,13 +165,13 @@ class DashboardController extends Controller
         $last30Days = $this->getLast30DaysBalance($income, $expences, $transfers, $accountIDs, $accountsToShow, $categoriesToShow);
 
         $categories = auth()->user()->categories()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();

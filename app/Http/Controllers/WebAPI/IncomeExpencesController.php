@@ -107,7 +107,7 @@ class IncomeExpencesController extends Controller
             ->get();
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->orderBy("name")

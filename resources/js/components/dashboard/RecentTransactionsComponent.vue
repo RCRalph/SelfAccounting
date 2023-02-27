@@ -86,6 +86,7 @@
                             >
                                 <template v-slot:label>
                                     <div>
+                                        <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
                                         {{ item.name }}
                                     </div>
                                 </template>
@@ -119,6 +120,7 @@
                             >
                                 <template v-slot:label>
                                     <div>
+                                        <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
                                         {{ item.name }}
                                     </div>
                                 </template>
@@ -155,7 +157,7 @@
                     >
                         <div class="d-flex justify-start align-center">
                             <div class="mr-2">
-                                <v-icon style="min-width: 24px">{{ item.category_icon.value }}</v-icon>
+                                <v-icon style="min-width: 24px" v-if="item.category_icon.value">{{ item.category_icon.value }}</v-icon>
                             </div>
 
                             <div class="d-flex justify-center align-center" style="width: 100%">
@@ -169,7 +171,10 @@
                     >
                         <div class="d-flex justify-start align-center">
                             <div class="mr-2">
-                                <v-icon style="min-width: 24px">{{ item.account_icon.value }}</v-icon>
+                                <v-icon
+                                    v-if="item.account_icon.value"
+                                    style="min-width: 24px"
+                                >{{ item.account_icon.value }}</v-icon>
                             </div>
 
                             <div class="d-flex justify-center align-center" style="width: 100%">
