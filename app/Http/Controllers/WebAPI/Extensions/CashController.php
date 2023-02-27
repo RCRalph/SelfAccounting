@@ -50,15 +50,15 @@ class CashController extends Controller
         $cashAccount = auth()->user()->cashAccounts()
             ->where("currency_id", $currency->id)
             ->pluck("accounts.id")
-            ->toArray();
+            ->first();
 
-        $cashAccount = $cashAccount ? $cashAccount[0] : null;
-
-        $ownedCash = auth()->user()->cash()->where("currency_id", $currency->id)->get()
+        $ownedCash = auth()->user()->cash()
+            ->where("currency_id", $currency->id)
+            ->get()
             ->mapWithKeys(fn ($item) => [$item->id => $item->pivot->amount]);
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name", "start_balance")
+            ->select("id", "name", "icon", "start_balance")
             ->where("currency_id", $currency->id)
             ->get();
 
@@ -89,9 +89,10 @@ class CashController extends Controller
         }
 
         $accounts = $accounts
-            ->prepend(["id" => null, "name" => "N/A", "balance" => 0])
+            ->prepend(["id" => null, "icon" => null, "name" => "N/A", "balance" => 0])
             ->map(fn ($item) => [
                 "id" => $item["id"],
+                "icon" => $item["icon"],
                 "name" => $item["name"],
                 "balance" => $item["balance"]
             ]);

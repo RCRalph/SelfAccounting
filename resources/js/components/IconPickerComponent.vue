@@ -31,23 +31,25 @@
                     <a href="https://pictogrammers.com/library/mdi/" target="_blank">MDI</a>
                 </p>
 
-                <v-text-field
-                    label="Icon name"
-                    :value="value"
-                    @input="update"
-                    counter="64"
-                    :rules="[validation.icon()]"
-                >
-                    <template v-slot:append-outer>
-                        <v-icon style="min-width: 26px">
-                            {{ value }}
-                        </v-icon>
-                    </template>
-                </v-text-field>
+                <v-form v-model="canSubmit">
+                    <v-text-field
+                        label="Icon name"
+                        :value="value"
+                        @input="update"
+                        counter="64"
+                        :rules="[validation.icon()]"
+                    >
+                        <template v-slot:append-outer>
+                            <v-icon style="min-width: 26px">
+                                {{ value }}
+                            </v-icon>
+                        </template>
+                    </v-text-field>
+                </v-form>
             </v-card-text>
 
             <v-card-actions class="d-flex justify-center">
-                <v-btn color="success" outlined @click="dialog = false">
+                <v-btn color="success" outlined :disabled="!canSubmit" @click="dialog = false">
                     Submit
                 </v-btn>
             </v-card-actions>
@@ -81,6 +83,10 @@ export default {
         value: {
             required: true,
             type: String,
+        },
+        type: {
+            required: true,
+            type: String
         }
     },
     data() {
@@ -104,7 +110,7 @@ export default {
             this.ready = false;
 
             axios
-                .get(`/web-api/categories/icons`)
+                .get(`/web-api/${this.type}/icons`)
                 .then(response => {
                     const data = response.data;
 

@@ -19,6 +19,7 @@
                         <v-col cols="12" sm="4" class="d-flex justify-center align-center">
                             <IconPickerComponent
                                 v-model="data.icon"
+                                type="categories"
                             ></IconPickerComponent>
                         </v-col>
 

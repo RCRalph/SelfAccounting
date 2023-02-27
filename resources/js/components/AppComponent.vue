@@ -162,7 +162,6 @@ import { useExtensionsStore } from "&/stores/extensions";
 import TutorialComponent from "@/TutorialComponent.vue";
 import PremiumExpiredComponent from "@/PremiumExpiredComponent.vue";
 import ThemeToggleComponent from "@/ThemeToggleComponent.vue";
-import IconPickerComponent from "@/IconPickerComponent.vue";
 
 export default {
     setup() {
@@ -175,7 +174,6 @@ export default {
         TutorialComponent,
         PremiumExpiredComponent,
         ThemeToggleComponent,
-        IconPickerComponent
     },
     data() {
         return {

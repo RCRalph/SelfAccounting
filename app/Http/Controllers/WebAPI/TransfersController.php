@@ -28,7 +28,7 @@ class TransfersController extends Controller
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name", "currency_id")
+            ->select("id", "name", "icon", "currency_id")
             ->where(function ($query) use ($paginatedData) {
                 $query->whereIn("id", array_column($paginatedData, "source_account_id"))
                     ->orWhereIn("id", array_column($paginatedData, "target_account_id"));
@@ -36,15 +36,18 @@ class TransfersController extends Controller
             ->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => [
                 "name" => $item["name"],
+                "icon" => $item["icon"],
                 "currency" => $currencies[$item["currency_id"]]
             ]]);
 
         foreach ($paginatedData as $i => $item) {
             $paginatedData[$i]["source_value"] *= 1;
+            $paginatedData[$i]["source_account_icon"] = $accounts[$item["source_account_id"]]["icon"];
             $paginatedData[$i]["source_account_name"] = $accounts[$item["source_account_id"]]["name"];
             $paginatedData[$i]["source_account_currency"] = $accounts[$item["source_account_id"]]["currency"];
 
             $paginatedData[$i]["target_value"] *= 1;
+            $paginatedData[$i]["target_account_icon"] = $accounts[$item["target_account_id"]]["icon"];
             $paginatedData[$i]["target_account_name"] = $accounts[$item["target_account_id"]]["name"];
             $paginatedData[$i]["target_account_currency"] = $accounts[$item["target_account_id"]]["currency"];
 
@@ -127,7 +130,7 @@ class TransfersController extends Controller
     public function data()
     {
         $accounts = auth()->user()->accounts()
-            ->select("id", "name", "currency_id", "start_date")
+            ->select("id", "icon", "name", "currency_id", "start_date")
             ->orderBy("name")
             ->get()
             ->groupBy("currency_id");
@@ -163,7 +166,7 @@ class TransfersController extends Controller
         ];
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name", "currency_id")
+            ->select("id", "icon", "name", "currency_id")
             ->orderBy("name")
             ->get()
             ->groupBy("currency_id");

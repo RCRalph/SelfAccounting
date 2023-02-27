@@ -162,7 +162,17 @@
 
                     <td v-if="item.account.span" :rowspan="item.account.span" @mouseover="setRowsToHighlight(index, item.account.span)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'"
-                    >{{ item.account.value }}</td>
+                    >
+                        <div class="d-flex justify-start align-center">
+                            <div class="mr-2">
+                                <v-icon style="min-width: 24px">{{ item.account_icon.value }}</v-icon>
+                            </div>
+
+                            <div class="d-flex justify-center align-center" style="width: 100%">
+                                {{ item.account.value }}
+                            </div>
+                        </div>
+                    </td>
 
                     <td @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"

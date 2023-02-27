@@ -16,14 +16,14 @@ class CategoriesController extends Controller
     private $ICONS = [
         "mdi-tshirt-crew",
         "mdi-train",
-        "mdi-star",
-        "mdi-star",
+        "mdi-soccer",
         "mdi-school",
         "mdi-popcorn",
         "mdi-paw",
         "mdi-laptop",
         "mdi-hospital-building",
         "mdi-home-variant",
+        "mdi-guitar-acoustic",
         "mdi-gift",
         "mdi-food-fork-drink",
         "mdi-cash-multiple",
@@ -51,7 +51,7 @@ class CategoriesController extends Controller
     public function create(Currency $currency)
     {
         $data = request()->validate([
-            "icon" => ["present", "string", "max:64"],
+            "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],
@@ -78,7 +78,7 @@ class CategoriesController extends Controller
         $this->authorize("update", $category);
 
         $data = request()->validate([
-            "icon" => ["present", "string", "max:64"],
+            "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],

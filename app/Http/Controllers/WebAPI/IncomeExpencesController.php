@@ -36,7 +36,7 @@ class IncomeExpencesController extends Controller
             ->prepend(["id" => null, "name" => "N/A"]);
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name", "start_date")
+            ->select("id", "name", "icon", "start_date")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->orderBy("name")

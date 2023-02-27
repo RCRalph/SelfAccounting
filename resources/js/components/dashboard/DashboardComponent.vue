@@ -17,8 +17,16 @@
                                         <template v-slot:default>
                                             <tbody>
                                                 <tr v-for="(item, i) in currentBalance" :key="i">
-                                                    <td class="text-right text-h6">
-                                                        {{ item.name | addNoBreakSpaces }}
+                                                    <td class="text-right text-h6" style="width: 50%">
+                                                        <div class="d-flex justify-start align-center">
+                                                            <div class="mr-2">
+                                                                <v-icon style="min-width: 24px">{{ item.icon }}</v-icon>
+                                                            </div>
+
+                                                            <div class="d-flex justify-end align-center" style="width: 100%">
+                                                                {{ item.name | addNoBreakSpaces }}
+                                                            </div>
+                                                        </div>
                                                     </td>
 
                                                     <td class="text-h6">

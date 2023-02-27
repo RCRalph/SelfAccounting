@@ -14,6 +14,7 @@ class Account extends Model
     protected $fillable = [
         'user_id',
         'currency_id',
+        'icon',
         'name',
         'used_in_income',
         'used_in_expences',

@@ -87,7 +87,7 @@ class BackupController extends Controller
 
         // Gather accounts
         $accounts = auth()->user()->accounts()
-            ->select("id", "currency_id AS currency", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "start_balance")
+            ->select("id", "currency_id AS currency", "icon", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "start_balance")
             ->orderBy("created_at")
             ->get();
 
@@ -236,6 +236,7 @@ class BackupController extends Controller
         $accounts = request()->validate([
             "accounts" => ["present", "array"],
             "accounts.*.currency" => ["required", "exists:currencies,ISO"],
+            "accounts.*.icon" => ["present", "string", "max:64"],
             "accounts.*.name" => ["required", "string", "max:32"],
             "accounts.*.used_in_income" => ["required", "boolean"],
             "accounts.*.used_in_expences" => ["required", "boolean"],
