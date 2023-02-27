@@ -193,7 +193,7 @@ class Controller extends BaseController
             $paginatedData[$i]["category"] = $categories[$item["category_id"]]["name"] ?? "N/A";
             $paginatedData[$i]["category_icon"] = $categories[$item["category_id"]]["icon"] ?? null;
             $paginatedData[$i]["account"] = $accounts[$item["account_id"]]["name"] ?? "N/A";
-            $paginatedData[$i]["account_icon"] = $categories[$item["account_id"]]["icon"] ?? null;
+            $paginatedData[$i]["account_icon"] = $accounts[$item["account_id"]]["icon"] ?? null;
 
             unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["account_id"]);
         }
