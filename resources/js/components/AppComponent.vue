@@ -34,7 +34,7 @@
                     <v-list-group v-else link no-action :prepend-icon="item.icon" color="unset">
                         <template v-slot:activator>
                             <v-list-item-content>
-                                <v-list-item-title v-text="item.title"></v-list-item-title>
+                                <v-list-item-title>{{ item.title }}</v-list-item-title>
                             </v-list-item-content>
                         </template>
 
@@ -48,7 +48,7 @@
                             </v-list-item-icon>
 
                             <v-list-item-content>
-                                <v-list-item-title v-text="sublink.text" :style="!sublink.icon && 'padding-left: 18px !important'"></v-list-item-title>
+                                <v-list-item-title :style="!sublink.icon && 'padding-left: 18px !important'">{{ sublink.text }}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
@@ -173,7 +173,7 @@ export default {
     components: {
         TutorialComponent,
         PremiumExpiredComponent,
-        ThemeToggleComponent
+        ThemeToggleComponent,
     },
     data() {
         return {
@@ -188,7 +188,7 @@ export default {
             menuClicked: false,
             user: {},
             premiumExpired: false,
-            ready: false
+            ready: false,
         }
     },
     computed: {

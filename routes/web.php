@@ -68,6 +68,8 @@ Route::prefix("/web-api")->group(function () {
     });
 
     Route::prefix("/categories")->group(function () {
+        Route::get("/icons", "WebAPI\CategoriesController@icons")->name("web-api.categories.icons");
+
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\CategoriesController@index")->name("web-api.categories");
             Route::post("/", "WebAPI\CategoriesController@create")->name("web-api.categories.create");
@@ -81,6 +83,8 @@ Route::prefix("/web-api")->group(function () {
     });
 
     Route::prefix("/accounts")->group(function () {
+        Route::get("/icons", "WebAPI\AccountsController@icons")->name("web-api.accounts.icons");
+
         Route::prefix("/{currency}")->group(function () {
             Route::get("/", "WebAPI\AccountsController@index")->name("web-api.accounts");
             Route::post("/", "WebAPI\AccountsController@create")->name("web-api.accounts.create");

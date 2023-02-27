@@ -72,7 +72,7 @@ class BackupController extends Controller
 
         // Gather categories
         $categories = auth()->user()->categories()
-            ->select("id", "currency_id AS currency", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "end_date")
+            ->select("id", "currency_id AS currency", "icon", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "end_date")
             ->orderBy("created_at")
             ->get();
 
@@ -87,7 +87,7 @@ class BackupController extends Controller
 
         // Gather accounts
         $accounts = auth()->user()->accounts()
-            ->select("id", "currency_id AS currency", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "start_balance")
+            ->select("id", "currency_id AS currency", "icon", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "start_balance")
             ->orderBy("created_at")
             ->get();
 
@@ -223,6 +223,7 @@ class BackupController extends Controller
         $categories = request()->validate([
             "categories" => ["present", "array"],
             "categories.*.currency" => ["required", "exists:currencies,ISO"],
+            "categories.*.icon" => ["present", "string", "max:64"],
             "categories.*.name" => ["required", "string", "max:32"],
             "categories.*.used_in_income" => ["required", "boolean"],
             "categories.*.used_in_expences" => ["required", "boolean"],
@@ -235,6 +236,7 @@ class BackupController extends Controller
         $accounts = request()->validate([
             "accounts" => ["present", "array"],
             "accounts.*.currency" => ["required", "exists:currencies,ISO"],
+            "accounts.*.icon" => ["present", "string", "max:64"],
             "accounts.*.name" => ["required", "string", "max:32"],
             "accounts.*.used_in_income" => ["required", "boolean"],
             "accounts.*.used_in_expences" => ["required", "boolean"],

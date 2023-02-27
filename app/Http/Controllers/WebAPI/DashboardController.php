@@ -140,8 +140,8 @@ class DashboardController extends Controller
 
         $accountIDs = $accounts->pluck("id")->toArray();
 
-        $accounts = $accounts->addSelect("name", "start_date", "start_balance")->get();
-        $categories = $categories->addSelect("name", "count_to_summary", "start_date", "end_date")->get();
+        $accounts = $accounts->addSelect("icon", "name", "start_date", "start_balance")->get();
+        $categories = $categories->addSelect("icon", "name", "count_to_summary", "start_date", "end_date")->get();
 
         $income = auth()->user()->income()
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
@@ -167,11 +167,13 @@ class DashboardController extends Controller
         $categories = auth()->user()->categories()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
+            ->orderBy("name")
             ->get();
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
+            ->orderBy("name")
             ->get();
 
         $charts = $this->getCharts("/dashboard");

@@ -66,7 +66,17 @@
                                 item-text="name"
                                 item-value="id"
                                 label="Account"
-                            ></v-select>
+                            >
+                                <template v-slot:item="{ item }">
+                                    <v-list-item-icon v-if="item.icon">
+                                        <v-icon>{{ item.icon }}</v-icon>
+                                    </v-list-item-icon>
+
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                            </v-select>
 
                             <v-select
                                 v-model="data.source.currency_id"
@@ -125,7 +135,17 @@
                                 item-text="name"
                                 item-value="id"
                                 label="Account"
-                            ></v-select>
+                            >
+                                <template v-slot:item="{ item }">
+                                    <v-list-item-icon v-if="item.icon">
+                                        <v-icon>{{ item.icon }}</v-icon>
+                                    </v-list-item-icon>
+
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                    </v-list-item-content>
+                                </template>
+                            </v-select>
 
                             <v-select
                                 v-model="data.target.currency_id"

@@ -28,7 +28,7 @@ class IncomeExpencesController extends Controller
     private function getCategoriesAndAccounts($currency)
     {
         $categories = auth()->user()->categories()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->orderBy("name")
@@ -36,7 +36,7 @@ class IncomeExpencesController extends Controller
             ->prepend(["id" => null, "name" => "N/A"]);
 
         $accounts = auth()->user()->accounts()
-            ->select("id", "name", "start_date")
+            ->select("id", "name", "icon", "start_date")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
             ->orderBy("name")
@@ -100,15 +100,17 @@ class IncomeExpencesController extends Controller
     public function index(Currency $currency)
     {
         $categories = auth()->user()->categories()
-            ->select("id", "name")
+            ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
+            ->orderBy("name")
             ->get();
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("used_in_" . request()->type, true)
+            ->orderBy("name")
             ->get();
 
         $charts = $this->getCharts("/" . request()->type);

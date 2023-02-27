@@ -45,6 +45,12 @@
                         :items-per-page="5"
                         disable-sort
                     >
+                        <template v-slot:[`item.icon`]="{ item }">
+                            <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+
+                            <span v-else>N/A</span>
+                        </template>
+
                         <template v-slot:[`item.title`]="{ item }">
                             <span style="white-space: nowrap">{{ item.title }}</span>
                         </template>
@@ -407,6 +413,7 @@ export default {
             headers: {
                 categories: [
                     { text: "Currency", align: "center", value: "currency" },
+                    { text: "Icon", align: "center", value: "icon" },
                     { text: "Name", align: "center", value: "name" },
                     { text: "Show in income", align: "center", value: "used_in_income" },
                     { text: "Show in expences", align: "center", value: "used_in_expences" },
@@ -536,6 +543,7 @@ export default {
 
             let validationArray = categories.map(item => [
                 this.currencies.findByISO(item.currency) !== undefined,
+                this.validation.icon()(item.icon) === true,
                 this.validation.name()(item.name) === true,
                 typeof item.used_in_income == "boolean",
                 typeof item.used_in_expences == "boolean",

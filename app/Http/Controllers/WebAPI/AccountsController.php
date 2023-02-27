@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WebAPI;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Currency;
 use App\Models\Account;
@@ -13,6 +14,25 @@ use App\Rules\Settings\CorrectFirstEntryDate;
 
 class AccountsController extends Controller
 {
+    private $ICONS = [
+        "mdi-wallet",
+        "mdi-steam",
+        "mdi-piggy-bank",
+        "mdi-google-play",
+        "mdi-credit-card-multiple",
+        "mdi-credit-card",
+        "mdi-currency-btc",
+        "mdi-cash-multiple",
+        "mdi-cash-100",
+        "mdi-cash",
+        "mdi-bank",
+        "mdi-archive",
+        "mdi-apple",
+        "fab fa-paypal",
+        "fa-vault",
+        "fab fa-google-wallet",
+    ];
+
     public function __construct()
     {
         $this->middleware("auth");
@@ -21,7 +41,7 @@ class AccountsController extends Controller
     public function index(Currency $currency)
     {
         $data = auth()->user()->accounts()
-            ->select("id", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "start_balance")
+            ->select("id", "icon", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "start_balance")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
@@ -32,6 +52,7 @@ class AccountsController extends Controller
     public function create(Currency $currency)
     {
         $data = request()->validate([
+            "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],
@@ -72,6 +93,7 @@ class AccountsController extends Controller
         $this->authorize("update", $account);
 
         $data = request()->validate([
+            "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],
@@ -93,5 +115,26 @@ class AccountsController extends Controller
         $account->delete();
 
         return response("");
+    }
+
+    public function icons()
+    {
+        $icons = Account::select("icon", DB::raw("COUNT(icon) AS count"))
+            ->whereNotNull("icon")
+            ->groupBy("icon")
+            ->orderBy("count", "DESC")
+            ->orderBy("icon", "DESC")
+            ->limit(16)
+            ->pluck("icon");
+
+        foreach ($this->ICONS as $icon) {
+            if ($icons->count() == 16) {
+                break;
+            } else if (!$icons->contains($icon)) {
+                $icons->push($icon);
+            }
+        }
+
+        return response()->json(compact("icons"));
     }
 }

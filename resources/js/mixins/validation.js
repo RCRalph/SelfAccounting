@@ -116,6 +116,24 @@ export default {
                         return true;
                     }
                 },
+                icon(allowNull = true) {
+                    return name => {
+                        if (allowNull && !name && name !== undefined) {
+                            return true;
+                        }
+                        else if (!name) {
+                            return "Icon name is required";
+                        }
+                        else if (typeof name != "string") {
+                            return "Icon name has to be a string";
+                        }
+                        else if (name.length > 64) {
+                            return "Icon name can't have more than 64 characters"
+                        }
+
+                        return true;
+                    }
+                },
                 username(allowNull = false) {
                     return username => {
                         if (allowNull && !username && username != undefined) {

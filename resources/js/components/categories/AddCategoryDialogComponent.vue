@@ -10,7 +10,14 @@
             <v-card-text>
                 <v-form v-model="canSubmit">
                     <v-row>
-                        <v-col cols="12" sm="8" offset-sm="2">
+                        <v-col cols="12" sm="4" class="d-flex justify-center align-center">
+                            <IconPickerComponent
+                                v-model="data.icon"
+                                type="categories"
+                            ></IconPickerComponent>
+                        </v-col>
+
+                        <v-col cols="12" sm="8">
                             <v-text-field
                                 label="Name"
                                 v-model="data.name"
@@ -77,6 +84,7 @@
 
 <script>
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+import IconPickerComponent from "@/IconPickerComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
 import validation from "&/mixins/validation";
@@ -90,12 +98,14 @@ export default {
     },
     mixins: [validation, main],
     components: {
-        ErrorSnackbarComponent
+        ErrorSnackbarComponent,
+        IconPickerComponent
     },
     data() {
         return {
             dialog: false,
             startData: {
+                icon: "",
                 name: "",
                 used_in_income: true,
                 used_in_expences: true,

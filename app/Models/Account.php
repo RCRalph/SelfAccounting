@@ -12,7 +12,16 @@ class Account extends Model
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $fillable = [
-        'user_id', 'currency_id', 'name', 'used_in_income', 'used_in_expences', 'show_on_charts', 'count_to_summary', 'start_date', 'start_balance'
+        'user_id',
+        'currency_id',
+        'icon',
+        'name',
+        'used_in_income',
+        'used_in_expences',
+        'show_on_charts',
+        'count_to_summary',
+        'start_date',
+        'start_balance'
     ];
 
     public function user()

@@ -21,6 +21,12 @@
                         disable-sort
                         disable-pagination
                     >
+                        <template v-slot:[`item.icon`]="{ item }">
+                            <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+
+                            <span v-else>N/A</span>
+                        </template>
+
                         <template v-slot:[`item.name`]="{ item }">
                             <span style="white-space: nowrap">{{ item.name }}</span>
                         </template>
@@ -98,6 +104,7 @@ export default {
     data() {
         return {
             headers: [
+                { text: "Icon", align: "center", value: "icon" },
                 { text: "Name", align: "center", value: "name" },
                 { text: "Show in income", align: "center", value: "used_in_income" },
                 { text: "Show in expences", align: "center", value: "used_in_expences" },

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WebAPI;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Currency;
 use App\Models\Category;
@@ -12,6 +13,25 @@ use App\Rules\Common\DateBeforeOrEqualField;
 
 class CategoriesController extends Controller
 {
+    private $ICONS = [
+        "mdi-tshirt-crew",
+        "mdi-train",
+        "mdi-soccer",
+        "mdi-school",
+        "mdi-popcorn",
+        "mdi-paw",
+        "mdi-laptop",
+        "mdi-hospital-building",
+        "mdi-home-variant",
+        "mdi-guitar-acoustic",
+        "mdi-gift",
+        "mdi-food-fork-drink",
+        "mdi-cash-multiple",
+        "mdi-cart",
+        "mdi-car-hatchback",
+        "mdi-beach",
+    ];
+
     public function __construct()
     {
         $this->middleware("auth");
@@ -20,7 +40,7 @@ class CategoriesController extends Controller
     public function index(Currency $currency)
     {
         $data = auth()->user()->categories()
-            ->select("id", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "end_date")
+            ->select("id", "icon", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "end_date")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
@@ -31,6 +51,7 @@ class CategoriesController extends Controller
     public function create(Currency $currency)
     {
         $data = request()->validate([
+            "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],
@@ -57,6 +78,7 @@ class CategoriesController extends Controller
         $this->authorize("update", $category);
 
         $data = request()->validate([
+            "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
             "used_in_expences" => ["required", "boolean"],
@@ -78,5 +100,26 @@ class CategoriesController extends Controller
         $category->delete();
 
         return response("");
+    }
+
+    public function icons()
+    {
+        $icons = Category::select("icon", DB::raw("COUNT(icon) AS count"))
+            ->whereNotNull("icon")
+            ->groupBy("icon")
+            ->orderBy("count", "DESC")
+            ->orderBy("icon", "DESC")
+            ->limit(16)
+            ->pluck("icon");
+
+        foreach ($this->ICONS as $icon) {
+            if ($icons->count() == 16) {
+                break;
+            } else if (!$icons->contains($icon)) {
+                $icons->push($icon);
+            }
+        }
+
+        return response()->json(compact("icons"));
     }
 }

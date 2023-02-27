@@ -31,7 +31,7 @@
                             <v-col cols="12" xl="3" md="6">
                                 <v-card class="elevation-0 transparent">
                                     <v-card-text class="text-center">
-                                        <v-icon style="font-size: 75px">fa-exchange</v-icon>
+                                        <v-icon style="font-size: 75px">mdi-swap-horizontal</v-icon>
                                     </v-card-text>
 
                                     <v-card-title class="d-flex justify-center headline">Monitor your transactions</v-card-title>

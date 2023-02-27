@@ -151,12 +151,32 @@
                     >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
                     <td v-if="item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'"
-                    >{{ item.category.value }}</td>
+                        :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'" style="max-width: 200px"
+                    >
+                        <div class="d-flex justify-start align-center">
+                            <div class="mr-2">
+                                <v-icon style="min-width: 24px">{{ item.category_icon.value }}</v-icon>
+                            </div>
+
+                            <div class="d-flex justify-center align-center" style="width: 100%">
+                                {{ item.category.value }}
+                            </div>
+                        </div>
+                    </td>
 
                     <td v-if="item.account.span" :rowspan="item.account.span" @mouseover="setRowsToHighlight(index, item.account.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'"
-                    >{{ item.account.value }}</td>
+                        :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'" style="max-width: 200px"
+                    >
+                        <div class="d-flex justify-start align-center">
+                            <div class="mr-2">
+                                <v-icon style="min-width: 24px">{{ item.account_icon.value }}</v-icon>
+                            </div>
+
+                            <div class="d-flex justify-center align-center" style="width: 100%">
+                                {{ item.account.value }}
+                            </div>
+                        </div>
+                    </td>
 
                     <td @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
                         :class="isRowHighlighted(index, 1) && 'table-hover-background'"
