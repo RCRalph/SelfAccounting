@@ -26,6 +26,25 @@ class Category extends Model
         'end_date'
     ];
 
+    public static $ICONS = [
+        "mdi-tshirt-crew",
+        "mdi-train",
+        "mdi-soccer",
+        "mdi-school",
+        "mdi-popcorn",
+        "mdi-paw",
+        "mdi-laptop",
+        "mdi-hospital-building",
+        "mdi-home-variant",
+        "mdi-lipstick",
+        "mdi-gift",
+        "mdi-food-fork-drink",
+        "mdi-cash-multiple",
+        "mdi-cart",
+        "mdi-car-hatchback",
+        "mdi-beach",
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
