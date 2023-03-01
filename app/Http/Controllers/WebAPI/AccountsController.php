@@ -14,25 +14,6 @@ use App\Rules\Settings\CorrectFirstEntryDate;
 
 class AccountsController extends Controller
 {
-    private $ICONS = [
-        "mdi-wallet",
-        "mdi-steam",
-        "mdi-piggy-bank",
-        "mdi-google-play",
-        "mdi-credit-card-multiple",
-        "mdi-credit-card",
-        "mdi-currency-btc",
-        "mdi-cash-multiple",
-        "mdi-cash-100",
-        "mdi-cash",
-        "mdi-bank",
-        "mdi-archive",
-        "mdi-apple",
-        "fab fa-paypal",
-        "fa-vault",
-        "fab fa-google-wallet",
-    ];
-
     public function __construct()
     {
         $this->middleware("auth");
@@ -127,7 +108,7 @@ class AccountsController extends Controller
             ->limit(16)
             ->pluck("icon");
 
-        foreach ($this->ICONS as $icon) {
+        foreach (Account::$ICONS as $icon) {
             if ($icons->count() == 16) {
                 break;
             } else if (!$icons->contains($icon)) {

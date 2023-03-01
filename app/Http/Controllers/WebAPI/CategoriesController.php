@@ -13,25 +13,6 @@ use App\Rules\Common\DateBeforeOrEqualField;
 
 class CategoriesController extends Controller
 {
-    private $ICONS = [
-        "mdi-tshirt-crew",
-        "mdi-train",
-        "mdi-soccer",
-        "mdi-school",
-        "mdi-popcorn",
-        "mdi-paw",
-        "mdi-laptop",
-        "mdi-hospital-building",
-        "mdi-home-variant",
-        "mdi-guitar-acoustic",
-        "mdi-gift",
-        "mdi-food-fork-drink",
-        "mdi-cash-multiple",
-        "mdi-cart",
-        "mdi-car-hatchback",
-        "mdi-beach",
-    ];
-
     public function __construct()
     {
         $this->middleware("auth");
@@ -112,7 +93,7 @@ class CategoriesController extends Controller
             ->limit(16)
             ->pluck("icon");
 
-        foreach ($this->ICONS as $icon) {
+        foreach (Category::$ICONS as $icon) {
             if ($icons->count() == 16) {
                 break;
             } else if (!$icons->contains($icon)) {

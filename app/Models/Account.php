@@ -24,6 +24,25 @@ class Account extends Model
         'start_balance'
     ];
 
+    public static $ICONS = [
+        "mdi-wallet",
+        "mdi-steam",
+        "mdi-piggy-bank",
+        "mdi-google-play",
+        "mdi-credit-card-multiple",
+        "mdi-credit-card",
+        "mdi-currency-btc",
+        "mdi-cash-multiple",
+        "mdi-cash-100",
+        "mdi-cash",
+        "mdi-bank",
+        "mdi-archive",
+        "mdi-apple",
+        "fab fa-paypal",
+        "fab fa-google-wallet",
+        "fa-vault",
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
