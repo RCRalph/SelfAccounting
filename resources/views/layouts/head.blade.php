@@ -21,6 +21,14 @@
         so until this bug is fixed let's keep this link commented-out
     -->
 
+    <!-- Open Graph configuration -->
+    <meta property="og:title" content="{{ config('app.name', 'SelfAccounting') }}" />
+    <meta property="og:description" content="Your personal accounting platform" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ env('APP_URL') }}" />
+    <meta property="og:image" content="{{ URL::asset('icon-1080.png') }}" />
+    <meta property="og:image:type" content="image/png" />
+
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
