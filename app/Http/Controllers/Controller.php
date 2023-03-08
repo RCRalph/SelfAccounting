@@ -197,8 +197,8 @@ class Controller extends BaseController
             ];
 
             $paginatedData[$i]["account"] = [
-                "name" => $categories[$item["account_id"]]["name"] ?? "N/A",
-                "icon" => $categories[$item["account_id"]]["icon"] ?? null
+                "name" => $accounts[$item["account_id"]]["name"] ?? "N/A",
+                "icon" => $accounts[$item["account_id"]]["icon"] ?? null
             ];
 
             unset($paginatedData[$i]["type"], $paginatedData[$i]["category_id"], $paginatedData[$i]["account_id"]);
