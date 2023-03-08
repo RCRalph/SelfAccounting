@@ -11,9 +11,9 @@
                                 class="table-bordered"
                                 hide-default-footer
                                 :headers="headers"
-                                :items="mergedCells"
+                                :items="tableData.data"
                                 :mobile-breakpoint="0"
-                                :server-items-length="items.length"
+                                :server-items-length="tableData.data.length"
                                 :options.sync="options"
                                 multi-sort
                             >
@@ -66,28 +66,53 @@
 
                                 <template v-slot:item="{item, index}">
                                     <tr class="text-center">
-                                        <td v-if="showColumn('date') && item.date.span" :rowspan="item.date.span" @mouseover="setRowsToHighlight(index, item.date.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.date.span) && 'table-hover-background'"
+                                        <td
+                                            v-if="showColumn('date') && item.date.span"
+                                            :rowspan="item.date.span"
+                                            :class="tableData.isRowHighlighted(index, item.date.span) && 'table-hover-background'"
+                                            @mouseover="tableData.setHoveredRows(index, item.date.span)"
+                                            @mouseleave="tableData.resetHoveredRows()"
                                         >{{ item.date.value }}</td>
 
-                                        <td v-if="showColumn('title') && item.title.span" :rowspan="item.title.span"  @mouseover="setRowsToHighlight(index, item.title.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.title.span) && 'table-hover-background'"
+                                        <td
+                                            v-if="showColumn('title') && item.title.span"
+                                            :rowspan="item.title.span"
+                                            :class="tableData.isRowHighlighted(index, item.title.span) && 'table-hover-background'"
+                                            @mouseover="tableData.setHoveredRows(index, item.title.span)"
+                                            @mouseleave="tableData.resetHoveredRows()"
                                         >{{ item.title.value }}</td>
 
-                                        <td v-if="showColumn('amount') && item.amount.span" :rowspan="item.amount.span" @mouseover="setRowsToHighlight(index, item.amount.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.amount.span) && 'table-hover-background'"
+                                        <td
+                                            v-if="showColumn('amount') && item.amount.span"
+                                            :rowspan="item.amount.span"
+                                            :class="tableData.isRowHighlighted(index, item.amount.span) && 'table-hover-background'"
+                                            @mouseover="tableData.setHoveredRows(index, item.amount.span)"
+                                            @mouseleave="tableData.resetHoveredRows()"
                                         >{{ item.amount.value }}</td>
 
-                                        <td v-if="showColumn('price') && item.price.span" :rowspan="item.price.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                                        <td
+                                            v-if="showColumn('price') && item.price.span"
+                                            :rowspan="item.price.span"
+                                            :class="tableData.isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                                            @mouseover="tableData.setHoveredRows(index, item.price.span)"
+                                            @mouseleave="tableData.resetHoveredRows()"
                                         >{{ item.price.value | addSpaces }}&nbsp;{{ currencies.findCurrency(item.currency_id.value).ISO }}</td>
 
-                                        <td v-if="showColumn('value') && item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.value.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.value.span) && 'table-hover-background'"
+                                        <td
+                                            v-if="showColumn('value') && item.value.span"
+                                            :rowspan="item.value.span"
+                                            :class="tableData.isRowHighlighted(index, item.value.span) && 'table-hover-background'"
+                                            @mouseover="tableData.setHoveredRows(index, item.value.span)"
+                                            @mouseleave="tableData.resetHoveredRows()"
                                         >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.findCurrency(item.currency_id.value).ISO }}</td>
 
-                                        <td v-if="showColumn('category') && item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'" style="max-width: 200px"
+                                        <td
+                                            v-if="showColumn('category') && item.category.span"
+                                            :rowspan="item.category.span"
+                                            style="max-width: 200px"
+                                            :class="tableData.isRowHighlighted(index, item.category.span) && 'table-hover-background'"
+                                            @mouseover="tableData.setHoveredRows(index, item.category.span)"
+                                            @mouseleave="tableData.resetHoveredRows()"
                                         >
                                             <div class="d-flex justify-start align-center">
                                                 <div class="mr-2">
@@ -100,8 +125,13 @@
                                             </div>
                                         </td>
 
-                                        <td v-if="showColumn('account') && item.account.span" :rowspan="item.account.span" @mouseover="setRowsToHighlight(index, item.account.span)" @mouseleave="resetRowsToHighlight()"
-                                            :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'" style="max-width: 200px"
+                                        <td
+                                            v-if="showColumn('account') && item.account.span"
+                                            :rowspan="item.account.span"
+                                            style="max-width: 200px"
+                                            :class="tableData.isRowHighlighted(index, item.account.span) && 'table-hover-background'"
+                                            @mouseover="tableData.setHoveredRows(index, item.account.span)"
+                                            @mouseleave="tableData.resetHoveredRows()"
                                         >
                                             <div class="d-flex justify-start align-center">
                                                 <div class="mr-2">
@@ -214,8 +244,8 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+import TableDataMerger from "&/classes/TableDataMerger.js";
 import main from "&/mixins/main";
-import customTableMerged from "&/mixins/customTableMerged";
 import validation from "&/mixins/validation";
 
 import EditReportDialogComponent from "@/extensions/reports/EditReportDialogComponent.vue";
@@ -227,7 +257,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [main, customTableMerged, validation],
+    mixins: [main, validation],
     components: {
         EditReportDialogComponent,
         SuccessSnackbarComponent
@@ -236,6 +266,7 @@ export default {
         return {
             information: {},
             content: [],
+            tableData: new TableDataMerger(["date"], ["id", "value"]),
             options: {},
             titleSearch: "",
             filteredData: {
@@ -258,10 +289,8 @@ export default {
             }
 
             let items = _.cloneDeep(this.content);
-
             if (this.titleSearch != "" && Object.keys(this.content[0]).includes("title")) {
                 const regex = new RegExp(this.titleSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-
                 items = items.filter(item => regex.test(item.title));
             }
 
@@ -278,11 +307,11 @@ export default {
             return items;
         },
         columnsToShow() {
-            if (!this.items.length) {
+            if (!this.tableData.data.length) {
                 return [];
             }
 
-            return Object.keys(this.items[0]);
+            return Object.keys(this.tableData.data[0]);
         },
         headers() {
             const headers = [
@@ -324,7 +353,7 @@ export default {
                 this.headers.map(item => item.text).join(",")
             ];
 
-            this.items.forEach(item => {
+            this.tableData.data.forEach(item => {
                 file.push(this.headers.map(item1 => {
                     if (["Price", "Value"].includes(item1.text)) {
                         return item[item1.value] + " " + this.currencies.findCurrency(item.currency_id).ISO;
@@ -351,7 +380,7 @@ export default {
 
             const data = [this.headers.map(item => item.text)];
 
-            this.items.forEach(item => {
+            this.tableData.data.forEach(item => {
                 data.push(this.headers.map(item1 => item[item1.value]));
             });
 
@@ -363,7 +392,7 @@ export default {
                 const columnIndex = data[0].findIndex(item => item == column);
 
                 for (let i = range.s.r + 1; i <= range.e.r; i++) {
-                    sheet[XLSX.utils.encode_cell({ r: i, c: columnIndex })].z = '0.00\" ' + this.currencies.findCurrency(this.items[i - 1].currency_id).ISO + '"';
+                    sheet[XLSX.utils.encode_cell({ r: i, c: columnIndex })].z = '0.00\" ' + this.currencies.findCurrency(this.tableData.data[i - 1].currency_id).ISO + '"';
                 }
             }})
 
@@ -385,6 +414,12 @@ export default {
                 this.filteredData = { date: [] };
                 this.getData();
             }
+        },
+        items() {
+            this.tableData.resetData();
+            this.tableData.appendData(this.items);
+
+            console.log(this.items);
         }
     },
     mounted() {

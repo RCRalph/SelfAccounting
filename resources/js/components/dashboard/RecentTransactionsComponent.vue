@@ -4,7 +4,7 @@
             class="table-bordered"
             hide-default-footer
             :headers="headers"
-            :items="mergedCells"
+            :items="tableData.data"
             :mobile-breakpoint="0"
             :loading="tableLoading"
             :server-items-length="pagination.perPage"
@@ -132,28 +132,53 @@
 
             <template v-slot:item="{item, index}">
                 <tr class="text-center">
-                    <td v-if="item.date.span" :rowspan="item.date.span" @mouseover="setRowsToHighlight(index, item.date.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.date.span) && 'table-hover-background'"
+                    <td
+                        v-if="item.date.span"
+                        :rowspan="item.date.span"
+                        :class="tableData.isRowHighlighted(index, item.date.span) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, item.date.span)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >{{ item.date.value }}</td>
 
-                    <td v-if="item.title.span" :rowspan="item.title.span"  @mouseover="setRowsToHighlight(index, item.title.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.title.span) && 'table-hover-background'"
+                    <td
+                        v-if="item.title.span"
+                        :rowspan="item.title.span"
+                        :class="tableData.isRowHighlighted(index, item.title.span) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, item.title.span)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >{{ item.title.value }}</td>
 
-                    <td v-if="item.amount.span" :rowspan="item.amount.span" @mouseover="setRowsToHighlight(index, item.amount.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.amount.span) && 'table-hover-background'"
+                    <td
+                        v-if="item.amount.span"
+                        :rowspan="item.amount.span"
+                        :class="tableData.isRowHighlighted(index, item.amount.span) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, item.amount.span)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >{{ item.amount.value }}</td>
 
-                    <td v-if="item.price.span" :rowspan="item.price.span" @mouseover="setRowsToHighlight(index, item.price.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                    <td
+                        v-if="item.price.span"
+                        :rowspan="item.price.span"
+                        :class="tableData.isRowHighlighted(index, item.price.span) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, item.price.span)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >{{ item.price.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
-                    <td v-if="item.value.span" :rowspan="item.value.span" @mouseover="setRowsToHighlight(index, item.value.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.value.span) && 'table-hover-background'"
+                    <td
+                        v-if="item.value.span"
+                        :rowspan="item.value.span"
+                        :class="tableData.isRowHighlighted(index, item.value.span) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, item.value.span)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >{{ item.value.value | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}</td>
 
-                    <td v-if="item.category.span" :rowspan="item.category.span" @mouseover="setRowsToHighlight(index, item.category.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.category.span) && 'table-hover-background'" style="max-width: 200px"
+                    <td
+                        v-if="item.category.span"
+                        :rowspan="item.category.span"
+                        style="max-width: 200px"
+                        :class="tableData.isRowHighlighted(index, item.category.span) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, item.category.span)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >
                         <div class="d-flex justify-start align-center">
                             <div class="mr-2">
@@ -166,8 +191,13 @@
                         </div>
                     </td>
 
-                    <td v-if="item.account.span" :rowspan="item.account.span" @mouseover="setRowsToHighlight(index, item.account.span)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, item.account.span) && 'table-hover-background'" style="max-width: 200px"
+                    <td
+                        v-if="item.account.span"
+                        :rowspan="item.account.span"
+                        style="max-width: 200px"
+                        :class="tableData.isRowHighlighted(index, item.account.span) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, item.account.span)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >
                         <div class="d-flex justify-start align-center">
                             <div class="mr-2">
@@ -183,8 +213,10 @@
                         </div>
                     </td>
 
-                    <td @mouseover="setRowsToHighlight(index, 1)" @mouseleave="resetRowsToHighlight()"
-                        :class="isRowHighlighted(index, 1) && 'table-hover-background'"
+                    <td
+                        :class="tableData.isRowHighlighted(index, 1) && 'table-hover-background'"
+                        @mouseover="tableData.setHoveredRows(index, 1)"
+                        @mouseleave="tableData.resetHoveredRows()"
                     >
                         <div class="d-flex flex-nowrap justify-center align-center">
                             <EditIncomeExpencesDialogComponent
@@ -219,8 +251,8 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+import TableDataMerger from "&/classes/TableDataMerger.js";
 import main from "&/mixins/main";
-import customTableMerged from "&/mixins/customTableMerged";
 import validation from "&/mixins/validation";
 
 import AddIncomeExpencesDialogComponent from "@/income-expences/AddIncomeExpencesDialogComponent.vue";
@@ -235,7 +267,7 @@ export default {
 
         return { currencies };
     },
-    mixins: [main, customTableMerged, validation],
+    mixins: [main, validation],
     components: {
         AddIncomeExpencesDialogComponent,
         EditIncomeExpencesDialogComponent,
@@ -265,7 +297,7 @@ export default {
                 { text: "Account", align: "center", value: "account", sortable: false },
                 { text: "Actions", align: "center", value: "", sortable: false }
             ],
-            items: [],
+            tableData: new TableDataMerger(["date"], ["id", "value"]),
             pagination: {
                 page: 1,
                 last: null,
@@ -321,6 +353,7 @@ export default {
                 this.tableLoading = true;
                 this.pagination.page = 1;
                 this.pagination.last = null;
+                this.tableData.resetData();
             }
 
             if (this.pagination.page <= this.pagination.last || this.pagination.last == null) {
@@ -331,9 +364,7 @@ export default {
                     .then(response => {
                         const data = response.data;
 
-                        this.items = this.pagination.page == 1 ?
-                            data.items.data :
-                            this.items.concat(data.items.data);
+                        this.tableData.appendData(data.items.data);
 
                         this.pagination.last = data.items.last_page;
                         this.pagination.perPage = data.items.per_page;
