@@ -42,14 +42,18 @@ class TransfersController extends Controller
 
         foreach ($paginatedData as $i => $item) {
             $paginatedData[$i]["source_value"] *= 1;
-            $paginatedData[$i]["source_account_icon"] = $accounts[$item["source_account_id"]]["icon"];
-            $paginatedData[$i]["source_account_name"] = $accounts[$item["source_account_id"]]["name"];
-            $paginatedData[$i]["source_account_currency"] = $accounts[$item["source_account_id"]]["currency"];
+            $paginatedData[$i]["source_account"] = [
+                "name" => $accounts[$item["source_account_id"]]["name"],
+                "icon" => $accounts[$item["source_account_id"]]["icon"] ?? null,
+                "currency" => $accounts[$item["source_account_id"]]["currency"]
+            ];
 
             $paginatedData[$i]["target_value"] *= 1;
-            $paginatedData[$i]["target_account_icon"] = $accounts[$item["target_account_id"]]["icon"];
-            $paginatedData[$i]["target_account_name"] = $accounts[$item["target_account_id"]]["name"];
-            $paginatedData[$i]["target_account_currency"] = $accounts[$item["target_account_id"]]["currency"];
+            $paginatedData[$i]["target_account"] = [
+                "name" => $accounts[$item["target_account_id"]]["name"],
+                "icon" => $accounts[$item["target_account_id"]]["icon"] ?? null,
+                "currency" => $accounts[$item["target_account_id"]]["currency"]
+            ];
 
             unset($paginatedData[$i]["source_account_id"], $paginatedData[$i]["target_account_id"]);
         }
