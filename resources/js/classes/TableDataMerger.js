@@ -35,11 +35,11 @@ export default class TableDataMerger {
             || !_.isEqual(row[key], this.#keyCounters[key].value);
     }
 
-    #changeDataSpan(key) {
+    #changeDataSpan(key, value) {
         const index = Math.max(this.data.length - this.#keyCounters[key].counter - 1, 0);
         this.data[index][key].span = this.#keyCounters[key].counter;
 
-        this.#keyCounters[key].value = item[key];
+        this.#keyCounters[key].value = value;
         this.#keyCounters[key].counter = 1;
     }
 
@@ -79,7 +79,7 @@ export default class TableDataMerger {
 
             for (let key in this.#keyCounters) {
                 if (this.#shouldSeparate(forceSeparation, key, item)) {
-                    this.#changeDataSpan(key);
+                    this.#changeDataSpan(key, item[key]);
                 } else if (this.data.length) {
                     this.#keyCounters[key].counter += 1;
                 }

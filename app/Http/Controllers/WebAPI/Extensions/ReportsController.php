@@ -251,14 +251,20 @@ class ReportsController extends Controller
             }
 
             if ($showColumns["category_id"]) {
-                $items[$i]["category"] = $categories[$item["category_id"]]["name"] ?? "N/A";
-                $items[$i]["category_icon"] = $categories[$item["category_id"]]["icon"] ?? null;
+                $items[$i]["category"] = [
+                    "name" => $categories[$item["category_id"]]["name"] ?? "N/A",
+                    "icon" => $categories[$item["category_id"]]["icon"] ?? null
+                ];
+
                 unset($items[$i]["category_id"]);
             }
 
             if ($showColumns["account_id"]) {
-                $items[$i]["account"] = $accounts[$item["account_id"]]["name"] ?? "N/A";
-                $items[$i]["account_icon"] = $categories[$item["account_id"]]["icon"] ?? null;
+                $items[$i]["account"] = [
+                    "name" => $accounts[$item["account_id"]]["name"] ?? "N/A",
+                    "icon" => $accounts[$item["account_id"]]["icon"] ?? null
+                ];
+
                 unset($items[$i]["account_id"]);
             }
         }

@@ -123,23 +123,23 @@
                             :class="tableData.isRowHighlighted(index, item.source_value.span) && 'table-hover-background'"
                             @mouseover="tableData.setHoveredRows(index, item.source_value.span)"
                             @mouseleave="tableData.resetHoveredRows()"
-                        >{{ item.source_value.value | addSpaces }}&nbsp;{{ item.source_account_currency.value }}</td>
+                        >{{ item.source_value.value | addSpaces }}&nbsp;{{ item.source_account.value.currency }}</td>
 
                         <td
-                            v-if="item.source_account_name.span"
-                            :rowspan="item.source_account_name.span"
+                            v-if="item.source_account.span"
+                            :rowspan="item.source_account.span"
                             style="max-width: 200px"
-                            :class="tableData.isRowHighlighted(index, item.source_account_name.span) && 'table-hover-background'"
-                            @mouseover="tableData.setHoveredRows(index, item.source_account_name.span)"
+                            :class="tableData.isRowHighlighted(index, item.source_account.span) && 'table-hover-background'"
+                            @mouseover="tableData.setHoveredRows(index, item.source_account.span)"
                             @mouseleave="tableData.resetHoveredRows()"
                         >
                             <div class="d-flex justify-start align-center">
                                 <div class="mr-2">
-                                    <v-icon style="min-width: 24px">{{ item.source_account_icon.value }}</v-icon>
+                                    <v-icon style="min-width: 24px" v-if="item.source_account.value.icon">{{ item.source_account.value.icon }}</v-icon>
                                 </div>
 
                                 <div class="d-flex justify-center align-center" style="width: 100%">
-                                    {{ item.source_account_name.value }}
+                                    {{ item.source_account.value.name }}
                                 </div>
                             </div>
                         </td>
@@ -150,23 +150,23 @@
                             :class="tableData.isRowHighlighted(index, item.target_value.span) && 'table-hover-background'"
                             @mouseover="tableData.setHoveredRows(index, item.target_value.span)"
                             @mouseleave="tableData.resetHoveredRows()"
-                        >{{ item.target_value.value | addSpaces }}&nbsp;{{ item.target_account_currency.value }}</td>
+                        >{{ item.target_value.value | addSpaces }}&nbsp;{{ item.target_account.value.currency }}</td>
 
                         <td
-                            v-if="item.target_account_name.span"
-                            :rowspan="item.target_account_name.span"
+                            v-if="item.target_account.span"
+                            :rowspan="item.target_account.span"
                             style="max-width: 200px"
-                            :class="tableData.isRowHighlighted(index, item.target_account_name.span) && 'table-hover-background'"
-                            @mouseover="tableData.setHoveredRows(index, item.target_account_name.span)"
+                            :class="tableData.isRowHighlighted(index, item.target_account.span) && 'table-hover-background'"
+                            @mouseover="tableData.setHoveredRows(index, item.target_account.span)"
                             @mouseleave="tableData.resetHoveredRows()"
                         >
                             <div class="d-flex justify-start align-center">
                                 <div class="mr-2">
-                                    <v-icon style="min-width: 24px">{{ item.target_account_icon.value }}</v-icon>
+                                    <v-icon style="min-width: 24px" v-if="item.target_account.value.icon">{{ item.target_account.value.icon }}</v-icon>
                                 </div>
 
                                 <div class="d-flex justify-center align-center" style="width: 100%">
-                                    {{ item.target_account_name.value }}
+                                    {{ item.target_account.value.name }}
                                 </div>
                             </div>
                         </td>

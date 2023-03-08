@@ -182,11 +182,11 @@
                     >
                         <div class="d-flex justify-start align-center">
                             <div class="mr-2">
-                                <v-icon style="min-width: 24px" v-if="item.category_icon.value">{{ item.category_icon.value }}</v-icon>
+                                <v-icon style="min-width: 24px" v-if="item.category.value.icon">{{ item.category.value.icon }}</v-icon>
                             </div>
 
                             <div class="d-flex justify-center align-center" style="width: 100%">
-                                {{ item.category.value }}
+                                {{ item.category.value.name }}
                             </div>
                         </div>
                     </td>
@@ -201,14 +201,11 @@
                     >
                         <div class="d-flex justify-start align-center">
                             <div class="mr-2">
-                                <v-icon
-                                    v-if="item.account_icon.value"
-                                    style="min-width: 24px"
-                                >{{ item.account_icon.value }}</v-icon>
+                                <v-icon style="min-width: 24px" v-if="item.account.value.icon">{{ item.account.value.icon }}</v-icon>
                             </div>
 
                             <div class="d-flex justify-center align-center" style="width: 100%">
-                                {{ item.account.value }}
+                                {{ item.account.value.name }}
                             </div>
                         </div>
                     </td>
