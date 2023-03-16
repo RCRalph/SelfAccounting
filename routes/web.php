@@ -45,6 +45,7 @@ Route::prefix("/web-api")->group(function () {
 
             Route::prefix("/{id}")->group(function () use ($type) {
                 Route::get("/", "WebAPI\IncomeExpencesController@show")->name("web-api.$type.show");
+                Route::post("/convert", "WebAPI\IncomeExpencesController@convert")->name("web-api.$type.convert");
                 Route::patch("/", "WebAPI\IncomeExpencesController@update")->name("web-api.$type.update");
                 Route::delete("/", "WebAPI\IncomeExpencesController@destroy")->name("web-api.$type.destroy");
             });

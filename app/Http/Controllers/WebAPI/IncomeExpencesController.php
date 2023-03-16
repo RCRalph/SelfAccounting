@@ -236,4 +236,24 @@ class IncomeExpencesController extends Controller
 
         return response("");
     }
+
+    public function convert($id)
+    {
+        $data = $this->getTypeRelation()
+            ->select("id", "date", "title", "amount", "price", "category_id", "account_id", "currency_id")
+            ->where("id", $id)
+            ->get()
+            ->firstOrFail()
+            ->toArray();
+
+        if (request()->type == "income") {
+            auth()->user()->expences()->create($data);
+            auth()->user()->income()->where("id", $id)->delete();
+        } else {
+            auth()->user()->income()->create($data);
+            auth()->user()->expences()->where("id", $id)->delete();
+        }
+
+        return response("");
+    }
 }

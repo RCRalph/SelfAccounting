@@ -215,6 +215,7 @@
                                 :type="type"
                                 :id="item.id.value"
                                 @updated="updated"
+                                @converted="converted"
                             ></EditIncomeExpencesDialogComponent>
 
                             <DeleteDialogComponent
@@ -407,6 +408,11 @@ export default {
         },
         deleted() {
             this.thing = `deleted ${this.type == 'expences' ? 'expence' : 'income'}`;
+            this.success = true;
+            this.getData();
+        },
+        converted() {
+            this.thing = `converted ${this.type == 'expences' ? 'expence' : 'income'} to ${this.type == 'expences' ? 'income' : 'expence'}`;
             this.success = true;
             this.getData();
         }
