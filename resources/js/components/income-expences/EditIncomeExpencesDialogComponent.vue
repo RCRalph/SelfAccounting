@@ -11,7 +11,15 @@
         </template>
 
         <v-card v-if="ready">
-            <v-card-title>Edit {{ type == 'expences' ? 'expence' : 'income' }}</v-card-title>
+            <v-card-title class="d-flex" :class="$vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between'">
+                <div>Edit {{ type == 'expences' ? 'expence' : 'income' }}</div>
+
+                <ConvertTransactionDialogComponent
+                    :type="type"
+                    :id="id"
+                    @converted="converted"
+                ></ConvertTransactionDialogComponent>
+            </v-card-title>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
@@ -155,6 +163,7 @@
 </template>
 
 <script>
+import ConvertTransactionDialogComponent from "@/income-expences/ConvertTransactionDialogComponent.vue";
 import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
 
 import { useCurrenciesStore } from "&/stores/currencies";
@@ -170,6 +179,7 @@ export default {
     },
     mixins: [validation, main],
     components: {
+        ConvertTransactionDialogComponent,
         ErrorSnackbarComponent
     },
     props: {
@@ -265,6 +275,10 @@ export default {
                         setTimeout(() => this.loading = false, 2000);
                     })
             })
+        },
+        converted() {
+            this.dialog = false;
+            this.$emit("converted");
         }
     }
 }
