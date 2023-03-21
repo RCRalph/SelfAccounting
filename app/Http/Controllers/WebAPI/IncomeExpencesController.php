@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Currency;
 
-use App\Rules\IncomeExpences\CorrectDateIncomeExpences;
-use App\Rules\IncomeExpences\CorrectDateIncomeExpencesUpdate;
-use App\Rules\IncomeExpences\ValidCategoryOrAccount;
-use App\Rules\IncomeExpences\ValidCategoryOrAccountUpdate;
-use App\Rules\Common\SameLengthAs;
-use App\Rules\Common\DateBeforeOrEqualField;
+use App\Rules\Transactions\CorrectTransactionDate;
+use App\Rules\Transactions\ValidCategoryOrAccount;
+use App\Rules\EqualArrayLength;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
 use App\Rules\Extensions\Cash\CashValidAmount;
 
@@ -73,13 +70,13 @@ class IncomeExpencesController extends Controller
             ->get()->firstOrFail();
 
         $data = request()->validate([
-            "date" => ["required", "date", new CorrectDateIncomeExpencesUpdate],
+            "date" => ["required", "date", new CorrectTransactionDate],
             "title" => ["required", "string", "max:64"],
             "amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
             "currency_id" => ["required", "integer", "exists:currencies,id"],
-            "category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountUpdate],
-            "account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccountUpdate]
+            "category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount]
         ]);
 
         $toUpdate->update($data);
@@ -134,9 +131,9 @@ class IncomeExpencesController extends Controller
             "categories.*" => ["required", "integer", "exists:categories,id"],
             "accounts" => ["nullable", "array"],
             "accounts.*" => ["required", "integer", "exists:accounts,id"],
-            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:" . implode(",", $fields), "distinct"],
-            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
             "orderDirections.*" => ["nullable", "string", "in:asc,desc"]
         ]);
 
@@ -183,7 +180,7 @@ class IncomeExpencesController extends Controller
     public function store(Currency $currency)
     {
         $data = request()->validate([
-            "data.*.date" => ["required", "date", new CorrectDateIncomeExpences],
+            "data.*.date" => ["required", "date", new CorrectTransactionDate],
             "data.*.title" => ["required", "string", "max:64"],
             "data.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "data.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],

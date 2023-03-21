@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
-use App\Rules\Profile\SameAsCurrentPassword;
-
 class ProfileController extends Controller
 {
     public function __construct()
@@ -95,7 +93,7 @@ class ProfileController extends Controller
     public function updatePassword()
     {
         $data = request()->validate([
-            "current_password" => ["required", "string", "min:8", "max:64", new SameAsCurrentPassword],
+            "current_password" => ["required", "string", "min:8", "max:64", "current_password"],
             "new_password" => ["required", "string", "min:8", "max:64", "confirmed"]
         ]);
 

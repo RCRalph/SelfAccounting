@@ -31,8 +31,16 @@ class ValidCategoryOrAccount implements Rule
 
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
 
-        $query = (str_contains($attribute, "category") ? auth()->user()->categories() : auth()->user()->accounts())
-            ->where("currency_id", request("$prefix.currency_id"))
+        $data = null;
+        if (str_starts_with($attribute, "account")) {
+            $data = auth()->user()->accounts();
+        } else if (str_starts_with($attribute, "category")) {
+            $data = auth()->user()->categories();
+        } else {
+            abort(500, "Invalid data type");
+        }
+
+        $data = $data->where("currency_id", request("$prefix.currency_id"))
             ->where("id", $value);
 
         if (request("$prefix.query_data")) {

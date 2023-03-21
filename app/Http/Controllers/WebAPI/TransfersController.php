@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Transfer;
 
-use App\Rules\Common\SameLengthAs;
+use App\Rules\EqualArrayLength;
 use App\Rules\Transfer\CorrectTransferDate;
 use App\Rules\Transfer\ValidTransferAccount;
 use App\Rules\Extensions\Cash\CorrectTransferCashCurrency;
@@ -97,9 +97,9 @@ class TransfersController extends Controller
             "source_accounts.*" => ["required", "integer", "exists:accounts,id"],
             "target_accounts" => ["nullable", "array"],
             "target_accounts.*" => ["required", "integer", "exists:accounts,id"],
-            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:" . implode(",", $fields), "distinct"],
-            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
             "orderDirections.*" => ["nullable", "string", "in:asc,desc"]
         ]);
 

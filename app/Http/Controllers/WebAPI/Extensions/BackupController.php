@@ -8,8 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Cash;
 use App\Models\User;
 
-use App\Rules\Common\DateBeforeOrEqualField;
-use App\Rules\Common\ValueLessOrEqualField;
 use App\Rules\Extensions\Backup\CorrectDateIncomeExpences;
 use App\Rules\Extensions\Backup\CorrectTransferDate;
 use App\Rules\Extensions\Backup\ValidCategoryOrAccount;
@@ -229,8 +227,8 @@ class BackupController extends Controller
             "categories.*.used_in_expences" => ["required", "boolean"],
             "categories.*.count_to_summary" => ["required", "boolean"],
             "categories.*.show_on_charts" => ["required", "boolean"],
-            "categories.*.start_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("end_date")],
-            "categories.*.end_date" => ["present", "nullable", "date"]
+            "categories.*.start_date" => ["present", "nullable", "date", "before_or_equal:categories.*.end_date"],
+            "categories.*.end_date" => ["present", "nullable", "date", "after_or_equal:categories.*.start_date"]
         ])["categories"];
 
         $accounts = request()->validate([
@@ -396,13 +394,13 @@ class BackupController extends Controller
 
                     "extensions.report.reports.*.queries" => ["present", "array"],
                     "extensions.report.reports.*.queries.*.query_data" => ["required", "string", "in:income,expences"],
-                    "extensions.report.reports.*.queries.*.min_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("max_date")],
-                    "extensions.report.reports.*.queries.*.max_date" => ["present", "nullable", "date"],
+                    "extensions.report.reports.*.queries.*.min_date" => ["present", "nullable", "date", "before_or_equal:extensions.report.reports.*.queries.*.max_date"],
+                    "extensions.report.reports.*.queries.*.max_date" => ["present", "nullable", "date", "after_or_equal:extensions.report.reports.*.queries.*.min_date"],
                     "extensions.report.reports.*.queries.*.title" => ["present", "nullable", "string", "max:64"],
-                    "extensions.report.reports.*.queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", new ValueLessOrEqualField("max_amount")],
-                    "extensions.report.reports.*.queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-                    "extensions.report.reports.*.queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", new ValueLessOrEqualField("max_price")],
-                    "extensions.report.reports.*.queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
+                    "extensions.report.reports.*.queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "lte:extensions.report.reports.*.queries.*.max_amount"],
+                    "extensions.report.reports.*.queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "gte:extensions.report.reports.*.queries.*.min_amount"],
+                    "extensions.report.reports.*.queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "lte:extensions.report.reports.*.queries.*.max_price"],
+                    "extensions.report.reports.*.queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "gte:extensions.report.reports.*.queries.*.min_price"],
                     "extensions.report.reports.*.queries.*.currency" => ["present", "nullable", "exists:currencies,ISO"],
                     "extensions.report.reports.*.queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount($categories, "query_data")],
                     "extensions.report.reports.*.queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount($accounts)],

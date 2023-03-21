@@ -31,15 +31,16 @@ class BelongsToReport implements Rule
             return true;
         }
 
+        $data = null;
         if (str_starts_with($attribute, "queries")) {
-            return $this->report->queries()
-                ->where("id", $value)
-                ->exists();
+            $data = $this->report->queries();
+        } else if (str_starts_with($attribute, "additionalEntries")) {
+            $data = $this->report->additionalEntries();
+        } else {
+            abort(500, "Invalid data type");
         }
 
-        return $this->report->additionalEntries()
-            ->where("id", $value)
-            ->exists();
+        return $data->where("id", $value)->exists();
     }
 
     /**
@@ -49,6 +50,6 @@ class BelongsToReport implements Rule
      */
     public function message()
     {
-        return "This doesn't belong to this report";
+        return "This attribute doesn't belong to this report";
     }
 }

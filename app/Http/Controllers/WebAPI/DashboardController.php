@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use App\Models\Currency;
 use App\Models\Chart;
 
-use App\Rules\Common\SameLengthAs;
+use App\Rules\EqualArrayLength;
 
 class DashboardController extends Controller
 {
@@ -75,9 +75,9 @@ class DashboardController extends Controller
             "categories.*" => ["required", "integer", "exists:categories,id"],
             "accounts" => ["nullable", "array"],
             "accounts.*" => ["required", "integer", "exists:accounts,id"],
-            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:" . implode(",", $fields), "distinct"],
-            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
             "orderDirections.*" => ["nullable", "string", "in:asc,desc"]
         ]);
 

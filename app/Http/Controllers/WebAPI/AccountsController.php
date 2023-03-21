@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Currency;
 use App\Models\Account;
 
-use App\Rules\Common\DateBeforeOrEqualField;
-use App\Rules\Settings\CorrectFirstEntryDate;
+use App\Rules\Accounts\CorrectStartDate;
 
 class AccountsController extends Controller
 {
@@ -80,7 +79,7 @@ class AccountsController extends Controller
             "used_in_expences" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
-            "start_date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectFirstEntryDate($account)],
+            "start_date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectStartDate($account)],
             "start_balance" => ["required", "numeric", "min:-1e11", "max:1e11", "not_in:-1e11,1e11"]
         ]);
 
