@@ -37,7 +37,7 @@ class BelongsToReport implements Rule
         } else if (str_starts_with($attribute, "additionalEntries")) {
             $data = $this->report->additionalEntries();
         } else {
-            abort(500, "Invalid data type");
+            abort(500, "Invalid data type for attribute check");
         }
 
         return $data->where("id", $value)->exists();
