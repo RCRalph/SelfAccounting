@@ -29,12 +29,12 @@ class ValidCategoryOrAccount implements Rule
             return true;
         }
 
+        $data = null;
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
 
-        $data = null;
-        if (str_starts_with($attribute, "account")) {
+        if (str_contains($attribute, "account")) {
             $data = auth()->user()->accounts();
-        } else if (str_starts_with($attribute, "category")) {
+        } else if (str_contains($attribute, "category")) {
             $data = auth()->user()->categories();
         } else {
             abort(500, "Invalid data type");

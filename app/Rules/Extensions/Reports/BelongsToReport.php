@@ -32,9 +32,9 @@ class BelongsToReport implements Rule
         }
 
         $data = null;
-        if (str_starts_with($attribute, "queries")) {
+        if (str_contains($attribute, "queries")) {
             $data = $this->report->queries();
-        } else if (str_starts_with($attribute, "additionalEntries")) {
+        } else if (str_contains($attribute, "additionalEntries")) {
             $data = $this->report->additionalEntries();
         } else {
             abort(500, "Invalid data type for attribute check");

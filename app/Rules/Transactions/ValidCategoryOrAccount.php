@@ -18,7 +18,7 @@ class ValidCategoryOrAccount implements Rule
     public function __construct(Currency $currency = null)
     {
         $this->currency_id = $currency === null ?
-            request("currency_id") : $this->currency->id;
+            request("currency_id") : $currency->id;
     }
 
     /**
