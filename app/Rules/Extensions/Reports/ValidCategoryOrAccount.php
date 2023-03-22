@@ -29,18 +29,18 @@ class ValidCategoryOrAccount implements Rule
             return true;
         }
 
-        $data = null;
+        $query = null;
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
 
         if (str_contains($attribute, "account")) {
-            $data = auth()->user()->accounts();
+            $query = auth()->user()->accounts();
         } else if (str_contains($attribute, "category")) {
-            $data = auth()->user()->categories();
+            $query = auth()->user()->categories();
         } else {
             abort(500, "Invalid data type");
         }
 
-        $data = $data->where("currency_id", request("$prefix.currency_id"))
+        $query = $query->where("currency_id", request("$prefix.currency_id"))
             ->where("id", $value);
 
         if (request("$prefix.query_data")) {
