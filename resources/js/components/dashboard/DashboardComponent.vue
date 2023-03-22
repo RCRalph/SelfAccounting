@@ -87,11 +87,11 @@
 
                                                 <tr>
                                                     <td class="text-right text-h6">
-                                                        Expences
+                                                        Expenses
                                                     </td>
 
                                                     <td class="text-h6">
-                                                        {{ last30Days.expences | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
+                                                        {{ last30Days.expenses | addSpaces }}&nbsp;{{ currencies.usedCurrencyObject.ISO }}
                                                     </td>
                                                 </tr>
 
@@ -195,7 +195,7 @@ export default {
     },
     computed: {
         last30DaysTotal() {
-            return this.last30Days.income + this.last30Days.transfersIn - this.last30Days.expences - this.last30Days.transfersOut;
+            return this.last30Days.income + this.last30Days.transfersIn - this.last30Days.expenses - this.last30Days.transfersOut;
         },
         last30DaysSummarySign() {
             return this.last30DaysTotal > 0 ? "+" : ( this.last30DaysTotal < 0 ? "-" : "" )

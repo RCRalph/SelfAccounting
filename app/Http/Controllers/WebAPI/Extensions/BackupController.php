@@ -70,7 +70,7 @@ class BackupController extends Controller
 
         // Gather categories
         $categories = auth()->user()->categories()
-            ->select("id", "currency_id AS currency", "icon", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "end_date")
+            ->select("id", "currency_id AS currency", "icon", "name", "used_in_income", "used_in_expenses", "count_to_summary", "show_on_charts", "start_date", "end_date")
             ->orderBy("created_at")
             ->get();
 
@@ -85,7 +85,7 @@ class BackupController extends Controller
 
         // Gather accounts
         $accounts = auth()->user()->accounts()
-            ->select("id", "currency_id AS currency", "icon", "name", "used_in_income", "used_in_expences", "count_to_summary", "show_on_charts", "start_date", "start_balance")
+            ->select("id", "currency_id AS currency", "icon", "name", "used_in_income", "used_in_expenses", "count_to_summary", "show_on_charts", "start_date", "start_balance")
             ->orderBy("created_at")
             ->get();
 
@@ -110,16 +110,16 @@ class BackupController extends Controller
             $income[$i]["account_id"] = !$item["account_id"] ? 0 : $accountIDs[$item["account_id"]];
         }
 
-        // Gather expences
-        $expences = auth()->user()->expences()
+        // Gather expenses
+        $expenses = auth()->user()->expenses()
             ->select("date", "title", "amount", "price", "category_id", "account_id", "currency_id AS currency")
             ->orderBy("date")
             ->get();
 
-        foreach ($expences as $i => $item) {
-            $expences[$i]["currency"] = $currencies[$item["currency"]];
-            $expences[$i]["category_id"] = !$item["category_id"] ? 0 : $categoryIDs[$item["category_id"]];
-            $expences[$i]["account_id"] = !$item["account_id"] ? 0 : $accountIDs[$item["account_id"]];
+        foreach ($expenses as $i => $item) {
+            $expenses[$i]["currency"] = $currencies[$item["currency"]];
+            $expenses[$i]["category_id"] = !$item["category_id"] ? 0 : $categoryIDs[$item["category_id"]];
+            $expenses[$i]["account_id"] = !$item["account_id"] ? 0 : $accountIDs[$item["account_id"]];
         }
 
         // Gather transfers
@@ -208,7 +208,7 @@ class BackupController extends Controller
             auth()->user()->backup()->update(["last_backup" => now()]);
         }
 
-        return response()->json(compact("categories", "accounts", "income", "expences", "transfers", "extensions"));
+        return response()->json(compact("categories", "accounts", "income", "expenses", "transfers", "extensions"));
     }
 
     public function restore()
@@ -224,7 +224,7 @@ class BackupController extends Controller
             "categories.*.icon" => ["present", "string", "max:64"],
             "categories.*.name" => ["required", "string", "max:32"],
             "categories.*.used_in_income" => ["required", "boolean"],
-            "categories.*.used_in_expences" => ["required", "boolean"],
+            "categories.*.used_in_expenses" => ["required", "boolean"],
             "categories.*.count_to_summary" => ["required", "boolean"],
             "categories.*.show_on_charts" => ["required", "boolean"],
             "categories.*.start_date" => ["present", "nullable", "date", "before_or_equal:categories.*.end_date"],
@@ -237,7 +237,7 @@ class BackupController extends Controller
             "accounts.*.icon" => ["present", "string", "max:64"],
             "accounts.*.name" => ["required", "string", "max:32"],
             "accounts.*.used_in_income" => ["required", "boolean"],
-            "accounts.*.used_in_expences" => ["required", "boolean"],
+            "accounts.*.used_in_expenses" => ["required", "boolean"],
             "accounts.*.count_to_summary" => ["required", "boolean"],
             "accounts.*.show_on_charts" => ["required", "boolean"],
             "accounts.*.start_date" => ["required", "date", "after_or_equal:1970-01-01"],
@@ -255,16 +255,16 @@ class BackupController extends Controller
             "income.*.account_id" => ["required", "integer", new ValidCategoryOrAccount($accounts, true)]
         ])["income"];
 
-        $expences = request()->validate([
-            "expences" => ["present", "array"],
-            "expences.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectTransactionDate($accounts)],
-            "expences.*.title" => ["required", "string", "max:64"],
-            "expences.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
-            "expences.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
-            "expences.*.currency" => ["required", "exists:currencies,ISO"],
-            "expences.*.category_id" => ["required", "integer", new ValidCategoryOrAccount($categories, true)],
-            "expences.*.account_id" => ["required", "integer", new ValidCategoryOrAccount($accounts, true)]
-        ])["expences"];
+        $expenses = request()->validate([
+            "expenses" => ["present", "array"],
+            "expenses.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectTransactionDate($accounts)],
+            "expenses.*.title" => ["required", "string", "max:64"],
+            "expenses.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
+            "expenses.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
+            "expenses.*.currency" => ["required", "exists:currencies,ISO"],
+            "expenses.*.category_id" => ["required", "integer", new ValidCategoryOrAccount($categories, true)],
+            "expenses.*.account_id" => ["required", "integer", new ValidCategoryOrAccount($accounts, true)]
+        ])["expenses"];
 
         $transfers = request()->validate([
             "transfers" => ["present", "array"],
@@ -279,7 +279,7 @@ class BackupController extends Controller
         auth()->user()->categories()->delete();
         auth()->user()->accounts()->delete();
         auth()->user()->income()->delete();
-        auth()->user()->expences()->delete();
+        auth()->user()->expenses()->delete();
         auth()->user()->transfers()->delete();
 
         // Get currency array as ID: ISO
@@ -322,9 +322,9 @@ class BackupController extends Controller
             ]);
         }
 
-        // Restore expences
-        foreach ($expences as $item) {
-            auth()->user()->expences()->create([
+        // Restore expenses
+        foreach ($expenses as $item) {
+            auth()->user()->expenses()->create([
                 ...$item,
                 "currency_id" => $currencies[$item["currency"]],
                 "category_id" => $categoryIDs[$item["category_id"]],
@@ -393,7 +393,7 @@ class BackupController extends Controller
                     "extensions.report.reports.*.show_columns" => ["required", "integer", "min:0", "max:127"],
 
                     "extensions.report.reports.*.queries" => ["present", "array"],
-                    "extensions.report.reports.*.queries.*.query_data" => ["required", "string", "in:income,expences"],
+                    "extensions.report.reports.*.queries.*.query_data" => ["required", "string", "in:income,expenses"],
                     "extensions.report.reports.*.queries.*.min_date" => ["present", "nullable", "date", "before_or_equal:extensions.report.reports.*.queries.*.max_date"],
                     "extensions.report.reports.*.queries.*.max_date" => ["present", "nullable", "date", "after_or_equal:extensions.report.reports.*.queries.*.min_date"],
                     "extensions.report.reports.*.queries.*.title" => ["present", "nullable", "string", "max:64"],

@@ -34,11 +34,11 @@ class CorrectStartDate implements Rule
             ->select($selectQuery)
             ->where("account_id", $this->account->id);
 
-        $expences = auth()->user()->expences()
+        $expenses = auth()->user()->expenses()
             ->select($selectQuery)
             ->where("account_id", $this->account->id);
 
-        $minDate = $income->union($expences)
+        $minDate = $income->union($expenses)
             ->orderBy("min_date", "ASC")
             ->first();
 

@@ -211,7 +211,7 @@ export default {
                         else if (!Number.isInteger(Number(amount))) {
                             return "Amount has to be an integer";
                         }
-                        else if (type == "expences" && owned < amount) {
+                        else if (type == "expenses" && owned < amount) {
                             return "Amount cannot be greater than currently owned amount";
                         }
 

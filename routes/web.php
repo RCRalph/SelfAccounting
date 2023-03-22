@@ -33,21 +33,21 @@ Route::prefix("/web-api")->group(function () {
         });
     });
 
-    // Income and expences routes
-    foreach (["income", "expences"] as $type) {
-        Route::group(["prefix" => "/$type", "middleware" => "income-expences:$type"], function () use ($type) {
+    // Income and expenses routes
+    foreach (["income", "expenses"] as $type) {
+        Route::group(["prefix" => "/$type", "middleware" => "transaction:$type"], function () use ($type) {
             Route::prefix("/currency/{currency}")->group(function () use ($type) {
-                Route::get("/", "WebAPI\IncomeExpencesController@index")->name("web-api.$type");
-                Route::post("/", "WebAPI\IncomeExpencesController@store")->name("web-api.$type.store");
-                Route::get("/data", "WebAPI\IncomeExpencesController@data")->name("web-api.$type.data");
-                Route::get("/list", "WebAPI\IncomeExpencesController@list")->name("web-api.$type.list");
+                Route::get("/", "WebAPI\TransactionsController@index")->name("web-api.$type");
+                Route::post("/", "WebAPI\TransactionsController@store")->name("web-api.$type.store");
+                Route::get("/data", "WebAPI\TransactionsController@data")->name("web-api.$type.data");
+                Route::get("/list", "WebAPI\TransactionsController@list")->name("web-api.$type.list");
             });
 
             Route::prefix("/{id}")->group(function () use ($type) {
-                Route::get("/", "WebAPI\IncomeExpencesController@show")->name("web-api.$type.show");
-                Route::post("/convert", "WebAPI\IncomeExpencesController@convert")->name("web-api.$type.convert");
-                Route::patch("/", "WebAPI\IncomeExpencesController@update")->name("web-api.$type.update");
-                Route::delete("/", "WebAPI\IncomeExpencesController@destroy")->name("web-api.$type.destroy");
+                Route::get("/", "WebAPI\TransactionsController@show")->name("web-api.$type.show");
+                Route::post("/convert", "WebAPI\TransactionsController@convert")->name("web-api.$type.convert");
+                Route::patch("/", "WebAPI\TransactionsController@update")->name("web-api.$type.update");
+                Route::delete("/", "WebAPI\TransactionsController@destroy")->name("web-api.$type.destroy");
             });
         });
     }

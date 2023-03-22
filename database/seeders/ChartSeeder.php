@@ -27,12 +27,12 @@ class ChartSeeder extends Seeder
             ]
         ],
         [
-            "name" => "Expences by categories",
+            "name" => "Expenses by categories",
             "type" => "doughnut",
             "routes" => [
                 "/",
                 "/dashboard",
-                "/expences"
+                "/expenses"
             ]
         ],
         [
@@ -45,12 +45,12 @@ class ChartSeeder extends Seeder
             ]
         ],
         [
-            "name" => "Expences by accounts",
+            "name" => "Expenses by accounts",
             "type" => "doughnut",
             "routes" => [
                 "/",
                 "/dashboard",
-                "/expences"
+                "/expenses"
             ]
         ],
         [

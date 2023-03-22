@@ -37,9 +37,9 @@
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_expences">
+                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_expenses">
                                 <template v-slot:label>
-                                    Show in expences
+                                    Show in expenses
                                 </template>
                             </v-switch>
                         </v-col>
@@ -108,7 +108,7 @@ export default {
                 icon: "",
                 name: "",
                 used_in_income: true,
-                used_in_expences: true,
+                used_in_expenses: true,
                 show_on_charts: true,
                 count_to_summary: true,
                 start_date: new Date().toISOString().split("T")[0],

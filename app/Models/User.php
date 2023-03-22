@@ -70,9 +70,9 @@ class User extends Authenticatable
         return $this->hasMany(Income::class);
     }
 
-    public function expences()
+    public function expenses()
     {
-        return $this->hasMany(Expence::class);
+        return $this->hasMany(Expense::class);
     }
 
     public function transfers()

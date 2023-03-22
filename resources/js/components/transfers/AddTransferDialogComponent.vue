@@ -33,7 +33,7 @@
                                     :accountID="data.source.account_id"
                                     :disabled="loading"
                                     :entryValue="sourceValue.value"
-                                    type="expences"
+                                    type="expenses"
                                 ></CashTransferDialogComponent>
                             </div>
 

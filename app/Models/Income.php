@@ -12,7 +12,14 @@ class Income extends Model
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $fillable = [
-        'user_id', 'date', 'title', 'amount', 'price', 'category_id', 'account_id', 'currency_id'
+        'user_id',
+        'date',
+        'title',
+        'amount',
+        'price',
+        'category_id',
+        'account_id',
+        'currency_id',
     ];
 
     public function user()

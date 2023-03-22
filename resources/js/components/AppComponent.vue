@@ -196,7 +196,7 @@ export default {
             const retArr = [
                 { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
                 { title: "Income", icon: "mdi-trending-up", link: "/income" },
-                { title: "Expences", icon: "mdi-trending-down", link: "/expences" },
+                { title: "Expenses", icon: "mdi-trending-down", link: "/expenses" },
                 { title: "Transfers", icon: "mdi-swap-horizontal", link: "/transfers" },
                 { title: "Categories", icon: "mdi-tag", link: "/categories" },
                 { title: "Accounts", icon: "mdi-wallet", link: "/accounts" },

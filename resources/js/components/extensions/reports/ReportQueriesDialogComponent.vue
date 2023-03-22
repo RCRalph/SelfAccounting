@@ -304,7 +304,7 @@ export default {
             },
             queryTypes: [
                 { value: "income", text: "Income" },
-                { value: "expences", text: "Expences" }
+                { value: "expenses", text: "Expenses" }
             ],
             validationArray: [],
             validationArrayObject: {

@@ -17,7 +17,7 @@ class Account extends Model
         'icon',
         'name',
         'used_in_income',
-        'used_in_expences',
+        'used_in_expenses',
         'show_on_charts',
         'count_to_summary',
         'start_date',
@@ -58,9 +58,9 @@ class Account extends Model
         return $this->hasMany(Income::class);
     }
 
-    public function expences()
+    public function expenses()
     {
-        return $this->hasMany(Expence::class);
+        return $this->hasMany(Expense::class);
     }
 
     public function sourceOfTransfers()

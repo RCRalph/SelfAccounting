@@ -179,7 +179,7 @@ class ReportsController extends Controller
         foreach ($report->queries as $query) {
             $data = $query->query_data == "income" ?
                 $report->user->income() :
-                $report->user->expences();
+                $report->user->expenses();
 
             foreach ($this->queryFields as $field) {
                 $queryFieldName = $field["name"] ?? $field["column"];
@@ -322,14 +322,14 @@ class ReportsController extends Controller
 
         $queries = request()->validate([
             "queries" => ["present", "array"],
-            "queries.*.query_data" => ["required", "string", "in:income,expences"],
+            "queries.*.query_data" => ["required", "string", "in:income,expenses"],
             "queries.*.min_date" => ["present", "nullable", "date", "before_or_equal:queries.*.max_date"],
             "queries.*.max_date" => ["present", "nullable", "date", "after_or_equal:queries.*.min_date"],
             "queries.*.title" => ["present", "nullable", "string", "max:64"],
-            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "lte:extensions.report.reports.*.queries.*.max_amount"],
-            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "gte:extensions.report.reports.*.queries.*.min_amount"],
-            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "lte:extensions.report.reports.*.queries.*.max_price"],
-            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "gte:extensions.report.reports.*.queries.*.min_amount"],
+            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "lte:queries.*.max_amount"],
+            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "gte:queries.*.min_amount"],
+            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "lte:queries.*.max_price"],
+            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "gte:queries.*.min_price"],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
             "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
@@ -473,14 +473,14 @@ class ReportsController extends Controller
         $queries = request()->validate([
             "queries" => ["present", "array"],
             "queries.*.id" => ["nullable", "integer", "distinct", "exists:report_queries,id", new BelongsToReport($report)],
-            "queries.*.query_data" => ["required", "string", "in:income,expences"],
+            "queries.*.query_data" => ["required", "string", "in:income,expenses"],
             "queries.*.min_date" => ["present", "nullable", "date", "before_or_equal:queries.*.max_date"],
             "queries.*.max_date" => ["present", "nullable", "date", "after_or_equal:queries.*.min_date"],
             "queries.*.title" => ["present", "nullable", "string", "max:64"],
-            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "lte:extensions.report.reports.*.queries.*.max_amount"],
-            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "gte:extensions.report.reports.*.queries.*.min_amount"],
-            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "lte:extensions.report.reports.*.queries.*.max_price"],
-            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "gte:extensions.report.reports.*.queries.*.min_amount"],
+            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "lte:queries.*.max_amount"],
+            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "gte:queries.*.min_amount"],
+            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "lte:queries.*.max_price"],
+            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "gte:queries.*.min_price"],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
             "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],

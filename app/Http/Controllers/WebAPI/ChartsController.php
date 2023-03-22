@@ -17,7 +17,7 @@ class ChartsController extends Controller
         $this->middleware("auth");
     }
 
-    private function dataByType($incomeExpences, $type, Currency $currency, $limits)
+    private function dataByType($transactionType, $type, Currency $currency, $limits)
     {
         // Get type data
         $typeData = $type == "category" ?
@@ -28,23 +28,23 @@ class ChartsController extends Controller
             ->select("id", "name")
             ->where("currency_id", $currency->id)
             ->where("show_on_charts", true)
-            ->where("used_in_" . $incomeExpences, true)
+            ->where("used_in_" . $transactionType, true)
             ->get();
 
-        // Get type IDs to get from income and expences
+        // Get type IDs to get from income and expenses
         $toShow = $typeData->pluck("id")->toArray();
 
-        $incomeExpencesData = $this->getTypeRelation($incomeExpences);
+        $transactionsData = $this->getTypeRelation($transactionType);
 
         if ($limits["start"]) {
-            $incomeExpencesData = $incomeExpencesData->whereDate("date", ">=", $limits["start"]);
+            $transactionsData = $transactionsData->whereDate("date", ">=", $limits["start"]);
         }
 
         if ($limits["end"]) {
-            $incomeExpencesData = $incomeExpencesData->whereDate("date", "<=", $limits["end"]);
+            $transactionsData = $transactionsData->whereDate("date", "<=", $limits["end"]);
         }
 
-        $incomeExpencesData = $incomeExpencesData
+        $transactionsData = $transactionsData
             ->select($type . "_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
             ->whereIn($type . "_id", $toShow)
@@ -64,7 +64,7 @@ class ChartsController extends Controller
             "labels" => []
         ];
 
-        foreach ($incomeExpencesData as $typeID => $amount) {
+        foreach ($transactionsData as $typeID => $amount) {
             array_push(
                 $data["datasets"][0]["data"],
                 round($amount, 2)
@@ -188,7 +188,7 @@ class ChartsController extends Controller
             ->where("currency_id", $currency->id)
             ->whereIn("account_id", $accountsToShow);
 
-        $expences = auth()->user()->expences()
+        $expenses = auth()->user()->expenses()
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
             ->whereIn("account_id", $accountsToShow);
@@ -203,17 +203,17 @@ class ChartsController extends Controller
 
         if ($limits["end"]) {
             $income = $income->where("date", "<=", $limits["end"]);
-            $expences = $expences->where("date", "<=", $limits["end"]);
+            $expenses = $expenses->where("date", "<=", $limits["end"]);
             $transfers = $transfers->where("date", "<=", $limits["end"]);
         }
 
         $income = $income->get();
-        $expences = $expences->get();
+        $expenses = $expenses->get();
 
         if ($limits["start"]) {
             $balanceBefore = $this->getBalance(
                 $income->where("date", "<=", $limits["start"]),
-                $expences->where("date", "<=", $limits["start"]),
+                $expenses->where("date", "<=", $limits["start"]),
                 $transfers->where("date", "<=", $limits["start"]),
                 $accounts, [], $accountsToShow, []
             );
@@ -234,7 +234,7 @@ class ChartsController extends Controller
 
         if ($limits["start"]) {
             $income = $income->where("date", ">", $limits["start"]);
-            $expences = $expences->where("date", ">", $limits["start"]);
+            $expenses = $expenses->where("date", ">", $limits["start"]);
             $transfers = $transfers->where("date", ">", $limits["start"]);
         }
 
@@ -246,7 +246,7 @@ class ChartsController extends Controller
                 )
             );
 
-        $expences = $expences
+        $expenses = $expenses
             ->groupBy("account_id")
             ->map(fn ($item) => $item
                 ->groupBy("date")
@@ -296,7 +296,7 @@ class ChartsController extends Controller
         }
 
         $differenceByAccounts = $income;
-        foreach ($expences as $accountID => $dates) {
+        foreach ($expenses as $accountID => $dates) {
             foreach ($dates as $date => $difference) {
                 $differenceAccount = $differenceByAccounts->get($accountID);
 
@@ -555,9 +555,9 @@ class ChartsController extends Controller
                 break;
 
             case "Income by categories":
-            case "Expences by categories":
+            case "Expenses by categories":
             case "Income by accounts":
-            case "Expences by accounts":
+            case "Expenses by accounts":
                 $name = explode(" ", $chart->name);
                 $result = $this->dataByType(
                     strtolower($name[0]),
