@@ -4,6 +4,8 @@ namespace App\Rules\Transactions;
 
 use Illuminate\Contracts\Validation\Rule;
 
+use App\Models\Currency;
+
 class ValidCategoryOrAccount implements Rule
 {
     private $currency_id;
@@ -38,7 +40,7 @@ class ValidCategoryOrAccount implements Rule
         } else if (str_starts_with($attribute, "category")) {
             $data = auth()->user()->categories();
         } else {
-            abort(500, "Invalid data type");
+            abort(500, "Invalid data type for transactions");
         }
 
         return $data
