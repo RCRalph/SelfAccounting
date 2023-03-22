@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use App\Models\Currency;
 use App\Models\Chart;
 
-use App\Rules\Common\SameLengthAs;
+use App\Rules\EqualArrayLength;
 
 class DashboardController extends Controller
 {
@@ -20,19 +20,19 @@ class DashboardController extends Controller
         $this->middleware("auth");
     }
 
-    private function getLast30DaysBalance($income, $expences, $transfers, $accountIDs, $accountsToShow, $categoriesToShow)
+    private function getLast30DaysBalance($income, $expenses, $transfers, $accountIDs, $accountsToShow, $categoriesToShow)
     {
         $incomeToSum = $income
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
             ->whereIn("account_id", $accountsToShow)
             ->sum("value");
 
-        $expencesToSum = $expences
+        $expensesToSum = $expenses
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
             ->whereIn("account_id", $accountsToShow)
             ->sum("value");
 
-        $expencesCategorySum = $expences
+        $expensesCategorySum = $expenses
             ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
             ->whereIn("category_id", $categoriesToShow)
             ->sum("value");
@@ -49,7 +49,7 @@ class DashboardController extends Controller
 
         return [
             "income" => $incomeToSum,
-            "expences" => $expencesToSum - $expencesCategorySum,
+            "expenses" => $expensesToSum - $expensesCategorySum,
             "transfersIn" => $transfersIn,
             "transfersOut" => $transfersOut
         ];
@@ -61,7 +61,7 @@ class DashboardController extends Controller
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("1 AS type"));
 
-        $expences = auth()->user()->expences()
+        $expenses = auth()->user()->expenses()
             ->where("currency_id", $currency->id)
             ->select("id", "date", "title", "amount", "price", DB::raw("round(amount * price, 2) AS value"), "category_id", "account_id", DB::raw("-1 AS type"));
 
@@ -75,33 +75,33 @@ class DashboardController extends Controller
             "categories.*" => ["required", "integer", "exists:categories,id"],
             "accounts" => ["nullable", "array"],
             "accounts.*" => ["required", "integer", "exists:accounts,id"],
-            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:" . implode(",", $fields), "distinct"],
-            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
             "orderDirections.*" => ["nullable", "string", "in:asc,desc"]
         ]);
 
         if (isset($data["title"])) {
             $income->where("title", "ilike", "%" . $data["title"] . "%");
-            $expences->where("title", "ilike", "%" . $data["title"] . "%");
+            $expenses->where("title", "ilike", "%" . $data["title"] . "%");
         }
 
         if (isset($data["dates"])) {
             $income->whereIn("date", $data["dates"]);
-            $expences->whereIn("date", $data["dates"]);
+            $expenses->whereIn("date", $data["dates"]);
         }
 
         if (isset($data["categories"])) {
             $income->whereIn("category_id", $data["categories"]);
-            $expences->whereIn("category_id", $data["categories"]);
+            $expenses->whereIn("category_id", $data["categories"]);
         }
 
         if (isset($data["accounts"])) {
             $income->whereIn("account_id", $data["accounts"]);
-            $expences->whereIn("account_id", $data["accounts"]);
+            $expenses->whereIn("account_id", $data["accounts"]);
         }
 
-        $items = $income->union($expences);
+        $items = $income->union($expenses);
 
         if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
             foreach ($data["orderFields"] as $i => $item) {
@@ -114,7 +114,7 @@ class DashboardController extends Controller
             $items = $items->orderBy($field, $field == "date" ? "desc" : "asc");
         }
 
-        $items = $this->addNamesToPaginatedIncomeOrExpencesItems($items->paginate(20), $currency);
+        $items = $this->addNamesToPaginatedTransactionsItems($items->paginate(20), $currency);
 
         return response()->json(compact("items"));
     }
@@ -148,7 +148,7 @@ class DashboardController extends Controller
             ->where("currency_id", $currency->id)
             ->get();
 
-        $expences = auth()->user()->expences()
+        $expenses = auth()->user()->expenses()
             ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
             ->where("currency_id", $currency->id)
             ->get();
@@ -161,8 +161,8 @@ class DashboardController extends Controller
             })
             ->get();
 
-        $currentBalance = $this->getBalance($income, $expences, $transfers, $accounts, $categories, $accountsToShow, $categoriesToShow);
-        $last30Days = $this->getLast30DaysBalance($income, $expences, $transfers, $accountIDs, $accountsToShow, $categoriesToShow);
+        $currentBalance = $this->getBalance($income, $expenses, $transfers, $accounts, $categories, $accountsToShow, $categoriesToShow);
+        $last30Days = $this->getLast30DaysBalance($income, $expenses, $transfers, $accountIDs, $accountsToShow, $categoriesToShow);
 
         $categories = auth()->user()->categories()
             ->select("id", "name", "icon")

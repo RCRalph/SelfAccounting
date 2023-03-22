@@ -81,7 +81,7 @@ export default {
     mixins: [validation],
     props: {
         value: {
-            required: true,
+            required: false,
             type: String,
         },
         type: {

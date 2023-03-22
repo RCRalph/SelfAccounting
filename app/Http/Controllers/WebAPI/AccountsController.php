@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Currency;
 use App\Models\Account;
 
-use App\Rules\Common\DateBeforeOrEqualField;
-use App\Rules\Settings\CorrectFirstEntryDate;
+use App\Rules\Accounts\CorrectStartDate;
 
 class AccountsController extends Controller
 {
@@ -22,7 +21,7 @@ class AccountsController extends Controller
     public function index(Currency $currency)
     {
         $data = auth()->user()->accounts()
-            ->select("id", "icon", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "start_balance")
+            ->select("id", "icon", "name", "used_in_income", "used_in_expenses", "show_on_charts", "count_to_summary", "start_date", "start_balance")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
@@ -36,7 +35,7 @@ class AccountsController extends Controller
             "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
-            "used_in_expences" => ["required", "boolean"],
+            "used_in_expenses" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
             "start_date" => ["required", "date", "after_or_equal:1970-01-01"],
@@ -57,7 +56,7 @@ class AccountsController extends Controller
         $minDate = auth()->user()->income()
             ->select("date")
             ->where("account_id", $account->id)
-            ->union(auth()->user()->expences()
+            ->union(auth()->user()->expenses()
                 ->select("date")
                 ->where("account_id", $account->id)
             )
@@ -77,10 +76,10 @@ class AccountsController extends Controller
             "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
-            "used_in_expences" => ["required", "boolean"],
+            "used_in_expenses" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
-            "start_date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectFirstEntryDate($account)],
+            "start_date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectStartDate($account)],
             "start_balance" => ["required", "numeric", "min:-1e11", "max:1e11", "not_in:-1e11,1e11"]
         ]);
 

@@ -6,17 +6,17 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCategoryOrAccount implements Rule
 {
-    private $data, $checkIncomeExpences;
+    private $data, $checkTransactions;
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($data, $checkIncomeExpences = false)
+    public function __construct($data, $checkTransactions = false)
     {
         $this->data = $data;
-        $this->checkIncomeExpences = $checkIncomeExpences;
+        $this->checkTransactions = $checkTransactions;
     }
 
     /**
@@ -37,9 +37,9 @@ class ValidCategoryOrAccount implements Rule
             return false;
         }
 
-        if ($this->checkIncomeExpences) {
-            $field = is_string($this->checkIncomeExpences) ?
-                request("$prefix.$this->checkIncomeExpences") :
+        if ($this->checkTransactions) {
+            $field = is_string($this->checkTransactions) ?
+                request("$prefix.$this->checkTransactions") :
                 substr($attribute, 0, strpos($attribute, "."));
 
             if (!$this->data[$value - 1]["used_in_" . $field]) {

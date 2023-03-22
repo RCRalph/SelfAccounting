@@ -35,8 +35,8 @@
                             <v-simple-checkbox v-model="item.used_in_income" disabled off-icon="mdi-close"></v-simple-checkbox>
                         </template>
 
-                        <template v-slot:[`item.used_in_expences`]="{ item }">
-                            <v-simple-checkbox v-model="item.used_in_expences" disabled off-icon="mdi-close"></v-simple-checkbox>
+                        <template v-slot:[`item.used_in_expenses`]="{ item }">
+                            <v-simple-checkbox v-model="item.used_in_expenses" disabled off-icon="mdi-close"></v-simple-checkbox>
                         </template>
 
                         <template v-slot:[`item.show_on_charts`]="{ item }">
@@ -107,7 +107,7 @@ export default {
                 { text: "Icon", align: "center", value: "icon" },
                 { text: "Name", align: "center", value: "name" },
                 { text: "Show in income", align: "center", value: "used_in_income" },
-                { text: "Show in expences", align: "center", value: "used_in_expences" },
+                { text: "Show in expenses", align: "center", value: "used_in_expenses" },
                 { text: "Show on charts", align: "center", value: "show_on_charts" },
                 { text: "Count to summary", align: "center", value: "count_to_summary" },
                 { text: "Actions", align: "center", value: "actions" }

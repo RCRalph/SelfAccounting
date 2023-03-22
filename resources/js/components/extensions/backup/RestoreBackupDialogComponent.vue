@@ -61,9 +61,9 @@
                             </div>
                         </template>
 
-                        <template v-slot:[`item.used_in_expences`]="{ item }">
+                        <template v-slot:[`item.used_in_expenses`]="{ item }">
                             <div class="checkbox-centered">
-                                <v-checkbox v-model="item.used_in_expences" disabled></v-checkbox>
+                                <v-checkbox v-model="item.used_in_expenses" disabled></v-checkbox>
                             </div>
                         </template>
 
@@ -106,9 +106,9 @@
                             </div>
                         </template>
 
-                        <template v-slot:[`item.used_in_expences`]="{ item }">
+                        <template v-slot:[`item.used_in_expenses`]="{ item }">
                             <div class="checkbox-centered">
-                                <v-checkbox v-model="item.used_in_expences" disabled></v-checkbox>
+                                <v-checkbox v-model="item.used_in_expenses" disabled></v-checkbox>
                             </div>
                         </template>
 
@@ -131,7 +131,7 @@
 
                     <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Income</div>
                     <v-data-table
-                        :headers="headers.incomeExpences"
+                        :headers="headers.transactions"
                         :items="data.income"
                         :mobile-breakpoint="0"
                         :items-per-page="5"
@@ -154,10 +154,10 @@
                         </template>
                     </v-data-table>
 
-                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Expences</div>
+                    <div class="text-center text-capitalize pb-lg-0 text-h6" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Expenses</div>
                     <v-data-table
-                        :headers="headers.incomeExpences"
-                        :items="data.expences"
+                        :headers="headers.transactions"
+                        :items="data.expenses"
                         :mobile-breakpoint="0"
                         :items-per-page="5"
                         disable-sort
@@ -416,7 +416,7 @@ export default {
                     { text: "Icon", align: "center", value: "icon" },
                     { text: "Name", align: "center", value: "name" },
                     { text: "Show in income", align: "center", value: "used_in_income" },
-                    { text: "Show in expences", align: "center", value: "used_in_expences" },
+                    { text: "Show in expenses", align: "center", value: "used_in_expenses" },
                     { text: "Show on charts", align: "center", value: "show_on_charts" },
                     { text: "Count to summary", align: "center", value: "count_to_summary" },
                     { text: "Start date", align: "center", value: "start_date" },
@@ -426,13 +426,13 @@ export default {
                     { text: "Currency", align: "center", value: "currency" },
                     { text: "Name", align: "center", value: "name" },
                     { text: "Show in income", align: "center", value: "used_in_income" },
-                    { text: "Show in expences", align: "center", value: "used_in_expences" },
+                    { text: "Show in expenses", align: "center", value: "used_in_expenses" },
                     { text: "Show on charts", align: "center", value: "show_on_charts" },
                     { text: "Count to summary", align: "center", value: "count_to_summary" },
                     { text: "Start date", align: "center", value: "start_date" },
                     { text: "Start balance", align: "center", value: "start_balance" }
                 ],
-                incomeExpences: [
+                transactions: [
                     { text: "Date", align: "center", value: "date" },
                     { text: "Title", align: "center", value: "title" },
                     { text: "Amount", align: "center", value: "amount" },
@@ -546,7 +546,7 @@ export default {
                 this.validation.icon()(item.icon) === true,
                 this.validation.name()(item.name) === true,
                 typeof item.used_in_income == "boolean",
-                typeof item.used_in_expences == "boolean",
+                typeof item.used_in_expenses == "boolean",
                 typeof item.count_to_summary == "boolean",
                 typeof item.show_on_charts == "boolean",
                 this.validation.date(true)(item.start_date) === true,
@@ -579,7 +579,7 @@ export default {
                 this.currencies.findByISO(item.currency) !== undefined,
                 this.validation.name()(item.name) === true,
                 typeof item.used_in_income == "boolean",
-                typeof item.used_in_expences == "boolean",
+                typeof item.used_in_expenses == "boolean",
                 typeof item.count_to_summary == "boolean",
                 typeof item.show_on_charts == "boolean",
                 this.validation.date(false)(item.start_date) === true,
@@ -600,7 +600,7 @@ export default {
 
             return true;
         },
-        validateIncomeExpences(data) {
+        validateTransactions(data) {
             if (!Array.isArray(data)) {
                 return false;
             }
@@ -685,7 +685,7 @@ export default {
                 Number.isInteger(item.show_columns) && item.show_columns >= 0 && item.show_columns <= 127,
 
                 Array.isArray(item.queries) && item.queries.map(item1 => [
-                    ["income", "expences"].includes(item1.query_data),
+                    ["income", "expenses"].includes(item1.query_data),
                     this.validation.date(true)(item1.min_date) === true,
                     this.validation.date(true, item1.min_date)(item1.max_date) === true,
                     this.validation.title(true)(item1.title) === true,
@@ -756,12 +756,12 @@ export default {
                         throw new Error("Invalid accounts");
                     }
 
-                    if (!this.validateIncomeExpences(data.income)) {
+                    if (!this.validateTransactions(data.income)) {
                         throw new Error("Invalid income");
                     }
 
-                    if (!this.validateIncomeExpences(data.expences)) {
-                        throw new Error("Invalid expences");
+                    if (!this.validateTransactions(data.expenses)) {
+                        throw new Error("Invalid expenses");
                     }
 
                     if (!this.validateTransfers(data.transfers)) {

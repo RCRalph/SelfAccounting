@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Report;
 use App\Models\User;
 
-use App\Rules\Common\SameLengthAs;
-use App\Rules\Common\DateBeforeOrEqualField;
-use App\Rules\Common\ValueLessOrEqualField;
+use App\Rules\EqualArrayLength;
 use App\Rules\Extensions\Reports\ValidCategoryOrAccount;
 use App\Rules\Extensions\Reports\BelongsToReport;
 
@@ -96,9 +94,9 @@ class ReportsController extends Controller
         $data = request()->validate([
             "items" => ["required", "integer", "in:10,15,20,25,30"],
             "search" => ["nullable", "string", "min:1", "max:64"],
-            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:id,title", "distinct"],
-            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
             "orderDirections.*" => ["required", "string", "in:asc,desc"]
         ]);
 
@@ -131,9 +129,9 @@ class ReportsController extends Controller
             "search" => ["nullable", "string", "min:1", "max:64"],
             "owners" => ["nullable", "array"],
             "owners.*" => ["required", "integer", "exists:users,id"],
-            "orderFields" => ["nullable", "array", new SameLengthAs("orderDirections")],
+            "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:id,title", "distinct"],
-            "orderDirections" => ["nullable", "array", new SameLengthAs("orderFields")],
+            "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
             "orderDirections.*" => ["required", "string", "in:asc,desc"]
         ]);
 
@@ -181,7 +179,7 @@ class ReportsController extends Controller
         foreach ($report->queries as $query) {
             $data = $query->query_data == "income" ?
                 $report->user->income() :
-                $report->user->expences();
+                $report->user->expenses();
 
             foreach ($this->queryFields as $field) {
                 $queryFieldName = $field["name"] ?? $field["column"];
@@ -324,14 +322,14 @@ class ReportsController extends Controller
 
         $queries = request()->validate([
             "queries" => ["present", "array"],
-            "queries.*.query_data" => ["required", "string", "in:income,expences"],
-            "queries.*.min_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("max_date")],
-            "queries.*.max_date" => ["present", "nullable", "date"],
+            "queries.*.query_data" => ["required", "string", "in:income,expenses"],
+            "queries.*.min_date" => ["present", "nullable", "date", "before_or_equal:queries.*.max_date"],
+            "queries.*.max_date" => ["present", "nullable", "date", "after_or_equal:queries.*.min_date"],
             "queries.*.title" => ["present", "nullable", "string", "max:64"],
-            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", new ValueLessOrEqualField("max_amount")],
-            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", new ValueLessOrEqualField("max_price")],
-            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
+            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "lte:queries.*.max_amount"],
+            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "gte:queries.*.min_amount"],
+            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "lte:queries.*.max_price"],
+            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "gte:queries.*.min_price"],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
             "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
@@ -475,14 +473,14 @@ class ReportsController extends Controller
         $queries = request()->validate([
             "queries" => ["present", "array"],
             "queries.*.id" => ["nullable", "integer", "distinct", "exists:report_queries,id", new BelongsToReport($report)],
-            "queries.*.query_data" => ["required", "string", "in:income,expences"],
-            "queries.*.min_date" => ["present", "nullable", "date", new DateBeforeOrEqualField("max_date")],
-            "queries.*.max_date" => ["present", "nullable", "date"],
+            "queries.*.query_data" => ["required", "string", "in:income,expenses"],
+            "queries.*.min_date" => ["present", "nullable", "date", "before_or_equal:queries.*.max_date"],
+            "queries.*.max_date" => ["present", "nullable", "date", "after_or_equal:queries.*.min_date"],
             "queries.*.title" => ["present", "nullable", "string", "max:64"],
-            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", new ValueLessOrEqualField("max_amount")],
-            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", new ValueLessOrEqualField("max_price")],
-            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11"],
+            "queries.*.min_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "lte:queries.*.max_amount"],
+            "queries.*.max_amount" => ["present", "nullable", "numeric", "max:1e7", "min:0", "not_in:1e7", "gte:queries.*.min_amount"],
+            "queries.*.min_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "lte:queries.*.max_price"],
+            "queries.*.max_price" => ["present", "nullable", "numeric", "max:1e11", "min:0", "not_in:1e11", "gte:queries.*.min_price"],
             "queries.*.currency_id" => ["present", "nullable", "integer", "exists:currencies,id"],
             "queries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],

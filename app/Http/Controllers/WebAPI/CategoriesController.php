@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Currency;
 use App\Models\Category;
 
-use App\Rules\Common\DateBeforeOrEqualField;
-
 class CategoriesController extends Controller
 {
     public function __construct()
@@ -21,7 +19,7 @@ class CategoriesController extends Controller
     public function index(Currency $currency)
     {
         $data = auth()->user()->categories()
-            ->select("id", "icon", "name", "used_in_income", "used_in_expences", "show_on_charts", "count_to_summary", "start_date", "end_date")
+            ->select("id", "icon", "name", "used_in_income", "used_in_expenses", "show_on_charts", "count_to_summary", "start_date", "end_date")
             ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
@@ -35,11 +33,11 @@ class CategoriesController extends Controller
             "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
-            "used_in_expences" => ["required", "boolean"],
+            "used_in_expenses" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
-            "start_date" => ["present", "date", "nullable", new DateBeforeOrEqualField("end_date")],
-            "end_date" => ["present", "date", "nullable"]
+            "start_date" => ["present", "date", "nullable", "before_or_equal:end_date"],
+            "end_date" => ["present", "date", "nullable", "after_or_equal:start_date"]
         ]);
 
         auth()->user()->categories()->create([ ...$data, "currency_id" => $currency->id ]);
@@ -62,11 +60,11 @@ class CategoriesController extends Controller
             "icon" => ["present", "nullable", "string", "max:64"],
             "name" => ["required", "string", "max:32"],
             "used_in_income" => ["required", "boolean"],
-            "used_in_expences" => ["required", "boolean"],
+            "used_in_expenses" => ["required", "boolean"],
             "show_on_charts" => ["required", "boolean"],
             "count_to_summary" => ["required", "boolean"],
-            "start_date" => ["present", "date", "nullable", new DateBeforeOrEqualField("end_date")],
-            "end_date" => ["present", "date", "nullable"]
+            "start_date" => ["present", "date", "nullable", "before_or_equal:end_date"],
+            "end_date" => ["present", "date", "nullable", "after_or_equal:start_date"]
         ]);
 
         $category->update($data);

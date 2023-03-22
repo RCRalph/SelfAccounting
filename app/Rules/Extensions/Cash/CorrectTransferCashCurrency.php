@@ -26,9 +26,9 @@ class CorrectTransferCashCurrency implements Rule
      */
     public function passes($attribute, $value)
     {
-        $type = explode(".", $attribute, 2)[0];
+        $prefix = substr($attribute, 0, strrpos($attribute, "."));
         $account = auth()->user()->accounts()
-            ->firstWhere("id", request("$type.account_id"));
+            ->firstWhere("id", request("$prefix.account_id"));
 
         return $account ? Cash::find($value)->currency_id == $account->currency_id : false;
     }

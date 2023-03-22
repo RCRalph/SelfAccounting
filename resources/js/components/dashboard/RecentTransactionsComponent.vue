@@ -26,15 +26,15 @@
                     </v-col>
 
                     <v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'" class="multi-button-table-top">
-                        <AddIncomeExpencesDialogComponent
+                        <AddTransactionsDialogComponent
                             type="income"
                             @added="added"
-                        ></AddIncomeExpencesDialogComponent>
+                        ></AddTransactionsDialogComponent>
 
-                        <AddIncomeExpencesDialogComponent
-                            type="expences"
+                        <AddTransactionsDialogComponent
+                            type="expenses"
                             @added="added"
-                        ></AddIncomeExpencesDialogComponent>
+                        ></AddTransactionsDialogComponent>
                     </v-col>
                 </v-row>
             </template>
@@ -216,15 +216,15 @@
                         @mouseleave="tableData.resetHoveredRows()"
                     >
                         <div class="d-flex flex-nowrap justify-center align-center">
-                            <EditIncomeExpencesDialogComponent
-                                :type="item.value.value < 0 ? 'expences' : 'income'"
+                            <EditTransactionsDialogComponent
+                                :type="item.value.value < 0 ? 'expenses' : 'income'"
                                 :id="item.id.value"
                                 @updated="getData"
-                            ></EditIncomeExpencesDialogComponent>
+                            ></EditTransactionsDialogComponent>
 
                             <DeleteDialogComponent
-                                :thing="item.value.value < 0 ? 'expence' : 'income'"
-                                :url="`${item.value.value < 0 ? 'expences' : 'income'}/${item.id.value}`"
+                                :thing="item.value.value < 0 ? 'expense' : 'income'"
+                                :url="`${item.value.value < 0 ? 'expenses' : 'income'}/${item.id.value}`"
                                 @deleted="getData"
                             ></DeleteDialogComponent>
                         </div>
@@ -252,8 +252,8 @@ import TableDataMerger from "&/classes/TableDataMerger.js";
 import main from "&/mixins/main";
 import validation from "&/mixins/validation";
 
-import AddIncomeExpencesDialogComponent from "@/income-expences/AddIncomeExpencesDialogComponent.vue";
-import EditIncomeExpencesDialogComponent from "@/income-expences/EditIncomeExpencesDialogComponent.vue";
+import AddTransactionsDialogComponent from "@/transactions/AddTransactionsDialogComponent.vue";
+import EditTransactionsDialogComponent from "@/transactions/EditTransactionsDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import InfiniteLoading from "vue-infinite-loading";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
@@ -266,8 +266,8 @@ export default {
     },
     mixins: [main, validation],
     components: {
-        AddIncomeExpencesDialogComponent,
-        EditIncomeExpencesDialogComponent,
+        AddTransactionsDialogComponent,
+        EditTransactionsDialogComponent,
         DeleteDialogComponent,
         InfiniteLoading,
         SuccessSnackbarComponent,
@@ -399,12 +399,12 @@ export default {
             this.getData();
         },
         updated() {
-            this.thing = `updated ${this.type == 'expences' ? 'expence' : 'income'}`;
+            this.thing = `updated ${this.type == 'expenses' ? 'expense' : 'income'}`;
             this.success = true;
             this.getData();
         },
         deleted() {
-            this.thing = `deleted ${this.type == 'expences' ? 'expence' : 'income'}`;
+            this.thing = `deleted ${this.type == 'expenses' ? 'expense' : 'income'}`;
             this.success = true;
             this.getData();
         }

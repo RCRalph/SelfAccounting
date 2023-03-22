@@ -1,5 +1,5 @@
 # Categories
-Categories are groups which your income and expences split into, for example:
+Categories are groups which your income and expenses split into, for example:
 - Food
 - Entertainment
 - Transport
@@ -13,4 +13,4 @@ Clicking on the trash bin in the actions column will allow you to delete the giv
 ## Add category
 Clicking the **Add category** button will open a dialog, which will allow you to enter a new category. Fill in the fields in the dialog and if everything is correct, the **Submit** button will be green and after clicking it you will submit your category.
 
-If count to summary is chosen, the two date fields to the right will be unlocked. This option allows you to show the expences with this category with dates between the entered values (if value is empty then the limit doesn't apply). This option is only useful when you - for example - spent an amount of money but you are certain you will have them back in some time. Otherwise, I don't advise selecting it.
+If count to summary is chosen, the two date fields to the right will be unlocked. This option allows you to show the expenses with this category with dates between the entered values (if value is empty then the limit doesn't apply). This option is only useful when you - for example - spent an amount of money but you are certain you will have them back in some time. Otherwise, I don't advise selecting it.

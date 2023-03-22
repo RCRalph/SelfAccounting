@@ -36,12 +36,12 @@ class CorrectTransferDate implements Rule
             return false;
         }
 
-        $maxDate = max(
+        $maxAccountDate = max(
             strtotime($this->accounts[$source_account_id - 1]["start_date"]),
             strtotime($this->accounts[$target_account_id - 1]["start_date"])
         );
 
-        return strtotime($maxDate) <= strtotime($value);
+        return $maxAccountDate <= strtotime($value);
     }
 
     /**
