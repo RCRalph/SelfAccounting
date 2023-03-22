@@ -12,7 +12,7 @@ use App\Rules\EqualArrayLength;
 use App\Rules\Transfer\CorrectTransferDate;
 use App\Rules\Transfer\ValidTransferAccount;
 use App\Rules\Extensions\Cash\CorrectTransferCashCurrency;
-use App\Rules\Extensions\Cash\CashValidAmount;
+use App\Rules\Extensions\Cash\ValidCashAmount;
 
 class TransfersController extends Controller
 {
@@ -237,7 +237,7 @@ class TransfersController extends Controller
                 $sourceCash = request()->validate([
                     "source.cash" => ["required", "array"],
                     "source.cash.*.id" => ["required", "integer", new CorrectTransferCashCurrency],
-                    "source.cash.*.amount" => ["required", "integer", "min:0", new CashValidAmount(false, "source.cash")]
+                    "source.cash.*.amount" => ["required", "integer", "min:0", new ValidCashAmount(false, "source.cash")]
                 ])["source"]["cash"];
             }
 
@@ -245,7 +245,7 @@ class TransfersController extends Controller
                 $targetCash = request()->validate([
                     "target.cash" => ["required", "array"],
                     "target.cash.*.id" => ["required", "integer", new CorrectTransferCashCurrency],
-                    "target.cash.*.amount" => ["required", "integer", "min:0", new CashValidAmount(true, "target.cash")]
+                    "target.cash.*.amount" => ["required", "integer", "min:0", new ValidCashAmount(true, "target.cash")]
                 ])["target"]["cash"];
             }
         }

@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cash;
 use App\Models\User;
 
-use App\Rules\Extensions\Backup\CorrectDateIncomeExpences;
+use App\Rules\Extensions\Backup\CorrectTransactionDate;
 use App\Rules\Extensions\Backup\CorrectTransferDate;
 use App\Rules\Extensions\Backup\ValidCategoryOrAccount;
 use App\Rules\Extensions\Backup\ValidTransferAccount;
@@ -246,7 +246,7 @@ class BackupController extends Controller
 
         $income = request()->validate([
             "income" => ["present", "array"],
-            "income.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIncomeExpences($accounts)],
+            "income.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectTransactionDate($accounts)],
             "income.*.title" => ["required", "string", "max:64"],
             "income.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "income.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],
@@ -257,7 +257,7 @@ class BackupController extends Controller
 
         $expences = request()->validate([
             "expences" => ["present", "array"],
-            "expences.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectDateIncomeExpences($accounts)],
+            "expences.*.date" => ["required", "date", "after_or_equal:1970-01-01", new CorrectTransactionDate($accounts)],
             "expences.*.title" => ["required", "string", "max:64"],
             "expences.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:0,1e7"],
             "expences.*.price" => ["required", "numeric", "max:1e11", "min:0", "not_in:0,1e11"],

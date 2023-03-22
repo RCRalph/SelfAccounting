@@ -13,7 +13,7 @@ use App\Rules\Transactions\CorrectTransactionDate;
 use App\Rules\Transactions\ValidCategoryOrAccount;
 use App\Rules\EqualArrayLength;
 use App\Rules\Extensions\Cash\CorrectCashCurrency;
-use App\Rules\Extensions\Cash\CashValidAmount;
+use App\Rules\Extensions\Cash\ValidCashAmount;
 
 class IncomeExpencesController extends Controller
 {
@@ -192,7 +192,7 @@ class IncomeExpencesController extends Controller
             $cash = request()->validate([
                 "cash" => ["required", "array"],
                 "cash.*.id" => ["required", "integer", new CorrectCashCurrency($currency)],
-                "cash.*.amount" => ["required", "integer", "min:0", new CashValidAmount(request()->type == "income")]
+                "cash.*.amount" => ["required", "integer", "min:0", new ValidCashAmount(request()->type == "income")]
             ])["cash"];
 
             foreach ($cash as $item) {
@@ -215,7 +215,7 @@ class IncomeExpencesController extends Controller
                     /*
                         This can only be reached if request()->type is "income",
                         in expences cash has to be already attached and this
-                        is checked inside CashValidAmount rule.
+                        is checked inside ValidCashAmount rule.
                     */
 
                     auth()->user()->cash()->attach(

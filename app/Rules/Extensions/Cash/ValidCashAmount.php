@@ -4,7 +4,7 @@ namespace App\Rules\Extensions\Cash;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class CashValidAmount implements Rule
+class ValidCashAmount implements Rule
 {
     private $addition, $directory;
 

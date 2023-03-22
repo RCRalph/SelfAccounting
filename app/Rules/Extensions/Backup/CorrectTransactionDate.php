@@ -4,7 +4,7 @@ namespace App\Rules\Extensions\Backup;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class CorrectDateIncomeExpences implements Rule
+class CorrectTransactionDate implements Rule
 {
     private $accounts;
 
@@ -47,6 +47,6 @@ class CorrectDateIncomeExpences implements Rule
      */
     public function message()
     {
-        return 'The date must be before the first entry starting date.';
+        return 'The date must be before the account start date.';
     }
 }
