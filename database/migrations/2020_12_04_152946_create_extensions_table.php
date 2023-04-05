@@ -22,8 +22,8 @@ class CreateExtensionsTable extends Migration
             $table->string('directory', 32)->unique();
             $table->decimal('price', 5, 2);
             $table->string('thumbnail', 96);
-            $table->text('short_description');
-            $table->text('description');
+            $table->string('short_description', 64);
+            $table->string('description', 64);
             $table->timestamps();
 
             $table->index(['id']);

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\WebAPI\Extensions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Extension;
 
@@ -23,6 +23,7 @@ class ExtensionsController extends Controller
             ->toArray();
 
         foreach ($extensions as $key => $item) {
+            $extensions[$key]["description"] = Storage::disk("local")->get("/files/extensions/descriptions/" . $item["description"]);
             $extensions[$key]["gallery"] = array_column($item["gallery"], "image_link");
         }
 
