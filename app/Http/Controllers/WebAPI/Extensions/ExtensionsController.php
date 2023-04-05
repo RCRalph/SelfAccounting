@@ -18,8 +18,11 @@ class ExtensionsController extends Controller
 
     public function index()
     {
-        $extensions = Extension::all()->load("gallery")
+        $extensions = Extension::all()
+            ->load("gallery")
             ->makeHidden(["thumbnail", "created_at", "updated_at", "icon"])
+            ->sortBy("title")
+            ->values()
             ->toArray();
 
         foreach ($extensions as $key => $item) {
