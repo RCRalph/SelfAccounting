@@ -353,13 +353,14 @@ export default {
                 this.headers.map(item => item.text).join(",")
             ];
 
-            this.tableData.data.forEach(item => {
+            this.tableData.tabulatedData.forEach(item => {
                 file.push(this.headers.map(item1 => {
-                    if (["Price", "Value"].includes(item1.text)) {
+                    if (["price", "value"].includes(item1.value)) {
                         return item[item1.value] + " " + this.currencies.findCurrency(item.currency_id).ISO;
-                    }
-                    else {
-                        return '"' + item[item1.value] + '"';
+                    } else if (["category", "account"].includes(item1.value)) {
+                        return `"${item[item1.value].name}"`;
+                    } else {
+                        return `"${item[item1.value]}"`
                     }
                 }).join(","));
             });
@@ -376,25 +377,42 @@ export default {
             document.body.removeChild(download);
         },
         exportToXLSX() {
-            const workbook = XLSX.utils.book_new();
+            const workbook = XLSX.utils.book_new(), data = [this.headers.map(item => item.text)];
 
-            const data = [this.headers.map(item => item.text)];
+            this.tableData.tabulatedData.forEach(item => {
+                data.push(this.headers.map(item1 => {
+                    if (["category", "account"].includes(item1.value)) {
+                        return item[item1.value].name;
+                    } else if (item1.value == "date") {
+                        let result = new Date(item[item1.value]);
+                        return new Date(result.getUTCFullYear(), result.getUTCMonth(), result.getUTCDate());
+                    }
 
-            this.tableData.data.forEach(item => {
-                data.push(this.headers.map(item1 => item[item1.value]));
+                    return item[item1.value];
+                }));
             });
 
-            const sheet = XLSX.utils.aoa_to_sheet(data);
+            const sheet = XLSX.utils.aoa_to_sheet(data, {cellDates: true});
+
+            if (data[0].includes("Date")) {
+                const range = XLSX.utils.decode_range(sheet["!ref"]);
+                const columnIndex = data[0].findIndex(item => item == "Date");
+
+                for (let i = range.s.r + 1; i <= range.e.r; i++) {
+                    sheet[XLSX.utils.encode_cell({ r: i, c: columnIndex })].t = "d";
+                }
+            }
 
             ["Price", "Value"].forEach(column => {
                 if (data[0].includes(column)) {
-                const range = XLSX.utils.decode_range(sheet["!ref"]);
-                const columnIndex = data[0].findIndex(item => item == column);
+                    const range = XLSX.utils.decode_range(sheet["!ref"]);
+                    const columnIndex = data[0].findIndex(item => item == column);
 
-                for (let i = range.s.r + 1; i <= range.e.r; i++) {
-                    sheet[XLSX.utils.encode_cell({ r: i, c: columnIndex })].z = '0.00\" ' + this.currencies.findCurrency(this.tableData.data[i - 1].currency_id).ISO + '"';
+                    for (let i = range.s.r + 1; i <= range.e.r; i++) {
+                        sheet[XLSX.utils.encode_cell({ r: i, c: columnIndex })].z = `0.00 ${this.currencies.findCurrency(this.tableData.tabulatedData[i - 1].currency_id).ISO}`;
+                    }
                 }
-            }})
+            });
 
             XLSX.utils.book_append_sheet(workbook, sheet, this.information.title);
             XLSX.writeFile(workbook, `${this.information.title}.xlsx`);
@@ -418,8 +436,6 @@ export default {
         items() {
             this.tableData.resetData();
             this.tableData.appendData(this.items);
-
-            console.log(this.items);
         }
     },
     mounted() {

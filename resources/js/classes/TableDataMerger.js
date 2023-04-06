@@ -1,7 +1,7 @@
 export default class TableDataMerger {
     // Public properties
     data = [];
-    hoveredRows = { // Has to be public because Vue has to watch for change of these properties
+    hoveredRows = { // Has to be public because Vue has to watch for changes of these properties
         start: Infinity,
         end: -Infinity
     };
@@ -106,5 +106,25 @@ export default class TableDataMerger {
 
     isRowHighlighted(start, span) { // Check if two intervals intersect
         return Math.max(this.hoveredRows.start, start) <= Math.min(this.hoveredRows.end, start + span - 1);
+    }
+
+    get tabulatedData() {
+        if (!this.data.length) return [];
+
+        const result = [], previousRow = {};
+        for (let item of this.data) {
+            const row = {};
+            for (let key in item) {
+                if (item[key].span) {
+                    previousRow[key] = item[key].value;
+                }
+
+                row[key] = previousRow[key]
+            }
+
+            result.push(row);
+        }
+
+        return result;
     }
 }
