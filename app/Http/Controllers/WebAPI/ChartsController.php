@@ -543,9 +543,13 @@ class ChartsController extends Controller
 
     public function index(Chart $chart, Currency $currency) {
         $limits = request()->validate([
-            "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01", "before_or_equal:end"],
-            "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01", "after_or_equal:start"]
+            "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01"],
+            "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
         ]);
+
+        if ($limits["start"] && $limits["end"] && strtotime($limits["start"]) > strtotime($limits["end"])) {
+            abort(422, "Start date is after end date");
+        }
 
         $result = [];
 
