@@ -91,4 +91,16 @@ class CategoryPolicy
     {
         //
     }
+
+    /**
+     * Determine whether the user can duplicate the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Category  $category
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function duplicate(User $user, Category $category)
+    {
+        return $category->user_id == $user->id;
+    }
 }

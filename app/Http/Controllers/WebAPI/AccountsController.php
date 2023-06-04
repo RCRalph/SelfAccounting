@@ -117,4 +117,26 @@ class AccountsController extends Controller
 
         return response()->json(compact("icons"));
     }
+
+    public function duplicate(Account $account)
+    {
+        $this->authorize("duplicate", $account);
+
+        $currency = request()->validate([
+            "currency" => ["required", "exists:currencies,id"]
+        ])["currency"];
+
+        $name = $account->name;
+        if ($currency == $account->currency_id) {
+            $name .= " - duplicate";
+        }
+
+        auth()->user()->accounts()->create([
+            ...$account->toArray(),
+            "name" => $name,
+            "currency_id" => $currency
+        ]);
+
+        return response("");
+    }
 }

@@ -101,4 +101,26 @@ class CategoriesController extends Controller
 
         return response()->json(compact("icons"));
     }
+
+    public function duplicate(Category $category)
+    {
+        $this->authorize("duplicate", $category);
+
+        $currency = request()->validate([
+            "currency" => ["required", "exists:currencies,id"]
+        ])["currency"];
+
+        $name = $category->name;
+        if ($currency == $category->currency_id) {
+            $name .= " - duplicate";
+        }
+
+        auth()->user()->categories()->create([
+            ...$category->toArray(),
+            "name" => $name,
+            "currency_id" => $currency
+        ]);
+
+        return response("");
+    }
 }

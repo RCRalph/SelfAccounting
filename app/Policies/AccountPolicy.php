@@ -91,4 +91,16 @@ class AccountPolicy
     {
         //
     }
+
+    /**
+     * Determine whether the user can duplicate the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Account  $account
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function duplicate(User $user, Account $account)
+    {
+        return $account->user_id == $user->id;
+    }
 }

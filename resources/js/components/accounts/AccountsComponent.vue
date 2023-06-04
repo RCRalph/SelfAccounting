@@ -55,6 +55,11 @@
                                         @updated="updated"
                                     ></EditAccountDialogComponent>
 
+                                    <DuplicateAccountDialogComponent
+                                        :id="item.id"
+                                        @duplicated="duplicated"
+                                    ></DuplicateAccountDialogComponent>
+
                                     <DeleteDialogComponent
                                         thing="account"
                                         :url="`accounts/account/${item.id}`"
@@ -87,6 +92,7 @@ import AddAccountDialogComponent from "@/accounts/AddAccountDialogComponent.vue"
 import EditAccountDialogComponent from "@/accounts/EditAccountDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
+import DuplicateAccountDialogComponent from "./DuplicateAccountDialogComponent.vue";
 
 export default {
     setup() {
@@ -99,7 +105,8 @@ export default {
         AddAccountDialogComponent,
         EditAccountDialogComponent,
         DeleteDialogComponent,
-        SuccessSnackbarComponent
+        SuccessSnackbarComponent,
+        DuplicateAccountDialogComponent
     },
     data() {
         return {
@@ -142,6 +149,11 @@ export default {
         },
         updated() {
             this.thing = `updated account`;
+            this.success = true;
+            this.getData();
+        },
+        duplicated() {
+            this.thing = `duplicated account`;
             this.success = true;
             this.getData();
         },

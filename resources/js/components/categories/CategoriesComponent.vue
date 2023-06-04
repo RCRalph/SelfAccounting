@@ -55,6 +55,11 @@
                                         @updated="updated"
                                     ></EditCategoryDialogComponent>
 
+                                    <DuplicateCategoryDialogComponent
+                                        :id="item.id"
+                                        @duplicated="duplicated"
+                                    ></DuplicateCategoryDialogComponent>
+
                                     <DeleteDialogComponent
                                         thing="category"
                                         :url="`categories/category/${item.id}`"
@@ -87,6 +92,7 @@ import AddCategoryDialogComponent from "@/categories/AddCategoryDialogComponent.
 import EditCategoryDialogComponent from "@/categories/EditCategoryDialogComponent.vue";
 import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
 import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
+import DuplicateCategoryDialogComponent from "./DuplicateCategoryDialogComponent.vue";
 
 export default {
     setup() {
@@ -96,11 +102,12 @@ export default {
     },
     mixins: [main],
     components: {
-        AddCategoryDialogComponent,
-        EditCategoryDialogComponent,
-        DeleteDialogComponent,
-        SuccessSnackbarComponent
-    },
+    AddCategoryDialogComponent,
+    EditCategoryDialogComponent,
+    DeleteDialogComponent,
+    SuccessSnackbarComponent,
+    DuplicateCategoryDialogComponent
+},
     data() {
         return {
             headers: [
@@ -142,6 +149,11 @@ export default {
         },
         updated() {
             this.thing = `updated category`;
+            this.success = true;
+            this.getData();
+        },
+        duplicated() {
+            this.thing = `duplicated category`;
             this.success = true;
             this.getData();
         },
