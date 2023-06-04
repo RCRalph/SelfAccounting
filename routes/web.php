@@ -80,6 +80,8 @@ Route::prefix("/web-api")->group(function () {
             Route::get("/", "WebAPI\CategoriesController@show")->name("web-api.categories.show");
             Route::patch("/", "WebAPI\CategoriesController@update")->name("web-api.categories.update");
             Route::delete("/", "WebAPI\CategoriesController@delete")->name("web-api.categories.delete");
+
+            Route::post("/duplicate", "WebAPI\CategoriesController@duplicate")->name("web-api.categories.duplicate");
         });
     });
 
@@ -95,6 +97,8 @@ Route::prefix("/web-api")->group(function () {
             Route::get("/", "WebAPI\AccountsController@show")->name("web-api.accounts.show");
             Route::patch("/", "WebAPI\AccountsController@update")->name("web-api.accounts.update");
             Route::delete("/", "WebAPI\AccountsController@delete")->name("web-api.accounts.delete");
+
+            Route::post("/duplicate", "WebAPI\AccountsController@duplicate")->name("web-api.accounts.duplicate");
         });
     });
 
