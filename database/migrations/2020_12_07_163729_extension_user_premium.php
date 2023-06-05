@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ExtensionUserPremium extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,11 @@ class ExtensionUserPremium extends Migration
     public function up()
     {
         Schema::create('extension_user_premium', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('extension_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->index(['id', 'extension_id', 'user_id']);
+            $table->index(['extension_id', 'user_id']);
         });
     }
 
@@ -32,4 +31,4 @@ class ExtensionUserPremium extends Migration
     {
         Schema::dropIfExists('extension_user_premium');
     }
-}
+};

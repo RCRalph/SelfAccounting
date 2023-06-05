@@ -24,8 +24,7 @@ class TransfersController extends Controller
     private function addNamesToPaginatedItems($items) {
         $paginatedData = $items->getCollection()->toArray();
 
-        $currencies = $this->getCurrencies()
-            ->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
+        $currencies = Currency::all()->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name", "icon", "currency_id")
