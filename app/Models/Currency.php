@@ -10,6 +10,11 @@ class Currency extends Model
 
     public $timestamps = false;
 
+    public function currencies()
+    {
+        return $this->belongsToMany(User::class, 'currency_user', 'currency_id', 'user_id')->withPivot('last_used');
+    }
+
     public function income()
     {
         return $this->hasMany(Income::class);

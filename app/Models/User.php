@@ -53,7 +53,12 @@ class User extends Authenticatable
         'premium_expiration' => 'date:Y-m-d'
     ];
 
-    protected $appends = ["profile_picture_link", "account_type", "extension_codes"];
+    protected $appends = ["profile_picture_link", "account_type", "extension_codes", "last_used_currencies"];
+
+    public function currencies()
+    {
+        return $this->belongsToMany(Currency::class, 'currency_user', 'user_id', 'currency_id')->withPivot('last_used');
+    }
 
     public function categories()
     {
@@ -173,7 +178,7 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function () {
-                $codes = $this->extensions->whereInStrict("pivot.enabled", [null, true])->pluck("code");
+                $codes = $this->extensions->whereInStrict("enabled", [null, true])->pluck("code");
                 if (!in_array(strtolower($this->account_type), ["admin", "premium"])) {
                     return $codes;
                 }
@@ -181,6 +186,28 @@ class User extends Authenticatable
                 $premiumCodes = $this->premiumExtensions()->pluck("extensions.code");
 
                 return $codes->merge($premiumCodes)->unique();
+            }
+        );
+    }
+
+    protected function lastUsedCurrencies(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $currencies = Currency::all()->toArray();
+
+                $lastCurrencyIDs = $this->currencies()
+                    ->orderBy("last_used", "ASC") // Sorting ASC due to the order of insertion in foreach below
+                    ->pluck("id");
+
+                // Move last used currencies to the beginning of the array
+                foreach ($lastCurrencyIDs as $currency) {
+                    $index = array_search($currency, array_column($currencies, "id"));
+                    array_unshift($currencies, $currencies[$index]);
+                    array_splice($currencies, $index + 1, 1);
+                }
+
+                return $currencies;
             }
         );
     }

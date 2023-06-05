@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Chart;
 use App\Models\Extension;
 use App\Models\Tutorial;
+use App\Models\Currency;
 
 class AppController extends Controller
 {
@@ -55,18 +56,9 @@ class AppController extends Controller
                     "last_page_visit" => Carbon::now()
                 ]);
 
-                $currencies = $this->getCurrencies()->toArray();
-                $lastCurrencies = $this->getLastUsedCurrencies();
-
-                foreach ($lastCurrencies->reverse() as $currency) {
-                    $index = array_search($currency, array_column($currencies, "id"));
-                    array_unshift($currencies, $currencies[$index]);
-                    array_splice($currencies, $index + 1, 1);
-                }
-
                 return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
-                    "currencies" => $currencies,
+                    "currencies" => auth()->user()->lastUsedCurrencies,
                     "charts" => $this->getCharts("/"),
                     "tutorials" => Tutorial::select("route")->pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),

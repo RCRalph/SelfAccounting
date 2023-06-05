@@ -23,7 +23,7 @@ Auth::routes();
 Route::get("/", "AppController@index")->name("index");
 Route::get("/app", "AppController@app")->name("app")->middleware("auth");
 
-Route::prefix("/web-api")->group(function () {
+Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
     Route::get("/app", "WebAPI\AppController@index")->name("web-api.app");
 
     Route::prefix("/dashboard")->group(function () {

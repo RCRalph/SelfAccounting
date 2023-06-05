@@ -19,11 +19,6 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function getCurrencies()
-    {
-        return Cache::rememberForever("currencies", fn () => Currency::all());
-    }
-
     public function getBalance($income, $expenses, $transfers, $accounts, $categories, $accountsToShow, $categoriesToShow)
     {
         $incomeByAccounts = $income

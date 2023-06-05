@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CashAccountUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class CashAccountUser extends Migration
     public function up()
     {
         Schema::create('cash_account_user', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('account_id')->constrained()->cascadeOnDelete();
 
@@ -31,4 +30,4 @@ class CashAccountUser extends Migration
     {
         Schema::dropIfExists('cash_account_user');
     }
-}
+};

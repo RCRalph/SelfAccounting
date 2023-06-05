@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Cash;
 use App\Models\User;
+use App\Models\Currency;
 
 use App\Rules\Extensions\Backup\CorrectTransactionDate;
 use App\Rules\Extensions\Backup\CorrectTransferDate;
@@ -65,8 +66,7 @@ class BackupController extends Controller
         $this->authorize("create", Backup::class);
 
         // Get currency array as ID: ISO
-        $currencies = $this->getCurrencies()
-            ->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
+        $currencies = Currency::all()->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
 
         // Gather categories
         $categories = auth()->user()->categories()
@@ -283,8 +283,7 @@ class BackupController extends Controller
         auth()->user()->transfers()->delete();
 
         // Get currency array as ID: ISO
-        $currencies = $this->getCurrencies()
-            ->mapWithKeys(fn ($item) => [$item["ISO"] => $item["id"]]);
+        $currencies = Currency::all()->mapWithKeys(fn ($item) => [$item["ISO"] => $item["id"]]);
 
         // $categoryIDs is an array which maps the index in the $categories array to the id of a category.
         $categoryIDs = [ 0 => null ];

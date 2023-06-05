@@ -63,29 +63,30 @@ class CashController extends Controller
             ->get();
 
         foreach ($accounts as $account) {
-            $balance = $account->start_balance;
-
-            $income = auth()->user()->income()
+            $accountValue = auth()->user()->income()
+                ->select(DB::raw("round(amount * price, 2) AS value"))
                 ->where("account_id", $account->id)
                 ->where("currency_id", $currency->id)
-                ->select(DB::raw("round(amount * price, 2) AS value"))
-                ->get();
+                ->union(
+                    auth()->user()->expenses()
+                        ->where("account_id", $account->id)
+                        ->where("currency_id", $currency->id)
+                        ->select(DB::raw("round(-1 * amount * price, 2) AS value"))
+                )
+                ->union(
+                    auth()->user()->transfers()
+                        ->select(DB::raw("target_value AS value"))
+                        ->where("target_account_id", $account->id)
+                )
+                ->union(
+                    auth()->user()->transfers()
+                        ->select(DB::raw("-1 * source_value AS value"))
+                        ->where("source_account_id", $account->id)
+                )
+                ->get()
+                ->sum("value");
 
-            foreach ($income as $item) {
-                $balance += $item->value;
-            }
-
-            $expenses = auth()->user()->expenses()
-                ->where("account_id", $account->id)
-                ->where("currency_id", $currency->id)
-                ->select(DB::raw("round(amount * price, 2) AS value"))
-                ->get();
-
-            foreach ($expenses as $item) {
-                $balance -= $item->value;
-            }
-
-            $account->balance = round($balance, 2);
+            $account->balance = round($account->start_balance + $accountValue, 2);
         }
 
         $accounts = $accounts

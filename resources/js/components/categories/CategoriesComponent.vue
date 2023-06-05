@@ -3,7 +3,7 @@
         <v-col xl="8" offset-xl="2" lg="10" offset-lg="1" cols="12">
             <v-card class="loading-height">
                 <v-card-title class="justify-sm-space-between justify-center text-h5 text-capitalize pb-lg-0 flex-sm-row flex-column align-center">
-                    <div class="mb-sm-0 mb-3">Categories</div>
+                    <div class="mb-sm-0 mb-3">Categories ({{ currencies.usedCurrencyObject.ISO }})</div>
 
                     <AddCategoryDialogComponent
                         @added="added"
