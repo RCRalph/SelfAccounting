@@ -58,7 +58,6 @@ class AppController extends Controller
 
                 return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
-                    "currencies" => auth()->user()->lastUsedCurrencies,
                     "charts" => $this->getCharts("/"),
                     "tutorials" => Tutorial::select("route")->pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
@@ -73,9 +72,10 @@ class AppController extends Controller
 
     public function index()
     {
-        $premiumExpired = $this->showPremiumExpiredDialog();
-        $data = $this->getAppStartData();
-
-        return response()->json(array_merge($data, compact("premiumExpired")));
+        return response()->json([
+            ...$data,
+            "currencies" => auth()->user()->lastUsedCurrencies,
+            "premiumExpired" => $this->showPremiumExpiredDialog()
+        ]);
     }
 }
