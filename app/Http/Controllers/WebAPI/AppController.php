@@ -73,7 +73,7 @@ class AppController extends Controller
     public function index()
     {
         return response()->json([
-            ...$data,
+            ...$this->getAppStartData(),
             "currencies" => auth()->user()->lastUsedCurrencies,
             "premiumExpired" => $this->showPremiumExpiredDialog()
         ]);
