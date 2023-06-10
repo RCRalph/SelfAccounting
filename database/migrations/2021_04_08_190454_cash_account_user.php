@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             $table->primary(['account_id', 'user_id']);
-            $table->index(['user_id', 'account_id']);
+            $table->index(['account_id', 'user_id']);
         });
     }
 
