@@ -27,7 +27,7 @@ return new class extends Migration
             $table->decimal('start_balance', 13, 2);
             $table->timestamps(6);
 
-            $table->index(['id', 'user_id']);
+            $table->index(['id', 'user_id', 'currency_id']);
         });
     }
 

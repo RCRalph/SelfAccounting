@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-        $table->id();
+            $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
             $table->string('name', 32);
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->timestamps(6);
 
-            $table->index(['id', 'user_id']);
+            $table->index(['id', 'user_id', 'currency_id']);
         });
     }
 

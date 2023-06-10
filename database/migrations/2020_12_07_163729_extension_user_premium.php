@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
+            $table->primary(['extension_id', 'user_id']);
             $table->index(['extension_id', 'user_id']);
         });
     }
