@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('filename', 64);
             $table->timestamps();
 
-            $table->index('id');
+            $table->index(['id']);
         });
     }
 

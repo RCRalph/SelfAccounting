@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tutorial_user', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('tutorial_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->index(['user_id', 'tutorial_id']);
+            $table->index(['tutorial_id', 'user_id']);
         });
     }
 

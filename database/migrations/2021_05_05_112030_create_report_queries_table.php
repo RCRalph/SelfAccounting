@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('account_id')->nullable()->constrained()->nullOnDelete();
 
-            $table->index(['id', 'report_id']);
+            $table->index(['id', 'report_id', 'currency_id', 'category_id', 'account_id']);
         });
     }
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name', 64)->unique();
             $table->string('type', 32);
 
-            $table->index('id');
+            $table->index(['id']);
         });
     }
 

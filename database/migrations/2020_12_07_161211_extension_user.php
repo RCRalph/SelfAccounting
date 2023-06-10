@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('enabled')->default(true);
             $table->timestamps();
 
+            $table->primary(['extension_id', 'user_id']);
             $table->index(['extension_id', 'user_id']);
         });
     }

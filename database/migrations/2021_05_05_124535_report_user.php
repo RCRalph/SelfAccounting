@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('report_user', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('report_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-            $table->index(['user_id', 'report_id']);
+            $table->primary(['report_id', 'user_id']);
+            $table->index(['report_id', 'user_id']);
         });
     }
 
