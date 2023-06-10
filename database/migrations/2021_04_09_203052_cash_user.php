@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('cash_user', function (Blueprint $table) {
-            $table->foreignId('cash_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('cash_id')->constrained('cash')->cascadeOnDelete(); // Constrain has to be there, because it defaults to 'cashes'
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->bigInteger('amount');
             $table->timestamps();
