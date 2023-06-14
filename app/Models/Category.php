@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class Category extends Model
 {
@@ -73,5 +74,29 @@ class Category extends Model
     public function reportAdditionalEntries()
     {
         return $this->hasMany(ReportAdditionalEntry::class);
+    }
+
+    public function balance()
+    {
+        if (!array_key_exists("count_to_summary", $this->attributes)) {
+            abort(500, "Missing category count to summary");
+        } else if (!$this->count_to_summary) return null;
+
+        foreach (["start_date", "end_date"] as $attribute) {
+            if (!array_key_exists($attribute, $this->attributes)) {
+                abort(500, "Missing category $attribute");
+            }
+        }
+
+        $expenses = $this->expenses();
+        if (!is_null($this->start_date)) {
+            $expenses = $expenses->whereDate("date", ">=", $this->start_date);
+        }
+
+        if (!is_null($this->end_date)) {
+            $expenses = $expenses->whereDate("date", "<=", $this->end_date);
+        }
+
+        return round($expenses->sum(DB::raw("round(amount * price, 2)")), 2);
     }
 }

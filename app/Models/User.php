@@ -125,6 +125,61 @@ class User extends Authenticatable
         return $this->belongsToMany(Tutorial::class, 'tutorial_user', 'user_id', 'tutorial_id');
     }
 
+    public function balance($accounts, $categories, $endDate = null)
+    {
+        $result = [];
+
+        foreach ($accounts as $account) {
+            $balance = $account->balance($endDate);
+
+            if (!is_null($balance)) {
+                // Check for missing attributes
+                foreach (["icon", "id", "name"] as $attribute) {
+                    if (!array_key_exists($attribute, $account->attributes)) {
+                        dd($account, $attribute);
+                        abort(500, "Missing account $attribute");
+                    }
+                }
+
+                array_push($result, [
+                    "icon" => $account->icon,
+                    "account_id" => $account->id,
+                    "name" => $account->name,
+                    "balance" => $balance
+                ]);
+            }
+        }
+
+        foreach ($categories as $category) {
+            $balance = $category->balance();
+
+            if (!is_null($balance)) {
+                // Check for missing attributes
+                foreach (["icon", "id", "name"] as $attribute) {
+                    if (!array_key_exists($attribute, $category->attributes)) {
+                        abort(500, "Missing category $attribute");
+                    }
+                }
+
+                array_push($result, [
+                    "icon" => $category->icon,
+                    "category_id" => $category->id,
+                    "name" => $category->name,
+                    "balance" => $balance
+                ]);
+            }
+        }
+
+        // Sort by balance DESC
+        usort($result, function ($a, $b) {
+            if ($b["balance"] == $a["balance"]) return 0;
+
+            return $b["balance"] < $a["balance"] ? -1 : 1;
+        });
+
+        return $result;
+    }
+
     protected function profilePictureLink(): Attribute
     {
         return Attribute::make(

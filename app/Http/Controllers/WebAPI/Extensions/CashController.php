@@ -63,39 +63,16 @@ class CashController extends Controller
             ->get();
 
         foreach ($accounts as $account) {
-            $accountValue = auth()->user()->income()
-                ->select(DB::raw("round(amount * price, 2) AS value"))
-                ->where("account_id", $account->id)
-                ->where("currency_id", $currency->id)
-                ->union(
-                    auth()->user()->expenses()
-                        ->where("account_id", $account->id)
-                        ->where("currency_id", $currency->id)
-                        ->select(DB::raw("round(-1 * amount * price, 2) AS value"))
-                )
-                ->union(
-                    auth()->user()->transfers()
-                        ->select(DB::raw("target_value AS value"))
-                        ->where("target_account_id", $account->id)
-                )
-                ->union(
-                    auth()->user()->transfers()
-                        ->select(DB::raw("-1 * source_value AS value"))
-                        ->where("source_account_id", $account->id)
-                )
-                ->get()
-                ->sum("value");
-
-            $account->balance = round($account->start_balance + $accountValue, 2);
+            $account->value = $account->balance();
         }
 
         $accounts = $accounts
-            ->prepend(["id" => null, "icon" => null, "name" => "N/A", "balance" => 0])
+            ->prepend(["id" => null, "icon" => null, "name" => "N/A", "value" => 0])
             ->map(fn ($item) => [
                 "id" => $item["id"],
                 "icon" => $item["icon"],
                 "name" => $item["name"],
-                "balance" => $item["balance"]
+                "balance" => $item["value"]
             ]);
 
         return response()->json(compact("cash", "cashAccount", "ownedCash", "accounts"));
