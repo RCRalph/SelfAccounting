@@ -198,8 +198,13 @@ class ChartsController extends Controller
             ->where(function ($query) use ($accountsToShow) {
                 $query->whereIn("source_account_id", $accountsToShow)
                     ->orWhereIn("target_account_id", $accountsToShow);
-            })
-            ->get();
+            });
+
+        if ($limits["start"]) {
+            $income = $income->where("date", ">", $limits["start"]);
+            $expenses = $expenses->where("date", ">", $limits["start"]);
+            $transfers = $transfers->where("date", ">", $limits["start"]);
+        }
 
         if ($limits["end"]) {
             $income = $income->where("date", "<=", $limits["end"]);
@@ -209,20 +214,18 @@ class ChartsController extends Controller
 
         $income = $income->get();
         $expenses = $expenses->get();
+        $transfers = $transfers->get();
 
         if ($limits["start"]) {
-            $balanceBefore = $this->getBalance(
-                $income->where("date", "<=", $limits["start"]),
-                $expenses->where("date", "<=", $limits["start"]),
-                $transfers->where("date", "<=", $limits["start"]),
-                $accounts, [], $accountsToShow, []
-            );
-        }
-        else {
-            $balanceBefore = $this->getBalance(
-                collect([]), collect([]), collect([]),
-                $accounts, [], $accountsToShow, []
-            );
+            $balanceBefore = auth()->user()->balance($accounts, [], $limits["start"]);
+        } else {
+            $balanceBefore = [];
+            foreach ($accounts as $account) {
+                array_push($balanceBefore, [
+                    "account_id" => $account->id,
+                    "balance" => $account->start_balance * 1
+                ]);
+            }
         }
 
         $firstEntries = [];
@@ -230,12 +233,6 @@ class ChartsController extends Controller
             if (isset($balance["account_id"])) {
                 $firstEntries[$balance["account_id"]] = $balance["balance"];
             }
-        }
-
-        if ($limits["start"]) {
-            $income = $income->where("date", ">", $limits["start"]);
-            $expenses = $expenses->where("date", ">", $limits["start"]);
-            $transfers = $transfers->where("date", ">", $limits["start"]);
         }
 
         $income = $income
@@ -264,8 +261,7 @@ class ChartsController extends Controller
                         $account->start_date,
                         $incomeByAccount->get($account->start_date) + $firstEntries[$account->id]
                     );
-                }
-                else {
+                } else {
                     $startDate = $account->start_date;
                     if ($limits["start"] && strtotime($limits["start"]) > strtotime($startDate)) {
                         $startDate = $limits["start"];
@@ -305,8 +301,7 @@ class ChartsController extends Controller
                         $date,
                         $differenceAccount->get($date) - $difference
                     );
-                }
-                else {
+                } else {
                     $differenceAccount->put(
                         $date,
                         -$difference
@@ -341,8 +336,7 @@ class ChartsController extends Controller
                         $date,
                         $differenceAccount->get($date) + $difference
                     );
-                }
-                else {
+                } else {
                     $differenceAccount->put(
                         $date,
                         $difference
@@ -376,8 +370,7 @@ class ChartsController extends Controller
                         $date,
                         $differenceAccount->get($date) - $difference
                     );
-                }
-                else {
+                } else {
                     $differenceAccount->put(
                         $date,
                         -$difference
@@ -408,7 +401,7 @@ class ChartsController extends Controller
             $balanceByAccounts->put($accountID, $retArr);
         }
 
-		$data = ["datasets" => []];
+        $data = ["datasets" => []];
 
         $lastDate = null;
         foreach ($balanceByAccounts as $accountData) {
@@ -426,31 +419,33 @@ class ChartsController extends Controller
         $colors = $this->getColors($count);
 
         foreach ($balanceByAccounts as $accountID => $balance) {
-			$account = $accounts->firstWhere("id", $accountID);
+            $account = $accounts->firstWhere("id", $accountID);
 
             $count--;
             $retArr = [
                 "label" => $account->name,
                 "steppedLine" => true,
-				"data" => [],
-				"fill" => false,
-				"borderWidth" => 5,
-				"borderColor" => $colors[$count]
+                "data" => [],
+                "fill" => false,
+                "borderWidth" => 5,
+                "borderColor" => $colors[$count]
             ];
 
             foreach ($balance as $date => $amount) {
                 array_push($retArr["data"], [
                     "t" => $date,
                     "y" => round($amount, 2)
-				]);
+                ]);
 
-				if (strtotime($date) > strtotime($lastDate)) {
-					$lastDate = $date;
-				}
+                if (strtotime($date) > strtotime($lastDate)) {
+                    $lastDate = $date;
+                }
             }
 
             array_push($data["datasets"], $retArr);
-		}
+        }
+
+        usort($data["datasets"], fn ($a, $b) => strcmp($a["label"], $b["label"]));
 
         $datesAndDifferences = [];
         foreach ($differenceByAccounts as $differencesByDate) {
@@ -472,8 +467,7 @@ class ChartsController extends Controller
 
                 if ($value["t"] == array_key_last($sumData)) {
                     $sumData[$value["t"]]["y"] += $value["y"];
-                }
-                else {
+                } else {
                     $lastElement = $sumData[array_key_last($sumData)];
                     $sumData[array_key_last($sumData)]["y"] = round($lastElement["y"], 2);
                     $sumData[$value["t"]] = [
@@ -496,7 +490,7 @@ class ChartsController extends Controller
             ]);
         }
 
-		// Options for chart
+        // Options for chart
         $options = [
             "responsive" => true,
             "maintainAspectRatio" => false,
@@ -511,32 +505,32 @@ class ChartsController extends Controller
                         "type" => "time",
                         "time" => [
                             "displayFormats" => [
-								"day" => "DD MMM",
-								"year" => "YYYY-MM-DD"
+                                "day" => "DD MMM",
+                                "year" => "YYYY-MM-DD"
                             ],
                             "minUnit" => "day"
-						],
-						"ticks" => [
-							"fontColor" => "#3490dc"
-						]
+                        ],
+                        "ticks" => [
+                            "fontColor" => "#3490dc"
+                        ]
                     ]
-				],
-				"yAxes" => [
-					[
-						"ticks" => [
-							"fontColor" => "#3490dc",
-							"beginAtZero" => true
-						]
-					]
-				]
-			],
-			"legend" => [
-				"display" => true,
-				"labels" => [
-					"fontColor" => "#3490dc"
-				]
-			]
-		];
+                ],
+                "yAxes" => [
+                    [
+                        "ticks" => [
+                            "fontColor" => "#3490dc",
+                            "beginAtZero" => true
+                        ]
+                    ]
+                ]
+            ],
+            "legend" => [
+                "display" => true,
+                "labels" => [
+                    "fontColor" => "#3490dc"
+                ]
+            ]
+        ];
 
         return compact("data", "options");
     }

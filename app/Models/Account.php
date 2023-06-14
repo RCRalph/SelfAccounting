@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\DB;
 
 class Account extends Model
 {
@@ -63,14 +65,14 @@ class Account extends Model
         return $this->hasMany(Expense::class);
     }
 
-    public function sourceOfTransfers()
+    public function transfersOut()
     {
-        return $this->hasMany(Transfer::class);
+        return $this->hasMany(Transfer::class, "source_account_id");
     }
 
-    public function targetOfTransfers()
+    public function transfersIn()
     {
-        return $this->hasMany(Transfer::class);
+        return $this->hasMany(Transfer::class, "target_account_id");
     }
 
     public function cashUser()
@@ -86,5 +88,37 @@ class Account extends Model
     public function reportAdditionalEntries()
     {
         return $this->hasMany(ReportAdditionalEntry::class);
+    }
+
+    public function balance($endDate = null)
+    {
+        if (!isset($this->start_balance)) {
+            abort(500, "Missing account start balance");
+        }
+
+        $income = $this->income();
+        $expenses = $this->expenses();
+        $transfersIn = $this->transfersIn();
+        $transfersOut = $this->transfersOut();
+
+        if ($endDate != null) {
+            if (!isset($this->start_date)) {
+                abort(500, "Missing account start date");
+            } else if (strtotime($this->start_date) > strtotime($endDate)) return null;
+
+            $income = $income->whereDate("date", "<=", $endDate);
+            $expenses = $expenses->whereDate("date", "<=", $endDate);
+            $transfersIn = $transfersIn->whereDate("date", "<=", $endDate);
+            $transfersOut = $transfersOut->whereDate("date", "<=", $endDate);
+        }
+
+        return round(
+            $this->start_balance
+            + $income->sum(DB::raw("round(amount * price, 2)"))
+            - $expenses->sum(DB::raw("round(amount * price, 2)"))
+            + $transfersIn->sum("target_value")
+            - $transfersOut->sum("source_value"),
+            2
+        );
     }
 }

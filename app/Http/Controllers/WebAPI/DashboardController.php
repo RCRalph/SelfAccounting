@@ -20,39 +20,39 @@ class DashboardController extends Controller
         $this->middleware("auth");
     }
 
-    private function getLast30DaysBalance($income, $expenses, $transfers, $accountIDs, $accountsToShow, $categoriesToShow)
+    private function getLast30DaysBalance($currency, $accounts, $categories)
     {
-        $incomeToSum = $income
-            ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
-            ->whereIn("account_id", $accountsToShow)
-            ->sum("value");
+        $result = [
+            "income" => auth()->user()->income()
+                ->whereIn("account_id", $accounts)
+                ->whereBetween("date", [Carbon::today()->subDays(29), Carbon::today()])
+                ->sum(DB::raw("round(amount * price, 2)")),
 
-        $expensesToSum = $expenses
-            ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
-            ->whereIn("account_id", $accountsToShow)
-            ->sum("value");
+            "expenses" => auth()->user()->expenses()
+                ->whereBetween("date", [Carbon::today()->subDays(29), Carbon::today()])
+                ->whereIn("account_id", $accounts)
+                ->where(function ($query) use ($categories) {
+                    $query->whereNotIn("category_id", $categories)
+                        ->orWhere("category_id", null);
+                })
+                ->sum(DB::raw("round(amount * price, 2)")),
 
-        $expensesCategorySum = $expenses
-            ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
-            ->whereIn("category_id", $categoriesToShow)
-            ->sum("value");
+            "transfersIn" => auth()->user()->transfers()
+                ->whereIn("target_account_id", $accounts)
+                ->whereBetween("date", [Carbon::today()->subDays(29), Carbon::today()])
+                ->sum("target_value"),
 
-        $transfersIn = $transfers
-            ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
-            ->whereIn("target_account_id", $accountIDs)
-            ->sum("target_value");
-
-        $transfersOut = $transfers
-            ->whereBetween("date", [Carbon::today()->subDays(30), Carbon::today()])
-            ->whereIn("source_account_id", $accountIDs)
-            ->sum("source_value");
-
-        return [
-            "income" => $incomeToSum,
-            "expenses" => $expensesToSum - $expensesCategorySum,
-            "transfersIn" => $transfersIn,
-            "transfersOut" => $transfersOut
+            "transfersOut" => auth()->user()->transfers()
+                ->whereIn("source_account_id", $accounts)
+                ->whereBetween("date", [Carbon::today()->subDays(29), Carbon::today()])
+                ->sum("source_value")
         ];
+
+        foreach (array_keys($result) as $key) {
+            $result[$key] *= 1;
+        }
+
+        return $result;
     }
 
     public function getRecentTransactions(Currency $currency, $filteredDates = null, $searchTerm = null)
@@ -121,60 +121,22 @@ class DashboardController extends Controller
 
     public function index(Currency $currency)
     {
-        $categories = auth()->user()->categories()
-            ->select("id")
-            ->where("currency_id", $currency->id)
-            ->orderBy("name");
-
         $accounts = auth()->user()->accounts()
-            ->select("id")
-            ->where("currency_id", $currency->id);
-
-        $categoriesToShow = $categories
+            ->select("id", "name", "icon", "start_date", "start_balance")
+            ->where("currency_id", $currency->id)
             ->where("count_to_summary", true)
-            ->pluck("id")->toArray();
-
-        $accountsToShow = $accounts
-            ->where("count_to_summary", true)
-            ->pluck("id")->toArray();
-
-        $accountIDs = $accounts->pluck("id")->toArray();
-
-        $accounts = $accounts->addSelect("icon", "name", "start_date", "start_balance")->get();
-        $categories = $categories->addSelect("icon", "name", "count_to_summary", "start_date", "end_date")->get();
-
-        $income = auth()->user()->income()
-            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
-            ->where("currency_id", $currency->id)
-            ->get();
-
-        $expenses = auth()->user()->expenses()
-            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
-            ->where("currency_id", $currency->id)
-            ->get();
-
-        $transfers = auth()->user()->transfers()
-            ->select("date", "source_account_id", "source_value", "target_account_id", "target_value")
-            ->where(function ($query) use ($accountIDs) {
-                $query->whereIn("source_account_id", $accountIDs)
-                    ->orWhereIn("target_account_id", $accountIDs);
-            })
-            ->get();
-
-        $currentBalance = $this->getBalance($income, $expenses, $transfers, $accounts, $categories, $accountsToShow, $categoriesToShow);
-        $last30Days = $this->getLast30DaysBalance($income, $expenses, $transfers, $accountIDs, $accountsToShow, $categoriesToShow);
-
-        $categories = auth()->user()->categories()
-            ->select("id", "name", "icon")
-            ->where("currency_id", $currency->id)
             ->orderBy("name")
             ->get();
 
-        $accounts = auth()->user()->accounts()
-            ->select("id", "name", "icon")
+        $categories = auth()->user()->categories()
+            ->select("id", "name", "icon", "count_to_summary", "start_date", "end_date")
             ->where("currency_id", $currency->id)
+            ->where("count_to_summary", true)
             ->orderBy("name")
             ->get();
+
+        $currentBalance = auth()->user()->balance($accounts, $categories);
+        $last30Days = $this->getLast30DaysBalance($currency, $accounts->pluck("id"), $categories->pluck("id"));
 
         $charts = $this->getCharts("/dashboard");
 
