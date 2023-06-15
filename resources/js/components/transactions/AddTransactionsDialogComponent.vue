@@ -370,10 +370,12 @@ export default {
 
                 const cashArray = [];
                 Object.keys(this.cash).forEach(item => {
-                    cashArray.push({
-                        id: item,
-                        amount: this.cash[item]
-                    });
+                    if (this.cash[item]) {
+                        cashArray.push({
+                            id: item,
+                            amount: this.cash[item]
+                        });
+                    }
                 });
 
                 axios
