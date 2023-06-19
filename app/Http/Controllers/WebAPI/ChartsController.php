@@ -235,6 +235,10 @@ class ChartsController extends Controller
             }
         }
 
+        foreach ($accounts->whereNotIn("id", array_column($balanceBefore, "account_id")) as $account) {
+            $firstEntries[$account->id] = $account->start_balance;
+        }
+
         $income = $income
             ->groupBy("account_id")
             ->map(fn ($item) => $item->groupBy("date")

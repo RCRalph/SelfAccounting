@@ -350,20 +350,24 @@ export default {
             if (!_.isEmpty(this.sourceCash)) {
                 data.source.cash = [];
                 Object.keys(this.sourceCash).forEach(item => {
-                    data.source.cash.push({
-                        id: item,
-                        amount: this.sourceCash[item]
-                    });
+                    if (this.sourceCash[item]) {
+                        data.source.cash.push({
+                            id: item,
+                            amount: this.sourceCash[item]
+                        });
+                    }
                 });
             }
 
             if (!_.isEmpty(this.targetCash)) {
                 data.target.cash = [];
                 Object.keys(this.targetCash).forEach(item => {
-                    data.target.cash.push({
-                        id: item,
-                        amount: this.targetCash[item]
-                    });
+                    if (this.targetCash[item]) {
+                        data.target.cash.push({
+                            id: item,
+                            amount: this.targetCash[item]
+                        });
+                    }
                 });
             }
 
