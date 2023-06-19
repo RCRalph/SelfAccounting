@@ -232,6 +232,8 @@ class ChartsController extends Controller
         foreach ($balanceBefore as $balance) {
             if (isset($balance["account_id"])) {
                 $firstEntries[$balance["account_id"]] = $balance["balance"];
+            } else {
+                $firstEntries[$balance["account_id"]] = auth()->user()->accounts->find($balance["account_id"])->start_balance;
             }
         }
 
