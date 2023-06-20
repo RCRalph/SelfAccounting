@@ -40,9 +40,10 @@ class CorrectStartDate implements Rule
 
         $minDate = $income->union($expenses)
             ->orderBy("min_date", "ASC")
-            ->first();
+            ->first()
+            ->min_date;
 
-        return $minDate == null ? true : strtotime($value) <= strtotime($minDate->min_date);
+        return $minDate == null ? true : strtotime($value) <= strtotime($minDate);
     }
 
     /**

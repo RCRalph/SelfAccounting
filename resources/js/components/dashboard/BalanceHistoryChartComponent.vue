@@ -4,6 +4,7 @@
             :options="options"
             :chartData="chartData"
             :style="'height: 400px'"
+            :key="keyVal"
         ></LineChart>
     </div>
 
@@ -17,9 +18,12 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+import main from "&/mixins/main";
+
 import LineChart from "@/charts/LineChart.vue";
 
 export default {
+    mixins: [main],
     components: {
         LineChart
     },
@@ -35,7 +39,8 @@ export default {
         return {
             chartData: {},
             options: {},
-            ready: false
+            ready: false,
+            keyVal: 0
         }
     },
     computed: {
@@ -51,6 +56,12 @@ export default {
             return retObj;
         }
     },
+    watch: {
+        "$vuetify.theme.dark"() {
+            this.options = this.setFontColor(this.options);
+            this.keyVal++;
+        }
+    },
     methods: {
         getChartData() {
             this.ready = false;
@@ -61,7 +72,7 @@ export default {
                     const data = response.data;
 
                     this.chartData = data.data;
-                    this.options = data.options;
+                    this.options = this.setFontColor(data.options);
 
                     this.ready = true;
                 })

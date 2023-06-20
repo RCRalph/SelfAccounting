@@ -5,16 +5,131 @@ namespace App\Http\Controllers\WebAPI;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use Carbon\Carbon;
 
 use App\Models\Currency;
 use App\Models\Chart;
+
+
+class AccountBalanceHistory
+{
+    private $data, $lastDate, $accounts, $colors, $datasetsConfig;
+
+    public function __construct(Collection $accounts, string|null $lastDate)
+    {
+        $this->data = [];
+        $this->lastDate = null;
+        $this->accounts = [];
+        $this->lastDate = $lastDate;
+
+        $this->datasetsConfig = [
+            "steppedLine" => true,
+            "fill" => false,
+            "borderWidth" => 5,
+        ];
+
+        $this->colors = ChartsController::getColors($accounts->count() + 1);
+        foreach ($accounts as $i => $account) {
+            $this->accounts[$account->id] = [
+                "name" => $account->name,
+                "color" => $this->colors[$i]
+            ];
+        }
+    }
+
+    private function addEntry(int $account, string $date, float $value)
+    {
+        if (!array_key_exists($account, $this->data)) {
+            $this->data[$account] = [];
+        }
+
+        array_push($this->data[$account], [
+            "t" => $date,
+            "y" => round($value + ($this->data[$account] ? end($this->data[$account])["y"] : 0), 2)
+        ]);
+
+        if (is_null($this->lastDate) || strtotime($this->lastDate) < strtotime($date)) {
+            $this->lastDate = $date;
+        }
+    }
+
+    public function addStartBalance(string $startDate, array $startBalance)
+    {
+        foreach ($startBalance as $balance) {
+            $this->addEntry($balance["account_id"], $startDate, $balance["balance"]);
+            $this->addEntry(0, $startDate, $balance["balance"]);
+        }
+    }
+
+    public function addEntries(Collection $data)
+    {
+        foreach ($data as $entry) {
+            $this->addEntry($entry->account_id, $entry->date, $entry->value);
+        }
+    }
+
+    public function addSum(Collection $data)
+    {
+        $this->accounts[0] = [
+            "name" => "Sum",
+            "color" => end($this->colors)
+        ];
+
+        foreach ($data as $entry) {
+            $this->addEntry(0, $entry->date, $entry->value);
+        }
+    }
+
+    public function getChartData()
+    {
+        $result = [ "datasets" => [] ];
+
+        foreach ($this->accounts as $id => $data) {
+            if ($this->data[$id] && end($this->data[$id])["t"] != $this->lastDate) {
+                array_push($this->data[$id], [
+                    "t" => $this->lastDate,
+                    "y" => end($this->data[$id])["y"]
+                ]);
+            }
+
+            array_push($result["datasets"], [
+                ...$this->datasetsConfig,
+                "label" => $data["name"],
+                "data" => $this->data[$id],
+                "borderColor" => $data["color"]
+            ]);
+        }
+
+        return $result;
+    }
+}
 
 class ChartsController extends Controller
 {
     public function __construct()
     {
         $this->middleware("auth");
+    }
+
+    static function getColors($numberOfColors)
+    {
+        if (!$numberOfColors) {
+            return [];
+        }
+
+        $circleShift = rand(1, 360);
+        $step = round(360 / $numberOfColors);
+
+        $result = [];
+        for ($i = 0; $i < $numberOfColors; $i++) {
+            $h = ($circleShift + $i * $step) % 360;
+            $s = rand(80, 100);
+            $l = rand(40, 60);
+            array_push($result, "hsl($h, $s%, $l%)");
+        }
+
+        return $result;
     }
 
     private function dataByType($transactionType, $type, Currency $currency, $limits)
@@ -87,7 +202,7 @@ class ChartsController extends Controller
             "legend" => [
                 "display" => true,
                 "labels" => [
-                    "fontColor" => "#3490dc"
+                    "fontColor" => null
                 ]
             ],
             "circumference" => pi(),
@@ -160,7 +275,7 @@ class ChartsController extends Controller
             "legend" => [
                 "display" => true,
                 "labels" => [
-                    "fontColor" => "#3490dc"
+                    "fontColor" => null
                 ]
             ],
             "circumference" => pi(),
@@ -173,370 +288,124 @@ class ChartsController extends Controller
     private function balanceHistory(Currency $currency, $limits)
     {
         $accounts = auth()->user()->accounts()
+            ->select("id", "icon", "name", "start_date", "start_balance")
             ->where("currency_id", $currency->id)
-            ->where("show_on_charts", true);
+            ->where("show_on_charts", true)
+            ->orderBy("name");
 
         if ($limits["end"]) {
             $accounts = $accounts->whereDate("start_date", "<=", $limits["end"]);
         }
 
         $accounts = $accounts->get();
-        $accountsToShow = $accounts->pluck("id")->toArray();
+        $accountIDs = array_column($accounts->toArray(), "id");
 
-        $income = auth()->user()->income()
-            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
-            ->where("currency_id", $currency->id)
-            ->whereIn("account_id", $accountsToShow);
+        /*
+            Gather all data from income, expenses and transfers with given accounts and dates to a table of values,
+            then sum these values with given date and account and order them by firstly account and then date.
+            This list also includes first entries for accounts, which simplifies the process of adding these values
+            later in the process and avoids issues with start date being after the start limit of the chart.
+        */
+        $dataSubquery = auth()->user()->income()
+            ->select("account_id", "date", DB::raw("sum(round(amount * price, 2)) AS value"))
+            ->whereIn("account_id", $accountIDs)
+            ->groupBy("account_id", "date")
+            ->union(
+                auth()->user()->expenses()
+                    ->select("account_id", "date", DB::raw("-sum(round(amount * price, 2)) AS value"))
+                    ->whereIn("account_id", $accountIDs)
+                    ->groupBy("account_id", "date")
+            )->union(
+                auth()->user()->transfers()
+                    ->select(DB::raw("source_account_id AS account_id"), "date", DB::raw("-sum(source_value) AS value"))
+                    ->whereIn("source_account_id", $accountIDs)
+                    ->groupBy("account_id", "date")
+            )->union(
+                auth()->user()->transfers()
+                    ->select(DB::raw("target_account_id AS account_id"), "date", DB::raw("sum(target_value) AS value"))
+                    ->whereIn("target_account_id", $accountIDs)
+                    ->groupBy("account_id", "date")
+            )->union(
+                auth()->user()->accounts()
+                    ->select(DB::raw("id AS account_id"), DB::raw("start_date AS date"), DB::raw("start_balance AS value"))
+                    ->whereIn("id", $accountIDs)
+            );
 
-        $expenses = auth()->user()->expenses()
-            ->select("date", "category_id", "account_id", DB::raw("round(amount * price, 2) AS value"))
-            ->where("currency_id", $currency->id)
-            ->whereIn("account_id", $accountsToShow);
+        $data = DB::query()->fromSub($dataSubquery, "data")
+            ->select("date", "account_id", DB::raw("sum(value) as value"))
+            ->groupBy("date", "account_id")
+            ->orderBy("date")
+            ->orderBy("account_id");
 
-        $transfers = auth()->user()->transfers()
-            ->select("date", "source_account_id", "source_value", "target_account_id", "target_value")
-            ->where(function ($query) use ($accountsToShow) {
-                $query->whereIn("source_account_id", $accountsToShow)
-                    ->orWhereIn("target_account_id", $accountsToShow);
-            });
+        $sumData = DB::query()->fromSub($dataSubquery, "data")
+            ->select("date", DB::raw("sum(value) as value"))
+            ->groupBy("date")
+            ->orderBy("date");
 
         if ($limits["start"]) {
-            $income = $income->where("date", ">", $limits["start"]);
-            $expenses = $expenses->where("date", ">", $limits["start"]);
-            $transfers = $transfers->where("date", ">", $limits["start"]);
+            $data = $data->where("date", ">", $limits["start"]); // We can skip the equality because we get that information later from account balance
+            $sumData = $sumData->where("date", ">", $limits["start"]);
         }
 
         if ($limits["end"]) {
-            $income = $income->where("date", "<=", $limits["end"]);
-            $expenses = $expenses->where("date", "<=", $limits["end"]);
-            $transfers = $transfers->where("date", "<=", $limits["end"]);
+            $data = $data->where("date", "<=", $limits["end"]);
+            $sumData = $sumData->where("date", "<=", $limits["end"]);
         }
 
-        $income = $income->get();
-        $expenses = $expenses->get();
-        $transfers = $transfers->get();
-
+        $accountHistory = new AccountBalanceHistory($accounts, $limits["end"]);
         if ($limits["start"]) {
-            $balanceBefore = auth()->user()->balance($accounts, [], $limits["start"]);
-        } else {
-            $balanceBefore = [];
-            foreach ($accounts as $account) {
-                array_push($balanceBefore, [
-                    "account_id" => $account->id,
-                    "balance" => $account->start_balance * 1
-                ]);
-            }
-        }
-
-        $firstEntries = [];
-        foreach ($balanceBefore as $balance) {
-            if (isset($balance["account_id"])) {
-                $firstEntries[$balance["account_id"]] = $balance["balance"];
-            }
-        }
-
-        foreach ($accounts->whereNotIn("id", array_column($balanceBefore, "account_id")) as $account) {
-            $firstEntries[$account->id] = $account->start_balance;
-        }
-
-        $income = $income
-            ->groupBy("account_id")
-            ->map(fn ($item) => $item->groupBy("date")
-                ->map(fn ($item1) => $item1->count() ?
-                    $item1->pluck("value")->reduce(fn ($carry, $item) => $carry + $item) : 0
-                )
-            );
-
-        $expenses = $expenses
-            ->groupBy("account_id")
-            ->map(fn ($item) => $item
-                ->groupBy("date")
-                ->map(fn ($item1) => $item1->count() ?
-                    $item1->pluck("value")->reduce(fn ($carry, $item) => $carry + $item) : 0
-                )
-            );
-
-        foreach ($accounts as $account) {
-            if ($income->has($account->id)) {
-                $incomeByAccount = $income->get($account->id);
-
-                if ($incomeByAccount->has($account->start_date)) {
-                    $incomeByAccount->put(
-                        $account->start_date,
-                        $incomeByAccount->get($account->start_date) + $firstEntries[$account->id]
-                    );
-                } else {
-                    $startDate = $account->start_date;
-                    if ($limits["start"] && strtotime($limits["start"]) > strtotime($startDate)) {
-                        $startDate = $limits["start"];
-                    }
-
-                    $incomeByAccount->prepend($firstEntries[$account->id] * 1, $startDate);
-                }
-
-                if ($account->count_to_summary && !$incomeByAccount->has($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"))) {
-                    $incomeByAccount->put($limits["end"] ? $limits["end"] : Carbon::today()->format("Y-m-d"), 0);
-                }
-            }
-            else {
-                $startDate = $account->start_date;
-                if ($limits["start"] && strtotime($limits["start"]) > strtotime($startDate)) {
-                    $startDate = $limits["start"];
-                }
-
-                $retArr = [$startDate => $firstEntries[$account->id]];
-                if ($limits["end"] && strtotime($limits["end"]) >= strtotime($startDate)) {
-                    $retArr[$limits["end"]] = 0;
-                } else if (Carbon::today()->gt($startDate)) {
-                    $retArr[Carbon::today()->format("Y-m-d")] = 0;
-                }
-
-                $income->put($account->id, collect($retArr));
-            }
-        }
-
-        $differenceByAccounts = $income;
-        foreach ($expenses as $accountID => $dates) {
-            foreach ($dates as $date => $difference) {
-                $differenceAccount = $differenceByAccounts->get($accountID);
-
-                if ($differenceAccount->has($date)) {
-                    $differenceAccount->put(
-                        $date,
-                        $differenceAccount->get($date) - $difference
-                    );
-                } else {
-                    $differenceAccount->put(
-                        $date,
-                        -$difference
-                    );
-                }
-            }
-
-            $differenceByAccounts->put(
-                $accountID,
-                $differenceByAccounts->get($accountID)
-                    ->sortBy(fn ($val, $key) => strtotime($key))
+            $accountHistory->addStartBalance(
+                $limits["start"],
+                auth()->user()->balance($accounts, [], $limits["start"])
             );
         }
 
-        // Add transfers to differences
-        $transfersIn = $transfers
-            ->whereIn("target_account_id", $accountsToShow)
-            ->groupBy("target_account_id")
-            ->map(fn ($item) => $item
-                ->groupBy("date")
-                ->map(fn ($item1) => $item1->count() ?
-                    $item1->pluck("target_value")->reduce(fn ($carry, $item) => $carry + $item) : 0
-                )
-            );
+        $accountHistory->addEntries($data->get());
+        $accountHistory->addSum($sumData->get());
 
-        foreach ($transfersIn as $accountID => $dates) {
-            foreach ($dates as $date => $difference) {
-                $differenceAccount = $differenceByAccounts->get($accountID);
-
-                if ($differenceAccount->has($date)) {
-                    $differenceAccount->put(
-                        $date,
-                        $differenceAccount->get($date) + $difference
-                    );
-                } else {
-                    $differenceAccount->put(
-                        $date,
-                        $difference
-                    );
-                }
-            }
-
-            $differenceByAccounts->put(
-                $accountID,
-                $differenceByAccounts->get($accountID)
-                    ->sortBy(fn ($val, $key) => strtotime($key))
-            );
-        }
-
-        $transfersOut = $transfers
-            ->whereIn("source_account_id", $accountsToShow)
-            ->groupBy("source_account_id")
-            ->map(fn ($item) => $item
-                ->groupBy("date")
-                ->map(fn ($item1) => $item1->count() ?
-                    $item1->pluck("source_value")->reduce(fn ($carry, $item) => $carry + $item) : 0
-                )
-            );
-
-        foreach ($transfersOut as $accountID => $dates) {
-            foreach ($dates as $date => $difference) {
-                $differenceAccount = $differenceByAccounts->get($accountID);
-
-                if ($differenceAccount->has($date)) {
-                    $differenceAccount->put(
-                        $date,
-                        $differenceAccount->get($date) - $difference
-                    );
-                } else {
-                    $differenceAccount->put(
-                        $date,
-                        -$difference
-                    );
-                }
-            }
-
-            $differenceByAccounts->put(
-                $accountID,
-                $differenceByAccounts->get($accountID)
-                    ->sortBy(fn ($val, $key) => strtotime($key))
-            );
-        }
-
-        $balanceByAccounts = collect();
-        foreach ($differenceByAccounts as $accountID => $differences) {
-            $differences = $differences->sortKeys();
-            $firstKey = $differences->keys()->first();
-            $retArr = collect([
-                $firstKey => $differences->first()
-            ]);
-
-            foreach ($differences as $date => $difference) {
-                if ($date == $firstKey) continue;
-                $retArr->put($date, $retArr->last() + $difference);
-            }
-
-            $balanceByAccounts->put($accountID, $retArr);
-        }
-
-        $data = ["datasets" => []];
-
-        $lastDate = null;
-        foreach ($balanceByAccounts as $accountData) {
-            foreach ($accountData->keys() as $date) {
-                if ($lastDate === null || strtotime($lastDate) > strtotime($date)) {
-                    $lastDate = $date;
-                }
-            }
-        }
-
-        $count = $balanceByAccounts->count() + $accounts
-            ->map(fn ($item) => $item->currency_id)
-            ->unique()->count();
-
-        $colors = $this->getColors($count);
-
-        foreach ($balanceByAccounts as $accountID => $balance) {
-            $account = $accounts->firstWhere("id", $accountID);
-
-            $count--;
-            $retArr = [
-                "label" => $account->name,
-                "steppedLine" => true,
-                "data" => [],
-                "fill" => false,
-                "borderWidth" => 5,
-                "borderColor" => $colors[$count]
-            ];
-
-            foreach ($balance as $date => $amount) {
-                array_push($retArr["data"], [
-                    "t" => $date,
-                    "y" => round($amount, 2)
-                ]);
-
-                if (strtotime($date) > strtotime($lastDate)) {
-                    $lastDate = $date;
-                }
-            }
-
-            array_push($data["datasets"], $retArr);
-        }
-
-        usort($data["datasets"], fn ($a, $b) => strcmp($a["label"], $b["label"]));
-
-        $datesAndDifferences = [];
-        foreach ($differenceByAccounts as $differencesByDate) {
-            foreach ($differencesByDate as $date => $value) {
-                array_push($datesAndDifferences, [
-                    "t" => $date,
-                    "y" => $value
-                ]);
-            }
-        }
-
-        usort($datesAndDifferences, fn ($a, $b) => strtotime($a["t"]) - strtotime($b["t"]));
-
-        if (count($datesAndDifferences)) {
-            // Sum data by dates
-            $sumData = [$datesAndDifferences[0]["t"] => $datesAndDifferences[0]];
-            foreach ($datesAndDifferences as $i => $value) {
-                if ($i == 0) continue;
-
-                if ($value["t"] == array_key_last($sumData)) {
-                    $sumData[$value["t"]]["y"] += $value["y"];
-                } else {
-                    $lastElement = $sumData[array_key_last($sumData)];
-                    $sumData[array_key_last($sumData)]["y"] = round($lastElement["y"], 2);
-                    $sumData[$value["t"]] = [
-                        "t" => $value["t"],
-                        "y" => $lastElement["y"] + $value["y"]
-                    ];
-                }
-            }
-            $sumData[array_key_last($sumData)]["y"] = round($sumData[array_key_last($sumData)]["y"], 2);
-            $sumData = array_values($sumData);
-
-            $count--;
-            array_push($data["datasets"], [
-                "label" => "Sum",
-                "steppedLine" => true,
-                "data" => $sumData,
-                "fill" => false,
-                "borderWidth" => 5,
-                "borderColor" => $colors[$count]
-            ]);
-        }
-
-        // Options for chart
-        $options = [
-            "responsive" => true,
-            "maintainAspectRatio" => false,
-            "elements" => [
-                "line" => [
-                    "tension" => 0
-                ]
-            ],
-            "scales" => [
-                "xAxes" => [
-                    [
-                        "type" => "time",
-                        "time" => [
-                            "displayFormats" => [
-                                "day" => "DD MMM",
-                                "year" => "YYYY-MM-DD"
+        return [
+            "data" => $accountHistory->getChartData($limits["end"]),
+            "options" => [
+                "responsive" => true,
+                "maintainAspectRatio" => false,
+                "elements" => [
+                    "line" => [
+                        "tension" => 0
+                    ]
+                ],
+                "scales" => [
+                    "xAxes" => [
+                        [
+                            "type" => "time",
+                            "time" => [
+                                "displayFormats" => [
+                                    "day" => "DD MMM",
+                                    "year" => "YYYY-MM-DD"
+                                ],
+                                "minUnit" => "day"
                             ],
-                            "minUnit" => "day"
-                        ],
-                        "ticks" => [
-                            "fontColor" => "#3490dc"
+                            "ticks" => [
+                                "fontColor" => null
+                            ]
+                        ]
+                    ],
+                    "yAxes" => [
+                        [
+                            "ticks" => [
+                                "fontColor" => null,
+                                "beginAtZero" => true
+                            ]
                         ]
                     ]
                 ],
-                "yAxes" => [
-                    [
-                        "ticks" => [
-                            "fontColor" => "#3490dc",
-                            "beginAtZero" => true
-                        ]
+                "legend" => [
+                    "display" => true,
+                    "labels" => [
+                        "fontColor" => null
                     ]
-                ]
-            ],
-            "legend" => [
-                "display" => true,
-                "labels" => [
-                    "fontColor" => "#3490dc"
                 ]
             ]
         ];
-
-        return compact("data", "options");
     }
 
     public function index(Chart $chart, Currency $currency) {
