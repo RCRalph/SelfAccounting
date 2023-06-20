@@ -190,6 +190,11 @@ tr {
     overflow-y: auto;
     max-height: calc(100vh - 32px);
 
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
     .v-sheet.v-card:not(.v-sheet--outlined) {
         box-shadow: none;
     }

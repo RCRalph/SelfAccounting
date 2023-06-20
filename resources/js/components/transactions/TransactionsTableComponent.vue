@@ -131,6 +131,7 @@
                         v-if="item.date.span"
                         :rowspan="item.date.span"
                         :class="tableData.isRowHighlighted(index, item.date.span) && 'table-hover-background'"
+                        style="white-space: nowrap;"
                         @mouseover="tableData.setHoveredRows(index, item.date.span)"
                         @mouseleave="tableData.resetHoveredRows()"
                     >{{ item.date.value }}</td>
