@@ -134,9 +134,8 @@ class User extends Authenticatable
 
             if (!is_null($balance)) {
                 // Check for missing attributes
-                foreach (["icon", "id", "name"] as $attribute) {
+                foreach (["icon", "id", "name", "start_date", "start_balance"] as $attribute) {
                     if (!array_key_exists($attribute, $account->attributes)) {
-                        dd($account, $attribute);
                         abort(500, "Missing account $attribute");
                     }
                 }

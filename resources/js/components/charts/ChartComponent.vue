@@ -22,6 +22,7 @@
             v-if="chartInfo.type == 'line'"
             :options="chartData.options"
             :chartData="chartData.data"
+            :key="keyVal"
             class="chart-block"
         ></LineChart>
 
@@ -29,6 +30,7 @@
             v-if="chartInfo.type == 'doughnut'"
             :options="chartData.options"
             :chartData="chartData.data"
+            :key="keyVal"
             class="chart-block"
         ></DoughnutChart>
     </v-card>
@@ -68,6 +70,7 @@ export default {
             lastChange: new Date(),
             chartData: {},
             chartInfo: {},
+            keyVal: 0,
 
             ready: false
         }
@@ -76,7 +79,11 @@ export default {
         start: "updateWithOffset",
         end: "updateWithOffset",
         "$route.params.id": "getData",
-        "currencies.usedCurrency": "getData"
+        "currencies.usedCurrency": "getData",
+        "$vuetify.theme.dark"() {
+            this.chartData.options = this.setFontColor(this.chartData.options);
+            this.keyVal++;
+        }
     },
     methods: {
         getData() {
@@ -93,7 +100,7 @@ export default {
                     const data = response.data;
 
                     this.chartInfo = data.info;
-                    this.chartData.options = data.options;
+                    this.chartData.options = this.setFontColor(data.options);
                     this.chartData.data = data.data;
 
                     this.ready = true;

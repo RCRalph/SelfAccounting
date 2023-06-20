@@ -18,9 +18,12 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+import main from "&/mixins/main";
+
 import DoughnutChart from "@/charts/DoughnutChart.vue";
 
 export default {
+    mixins: [main],
     props: {
         id: Number
     },
@@ -36,7 +39,8 @@ export default {
         return {
             chartData: {},
             options: {},
-            ready: false
+            ready: false,
+            keyVal: 0
         }
     },
     computed: {
@@ -52,6 +56,15 @@ export default {
             return retObj;
         }
     },
+    watch: {
+        id() {
+            this.getChartData();
+        },
+        "$vuetify.theme.dark"() {
+            this.options = this.setFontColor(this.options);
+            this.keyVal++;
+        }
+    },
     methods: {
         getChartData() {
             this.ready = false;
@@ -62,7 +75,7 @@ export default {
                     const data = response.data;
 
                     this.chartData = data.data;
-                    this.options = data.options;
+                    this.options = this.setFontColor(data.options);
 
                     this.ready = true;
                 })
@@ -71,11 +84,6 @@ export default {
     mounted() {
         this.getChartData();
         this.currencies.$subscribe(() => this.getChartData());
-    },
-    watch: {
-        id() {
-            this.getChartData();
-        }
     }
 }
 </script>

@@ -29507,6 +29507,10 @@ tr:hover {
   top: 16px;
   overflow-y: auto;
   max-height: calc(100vh - 32px);
+  -ms-overflow-style: none;
+}
+.overview-block::-webkit-scrollbar {
+  display: none;
 }
 .overview-block .v-sheet.v-card:not(.v-sheet--outlined) {
   box-shadow: none;

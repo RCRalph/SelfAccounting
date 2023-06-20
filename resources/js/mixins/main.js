@@ -79,6 +79,22 @@ export default {
             });
 
             return retVal;
-        }
+        },
+        setFontColor(options) {
+            if (typeof options != "object" || options === null) {
+                return options;
+            }
+
+            if (Array.isArray(options)) {
+                options.forEach((item) => this.setFontColor(item));
+            } else {
+                Object.keys(options).forEach((k) => {
+                    if (k == "fontColor") options[k] = this.$vuetify.theme.dark ? "#fff" : "rgba(0, 0, 0, 0.86)";
+                    else this.setFontColor(options[k]);
+                });
+            }
+
+            return options;
+        },
     }
 }
