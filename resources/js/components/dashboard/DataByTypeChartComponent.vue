@@ -4,6 +4,7 @@
             v-if="chartData.labels.length"
             :options="options"
             :chartData="chartData"
+            :theme="theme"
             :style="'height: 400px'"
         ></DoughnutChart>
     </div>
@@ -18,12 +19,10 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
-import main from "&/mixins/main";
 
 import DoughnutChart from "@/charts/DoughnutChart.vue";
 
 export default {
-    mixins: [main],
     props: {
         id: Number
     },
@@ -39,8 +38,8 @@ export default {
         return {
             chartData: {},
             options: {},
+            themeKeys: [],
             ready: false,
-            keyVal: 0
         }
     },
     computed: {
@@ -59,10 +58,6 @@ export default {
     watch: {
         id() {
             this.getChartData();
-        },
-        "$vuetify.theme.dark"() {
-            this.options = this.setFontColor(this.options);
-            this.keyVal++;
         }
     },
     methods: {
@@ -75,7 +70,8 @@ export default {
                     const data = response.data;
 
                     this.chartData = data.data;
-                    this.options = this.setFontColor(data.options);
+                    this.options = data.options;
+                    this.theme = data.theme;
 
                     this.ready = true;
                 })

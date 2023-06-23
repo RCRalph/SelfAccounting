@@ -80,21 +80,24 @@ export default {
 
             return retVal;
         },
-        setFontColor(options) {
-            if (typeof options != "object" || options === null) {
-                return options;
+        changeJsonValue(object, key, value) {
+            if (typeof object !== "object" || object === null) {
+                return object;
             }
 
-            if (Array.isArray(options)) {
-                options.forEach((item) => this.setFontColor(item));
+            if (Array.isArray(object)) {
+                object.forEach((item) => this.changeJsonValue(item, key, value));
             } else {
-                Object.keys(options).forEach((k) => {
-                    if (k == "fontColor") options[k] = this.$vuetify.theme.dark ? "#fff" : "rgba(0, 0, 0, 0.86)";
-                    else this.setFontColor(options[k]);
+                Object.keys(object).forEach(k => {
+                    if (k === key) {
+                        object[k] = value;
+                    } else {
+                        this.changeJsonValue(object[k], key, value);
+                    }
                 });
             }
 
-            return options;
-        },
+            return object;
+        }
     }
 }
