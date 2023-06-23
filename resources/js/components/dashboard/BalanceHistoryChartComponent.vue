@@ -37,7 +37,7 @@ export default {
         return {
             chartData: {},
             options: {},
-            theme: [],
+            theme: {},
             ready: false,
         }
     },
