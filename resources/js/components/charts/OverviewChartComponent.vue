@@ -6,6 +6,7 @@
             v-if="chartData.labels.length"
             :options="options"
             :chartData="chartData"
+            :theme="theme"
             class="chart-size"
         ></DoughnutChart>
 
@@ -22,6 +23,7 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
+
 import DoughnutChart from "@/charts/DoughnutChart.vue";
 
 export default {
@@ -51,16 +53,13 @@ export default {
         return {
             chartData: {},
             options: {},
-            ready: false
+            themeKeys: [],
+            ready: false,
         }
     },
     watch: {
-        start() {
-            this.getData();
-        },
-        end() {
-            this.getData();
-        }
+        start: "getData",
+        end: "getData",
     },
     methods: {
         getData() {
@@ -78,6 +77,7 @@ export default {
 
                     this.chartData = data.data;
                     this.options = data.options;
+                    this.theme = data.theme;
 
                     this.ready = true;
                 })

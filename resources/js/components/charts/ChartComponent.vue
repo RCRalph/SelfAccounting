@@ -22,7 +22,7 @@
             v-if="chartInfo.type == 'line'"
             :options="chartData.options"
             :chartData="chartData.data"
-            :key="keyVal"
+            :theme="chartData.theme"
             class="chart-block"
         ></LineChart>
 
@@ -30,7 +30,7 @@
             v-if="chartInfo.type == 'doughnut'"
             :options="chartData.options"
             :chartData="chartData.data"
-            :key="keyVal"
+            :theme="chartData.theme"
             class="chart-block"
         ></DoughnutChart>
     </v-card>
@@ -47,13 +47,11 @@
 
 <script>
 import { useCurrenciesStore } from "&/stores/currencies";
-import main from "&/mixins/main";
 
 import LineChart from "@/charts/LineChart.vue";
 import DoughnutChart from "@/charts/DoughnutChart.vue";
 
 export default {
-    mixins: [main],
     setup() {
         const currencies = useCurrenciesStore();
 
@@ -70,8 +68,6 @@ export default {
             lastChange: new Date(),
             chartData: {},
             chartInfo: {},
-            keyVal: 0,
-
             ready: false
         }
     },
@@ -79,11 +75,7 @@ export default {
         start: "updateWithOffset",
         end: "updateWithOffset",
         "$route.params.id": "getData",
-        "currencies.usedCurrency": "getData",
-        "$vuetify.theme.dark"() {
-            this.chartData.options = this.setFontColor(this.chartData.options);
-            this.keyVal++;
-        }
+        "currencies.usedCurrency": "getData"
     },
     methods: {
         getData() {
@@ -100,8 +92,9 @@ export default {
                     const data = response.data;
 
                     this.chartInfo = data.info;
-                    this.chartData.options = this.setFontColor(data.options);
+                    this.chartData.theme = data.theme;
                     this.chartData.data = data.data;
+                    this.chartData.options = data.options;
 
                     this.ready = true;
                 })

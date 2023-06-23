@@ -196,6 +196,10 @@ class ChartsController extends Controller
             );
         }
 
+        $theme = [
+            "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"]
+        ];
+
         $options = [
             "responsive" => true,
             "maintainAspectRatio" => false,
@@ -209,7 +213,7 @@ class ChartsController extends Controller
             "rotation" => -pi()
         ];
 
-        return compact("data", "options");
+        return compact("data", "options", "theme");
     }
 
     private function transfersByAccount($type, Currency $currency, $limits)
@@ -246,7 +250,7 @@ class ChartsController extends Controller
             "datasets" => [
                 [
                     "data" => [],
-                    "backgroundColor" => []
+                    "backgroundColor" => [],
                 ]
             ],
             "labels" => []
@@ -269,6 +273,10 @@ class ChartsController extends Controller
             );
         }
 
+        $theme = [
+            "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"]
+        ];
+
         $options = [
             "responsive" => true,
             "maintainAspectRatio" => false,
@@ -282,7 +290,7 @@ class ChartsController extends Controller
             "rotation" => -pi()
         ];
 
-        return compact("data", "options");
+        return compact("data", "options", "theme");
     }
 
     private function balanceHistory(Currency $currency, $limits)
@@ -365,6 +373,10 @@ class ChartsController extends Controller
 
         return [
             "data" => $accountHistory->getChartData($limits["end"]),
+            "theme" => [
+                "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"],
+                "color" => ["rgba(0, 0, 0, 0.1)", "rgba(255, 255, 255, 0.1)"]
+            ],
             "options" => [
                 "responsive" => true,
                 "maintainAspectRatio" => false,
@@ -386,6 +398,9 @@ class ChartsController extends Controller
                             ],
                             "ticks" => [
                                 "fontColor" => null
+                            ],
+                            "gridLines" => [
+                                "color" => null,
                             ]
                         ]
                     ],
@@ -394,6 +409,9 @@ class ChartsController extends Controller
                             "ticks" => [
                                 "fontColor" => null,
                                 "beginAtZero" => true
+                            ],
+                            "gridLines" => [
+                                "color" => "#fff"
                             ]
                         ]
                     ]
