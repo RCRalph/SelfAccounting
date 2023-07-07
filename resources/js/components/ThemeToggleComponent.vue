@@ -20,6 +20,7 @@ export default {
         toggleTheme() {
             this.loading = true
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+            document.documentElement.style.colorScheme = this.$vuetify.theme.dark ? "dark" : "light";
 
             axios.post("/web-api/profile/darkmode")
                 .then(response => {

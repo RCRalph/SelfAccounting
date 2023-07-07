@@ -270,6 +270,7 @@ export default {
 
                 this.user = data.user;
                 this.$vuetify.theme.dark = data.user.darkmode;
+                document.documentElement.style.colorScheme = this.$vuetify.theme.dark ? "dark" : "light";
 
                 this.premiumExpired = data.premiumExpired;
                 this.charts = data.charts;
