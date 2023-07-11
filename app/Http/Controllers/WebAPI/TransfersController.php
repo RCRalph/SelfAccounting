@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Currency;
 use App\Models\Transfer;
+use App\Models\Chart;
 
 use App\Rules\EqualArrayLength;
 use App\Rules\Transfer\CorrectTransferDate;
@@ -69,7 +70,7 @@ class TransfersController extends Controller
             ->orderBy("name")
             ->get();
 
-        $charts = $this->getCharts("/transfers");
+        $charts = Chart::route("/transfers");
 
         return response()->json(compact("accounts", "charts"));
     }

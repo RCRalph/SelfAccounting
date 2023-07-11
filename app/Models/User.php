@@ -53,7 +53,7 @@ class User extends Authenticatable
         'premium_expiration' => 'date:Y-m-d'
     ];
 
-    protected $appends = ["profile_picture_link", "account_type", "extension_codes", "last_used_currencies"];
+    protected $appends = ["profile_picture_link", "account_type", "extension_codes", "last_used_currencies", "transaction_titles"];
 
     public function currencies()
     {
@@ -262,6 +262,19 @@ class User extends Authenticatable
                 }
 
                 return $currencies;
+            }
+        );
+    }
+
+    protected function transactionTitles(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return $this->income()->select("title")
+                    ->union($this->expenses()->select("title")) // Unions guarantee unique rows
+                    ->orderBy("title")
+                    ->get()
+                    ->pluck("title");
             }
         );
     }

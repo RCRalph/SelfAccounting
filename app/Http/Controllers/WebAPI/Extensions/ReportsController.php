@@ -272,7 +272,7 @@ class ReportsController extends Controller
 
     public function create()
     {
-        $titles = $this->getTitles();
+        $titles = auth()->user()->transactionTitles;
 
         $categories = auth()->user()->categories()
             ->select("id", "name", "icon", "currency_id")
@@ -435,7 +435,7 @@ class ReportsController extends Controller
                 return $item;
             });
 
-        $titles = $this->getTitles();
+        $titles = auth()->user()->transactionTitles;
 
         $categories = auth()->user()->categories()
             ->select("id", "name", "icon", "currency_id")

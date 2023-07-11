@@ -58,8 +58,8 @@ class AppController extends Controller
 
                 return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
-                    "charts" => $this->getCharts("/"),
-                    "tutorials" => Tutorial::select("route")->pluck("route"),
+                    "charts" => Chart::route("/"),
+                    "tutorials" => Tutorial::pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
                     "extensions" => Extension::select("code", "title", "icon", "directory")->orderBy("title")->get(),
                     "ownedExtensions" => Extension::whereIn("code", auth()->user()->extensionCodes)

@@ -137,7 +137,7 @@ class DashboardController extends Controller
         $currentBalance = auth()->user()->balance($accounts, $categories);
         $last30Days = $this->getLast30DaysBalance($currency, $accounts->pluck("id"), $categories->pluck("id"));
 
-        $charts = $this->getCharts("/dashboard");
+        $charts = Chart::route("/dashboard");
 
         return response()->json(compact("categories", "accounts", "currentBalance", "last30Days", "charts"));
     }

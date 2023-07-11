@@ -64,41 +64,18 @@ class Controller extends BaseController
         return $items;
     }
 
-    public function getTitles()
-    {
-        return Cache::remember(
-            "titles_" . auth()->user()->id,
-            now()->addMinutes(15),
-            function () {
-                $incomeTitles = auth()->user()->income()->pluck("title");
-                $expenseTitles = auth()->user()->expenses()->pluck("title");
-
-                return $incomeTitles
-                    ->merge($expenseTitles)
-                    ->unique()
-                    ->values();
-            }
-        );
-    }
-
     public function getTypeRelation($type = null)
     {
         $type = $type ? $type : request()->type;
 
-        if (!in_array($type, ["income", "expenses"])) {
-            abort(500, "Unspecified type");
+        switch ($type) {
+            case "income":
+                return auth()->user()->income();
+            case "expenses":
+                return auth()->user()->expenses();
+            default:
+                abort(500, "Unspecified type");
         }
-
-        return $type == "income" ?
-            auth()->user()->income() :
-            auth()->user()->expenses();
-    }
-
-    public function getCharts($route) {
-        return Chart::select("charts.id", "charts.name", "charts.type")
-            ->join("chart_routes", "chart_routes.chart_id", "=", "charts.id")
-            ->where("chart_routes.route", $route)
-            ->get();
     }
 
     public function removeFile($disk, $directory, $name)

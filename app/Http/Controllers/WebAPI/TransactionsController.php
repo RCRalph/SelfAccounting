@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Currency;
+use App\Models\Chart;
 
 use App\Rules\Transactions\CorrectTransactionDate;
 use App\Rules\Transactions\ValidCategoryOrAccount;
@@ -55,7 +56,7 @@ class TransactionsController extends Controller
 
         $accountsAndCategories = $this->getCategoriesAndAccounts($data->currency);
 
-        $titles = $this->getTitles();
+        $titles = auth()->user()->transactionTitles;
 
         $data = collect($data);
         $data->forget("currency");
@@ -110,7 +111,7 @@ class TransactionsController extends Controller
             ->orderBy("name")
             ->get();
 
-        $charts = $this->getCharts("/" . request()->type);
+        $charts = Chart::route("/" . request()->type);
 
         return response()->json(compact("categories", "accounts", "charts"));
     }
@@ -172,7 +173,7 @@ class TransactionsController extends Controller
     public function data(Currency $currency)
     {
         $accountsAndCategories = $this->getCategoriesAndAccounts($currency);
-        $titles = $this->getTitles();
+        $titles = auth()->user()->transactionTitles;
 
         return response()->json([ ...compact("titles"), ...$accountsAndCategories ]);
     }
