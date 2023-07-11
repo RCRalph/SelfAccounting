@@ -131,7 +131,6 @@ class DashboardController extends Controller
         $categories = auth()->user()->categories()
             ->select("id", "name", "icon", "count_to_summary", "start_date", "end_date")
             ->where("currency_id", $currency->id)
-            ->where("count_to_summary", true)
             ->orderBy("name")
             ->get();
 
