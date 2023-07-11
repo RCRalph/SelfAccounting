@@ -4,7 +4,7 @@
             :expand-on-hover="$vuetify.breakpoint.mdAndUp && !menuClicked" fixed
         >
             <v-list-item class="pa-2">
-                <v-list-item-avatar tile>
+                <v-list-item-avatar tile class="mr-2">
                     <img src="/storage/Logo.svg">
                 </v-list-item-avatar>
 

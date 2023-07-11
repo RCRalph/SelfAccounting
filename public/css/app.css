@@ -29339,6 +29339,10 @@ html.overflow-y-hidden {
 }
 
 /*# sourceMappingURL=vuetify.css.map*/
+:root {
+  color-scheme: dark;
+}
+
 .v-application {
   font-family: "Nunito", sans-serif !important;
 }
