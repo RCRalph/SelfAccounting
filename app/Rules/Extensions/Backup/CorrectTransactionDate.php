@@ -30,12 +30,8 @@ class CorrectTransactionDate implements Rule
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
         $id = request("$prefix.account_id");
 
-        if ($id == 0) {
-            return true;
-        }
-        else if (count($this->accounts) < $id) {
-            return false;
-        }
+        if ($id == 0) return true;
+        else if (count($this->accounts) < $id) return false;
 
         return strtotime($this->accounts[$id - 1]["start_date"]) <= strtotime($value);
     }

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class BelongsToReport implements Rule
 {
-    private $report;
+    private $report, $data;
 
     /**
      * Create a new rule instance.
@@ -27,20 +27,17 @@ class BelongsToReport implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (!$value) {
-            return true;
-        }
+        if (!$value) return true;
 
-        $data = null;
         if (str_contains($attribute, "queries")) {
-            $data = $this->report->queries();
+            $this->data = $this->report->queries();
         } else if (str_contains($attribute, "additionalEntries")) {
-            $data = $this->report->additionalEntries();
+            $this->data = $this->report->additionalEntries();
         } else {
             abort(500, "Invalid data type for attribute check");
         }
 
-        return $data->where("id", $value)->exists();
+        return $this->data->where("id", $value)->exists();
     }
 
     /**

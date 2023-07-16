@@ -27,11 +27,10 @@ class CorrectCashAccount implements Rule
      */
     public function passes($attribute, $value)
     {
-        return $value == null ||
-            auth()->user()->accounts()
-                ->where("currency_id", $this->currency->id)
-                ->where("id", $value)
-                ->exists();
+        return $value == null || auth()->user()->accounts()
+            ->where("currency_id", $this->currency->id)
+            ->where("id", $value)
+            ->exists();
     }
 
     /**

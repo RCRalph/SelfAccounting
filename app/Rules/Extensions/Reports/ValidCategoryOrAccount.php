@@ -6,6 +6,8 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCategoryOrAccount implements Rule
 {
+    private $query;
+
     /**
      * Create a new rule instance.
      *
@@ -25,26 +27,24 @@ class ValidCategoryOrAccount implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value == null) {
-            return true;
-        }
+        if ($value == null) return true;
 
-        $query = null;
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
 
         if (str_contains($attribute, "account")) {
-            $query = auth()->user()->accounts();
+            $this->query = auth()->user()->accounts();
         } else if (str_contains($attribute, "category")) {
-            $query = auth()->user()->categories();
+            $this->query = auth()->user()->categories();
         } else {
             abort(500, "Invalid data type");
         }
 
-        $query = $query->where("currency_id", request("$prefix.currency_id"))
+        $this->query = $this->query
+            ->where("currency_id", request("$prefix.currency_id"))
             ->where("id", $value);
 
         if (request("$prefix.query_data")) {
-            $query = $query->where("used_in_" . request("$prefix.query_data"), true);
+            $this->query = $this->query->where("used_in_" . request("$prefix.query_data"), true);
         }
 
         return $query->exists();

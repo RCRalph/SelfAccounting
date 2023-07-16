@@ -26,9 +26,7 @@ class CorrectTransferDate implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (!request()->has(["source.account_id", "target.account_id"])) {
-            return false;
-        }
+        if (!request()->has(["source.account_id", "target.account_id"])) return false;
 
         $maxDate = auth()->user()->accounts()
             ->select(DB::raw("MAX(start_date) AS max_date"))

@@ -30,21 +30,16 @@ class ValidCategoryOrAccount implements Rule
     {
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
 
-        if ($value == 0) {
-            return true;
-        }
-        else if (count($this->data) < $value) {
-            return false;
-        }
+        if ($value == 0) return true;
+        else if (count($this->data) < $value) return false;
+
 
         if ($this->checkTransactions) {
             $field = is_string($this->checkTransactions) ?
                 request("$prefix.$this->checkTransactions") :
                 substr($attribute, 0, strpos($attribute, "."));
 
-            if (!$this->data[$value - 1]["used_in_" . $field]) {
-                return false;
-            }
+            if (!$this->data[$value - 1]["used_in_" . $field]) return false;
         }
 
         return $this->data[$value - 1]["currency"] == request("$prefix.currency");
