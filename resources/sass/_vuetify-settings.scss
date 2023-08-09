@@ -1,0 +1,5 @@
+@forward 'vuetify/settings' with (
+    $body-font-family: ("Nunito", sans-serif),
+    $overlay-opacity: 0,
+    $tab-min-width: 120px,
+);

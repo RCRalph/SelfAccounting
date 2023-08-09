@@ -18,6 +18,15 @@ class ExtensionsController extends Controller
 
     public function index()
     {
+        $extensions = Extension::select("code", "title", "icon", "directory")
+            ->orderBy("title")
+            ->get();
+
+        return response()->json(compact("extensions"));
+    }
+
+    /*public function index()
+    {
         $extensions = Extension::all()
             ->load("gallery")
             ->makeHidden(["thumbnail", "created_at", "updated_at", "icon"])
@@ -40,7 +49,7 @@ class ExtensionsController extends Controller
         $isPremium = in_array(strtolower(auth()->user()->account_type), ["admin", "premium"]);
 
         return response()->json(compact("extensions", "ownedExtensions", "premiumExtensions", "isPremium"));
-    }
+    }*/
 
     public function toggle()
     {

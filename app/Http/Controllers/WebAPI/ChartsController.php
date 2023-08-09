@@ -426,7 +426,8 @@ class ChartsController extends Controller
         ];
     }
 
-    public function index(Chart $chart, Currency $currency) {
+    public function show(Chart $chart, Currency $currency)
+    {
         $limits = request()->validate([
             "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01"],
             "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
@@ -466,5 +467,12 @@ class ChartsController extends Controller
         }
 
         return response()->json(["info" => $chart->only("id", "name", "type"), ...$result]);
+    }
+
+    public function index()
+    {
+        $charts = Chart::route("/");
+
+        return response()->json(compact("charts"));
     }
 }

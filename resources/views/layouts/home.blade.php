@@ -7,6 +7,7 @@
             @yield("content")
         </div>
 
-        <script src="{{ mix('js/home.js') }}"></script>
+        <script src="home.js"></script>
+        {{--@vite(["resources/ts/home.ts"])--}}
     </body>
 </html>

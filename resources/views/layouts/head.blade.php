@@ -22,18 +22,15 @@
     -->
 
     <!-- Open Graph configuration -->
-    <meta property="og:title" content="{{ config('app.name', 'SelfAccounting') }}" />
-    <meta property="og:description" content="Your personal accounting platform" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{ env('APP_URL') }}" />
-    <meta property="og:image" content="{{ URL::asset('OpenGraph.png') }}" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:title" content="{{ config('app.name', 'SelfAccounting') }}"/>
+    <meta property="og:description" content="Your personal accounting platform"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{ env('APP_URL') }}"/>
+    <meta property="og:image" content="{{ URL::asset('OpenGraph.png') }}"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:type" content="image/png"/>
 
     <!-- Twitter Card configuration -->
     <meta name="twitter:card" content="summary_large_image">
-
-    <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>

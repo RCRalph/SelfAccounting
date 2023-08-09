@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Chart;
 use App\Models\Extension;
 use App\Models\Tutorial;
 use App\Models\Currency;
@@ -36,7 +35,8 @@ class AppController extends Controller
             ->pluck("currency_id");
     }
 
-    private function showPremiumExpiredDialog() {
+    private function showPremiumExpiredDialog()
+    {
         if (auth()->user()->account_type != "Normal") {
             return false;
         }
@@ -58,7 +58,6 @@ class AppController extends Controller
 
                 return [
                     "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
-                    "charts" => Chart::route("/"),
                     "tutorials" => Tutorial::pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
                     "extensions" => Extension::select("code", "title", "icon", "directory")->orderBy("title")->get(),
