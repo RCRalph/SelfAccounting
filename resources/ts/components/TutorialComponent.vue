@@ -6,7 +6,7 @@
     >
         <v-card>
             <v-card-text
-                v-html="tutorial"
+                v-html="tutorialHTML"
                 class="tutorial-text"
             ></v-card-text>
 
@@ -14,34 +14,37 @@
                 class="d-flex justify-space-around flex-wrap flex-md-row flex-column-reverse"
             >
                 <v-btn
-                    outlined
+                    :block="display.smAndDown.value"
+                    :loading="loading.hideAllTutorials"
+                    variant="outlined"
                     class="mx-0 my-1"
-                    :block="$vuetify.breakpoint.smAndDown"
                     width="190"
                     color="error"
-                    :loading="loading.hide"
                     @click="hideAllTutorials"
-                >Hide all tutorials
+                >
+                    Hide all tutorials
                 </v-btn>
 
                 <v-btn
-                    outlined
+                    :block="display.smAndDown.value"
+                    :loading="loading.dontShowAgain"
+                    variant="outlined"
                     class="mx-0 my-1"
-                    :block="$vuetify.breakpoint.smAndDown"
                     width="190"
                     color="primary"
-                    :loading="loading.show"
                     @click="dontShowAgain"
-                >Don't show again
+                >
+                    Don't show again
                 </v-btn>
 
                 <v-btn
-                    outlined
+                    :block="display.smAndDown.value"
+                    variant="outlined"
                     class="mx-0 my-1"
-                    :block="$vuetify.breakpoint.smAndDown"
                     width="190"
                     @click="close"
-                >Close
+                >
+                    Close
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -50,91 +53,99 @@
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@components/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import {ref, watch, onMounted} from "vue"
+import {useDisplay} from "vuetify"
+import {useRoute} from "vue-router"
 
-export default {
-    components: {
-        ErrorSnackbarComponent
-    },
-    props: {
-        modelValue: {
-            required: true,
-            type: Array
-        },
-        tutorials: {
-            required: true,
-            type: Array
-        }
-    },
-    data() {
-        return {
-            dialog: false,
-            tutorial: "",
-            loading: {
-                hide: false,
-                show: false
-            },
-            error: false
-        }
-    },
-    watch: {
-        '$route.path'() {
-            this.getTutorial();
-        }
-    },
-    methods: {
-        getTutorial() {
-            this.dialog = false;
+import ErrorSnackbarComponent from "@components/ErrorSnackbarComponent.vue"
 
-            if (!this.value.includes(this.$route.path) && this.tutorials.includes(this.$route.path)) {
-                axios.get("/web-api/tutorials", {params: {route: this.$route.path}})
-                    .then(response => {
-                        const data = response.data;
-                        this.tutorial = data.tutorial;
-                        this.dialog = true;
-                    })
-                    .catch(err => {
-                        console.error(err);
-                    });
-            }
-        },
-        hideAllTutorials() {
-            this.loading.hide = true;
+const props = defineProps<{
+    hideAllTutorials: boolean
+    disabledTutorials: string[]
+    tutorialPaths: string[]
+}>()
 
-            axios.post("/web-api/tutorials/hide-all")
-                .then(() => {
-                    this.dialog = false;
-                    this.$emit("hideAll", {hide_all_tutorials: true});
-                    this.loading.hide = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading.hide = false, 2000);
-                })
-        },
-        dontShowAgain() {
-            this.loading.show = true;
+const emit = defineEmits<{
+    "update:disabledTutorials": [payload: string[]]
+    "update:hideAllTutorials": [payload: boolean]
+}>()
 
-            axios.post("/web-api/tutorials/hide", {route: this.$route.path})
-                .then(() => {
-                    this.dialog = false;
-                    this.$emit("input", this.value.filter(item => item != this.$route.path));
-                    this.loading.show = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading.show = false, 2000);
-                })
-        },
-        close() {
-            this.dialog = false;
-        }
-    },
-    mounted() {
-        this.getTutorial();
+const display = useDisplay()
+const route = useRoute()
+
+const dialog = ref(false)
+const error = ref(false)
+const tutorialHTML = ref("")
+
+function useTutorialButtonActions() {
+    const loading = ref({
+        hideAllTutorials: false,
+        dontShowAgain: false,
+    })
+
+    function hideAllTutorials() {
+        loading.value.hideAllTutorials = true
+
+        axios.post("/web-api/tutorials/hide-all")
+            .then(() => {
+                dialog.value = false
+                emit("update:hideAllTutorials", true)
+                loading.value.hideAllTutorials = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => error.value = true, 1000)
+                setTimeout(() => loading.value.hideAllTutorials = false, 2000)
+            })
+    }
+
+    function dontShowAgain() {
+        loading.value.dontShowAgain = true
+
+        axios.post("/web-api/tutorials/hide", {route: route.path})
+            .then(() => {
+                dialog.value = false
+                emit("update:disabledTutorials", props.disabledTutorials.filter(item => item != route.path))
+                loading.value.dontShowAgain = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => error.value = true, 1000)
+                setTimeout(() => loading.value.dontShowAgain = false, 2000)
+            })
+    }
+
+    function close() {
+        dialog.value = false
+    }
+
+    return {close, dontShowAgain, hideAllTutorials, loading}
+}
+
+function getTutorial() {
+    dialog.value = false
+
+    if (!props.disabledTutorials.includes(route.path) && props.tutorialPaths.includes(route.path)) {
+        axios.get("/web-api/tutorials", {params: {route: route.path}})
+            .then(response => {
+                const data = response.data
+
+                tutorialHTML.value = data.tutorial
+
+                dialog.value = true
+            })
+            .catch(err => {
+                console.error(err)
+            })
     }
 }
+
+watch(() => route.path, () => getTutorial())
+const {close, dontShowAgain, hideAllTutorials, loading} = useTutorialButtonActions()
+
+onMounted(() => {
+    getTutorial()
+})
 </script>

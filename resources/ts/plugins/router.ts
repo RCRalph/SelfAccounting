@@ -3,7 +3,10 @@ import {createRouter, createWebHashHistory} from "vue-router"
 import TestComponent from "@components/TestComponent.vue"
 import ChartsComponent from "@components/charts/ChartsComponent.vue"
 import ExtensionsComponent from "@components/extensions/ExtensionsComponent.vue"
+
+// Admin components
 import AdminComponent from "@components/admin/AdminComponent.vue"
+import AdminDashboardComponent from "@components/admin/AdminDashboardComponent.vue"
 
 export default createRouter({
     history: createWebHashHistory(),
@@ -73,6 +76,12 @@ export default createRouter({
         {
             path: "/admin",
             component: AdminComponent,
+            children: [
+                {
+                    path: "",
+                    component: AdminDashboardComponent,
+                },
+            ],
         },/*
         {
             path: "/income",

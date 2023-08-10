@@ -1,12 +1,14 @@
 <template>
-    <v-snackbar :value="value" @input="$emit('input', value)" color="error" bottom>
-        An error occured, please try again...
+    <v-snackbar
+        v-model="props.modelValue"
+        color="error"
+    >
+        An error occurred, please try again...
 
-        <template v-slot:action="{ attrs }">
+        <template v-slot:actions>
             <v-btn
-                text
-                v-bind="attrs"
-                @click="$emit('input', false)"
+                variant="text"
+                @click="emit('update:modelValue', false)"
             >
                 Close
             </v-btn>
@@ -14,13 +16,12 @@
     </v-snackbar>
 </template>
 
-<script>
-export default {
-    props: {
-        value: {
-            required: true,
-            type: Boolean
-        }
-    }
-}
+<script setup lang="ts">
+const props = defineProps<{
+    modelValue: boolean
+}>()
+
+const emit = defineEmits<{
+    "update:modelValue": [payload: boolean]
+}>()
 </script>

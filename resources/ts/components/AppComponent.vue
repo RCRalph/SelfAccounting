@@ -37,13 +37,9 @@
                             :value="item.title"
                             rounded="xl"
                             :to="item.link"
-                        >
-                            <template v-slot:prepend>
-                                <v-icon>{{ item.icon }}</v-icon>
-                            </template>
-
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                        </v-list-item>
+                            :prepend-icon="item.icon"
+                            :title="item.title"
+                        ></v-list-item>
                     </div>
                 </v-list>
 
@@ -115,16 +111,16 @@
                 </template>
             </v-navigation-drawer>
 
-            <!--<TutorialComponent
+            <TutorialComponent
                 v-if="typeof user.data == 'undefined' || !user.data.hide_all_tutorials"
-                v-model="disabledTutorials"
-                :tutorials="tutorialPaths"
-            ></TutorialComponent>-->
+                v-model:disabled-tutorials="disabledTutorials"
+                v-model:hide-all-tutorials="user.data.hide_all_tutorials"
+                :tutorial-paths="tutorialPaths"
+            ></TutorialComponent>
 
             <!--<PremiumExpiredComponent
                 v-model="premiumExpired"
             ></PremiumExpiredComponent>-->
-
 
             <v-main>
                 <router-view></router-view>

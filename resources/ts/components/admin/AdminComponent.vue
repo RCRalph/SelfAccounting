@@ -30,6 +30,8 @@
                 </span>
             </v-tab>
         </v-tabs>
+
+        <router-view></router-view>
     </div>
 
     <v-overlay
