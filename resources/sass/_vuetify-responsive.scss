@@ -16,7 +16,7 @@
         justify-content: center;
 
         button {
-            margin: 4px 0px;
+            margin: 4px 0;
         }
     }
 }
@@ -41,10 +41,6 @@
 }
 
 @media (hover: none) {
-    .menu-margin {
-        margin-left: 0;
-    }
-
     .pagination-fixed {
         width: calc(100vw - 16px - 16px);
     }

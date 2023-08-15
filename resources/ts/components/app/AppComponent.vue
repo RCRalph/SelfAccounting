@@ -6,6 +6,7 @@
                 :expand-on-hover="!display.mobile.value"
                 :permanent="!display.mobile.value"
                 :width="288"
+                :absolute="true"
                 @click="navigationForceOpen = true"
             >
                 <v-list-item class="pa-2">
@@ -61,7 +62,7 @@
                                 class="py-3"
                             ></v-select>
 
-                            <ThemeToggleComponent class="ml-4"></ThemeToggleComponent>
+                            <ThemeToggleComponent></ThemeToggleComponent>
                         </div>
                     </v-list-item>
 
@@ -118,11 +119,11 @@
                 :tutorial-paths="tutorialPaths"
             ></TutorialComponent>
 
-            <!--<PremiumExpiredComponent
+            <PremiumExpiredComponent
                 v-model="premiumExpired"
-            ></PremiumExpiredComponent>-->
+            ></PremiumExpiredComponent>
 
-            <v-main>
+            <v-main :style="VMainStyle">
                 <router-view></router-view>
             </v-main>
         </div>
@@ -133,45 +134,50 @@
                 size="128"
             ></v-progress-circular>
         </v-overlay>
+
+        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-app>
 </template>
 
-<script lang="ts">
-/*import PremiumExpiredComponent from "@components/PremiumExpiredComponent.vue"*/
-
+<script setup lang="ts">
 interface MenuItem {
     title: string
     icon: string
     link: string
 }
-</script>
 
-<script setup lang="ts">
 import axios from "axios"
 import {ref, computed, onMounted} from "vue"
 import type {Ref} from "vue"
 import {useDisplay} from "vuetify"
-import {useRoute} from "vue-router"
 
-import ThemeToggleComponent from "@components/ThemeToggleComponent.vue"
-import TutorialComponent from "@components/TutorialComponent.vue"
+import ThemeToggleComponent from "@components/app/ThemeToggleComponent.vue"
+import TutorialComponent from "@components/app/TutorialComponent.vue"
+import PremiumExpiredComponent from "@components/app/PremiumExpiredComponent.vue"
 
 import useThemeSettings from "@composables/useThemeSettings"
 import {useCurrenciesStore} from "@stores/currencies"
 import {useExtensionsStore} from "@stores/extensions"
 import {useUserStore} from "@stores/user"
+import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue";
 
 const currencies = useCurrenciesStore()
 const extensions = useExtensionsStore()
 const user = useUserStore()
 const display = useDisplay()
-const route = useRoute()
 
 function useAppSettings() {
     const ready = ref(false)
+    const error = ref(false)
     const premiumExpired = ref(false)
 
-    return {premiumExpired, ready}
+    const VMainStyle = computed(() =>
+        display.mobile.value ?
+            "margin-left: 0" :
+            "margin-left: 56px",
+    )
+
+    return {error, VMainStyle, premiumExpired, ready}
 }
 
 function useNavigationDrawer() {
@@ -180,7 +186,7 @@ function useNavigationDrawer() {
 
     const navigationRail = computed(() => {
         if (currencySelectFocused.value) return false
-        if (!display.mobile.value) return true
+        else if (!display.mobile.value) return true
 
         return !navigationForceOpen.value
     })
@@ -240,7 +246,7 @@ function useMenuItems() {
 }
 
 const {logoTextImage, setTheme} = useThemeSettings()
-const {premiumExpired, ready} = useAppSettings()
+const {error, VMainStyle, premiumExpired, ready} = useAppSettings()
 const {currencySelectFocused, navigationForceOpen, navigationRail} = useNavigationDrawer()
 const {disabledTutorials, tutorialPaths} = useTutorials()
 const {drawerItems, profileItems} = useMenuItems()
@@ -248,11 +254,15 @@ const {drawerItems, profileItems} = useMenuItems()
 function logout() {
     axios.post("/logout")
         .then(() => window.location.href = "/")
-        .catch(() => window.location.href = "/login")
+        .catch(err => {
+            console.log(err)
+            error.value = true
+        });
 }
 
 onMounted(() => {
     ready.value = false
+    setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches)
 
     axios.get("/web-api/app")
         .then(response => {
@@ -273,12 +283,9 @@ onMounted(() => {
 
             ready.value = true
         })
+        .catch(err => {
+            console.log(err)
+            error.value = true
+        })
 })
 </script>
-
-<style scoped lang="scss">
-.v-main {
-    padding-left: 0 !important;
-    margin-left: var(--v-layout-left);
-}
-</style>

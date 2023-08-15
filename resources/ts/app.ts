@@ -13,7 +13,7 @@ library.add(fas, far, fab)
 
 // App
 import {createApp} from "vue"
-import AppComponent from "@components/AppComponent.vue"
+import AppComponent from "@components/app/AppComponent.vue"
 
 // Plugins
 import vuetify from "@plugins/vuetify"

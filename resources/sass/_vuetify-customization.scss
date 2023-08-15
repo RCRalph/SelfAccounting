@@ -8,6 +8,12 @@
     }
 }
 
+.v-main {
+    position: relative;
+    min-height: 100dvh;
+    padding-left: 0 !important;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }

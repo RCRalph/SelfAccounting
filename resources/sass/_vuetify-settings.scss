@@ -1,5 +1,6 @@
 @forward 'vuetify/settings' with (
     $body-font-family: ("Nunito", sans-serif),
-    $overlay-opacity: 0,
+    $overlay-opacity: 1,
+    $overlay-scrim-background: rgb(var(--v-theme-surface)),
     $tab-min-width: 120px,
 );

@@ -3,7 +3,7 @@
         v-model="props.modelValue"
         color="error"
     >
-        An error occurred, please try again...
+        An error has occurred, please try again...
 
         <template v-slot:actions>
             <v-btn
@@ -17,6 +17,8 @@
 </template>
 
 <script setup lang="ts">
+import {watch} from "vue"
+
 const props = defineProps<{
     modelValue: boolean
 }>()
@@ -24,4 +26,13 @@ const props = defineProps<{
 const emit = defineEmits<{
     "update:modelValue": [payload: boolean]
 }>()
+
+watch(() => props.modelValue, () => {
+    if (props.modelValue) {
+        setTimeout(
+            () => emit("update:modelValue", false),
+            5000
+        )
+    }
+})
 </script>

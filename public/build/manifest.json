@@ -40,7 +40,7 @@
     "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2"
   },
   "resources/ts/app.css": {
-    "file": "assets/app-0a263aa8.css",
+    "file": "assets/app-073bb254.css",
     "src": "resources/ts/app.css"
   },
   "resources/ts/app.ts": {
@@ -57,9 +57,9 @@
       "assets/fa-brands-400-003f1154.ttf"
     ],
     "css": [
-      "assets/app-0a263aa8.css"
+      "assets/app-073bb254.css"
     ],
-    "file": "assets/app-9955f7c1.js",
+    "file": "assets/app-bba9d9c9.js",
     "isEntry": true,
     "src": "resources/ts/app.ts"
   }

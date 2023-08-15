@@ -6,7 +6,6 @@
             align-tabs="center"
             :show-arrows="true"
             :stacked="true"
-            bg-color="grey-darken-4"
             class="v-slide-group--horizontal"
         >
             <v-tab
@@ -28,23 +27,24 @@
             size="128"
         ></v-progress-circular>
     </v-overlay>
+
+    <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 interface Chart {
     id: number
     name: string
 }
-</script>
 
-<script setup lang="ts">
 import axios from "axios"
 import {onMounted, ref} from "vue"
 import type {Ref} from "vue"
-//import {useRoute} from "vue-router"
+import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue";
 
 const charts: Ref<Chart[]> = ref([])
 const ready = ref(false)
+const error = ref(false)
 
 onMounted(() => {
     ready.value = false
@@ -56,6 +56,10 @@ onMounted(() => {
             charts.value = data.charts
 
             ready.value = true
+        })
+        .catch(err => {
+            console.error(err)
+            error.value = true
         })
 })
 </script>

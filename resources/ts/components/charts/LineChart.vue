@@ -1,53 +1,30 @@
 <template>
     <Line
-        :data="data"
-        :options="themedOptions"
+        :data="props.data"
+        :options="props.options"
     ></Line>
 </template>
 
-<script lang="ts">
-import _ from "lodash"
-import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend} from "chart.js"
+<script setup lang="ts">
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    TimeScale,
+    PointElement,
+    LineElement,
+    Tooltip,
+    Legend,
+} from "chart.js"
+
+import 'chartjs-adapter-date-fns';
 import {Line} from "vue-chartjs"
-import main from "&/mixins/main"
+import type {ChartOptions, ChartData, Point} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Tooltip, Legend)
 
-export default {
-    components: {Line},
-    props: {
-        options: {
-            required: true,
-            type: Object,
-        },
-        data: {
-            required: true,
-            type: Object,
-        },
-        theme: {
-            required: true,
-            type: Object,
-        },
-    },
-    mixins: [main],
-    computed: {
-        themedOptions() {
-            let result = _.cloneDeep(this.options)
-
-            Object.keys(this.theme).forEach(item => {
-                result = this.changeJsonValue(
-                    result, item,
-                    this.theme[item][Number(this.$vuetify.theme.dark)],
-                )
-            })
-
-            return result
-        },
-    },
-    watch: {
-        "$vuetify.theme.dark"() {
-            this.$forceUpdate()
-        },
-    },
-}
+const props = defineProps<{
+    data: ChartData<"line", Point[], string>,
+    options: ChartOptions
+}>()
 </script>

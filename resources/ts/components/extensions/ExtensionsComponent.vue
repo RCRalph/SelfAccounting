@@ -6,7 +6,6 @@
             align-tabs="center"
             :show-arrows="true"
             :stacked="true"
-            bg-color="grey-darken-4"
             class="v-slide-group--horizontal"
         >
             <v-tab
@@ -31,16 +30,14 @@
     </v-overlay>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 interface Extension {
     code: string,
     title: string,
     icon: string,
     directory: string,
 }
-</script>
 
-<script setup lang="ts">
 import axios from "axios"
 import {onMounted, ref} from "vue"
 import type {Ref} from "vue"

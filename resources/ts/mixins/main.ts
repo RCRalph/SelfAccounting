@@ -1,22 +1,6 @@
 import _ from "lodash"
 
 export default {
-    filters: {
-        addSpaces(value: number): string {
-            return value
-                .toLocaleString("en", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                })
-                .split(",")
-                .join(String.fromCharCode(160))
-        },
-        addNoBreakSpaces(value: string): string {
-            if (!value) return ""
-
-            return value.split(" ").join(String.fromCharCode(160))
-        },
-    },
     methods: {
         sortUsingOptions(options: any, i = 0): (a: string | any[], b: string | any[]) => number {
             return (a, b) => {
@@ -47,23 +31,6 @@ export default {
             })
 
             return true
-        },
-        changeJsonValue(object: any, key: string, value: any): any {
-            if (typeof object !== "object" || object === null) return object
-
-            if (Array.isArray(object)) {
-                object.forEach((item) => this.changeJsonValue(item, key, value))
-            } else {
-                Object.keys(object).forEach(k => {
-                    if (k === key) {
-                        object[k] = value
-                    } else {
-                        this.changeJsonValue(object[k], key, value)
-                    }
-                })
-            }
-
-            return object
         },
     },
 }

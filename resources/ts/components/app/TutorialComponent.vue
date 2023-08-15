@@ -59,7 +59,7 @@ import {ref, watch, onMounted} from "vue"
 import {useDisplay} from "vuetify"
 import {useRoute} from "vue-router"
 
-import ErrorSnackbarComponent from "@components/ErrorSnackbarComponent.vue"
+import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue"
 
 const props = defineProps<{
     hideAllTutorials: boolean

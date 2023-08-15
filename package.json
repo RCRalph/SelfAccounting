@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "prod": "vite build"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^6.1.1",
@@ -12,11 +13,14 @@
         "@fortawesome/free-solid-svg-icons": "^6.1.1",
         "@fortawesome/vue-fontawesome": "^3.0.3",
         "@mdi/font": "^7.2.96",
+        "@types/chart.js": "^2.9.37",
         "@types/lodash": "^4.14.195",
         "@vitejs/plugin-vue": "^4.2.3",
         "@vue/tsconfig": "^0.4.0",
         "axios": "^0.21.4",
         "chart.js": "^4.3.2",
+        "chartjs-adapter-date-fns": "^3.0.0",
+        "date-fns": "^2.30.0",
         "deepmerge": "^4.2.2",
         "dompurify": "^2.3.3",
         "fibers": "^5.0.1",

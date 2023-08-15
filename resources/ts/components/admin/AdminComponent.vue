@@ -6,7 +6,6 @@
             align-tabs="center"
             :show-arrows="true"
             :stacked="true"
-            bg-color="grey-darken-4"
             class="v-slide-group--horizontal"
         >
             <v-tab
@@ -45,8 +44,6 @@
         ></v-progress-circular>
     </v-overlay>
 </template>
-
-<script lang="ts"></script>
 
 <script setup lang="ts">
 import {ref} from "vue"

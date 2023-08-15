@@ -7,6 +7,7 @@
         "strict": true,
         "allowJs": false,
         "baseUrl": ".",
+        "target": "ES2021",
         "paths": {
             "@sass/*": [
                 "resources/sass/*"

@@ -1,6 +1,6 @@
 <?php
 
-function getFileLink($disk, $directory, $filename)
+function getFileLink($disk, $directory, $filename): ?string
 {
     switch ($disk) {
         case "s3":

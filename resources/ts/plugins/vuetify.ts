@@ -23,7 +23,15 @@ export default createVuetify({
     },
     defaults: {
         VOverlay: {
+            persistent: true,
             class: ["justify-center", "align-center"],
+            zIndex: 999,
         },
+        VCardTitle: {
+            class: ["py-4"]
+        },
+        VTabs: {
+            bgColor: "rgb(var(--v-theme-surface))"
+        }
     },
 })
