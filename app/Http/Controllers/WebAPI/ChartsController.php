@@ -91,24 +91,7 @@ class ChartsController extends Controller
             $data["labels"][] = $typeData->firstWhere("id", $typeID)["name"];
         }
 
-        $theme = [
-            "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"]
-        ];
-
-        $options = [
-            "responsive" => true,
-            "maintainAspectRatio" => false,
-            "legend" => [
-                "display" => true,
-                "labels" => [
-                    "fontColor" => null
-                ]
-            ],
-            "circumference" => pi(),
-            "rotation" => -pi()
-        ];
-
-        return compact("data", "options", "theme");
+        return compact("data");
     }
 
     private function transfersByAccount($type, Currency $currency, $limits): array
@@ -157,24 +140,7 @@ class ChartsController extends Controller
             $data["labels"] = $accounts->firstWhere("id", $accountID)->name;
         }
 
-        $theme = [
-            "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"]
-        ];
-
-        $options = [
-            "responsive" => true,
-            "maintainAspectRatio" => false,
-            "legend" => [
-                "display" => true,
-                "labels" => [
-                    "fontColor" => null
-                ]
-            ],
-            "circumference" => pi(),
-            "rotation" => -pi()
-        ];
-
-        return compact("data", "options", "theme");
+        return compact("data");
     }
 
     private function balanceHistory(Currency $currency, $limits): array
@@ -255,9 +221,7 @@ class ChartsController extends Controller
         $accountHistory->addEntries($data->get());
         $accountHistory->addSum($sumData->get());
 
-        return [
-            "data" => $accountHistory->getChartData(),
-        ];
+        return ["data" => $accountHistory->getChartData()];
     }
 
     public function show(Chart $chart, Currency $currency): JsonResponse

@@ -56,10 +56,9 @@
 <script setup lang="ts">
 import axios from "axios"
 import {ref, watch, onMounted} from "vue"
+import {useStatusStore} from "@stores/status";
 import {useDisplay} from "vuetify"
 import {useRoute} from "vue-router"
-
-import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue"
 
 const props = defineProps<{
     hideAllTutorials: boolean
@@ -72,11 +71,11 @@ const emit = defineEmits<{
     "update:hideAllTutorials": [payload: boolean]
 }>()
 
+const status = useStatusStore()
 const display = useDisplay()
 const route = useRoute()
 
 const dialog = ref(false)
-const error = ref(false)
 const tutorialHTML = ref("")
 
 function useTutorialButtonActions() {
@@ -96,7 +95,7 @@ function useTutorialButtonActions() {
             })
             .catch(err => {
                 console.error(err)
-                setTimeout(() => error.value = true, 1000)
+                setTimeout(() => status.showError(), 1000)
                 setTimeout(() => loading.value.hideAllTutorials = false, 2000)
             })
     }
@@ -112,7 +111,7 @@ function useTutorialButtonActions() {
             })
             .catch(err => {
                 console.error(err)
-                setTimeout(() => error.value = true, 1000)
+                setTimeout(() => status.showError(), 1000)
                 setTimeout(() => loading.value.dontShowAgain = false, 2000)
             })
     }

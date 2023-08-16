@@ -25,6 +25,6 @@ ChartJS.register(CategoryScale, LinearScale, TimeScale, PointElement, LineElemen
 
 const props = defineProps<{
     data: ChartData<"line", Point[], string>,
-    options: ChartOptions
+    options: ChartOptions<"line">
 }>()
 </script>

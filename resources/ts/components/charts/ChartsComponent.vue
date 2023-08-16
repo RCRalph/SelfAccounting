@@ -27,8 +27,6 @@
             size="128"
         ></v-progress-circular>
     </v-overlay>
-
-    <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
 </template>
 
 <script setup lang="ts">
@@ -40,11 +38,11 @@ interface Chart {
 import axios from "axios"
 import {onMounted, ref} from "vue"
 import type {Ref} from "vue"
-import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue";
+import {useStatusStore} from "@stores/status";
 
+const status = useStatusStore()
 const charts: Ref<Chart[]> = ref([])
 const ready = ref(false)
-const error = ref(false)
 
 onMounted(() => {
     ready.value = false
@@ -59,7 +57,7 @@ onMounted(() => {
         })
         .catch(err => {
             console.error(err)
-            error.value = true
+            status.showError()
         })
 })
 </script>

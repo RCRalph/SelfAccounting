@@ -135,7 +135,7 @@
             ></v-progress-circular>
         </v-overlay>
 
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
+        <ErrorSnackbarComponent></ErrorSnackbarComponent>
     </v-app>
 </template>
 
@@ -154,21 +154,22 @@ import {useDisplay} from "vuetify"
 import ThemeToggleComponent from "@components/app/ThemeToggleComponent.vue"
 import TutorialComponent from "@components/app/TutorialComponent.vue"
 import PremiumExpiredComponent from "@components/app/PremiumExpiredComponent.vue"
+import ErrorSnackbarComponent from "@components/app/ErrorSnackbarComponent.vue"
 
 import useThemeSettings from "@composables/useThemeSettings"
 import {useCurrenciesStore} from "@stores/currencies"
 import {useExtensionsStore} from "@stores/extensions"
 import {useUserStore} from "@stores/user"
-import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue";
+import {useStatusStore} from "@stores/status"
 
 const currencies = useCurrenciesStore()
 const extensions = useExtensionsStore()
 const user = useUserStore()
+const status = useStatusStore()
 const display = useDisplay()
 
 function useAppSettings() {
     const ready = ref(false)
-    const error = ref(false)
     const premiumExpired = ref(false)
 
     const VMainStyle = computed(() =>
@@ -177,7 +178,7 @@ function useAppSettings() {
             "margin-left: 56px",
     )
 
-    return {error, VMainStyle, premiumExpired, ready}
+    return {VMainStyle, premiumExpired, ready}
 }
 
 function useNavigationDrawer() {
@@ -246,7 +247,7 @@ function useMenuItems() {
 }
 
 const {logoTextImage, setTheme} = useThemeSettings()
-const {error, VMainStyle, premiumExpired, ready} = useAppSettings()
+const {VMainStyle, premiumExpired, ready} = useAppSettings()
 const {currencySelectFocused, navigationForceOpen, navigationRail} = useNavigationDrawer()
 const {disabledTutorials, tutorialPaths} = useTutorials()
 const {drawerItems, profileItems} = useMenuItems()
@@ -256,7 +257,7 @@ function logout() {
         .then(() => window.location.href = "/")
         .catch(err => {
             console.log(err)
-            error.value = true
+            status.showError()
         });
 }
 
@@ -285,7 +286,7 @@ onMounted(() => {
         })
         .catch(err => {
             console.log(err)
-            error.value = true
+            status.showError()
         })
 })
 </script>

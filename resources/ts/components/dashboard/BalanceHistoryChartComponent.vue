@@ -1,10 +1,18 @@
 <template>
-    <div v-if="ready && chartData != undefined">
+    <div v-if="ready">
         <LineChart
-            :options="options"
+            v-if="chartData?.datasets.length"
             :data="chartData"
+            :options="options"
             style="height: 400px"
         ></LineChart>
+
+        <div
+            v-else
+            class="d-flex justify-center align-center my-7"
+        >
+            <span class="">No data available</span>
+        </div>
     </div>
 
     <v-overlay
@@ -17,35 +25,30 @@
             size="96"
         ></v-progress-circular>
     </v-overlay>
-
-    <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
 </template>
 
 <script setup lang="ts">
-interface QueryParameters {
-    start?: string
-    end?: string
-}
-
 import axios from "axios"
-import {computed, ref, onMounted} from "vue"
+import {computed, ref, onMounted, watch} from "vue"
 import type {ComputedRef, Ref} from "vue"
 import type {ChartOptions, ChartData, Point} from "chart.js";
 
-import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue";
 import LineChart from "@components/charts/LineChart.vue";
 
 import {useCurrenciesStore} from "@stores/currencies";
+import {useStatusStore} from "@stores/status";
 import useThemeSettings from "@composables/useThemeSettings";
+import useChartQueryParameters from "@composables/useChartQueryParameters";
 
 const props = defineProps<{
     id: number
 }>()
 
 const currencies = useCurrenciesStore()
+const status = useStatusStore()
 const {chartColors} = useThemeSettings()
+const {last30DaysQuery} = useChartQueryParameters()
 const ready = ref(false)
-const error = ref(false)
 
 function useChartData() {
     const chartData: Ref<ChartData<"line", Point[], string> | undefined> = ref(undefined)
@@ -100,24 +103,12 @@ function useChartData() {
         },
     }))
 
-    const queryParameters = computed(() => {
-        const result: QueryParameters = {}
-
-        const start = new Date();
-        start.setDate(start.getDate() - 31)
-        result.start = start.toISOString().split("T")[0]
-
-        result.end = new Date().toISOString().split("T")[0]
-
-        return result
-    })
-
     function getChartData() {
         ready.value = false
 
         axios.get(
             `/web-api/charts/${props.id}/currency/${currencies.usedCurrency}`,
-            {params: queryParameters.value},
+            {params: last30DaysQuery.value},
         )
             .then(response => {
                 const data = response.data
@@ -128,7 +119,7 @@ function useChartData() {
             })
             .catch(err => {
                 console.error(err)
-                error.value = true
+                status.showError()
             })
     }
 
@@ -137,8 +128,10 @@ function useChartData() {
 
 const {chartData, getChartData, options} = useChartData()
 
+watch(() => props.id, getChartData)
+
 onMounted(() => {
     getChartData()
-    currencies.$subscribe(() => getChartData())
+    currencies.$subscribe(getChartData)
 })
 </script>

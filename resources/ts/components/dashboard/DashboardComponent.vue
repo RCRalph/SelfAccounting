@@ -111,18 +111,18 @@
                                 </v-card-title>
 
                                 <div
-                                    v-if="currentBalance.length"
+                                    v-if="currentBalance.length && currentChart != undefined"
                                     class="mx-3"
                                 >
                                     <BalanceHistoryChartComponent
-                                        v-if="currentChart != undefined && chartType == 'line'"
+                                        v-if="chartType == 'line'"
                                         :id="currentChart"
                                     ></BalanceHistoryChartComponent>
 
-                                    <!--<DataByTypeChartComponent
+                                    <DataByTypeChartComponent
                                         v-else-if="chartType == 'doughnut'"
                                         :id="currentChart"
-                                    ></DataByTypeChartComponent>-->
+                                    ></DataByTypeChartComponent>
                                 </div>
 
                                 <v-card-text>
@@ -246,8 +246,6 @@
             size="128"
         ></v-progress-circular>
     </v-overlay>
-
-    <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
 </template>
 
 <script setup lang="ts">
@@ -269,15 +267,18 @@ import axios from "axios"
 import {ref, computed, onMounted} from "vue"
 import type {Ref} from "vue"
 
+import DataByTypeChartComponent from "@components/dashboard/DataByTypeChartComponent.vue";
 import BalanceHistoryChartComponent from "@components/dashboard/BalanceHistoryChartComponent.vue";
-import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue";
 
 import {useCurrenciesStore} from "@stores/currencies";
+import {useStatusStore} from "@stores/status";
 import useFormats from "@composables/useFormats";
 import useThemeSettings from "@composables/useThemeSettings";
 
 const currencies = useCurrenciesStore()
+const status = useStatusStore()
 const formats = useFormats()
+const {themeIsDark} = useThemeSettings()
 
 function useCurrentBalance() {
     const currentBalance: Ref<CurrentBalance[]> = ref([])
@@ -331,9 +332,7 @@ function useCharts() {
     return {chartType, charts, currentChart}
 }
 
-const {themeIsDark} = useThemeSettings()
 const ready = ref(false)
-const error = ref(false)
 const {currentBalance, currentBalanceSum} = useCurrentBalance()
 const {last30Days, last30DaysTotal} = useLast30Days()
 const {chartType, charts, currentChart} = useCharts()
@@ -357,7 +356,7 @@ function getBalanceData() {
         })
         .catch(err => {
             console.error(err)
-            setTimeout(() => error.value = true, 1000)
+            setTimeout(() => status.showError(), 1000)
         })
 }
 

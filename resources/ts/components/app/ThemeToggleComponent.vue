@@ -10,8 +10,6 @@
     >
         <v-icon>mdi-theme-light-dark</v-icon>
     </v-btn>
-
-    <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
 </template>
 
 <script setup lang="ts">
@@ -19,12 +17,12 @@ import axios from "axios"
 import {ref} from "vue"
 import useThemeSettings from "@composables/useThemeSettings"
 import {useUserStore} from "@stores/user"
-import ErrorSnackbarComponent from "@components/common/ErrorSnackbarComponent.vue";
+import {useStatusStore} from "@stores/status";
 
 const {themeIsDark, setTheme} = useThemeSettings()
 const user = useUserStore()
+const status = useStatusStore()
 const loading = ref(false)
-const error = ref(false)
 
 function toggleTheme() {
     loading.value = true
@@ -37,7 +35,7 @@ function toggleTheme() {
         })
         .catch(err => {
             console.error(err)
-            setTimeout(() => error.value = true, 1000)
+            setTimeout(() => status.showError(), 1000)
             setTimeout(() => loading.value = false, 2000)
         })
 }

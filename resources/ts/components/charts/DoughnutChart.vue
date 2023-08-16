@@ -1,53 +1,19 @@
 <template>
     <Doughnut
-        :data="data"
-        :options="themedOptions"
+        :data="props.data"
+        :options="props.options"
     ></Doughnut>
 </template>
 
-<script lang="ts">
-import _ from "lodash"
+<script setup lang="ts">
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from "chart.js"
 import {Doughnut} from "vue-chartjs"
-import main from "&/mixins/main"
+import type {ChartOptions, ChartData} from "chart.js"
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-export default {
-    components: {Doughnut},
-    props: {
-        options: {
-            required: true,
-            type: Object,
-        },
-        data: {
-            required: true,
-            type: Object,
-        },
-        theme: {
-            required: true,
-            type: Object,
-        },
-    },
-    mixins: [main],
-    computed: {
-        themedOptions() {
-            let result = _.cloneDeep(this.options)
-
-            Object.keys(this.theme).forEach(item => {
-                result = this.changeJsonValue(
-                    result, item,
-                    this.theme[item][Number(this.$vuetify.theme.dark)],
-                )
-            })
-
-            return result
-        },
-    },
-    watch: {
-        "$vuetify.theme.dark"() {
-            this.$forceUpdate()
-        },
-    },
-}
+const props = defineProps<{
+    data: ChartData<"doughnut", number[], string>,
+    options: ChartOptions<"doughnut">
+}>()
 </script>
