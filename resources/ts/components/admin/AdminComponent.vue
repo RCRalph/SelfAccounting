@@ -6,7 +6,6 @@
             align-tabs="center"
             :show-arrows="true"
             :stacked="true"
-            class="v-slide-group--horizontal"
         >
             <v-tab
                 value="Dashboard"

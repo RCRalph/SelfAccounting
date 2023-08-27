@@ -6,7 +6,6 @@
             align-tabs="center"
             :show-arrows="true"
             :stacked="true"
-            class="v-slide-group--horizontal"
         >
             <v-tab
                 v-for="item in charts"
@@ -38,7 +37,7 @@ interface Chart {
 import axios from "axios"
 import {onMounted, ref} from "vue"
 import type {Ref} from "vue"
-import {useStatusStore} from "@stores/status";
+import {useStatusStore} from "@stores/status"
 
 const status = useStatusStore()
 const charts: Ref<Chart[]> = ref([])
