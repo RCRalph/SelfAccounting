@@ -308,13 +308,13 @@
                             :type="item.value.value < 0 ? 'expenses' : 'income'"
                             :id="item.id.value"
                             @updated="getData"
-                        ></EditTransactionsDialogComponent>
+                        ></EditTransactionsDialogComponent>-->
 
                         <DeleteDialogComponent
-                            :thing="item.value.value < 0 ? 'expense' : 'income'"
-                            :url="`${item.value.value < 0 ? 'expenses' : 'income'}/${item.id.value}`"
-                            @deleted="getData"
-                        ></DeleteDialogComponent>-->
+                            :thing="item.raw.value.value < 0 ? 'expense' : 'income'"
+                            :url="`${item.raw.value.value < 0 ? 'expenses' : 'income'}/${item.raw.id.value}`"
+                            @deleted="getStartData"
+                        ></DeleteDialogComponent>
                     </div>
                 </td>
             </tr>
@@ -338,6 +338,8 @@ import type { VDataTable } from "vuetify/labs/VDataTable"
 import type { Transaction, DataQuery } from "@interfaces/Dashboard"
 import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
+
+import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import TableDataMerger from "@classes/TableDataMerger"
