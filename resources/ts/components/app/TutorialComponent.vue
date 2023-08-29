@@ -48,17 +48,15 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
 <script setup lang="ts">
 import axios from "axios"
-import {ref, watch, onMounted} from "vue"
-import {useStatusStore} from "@stores/status";
-import {useDisplay} from "vuetify"
-import {useRoute} from "vue-router"
+import { ref, watch, onMounted } from "vue"
+import { useStatusStore } from "@stores/status"
+import { useDisplay } from "vuetify"
+import { useRoute } from "vue-router"
 
 const props = defineProps<{
     hideAllTutorials: boolean
@@ -137,14 +135,13 @@ function getTutorial() {
             })
             .catch(err => {
                 console.error(err)
+                setTimeout(() => status.showError(), 1000)
             })
     }
 }
 
-watch(() => route.path, () => getTutorial())
+watch(() => route.path, getTutorial)
 const {close, dontShowAgain, hideAllTutorials, loading} = useTutorialButtonActions()
 
-onMounted(() => {
-    getTutorial()
-})
+onMounted(getTutorial)
 </script>

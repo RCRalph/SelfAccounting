@@ -1,12 +1,18 @@
 import _ from "lodash"
 
-type TableDataType = Record<string, any>
+import { ref } from "vue"
+import type { Ref } from "vue"
+
+type TableDataType = Record<string, unknown>
 
 export default class TableDataMerger<T extends TableDataType> {
-    public data: Record<string, { value: Object, span: number }>[] = []
+    public data: Ref<Record<string, { value: unknown, span: number }>[]> = ref([])
 
     // Has to be public because Vue has to watch for changes of these properties in order to highlight rows
-    public hoveredRows = {start: Infinity, end: -Infinity}
+    public hoveredRows = ref({
+        start: Infinity,
+        end: -Infinity,
+    })
 
     private keyCounters: Record<string, { counter: number, value: any }> = {}
 
@@ -16,7 +22,7 @@ export default class TableDataMerger<T extends TableDataType> {
     ) {
     }
 
-    private setKeyCounters(firstRow: T): void {
+    private setKeyCounters(firstRow: T) {
         this.keyCounters = {}
 
         for (let key in firstRow) {
@@ -27,43 +33,44 @@ export default class TableDataMerger<T extends TableDataType> {
         }
     }
 
-    private shouldSeparate(mustSeparate: boolean, key: string, row: T): boolean {
-        if (!this.data.length) return false
+    private shouldSeparate(mustSeparate: boolean, key: string, row: T) {
+        if (!this.data.value.length) return false
 
         return mustSeparate
             || this.singleSeparators.includes(key)
             || !_.isEqual(row[key], this.keyCounters[key].value)
     }
 
-    private changeDataSpan(key: string, value: any): void {
-        const index = Math.max(this.data.length - this.keyCounters[key].counter - 1, 0)
-        this.data[index][key].span = this.keyCounters[key].counter
+    private changeDataSpan(key: string, value: any) {
+        const index = Math.max(this.data.value.length - this.keyCounters[key].counter - 1, 0)
+        this.data.value[index][key].span = this.keyCounters[key].counter
 
         this.keyCounters[key].value = value
         this.keyCounters[key].counter = 1
     }
 
-    private appendDataRow(row: T): void {
-        const index = this.data.length
-        this.data.push({})
+    private appendDataRow(row: T) {
+        const index = this.data.value.length
+        this.data.value.push({})
 
         for (let key in row) {
-            this.data[index][key] = {
+            this.data.value[index][key] = {
                 value: row[key],
                 span: 0,
             }
         }
     }
 
-    resetData(): void {
-        this.data = []
+    resetData() {
+        this.data.value = []
         this.keyCounters = {}
     }
 
-    appendData(data: T[]): TableDataMerger<T> {
+    appendData(data: T[]) {
         if (!data.length) return this
-
-        this.setKeyCounters(data[0])
+        else if (!Object.keys(this.keyCounters).length) {
+            this.setKeyCounters(data[0])
+        }
 
         for (let item of data) {
             this.appendDataRow(item)
@@ -79,40 +86,41 @@ export default class TableDataMerger<T extends TableDataType> {
             for (let key in this.keyCounters) {
                 if (this.shouldSeparate(forceSeparation, key, item)) {
                     this.changeDataSpan(key, item[key])
-                } else if (this.data.length) {
+                } else if (this.data.value.length) {
                     this.keyCounters[key].counter++
                 }
             }
         }
 
         for (let key in this.keyCounters) {
-            this.data[this.data.length - this.keyCounters[key].counter][key].span = this.keyCounters[key].counter
+            const index = this.data.value.length - this.keyCounters[key].counter
+            this.data.value[index][key].span = this.keyCounters[key].counter
         }
 
         return this
     }
 
     setHoveredRows(start: number, span: number): void {
-        this.hoveredRows.start = start
-        this.hoveredRows.end = start + span - 1
+        this.hoveredRows.value.start = start
+        this.hoveredRows.value.end = start + span - 1
     }
 
     resetHoveredRows(): void {
-        this.hoveredRows.start = Infinity
-        this.hoveredRows.end = -Infinity
+        this.hoveredRows.value.start = Infinity
+        this.hoveredRows.value.end = -Infinity
     }
 
     isRowHighlighted(start: number, span: number): boolean {
         // Check if two intervals intersect in O(1) time
-        return Math.max(this.hoveredRows.start, start) <= Math.min(this.hoveredRows.end, start + span - 1)
+        return Math.max(this.hoveredRows.value.start, start) <= Math.min(this.hoveredRows.value.end, start + span - 1)
     }
 
     get tabulatedData(): T[] {
         const result: T[] = [], previousRow: TableDataType = {}
 
-        if (!this.data.length) return result
+        if (!this.data.value.length) return result
 
-        for (let item of this.data) {
+        for (let item of this.data.value) {
             const row: TableDataType = {}
             for (let key in item) {
                 if (item[key].span) {

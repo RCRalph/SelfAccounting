@@ -6,7 +6,7 @@ interface QueryParameters {
 }
 
 export default function useChartQueryParameters() {
-    const dashboardQuery = computed(() => {
+    const last30DaysQuery = computed(() => {
         const result: QueryParameters = {}
 
         const start = new Date();
@@ -18,5 +18,5 @@ export default function useChartQueryParameters() {
         return result
     })
 
-    return {dashboardQuery}
+    return {last30DaysQuery}
 }

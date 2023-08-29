@@ -136,31 +136,30 @@
         </v-overlay>
 
         <ErrorSnackbarComponent></ErrorSnackbarComponent>
+
+        <SuccessSnackbarComponent></SuccessSnackbarComponent>
     </v-app>
 </template>
 
 <script setup lang="ts">
-interface MenuItem {
-    title: string
-    icon: string
-    link: string
-}
-
 import axios from "axios"
-import {ref, computed, onMounted} from "vue"
-import type {Ref} from "vue"
-import {useDisplay} from "vuetify"
+import { ref, computed, onMounted } from "vue"
+import type { Ref } from "vue"
+import { useDisplay } from "vuetify"
+
+import type { MenuItem } from "@interfaces/App"
 
 import ThemeToggleComponent from "@components/app/ThemeToggleComponent.vue"
 import TutorialComponent from "@components/app/TutorialComponent.vue"
 import PremiumExpiredComponent from "@components/app/PremiumExpiredComponent.vue"
 import ErrorSnackbarComponent from "@components/app/ErrorSnackbarComponent.vue"
+import SuccessSnackbarComponent from "@components/app/SuccessSnackbarComponent.vue"
 
 import useThemeSettings from "@composables/useThemeSettings"
-import {useCurrenciesStore} from "@stores/currencies"
-import {useExtensionsStore} from "@stores/extensions"
-import {useUserStore} from "@stores/user"
-import {useStatusStore} from "@stores/status"
+import { useCurrenciesStore } from "@stores/currencies"
+import { useExtensionsStore } from "@stores/extensions"
+import { useUserStore } from "@stores/user"
+import { useStatusStore } from "@stores/status"
 
 const currencies = useCurrenciesStore()
 const extensions = useExtensionsStore()
@@ -258,7 +257,7 @@ function logout() {
         .catch(err => {
             console.log(err)
             status.showError()
-        });
+        })
 }
 
 onMounted(() => {

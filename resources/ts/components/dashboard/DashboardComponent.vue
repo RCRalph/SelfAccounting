@@ -17,56 +17,57 @@
                             xl="12" lg="4" md="6" cols="12"
                             class="pb-4 pb-md-0 pb-xl-4 pr-xl-0 pr-md-3 pr-0"
                         >
-                            <v-card
-                                height="100%"
-                                class="d-flex justify-center flex-column"
-                            >
-                                <v-card-title class="text-center text-h5 py-4">
-                                    Current balance
-                                </v-card-title>
+                            <v-card class="h-100">
+                                <div class="d-flex justify-center flex-column w-100 h-100">
+                                    <div>
+                                        <v-card-title class="text-center text-h5 py-4">
+                                            Current balance
+                                        </v-card-title>
 
-                                <v-card-text>
-                                    <div
-                                        class="text-h4 text-center font-weight-regular mb-6"
-                                        :class="themeIsDark ? 'white--text' : 'black--text'"
-                                    >
-                                        {{
-                                            formats.numberWithCurrency(
-                                                currentBalanceSum,
-                                                currencies.usedCurrencyObject.ISO,
-                                            )
-                                        }}
+                                        <v-card-text>
+                                            <div
+                                                class="text-h4 text-center font-weight-regular mb-6"
+                                                :class="themeIsDark ? 'white--text' : 'black--text'"
+                                            >
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        currentBalanceSum,
+                                                        currencies.usedCurrencyObject.ISO,
+                                                    )
+                                                }}
+                                            </div>
+
+                                            <v-table v-if="currentBalance.length > 1" density="comfortable">
+                                                <tbody>
+                                                <tr v-for="(item, i) in currentBalance" :key="i">
+                                                    <td class="text-right text-h6" style="width: 50%">
+                                                        <div class="d-flex justify-start align-center">
+                                                            <div class="mr-2">
+                                                                <v-icon style="min-width: 24px">
+                                                                    {{ formats.iconName(item.icon) }}
+                                                                </v-icon>
+                                                            </div>
+
+                                                            <div class="d-flex justify-end align-center w-100">
+                                                                {{ formats.textWithNBSP(item.name) }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="text-h6">
+                                                        {{
+                                                            formats.numberWithCurrency(
+                                                                item.balance,
+                                                                currencies.usedCurrencyObject.ISO,
+                                                            )
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </v-table>
+                                        </v-card-text>
                                     </div>
-
-                                    <v-table v-if="currentBalance.length > 1" density="comfortable">
-                                        <tbody>
-                                            <tr v-for="(item, i) in currentBalance" :key="i">
-                                                <td class="text-right text-h6" style="width: 50%">
-                                                    <div class="d-flex justify-start align-center">
-                                                        <div class="mr-2">
-                                                            <v-icon style="min-width: 24px">
-                                                                {{ formats.iconName(item.icon) }}
-                                                            </v-icon>
-                                                        </div>
-
-                                                        <div class="d-flex justify-end align-center w-100">
-                                                            {{ formats.textWithNBSP(item.name) }}
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-                                                <td class="text-h6">
-                                                    {{
-                                                        formats.numberWithCurrency(
-                                                            item.balance,
-                                                            currencies.usedCurrencyObject.ISO,
-                                                        )
-                                                    }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </v-table>
-                                </v-card-text>
+                                </div>
                             </v-card>
                         </v-col>
 
@@ -128,88 +129,88 @@
                                 <v-card-text>
                                     <v-table>
                                         <tbody>
-                                            <tr>
-                                                <td
-                                                    class="text-right text-h6"
-                                                    style="width: 50%"
-                                                >
-                                                    Income
-                                                </td>
+                                        <tr>
+                                            <td
+                                                class="text-right text-h6"
+                                                style="width: 50%"
+                                            >
+                                                Income
+                                            </td>
 
-                                                <td class="text-h6">
-                                                    {{
-                                                        formats.numberWithCurrency(
-                                                            last30Days.income,
-                                                            currencies.usedCurrencyObject.ISO,
-                                                        )
-                                                    }}
-                                                </td>
-                                            </tr>
+                                            <td class="text-h6">
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        last30Days.income,
+                                                        currencies.usedCurrencyObject.ISO,
+                                                    )
+                                                }}
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Expenses
-                                                </td>
+                                        <tr>
+                                            <td class="text-right text-h6">
+                                                Expenses
+                                            </td>
 
-                                                <td class="text-h6">
-                                                    {{
-                                                        formats.numberWithCurrency(
-                                                            last30Days.expenses,
-                                                            currencies.usedCurrencyObject.ISO,
-                                                        )
-                                                    }}
-                                                </td>
-                                            </tr>
+                                            <td class="text-h6">
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        last30Days.expenses,
+                                                        currencies.usedCurrencyObject.ISO,
+                                                    )
+                                                }}
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Incoming transfers
-                                                </td>
+                                        <tr>
+                                            <td class="text-right text-h6">
+                                                Incoming transfers
+                                            </td>
 
-                                                <td class="text-h6">
-                                                    {{
-                                                        formats.numberWithCurrency(
-                                                            last30Days.transfersIn,
-                                                            currencies.usedCurrencyObject.ISO,
-                                                        )
-                                                    }}
-                                                </td>
-                                            </tr>
+                                            <td class="text-h6">
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        last30Days.transfersIn,
+                                                        currencies.usedCurrencyObject.ISO,
+                                                    )
+                                                }}
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Outgoing transfers
-                                                </td>
+                                        <tr>
+                                            <td class="text-right text-h6">
+                                                Outgoing transfers
+                                            </td>
 
-                                                <td class="text-h6">
-                                                    {{
-                                                        formats.numberWithCurrency(
-                                                            last30Days.transfersOut,
-                                                            currencies.usedCurrencyObject.ISO,
-                                                        )
-                                                    }}
-                                                </td>
-                                            </tr>
+                                            <td class="text-h6">
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        last30Days.transfersOut,
+                                                        currencies.usedCurrencyObject.ISO,
+                                                    )
+                                                }}
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td class="text-right text-h6">
-                                                    Total
-                                                </td>
+                                        <tr>
+                                            <td class="text-right text-h6">
+                                                Total
+                                            </td>
 
-                                                <td :class="[
+                                            <td :class="[
                                                     'text-h6',
                                                     last30DaysTotal > 0 && 'text-success',
                                                     last30DaysTotal < 0 && 'text-error'
                                                 ]">
-                                                    {{
-                                                        formats.numberWithCurrency(
-                                                            last30DaysTotal,
-                                                            currencies.usedCurrencyObject.ISO,
-                                                            true,
-                                                        )
-                                                    }}
-                                                </td>
-                                            </tr>
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        last30DaysTotal,
+                                                        currencies.usedCurrencyObject.ISO,
+                                                        true,
+                                                    )
+                                                }}
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </v-table>
                                 </v-card-text>
@@ -226,10 +227,10 @@
                     </v-card-title>
 
                     <v-card-text>
-                        <!--<RecentTransactionsComponent
-                            :categories="categories"
+                        <RecentTransactionsComponent
                             :accounts="accounts"
-                        ></RecentTransactionsComponent>-->
+                            :categories="categories"
+                        ></RecentTransactionsComponent>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -249,31 +250,22 @@
 </template>
 
 <script setup lang="ts">
-interface CurrentBalance {
-    account_id?: number
-    category_id?: number
-    balance: number
-    icon: string
-    name: string
-}
-
-interface Chart {
-    id: number
-    name: string
-    type: string
-}
-
 import axios from "axios"
-import {ref, computed, onMounted} from "vue"
-import type {Ref} from "vue"
+import { ref, computed, onMounted } from "vue"
+import type { Ref } from "vue"
 
-import DataByTypeChartComponent from "@components/dashboard/DataByTypeChartComponent.vue";
-import BalanceHistoryChartComponent from "@components/dashboard/BalanceHistoryChartComponent.vue";
+import type { CurrentBalance, Chart } from "@interfaces/Dashboard"
+import type { Category } from "@interfaces/Category"
+import type { Account } from "@interfaces/Account"
 
-import {useCurrenciesStore} from "@stores/currencies";
-import {useStatusStore} from "@stores/status";
-import useFormats from "@composables/useFormats";
-import useThemeSettings from "@composables/useThemeSettings";
+import BalanceHistoryChartComponent from "@components/dashboard/BalanceHistoryChartComponent.vue"
+import DataByTypeChartComponent from "@components/dashboard/DataByTypeChartComponent.vue"
+import RecentTransactionsComponent from "@components/dashboard/RecentTransactionsComponent.vue"
+
+import { useCurrenciesStore } from "@stores/currencies"
+import { useStatusStore } from "@stores/status"
+import useFormats from "@composables/useFormats"
+import useThemeSettings from "@composables/useThemeSettings"
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
@@ -332,10 +324,12 @@ function useCharts() {
     return {chartType, charts, currentChart}
 }
 
-const ready = ref(false)
-const {currentBalance, currentBalanceSum} = useCurrentBalance()
-const {last30Days, last30DaysTotal} = useLast30Days()
-const {chartType, charts, currentChart} = useCharts()
+function useRecentTransactions() {
+    const accounts: Ref<Account[]> = ref([])
+    const categories: Ref<Category[]> = ref([])
+
+    return {accounts, categories}
+}
 
 function getBalanceData() {
     ready.value = false
@@ -352,6 +346,9 @@ function getBalanceData() {
                 currentChart.value = charts.value[0].id
             }
 
+            accounts.value = data.accounts
+            categories.value = data.categories
+
             ready.value = true
         })
         .catch(err => {
@@ -360,87 +357,14 @@ function getBalanceData() {
         })
 }
 
+const ready = ref(false)
+const {currentBalance, currentBalanceSum} = useCurrentBalance()
+const {last30Days, last30DaysTotal} = useLast30Days()
+const {chartType, charts, currentChart} = useCharts()
+const {accounts, categories} = useRecentTransactions()
+
 onMounted(() => {
     getBalanceData()
     currencies.$subscribe(() => getBalanceData())
 })
-/*
-import { useCurrenciesStore } from "&/stores/currencies";
-import main from "&/mixins/main";
-
-import BalanceHistoryChartComponent from "@/dashboard/BalanceHistoryChartComponent.vue";
-import DataByTypeChartComponent from "@/dashboard/DataByTypeChartComponent.vue";
-import RecentTransactionsComponent from "@/dashboard/RecentTransactionsComponent.vue";
-
-export default {
-    components: {
-        BalanceHistoryChartComponent,
-        DataByTypeChartComponent,
-        RecentTransactionsComponent
-    },
-    mixins: [main],
-    setup() {
-        const currencies = useCurrenciesStore();
-
-        return { currencies };
-    },
-    data() {
-        return {
-            charts: [],
-            categories: [],
-            accounts: [],
-            currentChart: null,
-            currentBalance: [],
-            last30Days: {},
-
-            ready: false
-        }
-    },
-    computed: {
-        last30DaysTotal() {
-            return this.last30Days.income + this.last30Days.transfersIn - this.last30Days.expenses - this.last30Days.transfersOut;
-        },
-        last30DaysSummarySign() {
-            return this.last30DaysTotal > 0 ? "+" : ( this.last30DaysTotal < 0 ? "-" : "" )
-        },
-        currentBalanceSum() {
-            return this.currentBalance.length ?
-                this.currentBalance
-                    .map(item => item.balance)
-                    .reduce((item1, item2) => item1 + item2)
-                : 0
-        },
-        chartType() {
-            return this.ready ? this.charts.find(item => item.id == this.currentChart).type : ""
-        }
-    },
-    methods: {
-        getBalanceData() {
-            this.ready = false;
-
-            axios
-                .get(`/web-api/dashboard/${this.currencies.usedCurrency}`)
-                .then(response => {
-                    const data = response.data;
-
-                    this.currentBalance = data.currentBalance;
-                    this.last30Days = data.last30Days;
-
-                    this.categories = data.categories;
-                    this.accounts = data.accounts;
-
-                    this.charts = data.charts;
-                    if (data.charts.length) {
-                        this.currentChart = data.charts[0].id
-                    }
-
-                    this.ready = true;
-                })
-        }
-    },
-    mounted() {
-        this.getBalanceData()
-        this.currencies.$subscribe(() => this.getBalanceData());
-    }
-}*/
 </script>

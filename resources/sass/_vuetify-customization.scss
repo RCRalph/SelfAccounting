@@ -1,3 +1,5 @@
+$sticky-panel-margin: 12px;
+
 .v-application {
     .text-h6 {
         font-size: 1.125rem !important;
@@ -10,7 +12,8 @@
 
 .v-main {
     position: relative;
-    min-height: 100dvh;
+    height: 100dvh;
+    overflow-y: auto;
     padding-left: 0 !important;
 }
 
@@ -47,13 +50,13 @@ tr {
 }
 
 .table-hover-background {
-    background-color: #616161;
+    background-color: rgb(var(--v-theme-on-surface-variant)) !important;
     transition: background-color 0.1s ease-in-out !important;
 }
 
 .sticky-panel {
     position: sticky;
-    top: 16px;
+    top: $sticky-panel-margin;
 }
 
 .loading-height {
@@ -175,10 +178,9 @@ tr {
 }
 
 .overview-block {
-    position: sticky;
-    top: 16px;
+    @extend .sticky-panel;
     overflow-y: auto;
-    max-height: calc(100vh - 32px);
+    max-height: calc(100vh - #{2 * $sticky-panel-margin});
 
     -ms-overflow-style: none;
 

@@ -47,7 +47,7 @@ const props = defineProps<{
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
 const {chartColors} = useThemeSettings()
-const {dashboardQuery} = useChartQueryParameters()
+const {last30DaysQuery} = useChartQueryParameters()
 const ready = ref(false)
 
 function useChartData() {
@@ -73,7 +73,7 @@ function useChartData() {
 
         axios.get(
             `/web-api/charts/${props.id}/currency/${currencies.usedCurrency}`,
-            {params: dashboardQuery.value},
+            {params: last30DaysQuery.value},
         )
             .then(response => {
                 const data = response.data

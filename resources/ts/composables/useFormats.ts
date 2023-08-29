@@ -4,7 +4,7 @@ export default function useFormats() {
     function numberWithCurrency(
         value: number,
         ISO: string,
-        forceSign = false
+        forceSign = false,
     ): string {
         let valueString = Math.abs(value)
             .toLocaleString("en", {

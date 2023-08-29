@@ -23,6 +23,12 @@
             ],
             "@stores/*": [
                 "resources/ts/stores/*"
+            ],
+            "@classes/*": [
+                "resources/ts/classes/*"
+            ],
+            "@interfaces/*": [
+                "resources/ts/interfaces/*"
             ]
         }
     }

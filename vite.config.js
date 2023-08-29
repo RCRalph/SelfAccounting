@@ -17,7 +17,6 @@ export default defineConfig({
             }
         }),
         vuetify({
-            autoImport: true,
             styles: {
                 configFile: "/resources/sass/_vuetify-settings.scss"
             }
@@ -30,6 +29,8 @@ export default defineConfig({
             "@components": "/resources/ts/components",
             "@plugins": "/resources/ts/plugins",
             "@stores": "/resources/ts/stores",
+            "@classes": "/resources/ts/classes",
+            "@interfaces": "/resources/ts/interfaces",
         }
     }
 });
