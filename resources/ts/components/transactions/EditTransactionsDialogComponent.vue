@@ -123,13 +123,10 @@
                             cols="12"
                             md="4"
                         >
-                            <v-text-field
-                                :model-value="value"
-                                :suffix="currencies.usedCurrencyObject.ISO"
-                                :readonly="true"
-                                variant="plain"
-                                label="Value"
-                            ></v-text-field>
+                            <ValueFieldComponent
+                                :value="value"
+                                :iso="currencies.usedCurrencyObject.ISO"
+                            ></ValueFieldComponent>
                         </v-col>
                     </v-row>
 
@@ -214,6 +211,7 @@ import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 
 import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
+import ValueFieldComponent from "@components/common/ValueFieldComponent.vue"
 import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import CardActionsResetUpdate from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
