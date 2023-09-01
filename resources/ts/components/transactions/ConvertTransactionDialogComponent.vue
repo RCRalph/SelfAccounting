@@ -1,72 +1,83 @@
 <template>
-    <v-dialog v-model="dialog" width="unset">
-        <template v-slot:activator="{ on, attrs }">
+    <v-dialog
+        v-model="dialog"
+        width="unset"
+    >
+        <template v-slot:activator="{ props }: any">
             <v-btn
-                outlined
-                :class="$vuetify.breakpoint.xs && 'mt-2'"
-                v-bind="attrs" v-on="on"
+                v-bind="props"
+                :class="display.xs && 'mt-2'"
+                variant="outlined"
             >
-                Convert to {{ type == 'expenses' ? 'income' : 'expense' }}
+                Convert to {{ target }}
             </v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Convert to {{ type == 'expenses' ? 'income' : 'expense' }}</v-card-title>
+            <v-card-title class="d-flex justify-center pb-0">
+                Convert to {{ target }}
+            </v-card-title>
 
-            <v-card-text>
-                <h3>Are you sure you want to convert this {{ type == 'expenses' ? 'expense' : 'income' }} to {{ type == 'expenses' ? 'income' : 'expense' }}?</h3>
+            <v-card-text class="text-h7 mx-5">
+                Are you sure you want to convert this {{ source }} to {{ target }}?
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn outlined @click="dialog = false" :disabled="loading" class="mx-1">
-                    No
-                </v-btn>
-
-                <v-btn color="success" outlined @click="remove" :disabled="loading" :loading="loading" class="mx-1">
-                    Yes
-                </v-btn>
-            </v-card-actions>
+            <CardActionsNoYesComponent
+                :loading="loading"
+                @no="dialog = false"
+                @yes="convert"
+            ></CardActionsNoYesComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref, computed } from "vue"
+import { useDisplay } from "vuetify"
+import { useStatusStore } from "@stores/status"
 
-export default {
-    components: {
-        ErrorSnackbarComponent
-    },
-    props: {
-        type: String,
-        id: Number
-    },
-    data() {
-        return {
-            dialog: false,
-            error: false,
-            loading: false
-        }
-    },
-    methods: {
-        remove() {
-            this.loading = true;
+import CardActionsNoYesComponent from "@components/common/card-actions/CardActionsNoYesComponent.vue"
 
-            axios
-                .post(`/web-api/${this.type}/${this.id}/convert`)
-                .then(() => {
-                    this.$emit("converted");
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        }
+const props = defineProps<{
+    type: string,
+    id: number
+}>()
+
+const emit = defineEmits<{
+    converted: []
+}>()
+
+const status = useStatusStore()
+const display = useDisplay()
+
+function useDialogSettings() {
+    const dialog = ref(false)
+    const loading = ref(false)
+
+    const source = computed(() => props.type == "expenses" ? "expense" : "income")
+
+    const target = computed(() => props.type == "expenses" ? "income" : "expense")
+
+    function convert() {
+        loading.value = true
+
+        axios.post(`/web-api/${props.type}/${props.id}/convert`)
+            .then(() => {
+                status.showSuccess(`converted ${source.value} into ${target.value}`)
+                emit("converted")
+                dialog.value = false
+                loading.value = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value = false, 2000)
+            })
     }
+
+    return {convert, dialog, loading, source, target}
 }
+
+const {convert, dialog, loading, source, target} = useDialogSettings()
 </script>

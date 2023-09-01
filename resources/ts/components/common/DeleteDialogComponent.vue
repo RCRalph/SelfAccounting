@@ -28,27 +28,11 @@
                 Are you sure you want to delete this {{ props.thing }}?
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn
-                    :disabled="loading"
-                    variant="outlined"
-                    class="mx-1"
-                    @click="dialog = false"
-                >
-                    No
-                </v-btn>
-
-                <v-btn
-                    :disabled="loading"
-                    :loading="loading"
-                    color="error"
-                    variant="outlined"
-                    class="mx-1"
-                    @click="remove"
-                >
-                    Yes
-                </v-btn>
-            </v-card-actions>
+            <CardActionsNoYesComponent
+                :loading="loading"
+                @no="dialog = false"
+                @yes="remove"
+            ></CardActionsNoYesComponent>
         </v-card>
     </v-dialog>
 </template>
@@ -56,8 +40,8 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref } from "vue"
-
 import { useStatusStore } from "@stores/status"
+import CardActionsNoYesComponent from "@components/common/card-actions/CardActionsNoYesComponent.vue"
 
 const props = defineProps<{
     url: string,
@@ -79,6 +63,7 @@ function useDialogSettings() {
 
         axios.delete(`/web-api/${props.url}`)
             .then(() => {
+                status.showSuccess(`deleted ${props.thing}`)
                 emit("deleted")
                 dialog.value = false
                 loading.value = false

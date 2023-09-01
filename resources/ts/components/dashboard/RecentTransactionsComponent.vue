@@ -52,7 +52,7 @@
                         <div class="d-flex justify-end">
                             <v-btn
                                 v-bind="props"
-                                :color="filteredData.dates.length && 'rgba(var(--v-theme-on-surface))'"
+                                :color="filterColor(filteredData.dates.length)"
                                 :style="filteredData.dates.length && 'opacity: 1'"
                                 icon="mdi-filter"
                                 size="x-small"
@@ -101,7 +101,7 @@
                         <div class="d-flex justify-end">
                             <v-btn
                                 v-bind="props"
-                                :color="filteredData.categories.length && 'rgba(var(--v-theme-on-surface))'"
+                                :color="filterColor(filteredData.categories.length)"
                                 :style="filteredData.categories.length && 'opacity: 1'"
                                 icon="mdi-filter"
                                 size="x-small"
@@ -116,7 +116,7 @@
                                 v-for="(item, i) in props.categories"
                                 v-model="filteredData.categories"
                                 :value="item.id"
-                                :key="item.id"
+                                :key="i"
                                 :class="i == 0 && 'mt-0 pt-0'"
                                 density="comfortable"
                                 hide-details
@@ -149,7 +149,7 @@
                         <div class="d-flex justify-end">
                             <v-btn
                                 v-bind="props"
-                                :color="filteredData.accounts.length && 'rgba(var(--v-theme-on-surface))'"
+                                :color="filterColor(filteredData.accounts.length)"
                                 :style="filteredData.accounts.length && 'opacity: 1'"
                                 icon="mdi-filter"
                                 size="x-small"
@@ -164,7 +164,7 @@
                                 v-for="(item, i) in props.accounts"
                                 v-model="filteredData.accounts"
                                 :value="item.id"
-                                :key="item.id"
+                                :key="i"
                                 :class="i == 0 && 'mt-0 pt-0'"
                                 density="comfortable"
                                 hide-details
@@ -304,16 +304,16 @@
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     <div class="d-flex flex-nowrap justify-center align-center">
-                        <!--<EditTransactionsDialogComponent
-                            :type="item.value.value < 0 ? 'expenses' : 'income'"
-                            :id="item.id.value"
-                            @updated="getData"
-                        ></EditTransactionsDialogComponent>-->
+                        <EditTransactionsDialogComponent
+                            :type="item.raw.value.value < 0 ? 'expenses' : 'income'"
+                            :id="item.raw.id.value"
+                            @updated="emit('updated')"
+                        ></EditTransactionsDialogComponent>
 
                         <DeleteDialogComponent
                             :thing="item.raw.value.value < 0 ? 'expense' : 'income'"
                             :url="`${item.raw.value.value < 0 ? 'expenses' : 'income'}/${item.raw.id.value}`"
-                            @deleted="getStartData"
+                            @deleted="emit('updated')"
                         ></DeleteDialogComponent>
                     </div>
                 </td>
@@ -335,10 +335,12 @@ import { ref, computed, onMounted, watch } from "vue"
 import type { Ref } from "vue"
 import type { VDataTable } from "vuetify/labs/VDataTable"
 
-import type { Transaction, DataQuery } from "@interfaces/Dashboard"
+import type { DataQuery } from "@interfaces/Dashboard"
+import type { TransactionRow } from "@interfaces/Transaction"
 import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
 
+import EditTransactionsDialogComponent from "@components/transactions/EditTransactionsDialogComponent.vue"
 import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
@@ -349,6 +351,10 @@ import useFormats from "@composables/useFormats"
 const props = defineProps<{
     accounts: Account[]
     categories: Category[]
+}>()
+
+const emit = defineEmits<{
+    updated: []
 }>()
 
 const currencies = useCurrenciesStore()
@@ -376,7 +382,11 @@ function useTableSettings() {
         accounts: [] as number[],
     })
 
-    return {filteredData, headers, loading, options}
+    function filterColor(length: number) {
+        return length ? "rgba(var(--v-theme-on-surface))" : undefined
+    }
+
+    return {filterColor, filteredData, headers, loading, options}
 }
 
 function useTableData() {
@@ -384,7 +394,7 @@ function useTableData() {
         title: "",
     })
 
-    const tableData = new TableDataMerger<Transaction>(
+    const tableData = new TableDataMerger<TransactionRow>(
         ["date"],
         ["id", "value"],
     )
@@ -492,7 +502,7 @@ function useUpdateWithOffset() {
     return {updateWithOffset}
 }
 
-const {filteredData, headers, loading, options} = useTableSettings()
+const {filterColor, filteredData, headers, loading, options} = useTableSettings()
 const {getStartData, getMoreData, tableData, search} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset()
 

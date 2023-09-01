@@ -1,6 +1,6 @@
-import {createVuetify} from "vuetify"
-import {fa} from "vuetify/iconsets/fa"
-import {mdi} from "vuetify/iconsets/mdi"
+import { createVuetify } from "vuetify"
+import { fa } from "vuetify/iconsets/fa"
+import { mdi } from "vuetify/iconsets/mdi"
 
 import * as components from "vuetify/components"
 import * as labsComponents from "vuetify/labs/components"
@@ -40,6 +40,11 @@ export default createVuetify({
         VTabs: {
             bgColor: "rgb(var(--v-theme-surface))",
             style: "color: rgb(var(--theme-on-surface))",
+        },
+        VCard: {
+            style: {
+                padding: "2.5px",
+            },
         },
     },
 })

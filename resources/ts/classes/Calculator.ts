@@ -1,36 +1,40 @@
-import _ from "lodash"
+import { round } from "lodash"
 
-type Allow = {
-    null: boolean,
-    zero: boolean,
-    negative: boolean,
+interface Allow {
+    null: boolean
+    zero: boolean
+    negative: boolean
 }
 
-type Field = {
-    regex: RegExp;
-    precision: number;
-    name: string;
+interface Field {
+    regex: RegExp
+    precision: number
+    name: string
 }
 
-type ResultObject = {
-    value: number;
-    hint: string | undefined;
-    error: string | undefined;
+interface ResultObject {
+    value: number
+    hint: string | undefined
+    error: string | undefined
 }
 
 export default class Calculator {
-    private readonly operation: string
+    private readonly operation: string | number
     private readonly field: Field | undefined
     private readonly errorMargin: number
 
     constructor(
-        operation: string,
+        operation: string | number,
         fieldType: keyof typeof Calculator.FIELDS | undefined,
         private allow: Allow,
     ) {
-        this.operation = operation.trim()
-            .replaceAll(" ", "")
-            .replaceAll(",", ".")
+        if (typeof operation == "string") {
+            this.operation = operation.trim()
+                .replaceAll(" ", "")
+                .replaceAll(",", ".")
+        } else {
+            this.operation = operation
+        }
 
         if (fieldType != undefined) {
             this.field = Calculator.FIELDS[fieldType]
@@ -76,7 +80,7 @@ export default class Calculator {
     */
     public static OPERATION_REGEX = /^-?(\d+|\d*\.\d+|\d+\.\d*)([+\-*/^]-?(\d+|\d*\.\d+|\d+\.\d*))*$/
 
-    private getOperationStringWithoutBrackets(operation: string): string {
+    private getOperationStringWithoutBrackets(operation: string) {
         for (let i = 0; i < operation.length; i++) {
             if (operation[i] == "(") {
                 let j = i + 1, counter = 1
@@ -108,7 +112,7 @@ export default class Calculator {
         return operation
     }
 
-    validate(value: string | number): string | undefined {
+    validate(value: string | number) {
         if (this.allow.null && typeof value == "string" && !value.length) {
             return undefined
         }
@@ -130,7 +134,11 @@ export default class Calculator {
         return undefined
     }
 
-    calculate(operation: string): string {
+    calculate(operation: string | number) {
+        if (typeof operation == "number") {
+            return String(operation)
+        }
+
         operation = this.getOperationStringWithoutBrackets(operation)
 
         if (!operation) {
@@ -226,7 +234,7 @@ export default class Calculator {
         return operationArray[0]
     }
 
-    get resultObject(): ResultObject {
+    get resultObject() {
         const result: ResultObject = {
             value: NaN,
             hint: undefined,
@@ -234,7 +242,7 @@ export default class Calculator {
         }
 
         try {
-            let value = this.calculate(this.operation)
+            const value = this.calculate(this.operation)
 
             if (this.field == undefined) {
                 result.error = this.validate(value)
@@ -245,7 +253,7 @@ export default class Calculator {
             } else {
                 result.error = this.validate(value)
 
-                const rounded = _.round(Number(value), this.field.precision)
+                const rounded = round(Number(value), this.field.precision)
                 if (!result.error) {
                     result.value = rounded
                 }
@@ -261,10 +269,10 @@ export default class Calculator {
         return result
     }
 
-    get resultValue(): number {
+    get resultValue() {
         try {
             const result = Number(this.calculate(this.operation))
-            return this.field == undefined ? result : _.round(result, this.field.precision)
+            return this.field == undefined ? result : round(result, this.field.precision)
         } catch {
             return NaN
         }

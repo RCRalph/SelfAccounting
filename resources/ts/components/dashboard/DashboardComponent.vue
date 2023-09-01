@@ -230,6 +230,7 @@
                         <RecentTransactionsComponent
                             :accounts="accounts"
                             :categories="categories"
+                            @updated="getBalanceData"
                         ></RecentTransactionsComponent>
                     </v-card-text>
                 </v-card>

@@ -1,9 +1,9 @@
 interface Account {
-    id: number
+    id: number | null
     name: string
-    icon: string | null
+    icon?: string | null
     start_date: string | null
-    start_balance: number
+    start_balance?: number
 }
 
 export type {

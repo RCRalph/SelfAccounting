@@ -1,60 +1,88 @@
 <template>
-    <v-dialog v-model="dialog" max-width="800">
-        <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
-                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-pencil</v-icon>
+    <v-dialog
+        v-model="dialog"
+        max-width="800"
+    >
+        <template v-slot:activator="{props: dialogProps}: any">
+            <v-tooltip location="bottom">
+                <template v-slot:activator="{props: tooltipProps}: any">
+                    <v-icon
+                        v-bind="{ ...dialogProps, ...tooltipProps }"
+                        class="mx-1 cursor-pointer"
+                        icon="mdi-pencil"
+                    ></v-icon>
                 </template>
 
-                <span>Edit {{ type == 'expenses' ? 'expense' : 'income' }}</span>
+                <span>
+                    Edit {{ typeSingular }}
+                </span>
             </v-tooltip>
         </template>
 
-        <v-card v-if="ready">
-            <v-card-title class="d-flex" :class="$vuetify.breakpoint.xs ? 'flex-wrap flex-column justify-center' : 'justify-space-between'">
-                <div>Edit {{ type == 'expenses' ? 'expense' : 'income' }}</div>
+        <v-card v-if="ready && transactionData != undefined">
+            <CardTitleWithButtons>
+                <div>Edit {{ typeSingular }}</div>
 
                 <ConvertTransactionDialogComponent
                     :type="type"
                     :id="id"
-                    @converted="converted"
+                    @converted="emit('updated')"
                 ></ConvertTransactionDialogComponent>
-            </v-card-title>
+            </CardTitleWithButtons>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
                     <v-row>
-                        <v-col cols="12" md="4">
-                            <v-text-field type="date" label="Date" v-model="data.date" :min="usedAccount.start_date" :rules="[validation.date(false, usedAccount.start_date)]"></v-text-field>
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <v-text-field
+                                v-model="transactionData.date"
+                                :min="usedAccount?.start_date"
+                                :rules="[
+                                    Validator.date(false, usedAccount?.date)
+                                ]"
+                                variant="underlined"
+                                label="Date"
+                                type="date"
+                            ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="8">
                             <v-combobox
-                                label="Title"
+                                v-model="transactionData.title"
                                 :items="titles"
-                                v-model="data.title"
+                                :rules="[
+                                    Validator.title('Title', 64)
+                                ]"
+                                variant="underlined"
+                                label="Title"
                                 counter="64"
-                                :rules="[validation.title()]"
-                                ref="title"
                             ></v-combobox>
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="4">
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
                             <v-text-field
-                                label="Amount"
-                                v-model="data.amount"
-                                :error-messages="keys.amount ? amount.error : undefined"
+                                v-model="transactionData.amount"
+                                :error-messages="amount.error"
                                 :hint="amount.hint"
-                                @input="keys.amount++"
+                                variant="underlined"
+                                label="Amount"
                             >
-                                <template v-slot:append>
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon v-on="on" class="ml-1">
-                                                mdi-calculator
-                                            </v-icon>
+                                <template v-slot:append-inner>
+                                    <v-tooltip location="bottom">
+                                        <template v-slot:activator="{ props }: any">
+                                            <v-icon
+                                                v-bind="props"
+                                                class="ml-1"
+                                                icon="mdi-calculator"
+                                            ></v-icon>
                                         </template>
 
                                         Supported operations: <strong>+ - * / ^</strong>
@@ -63,21 +91,26 @@
                             </v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4">
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
                             <v-text-field
-                                label="Price"
-                                v-model="data.price"
-                                :error-messages="keys.price ? price.error : undefined"
-                                :hint="price.hint"
-                                @input="keys.price++"
+                                v-model="transactionData.price"
                                 :suffix="currencies.usedCurrencyObject.ISO"
+                                :error-messages="price.error"
+                                :hint="price.hint"
+                                variant="underlined"
+                                label="Price"
                             >
-                                <template v-slot:append>
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon v-on="on" class="ml-1">
-                                                mdi-calculator
-                                            </v-icon>
+                                <template v-slot:append-inner>
+                                    <v-tooltip location="bottom">
+                                        <template v-slot:activator="{ props }: any">
+                                            <v-icon
+                                                v-bind="props"
+                                                class="ml-1"
+                                                icon="mdi-calculator"
+                                            ></v-icon>
                                         </template>
 
                                         Supported operations: <strong>+ - * / ^</strong>
@@ -86,49 +119,64 @@
                             </v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="4" style='display: flex; flex-wrap: wrap; flex-direction: column; overflow-x: hidden'>
-                            <div class="caption mb-2">Value</div>
-                            <h2 style='white-space: nowrap; font-weight: normal' :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ valueField | addSpaces }} {{ currencies.usedCurrencyObject.ISO }}</h2>
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <v-text-field
+                                :model-value="value"
+                                :suffix="currencies.usedCurrencyObject.ISO"
+                                :readonly="true"
+                                variant="plain"
+                                label="Value"
+                            ></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="6">
+                        <v-col
+                            cols="12"
+                            md="6"
+                        >
                             <v-select
-                                v-model="data.category_id"
+                                v-model="transactionData.category_id"
                                 :items="categories"
-                                item-text="name"
+                                item-title="name"
                                 item-value="id"
                                 label="Category"
+                                variant="underlined"
                             >
-                                <template v-slot:item="{ item }">
-                                    <v-list-item-icon v-if="item.icon">
-                                        <v-icon>{{ item.icon }}</v-icon>
-                                    </v-list-item-icon>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                    </v-list-item-content>
+                                <template v-slot:item="{ item, props }: any">
+                                    <v-list-item v-bind="props">
+                                        <template v-slot:prepend>
+                                            <v-icon
+                                                v-if="item.raw.icon"
+                                                :icon="item.raw.icon"
+                                            ></v-icon>
+                                        </template>
+                                    </v-list-item>
                                 </template>
                             </v-select>
                         </v-col>
 
                         <v-col cols="12" md="6">
                             <v-select
-                                v-model="data.account_id"
+                                v-model="transactionData.account_id"
                                 :items="accounts"
-                                item-text="name"
+                                item-title="name"
                                 item-value="id"
-                                label="Account"
+                                label="Category"
+                                variant="underlined"
                             >
-                                <template v-slot:item="{ item }">
-                                    <v-list-item-icon v-if="item.icon">
-                                        <v-icon>{{ item.icon }}</v-icon>
-                                    </v-list-item-icon>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                    </v-list-item-content>
+                                <template v-slot:item="{ item, props }: any">
+                                    <v-list-item v-bind="props">
+                                        <template v-slot:prepend>
+                                            <v-icon
+                                                v-if="item.raw.icon"
+                                                :icon="item.raw.icon"
+                                            ></v-icon>
+                                        </template>
+                                    </v-list-item>
                                 </template>
                             </v-select>
                         </v-col>
@@ -136,150 +184,170 @@
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1" width="85">
-                    Reset
-                </v-btn>
-
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1" width="85">
-                    Update
-                </v-btn>
-            </v-card-actions>
+            <CardActionsResetUpdate
+                :loading="loading"
+                :can-submit="canSubmit"
+                @reset="reset"
+                @update="update"
+            ></CardActionsResetUpdate>
         </v-card>
 
-        <v-card v-else>
-            <v-card-title>Edit {{ type }}</v-card-title>
-
-            <v-card-text class="d-flex justify-center">
-                <v-progress-circular
-                    indeterminate
-                    size="96"
-                ></v-progress-circular>
-            </v-card-text>
-        </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
+        <CardLoadingComponent
+            v-else
+            :thing="typeSingular"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 
-<script>
-import ConvertTransactionDialogComponent from "@/transactions/ConvertTransactionDialogComponent.vue";
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { round } from "lodash"
+import { cloneDeep, isNull } from "lodash"
+import { ref, computed, watch } from "vue"
+import type { Ref } from "vue"
 
-import { useCurrenciesStore } from "&/stores/currencies";
-import Calculator from "&/classes/Calculator";
-import validation from "&/mixins/validation";
-import main from "&/mixins/main";
+import type { Transaction } from "@interfaces/Transaction"
+import type { Category } from "@interfaces/Category"
+import type { Account } from "@interfaces/Account"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import { useStatusStore } from "@stores/status"
+import { useCurrenciesStore } from "@stores/currencies"
 
-        return { currencies };
-    },
-    mixins: [validation, main],
-    components: {
-        ConvertTransactionDialogComponent,
-        ErrorSnackbarComponent
-    },
-    props: {
-        type: String,
-        id: Number
-    },
-    data() {
-        return {
-            dialog: false,
-            data: {},
-            dataCopy: {},
-            accounts: [],
-            categories: [],
-            titles: [],
-            keys: {
-                amount: 0,
-                price: 0
-            },
+import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
+import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
+import CardActionsResetUpdate from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
 
-            ready: false,
-            error: false,
-            loading: false,
-            canSubmit: false
-        }
-    },
-    watch: {
-        dialog() {
-            if (!this.dialog) return;
-            this.ready = false;
+import Calculator from "@classes/Calculator"
+import Validator from "@classes/Validator"
 
-            axios
-                .get(`/web-api/${this.type}/${this.id}`)
-                .then(response => {
-                    const data = response.data;
+const props = defineProps<{
+    type: "income" | "expenses"
+    id: number
+}>()
 
-                    this.titles = data.titles;
-                    this.data = data.data;
-                    this.dataCopy = _.cloneDeep(data.data);
-                    this.accounts = data.accounts;
-                    this.categories = data.categories;
+const emit = defineEmits<{
+    updated: []
+}>()
 
-                    this.ready = true;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                })
-        }
-    },
-    computed: {
-        amount() {
-            this.keys.amount;
-            return new Calculator(this.data.amount, Calculator.FIELDS.amount).resultObject;
-        },
-        price() {
-            this.keys.price;
-            return new Calculator(this.data.price, Calculator.FIELDS.price).resultObject;
-        },
-        usedCategory() {
-            return this.categories.find(item => item.id == this.data.category_id);
-        },
-        usedAccount() {
-            return this.accounts.find(item => item.id == this.data.account_id);
-        },
-        valueField() {
-            return _.round(this.amount.value * this.price.value, 2) || 0;
-        },
-    },
-    methods: {
-        reset() {
-            this.data = _.cloneDeep(this.dataCopy);
-        },
-        update() {
-            this.loading = true;
-            this.$refs.title.blur();
+const status = useStatusStore()
+const currencies = useCurrenciesStore()
 
-            this.$nextTick(() => {
-                axios
-                    .patch(`/web-api/${this.type}/${this.id}`, {
-                        ...this.data,
-                        amount: this.amount.value,
-                        price: this.price.value
-                    })
-                    .then(() => {
-                        this.dataCopy = _.cloneDeep(this.data);
-                        this.$emit("updated");
-                        this.dialog = false;
-                        this.loading = false;
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        setTimeout(() => this.error = true, 1000);
-                        setTimeout(() => this.loading = false, 2000);
-                    })
-            })
-        },
-        converted() {
-            this.dialog = false;
-            this.$emit("converted");
-        }
-    }
+function useDialogSettings() {
+    const dialog = ref(false)
+    const ready = ref(true)
+    const canSubmit = ref(false)
+    const loading = ref(false)
+
+    const typeSingular = computed(() => props.type == "expenses" ? "expense" : "income")
+
+    return {dialog, ready, typeSingular, canSubmit, loading}
 }
+
+function useData() {
+    const transactionData: Ref<Transaction | undefined> = ref(undefined)
+    const transactionDataCopy: Ref<Transaction | undefined> = ref(undefined)
+
+    const titles: Ref<string[]> = ref([])
+    const categories: Ref<Category[]> = ref([])
+    const accounts: Ref<Account[]> = ref([])
+
+    const usedAccount = computed(() => {
+        const result = accounts.value.find(item => item.id == transactionData.value?.account_id)
+
+        if (typeof result == "undefined") {
+            return undefined
+        } else if (!isNull(result.start_date)) {
+            return {...result, date: new Date(result.start_date)}
+        } else {
+            throw new Error("Account start date is null, which it shouldn't be.")
+        }
+    })
+
+    function getData() {
+        if (!dialog.value) return
+
+        ready.value = false
+
+        axios.get(`/web-api/${props.type}/${props.id}`)
+            .then(response => {
+                const data = response.data
+
+                transactionData.value = data.data
+                transactionDataCopy.value = cloneDeep(data.data)
+
+                titles.value = data.titles
+                accounts.value = data.accounts
+                categories.value = data.categories
+
+                ready.value = true
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+            })
+    }
+
+    return {accounts, categories, getData, titles, transactionData, transactionDataCopy, usedAccount}
+}
+
+function useCalculatedValues() {
+    const calculatorAllowObject = {
+        null: false,
+        negative: false,
+        zero: false,
+    }
+
+    const amount = computed(() => new Calculator(
+        transactionData.value?.amount || "",
+        "amount",
+        calculatorAllowObject,
+    ).resultObject)
+
+    const price = computed(() => new Calculator(
+        transactionData.value?.price || "",
+        "price",
+        calculatorAllowObject,
+    ).resultObject)
+
+    const value = computed(() => round(amount.value.value * price.value.value, 2) || 0)
+
+    return {amount, price, value}
+}
+
+function useActions() {
+    function reset() {
+        transactionData.value = cloneDeep(transactionDataCopy.value)
+    }
+
+    function update() {
+        loading.value = true
+
+        axios.patch(`/web-api/${props.type}/${props.id}`, {
+            ...transactionData.value,
+            amount: amount.value.value,
+            price: price.value.value,
+        })
+            .then(() => {
+                emit("updated")
+                transactionDataCopy.value = cloneDeep(transactionData.value)
+                dialog.value = false
+                loading.value = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value = false, 2000)
+            })
+    }
+
+    return {reset, update}
+}
+
+const {dialog, ready, typeSingular, canSubmit, loading} = useDialogSettings()
+const {accounts, categories, getData, titles, transactionData, transactionDataCopy, usedAccount} = useData()
+const {amount, price, value} = useCalculatedValues()
+const {reset, update} = useActions()
+
+watch(dialog, getData)
 </script>

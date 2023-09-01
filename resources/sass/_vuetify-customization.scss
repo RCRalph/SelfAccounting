@@ -35,13 +35,13 @@ tr {
 
 .table-bordered {
     th, td {
-        border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+        border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
     }
 
     table {
-        border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-left: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+        border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
     }
 
     tr:hover {
