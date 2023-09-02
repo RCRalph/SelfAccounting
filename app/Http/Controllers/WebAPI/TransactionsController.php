@@ -44,6 +44,25 @@ class TransactionsController extends Controller
         return compact("categories", "accounts");
     }
 
+    private function getTitles(int $currencyID, string $title)
+    {
+        $incomeTitles = auth()->user()->income()
+            ->select("title")
+            ->where("currency_id", $currencyID)
+            ->where("title", "ilike", "%" . $title . "%");
+
+        $expensesTitles = auth()->user()->expenses()
+            ->select("title")
+            ->where("currency_id", $currencyID)
+            ->where("title", "ilike", "%" . $title . "%");
+
+        return $incomeTitles
+            ->union($expensesTitles) // Unions ensure unique rows
+            ->orderBy("title")
+            ->get()
+            ->pluck("title");
+    }
+
     public function show($id)
     {
         $data = $this->getTypeRelation()
@@ -56,12 +75,12 @@ class TransactionsController extends Controller
 
         $accountsAndCategories = $this->getCategoriesAndAccounts($data->currency);
 
-        $titles = auth()->user()->transactionTitles;
+        $titles = $this->getTitles($data->currency_id, $data->title);
 
         $data = collect($data);
         $data->forget("currency");
 
-        return response()->json([ ...compact("data", "titles"), ...$accountsAndCategories ]);
+        return response()->json([...compact("data", "titles"), ...$accountsAndCategories]);
     }
 
     public function update($id)
@@ -175,7 +194,7 @@ class TransactionsController extends Controller
         $accountsAndCategories = $this->getCategoriesAndAccounts($currency);
         $titles = auth()->user()->transactionTitles;
 
-        return response()->json([ ...compact("titles"), ...$accountsAndCategories ]);
+        return response()->json([...compact("titles"), ...$accountsAndCategories]);
     }
 
     public function store(Currency $currency)
@@ -207,12 +226,10 @@ class TransactionsController extends Controller
                             $item["id"],
                             ["amount" => $cashAmount]
                         );
-                    }
-                    else {
+                    } else {
                         auth()->user()->cash()->detach($item["id"]);
                     }
-                }
-                else {
+                } else {
                     /*
                         This can only be reached if request()->type is "income",
                         in expenses cash has to be already attached and this
@@ -221,7 +238,7 @@ class TransactionsController extends Controller
 
                     auth()->user()->cash()->attach(
                         $item["id"],
-                        [ "amount" => $item["amount"] ]
+                        ["amount" => $item["amount"]]
                     );
                 }
             }
@@ -253,5 +270,16 @@ class TransactionsController extends Controller
         }
 
         return response("");
+    }
+
+    public function titles(Currency $currency)
+    {
+        $title = request()->validate([
+            "title" => ["required", "string", "max:64"],
+        ])["title"];
+
+        return response()->json([
+            "titles" => $this->getTitles($currency->id, $title)
+        ]);
     }
 }

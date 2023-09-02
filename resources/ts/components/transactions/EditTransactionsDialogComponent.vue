@@ -52,7 +52,9 @@
                         <v-col cols="12" md="8">
                             <v-combobox
                                 v-model="transactionData.title"
+                                v-model:menu="titleMenuShow"
                                 :items="titles"
+                                :loading="loading.title"
                                 :rules="[
                                     Validator.title('Title', 64)
                                 ]"
@@ -182,8 +184,8 @@
             </v-card-text>
 
             <CardActionsResetUpdate
-                :loading="loading"
-                :can-submit="canSubmit"
+                :loading="loading.update"
+                :can-submit="!!canSubmit"
                 @reset="reset"
                 @update="update"
             ></CardActionsResetUpdate>
@@ -207,6 +209,8 @@ import type { Transaction } from "@interfaces/Transaction"
 import type { Category } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 
+import useTitles from "@composables/useTitles"
+import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 
@@ -234,19 +238,21 @@ const currencies = useCurrenciesStore()
 function useDialogSettings() {
     const dialog = ref(false)
     const ready = ref(true)
-    const canSubmit = ref(false)
-    const loading = ref(false)
+    const canSubmit: Ref<null | boolean> = ref(null)
+    const loading = ref({
+        update: false,
+        title: false,
+    })
 
     const typeSingular = computed(() => props.type == "expenses" ? "expense" : "income")
 
-    return {dialog, ready, typeSingular, canSubmit, loading}
+    return {canSubmit, dialog, loading, ready, typeSingular}
 }
 
 function useData() {
     const transactionData: Ref<Transaction | undefined> = ref(undefined)
     const transactionDataCopy: Ref<Transaction | undefined> = ref(undefined)
 
-    const titles: Ref<string[]> = ref([])
     const categories: Ref<Category[]> = ref([])
     const accounts: Ref<Account[]> = ref([])
 
@@ -274,7 +280,6 @@ function useData() {
                 transactionData.value = data.data
                 transactionDataCopy.value = cloneDeep(data.data)
 
-                titles.value = data.titles
                 accounts.value = data.accounts
                 categories.value = data.categories
 
@@ -286,7 +291,7 @@ function useData() {
             })
     }
 
-    return {accounts, categories, getData, titles, transactionData, transactionDataCopy, usedAccount}
+    return {accounts, categories, getData, transactionData, transactionDataCopy, usedAccount}
 }
 
 function useCalculatedValues() {
@@ -318,8 +323,8 @@ function useActions() {
         transactionData.value = cloneDeep(transactionDataCopy.value)
     }
 
-    function update() {
-        loading.value = true
+    const {updateWithOffset: update} = useUpdateWithOffset(() => {
+        loading.value.update = true
 
         axios.patch(`/web-api/${props.type}/${props.id}`, {
             ...transactionData.value,
@@ -330,22 +335,33 @@ function useActions() {
                 emit("updated")
                 transactionDataCopy.value = cloneDeep(transactionData.value)
                 dialog.value = false
-                loading.value = false
+                loading.value.update = false
             })
             .catch(err => {
                 console.error(err)
                 setTimeout(() => status.showError(), 1000)
-                setTimeout(() => loading.value = false, 2000)
+                setTimeout(() => loading.value.update = false, 2000)
             })
-    }
+    })
 
     return {reset, update}
 }
 
-const {dialog, ready, typeSingular, canSubmit, loading} = useDialogSettings()
-const {accounts, categories, getData, titles, transactionData, transactionDataCopy, usedAccount} = useData()
+const {canSubmit, dialog, loading, ready, typeSingular} = useDialogSettings()
+const {accounts, categories, getData, transactionData, transactionDataCopy, usedAccount} = useData()
 const {amount, price, value} = useCalculatedValues()
 const {reset, update} = useActions()
 
+const {getTitles, titleMenuShow, titles} = useTitles(
+    loading,
+    `/web-api/${props.type}/currency/${currencies.usedCurrency}/titles`,
+)
+
 watch(dialog, getData)
+
+watch(() => transactionData.value?.title, (newValue, oldValue) => {
+    if (typeof oldValue != "undefined" && Validator.title("Title", 64)(newValue) === true) {
+        getTitles(transactionData.value?.title)
+    }
+})
 </script>

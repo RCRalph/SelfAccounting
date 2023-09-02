@@ -41,6 +41,7 @@ Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
                 Route::post("/", "WebAPI\TransactionsController@store")->name("web-api.$type.store");
                 Route::get("/data", "WebAPI\TransactionsController@data")->name("web-api.$type.data");
                 Route::get("/list", "WebAPI\TransactionsController@list")->name("web-api.$type.list");
+                Route::get("/titles", "WebAPI\TransactionsController@titles")->name("web-api.$type.titles");
             });
 
             Route::prefix("/{id}")->group(function () use ($type) {

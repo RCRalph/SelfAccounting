@@ -140,12 +140,12 @@ class User extends Authenticatable
                     }
                 }
 
-                array_push($result, [
+                $result[] = [
                     "icon" => $account->icon,
                     "account_id" => $account->id,
                     "name" => $account->name,
                     "balance" => $balance
-                ]);
+                ];
             }
         }
 
@@ -160,12 +160,12 @@ class User extends Authenticatable
                     }
                 }
 
-                array_push($result, [
+                $result[] = [
                     "icon" => $category->icon,
                     "category_id" => $category->id,
                     "name" => $category->name,
                     "balance" => $balance
-                ]);
+                ];
             }
         }
 
@@ -262,19 +262,6 @@ class User extends Authenticatable
                 }
 
                 return $currencies;
-            }
-        );
-    }
-
-    protected function transactionTitles(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                return $this->income()->select("title")
-                    ->union($this->expenses()->select("title")) // Unions guarantee unique rows
-                    ->orderBy("title")
-                    ->get()
-                    ->pluck("title");
             }
         );
     }
