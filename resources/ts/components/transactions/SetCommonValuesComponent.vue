@@ -1,59 +1,78 @@
 <template>
-    <v-dialog v-model="dialog" max-width="700">
-        <template v-slot:activator="{ on, attrs }">
+    <v-dialog
+        v-model="dialog"
+        max-width="700"
+    >
+        <template v-slot:activator="{ props }: any">
             <v-btn
-                outlined
-                color="primary"
-                :class="$vuetify.breakpoint.xs && 'mt-2'"
-                v-bind="attrs" v-on="on"
+                v-bind="props"
+                variant="outlined"
+                class="mt-2 mt-sm-0"
             >
                 Set common values
             </v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Set common values</v-card-title>
+            <v-card-title class="text-center">
+                Set common values
+            </v-card-title>
 
             <v-card-text>
                 <v-form v-model="canUpdate">
                     <v-row>
-                        <v-col cols="12" md="4">
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
                             <v-text-field
-                                type="date"
+                                v-model="commonValues.date"
+                                :min="usedAccount?.start_date"
+                                :rules="[
+                                    Validator.date(true, usedAccount?.date)
+                                ]"
+                                variant="underlined"
                                 label="Date"
-                                v-model="value.date"
-                                :min="usedAccount.start_date"
-                                :rules="[validation.date(true, usedAccount.start_date, true)]"
+                                type="date"
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" md="8">
                             <v-combobox
-                                label="Title"
+                                v-model="commonValues.title"
+                                v-model:menu="titleMenuShow"
                                 :items="titles"
-                                v-model="value.title"
+                                :loading="loading.title"
+                                :rules="[
+                                    Validator.title('Title', 64, true)
+                                ]"
+                                variant="underlined"
+                                label="Title"
                                 counter="64"
-                                :rules="[validation.title(true)]"
-                                ref="title"
                             ></v-combobox>
                         </v-col>
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="6">
+                        <v-col
+                            cols="12"
+                            md="6"
+                        >
                             <v-text-field
-                                label="Amount"
-                                v-model="value.amount"
+                                v-model="commonValues.amount"
                                 :error-messages="amount.error"
                                 :hint="amount.hint"
-                                @input="keys.amount++"
+                                variant="underlined"
+                                label="Amount"
                             >
-                                <template v-slot:append>
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon v-on="on" class="ml-1">
-                                                mdi-calculator
-                                            </v-icon>
+                                <template v-slot:append-inner>
+                                    <v-tooltip location="bottom">
+                                        <template v-slot:activator="{ props }: any">
+                                            <v-icon
+                                                v-bind="props"
+                                                class="ml-1"
+                                                icon="mdi-calculator"
+                                            ></v-icon>
                                         </template>
 
                                         Supported operations: <strong>+ - * / ^</strong>
@@ -62,21 +81,26 @@
                             </v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="6">
+                        <v-col
+                            cols="12"
+                            md="6"
+                        >
                             <v-text-field
-                                label="Price"
-                                v-model="value.price"
+                                v-model="commonValues.price"
+                                :suffix="currencies.usedCurrencyObject.ISO"
                                 :error-messages="price.error"
                                 :hint="price.hint"
-                                @input="keys.price++"
-                                :suffix="currencies.usedCurrencyObject.ISO"
+                                variant="underlined"
+                                label="Price"
                             >
-                                <template v-slot:append>
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon v-on="on" class="ml-1">
-                                                mdi-calculator
-                                            </v-icon>
+                                <template v-slot:append-inner>
+                                    <v-tooltip location="bottom">
+                                        <template v-slot:activator="{ props }: any">
+                                            <v-icon
+                                                v-bind="props"
+                                                class="ml-1"
+                                                icon="mdi-calculator"
+                                            ></v-icon>
                                         </template>
 
                                         Supported operations: <strong>+ - * / ^</strong>
@@ -87,42 +111,49 @@
                     </v-row>
 
                     <v-row>
-                        <v-col cols="12" md="6">
+                        <v-col
+                            cols="12"
+                            md="6"
+                        >
                             <v-select
-                                v-model="value.category_id"
+                                v-model="commonValues.category_id"
                                 :items="categories"
-                                item-text="name"
+                                item-title="name"
                                 item-value="id"
                                 label="Category"
+                                variant="underlined"
                             >
-                                <template v-slot:item="{ item }">
-                                    <v-list-item-icon v-if="item.icon">
-                                        <v-icon>{{ item.icon }}</v-icon>
-                                    </v-list-item-icon>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                    </v-list-item-content>
+                                <template v-slot:item="{ item, props }: any">
+                                    <v-list-item v-bind="props">
+                                        <template v-slot:prepend>
+                                            <v-icon
+                                                v-if="item.raw.icon"
+                                                :icon="item.raw.icon"
+                                            ></v-icon>
+                                        </template>
+                                    </v-list-item>
                                 </template>
                             </v-select>
                         </v-col>
 
                         <v-col cols="12" md="6">
                             <v-select
-                                v-model="value.account_id"
+                                v-model="commonValues.account_id"
                                 :items="accounts"
-                                item-text="name"
+                                item-title="name"
                                 item-value="id"
-                                label="Account"
+                                label="Category"
+                                variant="underlined"
                             >
-                                <template v-slot:item="{ item }">
-                                    <v-list-item-icon v-if="item.icon">
-                                        <v-icon>{{ item.icon }}</v-icon>
-                                    </v-list-item-icon>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                    </v-list-item-content>
+                                <template v-slot:item="{ item, props }: any">
+                                    <v-list-item v-bind="props">
+                                        <template v-slot:prepend>
+                                            <v-icon
+                                                v-if="item.raw.icon"
+                                                :icon="item.raw.icon"
+                                            ></v-icon>
+                                        </template>
+                                    </v-list-item>
                                 </template>
                             </v-select>
                         </v-col>
@@ -131,7 +162,12 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-center">
-                <v-btn color="success" outlined :disabled="!canUpdate || disableUpdate" @click="update">
+                <v-btn
+                    :disabled="!canUpdate || props.disableUpdate"
+                    color="success"
+                    variant="outlined"
+                    @click="update"
+                >
                     Update
                 </v-btn>
             </v-card-actions>
@@ -139,77 +175,113 @@
     </v-dialog>
 </template>
 
-<script>
-import { useCurrenciesStore } from "&/stores/currencies";
+<script setup lang="ts">
+import { watch, ref, computed } from "vue"
+import { cloneDeep, isNull } from "lodash"
 
-import Calculator from "&/classes/Calculator";
-import validation from "&/mixins/validation";
-import main from "&/mixins/main";
+import type { Transaction } from "@interfaces/Transaction"
+import type { Account } from "@interfaces/Account"
+import type { Category } from "@interfaces/Category"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import Validator from "@classes/Validator"
+import { useCurrenciesStore } from "@stores/currencies"
+import { useDialogSettings } from "@composables/useDialogSettings"
+import useTitles from "@composables/useTitles"
+import Calculator from "@classes/Calculator"
 
-        return { currencies };
-    },
-    mixins: [validation, main],
-    props: {
-        accounts: {
-            required: true,
-            type: Array
-        },
-        categories: {
-            required: true,
-            type: Array
-        },
-        value: {
-            required: true,
-            type: Object
-        },
-        disableUpdate: {
-            required: true,
-            type: Boolean
-        },
-        titles: {
-            required: true,
-            type: Array
+const props = defineProps<{
+    transactionData: Transaction[],
+    commonValues: Transaction,
+    accounts: Account[],
+    categories: Category[],
+    disableUpdate: boolean,
+    type: "income" | "expenses"
+}>()
+
+const emit = defineEmits<{
+    "update:common-values": [payload: Transaction],
+    priceChange: []
+}>()
+
+const currencies = useCurrenciesStore()
+
+function useCommonValues() {
+    const commonValues = ref(cloneDeep(props.commonValues))
+
+    const usedAccount = computed(() => {
+        const result = props.accounts.find(item => item.id == commonValues.value?.account_id)
+
+        if (typeof result == "undefined") {
+            return undefined
+        } else if (!isNull(result.start_date)) {
+            return {...result, date: new Date(result.start_date)}
+        } else {
+            throw new Error("Account start date is null, which it shouldn't be.")
         }
-    },
-    data() {
-        return {
-            dialog: false,
-            canUpdate: true,
-            keys: {
-                amount: 0,
-                price: 0
+    })
+
+    function update() {
+        const changes = cloneDeep(commonValues.value)
+
+        for (let key of Object.keys(changes) as (keyof Transaction)[]) {
+            if (props.commonValues[key] == changes[key] || changes[key] == "") {
+                delete changes[key]
             }
         }
-    },
-    computed: {
-        amount() {
-            this.keys.amount;
-            return new Calculator(this.value.amount, Calculator.FIELDS.amount, true).resultObject;
-        },
-        price() {
-            this.keys.price;
-            return new Calculator(this.value.price, Calculator.FIELDS.price, true).resultObject;
-        },
-        usedCategory() {
-            return this.categories.find(item => item.id == this.value.category_id);
-        },
-        usedAccount() {
-            return this.accounts.find(item => item.id == this.value.account_id);
-        }
-    },
-    methods: {
-        update() {
-            this.$refs.title.blur();
 
-            this.$nextTick(() => {
-                this.$emit("update", this.value);
-                this.dialog = false;
-            });
+        if (changes.hasOwnProperty("price")) {
+            emit("price-change")
         }
+
+        props.transactionData.forEach((item, i) => {
+            props.transactionData[i] = {...item, ...changes}
+        })
+
+        emit("update:common-values", commonValues.value)
+
+        dialog.value = false
     }
+
+    return {commonValues, update, usedAccount}
 }
+
+function useCalculatedValues() {
+    const calculatorAllowObject = {
+        null: true,
+        negative: false,
+        zero: false,
+    }
+
+    const amount = computed(() => new Calculator(
+        commonValues.value?.amount || "",
+        "amount",
+        calculatorAllowObject,
+    ).resultObject)
+
+    const price = computed(() => new Calculator(
+        commonValues.value?.price || "",
+        "price",
+        calculatorAllowObject,
+    ).resultObject)
+
+    return {amount, price}
+}
+
+const {dialog, canSubmit: canUpdate, loading} = useDialogSettings()
+const {commonValues, usedAccount, update} = useCommonValues()
+const {amount, price} = useCalculatedValues()
+const {titles, getTitles, titleMenuShow} = useTitles(
+    loading,
+    `/web-api/${props.type}/currency/${currencies.usedCurrency}/titles`,
+)
+
+watch(() => commonValues.value?.title, (newValue, oldValue) => {
+    if (typeof oldValue != "undefined" && Validator.title("", 64)(newValue) === true) {
+        getTitles(commonValues.value?.title)
+    }
+})
+
+watch(() => props.commonValues, () => {
+    commonValues.value = cloneDeep(props.commonValues)
+})
 </script>

@@ -15,11 +15,15 @@ export default createVuetify({
             light: {
                 colors: {
                     success: "#4caf50",
+                    primary: "#2196f3",
+                    surface: "#fcfcfc",
                 },
             },
             dark: {
                 colors: {
                     success: "#4caf50",
+                    primary: "#2196f3",
+                    surface: "#1e1e1e",
                 },
             },
         },

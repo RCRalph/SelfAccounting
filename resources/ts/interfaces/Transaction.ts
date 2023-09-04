@@ -17,7 +17,7 @@ interface TransactionRow extends Record<string, any> {
 interface Transaction {
     id?: number
     date: string
-    title: string
+    title?: string
     amount: number | string
     price: number | string
     category_id: number | null

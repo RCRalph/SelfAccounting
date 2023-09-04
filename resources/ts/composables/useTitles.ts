@@ -1,14 +1,12 @@
 import { ref } from "vue"
 import type { Ref } from "vue"
 
+import type { Loading } from "@composables/useDialogSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import { useStatusStore } from "@stores/status"
 import axios from "axios"
 
-export default function useTitles(
-    loading: Ref<{ title: boolean }>,
-    url: string,
-) {
+export default function useTitles(loading: Ref<Loading>, url: string) {
     const status = useStatusStore()
     const titles: Ref<string[]> = ref([])
     const titleMenuShow = ref(false)

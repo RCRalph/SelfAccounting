@@ -184,7 +184,7 @@
             </v-card-text>
 
             <CardActionsResetUpdate
-                :loading="loading.update"
+                :loading="loading.submit"
                 :can-submit="!!canSubmit"
                 @reset="reset"
                 @update="update"
@@ -193,8 +193,9 @@
 
         <CardLoadingComponent
             v-else
-            :thing="typeSingular"
-        ></CardLoadingComponent>
+        >
+            Add {{ typeSingular }}
+        </CardLoadingComponent>
     </v-dialog>
 </template>
 
@@ -210,18 +211,17 @@ import type { Category } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 
 import useTitles from "@composables/useTitles"
-import useUpdateWithOffset from "@composables/useUpdateWithOffset"
+import { useDialogSettings } from "@composables/useDialogSettings"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
+import Calculator from "@classes/Calculator"
+import Validator from "@classes/Validator"
 
 import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
 import ValueFieldComponent from "@components/common/ValueFieldComponent.vue"
 import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import CardActionsResetUpdate from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
-
-import Calculator from "@classes/Calculator"
-import Validator from "@classes/Validator"
 
 const props = defineProps<{
     type: "income" | "expenses"
@@ -234,20 +234,6 @@ const emit = defineEmits<{
 
 const status = useStatusStore()
 const currencies = useCurrenciesStore()
-
-function useDialogSettings() {
-    const dialog = ref(false)
-    const ready = ref(true)
-    const canSubmit: Ref<null | boolean> = ref(null)
-    const loading = ref({
-        update: false,
-        title: false,
-    })
-
-    const typeSingular = computed(() => props.type == "expenses" ? "expense" : "income")
-
-    return {canSubmit, dialog, loading, ready, typeSingular}
-}
 
 function useData() {
     const transactionData: Ref<Transaction | undefined> = ref(undefined)
@@ -323,8 +309,8 @@ function useActions() {
         transactionData.value = cloneDeep(transactionDataCopy.value)
     }
 
-    const {updateWithOffset: update} = useUpdateWithOffset(() => {
-        loading.value.update = true
+    function update() {
+        loading.value.submit = true
 
         axios.patch(`/web-api/${props.type}/${props.id}`, {
             ...transactionData.value,
@@ -333,25 +319,26 @@ function useActions() {
         })
             .then(() => {
                 emit("updated")
+                status.showSuccess(`updated ${typeSingular.value}`)
                 transactionDataCopy.value = cloneDeep(transactionData.value)
                 dialog.value = false
-                loading.value.update = false
+                loading.value.submit = false
             })
             .catch(err => {
                 console.error(err)
                 setTimeout(() => status.showError(), 1000)
-                setTimeout(() => loading.value.update = false, 2000)
+                setTimeout(() => loading.value.submit = false, 2000)
             })
-    })
+    }
 
     return {reset, update}
 }
 
-const {canSubmit, dialog, loading, ready, typeSingular} = useDialogSettings()
+const typeSingular = computed(() => props.type == "expenses" ? "expense" : "income")
+const {canSubmit, dialog, loading, ready} = useDialogSettings()
 const {accounts, categories, getData, transactionData, transactionDataCopy, usedAccount} = useData()
 const {amount, price, value} = useCalculatedValues()
 const {reset, update} = useActions()
-
 const {getTitles, titleMenuShow, titles} = useTitles(
     loading,
     `/web-api/${props.type}/currency/${currencies.usedCurrency}/titles`,
@@ -360,7 +347,7 @@ const {getTitles, titleMenuShow, titles} = useTitles(
 watch(dialog, getData)
 
 watch(() => transactionData.value?.title, (newValue, oldValue) => {
-    if (typeof oldValue != "undefined" && Validator.title("Title", 64)(newValue) === true) {
+    if (typeof oldValue != "undefined" && Validator.title("", 64)(newValue) === true) {
         getTitles(transactionData.value?.title)
     }
 })

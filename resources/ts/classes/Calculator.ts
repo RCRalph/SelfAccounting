@@ -26,7 +26,7 @@ export default class Calculator {
     constructor(
         operation: string | number,
         fieldType: keyof typeof Calculator.FIELDS | undefined,
-        private allow: Allow,
+        private readonly allow: Allow = {null: true, zero: true, negative: true},
     ) {
         if (typeof operation == "string") {
             this.operation = operation.trim()
@@ -142,7 +142,7 @@ export default class Calculator {
         operation = this.getOperationStringWithoutBrackets(operation)
 
         if (!operation) {
-            return "0"
+            return ""
         } else if (!Calculator.OPERATION_REGEX.test(operation)) {
             throw new Error("Invalid operation")
         }

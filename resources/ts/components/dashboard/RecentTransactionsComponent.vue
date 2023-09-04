@@ -18,18 +18,24 @@
             ></v-text-field>
         </v-col>
 
-        <!--<v-col cols="12" sm="7" lg="8" :order="$vuetify.breakpoint.xsOnly ? 'first' : 'last'"
-               class="multi-button-table-top">
+        <v-col
+            order="first"
+            order-sm="last"
+            cols="12"
+            sm="7"
+            lg="8"
+            class="multi-button-table-top"
+        >
             <AddTransactionsDialogComponent
                 type="income"
-                @added="added"
+                @added="getStartData"
             ></AddTransactionsDialogComponent>
 
             <AddTransactionsDialogComponent
                 type="expenses"
-                @added="added"
+                @added="getStartData"
             ></AddTransactionsDialogComponent>
-        </v-col>-->
+        </v-col>
     </v-row>
 
     <v-data-table
@@ -340,6 +346,7 @@ import type { TransactionRow } from "@interfaces/Transaction"
 import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
 
+import AddTransactionsDialogComponent from "@components/transactions/AddTransactionsDialogComponent.vue"
 import EditTransactionsDialogComponent from "@components/transactions/EditTransactionsDialogComponent.vue"
 import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 

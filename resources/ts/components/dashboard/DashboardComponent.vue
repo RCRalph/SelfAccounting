@@ -39,30 +39,36 @@
 
                                             <v-table v-if="currentBalance.length > 1" density="comfortable">
                                                 <tbody>
-                                                <tr v-for="(item, i) in currentBalance" :key="i">
-                                                    <td class="text-right text-h6" style="width: 50%">
-                                                        <div class="d-flex justify-start align-center">
-                                                            <div class="mr-2">
-                                                                <v-icon style="min-width: 24px">
-                                                                    {{ formats.iconName(item.icon) }}
-                                                                </v-icon>
-                                                            </div>
+                                                    <tr
+                                                        v-for="(item, i) in currentBalance"
+                                                        :key="i"
+                                                    >
+                                                        <td
+                                                            class="text-right text-h6"
+                                                            style="width: 50%"
+                                                        >
+                                                            <div class="d-flex justify-start align-center">
+                                                                <div class="mr-2">
+                                                                    <v-icon style="min-width: 24px">
+                                                                        {{ formats.iconName(item.icon) }}
+                                                                    </v-icon>
+                                                                </div>
 
-                                                            <div class="d-flex justify-end align-center w-100">
-                                                                {{ formats.textWithNBSP(item.name) }}
+                                                                <div class="d-flex justify-end align-center w-100">
+                                                                    {{ formats.textWithNBSP(item.name) }}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
+                                                        </td>
 
-                                                    <td class="text-h6">
-                                                        {{
-                                                            formats.numberWithCurrency(
-                                                                item.balance,
-                                                                currencies.usedCurrencyObject.ISO,
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
+                                                        <td class="text-h6">
+                                                            {{
+                                                                formats.numberWithCurrency(
+                                                                    item.balance,
+                                                                    currencies.usedCurrencyObject.ISO,
+                                                                )
+                                                            }}
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </v-table>
                                         </v-card-text>
@@ -129,88 +135,88 @@
                                 <v-card-text>
                                     <v-table>
                                         <tbody>
-                                        <tr>
-                                            <td
-                                                class="text-right text-h6"
-                                                style="width: 50%"
-                                            >
-                                                Income
-                                            </td>
+                                            <tr>
+                                                <td
+                                                    class="text-right text-h6"
+                                                    style="width: 50%"
+                                                >
+                                                    Income
+                                                </td>
 
-                                            <td class="text-h6">
-                                                {{
-                                                    formats.numberWithCurrency(
-                                                        last30Days.income,
-                                                        currencies.usedCurrencyObject.ISO,
-                                                    )
-                                                }}
-                                            </td>
-                                        </tr>
+                                                <td class="text-h6">
+                                                    {{
+                                                        formats.numberWithCurrency(
+                                                            last30Days.income,
+                                                            currencies.usedCurrencyObject.ISO,
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
 
-                                        <tr>
-                                            <td class="text-right text-h6">
-                                                Expenses
-                                            </td>
+                                            <tr>
+                                                <td class="text-right text-h6">
+                                                    Expenses
+                                                </td>
 
-                                            <td class="text-h6">
-                                                {{
-                                                    formats.numberWithCurrency(
-                                                        last30Days.expenses,
-                                                        currencies.usedCurrencyObject.ISO,
-                                                    )
-                                                }}
-                                            </td>
-                                        </tr>
+                                                <td class="text-h6">
+                                                    {{
+                                                        formats.numberWithCurrency(
+                                                            last30Days.expenses,
+                                                            currencies.usedCurrencyObject.ISO,
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
 
-                                        <tr>
-                                            <td class="text-right text-h6">
-                                                Incoming transfers
-                                            </td>
+                                            <tr>
+                                                <td class="text-right text-h6">
+                                                    Incoming transfers
+                                                </td>
 
-                                            <td class="text-h6">
-                                                {{
-                                                    formats.numberWithCurrency(
-                                                        last30Days.transfersIn,
-                                                        currencies.usedCurrencyObject.ISO,
-                                                    )
-                                                }}
-                                            </td>
-                                        </tr>
+                                                <td class="text-h6">
+                                                    {{
+                                                        formats.numberWithCurrency(
+                                                            last30Days.transfersIn,
+                                                            currencies.usedCurrencyObject.ISO,
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
 
-                                        <tr>
-                                            <td class="text-right text-h6">
-                                                Outgoing transfers
-                                            </td>
+                                            <tr>
+                                                <td class="text-right text-h6">
+                                                    Outgoing transfers
+                                                </td>
 
-                                            <td class="text-h6">
-                                                {{
-                                                    formats.numberWithCurrency(
-                                                        last30Days.transfersOut,
-                                                        currencies.usedCurrencyObject.ISO,
-                                                    )
-                                                }}
-                                            </td>
-                                        </tr>
+                                                <td class="text-h6">
+                                                    {{
+                                                        formats.numberWithCurrency(
+                                                            last30Days.transfersOut,
+                                                            currencies.usedCurrencyObject.ISO,
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
 
-                                        <tr>
-                                            <td class="text-right text-h6">
-                                                Total
-                                            </td>
+                                            <tr>
+                                                <td class="text-right text-h6">
+                                                    Total
+                                                </td>
 
-                                            <td :class="[
+                                                <td :class="[
                                                     'text-h6',
                                                     last30DaysTotal > 0 && 'text-success',
                                                     last30DaysTotal < 0 && 'text-error'
                                                 ]">
-                                                {{
-                                                    formats.numberWithCurrency(
-                                                        last30DaysTotal,
-                                                        currencies.usedCurrencyObject.ISO,
-                                                        true,
-                                                    )
-                                                }}
-                                            </td>
-                                        </tr>
+                                                    {{
+                                                        formats.numberWithCurrency(
+                                                            last30DaysTotal,
+                                                            currencies.usedCurrencyObject.ISO,
+                                                            true,
+                                                        )
+                                                    }}
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </v-table>
                                 </v-card-text>

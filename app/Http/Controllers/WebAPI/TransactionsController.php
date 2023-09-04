@@ -75,12 +75,10 @@ class TransactionsController extends Controller
 
         $accountsAndCategories = $this->getCategoriesAndAccounts($data->currency);
 
-        $titles = $this->getTitles($data->currency_id, $data->title);
-
         $data = collect($data);
         $data->forget("currency");
 
-        return response()->json([...compact("data", "titles"), ...$accountsAndCategories]);
+        return response()->json([...compact("data"), ...$accountsAndCategories]);
     }
 
     public function update($id)

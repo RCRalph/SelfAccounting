@@ -1,6 +1,8 @@
 <template>
     <v-card>
-        <v-card-title>Edit {{ props.thing }}</v-card-title>
+        <v-card-title>
+            <slot></slot>
+        </v-card-title>
 
         <v-card-text class="card-loading">
             <v-progress-circular
@@ -10,12 +12,6 @@
         </v-card-text>
     </v-card>
 </template>
-
-<script setup lang="ts">
-const props = defineProps<{
-    thing: string
-}>()
-</script>
 
 <style scoped lang="scss">
 $padding: 20px;
