@@ -29,16 +29,14 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import {computed, ref, onMounted, watch} from "vue"
-import type {ComputedRef, Ref} from "vue"
-import type {ChartOptions, ChartData, Point} from "chart.js";
+import { ref, onMounted, watch } from "vue"
 
-import LineChart from "@components/charts/LineChart.vue";
+import LineChart from "@components/charts/LineChart.vue"
 
-import {useCurrenciesStore} from "@stores/currencies";
-import {useStatusStore} from "@stores/status";
-import useThemeSettings from "@composables/useThemeSettings";
-import useChartQueryParameters from "@composables/useChartQueryParameters";
+import { useCurrenciesStore } from "@stores/currencies"
+import { useStatusStore } from "@stores/status"
+import { useLineChartData } from "@composables/useChartData"
+import { last30DaysQuery } from "@composables/useChartQueryParameters"
 
 const props = defineProps<{
     id: number
@@ -46,87 +44,28 @@ const props = defineProps<{
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
-const {chartColors} = useThemeSettings()
-const {last30DaysQuery} = useChartQueryParameters()
+const {chartData, options} = useLineChartData()
 const ready = ref(false)
 
-function useChartData() {
-    const chartData: Ref<ChartData<"line", Point[], string> | undefined> = ref(undefined)
+function getChartData() {
+    ready.value = false
 
-    const options: ComputedRef<ChartOptions<"line">> = computed(() => ({
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-                type: "time",
-                time: {
-                    displayFormats: {
-                        day: "dd MMM",
-                        year: "YYYY-MM-dd",
-                    },
-                    minUnit: "day",
-                },
-                ticks: {
-                    color: chartColors.value.fontColor,
-                },
-                grid: {
-                    color: chartColors.value.gridColor,
-                },
-            },
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: chartColors.value.fontColor,
-                },
-                grid: {
-                    color: chartColors.value.gridColor,
-                },
-            },
-        },
-        elements: {
-            line: {
-                tension: 0,
-            },
-        },
-        plugins: {
-            legend: {
-                display: true,
-                labels: {
-                    color: chartColors.value.fontColor,
-                },
-            },
-            tooltip: {
-                callbacks: {
-                    title: (context: any) => context[0].raw.x,
-                },
-            },
-        },
-    }))
+    axios.get(
+        `/web-api/charts/${props.id}/currency/${currencies.usedCurrency}`,
+        {params: last30DaysQuery.value},
+    )
+        .then(response => {
+            const data = response.data
 
-    function getChartData() {
-        ready.value = false
+            chartData.value = data.data
 
-        axios.get(
-            `/web-api/charts/${props.id}/currency/${currencies.usedCurrency}`,
-            {params: last30DaysQuery.value},
-        )
-            .then(response => {
-                const data = response.data
-
-                chartData.value = data.data
-
-                ready.value = true
-            })
-            .catch(err => {
-                console.error(err)
-                status.showError()
-            })
-    }
-
-    return {chartData, getChartData, options}
+            ready.value = true
+        })
+        .catch(err => {
+            console.error(err)
+            status.showError()
+        })
 }
-
-const {chartData, getChartData, options} = useChartData()
 
 watch(() => props.id, getChartData)
 

@@ -4,6 +4,13 @@ interface MenuItem {
     link: string
 }
 
+interface Loading {
+    submit?: boolean
+    table?: boolean
+    title?: boolean
+}
+
 export type {
     MenuItem,
+    Loading,
 }

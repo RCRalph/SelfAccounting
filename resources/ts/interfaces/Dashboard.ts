@@ -6,23 +6,6 @@ interface CurrentBalance {
     name: string
 }
 
-interface Chart {
-    id: number
-    name: string
-    type: string
-}
-
-interface DataQuery {
-    title?: string
-    orderFields?: string[]
-    orderDirections?: ("asc" | "desc")[]
-    dates?: string[]
-    categories?: number[]
-    accounts?: number[]
-}
-
 export type {
-    Chart,
     CurrentBalance,
-    DataQuery,
 }

@@ -12,7 +12,7 @@ $sticky-panel-margin: 12px;
 
 .v-main {
     position: relative;
-    height: 100dvh;
+    min-height: 100dvh;
     overflow-y: auto;
     padding-left: 0 !important;
 }
@@ -58,7 +58,6 @@ tr {
 
 .sticky-panel {
     position: sticky;
-    top: $sticky-panel-margin;
 }
 
 .loading-height {
@@ -182,7 +181,7 @@ tr {
 .overview-block {
     @extend .sticky-panel;
     overflow-y: auto;
-    max-height: calc(100vh - #{2 * $sticky-panel-margin});
+    max-height: calc(100dvh - #{2 * $sticky-panel-margin});
 
     -ms-overflow-style: none;
 
@@ -195,14 +194,8 @@ tr {
     }
 
     .charts {
-        max-height: calc(100vh - #{32px + 64px + 48px + 16px + 16px});
-
-        .chart-size {
-            max-width: calc(100% - 16px);
-            margin-left: 8px;
-            margin-bottom: 16px;
-            height: 335px;
-        }
+        position: relative;
+        max-height: calc(100dvh - #{32px + 64px + 48px + 16px + 16px});
     }
 }
 

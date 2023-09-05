@@ -7,6 +7,7 @@
                 :permanent="!display.mobile.value"
                 :width="288"
                 :absolute="true"
+                style="position: fixed"
                 @click="navigationForceOpen = true"
             >
                 <v-list-item class="pa-2">

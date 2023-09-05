@@ -1,8 +1,5 @@
 <template>
-    <div
-        v-if="ready"
-        style="margin: 12px"
-    >
+    <div v-if="ready" style="margin: 12px">
         <v-row>
             <v-col
                 xl="4" cols="12"
@@ -261,7 +258,8 @@ import axios from "axios"
 import { ref, computed, onMounted } from "vue"
 import type { Ref } from "vue"
 
-import type { CurrentBalance, Chart } from "@interfaces/Dashboard"
+import type { CurrentBalance } from "@interfaces/Dashboard"
+import type { Chart } from "@interfaces/Chart"
 import type { Category } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 

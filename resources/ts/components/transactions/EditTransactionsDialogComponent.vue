@@ -184,7 +184,7 @@
             </v-card-text>
 
             <CardActionsResetUpdate
-                :loading="loading.submit"
+                :loading="!!loading.submit"
                 :can-submit="!!canSubmit"
                 @reset="reset"
                 @update="update"

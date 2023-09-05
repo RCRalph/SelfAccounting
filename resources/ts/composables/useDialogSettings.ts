@@ -1,10 +1,6 @@
 import { ref } from "vue"
 import type { Ref } from "vue"
-
-interface Loading {
-    submit: boolean
-    title: boolean
-}
+import type { Loading } from "@interfaces/App"
 
 function useDialogSettings() {
     const dialog = ref(false)
@@ -12,6 +8,7 @@ function useDialogSettings() {
     const canSubmit: Ref<null | boolean> = ref(null)
     const loading: Ref<Loading> = ref({
         submit: false,
+        table: false,
         title: false,
     })
 
@@ -20,8 +17,4 @@ function useDialogSettings() {
 
 export {
     useDialogSettings,
-}
-
-export type {
-    Loading,
 }

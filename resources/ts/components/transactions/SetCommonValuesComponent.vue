@@ -14,7 +14,7 @@
         </template>
 
         <v-card>
-            <v-card-title class="text-center">
+            <v-card-title class="text-center pb-0">
                 Set common values
             </v-card-title>
 

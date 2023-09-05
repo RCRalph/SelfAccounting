@@ -14,7 +14,7 @@ const titleClasses = computed(() => {
     const result = ["d-flex", "pb-1", "px-6"]
 
     if (display.mobile.value) {
-        result.push("flex-wrap", "flex-column", "justify-center")
+        result.push("flex-wrap", "flex-column", "justify-center", "align-center")
     } else {
         result.push("justify-space-between")
     }

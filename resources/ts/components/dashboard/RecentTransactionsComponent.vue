@@ -42,7 +42,7 @@
         v-model:options="options"
         :headers="headers"
         :items="tableData.data.value"
-        :loading="loading"
+        :loading="loading.table"
         :items-per-page="-1"
         class="table-bordered"
         density="comfortable"
@@ -338,11 +338,8 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, computed, onMounted, watch } from "vue"
-import type { Ref } from "vue"
-import type { VDataTable } from "vuetify/labs/VDataTable"
 
-import type { DataQuery } from "@interfaces/Dashboard"
-import type { TransactionRow } from "@interfaces/Transaction"
+import type { TransactionRow, DataQuery } from "@interfaces/Transaction"
 import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
 
@@ -354,6 +351,8 @@ import { useCurrenciesStore } from "@stores/currencies"
 import TableDataMerger from "@classes/TableDataMerger"
 import Validator from "@classes/Validator"
 import useFormats from "@composables/useFormats"
+import useTableSettings from "@composables/useTableSettings"
+import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 
 const props = defineProps<{
     accounts: Account[]
@@ -367,40 +366,7 @@ const emit = defineEmits<{
 const currencies = useCurrenciesStore()
 const formats = useFormats()
 
-function useTableSettings() {
-    const headers: VDataTable["headers"] = [
-        {title: "Date", key: "date", align: "center"},
-        {title: "Title", key: "title", align: "center"},
-        {title: "Amount", key: "amount", align: "center"},
-        {title: "Price", key: "price", align: "center"},
-        {title: "Value", key: "value", align: "center"},
-        {title: "Category", key: "category", align: "center", sortable: false},
-        {title: "Account", key: "account", align: "center", sortable: false},
-        {title: "Actions", key: "", align: "center", sortable: false},
-    ]
-
-    const loading = ref(true)
-
-    const options: Ref<any> = ref({})
-
-    const filteredData = ref({
-        dates: [] as string[],
-        categories: [] as number[],
-        accounts: [] as number[],
-    })
-
-    function filterColor(length: number) {
-        return length ? "rgba(var(--v-theme-on-surface))" : undefined
-    }
-
-    return {filterColor, filteredData, headers, loading, options}
-}
-
 function useTableData() {
-    const search = ref({
-        title: "",
-    })
-
     const tableData = new TableDataMerger<TransactionRow>(
         ["date"],
         ["id", "value"],
@@ -466,12 +432,12 @@ function useTableData() {
     }
 
     async function getStartData() {
-        loading.value = true
+        loading.value.table = true
         pagination.value.page = 1
         pagination.value.last = Infinity
         tableData.resetData()
 
-        await getData().then(() => loading.value = false)
+        await getData().then(() => loading.value.table = false)
     }
 
     async function getMoreData(state: { done: Function }) {
@@ -489,29 +455,9 @@ function useTableData() {
     return {getStartData, getMoreData, tableData, search}
 }
 
-function useUpdateWithOffset() {
-    const timeOffset = 250
-    const lastChange: Ref<Date> = ref(new Date())
-
-    function updateWithOffset() {
-        lastChange.value = new Date()
-
-        setTimeout(
-            () => {
-                if (new Date().getTime() - lastChange.value.getTime() >= timeOffset) {
-                    getStartData()
-                }
-            },
-            timeOffset,
-        )
-    }
-
-    return {updateWithOffset}
-}
-
-const {filterColor, filteredData, headers, loading, options} = useTableSettings()
-const {getStartData, getMoreData, tableData, search} = useTableData()
-const {updateWithOffset} = useUpdateWithOffset()
+const {filterColor, filteredData, headers, loading, options, search} = useTableSettings()
+const {getStartData, getMoreData, tableData} = useTableData()
+const {updateWithOffset} = useUpdateWithOffset<void>(getStartData)
 
 watch(options, (_, oldValue) => {
     if (Object.keys(oldValue).length) {
@@ -519,11 +465,11 @@ watch(options, (_, oldValue) => {
     }
 })
 
-watch(search, updateWithOffset, {
+watch(search, updateWithOffset as () => void, {
     deep: true,
 })
 
-watch(filteredData, updateWithOffset, {
+watch(filteredData, updateWithOffset as () => void, {
     deep: true,
 })
 

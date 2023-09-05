@@ -1,10 +1,10 @@
+import axios from "axios"
 import { ref } from "vue"
 import type { Ref } from "vue"
 
-import type { Loading } from "@composables/useDialogSettings"
+import type { Loading } from "@interfaces/App"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import { useStatusStore } from "@stores/status"
-import axios from "axios"
 
 export default function useTitles(loading: Ref<Loading>, url: string) {
     const status = useStatusStore()

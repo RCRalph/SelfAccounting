@@ -1,7 +1,8 @@
-import {createRouter, createWebHashHistory} from "vue-router"
-import type {RouteRecordRaw} from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router"
+import type { RouteRecordRaw } from "vue-router"
 
 import DashboardComponent from "@components/dashboard/DashboardComponent.vue"
+import TransactionsComponent from "@components/transactions/TransactionsComponent.vue"
 import ChartsComponent from "@components/charts/ChartsComponent.vue"
 
 // Extension components
@@ -15,6 +16,20 @@ const routes: RouteRecordRaw[] = [
     {
         path: "/",
         component: DashboardComponent,
+    },
+    {
+        path: "/income",
+        component: TransactionsComponent,
+        props: {
+            type: "income",
+        },
+    },
+    {
+        path: "/expenses",
+        component: TransactionsComponent,
+        props: {
+            type: "expenses",
+        },
     },
     {
         path: "/charts",
@@ -53,18 +68,8 @@ export default createRouter({
                 path: "/payment/extensions/:id",
                 redirect: (to) => window.location.href = "/payment/extensions/" + to.params.id,
             },
-        ])
+        ]),
     /*{
-        path: "/income",
-        component: () => import("@components/transactions/TransactionsComponent.vue"),
-        props: {type: "income"},
-    },
-    {
-        path: "/expenses",
-        component: () => import("@components/transactions/TransactionsComponent.vue"),
-        props: {type: "expenses"},
-    },
-    {
         path: "/transfers",
         component: () => import("@components/transfers/TransfersComponent.vue"),
     },

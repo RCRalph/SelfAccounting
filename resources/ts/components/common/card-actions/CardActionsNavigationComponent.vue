@@ -26,11 +26,11 @@
             ></v-btn>
         </div>
 
-        <div>
+        <div :class="display.mobile.value && 'd-flex flex-wrap flex-column'">
             <slot></slot>
         </div>
 
-        <div :class="display.mobile.value && 'd-flex flex-wrap flex-column-reverse'">
+        <div :class="display.mobile.value && 'd-flex flex-wrap flex-column'">
             <v-btn
                 :disabled="page == dataLength - 1"
                 class="ma-1"

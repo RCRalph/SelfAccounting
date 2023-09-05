@@ -1,19 +1,26 @@
 <template>
     <div v-if="ready">
-        <div class="text-h5 text-center text-capitalize" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">{{ chart.name }}</div>
+        <div
+            class="text-h5 text-center text-capitalize"
+        >
+            {{ props.chart.name }}
+        </div>
 
-        <DoughnutChart
-            v-if="chartData.labels.length"
-            :options="options"
-            :chartData="chartData"
-            :theme="theme"
-            class="chart-size"
-        ></DoughnutChart>
+        <div v-if="chartData?.labels?.length" class="chart-size">
+            <DoughnutChart
+                :data="chartData"
+                :options="options"
+            ></DoughnutChart>
+        </div>
 
         <div v-else class="text-h6 text-center">No data</div>
     </div>
 
-    <v-overlay v-else :value="true" opacity="1" absolute>
+    <v-overlay
+        v-else
+        :model-value="true"
+        :contained="true"
+    >
         <v-progress-circular
             indeterminate
             size="96"
@@ -21,71 +28,64 @@
     </v-overlay>
 </template>
 
-<script>
-import { useCurrenciesStore } from "&/stores/currencies";
+<script setup lang="ts">
+import axios from "axios"
+import { ref, onMounted, watch } from "vue"
 
-import DoughnutChart from "@/charts/DoughnutChart.vue";
+import type { Chart } from "@interfaces/Chart"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import DoughnutChart from "@components/charts/DoughnutChart.vue"
 
-        return { currencies };
-    },
-    components: {
-        DoughnutChart
-    },
-    props: {
-        chart: {
-            required: true,
-            type: Object
-        },
-        start: {
-            required: false,
-            type: String
-        },
-        end: {
-            required: false,
-            type: String
-        }
-    },
-    data() {
-        return {
-            chartData: {},
-            options: {},
-            themeKeys: [],
-            ready: false,
-        }
-    },
-    watch: {
-        start: "getData",
-        end: "getData",
-    },
-    methods: {
-        getData() {
-            this.ready = false;
+import { useDoughnutChartData } from "@composables/useChartData"
+import { useStatusStore } from "@stores/status"
+import { useCurrenciesStore } from "@stores/currencies"
+import { queryWithDates } from "@composables/useChartQueryParameters"
 
-            axios
-                .get(`/web-api/charts/${this.chart.id}/currency/${this.currencies.usedCurrency}`, {
-                    params: {
-                        start: this.start,
-                        end: this.end
-                    }
-                })
-                .then(response => {
-                    const data = response.data;
+const props = defineProps<{
+    chart: Chart,
+    start: string,
+    end: string
+}>()
 
-                    this.chartData = data.data;
-                    this.options = data.options;
-                    this.theme = data.theme;
+const currencies = useCurrenciesStore()
+const status = useStatusStore()
+const ready = ref(true)
+const {chartData, options} = useDoughnutChartData()
 
-                    this.ready = true;
-                })
-        }
-    },
-    mounted() {
-        this.getData();
-        this.currencies.$subscribe(() => this.getData());
-    }
+function getChartData() {
+    ready.value = false
+
+    axios.get(
+        `/web-api/charts/${props.chart.id}/currency/${currencies.usedCurrency}`,
+        {params: queryWithDates(props.start, props.end)},
+    )
+        .then(response => {
+            const data = response.data
+
+            chartData.value = data.data
+
+            ready.value = true
+        })
+        .catch(err => {
+            console.error(err)
+            status.showError()
+        })
 }
+
+watch(() => props.start, getChartData)
+watch(() => props.end, getChartData)
+
+onMounted(() => {
+    getChartData()
+    currencies.$subscribe(getChartData)
+})
 </script>
+
+<style scoped>
+.chart-size {
+    max-width: calc(100% - 16px);
+    margin-left: 8px;
+    margin-bottom: 10px;
+    height: 335px !important;
+}
+</style>
