@@ -137,7 +137,7 @@ class ChartsController extends Controller
         foreach ($items as $accountID => $value) {
             $data["datasets"][0]["data"][] = round($value, 2);
             $data["datasets"][0]["backgroundColor"][] = $colors[--$count];
-            $data["labels"] = $accounts->firstWhere("id", $accountID)->name;
+            $data["labels"][] = $accounts->firstWhere("id", $accountID)->name;
         }
 
         return compact("data");
