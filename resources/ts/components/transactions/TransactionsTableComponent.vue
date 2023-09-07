@@ -35,7 +35,7 @@
 
     <v-data-table
         v-model:options="options"
-        :headers="headers"
+        :headers="transactionHeaders()"
         :items="tableData.data.value"
         :loading="loading.table"
         :items-per-page="-1"
@@ -332,9 +332,9 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref, computed, watch, onMounted } from "vue"
+import { computed, watch, onMounted } from "vue"
 
-import type { TransactionRow, DataQuery } from "@interfaces/Transaction"
+import type { TransactionRow } from "@interfaces/Transaction"
 import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
 
@@ -370,52 +370,12 @@ function useTableData() {
         ["id", "value"],
     )
 
-    const pagination = ref({
-        page: 1,
-        last: Infinity,
-        perPage: Infinity,
-    })
-
-    const query = computed(() => {
-        let result: DataQuery = {}
-
-        if (Object.keys(options.value).length) {
-            if (search.value.title.length) {
-                result.title = search.value.title
-            }
-
-            if (options.value.sortBy.length) {
-                result.orderFields = []
-                result.orderDirections = []
-
-                for (let item of options.value.sortBy) {
-                    result.orderFields.push(item.key)
-                    result.orderDirections.push(item.order)
-                }
-            }
-
-            if (filteredData.value.accounts.length) {
-                result.accounts = filteredData.value.accounts
-            }
-
-            if (filteredData.value.categories.length) {
-                result.categories = filteredData.value.categories
-            }
-
-            if (filteredData.value.dates.length) {
-                result.dates = filteredData.value.dates
-            }
-        }
-
-        return result
-    })
-
     async function getData() {
         return axios
             .get(`/web-api/${props.type}/currency/${currencies.usedCurrency}/list`, {
                 params: {
                     page: pagination.value.page,
-                    ...query.value,
+                    ...transactionQuery.value,
                 },
             })
             .then(response => {
@@ -453,7 +413,16 @@ function useTableData() {
     return {getStartData, getMoreData, tableData, typeSingular}
 }
 
-const {filterColor, filteredData, headers, loading, options, search} = useTableSettings()
+const {
+    filterColor,
+    filteredData,
+    transactionHeaders,
+    loading,
+    options,
+    search,
+    pagination,
+    transactionQuery,
+} = useTableSettings()
 const {getStartData, getMoreData, tableData, typeSingular} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset<void>(getStartData)
 

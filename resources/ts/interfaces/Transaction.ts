@@ -1,7 +1,4 @@
-interface Icon {
-    name: string
-    icon: string | null
-}
+import type { Icon } from "@interfaces/App"
 
 interface TransactionRow extends Record<string, any> {
     id: number

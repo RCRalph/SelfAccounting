@@ -22,7 +22,7 @@
                     :categories="categories"
                     :accounts="accounts"
                     :type="props.type"
-                    :disable-update="loading.submit"
+                    :disable-update="!!loading.submit"
                     :titles="titles"
                     @price-change="commonValuesPriceChange"
                 ></SetCommonValuesComponent>

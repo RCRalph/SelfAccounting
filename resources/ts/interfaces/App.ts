@@ -10,7 +10,13 @@ interface Loading {
     title?: boolean
 }
 
+interface Icon {
+    name: string
+    icon: string | null
+}
+
 export type {
     MenuItem,
     Loading,
+    Icon,
 }

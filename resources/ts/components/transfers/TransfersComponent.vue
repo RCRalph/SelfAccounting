@@ -1,10 +1,28 @@
 <template>
-    <div v-if="ready">
+    <div v-if="ready" style="margin: 12px">
         <v-row>
-            <v-col xl="8" cols="12" order="last" order-xl="first">
-                <TransfersTableComponent
-                    :accounts="accounts"
-                ></TransfersTableComponent>
+            <v-col
+                xl="8"
+                cols="12"
+                order="last"
+                order-xl="first"
+            >
+                <v-card class="loading-height">
+                    <CardTitleWithButtons>
+                        <div class="text-h5 text-capitalize pb-lg-0">Transfers</div>
+
+                        <!--<AddTransferDialogComponent>
+
+                        </AddTransferDialogComponent>-->
+                    </CardTitleWithButtons>
+
+                    <v-card-text>
+                        <TransfersTableComponent
+                            :accounts="accounts"
+                            @updated="getData"
+                        ></TransfersTableComponent>
+                    </v-card-text>
+                </v-card>
             </v-col>
 
             <v-col xl="4" cols="12" order-xl="last">
@@ -15,59 +33,68 @@
         </v-row>
     </div>
 
-    <v-overlay v-else :value="true" opacity="1" absolute>
+    <v-overlay
+        v-else
+        :model-value="true"
+        :contained="true"
+    >
         <v-progress-circular
             indeterminate
-            size="96"
+            size="128"
         ></v-progress-circular>
     </v-overlay>
 </template>
 
-<script>
-import { useCurrenciesStore } from "&/stores/currencies";
-import main from "&/mixins/main";
+<script setup lang="ts">
+import axios from "axios"
+import { onMounted, ref } from "vue"
+import type { Ref } from "vue"
 
-import TransfersTableComponent from "@/transfers/TransfersTableComponent.vue";
-import OverviewComponent from "@/OverviewComponent.vue";
+import type { Account } from "@interfaces/Account"
+import type { Chart } from "@interfaces/Chart"
 
-export default {
-    components: {
-        TransfersTableComponent,
-        OverviewComponent
-    },
-    mixins: [main],
-    setup() {
-        const currencies = useCurrenciesStore();
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
+import TransfersTableComponent from "@components/transfers/TransfersTableComponent.vue"
+//import AddTransferDialogComponent from "@components/transfers/AddTransferDialogComponent.vue"
+import OverviewComponent from "@components/charts/OverviewComponent.vue"
 
-        return { currencies };
-    },
-    data() {
-        return {
-            accounts: [],
-            charts: [],
+import { useCurrenciesStore } from "@stores/currencies"
+import { useStatusStore } from "@stores/status"
 
-            ready: false
-        }
-    },
-    methods: {
-        getData() {
-            this.ready = false;
+const currencies = useCurrenciesStore()
+const status = useStatusStore()
 
-            axios
-                .get(`/web-api/transfers/currency/${this.currencies.usedCurrency}`)
-                .then(response => {
-                    const data = response.data;
+function useData() {
+    const ready = ref(false)
 
-                    this.accounts = data.accounts;
-                    this.charts = data.charts;
+    const accounts: Ref<Account[]> = ref([])
+    const charts: Ref<Chart[]> = ref([])
 
-                    this.ready = true;
-                })
-        }
-    },
-    mounted() {
-        this.getData()
-        this.currencies.$subscribe(() => this.getData());
+    function getData() {
+        ready.value = false
+
+        axios.get(`/web-api/transfers/currency/${currencies.usedCurrency}`)
+            .then(response => {
+                const data = response.data
+
+                accounts.value = data.accounts
+                charts.value = data.charts
+
+                ready.value = true
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+            })
     }
+
+    return {ready, getData, accounts, charts}
 }
+
+const {getData, ready, accounts, charts} = useData()
+
+onMounted(() => {
+    getData()
+    currencies.$subscribe(getData)
+})
 </script>

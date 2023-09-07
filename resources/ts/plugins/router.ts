@@ -1,8 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import type { RouteRecordRaw } from "vue-router"
 
+// Components
 import DashboardComponent from "@components/dashboard/DashboardComponent.vue"
 import TransactionsComponent from "@components/transactions/TransactionsComponent.vue"
+import TransfersComponent from "@components/transfers/TransfersComponent.vue"
 import ChartsComponent from "@components/charts/ChartsComponent.vue"
 
 // Extension components
@@ -30,6 +32,10 @@ const routes: RouteRecordRaw[] = [
         props: {
             type: "expenses",
         },
+    },
+    {
+        path: "/transfers",
+        component: TransfersComponent,
     },
     {
         path: "/charts",
