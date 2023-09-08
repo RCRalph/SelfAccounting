@@ -251,11 +251,10 @@
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     <div class="d-flex flex-nowrap justify-center align-center">
-                        <!--<EditTransactionsDialogComponent
-                            :type="props.type"
+                        <EditTransferDialogComponent
                             :id="item.raw.id.value"
                             @updated="emit('updated')"
-                        ></EditTransactionsDialogComponent>-->
+                        ></EditTransferDialogComponent>
 
                         <DeleteDialogComponent
                             thing="transfer"
@@ -283,6 +282,7 @@ import { watch, onMounted } from "vue"
 import type { Account } from "@interfaces/Account"
 import type { TransferRow } from "@interfaces/Transfer"
 
+import EditTransferDialogComponent from "@components/transfers/EditTransferDialogComponent.vue"
 import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"

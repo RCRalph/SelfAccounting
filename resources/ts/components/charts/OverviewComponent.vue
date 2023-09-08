@@ -1,8 +1,9 @@
 <template>
     <v-card class="loading-height">
-        <v-card-title class="text-center text-h5">
-            Overview
-        </v-card-title>
+        <CardTitleWithButtons
+            title="Overview"
+            :large-font="true"
+        ></CardTitleWithButtons>
 
         <v-card-text>
             <div class="d-flex justify-center flex-nowrap align-end mb-4">
@@ -69,6 +70,7 @@ import { ref } from "vue"
 import type { Chart } from "@interfaces/Chart"
 
 import OverviewChartComponent from "@components/charts/OverviewChartComponent.vue"
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 
 const props = defineProps<{
     charts: Chart[]

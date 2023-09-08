@@ -1,22 +1,54 @@
 <template>
-    <v-card-title :class="titleClasses">
-        <slot></slot>
+    <v-card-title :class="titleCardClasses">
+        <div :class="titleClasses">
+            {{ props.title }}
+        </div>
+
+        <div class="multi-button-table-top">
+            <slot></slot>
+        </div>
     </v-card-title>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, useSlots } from "vue"
 import { useDisplay } from "vuetify"
 
+const props = defineProps<{
+    title: string,
+    largeFont?: boolean,
+    extraBottom?: boolean
+}>()
+
 const display = useDisplay()
+const slots = useSlots()
 
-const titleClasses = computed(() => {
-    const result = ["d-flex", "pb-1", "px-6"]
+const titleCardClasses = computed(() => {
+    const result = ["d-flex", "px-4"]
 
-    if (display.mobile.value) {
+    if (!slots.default) {
+        result.push("justify-center")
+    } else if (display.mobile.value) {
         result.push("flex-wrap", "flex-column", "justify-center", "align-center")
     } else {
         result.push("justify-space-between")
+    }
+
+    if (!props.extraBottom) {
+        result.push("pb-1")
+    }
+
+    return result
+})
+
+const titleClasses = computed(() => {
+    const result = [
+        "text-capitalize",
+        display.mobile.value ? "mb-1" : "mb-0",
+    ]
+
+    if (props.largeFont) {
+        result.push("text-h5")
     }
 
     return result

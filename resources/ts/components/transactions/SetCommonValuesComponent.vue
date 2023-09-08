@@ -7,16 +7,13 @@
             <v-btn
                 v-bind="props"
                 variant="outlined"
-                class="mt-2 mt-sm-0"
             >
                 Set common values
             </v-btn>
         </template>
 
         <v-card>
-            <v-card-title class="text-center pb-0">
-                Set common values
-            </v-card-title>
+            <CardTitleWithButtons title="Set common values"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-form v-model="canUpdate">
@@ -183,11 +180,13 @@ import type { Transaction } from "@interfaces/Transaction"
 import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
 
-import Validator from "@classes/Validator"
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
+
 import { useCurrenciesStore } from "@stores/currencies"
 import { useDialogSettings } from "@composables/useDialogSettings"
 import useTitles from "@composables/useTitles"
 import Calculator from "@classes/Calculator"
+import Validator from "@classes/Validator"
 
 const props = defineProps<{
     transactionData: Transaction[],

@@ -8,9 +8,10 @@
                 order-xl="first"
             >
                 <v-card class="loading-height">
-                    <v-card-title class="text-center text-h5 text-capitalize pb-lg-0">
-                        {{ props.type }}
-                    </v-card-title>
+                    <CardTitleWithButtons
+                        :title="props.type"
+                        :large-font="true"
+                    ></CardTitleWithButtons>
 
                     <v-card-text>
                         <TransactionsTableComponent
@@ -52,6 +53,7 @@ import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
 import type { Chart } from "@interfaces/Chart"
 
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import TransactionsTableComponent from "@components/transactions/TransactionsTableComponent.vue"
 import OverviewComponent from "@components/charts/OverviewComponent.vue"
 

@@ -13,9 +13,7 @@
         </template>
 
         <v-card v-if="ready">
-            <CardTitleWithButtons>
-                <div>Add {{ props.type }}</div>
-
+            <CardTitleWithButtons :title="`Add ${props.type}`">
                 <SetCommonValuesComponent
                     v-model:transaction-data="transactionData"
                     v-model:common-values="commonValues"

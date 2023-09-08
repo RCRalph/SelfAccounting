@@ -6,7 +6,6 @@
         <template v-slot:activator="{ props }: any">
             <v-btn
                 v-bind="props"
-                :class="display.xs && 'mt-2'"
                 variant="outlined"
             >
                 Convert to {{ target }}
@@ -14,9 +13,7 @@
         </template>
 
         <v-card>
-            <v-card-title class="d-flex justify-center pb-0">
-                Convert to {{ target }}
-            </v-card-title>
+            <CardTitleWithButtons :title="`Convert to ${target}`"></CardTitleWithButtons>
 
             <v-card-text class="text-h7 mx-5">
                 Are you sure you want to convert this {{ source }} to {{ target }}?
@@ -38,6 +35,7 @@ import { useDisplay } from "vuetify"
 import { useStatusStore } from "@stores/status"
 
 import CardActionsNoYesComponent from "@components/common/card-actions/CardActionsNoYesComponent.vue"
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 
 const props = defineProps<{
     type: string,

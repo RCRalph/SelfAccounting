@@ -310,11 +310,11 @@
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     <div class="d-flex flex-nowrap justify-center align-center">
-                        <EditTransactionsDialogComponent
+                        <EditTransactionDialogComponent
                             :type="item.raw.value.value < 0 ? 'expenses' : 'income'"
                             :id="item.raw.id.value"
                             @updated="emit('updated')"
-                        ></EditTransactionsDialogComponent>
+                        ></EditTransactionDialogComponent>
 
                         <DeleteDialogComponent
                             :thing="item.raw.value.value < 0 ? 'expense' : 'income'"
@@ -344,7 +344,7 @@ import type { Account } from "@interfaces/Account"
 import type { Category } from "@interfaces/Category"
 
 import AddTransactionsDialogComponent from "@components/transactions/AddTransactionsDialogComponent.vue"
-import EditTransactionsDialogComponent from "@components/transactions/EditTransactionsDialogComponent.vue"
+import EditTransactionDialogComponent from "@components/transactions/EditTransactionDialogComponent.vue"
 import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"

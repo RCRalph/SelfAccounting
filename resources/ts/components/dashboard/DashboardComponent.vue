@@ -225,9 +225,10 @@
 
             <v-col xl="8" cols="12">
                 <v-card class="loading-height">
-                    <v-card-title class="text-center text-h5">
-                        Recent transactions
-                    </v-card-title>
+                    <CardTitleWithButtons
+                        title="Recent transactions"
+                        :large-font="true"
+                    ></CardTitleWithButtons>
 
                     <v-card-text>
                         <RecentTransactionsComponent
@@ -266,6 +267,7 @@ import type { Account } from "@interfaces/Account"
 import BalanceHistoryChartComponent from "@components/dashboard/BalanceHistoryChartComponent.vue"
 import DataByTypeChartComponent from "@components/dashboard/DataByTypeChartComponent.vue"
 import RecentTransactionsComponent from "@components/dashboard/RecentTransactionsComponent.vue"
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"

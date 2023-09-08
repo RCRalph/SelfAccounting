@@ -8,12 +8,14 @@
                 order-xl="first"
             >
                 <v-card class="loading-height">
-                    <CardTitleWithButtons>
-                        <div class="text-h5 text-capitalize pb-lg-0">Transfers</div>
-
-                        <!--<AddTransferDialogComponent>
-
-                        </AddTransferDialogComponent>-->
+                    <CardTitleWithButtons
+                        title="Transfers"
+                        :large-font="true"
+                        :extra-bottom="true"
+                    >
+                        <AddTransferDialogComponent
+                            @added="getData"
+                        ></AddTransferDialogComponent>
                     </CardTitleWithButtons>
 
                     <v-card-text>
@@ -55,7 +57,7 @@ import type { Chart } from "@interfaces/Chart"
 
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import TransfersTableComponent from "@components/transfers/TransfersTableComponent.vue"
-//import AddTransferDialogComponent from "@components/transfers/AddTransferDialogComponent.vue"
+import AddTransferDialogComponent from "@components/transfers/AddTransferDialogComponent.vue"
 import OverviewComponent from "@components/charts/OverviewComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"

@@ -20,9 +20,7 @@
         </template>
 
         <v-card v-if="ready && transactionData != undefined">
-            <CardTitleWithButtons>
-                <div>Edit {{ typeSingular }}</div>
-
+            <CardTitleWithButtons :title="`Edit ${typeSingular}`">
                 <ConvertTransactionDialogComponent
                     :type="type"
                     :id="id"
@@ -150,8 +148,9 @@
                                         <template v-slot:prepend>
                                             <v-icon
                                                 v-if="item.raw.icon"
-                                                :icon="item.raw.icon"
-                                            ></v-icon>
+                                            >
+                                                {{ formats.iconName(item.raw.icon) }}
+                                            </v-icon>
                                         </template>
                                     </v-list-item>
                                 </template>
@@ -172,8 +171,9 @@
                                         <template v-slot:prepend>
                                             <v-icon
                                                 v-if="item.raw.icon"
-                                                :icon="item.raw.icon"
-                                            ></v-icon>
+                                            >
+                                                {{ formats.iconName(item.raw.icon) }}
+                                            </v-icon>
                                         </template>
                                     </v-list-item>
                                 </template>
@@ -191,10 +191,8 @@
             ></CardActionsResetUpdate>
         </v-card>
 
-        <CardLoadingComponent
-            v-else
-        >
-            Add {{ typeSingular }}
+        <CardLoadingComponent v-else>
+            Edit {{ typeSingular }}
         </CardLoadingComponent>
     </v-dialog>
 </template>
@@ -210,18 +208,19 @@ import type { Transaction } from "@interfaces/Transaction"
 import type { Category } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 
-import useTitles from "@composables/useTitles"
-import { useDialogSettings } from "@composables/useDialogSettings"
-import { useStatusStore } from "@stores/status"
-import { useCurrenciesStore } from "@stores/currencies"
-import Calculator from "@classes/Calculator"
-import Validator from "@classes/Validator"
-
 import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
 import ValueFieldComponent from "@components/common/ValueFieldComponent.vue"
 import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import CardActionsResetUpdate from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
+
+import useTitles from "@composables/useTitles"
+import { useDialogSettings } from "@composables/useDialogSettings"
+import { useStatusStore } from "@stores/status"
+import { useCurrenciesStore } from "@stores/currencies"
+import useFormats from "@composables/useFormats"
+import Calculator from "@classes/Calculator"
+import Validator from "@classes/Validator"
 
 const props = defineProps<{
     type: "income" | "expenses"
@@ -234,6 +233,7 @@ const emit = defineEmits<{
 
 const status = useStatusStore()
 const currencies = useCurrenciesStore()
+const formats = useFormats()
 
 function useData() {
     const transactionData: Ref<Transaction | undefined> = ref(undefined)
