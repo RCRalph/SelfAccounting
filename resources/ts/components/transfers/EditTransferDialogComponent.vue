@@ -1,47 +1,75 @@
 <template>
-    <v-dialog v-model="dialog" max-width="700">
-        <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
-            <v-tooltip bottom >
-                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
-                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-pencil</v-icon>
+    <v-dialog
+        v-model="dialog"
+        max-width="700"
+    >
+        <template v-slot:activator="{props: dialogProps}: any">
+            <v-tooltip location="bottom">
+                <template v-slot:activator="{props: tooltipProps}: any">
+                    <v-icon
+                        v-bind="{ ...dialogProps, ...tooltipProps }"
+                        class="mx-1 cursor-pointer"
+                        icon="mdi-pencil"
+                    ></v-icon>
                 </template>
 
-                <span>Edit transfer</span>
+                <span>
+                    Edit transfer
+                </span>
             </v-tooltip>
         </template>
 
-        <v-card v-if="ready">
-            <v-card-title>Edit transfer</v-card-title>
+        <v-card v-if="ready && transferData != undefined">
+            <CardTitleWithButtons title="Edit transfer"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
                     <v-row>
-                        <v-col cols="12" md="4" offset-md="4" class="pb-0">
+                        <v-col
+                            cols="12"
+                            md="4"
+                            offset-md="4"
+                            class="pb-0"
+                        >
                             <v-text-field
-                                type="date" label="Date"
-                                v-model="data.date"
+                                v-model="transferData.date"
                                 :min="minDate"
-                                :rules="[validation.date(false, minDate)]"
+                                :rules="[
+                                    Validator.date(false, minDate)
+                                ]"
+                                variant="underlined"
+                                label="Date"
+                                type="date"
                             ></v-text-field>
                         </v-col>
+                    </v-row>
 
-                        <v-col cols="12" md="6">
-                            <div class="text-h5-5 text-center" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Source</div>
+                    <v-row>
+                        <v-col
+                            cols="12"
+                            md="6"
+                            class="pt-sm-0"
+                        >
+                            <div class="text-h5 text-center">
+                                Source
+                            </div>
 
                             <v-text-field
-                                label="Value"
-                                v-model="data.source.value"
-                                :error-messages="keys.source ? sourceValue.error : undefined"
+                                v-model="transferData.source.value"
+                                :suffix="sourceData?.currency?.ISO"
+                                :error-messages="sourceValue.error"
                                 :hint="sourceValue.hint"
-                                @input="keys.source++"
-                                :suffix="sourceData.currency.ISO"
+                                variant="underlined"
+                                label="Value"
                             >
-                                <template v-slot:append>
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon v-on="on" class="ml-1">
-                                                mdi-calculator
-                                            </v-icon>
+                                <template v-slot:append-inner>
+                                    <v-tooltip location="bottom">
+                                        <template v-slot:activator="{ props }: any">
+                                            <v-icon
+                                                v-bind="props"
+                                                class="ml-1"
+                                                icon="mdi-calculator"
+                                            ></v-icon>
                                         </template>
 
                                         Supported operations: <strong>+ - * / ^</strong>
@@ -50,51 +78,62 @@
                             </v-text-field>
 
                             <v-select
-                                v-model="data.source.account_id"
+                                v-model="transferData.source.account_id"
+                                :rules="[
+                                    Validator.differentAccounts(transferData.target.account_id)
+                                ]"
                                 :items="sourceAccounts"
-                                :rules="[validation.differentAccounts(data.target.account_id)]"
-                                item-text="name"
+                                item-title="name"
                                 item-value="id"
                                 label="Account"
+                                variant="underlined"
                             >
-                                <template v-slot:item="{ item }">
-                                    <v-list-item-icon v-if="item.icon">
-                                        <v-icon>{{ item.icon }}</v-icon>
-                                    </v-list-item-icon>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                    </v-list-item-content>
+                                <template v-slot:item="{ item, props }: any">
+                                    <v-list-item v-bind="props">
+                                        <template v-slot:prepend>
+                                            <v-icon v-if="item.raw.icon">
+                                                {{ formats.iconName(item.raw.icon) }}
+                                            </v-icon>
+                                        </template>
+                                    </v-list-item>
                                 </template>
                             </v-select>
 
                             <v-select
-                                v-model="data.source.currency_id"
-                                :items="currencySelectData"
-                                item-text="ISO"
+                                v-model="transferData.source.currency_id"
+                                :items="availableCurrencyData"
+                                item-title="ISO"
                                 item-value="id"
                                 label="Currency"
-                                @input="resetSelects('source')"
+                                variant="underlined"
                             ></v-select>
                         </v-col>
 
-                        <v-col cols="12" md="6">
-                            <div class="text-h5-5 text-center" :class="$vuetify.theme.dark ? 'white--text' : 'black--text'">Target</div>
+                        <v-col
+                            cols="12"
+                            md="6"
+                            class="pt-sm-0"
+                        >
+                            <div class="text-h5 text-center">
+                                Target
+                            </div>
 
                             <v-text-field
-                                label="Value"
-                                v-model="data.target.value"
-                                :error-messages="keys.targetVa ? targetValue.error : undefined"
+                                v-model="transferData.target.value"
+                                :suffix="targetData?.currency?.ISO"
+                                :error-messages="targetValue.error"
                                 :hint="targetValue.hint"
-                                @input="keys.target++"
-                                :suffix="targetData.currency.ISO"
+                                variant="underlined"
+                                label="Value"
                             >
-                                <template v-slot:append>
-                                    <v-tooltip bottom>
-                                        <template v-slot:activator="{ on }">
-                                            <v-icon v-on="on" class="ml-1">
-                                                mdi-calculator
-                                            </v-icon>
+                                <template v-slot:append-inner>
+                                    <v-tooltip location="bottom">
+                                        <template v-slot:activator="{ props }: any">
+                                            <v-icon
+                                                v-bind="props"
+                                                class="ml-1"
+                                                icon="mdi-calculator"
+                                            ></v-icon>
                                         </template>
 
                                         Supported operations: <strong>+ - * / ^</strong>
@@ -103,212 +142,253 @@
                             </v-text-field>
 
                             <v-select
-                                v-model="data.target.account_id"
+                                v-model="transferData.target.account_id"
+                                :rules="[
+                                    Validator.differentAccounts(transferData.source.account_id)
+                                ]"
                                 :items="targetAccounts"
-                                :rules="[validation.differentAccounts(data.source.account_id)]"
-                                item-text="name"
+                                item-title="name"
                                 item-value="id"
                                 label="Account"
+                                variant="underlined"
                             >
-                                <template v-slot:item="{ item }">
-                                    <v-list-item-icon v-if="item.icon">
-                                        <v-icon>{{ item.icon }}</v-icon>
-                                    </v-list-item-icon>
-
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                    </v-list-item-content>
+                                <template v-slot:item="{ item, props }: any">
+                                    <v-list-item v-bind="props">
+                                        <template v-slot:prepend>
+                                            <v-icon v-if="item.raw.icon">
+                                                {{ formats.iconName(item.raw.icon) }}
+                                            </v-icon>
+                                        </template>
+                                    </v-list-item>
                                 </template>
                             </v-select>
 
                             <v-select
-                                v-model="data.target.currency_id"
-                                :items="currencySelectData"
-                                item-text="ISO"
+                                v-model="transferData.target.currency_id"
+                                :items="availableCurrencyData"
+                                item-title="ISO"
                                 item-value="id"
                                 label="Currency"
-                                @input="resetSelects('target')"
+                                variant="underlined"
                             ></v-select>
                         </v-col>
                     </v-row>
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1" width="85">
-                    Reset
-                </v-btn>
-
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1" width="85">
-                    Update
-                </v-btn>
-            </v-card-actions>
+            <CardActionsResetUpdate
+                :loading="!!loading.submit"
+                :can-submit="!!canSubmit"
+                @reset="reset"
+                @update="update"
+            ></CardActionsResetUpdate>
         </v-card>
 
-        <v-card v-else>
-            <v-card-title>Edit transfer</v-card-title>
-
-            <v-card-text class="d-flex justify-center">
-                <v-progress-circular
-                    indeterminate
-                    size="96"
-                ></v-progress-circular>
-            </v-card-text>
-        </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
+        <CardLoadingComponent v-else>
+            Edit transfer
+        </CardLoadingComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref, computed, watch } from "vue"
+import type { Ref } from "vue"
+import { isNull, cloneDeep } from "lodash"
 
-import { useCurrenciesStore } from "&/stores/currencies";
-import Calculator from "&/classes/Calculator";
-import validation from "&/mixins/validation";
-import main from "&/mixins/main";
+import type { Account } from "@interfaces/Account"
+import type { Transfer } from "@interfaces/Transfer"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
+import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
+import CardActionsResetUpdate from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
 
-        return { currencies };
-    },
-    mixins: [validation, main],
-    components: {
-        ErrorSnackbarComponent
-    },
-    props: {
-        id: Number
-    },
-    data() {
+import { useDialogSettings } from "@composables/useDialogSettings"
+import { useStatusStore } from "@stores/status"
+import { useCurrenciesStore } from "@stores/currencies"
+import useFormats from "@composables/useFormats"
+import Calculator from "@classes/Calculator"
+import Validator from "@classes/Validator"
+
+const props = defineProps<{
+    id: number
+}>()
+
+const emit = defineEmits<{
+    updated: []
+}>()
+
+const status = useStatusStore()
+const currencies = useCurrenciesStore()
+const formats = useFormats()
+
+function useData() {
+    const transferData: Ref<Transfer | undefined> = ref(undefined)
+    const transferDataCopy: Ref<Transfer | undefined> = ref(undefined)
+
+    const accounts: Ref<Record<number, Account[]>> = ref({})
+    const availableCurrencies: Ref<number[]> = ref([])
+
+    const availableCurrencyData = computed(() => currencies.selectCurrencies(availableCurrencies.value))
+
+    const sourceData = computed(() => {
+        if (typeof transferData.value == "undefined") return undefined
+
+        const account = accounts.value[transferData.value?.source.currency_id]
+            .find(item => item.id == transferData.value?.source.account_id)
+
         return {
-            dialog: false,
-            data: {},
-            dataCopy: {},
-            accounts: {},
-            availableCurrencies: [],
-            keys: {
-                source: 0,
-                target: 0
-            },
-
-            ready: false,
-            error: false,
-            loading: false,
-            canSubmit: false
+            currency: currencies.findCurrency(transferData.value.source.currency_id),
+            account: typeof account != "undefined" && !isNull(account.start_date) ?
+                {...account, date: new Date(account.start_date)} : undefined,
         }
-    },
-    watch: {
-        dialog() {
-            if (!this.dialog) return;
-            this.ready = false;
+    })
 
-            axios
-                .get(`/web-api/transfers/${this.id}`)
-                .then(response => {
-                    const data = response.data;
+    const targetData = computed(() => {
+        if (typeof transferData.value == "undefined") return undefined
 
-                    this.data = data.data;
-                    this.dataCopy = _.cloneDeep(data.data);
-                    this.accounts = data.accounts;
-                    this.availableCurrencies = data.availableCurrencies;
+        const account = accounts.value[transferData.value?.target.currency_id]
+            .find(item => item.id == transferData.value?.target.account_id)
 
-                    this.ready = true;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                })
+        return {
+            currency: currencies.findCurrency(transferData.value.target.currency_id),
+            account: typeof account != "undefined" && !isNull(account.start_date) ?
+                {...account, date: new Date(account.start_date)} : undefined,
         }
-    },
-    computed: {
-        currencySelectData() {
-            return this.currencies.selectCurrencies(this.availableCurrencies);
-        },
-        sourceValue() {
-            this.keys.source;
-            return new Calculator(this.data.source.value, Calculator.FIELDS.value).resultObject;
-        },
-        targetValue() {
-            this.keys.target;
-            return new Calculator(this.data.target.value, Calculator.FIELDS.value).resultObject;
-        },
-        sourceData() {
-            if (!this.ready) return {};
+    })
 
-            const account = this.accounts[this.data.source.currency_id].find(item => item.id == this.data.source.account_id);
+    const sourceAccounts = computed(() => {
+        if (typeof transferData.value == "undefined") return []
 
-            return {
-                currency: this.currencies.findCurrency(this.data.source.currency_id),
-                account: account !== undefined ? account : {}
-            }
-        },
-        targetData() {
-            if (!this.ready) return {};
+        return accounts.value[transferData.value?.source.currency_id]
+    })
 
-            const account = this.accounts[this.data.target.currency_id].find(item => item.id == this.data.target.account_id);
+    const targetAccounts = computed(() => {
+        if (typeof transferData.value == "undefined") return []
 
-            return {
-                currency: this.currencies.findCurrency(this.data.target.currency_id),
-                account: account !== undefined ? account : {}
-            }
-        },
-        sourceAccounts() {
-            return this.accounts[this.data.source.currency_id];
-        },
-        targetAccounts() {
-            return this.accounts[this.data.target.currency_id];
-        },
-        minDate() {
-            let result = new Date("1970-01-01"), date = new Date();
+        return accounts.value[transferData.value?.target.currency_id]
+    })
 
-            if (!_.isEmpty(this.sourceData.account)) {
-                date = new Date(this.sourceData.account.start_date);
-                if (result.getTime() < date.getTime()) {
-                    result = date;
-                }
-            }
+    const minDate = computed(() => {
+        let result = new Date("1970-01-01")
 
-            if (!_.isEmpty(this.targetData.account)) {
-                date = new Date(this.targetData.account.start_date);
-                if (result.getTime() < date.getTime()) {
-                    result = date;
-                }
-            }
-
-            return result;
-        },
-    },
-    methods: {
-        reset() {
-            this.data = _.cloneDeep(this.dataCopy);
-        },
-        update() {
-            this.loading = true;
-
-            let data = _.cloneDeep(this.data);
-            data.source.value = this.sourceValue.value;
-            data.target.value = this.targetValue.value;
-            delete data.source.currency_id;
-            delete data.target.currency_id;
-
-            axios.patch(`/web-api/transfers/${this.id}`, data)
-                .then(() => {
-                    this.dataCopy = _.cloneDeep(this.data);
-                    this.$emit("updated");
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        },
-        resetSelects(key) {
-            this.data[key].account_id = null;
+        if (
+            typeof sourceData.value?.account != "undefined" &&
+            result.getTime() < sourceData.value.account.date.getTime()
+        ) {
+            result = sourceData.value.account.date
         }
+
+        if (
+            typeof targetData.value?.account != "undefined" &&
+            result.getTime() < targetData.value.account.date.getTime()
+        ) {
+            result = targetData.value.account.date
+        }
+
+        return result
+    })
+
+    function getData() {
+        if (!dialog.value) return
+
+        ready.value = false
+
+        axios.get(`/web-api/transfers/${props.id}`)
+            .then(response => {
+                const data = response.data
+
+                transferData.value = data.data
+                transferDataCopy.value = cloneDeep(data.data)
+
+                accounts.value = data.accounts
+                availableCurrencies.value = data.availableCurrencies
+
+                ready.value = true
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+            })
+    }
+
+    return {
+        getData, minDate,
+        sourceAccounts, sourceData,
+        targetAccounts, targetData,
+        transferData, transferDataCopy,
+        availableCurrencyData,
     }
 }
+
+function useCalculatedValues() {
+    const calculatorAllowObject = {
+        null: false,
+        negative: false,
+        zero: false,
+    }
+
+    const sourceValue = computed(() => new Calculator(
+        transferData.value?.source.value || "",
+        "price",
+        calculatorAllowObject,
+    ).resultObject)
+
+    const targetValue = computed(() => new Calculator(
+        transferData.value?.target.value || "",
+        "price",
+        calculatorAllowObject,
+    ).resultObject)
+
+    return {sourceValue, targetValue}
+}
+
+function useActions() {
+    function reset() {
+        transferData.value = cloneDeep(transferDataCopy.value)
+    }
+
+    function update() {
+        loading.value.submit = true
+
+        if (typeof transferData.value == "undefined") {
+            throw new Error("Can't update data when it's undefined")
+        }
+
+        const data: any = cloneDeep(transferData.value)
+        data.source.value = sourceValue.value.value
+        data.target.value = targetValue.value.value
+        delete data.source.currency_id
+        delete data.target.currency_id
+
+        axios.patch(`/web-api/transfers/${props.id}`, data)
+            .then(() => {
+                emit("updated")
+                status.showSuccess("updated transfer")
+                transferDataCopy.value = cloneDeep(transferData.value)
+                dialog.value = false
+                loading.value.submit = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value.submit = false, 2000)
+            })
+    }
+
+    return {reset, update}
+}
+
+const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {
+    getData, minDate,
+    sourceAccounts, sourceData,
+    targetAccounts, targetData,
+    transferData, transferDataCopy,
+    availableCurrencyData,
+} = useData()
+const {sourceValue, targetValue} = useCalculatedValues()
+const {reset, update} = useActions()
+
+watch(dialog, getData)
 </script>

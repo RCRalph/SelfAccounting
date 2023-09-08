@@ -91,7 +91,7 @@ export default class Validator {
     }
 
     static differentAccounts(
-        otherAccount: number | null,
+        otherAccount: number | null | undefined,
     ): (account: number | null | undefined) => boolean | string {
         return (account) => {
             if (!account) {

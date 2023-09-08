@@ -1,5 +1,18 @@
 import type { Icon } from "@interfaces/App"
 
+interface Account {
+    account_id?: number
+    currency_id: number
+    value: string | number
+}
+
+interface Transfer {
+    id?: number
+    date: string
+    source: Account
+    target: Account
+}
+
 interface TransferRow extends Record<string, any> {
     id: number
     date: string
@@ -18,6 +31,7 @@ interface DataQuery {
 }
 
 export type {
+    Transfer,
     TransferRow,
     DataQuery,
 }
