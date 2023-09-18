@@ -328,7 +328,7 @@
     </v-data-table>
 
     <v-infinite-scroll
-        v-if="!loading"
+        v-if="!loading.table"
         @load="getMoreData"
     ></v-infinite-scroll>
 </template>
