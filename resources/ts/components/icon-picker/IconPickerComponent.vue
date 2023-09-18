@@ -24,14 +24,12 @@
                         cols="3"
                     >
                         <v-btn
-                            icon
                             variant="text"
-                            :color="props.modelValue == item ? 'primary' : undefined"
-                            @click="emit('update:modelValue', item)"
+                            :color="icon == item ? 'primary' : undefined"
+                            @click="icon = item"
                             density="comfortable"
-                        >
-                            <v-icon :icon="item"></v-icon>
-                        </v-btn>
+                            :icon="item"
+                        ></v-btn>
                     </v-col>
                 </v-row>
 
@@ -39,18 +37,20 @@
 
                 <v-form v-model="canSubmit">
                     <v-text-field
-                        v-model="props.modelValue"
+                        v-model="icon"
                         :rules="[
                             Validator.title('Icon', 64, true)
                         ]"
                         label="Icon name"
                         counter="64"
                         variant="underlined"
-                        @input="emit('update:modelValue', props.modelValue)"
                     >
                         <template v-slot:append>
-                            <v-icon style="min-width: 26px">
-                                {{ props.modelValue }}
+                            <v-icon
+                                v-if="props.modelValue"
+                                style="min-width: 26px"
+                            >
+                                {{ formats.iconName(props.modelValue) }}
                             </v-icon>
                         </template>
                     </v-text-field>
@@ -59,7 +59,7 @@
 
             <CardActionsSubmitComponent
                 :loading="false"
-                :can-submit="canSubmit"
+                :can-submit="!!canSubmit"
                 @submit="dialog = false"
             ></CardActionsSubmitComponent>
         </v-card>
@@ -72,17 +72,18 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref, watch } from "vue"
+import { ref, watch, computed } from "vue"
 import type { Ref } from "vue"
 
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import SupportedIconSetsComponent from "@components/icon-picker/SupportedIconSetsComponent.vue"
+import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
+import CardActionsSubmitComponent from "@components/common/card-actions/CardActionsSubmitComponent.vue"
 
 import { useStatusStore } from "@stores/status"
 import { useDialogSettings } from "@composables/useDialogSettings"
+import useFormats from "@composables/useFormats"
 import Validator from "@classes/Validator"
-import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
-import CardActionsSubmitComponent from "@components/common/card-actions/CardActionsSubmitComponent.vue"
 
 const props = defineProps<{
     modelValue?: string
@@ -90,13 +91,23 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    "update:modelValue": [payload: string]
+    "update:modelValue": [payload?: string]
 }>()
 
 const status = useStatusStore()
+const formats = useFormats()
 
 function useData() {
     const icons: Ref<string[]> = ref([])
+
+    const icon = computed({
+        get() {
+            return props.modelValue
+        },
+        set(value) {
+            emit("update:modelValue", value)
+        },
+    })
 
     function getData() {
         if (!dialog.value) return
@@ -117,11 +128,11 @@ function useData() {
             })
     }
 
-    return {getData, icons}
+    return {getData, icon, icons}
 }
 
 const {canSubmit, dialog, ready} = useDialogSettings()
-const {getData, icons} = useData()
+const {getData, icon, icons} = useData()
 
 watch(dialog, getData)
 </script>
