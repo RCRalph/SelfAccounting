@@ -1,183 +1,208 @@
 <template>
-    <v-dialog v-model="dialog" max-width="700">
-        <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
-                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-pencil</v-icon>
+    <v-dialog
+        v-model="dialog"
+        max-width="700"
+    >
+        <template v-slot:activator="{props: dialogProps}: any">
+            <v-tooltip location="bottom">
+                <template v-slot:activator="{props: tooltipProps}: any">
+                    <v-icon
+                        v-bind="{ ...dialogProps, ...tooltipProps }"
+                        class="mx-1 cursor-pointer"
+                        icon="mdi-pencil"
+                    ></v-icon>
                 </template>
 
-                <span>Edit category</span>
+                <span>
+                    Edit category
+                </span>
             </v-tooltip>
         </template>
 
-        <v-card v-if="ready">
-            <v-card-title>Edit category</v-card-title>
+        <v-card v-if="ready && categoryData !== undefined">
+            <CardTitleWithButtons title="Edit Category"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
                     <v-row>
                         <v-col cols="12" sm="4" class="d-flex justify-center align-center">
                             <IconPickerComponent
-                                v-model="data.icon"
+                                v-model="categoryData.icon"
                                 type="categories"
                             ></IconPickerComponent>
                         </v-col>
 
                         <v-col cols="12" sm="8">
                             <v-text-field
+                                v-model="categoryData.name"
+                                :rules="[
+                                    Validator.title('Name', 32)
+                                ]"
+                                variant="underlined"
                                 label="Name"
-                                v-model="data.name"
                                 counter="32"
-                                :rules="[validation.name()]"
                             ></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_income">
-                                <template v-slot:label>
-                                    Show in income
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="categoryData.used_in_income"
+                                label="Show in income"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_expenses">
-                                <template v-slot:label>
-                                    Show in expenses
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="categoryData.used_in_expenses"
+                                label="Show in expenses"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.show_on_charts">
-                                <template v-slot:label>
-                                    Show on charts
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="categoryData.show_on_charts"
+                                label="Show on charts"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.count_to_summary">
-                                <template v-slot:label>
-                                    Count to summary
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="categoryData.count_to_summary"
+                                label="Count to summary"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="12" sm="4">
-                            <v-text-field :disabled="!data.count_to_summary" type="date" label="Start date" v-model="data.start_date" :max="data.end_date" :rules="[validation.date(true)]"></v-text-field>
+                            <v-text-field
+                                v-model="categoryData.start_date"
+                                :disabled="!categoryData.count_to_summary"
+                                :max="categoryData.end_date"
+                                :rules="[
+                                    Validator.date(true)
+                                ]"
+                                type="date"
+                                label="Start date"
+                                variant="underlined"
+                            ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" sm="4">
-                            <v-text-field :disabled="!data.count_to_summary" type="date" label="End date" v-model="data.end_date" :min="data.start_date" :rules="[validation.date(true)]"></v-text-field>
+                            <v-text-field
+                                v-model="categoryData.end_date"
+                                :disabled="!categoryData.count_to_summary"
+                                :min="categoryData.start_date"
+                                :rules="[
+                                    Validator.date(true)
+                                ]"
+                                type="date"
+                                label="End date"
+                                variant="underlined"
+                            ></v-text-field>
                         </v-col>
                     </v-row>
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1" width="85">
-                    Reset
-                </v-btn>
-
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1" width="85">
-                    Update
-                </v-btn>
-            </v-card-actions>
+            <CardActionsResetUpdateComponent
+                :loading="!!loading.submit"
+                :can-submit="!!canSubmit"
+                @reset="reset"
+                @update="update"
+            ></CardActionsResetUpdateComponent>
         </v-card>
 
-        <v-card v-else>
-            <v-card-title>Edit category</v-card-title>
-
-            <v-card-text class="d-flex justify-center">
-                <v-progress-circular
-                    indeterminate
-                    size="96"
-                ></v-progress-circular>
-            </v-card-text>
-        </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
+        <CardLoadingComponent v-else>
+            Edit category
+        </CardLoadingComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-import IconPickerComponent from "@/IconPickerComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref, watch } from "vue"
+import type { Ref } from "vue"
+import { cloneDeep } from "lodash"
 
-import { useCurrenciesStore } from "&/stores/currencies";
-import validation from "&/mixins/validation";
-import main from "&/mixins/main";
+import type { Category } from "@interfaces/Category"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 
-        return { currencies };
-    },
-    mixins: [validation, main],
-    components: {
-        ErrorSnackbarComponent,
-        IconPickerComponent,
-    },
-    props: {
-        id: Number
-    },
-    data() {
-        return {
-            dialog: false,
-            data: {},
-            dataCopy: {},
+import { useStatusStore } from "@stores/status"
+import { useDialogSettings } from "@composables/useDialogSettings"
 
-            ready: false,
-            error: false,
-            loading: false,
-            canSubmit: false
-        }
-    },
-    watch: {
-        dialog() {
-            this.ready = false;
+import Validator from "@classes/Validator"
+import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
+import CardActionsResetUpdateComponent from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
+import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
 
-            axios
-                .get(`/web-api/categories/category/${this.id}`)
-                .then(response => {
-                    const data = response.data;
+const props = defineProps<{
+    id: number
+}>()
 
-                    this.data = data.data;
-                    this.dataCopy = _.cloneDeep(data.data);
+const emit = defineEmits<{
+    updated: []
+}>()
 
-                    this.ready = true;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                })
-        }
-    },
-    methods: {
-        reset() {
-            this.data = _.cloneDeep(this.dataCopy);
-        },
-        update() {
-            this.loading = true;
+const status = useStatusStore()
 
-            axios
-                .patch(`/web-api/categories/category/${this.id}`, this.data)
-                .then(() => {
-                    this.dataCopy = _.cloneDeep(this.data);
-                    this.$emit("updated");
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        }
+function useData() {
+    const categoryData: Ref<Category | undefined> = ref(undefined)
+    const categoryDataCopy: Ref<Category | undefined> = ref(undefined)
+
+    function getData() {
+        if (!dialog.value) return
+
+        ready.value = false
+
+        axios.get(`/web-api/categories/category/${props.id}`)
+            .then(response => {
+                const data = response.data
+
+                categoryData.value = data.data
+                categoryDataCopy.value = cloneDeep(data.data)
+
+                ready.value = true
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+            })
     }
+
+    return {categoryData, categoryDataCopy, getData}
 }
+
+function useActions() {
+    function reset() {
+        categoryData.value = cloneDeep(categoryDataCopy.value)
+    }
+
+    function update() {
+        loading.value.submit = true
+
+        axios.patch(`/web-api/categories/category/${props.id}`, categoryData.value)
+            .then(() => {
+                emit("updated")
+                status.showSuccess("updated category")
+                categoryDataCopy.value = cloneDeep(categoryData.value)
+                dialog.value = false
+                loading.value.submit = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value.submit = false, 2000)
+            })
+    }
+
+    return {reset, update}
+}
+
+const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {categoryData, categoryDataCopy, getData} = useData()
+const {reset, update} = useActions()
+
+watch(dialog, getData)
 </script>

@@ -5,6 +5,7 @@ import type { RouteRecordRaw } from "vue-router"
 import DashboardComponent from "@components/dashboard/DashboardComponent.vue"
 import TransactionsComponent from "@components/transactions/TransactionsComponent.vue"
 import TransfersComponent from "@components/transfers/TransfersComponent.vue"
+import CategoriesComponent from "@components/categories/CategoriesComponent.vue"
 import ChartsComponent from "@components/charts/ChartsComponent.vue"
 
 // Extension components
@@ -36,6 +37,10 @@ const routes: RouteRecordRaw[] = [
     {
         path: "/transfers",
         component: TransfersComponent,
+    },
+    {
+        path: "/categories",
+        component: CategoriesComponent,
     },
     {
         path: "/charts",

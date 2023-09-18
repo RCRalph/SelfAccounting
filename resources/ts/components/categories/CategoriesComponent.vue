@@ -1,171 +1,169 @@
 <template>
-    <v-row v-if="ready">
-        <v-col xl="8" offset-xl="2" lg="10" offset-lg="1" cols="12">
-            <v-card class="loading-height">
-                <v-card-title class="justify-sm-space-between justify-center text-h5 text-capitalize pb-lg-0 flex-sm-row flex-column align-center">
-                    <div class="mb-sm-0 mb-3">Categories ({{ currencies.usedCurrencyObject.ISO }})</div>
-
-                    <AddCategoryDialogComponent
-                        @added="added"
-                    ></AddCategoryDialogComponent>
-                </v-card-title>
-
-                <v-card-text>
-                    <v-data-table
-                        hide-default-footer
-                        :headers="headers"
-                        :items="categories"
-                        :mobile-breakpoint="0"
-                        :loading="tableLoading"
-                        disable-filtering
-                        disable-sort
-                        disable-pagination
+    <div
+        v-if="ready"
+        style="margin: 12px"
+    >
+        <v-row>
+            <v-col
+                cols="12"
+                lg="10"
+                offset-lg="1"
+                xl="8"
+                offset-xl="2"
+            >
+                <v-card class="loading-height">
+                    <CardTitleWithButtons
+                        :title="`Categories (${currencies.usedCurrencyObject.ISO})`"
+                        :large-font="true"
                     >
-                        <template v-slot:[`item.icon`]="{ item }">
-                            <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+                        <!--<AddCategoryDialogComponent
 
-                            <span v-else>N/A</span>
-                        </template>
+                        ></AddCategoryDialogComponent>-->
+                    </CardTitleWithButtons>
 
-                        <template v-slot:[`item.name`]="{ item }">
-                            <span style="white-space: nowrap">{{ item.name }}</span>
-                        </template>
+                    <v-card-text>
+                        <v-data-table
+                            v-model:options="options"
+                            :headers="categoryHeaders()"
+                            :items="categories"
+                            :items-per-page="-1"
+                            density="comfortable"
+                        >
+                            <template v-slot:[`item.icon`]="{ item }">
+                                <v-icon v-if="item.raw.icon">
+                                    {{ formats.iconName(item.raw.icon) }}
+                                </v-icon>
 
-                        <template v-slot:[`item.used_in_income`]="{ item }">
-                            <v-simple-checkbox v-model="item.used_in_income" disabled off-icon="mdi-close"></v-simple-checkbox>
-                        </template>
+                                <span v-else>
+                                    N/A
+                                </span>
+                            </template>
 
-                        <template v-slot:[`item.used_in_expenses`]="{ item }">
-                            <v-simple-checkbox v-model="item.used_in_expenses" disabled off-icon="mdi-close"></v-simple-checkbox>
-                        </template>
+                            <template v-slot:[`item.name`]="{ item }">
+                                <span style="white-space: nowrap">{{ item.raw.name }}</span>
+                            </template>
 
-                        <template v-slot:[`item.show_on_charts`]="{ item }">
-                            <v-simple-checkbox v-model="item.show_on_charts" disabled off-icon="mdi-close"></v-simple-checkbox>
-                        </template>
+                            <template v-slot:[`item.used_in_income`]="{ item }">
+                                <v-checkbox-btn
+                                    v-model="item.raw.used_in_income"
+                                    :disabled="true"
+                                    direction="vertical"
+                                    class="d-flex justify-center"
+                                    false-icon="mdi-close"
+                                    hide-details
+                                ></v-checkbox-btn>
+                            </template>
 
-                        <template v-slot:[`item.count_to_summary`]="{ item }">
-                            <v-simple-checkbox v-model="item.count_to_summary" disabled off-icon="mdi-close"></v-simple-checkbox>
-                        </template>
+                            <template v-slot:[`item.used_in_expenses`]="{ item }">
+                                <v-checkbox-btn
+                                    v-model="item.raw.used_in_expenses"
+                                    :disabled="true"
+                                    direction="vertical"
+                                    class="d-flex justify-center"
+                                    false-icon="mdi-close"
+                                    hide-details
+                                ></v-checkbox-btn>
+                            </template>
 
-                        <template v-slot:[`item.actions`]="{ item }">
-                            <td>
+                            <template v-slot:[`item.show_on_charts`]="{ item }">
+                                <v-checkbox-btn
+                                    v-model="item.raw.show_on_charts"
+                                    :disabled="true"
+                                    direction="vertical"
+                                    class="d-flex justify-center"
+                                    false-icon="mdi-close"
+                                    hide-details
+                                ></v-checkbox-btn>
+                            </template>
+
+                            <template v-slot:[`item.count_to_summary`]="{ item }">
+                                <v-checkbox-btn
+                                    v-model="item.raw.count_to_summary"
+                                    :disabled="true"
+                                    direction="vertical"
+                                    class="d-flex justify-center"
+                                    false-icon="mdi-close"
+                                    hide-details
+                                ></v-checkbox-btn>
+                            </template>
+
+                            <template v-slot:[`item.actions`]="{ item }">
                                 <div class="d-flex flex-nowrap justify-center align-center">
                                     <EditCategoryDialogComponent
-                                        :id="item.id"
-                                        @updated="updated"
+                                        :id="item.raw.id"
+                                        @updated="getData"
                                     ></EditCategoryDialogComponent>
 
-                                    <DuplicateCategoryDialogComponent
-                                        :id="item.id"
-                                        @duplicated="duplicated"
-                                    ></DuplicateCategoryDialogComponent>
-
                                     <DeleteDialogComponent
+                                        :url="`categories/category/${item.raw.id}`"
                                         thing="category"
-                                        :url="`categories/category/${item.id}`"
-                                        @deleted="deleted"
+                                        @deleted="getData"
                                     ></DeleteDialogComponent>
                                 </div>
-                            </td>
-                        </template>
-                    </v-data-table>
-                </v-card-text>
+                            </template>
 
-                <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
-            </v-card>
-        </v-col>
-    </v-row>
+                            <template v-slot:bottom></template>
+                        </v-data-table>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </div>
 
-    <v-overlay v-else :value="true" opacity="1" absolute>
+    <v-overlay
+        v-else
+        :model-value="true"
+        :contained="true"
+    >
         <v-progress-circular
             indeterminate
-            size="96"
+            size="128"
         ></v-progress-circular>
     </v-overlay>
 </template>
 
-<script>
-import { useCurrenciesStore } from "&/stores/currencies";
-import main from "&/mixins/main";
+<script setup lang="ts">
+import axios from "axios"
+import { ref, onMounted } from "vue"
+import type { Ref } from "vue"
 
-import AddCategoryDialogComponent from "@/categories/AddCategoryDialogComponent.vue";
-import EditCategoryDialogComponent from "@/categories/EditCategoryDialogComponent.vue";
-import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
-import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
-import DuplicateCategoryDialogComponent from "./DuplicateCategoryDialogComponent.vue";
+import type { Category } from "@interfaces/Category"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import { useCurrenciesStore } from "@stores/currencies"
 
-        return { currencies };
-    },
-    mixins: [main],
-    components: {
-    AddCategoryDialogComponent,
-    EditCategoryDialogComponent,
-    DeleteDialogComponent,
-    SuccessSnackbarComponent,
-    DuplicateCategoryDialogComponent
-},
-    data() {
-        return {
-            headers: [
-                { text: "Icon", align: "center", value: "icon" },
-                { text: "Name", align: "center", value: "name" },
-                { text: "Show in income", align: "center", value: "used_in_income" },
-                { text: "Show in expenses", align: "center", value: "used_in_expenses" },
-                { text: "Show on charts", align: "center", value: "show_on_charts" },
-                { text: "Count to summary", align: "center", value: "count_to_summary" },
-                { text: "Actions", align: "center", value: "actions" }
-            ],
-            categories: [],
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
+import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
+import EditCategoryDialogComponent from "@components/categories/EditCategoryDialogComponent.vue"
 
-            ready: false,
-            tableLoading: false,
-            success: false,
-            thing: ""
-        }
-    },
-    methods: {
-        getData() {
-            this.tableLoading = true;
+import useTableSettings from "@composables/useTableSettings"
+import useFormats from "@composables/useFormats"
 
-            axios
-                .get(`/web-api/categories/${this.currencies.usedCurrency}`)
-                .then(response => {
-                    const data = response.data;
+const currencies = useCurrenciesStore()
+const formats = useFormats()
 
-                    this.categories = data;
+function useData() {
+    const ready = ref(false)
+    const categories: Ref<Category[]> = ref([])
 
-                    this.ready = true;
-                    this.tableLoading = false;
-                })
-        },
-        added() {
-            this.thing = `added category`;
-            this.success = true;
-            this.getData();
-        },
-        updated() {
-            this.thing = `updated category`;
-            this.success = true;
-            this.getData();
-        },
-        duplicated() {
-            this.thing = `duplicated category`;
-            this.success = true;
-            this.getData();
-        },
-        deleted() {
-            this.thing = `deleted category`;
-            this.success = true;
-            this.getData();
-        }
-    },
-    mounted() {
-        this.getData();
-        this.currencies.$subscribe(() => this.getData());
+    function getData() {
+        ready.value = false
+
+        axios.get(`/web-api/categories/${currencies.usedCurrency}`)
+            .then(response => {
+                categories.value = response.data
+
+                ready.value = true
+            })
     }
+
+    return {categories, getData, ready}
 }
+
+const {categoryHeaders, options} = useTableSettings()
+const {categories, getData, ready} = useData()
+
+onMounted(() => {
+    getData()
+    currencies.$subscribe(getData)
+})
 </script>
