@@ -13,7 +13,6 @@ $sticky-panel-margin: 12px;
 .v-main {
     position: relative;
     min-height: 100dvh;
-    overflow-y: auto;
     padding-left: 0 !important;
 }
 
@@ -57,7 +56,8 @@ tr {
 }
 
 .sticky-panel {
-    position: sticky;
+    position: sticky !important;
+    top: $sticky-panel-margin;
 }
 
 .loading-height {
@@ -180,7 +180,7 @@ tr {
 
 .overview-block {
     @extend .sticky-panel;
-    overflow-y: auto;
+    overflow-y: auto !important;
     max-height: calc(100dvh - #{2 * $sticky-panel-margin});
 
     -ms-overflow-style: none;

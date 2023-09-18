@@ -1,5 +1,5 @@
 <template>
-    <v-card class="loading-height">
+    <v-card class="loading-height overview-block">
         <CardTitleWithButtons
             title="Overview"
             :large-font="true"
