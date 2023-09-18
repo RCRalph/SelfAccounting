@@ -83,7 +83,6 @@
                                 v-for="(item, i) in props.accounts"
                                 v-model="filteredData.source_accounts"
                                 :value="item.id"
-                                :key="i"
                                 :class="i == 0 && 'mt-0 pt-0'"
                                 density="comfortable"
                                 hide-details
@@ -131,7 +130,6 @@
                                 v-for="(item, i) in props.accounts"
                                 v-model="filteredData.target_accounts"
                                 :value="item.id"
-                                :key="i"
                                 :class="i == 0 && 'mt-0 pt-0'"
                                 density="comfortable"
                                 hide-details

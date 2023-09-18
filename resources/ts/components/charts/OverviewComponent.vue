@@ -48,7 +48,6 @@
                 <v-row no-gutters>
                     <v-col
                         v-for="chart in props.charts"
-                        :key="chart.id"
                         cols="12"
                         lg="6"
                         xl="12"

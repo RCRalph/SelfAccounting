@@ -14,7 +14,6 @@
             >
                 <v-carousel-item
                     v-for="(image, i) in extension.gallery"
-                    :key="i"
                     :src="image"
                 ></v-carousel-item>
             </v-carousel>
@@ -25,25 +24,25 @@
 </template>
 
 <script>
-import { marked } from "marked";
-import DOMPurify from "dompurify";
+import { marked } from "marked"
+import DOMPurify from "dompurify"
 
 export default {
     props: {
         extension: {
             required: true,
-            type: Object
-        }
+            type: Object,
+        },
     },
     data() {
         return {
-            dialog: false
+            dialog: false,
         }
     },
     computed: {
         description() {
-            return DOMPurify.sanitize(marked(this.extension.description));
+            return DOMPurify.sanitize(marked(this.extension.description))
         },
-    }
+    },
 }
 </script>

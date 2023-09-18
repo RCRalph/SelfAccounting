@@ -117,7 +117,6 @@
                                 v-for="(item, i) in props.categories"
                                 v-model="filteredData.categories"
                                 :value="item.id"
-                                :key="i"
                                 :class="i == 0 && 'mt-0 pt-0'"
                                 density="comfortable"
                                 hide-details
@@ -165,7 +164,6 @@
                                 v-for="(item, i) in props.accounts"
                                 v-model="filteredData.accounts"
                                 :value="item.id"
-                                :key="i"
                                 :class="i == 0 && 'mt-0 pt-0'"
                                 density="comfortable"
                                 hide-details

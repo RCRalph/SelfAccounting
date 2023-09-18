@@ -34,7 +34,7 @@
                 <v-divider class="my-1"></v-divider>
 
                 <v-list :lines="false" :nav="true" density="comfortable">
-                    <div v-for="(item, i) in drawerItems" :key="i">
+                    <div v-for="item in drawerItems">
                         <v-list-item
                             :value="item.title"
                             rounded="xl"
@@ -97,8 +97,7 @@
 
                         <v-list>
                             <v-list-item
-                                v-for="(item, index) in profileItems"
-                                :key="index"
+                                v-for="item in profileItems"
                                 :to="item.link"
                                 :prepend-icon="item.icon"
                             >
