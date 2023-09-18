@@ -36,7 +36,7 @@
 
                                             <v-table v-if="currentBalance.length > 1" density="comfortable">
                                                 <tbody>
-                                                    <tr v-for="(item, i) in currentBalance">
+                                                    <tr v-for="item in currentBalance">
                                                         <td
                                                             class="text-right text-h6"
                                                             style="width: 50%"
