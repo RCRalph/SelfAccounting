@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="350">
+    <v-dialog v-model="dialog" max-width="375">
         <template v-slot:activator="{ props }: any">
             <v-btn
                 v-bind="props"
@@ -32,12 +32,22 @@
                             </a>
                         </div>
 
-                        <div>
-                            <span class="font-weight-bold">Usage:</span> {{ item.usage }}
+                        <div class="mb-1">
+                            <div class="font-weight-bold">
+                                Usage:
+                            </div>
+
+                            {{ item.usage }}
                         </div>
 
                         <div>
-                            <span class="font-weight-bold">Example:</span> {{ item.example }}
+                            <span class="font-weight-bold">Examples:</span>
+
+                            <ul class="list-without-bullets">
+                                <li v-for="example in item.examples">
+                                    {{ example }}
+                                </li>
+                            </ul>
                         </div>
                     </v-col>
                 </v-row>
@@ -64,13 +74,21 @@ const iconSets = ref([
         name: "Material Design Icons",
         website: "https://pictogrammers.com/library/mdi",
         usage: "mdi-[icon name]",
-        example: "mdi-bike-fast",
+        examples: [
+            "mdi-bike-fast",
+            "mdi-train",
+            "mdi-cash-multiple",
+        ],
     },
     {
-        name: "Font Awesome 5",
-        website: "https://fontawesome.com/v5/search",
-        usage: "fas/far/fab fa-[icon name]",
-        example: "fas fa-fighter-jet",
+        name: "Font Awesome 6",
+        website: "https://fontawesome.com/v6/search",
+        usage: "fa-[solid/regular/brands] fa-[icon name]",
+        examples: [
+            "fa-solid fa-fighter-jet",
+            "fa-regular fa-wand-magic-sparkles",
+            "fa-brands fa-github",
+        ],
     },
 ])
 
