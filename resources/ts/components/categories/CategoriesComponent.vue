@@ -16,9 +16,7 @@
                         :title="`Categories (${currencies.usedCurrencyObject.ISO})`"
                         :large-font="true"
                     >
-                        <!--<AddCategoryDialogComponent
-
-                        ></AddCategoryDialogComponent>-->
+                        <AddCategoryDialogComponent @added="getData"></AddCategoryDialogComponent>
                     </CardTitleWithButtons>
 
                     <v-card-text>
@@ -138,6 +136,7 @@ import { useCurrenciesStore } from "@stores/currencies"
 
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
+import AddCategoryDialogComponent from "@components/categories/AddCategoryDialogComponent.vue"
 import EditCategoryDialogComponent from "@components/categories/EditCategoryDialogComponent.vue"
 import DuplicateCategoryDialogComponent from "@components/categories/DuplicateCategoryDialogComponent.vue"
 

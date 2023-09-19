@@ -8,6 +8,7 @@
             <v-btn
                 v-bind="props"
                 variant="outlined"
+                :append-icon="icon"
             >
                 Select Icon
             </v-btn>
@@ -86,12 +87,12 @@ import useFormats from "@composables/useFormats"
 import Validator from "@classes/Validator"
 
 const props = defineProps<{
-    modelValue?: string | null
+    modelValue: string | null
     type: "categories" | "accounts"
 }>()
 
 const emit = defineEmits<{
-    "update:modelValue": [payload?: string]
+    "update:modelValue": [payload: string | null]
 }>()
 
 const status = useStatusStore()
