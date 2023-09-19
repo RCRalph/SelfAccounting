@@ -1,85 +1,90 @@
 <template>
-    <v-dialog v-model="dialog" max-width="300">
-        <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
-                    <v-icon class="mx-1 cursor-pointer" v-bind="{ ...dialogAttrs, ...tooltipAttrs }" v-on="{ ...dialogOn, ...tooltipOn }">mdi-content-duplicate</v-icon>
+    <v-dialog
+        v-model="dialog"
+        max-width="300"
+    >
+        <template v-slot:activator="{props: dialogProps}: any">
+            <v-tooltip location="bottom">
+                <template v-slot:activator="{props: tooltipProps}: any">
+                    <v-icon
+                        v-bind="{ ...dialogProps, ...tooltipProps }"
+                        class="mx-1 cursor-pointer"
+                        icon="mdi-content-duplicate"
+                    ></v-icon>
                 </template>
 
-                <span>Duplicate category</span>
+                <span>
+                    Duplicate category
+                </span>
             </v-tooltip>
         </template>
 
         <v-card>
-            <v-card-title>Duplicate category</v-card-title>
+            <CardTitleWithButtons title="Duplicate category"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-select
                     v-model="currency"
                     :items="currencies.currencies"
                     label="Currency"
-                    item-text="ISO"
+                    item-title="ISO"
                     item-value="id"
+                    variant="underlined"
+                    hide-details
                 ></v-select>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="success" outlined :disabled="loading" @click="duplicate" :loading="loading" class="mx-1">
-                    Duplicate
-                </v-btn>
-            </v-card-actions>
+            <CardActionsSubmitComponent
+                :loading="!!loading.submit"
+                :can-submit="true"
+                @submit="duplicate"
+            ></CardActionsSubmitComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-import { useCurrenciesStore } from "&/stores/currencies";
+<script setup lang="ts">
+import axios from "axios"
+import { ref } from "vue"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import { useStatusStore } from "@stores/status"
+import { useCurrenciesStore } from "@stores/currencies"
+import { useDialogSettings } from "@composables/useDialogSettings"
 
-        return { currencies };
-    },
-    components: {
-        ErrorSnackbarComponent,
-    },
-    props: {
-        id: Number
-    },
-    data() {
-        return {
-            dialog: false,
-            currency: this.currencies.usedCurrency,
+import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
+import CardActionsSubmitComponent from "@components/common/card-actions/CardActionsSubmitComponent.vue"
 
-            error: false,
-            loading: false,
-            canSubmit: false
-        }
-    },
-    methods: {
-        duplicate() {
-            this.loading = true;
+const props = defineProps<{
+    id: number
+}>()
 
-            axios
-                .post(`/web-api/categories/category/${this.id}/duplicate`, {
-                    currency: this.currency
-                })
-                .then(() => {
-                    this.dataCopy = _.cloneDeep(this.data);
-                    this.$emit("duplicated");
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        }
-    }
+const emit = defineEmits<{
+    duplicated: []
+}>()
+
+const currencies = useCurrenciesStore()
+const status = useStatusStore()
+const currency = ref(currencies.usedCurrency)
+
+function duplicate() {
+    loading.value.submit = true
+
+    axios.post(
+        `/web-api/categories/category/${props.id}/duplicate`,
+        {
+            currency: currency.value,
+        })
+        .then(() => {
+            emit("duplicated")
+            dialog.value = false
+            loading.value.submit = false
+        })
+        .catch(err => {
+            console.error(err)
+            setTimeout(() => status.showError(), 1000)
+            setTimeout(() => loading.value.submit = false, 2000)
+        })
 }
+
+const {dialog, loading} = useDialogSettings()
 </script>

@@ -86,7 +86,7 @@ import useFormats from "@composables/useFormats"
 import Validator from "@classes/Validator"
 
 const props = defineProps<{
-    modelValue?: string
+    modelValue?: string | null
     type: "categories" | "accounts"
 }>()
 

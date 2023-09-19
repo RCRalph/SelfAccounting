@@ -94,6 +94,11 @@
                                         @updated="getData"
                                     ></EditCategoryDialogComponent>
 
+                                    <DuplicateCategoryDialogComponent
+                                        :id="item.raw.id"
+                                        @duplicated="getData"
+                                    ></DuplicateCategoryDialogComponent>
+
                                     <DeleteDialogComponent
                                         :url="`categories/category/${item.raw.id}`"
                                         thing="category"
@@ -134,6 +139,7 @@ import { useCurrenciesStore } from "@stores/currencies"
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 import EditCategoryDialogComponent from "@components/categories/EditCategoryDialogComponent.vue"
+import DuplicateCategoryDialogComponent from "@components/categories/DuplicateCategoryDialogComponent.vue"
 
 import useTableSettings from "@composables/useTableSettings"
 import useFormats from "@composables/useFormats"
