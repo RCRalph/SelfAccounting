@@ -50,7 +50,7 @@ import { watch, onMounted, ref } from "vue"
 import type { Ref } from "vue"
 
 import type { Account } from "@interfaces/Account"
-import type { Category } from "@interfaces/Category"
+import type { CategoryData } from "@interfaces/Category"
 import type { Chart } from "@interfaces/Chart"
 
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
@@ -71,7 +71,7 @@ function useData() {
     const ready = ref(false)
 
     const accounts: Ref<Account[]> = ref([])
-    const categories: Ref<Category[]> = ref([])
+    const categories: Ref<CategoryData[]> = ref([])
     const charts: Ref<Chart[]> = ref([])
 
     function getData() {

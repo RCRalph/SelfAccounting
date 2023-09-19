@@ -1,10 +1,19 @@
 interface Category {
+    id?: number
+    name: string
+    icon?: string | null
+    used_in_income: boolean
+    used_in_expenses: boolean
+    show_on_charts: boolean
+    count_to_summary?: boolean
+    start_date: string | null
+    end_date: string | null
+}
+
+interface CategoryData {
     id: number | null
     name: string
     icon?: string | null
-    used_in_income?: boolean
-    used_in_expenses?: boolean
-    show_on_charts?: boolean
     count_to_summary?: boolean
     start_date?: string | null
     end_date?: string | null
@@ -12,4 +21,5 @@ interface Category {
 
 export type {
     Category,
+    CategoryData,
 }

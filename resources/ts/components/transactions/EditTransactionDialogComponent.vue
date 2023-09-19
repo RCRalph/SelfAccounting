@@ -205,7 +205,7 @@ import { ref, computed, watch } from "vue"
 import type { Ref } from "vue"
 
 import type { Transaction } from "@interfaces/Transaction"
-import type { Category } from "@interfaces/Category"
+import type { CategoryData } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 
 import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
@@ -239,7 +239,7 @@ function useData() {
     const transactionData: Ref<Transaction | undefined> = ref(undefined)
     const transactionDataCopy: Ref<Transaction | undefined> = ref(undefined)
 
-    const categories: Ref<Category[]> = ref([])
+    const categories: Ref<CategoryData[]> = ref([])
     const accounts: Ref<Account[]> = ref([])
 
     const usedAccount = computed(() => {

@@ -178,7 +178,7 @@ import { cloneDeep, isNull } from "lodash"
 
 import type { Transaction } from "@interfaces/Transaction"
 import type { Account } from "@interfaces/Account"
-import type { Category } from "@interfaces/Category"
+import type { CategoryData } from "@interfaces/Category"
 
 import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 
@@ -192,7 +192,7 @@ const props = defineProps<{
     transactionData: Transaction[],
     commonValues: Transaction,
     accounts: Account[],
-    categories: Category[],
+    categories: CategoryData[],
     disableUpdate: boolean,
     type: "income" | "expenses"
 }>()
@@ -229,7 +229,7 @@ function useCommonValues() {
         }
 
         if (changes.hasOwnProperty("price")) {
-            emit("price-change")
+            emit("priceChange")
         }
 
         props.transactionData.forEach((item, i) => {

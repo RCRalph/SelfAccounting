@@ -237,7 +237,7 @@ import ValueFieldComponent from "@components/common/ValueFieldComponent.vue"
 import CardActionsNavigationComponent from "@components/common/card-actions/CardActionsNavigationComponent.vue"
 
 import type { Transaction } from "@interfaces/Transaction"
-import type { Category } from "@interfaces/Category"
+import type { CategoryData } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 import Calculator from "@classes/Calculator"
 
@@ -280,7 +280,7 @@ function useData() {
         account_id: null,
         currency_id: currencies.usedCurrency,
     })
-    const categories: Ref<Category[]> = ref([])
+    const categories: Ref<CategoryData[]> = ref([])
     const accounts: Ref<Account[]> = ref([])
 
     const page = ref(0)

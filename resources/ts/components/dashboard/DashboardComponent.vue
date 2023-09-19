@@ -258,7 +258,7 @@ import type { Ref } from "vue"
 
 import type { CurrentBalance } from "@interfaces/Dashboard"
 import type { Chart } from "@interfaces/Chart"
-import type { Category } from "@interfaces/Category"
+import type { CategoryData } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 
 import BalanceHistoryChartComponent from "@components/dashboard/BalanceHistoryChartComponent.vue"
@@ -330,7 +330,7 @@ function useCharts() {
 
 function useRecentTransactions() {
     const accounts: Ref<Account[]> = ref([])
-    const categories: Ref<Category[]> = ref([])
+    const categories: Ref<CategoryData[]> = ref([])
 
     return {accounts, categories}
 }
