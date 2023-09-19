@@ -51,9 +51,6 @@ import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import { useDialogSettings } from "@composables/useDialogSettings"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-import CardActionsSubmitComponent from "@components/common/card-actions/CardActionsSubmitComponent.vue"
-
 const props = defineProps<{
     id: number
 }>()

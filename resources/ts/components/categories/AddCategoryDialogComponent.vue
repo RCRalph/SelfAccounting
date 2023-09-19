@@ -113,8 +113,6 @@ import { ref, onMounted } from "vue"
 import type { Ref } from "vue"
 import { cloneDeep } from "lodash"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-
 import type { Category } from "@interfaces/Category"
 
 import { useCurrenciesStore } from "@stores/currencies"
@@ -122,7 +120,6 @@ import { useStatusStore } from "@stores/status"
 import { useDialogSettings } from "@composables/useDialogSettings"
 import Validator from "@classes/Validator"
 import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
-import CardActionsSubmitComponent from "@components/common/card-actions/CardActionsSubmitComponent.vue"
 
 const emit = defineEmits<{
     added: []

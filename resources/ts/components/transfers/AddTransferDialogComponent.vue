@@ -196,16 +196,12 @@ import { isNull, cloneDeep } from "lodash"
 import type { Account } from "@interfaces/Account"
 import type { Transfer } from "@interfaces/Transfer"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
-
 import { useDialogSettings } from "@composables/useDialogSettings"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
 import Calculator from "@classes/Calculator"
 import Validator from "@classes/Validator"
-import CardActionsSubmitComponent from "@components/common/card-actions/CardActionsSubmitComponent.vue"
 
 const emit = defineEmits<{
     added: []

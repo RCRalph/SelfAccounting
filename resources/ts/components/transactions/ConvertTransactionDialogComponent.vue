@@ -34,9 +34,6 @@ import { ref, computed } from "vue"
 import { useDisplay } from "vuetify"
 import { useStatusStore } from "@stores/status"
 
-import CardActionsNoYesComponent from "@components/common/card-actions/CardActionsNoYesComponent.vue"
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-
 const props = defineProps<{
     type: string,
     id: number

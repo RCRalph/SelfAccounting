@@ -183,12 +183,12 @@
                 </v-form>
             </v-card-text>
 
-            <CardActionsResetUpdate
+            <CardActionsResetUpdateComponent
                 :loading="!!loading.submit"
                 :can-submit="!!canSubmit"
                 @reset="reset"
                 @update="update"
-            ></CardActionsResetUpdate>
+            ></CardActionsResetUpdateComponent>
         </v-card>
 
         <CardLoadingComponent v-else>
@@ -209,10 +209,6 @@ import type { CategoryData } from "@interfaces/Category"
 import type { Account } from "@interfaces/Account"
 
 import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
-import ValueFieldComponent from "@components/common/ValueFieldComponent.vue"
-import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-import CardActionsResetUpdate from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
 
 import useTitles from "@composables/useTitles"
 import { useDialogSettings } from "@composables/useDialogSettings"

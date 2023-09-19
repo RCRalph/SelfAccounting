@@ -338,7 +338,6 @@ import type { CategoryData } from "@interfaces/Category"
 
 import AddTransactionsDialogComponent from "@components/transactions/AddTransactionsDialogComponent.vue"
 import EditTransactionDialogComponent from "@components/transactions/EditTransactionDialogComponent.vue"
-import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
@@ -396,7 +395,9 @@ function useTableData() {
         await getData().then(() => loading.value.table = false)
     }
 
-    async function getMoreData(state: { done: Function }) {
+    async function getMoreData(state: {
+        done: Function
+    }) {
         getData()
             .then(() => {
                 if (pagination.value.page <= pagination.value.last) {

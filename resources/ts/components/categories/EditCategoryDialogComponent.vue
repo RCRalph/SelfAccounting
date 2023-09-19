@@ -127,15 +127,11 @@ import { cloneDeep } from "lodash"
 
 import type { Category } from "@interfaces/Category"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-
 import { useStatusStore } from "@stores/status"
 import { useDialogSettings } from "@composables/useDialogSettings"
 
 import Validator from "@classes/Validator"
 import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
-import CardActionsResetUpdateComponent from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
-import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
 
 const props = defineProps<{
     id: number

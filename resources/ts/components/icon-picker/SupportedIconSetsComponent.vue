@@ -66,7 +66,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import { useDialogSettings } from "@composables/useDialogSettings"
 
 const iconSets = ref([

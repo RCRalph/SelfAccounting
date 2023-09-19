@@ -176,12 +176,12 @@
                 </v-form>
             </v-card-text>
 
-            <CardActionsResetUpdate
+            <CardActionsResetUpdateComponent
                 :loading="!!loading.submit"
                 :can-submit="!!canSubmit"
                 @reset="reset"
                 @update="update"
-            ></CardActionsResetUpdate>
+            ></CardActionsResetUpdateComponent>
         </v-card>
 
         <CardLoadingComponent v-else>
@@ -198,10 +198,6 @@ import { isNull, cloneDeep } from "lodash"
 
 import type { Account } from "@interfaces/Account"
 import type { Transfer } from "@interfaces/Transfer"
-
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
-import CardActionsResetUpdate from "@components/common/card-actions/CardActionsResetUpdateComponent.vue"
 
 import { useDialogSettings } from "@composables/useDialogSettings"
 import { useStatusStore } from "@stores/status"

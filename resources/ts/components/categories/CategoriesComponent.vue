@@ -134,8 +134,6 @@ import type { Category } from "@interfaces/Category"
 
 import { useCurrenciesStore } from "@stores/currencies"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 import AddCategoryDialogComponent from "@components/categories/AddCategoryDialogComponent.vue"
 import EditCategoryDialogComponent from "@components/categories/EditCategoryDialogComponent.vue"
 import DuplicateCategoryDialogComponent from "@components/categories/DuplicateCategoryDialogComponent.vue"

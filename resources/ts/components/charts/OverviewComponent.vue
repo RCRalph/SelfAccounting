@@ -69,7 +69,6 @@ import { ref } from "vue"
 import type { Chart } from "@interfaces/Chart"
 
 import OverviewChartComponent from "@components/charts/OverviewChartComponent.vue"
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 
 const props = defineProps<{
     charts: Chart[]

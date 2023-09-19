@@ -264,7 +264,6 @@ import type { Account } from "@interfaces/Account"
 import BalanceHistoryChartComponent from "@components/dashboard/BalanceHistoryChartComponent.vue"
 import DataByTypeChartComponent from "@components/dashboard/DataByTypeChartComponent.vue"
 import RecentTransactionsComponent from "@components/dashboard/RecentTransactionsComponent.vue"
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"

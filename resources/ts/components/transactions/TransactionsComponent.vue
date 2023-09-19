@@ -53,7 +53,6 @@ import type { Account } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 import type { Chart } from "@interfaces/Chart"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import TransactionsTableComponent from "@components/transactions/TransactionsTableComponent.vue"
 import OverviewComponent from "@components/charts/OverviewComponent.vue"
 

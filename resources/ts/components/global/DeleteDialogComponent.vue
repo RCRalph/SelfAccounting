@@ -41,7 +41,6 @@
 import axios from "axios"
 import { ref } from "vue"
 import { useStatusStore } from "@stores/status"
-import CardActionsNoYesComponent from "@components/common/card-actions/CardActionsNoYesComponent.vue"
 
 const props = defineProps<{
     url: string,

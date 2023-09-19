@@ -180,8 +180,6 @@ import type { Transaction } from "@interfaces/Transaction"
 import type { Account } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-
 import { useCurrenciesStore } from "@stores/currencies"
 import { useDialogSettings } from "@composables/useDialogSettings"
 import useTitles from "@composables/useTitles"

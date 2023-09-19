@@ -231,10 +231,6 @@ import { useCurrenciesStore } from "@stores/currencies"
 import Validator from "@classes/Validator"
 
 import SetCommonValuesComponent from "@components/transactions/SetCommonValuesComponent.vue"
-import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
-import ValueFieldComponent from "@components/common/ValueFieldComponent.vue"
-import CardActionsNavigationComponent from "@components/common/card-actions/CardActionsNavigationComponent.vue"
 
 import type { Transaction } from "@interfaces/Transaction"
 import type { CategoryData } from "@interfaces/Category"

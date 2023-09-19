@@ -281,7 +281,6 @@ import type { Account } from "@interfaces/Account"
 import type { TransferRow } from "@interfaces/Transfer"
 
 import EditTransferDialogComponent from "@components/transfers/EditTransferDialogComponent.vue"
-import DeleteDialogComponent from "@components/common/DeleteDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
@@ -334,7 +333,9 @@ function useTableData() {
         await getData().then(() => loading.value.table = false)
     }
 
-    async function getMoreData(state: { done: Function }) {
+    async function getMoreData(state: {
+        done: Function
+    }) {
         getData()
             .then(() => {
                 if (pagination.value.page <= pagination.value.last) {

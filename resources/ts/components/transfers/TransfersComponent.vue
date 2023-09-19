@@ -55,7 +55,6 @@ import type { Ref } from "vue"
 import type { Account } from "@interfaces/Account"
 import type { Chart } from "@interfaces/Chart"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import TransfersTableComponent from "@components/transfers/TransfersTableComponent.vue"
 import AddTransferDialogComponent from "@components/transfers/AddTransferDialogComponent.vue"
 import OverviewComponent from "@components/charts/OverviewComponent.vue"

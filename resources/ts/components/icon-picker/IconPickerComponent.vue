@@ -76,10 +76,7 @@ import axios from "axios"
 import { ref, watch, computed } from "vue"
 import type { Ref } from "vue"
 
-import CardTitleWithButtons from "@components/common/CardTitleWithButtons.vue"
 import SupportedIconSetsComponent from "@components/icon-picker/SupportedIconSetsComponent.vue"
-import CardLoadingComponent from "@components/common/CardLoadingComponent.vue"
-import CardActionsSubmitComponent from "@components/common/card-actions/CardActionsSubmitComponent.vue"
 
 import { useStatusStore } from "@stores/status"
 import { useDialogSettings } from "@composables/useDialogSettings"
