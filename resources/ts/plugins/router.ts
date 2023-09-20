@@ -6,6 +6,7 @@ import DashboardComponent from "@components/dashboard/DashboardComponent.vue"
 import TransactionsComponent from "@components/transactions/TransactionsComponent.vue"
 import TransfersComponent from "@components/transfers/TransfersComponent.vue"
 import CategoriesComponent from "@components/categories/CategoriesComponent.vue"
+import AccountsComponent from "@components/accounts/AccountsComponent.vue"
 import ChartsComponent from "@components/charts/ChartsComponent.vue"
 
 // Extension components
@@ -41,6 +42,10 @@ const routes: RouteRecordRaw[] = [
     {
         path: "/categories",
         component: CategoriesComponent,
+    },
+    {
+        path: "/accounts",
+        component: AccountsComponent,
     },
     {
         path: "/charts",
@@ -80,18 +85,7 @@ export default createRouter({
                 redirect: (to) => window.location.href = "/payment/extensions/" + to.params.id,
             },
         ]),
-    /*{
-        path: "/transfers",
-        component: () => import("@components/transfers/TransfersComponent.vue"),
-    },
-    {
-        path: "/categories",
-        component: () => import("@components/categories/CategoriesComponent.vue"),
-    },
-    {
-        path: "/accounts",
-        component: () => import("@components/accounts/AccountsComponent.vue"),
-    },
+    /*
     {
         path: "/profile",
         component: () => import("@components/profile/ProfileComponent.vue"),

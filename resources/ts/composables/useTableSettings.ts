@@ -6,6 +6,22 @@ import type { DataQuery as TransactionDataQuery } from "@interfaces/Transaction"
 import type { DataQuery as TransferDataQuery } from "@interfaces/Transfer"
 
 export default function useTableSettings() {
+    function tableHeaders(
+        headers: {
+            title: string,
+            key: string,
+            align?: string,
+            sortable?: boolean
+        }[],
+        columns: string[] | true,
+    ): VDataTable["headers"] {
+        return (
+            columns === true ?
+                headers :
+                headers.filter(item => columns.includes(item.key))
+        ) as VDataTable["headers"]
+    }
+
     const transactions = [
         {title: "Date", key: "date", align: "center"},
         {title: "Title", key: "title", align: "center"},
@@ -18,11 +34,7 @@ export default function useTableSettings() {
     ]
 
     function transactionHeaders(columns: string[] | true = true): VDataTable["headers"] {
-        return (
-            columns === true ?
-                transactions :
-                transactions.filter(item => columns.includes(item.key))
-        ) as VDataTable["headers"]
+        return tableHeaders(transactions, columns)
     }
 
     const transfers = [
@@ -35,11 +47,7 @@ export default function useTableSettings() {
     ]
 
     function transferHeaders(columns: string[] | true = true): VDataTable["headers"] {
-        return (
-            columns === true ?
-                transfers :
-                transfers.filter(item => columns.includes(item.key))
-        ) as VDataTable["headers"]
+        return tableHeaders(transfers, columns)
     }
 
     const categories = [
@@ -53,11 +61,21 @@ export default function useTableSettings() {
     ]
 
     function categoryHeaders(columns: string[] | true = true): VDataTable["headers"] {
-        return (
-            columns === true ?
-                categories :
-                categories.filter(item => columns.includes(item.key))
-        ) as VDataTable["headers"]
+        return tableHeaders(categories, columns)
+    }
+
+    const accounts = [
+        {title: "Icon", key: "icon", align: "center", sortable: false},
+        {title: "Name", key: "name", align: "center", sortable: false},
+        {title: "Show in income", key: "used_in_income", align: "center", sortable: false},
+        {title: "Show in expenses", key: "used_in_expenses", align: "center", sortable: false},
+        {title: "Show on charts", key: "show_on_charts", align: "center", sortable: false},
+        {title: "Count to summary", key: "count_to_summary", align: "center", sortable: false},
+        {title: "Actions", key: "actions", align: "center", sortable: false},
+    ]
+
+    function accountHeaders(columns: string[] | true = true): VDataTable["headers"] {
+        return tableHeaders(accounts, columns)
     }
 
     const loading: Ref<Loading> = ref({
@@ -164,5 +182,6 @@ export default function useTableSettings() {
         transferHeaders,
         transferQuery,
         categoryHeaders,
+        accountHeaders,
     }
 }
