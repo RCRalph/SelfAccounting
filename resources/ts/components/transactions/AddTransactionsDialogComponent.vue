@@ -234,7 +234,7 @@ import SetCommonValuesComponent from "@components/transactions/SetCommonValuesCo
 
 import type { Transaction } from "@interfaces/Transaction"
 import type { CategoryData } from "@interfaces/Category"
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import Calculator from "@classes/Calculator"
 
 const props = defineProps<{
@@ -277,7 +277,7 @@ function useData() {
         currency_id: currencies.usedCurrency,
     })
     const categories: Ref<CategoryData[]> = ref([])
-    const accounts: Ref<Account[]> = ref([])
+    const accounts: Ref<AccountData[]> = ref([])
 
     const page = ref(0)
 

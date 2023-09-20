@@ -206,7 +206,7 @@ import type { Ref } from "vue"
 
 import type { Transaction } from "@interfaces/Transaction"
 import type { CategoryData } from "@interfaces/Category"
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 
 import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
 
@@ -236,7 +236,7 @@ function useData() {
     const transactionDataCopy: Ref<Transaction | undefined> = ref(undefined)
 
     const categories: Ref<CategoryData[]> = ref([])
-    const accounts: Ref<Account[]> = ref([])
+    const accounts: Ref<AccountData[]> = ref([])
 
     const usedAccount = computed(() => {
         const result = accounts.value.find(item => item.id == transactionData.value?.account_id)

@@ -338,7 +338,7 @@ import axios from "axios"
 import { onMounted, watch } from "vue"
 
 import type { TransactionRow } from "@interfaces/Transaction"
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 
 import AddTransactionsDialogComponent from "@components/transactions/AddTransactionsDialogComponent.vue"
@@ -352,7 +352,7 @@ import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 
 const props = defineProps<{
-    accounts: Account[]
+    accounts: AccountData[]
     categories: CategoryData[]
 }>()
 

@@ -177,7 +177,7 @@ import { watch, ref, computed } from "vue"
 import { cloneDeep, isNull } from "lodash"
 
 import type { Transaction } from "@interfaces/Transaction"
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 
 import { useCurrenciesStore } from "@stores/currencies"
@@ -189,7 +189,7 @@ import Validator from "@classes/Validator"
 const props = defineProps<{
     transactionData: Transaction[],
     commonValues: Transaction,
-    accounts: Account[],
+    accounts: AccountData[],
     categories: CategoryData[],
     disableUpdate: boolean,
     type: "income" | "expenses"

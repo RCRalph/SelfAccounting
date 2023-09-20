@@ -333,7 +333,7 @@ import axios from "axios"
 import { computed, watch, onMounted } from "vue"
 
 import type { TransactionRow } from "@interfaces/Transaction"
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 
 import AddTransactionsDialogComponent from "@components/transactions/AddTransactionsDialogComponent.vue"
@@ -348,7 +348,7 @@ import Validator from "@classes/Validator"
 
 const props = defineProps<{
     type: "income" | "expenses"
-    accounts: Account[],
+    accounts: AccountData[],
     categories: CategoryData[]
 }>()
 

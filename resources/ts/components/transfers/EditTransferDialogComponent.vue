@@ -196,7 +196,7 @@ import { ref, computed, watch } from "vue"
 import type { Ref } from "vue"
 import { isNull, cloneDeep } from "lodash"
 
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import type { Transfer } from "@interfaces/Transfer"
 
 import { useDialogSettings } from "@composables/useDialogSettings"
@@ -222,7 +222,7 @@ function useData() {
     const transferData: Ref<Transfer | undefined> = ref(undefined)
     const transferDataCopy: Ref<Transfer | undefined> = ref(undefined)
 
-    const accounts: Ref<Record<number, Account[]>> = ref({})
+    const accounts: Ref<Record<number, AccountData[]>> = ref({})
     const availableCurrencies: Ref<number[]> = ref([])
 
     const availableCurrencyData = computed(() => currencies.selectCurrencies(availableCurrencies.value))

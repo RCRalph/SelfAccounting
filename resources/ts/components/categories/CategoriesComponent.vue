@@ -132,12 +132,12 @@ import type { Ref } from "vue"
 
 import type { Category } from "@interfaces/Category"
 
-import { useCurrenciesStore } from "@stores/currencies"
 
 import AddCategoryDialogComponent from "@components/categories/AddCategoryDialogComponent.vue"
 import EditCategoryDialogComponent from "@components/categories/EditCategoryDialogComponent.vue"
 import DuplicateCategoryDialogComponent from "@components/categories/DuplicateCategoryDialogComponent.vue"
 
+import { useCurrenciesStore } from "@stores/currencies"
 import useTableSettings from "@composables/useTableSettings"
 import useFormats from "@composables/useFormats"
 

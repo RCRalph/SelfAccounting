@@ -52,7 +52,7 @@ import axios from "axios"
 import { onMounted, ref } from "vue"
 import type { Ref } from "vue"
 
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import type { Chart } from "@interfaces/Chart"
 
 import TransfersTableComponent from "@components/transfers/TransfersTableComponent.vue"
@@ -68,7 +68,7 @@ const status = useStatusStore()
 function useData() {
     const ready = ref(false)
 
-    const accounts: Ref<Account[]> = ref([])
+    const accounts: Ref<AccountData[]> = ref([])
     const charts: Ref<Chart[]> = ref([])
 
     function getData() {

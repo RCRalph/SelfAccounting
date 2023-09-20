@@ -49,7 +49,7 @@ import axios from "axios"
 import { watch, onMounted, ref } from "vue"
 import type { Ref } from "vue"
 
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 import type { Chart } from "@interfaces/Chart"
 
@@ -69,7 +69,7 @@ const status = useStatusStore()
 function useData() {
     const ready = ref(false)
 
-    const accounts: Ref<Account[]> = ref([])
+    const accounts: Ref<AccountData[]> = ref([])
     const categories: Ref<CategoryData[]> = ref([])
     const charts: Ref<Chart[]> = ref([])
 

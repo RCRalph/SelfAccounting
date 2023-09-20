@@ -277,7 +277,7 @@
 import axios from "axios"
 import { watch, onMounted } from "vue"
 
-import type { Account } from "@interfaces/Account"
+import type { AccountData } from "@interfaces/Account"
 import type { TransferRow } from "@interfaces/Transfer"
 
 import EditTransferDialogComponent from "@components/transfers/EditTransferDialogComponent.vue"
@@ -289,7 +289,7 @@ import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 
 const props = defineProps<{
-    accounts: Account[]
+    accounts: AccountData[]
 }>()
 
 const emit = defineEmits<{
