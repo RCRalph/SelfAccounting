@@ -115,11 +115,12 @@ import { cloneDeep } from "lodash"
 
 import type { Category } from "@interfaces/Category"
 
+import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
+
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import { useDialogSettings } from "@composables/useDialogSettings"
 import Validator from "@classes/Validator"
-import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
 
 const emit = defineEmits<{
     added: []
