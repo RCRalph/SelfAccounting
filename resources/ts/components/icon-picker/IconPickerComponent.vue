@@ -8,7 +8,7 @@
             <v-btn
                 v-bind="props"
                 variant="outlined"
-                :append-icon="icon"
+                :append-icon="formats.iconName(icon)"
             >
                 Select Icon
             </v-btn>
@@ -29,7 +29,7 @@
                             :color="icon == item ? 'primary' : undefined"
                             @click="icon = item"
                             density="comfortable"
-                            :icon="item"
+                            :icon="formats.iconName(item)"
                         ></v-btn>
                     </v-col>
                 </v-row>

@@ -35,7 +35,7 @@ export default function useFormats() {
             }
         }
 
-        return null
+        return undefined
     }
 
     return {iconName, numberWithCurrency, textWithNBSP}
