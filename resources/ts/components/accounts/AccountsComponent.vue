@@ -16,7 +16,7 @@
                         :title="`Accounts: ${currencies.usedCurrencyObject.ISO}`"
                         :large-font="true"
                     >
-                        <!--<AddAccountDialogComponent @added="getData"></AddAccountDialogComponent>-->
+                        <AddAccountDialogComponent @added="getData"></AddAccountDialogComponent>
                     </CardTitleWithButtons>
 
                     <v-card-text>
@@ -134,6 +134,7 @@ import type { Ref } from "vue"
 
 import type { Account } from "@interfaces/Account"
 
+import AddAccountDialogComponent from "@components/accounts/AddAccountDialogComponent.vue"
 import EditAccountDialogComponent from "@components/accounts/EditAccountDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"

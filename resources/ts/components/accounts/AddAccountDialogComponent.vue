@@ -1,147 +1,179 @@
 <template>
-    <v-dialog v-model="dialog" max-width="700">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined v-bind="attrs" v-on="on">Add account</v-btn>
+    <v-dialog
+        v-model="dialog"
+        max-width="700"
+    >
+        <template v-slot:activator="{ props: dialogProps }: any">
+            <v-btn
+                v-bind="dialogProps"
+                variant="outlined"
+            >
+                Add account
+            </v-btn>
         </template>
 
-        <v-card>
-            <v-card-title>Add account</v-card-title>
+        <v-card v-if="ready && accountData !== undefined">
+            <CardTitleWithButtons title="Add account"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-form v-model="canSubmit">
                     <v-row>
                         <v-col cols="12" sm="4" class="d-flex justify-center align-center">
                             <IconPickerComponent
-                                v-model="data.icon"
+                                v-model="accountData.icon"
                                 type="accounts"
                             ></IconPickerComponent>
                         </v-col>
 
                         <v-col cols="12" sm="8">
                             <v-text-field
+                                v-model="accountData.name"
+                                :rules="[
+                                    Validator.title('Name', 32)
+                                ]"
+                                variant="underlined"
                                 label="Name"
-                                v-model="data.name"
                                 counter="32"
-                                :rules="[validation.name()]"
                             ></v-text-field>
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_income">
-                                <template v-slot:label>
-                                    Show in income
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="accountData.used_in_income"
+                                label="Show in income"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.used_in_expenses">
-                                <template v-slot:label>
-                                    Show in expenses
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="accountData.used_in_expenses"
+                                label="Show in expenses"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.show_on_charts">
-                                <template v-slot:label>
-                                    Show on charts
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="accountData.show_on_charts"
+                                label="Show on charts"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="6" sm="4">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.count_to_summary">
-                                <template v-slot:label>
-                                    Count to summary
-                                </template>
-                            </v-switch>
+                            <v-switch
+                                v-model="accountData.count_to_summary"
+                                label="Count to summary"
+                            ></v-switch>
                         </v-col>
 
                         <v-col cols="12" sm="4">
-                            <v-text-field type="date" label="Start date" v-model="data.start_date" min="1970-01-01" :rules="[validation.date(false)]"></v-text-field>
+                            <v-text-field
+                                v-model="accountData.start_date"
+                                :max="accountData.max_date"
+                                :rules="[
+                                    Validator.date(false)
+                                ]"
+                                type="date"
+                                label="Start date"
+                                min="1970-01-01"
+                                variant="underlined"
+                            ></v-text-field>
                         </v-col>
 
                         <v-col cols="12" sm="4">
-                            <v-text-field label="Start balance" v-model="data.start_balance" :rules="[validation.price(false, true)]"></v-text-field>
+                            <v-text-field
+                                v-model="accountData.start_balance"
+                                :rules="[
+                                    Validator.price(
+                                        false,
+                                        true,
+                                        true
+                                    )
+                                ]"
+                                label="Start balance"
+                                variant="underlined"
+                            ></v-text-field>
                         </v-col>
                     </v-row>
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="submit" :loading="loading">
-                    Submit
-                </v-btn>
-            </v-card-actions>
+            <CardActionsSubmitComponent
+                :loading="!!loading.submit"
+                :can-submit="!!canSubmit"
+                @submit="submit"
+            ></CardActionsSubmitComponent>
         </v-card>
 
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
+        <CardLoadingComponent v-else>
+            Add account
+        </CardLoadingComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
-import IconPickerComponent from "@/IconPickerComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref, onMounted } from "vue"
+import type { Ref } from "vue"
+import { cloneDeep } from "lodash"
 
-import { useCurrenciesStore } from "&/stores/currencies";
-import validation from "&/mixins/validation";
-import main from "&/mixins/main";
+import type { Account } from "@interfaces/Account"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
 
-        return { currencies };
-    },
-    mixins: [validation, main],
-    components: {
-        ErrorSnackbarComponent,
-        IconPickerComponent
-    },
-    data() {
-        return {
-            dialog: false,
-            startData: {
-                icon: "",
-                name: "",
-                used_in_income: true,
-                used_in_expenses: true,
-                show_on_charts: true,
-                count_to_summary: true,
-                start_date: new Date().toISOString().split("T")[0],
-                start_balance: 0
-            },
-            data: {},
+import { useCurrenciesStore } from "@stores/currencies"
+import { useStatusStore } from "@stores/status"
+import { useDialogSettings } from "@composables/useDialogSettings"
+import Validator from "@classes/Validator"
 
-            error: false,
-            loading: false,
-            canSubmit: false
-        }
-    },
-    methods: {
-        submit() {
-            this.loading = true;
+const emit = defineEmits<{
+    added: []
+}>()
 
-            axios
-                .post(`/web-api/accounts/${this.currencies.usedCurrency}`, this.data)
-                .then(() => {
-                    this.data = _.cloneDeep(this.startData);
-                    this.$emit("added");
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        }
-    },
-    mounted() {
-        this.data = _.cloneDeep(this.startData);
+const currencies = useCurrenciesStore()
+const status = useStatusStore()
+
+function useData() {
+    const accountData: Ref<Account | undefined> = ref(undefined)
+    const commonValues: Ref<Account> = ref({
+        name: undefined,
+        icon: null,
+        used_in_income: true,
+        used_in_expenses: true,
+        show_on_charts: true,
+        count_to_summary: false,
+        start_date: new Date().toISOString().split("T")[0],
+        start_balance: 0,
+    })
+
+    function setData() {
+        accountData.value = cloneDeep(commonValues.value)
     }
+
+    function submit() {
+        loading.value.submit = true
+
+        axios
+            .post(`/web-api/accounts/${currencies.usedCurrency}`, accountData.value)
+            .then(() => {
+                emit("added")
+                setData()
+                dialog.value = false
+                loading.value.submit = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value.submit = false, 2000)
+            })
+    }
+
+    return {accountData, setData, submit}
 }
+
+const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {accountData, setData, submit} = useData()
+
+onMounted(setData)
 </script>
