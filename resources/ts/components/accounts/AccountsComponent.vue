@@ -13,7 +13,7 @@
             >
                 <v-card class="loading-height">
                     <CardTitleWithButtons
-                        :title="`Accounts: (${currencies.usedCurrencyObject.ISO})`"
+                        :title="`Accounts: ${currencies.usedCurrencyObject.ISO}`"
                         :large-font="true"
                     >
                         <!--<AddAccountDialogComponent @added="getData"></AddAccountDialogComponent>-->

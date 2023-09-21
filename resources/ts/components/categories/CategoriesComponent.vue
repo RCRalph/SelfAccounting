@@ -13,7 +13,7 @@
             >
                 <v-card class="loading-height">
                     <CardTitleWithButtons
-                        :title="`Categories (${currencies.usedCurrencyObject.ISO})`"
+                        :title="`Categories: ${currencies.usedCurrencyObject.ISO}`"
                         :large-font="true"
                     >
                         <AddCategoryDialogComponent @added="getData"></AddCategoryDialogComponent>
