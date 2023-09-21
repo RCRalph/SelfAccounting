@@ -8,6 +8,7 @@ interface Account {
     count_to_summary: boolean
     start_date: string
     start_balance: number
+    max_date?: string
 }
 
 interface AccountData {

@@ -87,10 +87,10 @@
 
                             <template v-slot:[`item.actions`]="{ item }">
                                 <div class="d-flex flex-nowrap justify-center align-center">
-                                    <!--<EditAccountDialogComponent
+                                    <EditAccountDialogComponent
                                         :id="item.raw.id"
                                         @updated="getData"
-                                    ></EditAccountDialogComponent>-->
+                                    ></EditAccountDialogComponent>
 
                                     <DuplicateDialogComponent
                                         :url="`accounts/account/${item.raw.id}/duplicate`"
@@ -133,6 +133,8 @@ import { ref, onMounted } from "vue"
 import type { Ref } from "vue"
 
 import type { Account } from "@interfaces/Account"
+
+import EditAccountDialogComponent from "@components/accounts/EditAccountDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import useTableSettings from "@composables/useTableSettings"
