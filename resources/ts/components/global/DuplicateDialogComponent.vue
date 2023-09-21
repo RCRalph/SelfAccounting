@@ -14,29 +14,37 @@
                 </template>
 
                 <span>
-                    Duplicate category
+                    Duplicate {{ props.thing }}
                 </span>
             </v-tooltip>
         </template>
 
         <v-card>
-            <CardTitleWithButtons title="Duplicate category"></CardTitleWithButtons>
+            <CardTitleWithButtons :title="`Duplicate ${props.thing}`"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-select
+                    v-if="props.specifyCurrency"
                     v-model="currency"
-                    :items="currencies.currencies"
+                    :items="currencies.selectCurrenciesWithout(currencies.usedCurrency)"
                     label="Currency"
                     item-title="ISO"
                     item-value="id"
                     variant="underlined"
                     hide-details
                 ></v-select>
+
+                <div
+                    v-else
+                    class="text-h7 mx-5"
+                >
+                    Are you sure you want to duplicate this {{ props.thing }}?
+                </div>
             </v-card-text>
 
             <CardActionsSubmitComponent
                 :loading="!!loading.submit"
-                :can-submit="true"
+                :can-submit="!props.specifyCurrency || !!currency"
                 @submit="duplicate"
             ></CardActionsSubmitComponent>
         </v-card>
@@ -46,33 +54,40 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref } from "vue"
+import type { Ref } from "vue"
 
 import { useStatusStore } from "@stores/status"
-import { useCurrenciesStore } from "@stores/currencies"
 import { useDialogSettings } from "@composables/useDialogSettings"
+import { useCurrenciesStore } from "@stores/currencies"
 
 const props = defineProps<{
-    id: number
+    url: string,
+    thing: string,
+    specifyCurrency: boolean
 }>()
 
 const emit = defineEmits<{
-    duplicated: []
+    duplicated: [currency?: number]
 }>()
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
-const currency = ref(currencies.usedCurrency)
+const {dialog, loading} = useDialogSettings()
+
+const currency: Ref<number | undefined> = ref(undefined)
 
 function duplicate() {
+    const data: Record<string, any> = {}
+
+    if (props.specifyCurrency) {
+        data.currency = currency.value
+    }
+
     loading.value.submit = true
 
-    axios.post(
-        `/web-api/categories/category/${props.id}/duplicate`,
-        {
-            currency: currency.value,
-        })
+    axios.post(`/web-api/${props.url}`, data)
         .then(() => {
-            emit("duplicated")
+            emit("duplicated", currency.value)
             dialog.value = false
             loading.value.submit = false
         })
@@ -82,6 +97,4 @@ function duplicate() {
             setTimeout(() => loading.value.submit = false, 2000)
         })
 }
-
-const {dialog, loading} = useDialogSettings()
 </script>

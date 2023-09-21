@@ -22,6 +22,7 @@ import AppComponent from "@components/app/AppComponent.vue"
 
 // Global components
 import DeleteDialogComponent from "@components/global/DeleteDialogComponent.vue"
+import DuplicateDialogComponent from "@components/global/DuplicateDialogComponent.vue"
 import ValueFieldComponent from "@components/global/ValueFieldComponent.vue"
 
 // Card Components
@@ -37,6 +38,7 @@ const app = createApp(AppComponent)
 // Register global components
 app.component("font-awesome-icon", FontAwesomeIcon)
     .component("DeleteDialogComponent", DeleteDialogComponent)
+    .component("DuplicateDialogComponent", DuplicateDialogComponent)
     .component("ValueFieldComponent", ValueFieldComponent)
     .component("CardLoadingComponent", CardLoadingComponent)
     .component("CardTitleWithButtons", CardTitleWithButtons)

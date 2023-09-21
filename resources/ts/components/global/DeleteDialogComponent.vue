@@ -29,7 +29,7 @@
             </v-card-text>
 
             <CardActionsNoYesComponent
-                :loading="loading"
+                :loading="!!loading.submit"
                 @no="dialog = false"
                 @yes="remove"
             ></CardActionsNoYesComponent>
@@ -39,8 +39,8 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref } from "vue"
 import { useStatusStore } from "@stores/status"
+import { useDialogSettings } from "@composables/useDialogSettings"
 
 const props = defineProps<{
     url: string,
@@ -52,30 +52,22 @@ const emit = defineEmits<{
 }>()
 
 const status = useStatusStore()
+const {dialog, loading} = useDialogSettings()
 
-function useDialogSettings() {
-    const dialog = ref(false)
-    const loading = ref(false)
+function remove() {
+    loading.value.submit = true
 
-    function remove() {
-        loading.value = true
-
-        axios.delete(`/web-api/${props.url}`)
-            .then(() => {
-                status.showSuccess(`deleted ${props.thing}`)
-                emit("deleted")
-                dialog.value = false
-                loading.value = false
-            })
-            .catch(err => {
-                console.error(err)
-                setTimeout(() => status.showError(), 1000)
-                setTimeout(() => loading.value = false, 2000)
-            })
-    }
-
-    return {remove, dialog, loading}
+    axios.delete(`/web-api/${props.url}`)
+        .then(() => {
+            status.showSuccess(`deleted ${props.thing}`)
+            emit("deleted")
+            dialog.value = false
+            loading.value.submit = false
+        })
+        .catch(err => {
+            console.error(err)
+            setTimeout(() => status.showError(), 1000)
+            setTimeout(() => loading.value.submit = false, 2000)
+        })
 }
-
-const {remove, dialog, loading} = useDialogSettings()
 </script>

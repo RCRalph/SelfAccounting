@@ -90,12 +90,14 @@
                                     <!--<EditAccountDialogComponent
                                         :id="item.raw.id"
                                         @updated="getData"
-                                    ></EditAccountDialogComponent>
+                                    ></EditAccountDialogComponent>-->
 
-                                    <DuplicateAccountDialogComponent
-                                        :id="item.raw.id"
+                                    <DuplicateDialogComponent
+                                        :url="`accounts/account/${item.raw.id}/duplicate`"
+                                        thing="account"
+                                        :specify-currency="true"
                                         @duplicated="getData"
-                                    ></DuplicateAccountDialogComponent>-->
+                                    ></DuplicateDialogComponent>
 
                                     <DeleteDialogComponent
                                         :url="`accounts/account/${item.raw.id}`"

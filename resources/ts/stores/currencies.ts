@@ -1,4 +1,4 @@
-import {defineStore} from "pinia"
+import { defineStore } from "pinia"
 
 export interface Currency {
     id: number
@@ -30,6 +30,13 @@ export const useCurrenciesStore = defineStore("currencies", {
         },
         selectCurrencies(state: State): (currencyIDs: number[]) => Currency[] {
             return ids => state.currencies.filter(item => ids.includes(item.id))
+        },
+        selectCurrenciesWithout(state: State): (currencyIDs: number | number[]) => Currency[] {
+            return ids => state.currencies.filter(item => {
+                return typeof ids == "number" ?
+                    ids != item.id :
+                    !ids.includes(item.id)
+            })
         },
         findByISO(state: State): (ISO: string) => (Currency | undefined) {
             return ISO => state.currencies.find(item => item.ISO == ISO)
