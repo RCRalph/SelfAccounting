@@ -12,7 +12,7 @@
             </v-btn>
         </template>
 
-        <v-card v-if="ready && accountData !== undefined">
+        <v-card v-if="accountData !== undefined">
             <CardTitleWithButtons title="Add account"></CardTitleWithButtons>
 
             <v-card-text>
@@ -106,9 +106,10 @@
             ></CardActionsSubmitComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Add account
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            title="Add account"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 
@@ -172,7 +173,7 @@ function useData() {
     return {accountData, setData, submit}
 }
 
-const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {canSubmit, dialog, loading} = useDialogSettings()
 const {accountData, setData, submit} = useData()
 
 onMounted(setData)

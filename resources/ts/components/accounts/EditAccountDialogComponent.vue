@@ -114,9 +114,10 @@
             ></CardActionsResetUpdateComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Edit account
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            title="Edit account"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 

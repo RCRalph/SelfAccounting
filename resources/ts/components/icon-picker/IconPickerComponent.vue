@@ -65,9 +65,10 @@
             ></CardActionsSubmitComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Select Icon
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            title="Select icon"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 

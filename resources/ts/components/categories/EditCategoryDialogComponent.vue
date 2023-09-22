@@ -113,9 +113,10 @@
             ></CardActionsResetUpdateComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Edit category
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            title="Edit category"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 

@@ -181,9 +181,10 @@
             ></CardActionsSubmitComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Add transfer
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            title="Add transfer"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 

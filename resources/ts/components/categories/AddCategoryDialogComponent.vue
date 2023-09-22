@@ -12,7 +12,7 @@
             </v-btn>
         </template>
 
-        <v-card v-if="ready && categoryData !== undefined">
+        <v-card v-if="categoryData !== undefined">
             <CardTitleWithButtons title="Add category"></CardTitleWithButtons>
 
             <v-card-text>
@@ -104,6 +104,11 @@
                 @submit="submit"
             ></CardActionsSubmitComponent>
         </v-card>
+
+        <CardLoadingComponent
+            v-else
+            title="Add category"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 
@@ -116,6 +121,7 @@ import { cloneDeep } from "lodash"
 import type { Category } from "@interfaces/Category"
 
 import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
+import CardLoadingComponent from "@components/global/card/CardLoadingComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
@@ -167,7 +173,7 @@ function useData() {
     return {categoryData, setData, submit}
 }
 
-const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {canSubmit, dialog, loading} = useDialogSettings()
 const {categoryData, setData, submit} = useData()
 
 onMounted(setData)

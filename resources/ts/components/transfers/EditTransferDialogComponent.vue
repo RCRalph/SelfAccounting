@@ -184,9 +184,10 @@
             ></CardActionsResetUpdateComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Edit transfer
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            title="Edit transfer"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 

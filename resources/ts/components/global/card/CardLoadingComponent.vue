@@ -1,7 +1,7 @@
 <template>
     <v-card>
-        <v-card-title>
-            <slot></slot>
+        <v-card-title v-if="props.title">
+            {{ props.title }}
         </v-card-title>
 
         <v-card-text class="card-loading">
@@ -12,6 +12,12 @@
         </v-card-text>
     </v-card>
 </template>
+
+<script setup lang="ts">
+const props = defineProps<{
+    title?: string
+}>()
+</script>
 
 <style scoped lang="scss">
 $padding: 20px;

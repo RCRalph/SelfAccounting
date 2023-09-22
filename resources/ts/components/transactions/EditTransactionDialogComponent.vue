@@ -191,9 +191,10 @@
             ></CardActionsResetUpdateComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Edit {{ typeSingular }}
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            :title="`Edit ${typeSingular}`"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 

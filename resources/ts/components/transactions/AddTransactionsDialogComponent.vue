@@ -211,9 +211,10 @@
             </CardActionsNavigationComponent>
         </v-card>
 
-        <CardLoadingComponent v-else>
-            Add {{ props.type }}
-        </CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            :title="`Add ${props.type}`"
+        ></CardLoadingComponent>
     </v-dialog>
 </template>
 
