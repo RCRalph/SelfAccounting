@@ -1,119 +1,138 @@
 <template>
-    <v-card v-if="ready" class="chart-card">
-        <v-card-title class="justify-center text-h5">{{ chartInfo.name }}</v-card-title>
+    <div style="margin: 12px">
+        <v-card
+            v-if="ready"
+            class="chart-card"
+        >
+            <v-card-text class="d-flex justify-center flex-nowrap align-end">
+                <div class="me-2 ms-0" style="width: 145px">
+                    <v-text-field
+                        v-model="start"
+                        :max="end"
+                        type="date"
+                        label="Start"
+                        min="1970-01-01"
+                        variant="underlined"
+                        hide-details
+                    ></v-text-field>
+                </div>
 
-        <v-card-text class="d-flex justify-center flex-nowrap align-end">
-            <div class="me-2 ms-0" style="width: 145px">
-                <v-text-field type="date" label="Start" v-model="start" :max="end" min="1970-01-01"
-                              hide-details></v-text-field>
+                <div>
+                    <v-icon
+                        icon="mdi-arrow-right-thick"
+                        class="mb-2"
+                    ></v-icon>
+                </div>
+
+                <div class="ms-2 me-0" style="width: 145px">
+                    <v-text-field
+                        v-model="end"
+                        :min="start || '1970-01-01'"
+                        type="date"
+                        label="End"
+                        variant="underlined"
+                        hide-details
+                    ></v-text-field>
+                </div>
+            </v-card-text>
+
+            <div
+                v-if="chartHasData"
+                class="chart-block"
+            >
+                <LineChart
+                    v-if="chart.type == 'line'"
+                    :options="lineOptions"
+                    :data="lineChartData"
+                ></LineChart>
+
+                <DoughnutChart
+                    v-if="chart.type == 'doughnut'"
+                    :options="doughnutOptions"
+                    :data="doughnutChartData"
+                ></DoughnutChart>
             </div>
 
-            <div>
-                <v-icon>mdi-arrow-right-bold</v-icon>
-            </div>
+            <div v-else class="text-h6 text-center">No data</div>
+        </v-card>
 
-            <div class="ms-2 me-0" style="width: 145px">
-                <v-text-field type="date" label="End" v-model="end" :min="start || '1970-01-01'"
-                              hide-details></v-text-field>
-            </div>
-        </v-card-text>
-
-        <!-- Chart selection -->
-
-        <LineChart
-            v-if="chartInfo.type == 'line'"
-            :options="chartData.options"
-            :chartData="chartData.data"
-            :theme="chartData.theme"
-            class="chart-block"
-        ></LineChart>
-
-        <DoughnutChart
-            v-if="chartInfo.type == 'doughnut'"
-            :options="chartData.options"
-            :chartData="chartData.data"
-            :theme="chartData.theme"
-            class="chart-block"
-        ></DoughnutChart>
-    </v-card>
-
-    <v-card v-else>
-        <v-card-text class="d-flex justify-center">
-            <v-progress-circular
-                indeterminate
-                size="96"
-            ></v-progress-circular>
-        </v-card-text>
-    </v-card>
+        <CardLoadingComponent v-else></CardLoadingComponent>
+    </div>
 </template>
 
-<script>
-import {useCurrenciesStore} from "&/stores/currencies";
+<script setup lang="ts">
+import axios from "axios"
+import { onMounted, ref, watch, computed } from "vue"
 
-import LineChart from "@/charts/LineChart.vue";
-import DoughnutChart from "@/charts/DoughnutChart.vue";
+import type { Chart } from "@interfaces/Chart"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import LineChart from "@components/charts/LineChart.vue"
+import DoughnutChart from "@components/charts/DoughnutChart.vue"
 
-        return {currencies};
-    },
-    components: {
-        LineChart,
-        DoughnutChart
-    },
-    data() {
-        return {
-            start: "",
-            end: "",
-            lastChange: new Date(),
-            chartData: {},
-            chartInfo: {},
-            ready: false
-        }
-    },
-    watch: {
-        start: "updateWithOffset",
-        end: "updateWithOffset",
-        "$route.params.id": "getData",
-        "currencies.usedCurrency": "getData"
-    },
-    methods: {
-        getData() {
-            this.ready = false;
+import { useStatusStore } from "@stores/status"
+import { useDoughnutChartData, useLineChartData } from "@composables/useChartData"
+import { queryWithDates } from "@composables/useChartQueryParameters"
+import { useCurrenciesStore } from "@stores/currencies"
 
-            axios
-                .get(`/web-api/charts/${this.$route.params.id}/currency/${this.currencies.usedCurrency}`, {
-                    params: {
-                        start: this.start,
-                        end: this.end
-                    }
-                })
-                .then(response => {
-                    const data = response.data;
+const props = defineProps<{
+    chart: Chart
+}>()
 
-                    this.chartInfo = data.info;
-                    this.chartData.theme = data.theme;
-                    this.chartData.data = data.data;
-                    this.chartData.options = data.options;
+const currencies = useCurrenciesStore()
+const status = useStatusStore()
 
-                    this.ready = true;
-                })
-        },
-        updateWithOffset() {
-            const timeOffset = 500;
-            this.lastChange = new Date();
+function useData() {
+    const ready = ref(true)
+    const start = ref("")
+    const end = ref("")
 
-            setTimeout(() => {
-                if (new Date() - this.lastChange >= timeOffset) {
-                    this.getData();
+    const chartHasData = computed(() =>
+        lineChartData.value?.datasets.length ||
+        doughnutChartData.value?.datasets.length && doughnutChartData.value?.datasets[0].data.length,
+    )
+
+    function getChartData() {
+        ready.value = false
+
+        axios.get(
+            `/web-api/charts/${props.chart.id}/currency/${currencies.usedCurrency}`,
+            {params: queryWithDates(start.value, end.value)},
+        )
+            .then(response => {
+                const data = response.data
+
+                switch (props.chart.type) {
+                    case "line":
+                        lineChartData.value = data.data
+                        break
+                    case "doughnut":
+                        doughnutChartData.value = data.data
+                        break
+                    default:
+                        throw new Error("Invalid chart type")
                 }
-            }, timeOffset + 1);
-        }
-    },
-    mounted() {
-        this.getData();
+
+                ready.value = true
+            })
+            .catch(err => {
+                console.error(err)
+                status.showError()
+            })
     }
+
+    return {chartHasData, end, getChartData, ready, start}
 }
+
+const {chartHasData, end, getChartData, ready, start} = useData()
+const {chartData: lineChartData, options: lineOptions} = useLineChartData()
+const {chartData: doughnutChartData, options: doughnutOptions} = useDoughnutChartData()
+
+watch(start, getChartData)
+watch(end, getChartData)
+watch(() => props.chart, getChartData)
+
+onMounted(() => {
+    getChartData()
+    currencies.$subscribe(getChartData)
+})
 </script>

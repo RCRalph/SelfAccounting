@@ -1,5 +1,6 @@
 <template>
     <Line
+        v-if="props.data"
         :data="props.data"
         :options="props.options"
     ></Line>
@@ -17,14 +18,14 @@ import {
     Legend,
 } from "chart.js"
 
-import 'chartjs-adapter-date-fns';
-import {Line} from "vue-chartjs"
-import type {ChartOptions, ChartData, Point} from "chart.js";
+import "chartjs-adapter-date-fns"
+import { Line } from "vue-chartjs"
+import type { ChartOptions, ChartData, Point } from "chart.js"
 
 ChartJS.register(CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Tooltip, Legend)
 
 const props = defineProps<{
-    data: ChartData<"line", Point[], string>,
+    data?: ChartData<"line", Point[], string>,
     options: ChartOptions<"line">
 }>()
 </script>

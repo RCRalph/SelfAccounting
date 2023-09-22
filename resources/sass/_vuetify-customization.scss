@@ -207,11 +207,11 @@ tr {
 }
 
 .chart-card {
-    min-height: calc(100vh - 32px);
+    min-height: calc(100dvh - #{24px + 60px});
 
     .chart-block {
         padding: 16px;
-        min-height: calc(100vh - #{32px + 64px + 64px});
+        min-height: calc(100dvh - #{24px + 60px + 84px + 32px});
     }
 }
 

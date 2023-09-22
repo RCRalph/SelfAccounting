@@ -1,7 +1,7 @@
 interface Chart {
     id: number
     name: string
-    type: string
+    type: "doughnut" | "line"
 }
 
 export type {

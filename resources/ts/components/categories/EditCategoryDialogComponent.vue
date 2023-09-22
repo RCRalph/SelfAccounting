@@ -92,7 +92,7 @@
                             <v-text-field
                                 v-model="categoryData.end_date"
                                 :disabled="!categoryData.count_to_summary"
-                                :min="categoryData.start_date"
+                                :min="categoryData.start_date || '1970-01-01'"
                                 :rules="[
                                     Validator.date(true)
                                 ]"

@@ -1,11 +1,12 @@
 <template>
     <div v-if="ready">
         <v-tabs
+            v-model="currentChart"
             :height="60"
             :center-active="true"
-            align-tabs="center"
             :show-arrows="true"
             :stacked="true"
+            align-tabs="center"
         >
             <v-tab
                 v-for="item in charts"
@@ -14,6 +15,11 @@
                 {{ item.name }}
             </v-tab>
         </v-tabs>
+
+        <ChartComponent
+            v-if="currentChartData"
+            :chart="currentChartData"
+        ></ChartComponent>
     </div>
 
     <v-overlay
@@ -29,36 +35,48 @@
 </template>
 
 <script setup lang="ts">
-interface Chart {
-    id: number
-    name: string
-}
-
 import axios from "axios"
-import {onMounted, ref} from "vue"
-import type {Ref} from "vue"
-import {useStatusStore} from "@stores/status"
+import { onMounted, ref, computed } from "vue"
+import type { Ref } from "vue"
+
+import type { Chart } from "@interfaces/Chart"
+
+import ChartComponent from "@components/charts/ChartComponent.vue"
+
+import { useStatusStore } from "@stores/status"
 
 const status = useStatusStore()
-const charts: Ref<Chart[]> = ref([])
-const ready = ref(false)
 
-onMounted(() => {
-    ready.value = false
+function useData() {
+    const ready = ref(false)
+    const charts: Ref<Chart[]> = ref([])
+    const currentChart: Ref<number | undefined> = ref(undefined)
 
-    axios.get("/web-api/charts")
-        .then(response => {
-            const data = response.data
+    function getData() {
+        ready.value = false
 
-            charts.value = data.charts
+        axios.get("/web-api/charts")
+            .then(response => {
+                const data = response.data
 
-            ready.value = true
-        })
-        .catch(err => {
-            console.error(err)
-            status.showError()
-        })
-})
+                charts.value = data.charts
+
+                ready.value = true
+            })
+            .catch(err => {
+                console.error(err)
+                status.showError()
+            })
+    }
+
+    const currentChartData = computed(() => charts.value.find(item => item.id == currentChart.value))
+
+    return {charts, currentChart, currentChartData, getData, ready}
+}
+
+const {charts, currentChart, currentChartData, getData, ready} = useData()
+
+onMounted(getData)
 </script>
 
 <style scoped lang="scss">
