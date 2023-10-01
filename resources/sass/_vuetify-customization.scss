@@ -207,11 +207,17 @@ tr {
 }
 
 .chart-card {
+    $card-content-height: calc(100dvh - #{24px + 60px + 84px + 32px});
+
     min-height: calc(100dvh - #{24px + 60px});
 
     .chart-block {
         padding: 16px;
-        min-height: calc(100dvh - #{24px + 60px + 84px + 32px});
+        min-height: $card-content-height;
+    }
+
+    .card-loading {
+        min-height: $card-content-height;
     }
 }
 

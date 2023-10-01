@@ -56,7 +56,10 @@
             <div v-else class="text-h6 text-center">No data</div>
         </v-card>
 
-        <CardLoadingComponent v-else></CardLoadingComponent>
+        <CardLoadingComponent
+            v-else
+            card-class="chart-card"
+        ></CardLoadingComponent>
     </div>
 </template>
 

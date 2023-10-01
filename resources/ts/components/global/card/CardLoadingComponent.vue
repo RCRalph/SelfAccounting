@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card :class="props.cardClass">
         <v-card-title v-if="props.title">
             {{ props.title }}
         </v-card-title>
@@ -15,7 +15,8 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-    title?: string
+    title?: string,
+    cardClass?: string
 }>()
 </script>
 
