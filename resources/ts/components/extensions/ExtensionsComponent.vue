@@ -1,5 +1,8 @@
 <template>
-    <div v-if="ready">
+    <div
+        v-if="ready"
+        class="tabs"
+    >
         <v-tabs
             :height="60"
             :center-active="true"
@@ -38,8 +41,8 @@ interface Extension {
 }
 
 import axios from "axios"
-import {onMounted, ref} from "vue"
-import type {Ref} from "vue"
+import { onMounted, ref } from "vue"
+import type { Ref } from "vue"
 //import {useRoute} from "vue-router"
 
 const extensions: Ref<Extension[]> = ref([{

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="ready" style="margin: 12px">
+    <div v-if="ready">
         <v-row>
             <v-col
                 xl="4" cols="12"

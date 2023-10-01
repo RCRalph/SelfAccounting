@@ -19,7 +19,7 @@
             </v-tooltip>
         </template>
 
-        <v-card v-if="ready && accountData !== undefined">
+        <v-card v-if="ready && accountData">
             <CardTitleWithButtons title="Edit Account"></CardTitleWithButtons>
 
             <v-card-text>

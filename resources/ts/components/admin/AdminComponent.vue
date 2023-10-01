@@ -1,5 +1,8 @@
 <template>
-    <div v-if="ready">
+    <div
+        v-if="ready"
+        class="tabs"
+    >
         <v-tabs
             :height="60"
             :center-active="true"
@@ -45,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue"
+import { ref } from "vue"
 
 const ready = ref(true)
 </script>

@@ -1,5 +1,8 @@
 <template>
-    <div v-if="ready">
+    <div
+        v-if="ready"
+        class="tabs"
+    >
         <v-tabs
             v-model="currentChart"
             :height="60"

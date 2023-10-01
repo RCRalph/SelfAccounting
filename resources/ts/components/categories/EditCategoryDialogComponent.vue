@@ -19,7 +19,7 @@
             </v-tooltip>
         </template>
 
-        <v-card v-if="ready && categoryData !== undefined">
+        <v-card v-if="ready && categoryData">
             <CardTitleWithButtons title="Edit Category"></CardTitleWithButtons>
 
             <v-card-text>

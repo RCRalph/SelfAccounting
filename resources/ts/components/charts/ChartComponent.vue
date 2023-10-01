@@ -1,5 +1,5 @@
 <template>
-    <div style="margin: 12px">
+    <div>
         <v-card
             v-if="ready"
             class="chart-card"

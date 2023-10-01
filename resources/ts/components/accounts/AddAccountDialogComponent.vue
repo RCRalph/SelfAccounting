@@ -12,7 +12,7 @@
             </v-btn>
         </template>
 
-        <v-card v-if="accountData !== undefined">
+        <v-card v-if="accountData">
             <CardTitleWithButtons title="Add account"></CardTitleWithButtons>
 
             <v-card-text>

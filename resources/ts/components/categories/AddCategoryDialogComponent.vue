@@ -12,7 +12,7 @@
             </v-btn>
         </template>
 
-        <v-card v-if="categoryData !== undefined">
+        <v-card v-if="categoryData">
             <CardTitleWithButtons title="Add category"></CardTitleWithButtons>
 
             <v-card-text>
