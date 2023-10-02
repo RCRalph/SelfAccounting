@@ -125,6 +125,7 @@ import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
+import { currentTimeZoneDate } from "@composables/useDates"
 import { useDialogSettings } from "@composables/useDialogSettings"
 import Validator from "@classes/Validator"
 
@@ -144,7 +145,7 @@ function useData() {
         used_in_expenses: true,
         show_on_charts: true,
         count_to_summary: false,
-        start_date: new Date().toISOString().split("T")[0],
+        start_date: currentTimeZoneDate(),
         start_balance: 0,
     })
 

@@ -227,6 +227,7 @@ import type { Ref } from "vue"
 import useFormats from "@composables/useFormats"
 import useTitles from "@composables/useTitles"
 import { useDialogSettings } from "@composables/useDialogSettings"
+import { currentTimeZoneDate } from "@composables/useDates"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import Validator from "@classes/Validator"
@@ -269,7 +270,7 @@ function usePriceModified() {
 function useData() {
     const transactionData: Ref<Transaction[]> = ref([])
     const commonValues: Ref<Transaction> = ref({
-        date: new Date().toISOString().split("T")[0],
+        date: currentTimeZoneDate(),
         title: undefined,
         amount: 1,
         price: "",

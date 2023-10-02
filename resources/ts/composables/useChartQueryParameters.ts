@@ -1,4 +1,5 @@
 import { computed } from "vue"
+import { formatDate } from "@composables/useDates"
 
 interface QueryParameters {
     start?: string
@@ -10,9 +11,8 @@ const last30DaysQuery = computed(() => {
 
     const start = new Date()
     start.setDate(start.getDate() - 31)
-    result.start = start.toISOString().split("T")[0]
-
-    result.end = new Date().toISOString().split("T")[0]
+    result.start = formatDate(start, false)
+    result.end = formatDate(new Date(), false)
 
     return result
 })

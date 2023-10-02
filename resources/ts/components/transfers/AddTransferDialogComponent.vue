@@ -198,6 +198,7 @@ import type { AccountData } from "@interfaces/Account"
 import type { Transfer } from "@interfaces/Transfer"
 
 import { useDialogSettings } from "@composables/useDialogSettings"
+import { currentTimeZoneDate } from "@composables/useDates"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
@@ -215,7 +216,7 @@ const formats = useFormats()
 function useData() {
     const transferData: Ref<Transfer | undefined> = ref(undefined)
     const commonValues: Ref<Transfer> = ref({
-        date: new Date().toISOString().split("T")[0],
+        date: currentTimeZoneDate(),
         source: {
             value: "",
             account_id: undefined,
