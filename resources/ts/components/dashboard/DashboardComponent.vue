@@ -34,12 +34,14 @@
                                                 }}
                                             </div>
 
-                                            <v-table v-if="currentBalance.length > 1" density="comfortable">
-                                                <tbody>
+                                            <v-table
+                                                v-if="currentBalance.length > 1"
+                                                density="comfortable"
+                                            >
+                                                <tbody class="table-two-columns-same-width">
                                                     <tr v-for="item in currentBalance">
                                                         <td
                                                             class="text-right text-h6"
-                                                            style="width: 50%"
                                                         >
                                                             <div class="d-flex justify-start align-center">
                                                                 <div class="mr-2">

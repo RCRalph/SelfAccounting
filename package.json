@@ -17,7 +17,7 @@
     "@types/lodash": "^4.14.195",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/tsconfig": "^0.4.0",
-    "axios": "^0.21.4",
+    "axios": "^1.6.7",
     "chart.js": "^4.3.2",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^2.30.0",
@@ -38,7 +38,7 @@
     "vue": "~3.3.1",
     "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.4",
-    "vuetify": "^3.3.15",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
+    "vuetify": "^3.5.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
   }
 }

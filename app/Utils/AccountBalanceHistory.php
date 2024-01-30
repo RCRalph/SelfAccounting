@@ -87,6 +87,8 @@ class AccountBalanceHistory
     {
         $result = ["datasets" => []];
 
+        if (!$this->data) return $result;
+        
         foreach ($this->accounts as $id => $data) {
             if ($this->data[$id] && end($this->data[$id])["x"] != $this->lastDate) {
                 $this->data[$id][] = [

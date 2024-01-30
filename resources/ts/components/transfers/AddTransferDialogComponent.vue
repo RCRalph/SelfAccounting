@@ -214,7 +214,12 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function useData() {
+    const accounts: Ref<Record<number, AccountData[]>> = ref({})
+    const availableCurrencies: Ref<number[]> = ref([])
+    const availableCurrencyData = computed(() => currencies.selectCurrencies(availableCurrencies.value))
+
     const transferData: Ref<Transfer | undefined> = ref(undefined)
+
     const commonValues: Ref<Transfer> = ref({
         date: currentTimeZoneDate(),
         source: {
@@ -229,20 +234,18 @@ function useData() {
         },
     })
 
-    const accounts: Ref<Record<number, AccountData[]>> = ref({})
-    const availableCurrencies: Ref<number[]> = ref([])
-    const availableCurrencyData = computed(() => currencies.selectCurrencies(availableCurrencies.value))
-
     const valueModified = ref({
         source: false,
         target: false,
     })
 
     const sourceData = computed(() => {
-        if (typeof transferData.value == "undefined") return undefined
+        if (typeof transferData.value?.source.currency_id == "undefined") return undefined
 
-        const account = accounts.value[transferData.value.source.currency_id]
-            .find(item => item.id == transferData.value?.source.account_id)
+        const currencyAccounts = accounts.value[transferData.value?.source.currency_id]
+        if (typeof currencyAccounts == "undefined") return undefined
+
+        const account = currencyAccounts.find(item => item.id == transferData.value?.source.account_id)
 
         return {
             currency: currencies.findCurrency(transferData.value.source.currency_id),
@@ -252,10 +255,13 @@ function useData() {
     })
 
     const targetData = computed(() => {
-        if (typeof transferData.value == "undefined") return undefined
+        if (typeof transferData.value?.target.currency_id == "undefined") return undefined
 
-        const account = accounts.value[transferData.value?.target.currency_id]
-            .find(item => item.id == transferData.value?.target.account_id)
+        const currencyAccounts = accounts.value[transferData.value.target.currency_id]
+
+        if (typeof currencyAccounts == "undefined") return undefined
+
+        const account = currencyAccounts.find(item => item.id == transferData.value?.target.account_id)
 
         return {
             currency: currencies.findCurrency(transferData.value.target.currency_id),
@@ -265,13 +271,13 @@ function useData() {
     })
 
     const sourceAccounts = computed(() => {
-        if (typeof transferData.value == "undefined") return []
+        if (typeof transferData.value?.source.currency_id == "undefined") return []
 
         return accounts.value[transferData.value.source.currency_id]
     })
 
     const targetAccounts = computed(() => {
-        if (typeof transferData.value == "undefined") return []
+        if (typeof transferData.value?.target.currency_id == "undefined") return []
 
         return accounts.value[transferData.value.target.currency_id]
     })
@@ -311,9 +317,15 @@ function useData() {
             .then(response => {
                 const data = response.data
 
-                transferData.value = cloneDeep(commonValues.value)
                 accounts.value = data.accounts
                 availableCurrencies.value = data.availableCurrencies
+
+                if (!availableCurrencies.value.length) {
+                    commonValues.value.source.currency_id = undefined
+                    commonValues.value.target.currency_id = undefined
+                }
+
+                transferData.value = cloneDeep(commonValues.value)
 
                 ready.value = true
             })

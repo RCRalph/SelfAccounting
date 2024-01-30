@@ -1,18 +1,20 @@
 import { computed, ref } from "vue"
 import type { Ref } from "vue"
-import { VDataTable } from "vuetify/labs/VDataTable"
+import type { VDataTable } from "vuetify/components"
 import type { Loading } from "@interfaces/App"
 import type { DataQuery as TransactionDataQuery } from "@interfaces/Transaction"
 import type { DataQuery as TransferDataQuery } from "@interfaces/Transfer"
 
+interface HeaderData {
+    title: string,
+    key: string,
+    align?: string,
+    sortable?: boolean,
+}
+
 export default function useTableSettings() {
     function tableHeaders(
-        headers: {
-            title: string,
-            key: string,
-            align?: string,
-            sortable?: boolean
-        }[],
+        headers: HeaderData[],
         columns: string[] | true,
     ): VDataTable["headers"] {
         return (
@@ -22,7 +24,7 @@ export default function useTableSettings() {
         ) as VDataTable["headers"]
     }
 
-    const transactions = [
+    const transactions: HeaderData[] = [
         {title: "Date", key: "date", align: "center"},
         {title: "Title", key: "title", align: "center"},
         {title: "Amount", key: "amount", align: "center"},
@@ -37,20 +39,20 @@ export default function useTableSettings() {
         return tableHeaders(transactions, columns)
     }
 
-    const transfers = [
+    const transfers: HeaderData[] = [
         {title: "Date", key: "date", align: "center"},
         {title: "Source value", key: "source_value", align: "center"},
         {title: "Source account", key: "source_account", align: "center", sortable: false},
         {title: "Target value", key: "target_value", align: "center"},
         {title: "Target account", key: "target_account", align: "center", sortable: false},
-        {title: "Actions", key: "actions", align: "center", value: "", sortable: false},
+        {title: "Actions", key: "actions", align: "center", sortable: false},
     ]
 
     function transferHeaders(columns: string[] | true = true): VDataTable["headers"] {
         return tableHeaders(transfers, columns)
     }
 
-    const categories = [
+    const categories: HeaderData[] = [
         {title: "Icon", key: "icon", align: "center", sortable: false},
         {title: "Name", key: "name", align: "center", sortable: false},
         {title: "Show in income", key: "used_in_income", align: "center", sortable: false},
@@ -64,7 +66,7 @@ export default function useTableSettings() {
         return tableHeaders(categories, columns)
     }
 
-    const accounts = [
+    const accounts: HeaderData[] = [
         {title: "Icon", key: "icon", align: "center", sortable: false},
         {title: "Name", key: "name", align: "center", sortable: false},
         {title: "Show in income", key: "used_in_income", align: "center", sortable: false},

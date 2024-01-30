@@ -2,7 +2,7 @@ import type { Icon } from "@interfaces/App"
 
 interface Account {
     account_id?: number
-    currency_id: number
+    currency_id?: number
     value: string | number
 }
 

@@ -12,7 +12,7 @@
             >
                 <v-list-item class="pa-2">
                     <template v-slot:prepend>
-                        <v-avatar image="/storage/Logo.svg" rounded="0"></v-avatar>
+                        <v-avatar image="/storage/Logo.svg" rounded="0" :size="40"></v-avatar>
                     </template>
 
                     <v-list-item-title class="m-0">
@@ -59,7 +59,7 @@
                                 item-value="id"
                                 variant="underlined"
                                 label="Currency"
-                                density="compact"
+                                density="comfortable"
                                 class="py-3"
                             ></v-select>
 
@@ -68,15 +68,16 @@
                     </v-list-item>
 
                     <v-menu
+                        v-model="profileMenuFocused"
                         location="top"
                         transition="slide-x-transition"
                     >
                         <template v-slot:activator="{ props }: any">
-                            <v-list-item
-                                v-bind="props"
-                                :prepend-avatar="user.data.profile_picture_link"
-                                class="pa-2"
-                            >
+                            <v-list-item v-bind="props" class="pa-2">
+                                <template v-slot:prepend>
+                                    <v-avatar :image="user.data.profile_picture_link" :size="40"></v-avatar>
+                                </template>
+
                                 <div class="d-flex align-center">
                                     <v-list-item-title
                                         class="font-weight-black h5 m-0"
@@ -183,15 +184,16 @@ function useAppSettings() {
 function useNavigationDrawer() {
     const navigationForceOpen = ref(false)
     const currencySelectFocused = ref(false)
+    const profileMenuFocused = ref(false)
 
     const navigationRail = computed(() => {
-        if (currencySelectFocused.value) return false
+        if (currencySelectFocused.value || profileMenuFocused.value) return false
         else if (!display.mobile.value) return true
 
         return !navigationForceOpen.value
     })
 
-    return {currencySelectFocused, navigationForceOpen, navigationRail}
+    return {currencySelectFocused, navigationForceOpen, navigationRail, profileMenuFocused}
 }
 
 function useTutorials() {
@@ -247,7 +249,7 @@ function useMenuItems() {
 
 const {logoTextImage, setTheme} = useThemeSettings()
 const {VMainStyle, premiumExpired, ready} = useAppSettings()
-const {currencySelectFocused, navigationForceOpen, navigationRail} = useNavigationDrawer()
+const {currencySelectFocused, navigationForceOpen, navigationRail, profileMenuFocused} = useNavigationDrawer()
 const {disabledTutorials, tutorialPaths} = useTutorials()
 const {drawerItems, profileItems} = useMenuItems()
 
