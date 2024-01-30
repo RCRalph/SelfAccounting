@@ -1,100 +1,94 @@
 <template>
-    <v-dialog v-model="dialog" max-width="500">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined class="mx-3 my-2" width="145" :block="$vuetify.breakpoint.xs" v-on="on" v-bind="attrs">Settings</v-btn>
+    <v-dialog
+        v-model="dialog"
+        max-width="400"
+    >
+        <template v-slot:activator="{ props: dialogProps }: any">
+            <v-btn
+                v-bind="dialogProps"
+                variant="outlined"
+                block
+            >
+                Settings
+            </v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Settings</v-card-title>
+            <CardTitleWithButtons title="Profile settings"></CardTitleWithButtons>
 
             <v-card-text>
-                <v-form v-model="canSubmit" ref="form">
-                    <v-row>
-                        <v-col cols="6">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.darkmode">
-                                <template v-slot:label>
-                                    Darkmode
-                                </template>
-                            </v-switch>
-                        </v-col>
-
-                        <v-col cols="6">
-                            <v-switch :color="$vuetify.theme.dark ? 'white' : 'grey'" v-model="data.show_tutorials">
-                                <template v-slot:label>
-                                    Show tutorials
-                                </template>
-                            </v-switch>
-                        </v-col>
-                    </v-row>
+                <v-form v-model="canSubmit">
+                    <v-switch
+                        class="d-flex justify-center"
+                        v-model="userData.show_tutorials"
+                        label="Show tutorials"
+                    ></v-switch>
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1" width="85">
-                    Reset
-                </v-btn>
-
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1" width="85">
-                    Update
-                </v-btn>
-            </v-card-actions>
+            <CardActionsResetUpdateComponent
+                :loading="!!loading.submit"
+                :can-submit="!!canSubmit"
+                @reset="reset"
+                @update="update"
+            ></CardActionsResetUpdateComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref } from "vue"
 
-export default {
-    components: {
-        ErrorSnackbarComponent
-    },
-    props: {
-        value: {
-            required: true,
-            type: Object
-        }
-    },
-    data() {
-        return {
-            dialog: false,
-            data: {},
+import type { UserData } from "@interfaces/User"
 
-            error: false,
-            loading: false,
-            canSubmit: false
-        }
-    },
-    methods: {
-        reset() {
-            this.data = {
-                darkmode: this.value.darkmode,
-                show_tutorials: !this.value.hide_all_tutorials
-            };
-        },
-        update() {
-            this.loading = true;
+import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
+import CardActionsResetUpdateComponent from "@components/global/card/CardActionsResetUpdateComponent.vue"
 
-            axios
-                .post("/web-api/profile/settings", this.data)
-                .then(() => {
-                    this.value.darkmode = this.data.darkmode;
-                    this.value.hide_all_tutorials = !this.data.show_tutorials;
+import { useDialogSettings } from "@composables/useDialogSettings"
+import { useStatusStore } from "@stores/status"
 
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        }
-    },
-    mounted() {
-        this.reset();
+const props = defineProps<{
+    modelValue: UserData
+}>()
+
+const status = useStatusStore()
+
+function useInformation() {
+    const userData = ref({
+        darkmode: props.modelValue.darkmode,
+        show_tutorials: !props.modelValue.hide_all_tutorials,
+    })
+
+    function reset() {
+        userData.value.darkmode = props.modelValue.darkmode
+        userData.value.show_tutorials = !props.modelValue.hide_all_tutorials
     }
+
+    function update() {
+        loading.value.submit = true
+
+        axios
+            .post("/web-api/profile/settings", userData.value)
+            .then(() => {
+                props.modelValue.darkmode = userData.value.darkmode
+                props.modelValue.hide_all_tutorials = !userData.value.show_tutorials
+
+                status.showSuccess("updated profile settings")
+
+                dialog.value = false
+                loading.value.submit = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value.submit = false, 2000)
+            })
+    }
+
+    return {userData, reset, update}
 }
+
+const {canSubmit, dialog, loading} = useDialogSettings()
+const {userData, reset, update} = useInformation()
 </script>

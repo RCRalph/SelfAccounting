@@ -1,63 +1,62 @@
 <template>
-    <v-dialog v-model="dialog" width="unset">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined class="mx-3 my-2" :block="$vuetify.breakpoint.xs" color="error" v-bind="attrs" v-on="on">Delete account</v-btn>
+    <v-dialog
+        v-model="dialog"
+        width="unset"
+    >
+        <template v-slot:activator="{ props: dialogProps }: any">
+            <v-btn
+                v-bind="dialogProps"
+                variant="outlined"
+                color="error"
+                block
+            >
+                Delete account
+            </v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Delete account</v-card-title>
+            <CardTitleWithButtons title="Delete account"></CardTitleWithButtons>
 
             <v-card-text>
                 <h3>Are you sure you want to delete your account?</h3>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn outlined @click="dialog = false" :disabled="loading" class="mx-1">
-                    No
-                </v-btn>
-
-                <v-btn color="error" outlined @click="remove" :loading="loading" class="mx-1">
-                    Yes
-                </v-btn>
-            </v-card-actions>
+            <CardActionsNoYesComponent
+                :loading="!!loading.submit"
+                @yes="remove"
+                @no="dialog = false"
+            ></CardActionsNoYesComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
 
-export default {
-    components: {
-        ErrorSnackbarComponent
-    },
-    data() {
-        return {
-            dialog: false,
-            error: false,
-            loading: false
-        }
-    },
-    methods: {
-        remove() {
-            this.loading = true;
+import CardActionsNoYesComponent from "@components/global/card/CardActionsNoYesComponent.vue"
+import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
 
-            axios
-                .delete(`/web-api/profile`)
-                .then(() => {
-                    window.location = "/"
+import { useDialogSettings } from "@composables/useDialogSettings"
+import { useStatusStore } from "@stores/status"
 
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        }
-    }
+const status = useStatusStore()
+
+function remove() {
+    loading.value.submit = true
+
+    axios.delete("/web-api/profile")
+        .then(() => {
+            window.location.href = "/"
+
+            dialog.value = false
+            loading.value.submit = false
+        })
+        .catch(err => {
+            console.error(err)
+            setTimeout(() => status.hideError(), 1000)
+            setTimeout(() => loading.value.submit = false, 2000)
+        })
 }
+
+const {dialog, loading} = useDialogSettings()
 </script>

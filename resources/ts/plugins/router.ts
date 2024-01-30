@@ -8,6 +8,7 @@ import TransfersComponent from "@components/transfers/TransfersComponent.vue"
 import CategoriesComponent from "@components/categories/CategoriesComponent.vue"
 import AccountsComponent from "@components/accounts/AccountsComponent.vue"
 import ChartsComponent from "@components/charts/ChartsComponent.vue"
+import ProfileComponent from "@components/profile/ProfileComponent.vue"
 
 // Extension components
 import ExtensionsComponent from "@components/extensions/ExtensionsComponent.vue"
@@ -50,6 +51,10 @@ const routes: RouteRecordRaw[] = [
     {
         path: "/charts",
         component: ChartsComponent,
+    },
+    {
+        path: "/profile",
+        component: ProfileComponent,
     },
 ]
 

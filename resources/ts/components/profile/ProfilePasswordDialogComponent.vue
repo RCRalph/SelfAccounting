@@ -1,146 +1,168 @@
 <template>
-    <v-dialog v-model="dialog" max-width="800">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined class="mx-3 my-2" width="145" :block="$vuetify.breakpoint.xs" v-on="on" v-bind="attrs">Password</v-btn>
+    <v-dialog
+        v-model="dialog"
+        max-width="400"
+    >
+        <template v-slot:activator="{ props: dialogProps }: any">
+            <v-btn
+                v-bind="dialogProps"
+                variant="outlined"
+                block
+            >
+                Password
+            </v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Password change</v-card-title>
+            <CardTitleWithButtons title="Password update"></CardTitleWithButtons>
 
             <v-card-text>
-                <v-form v-model="canSubmit" ref="form">
-                    <v-row>
-                        <v-col cols="12" md="6" offset-md="3">
+                <v-form
+                    v-model="canSubmit"
+                    ref="$form"
+                >
+                    <v-row no-gutters>
+                        <v-col cols="12">
                             <v-text-field
+                                v-model="passwordData.current.value"
+                                :rules="[
+                                    Validator.password(),
+                                    () => currentPasswordMatch || `Password doesn't match our records`,
+                                ]"
+                                :append-icon="!passwordData.current.show ? 'mdi-eye' : 'mdi-eye-off'"
+                                :type="passwordData.current.show ? 'text' : 'password'"
+                                variant="underlined"
                                 label="Current password"
-                                v-model="data.current_password"
-                                :rules="[
-                                    validation.password(),
-                                    () => currentPasswordMatch || `Password doesn't match our records`
-                                ]"
-                                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                :type="show1 ? 'text' : 'password'"
-                                @click:append="show1 = !show1"
                                 counter
-                                @blur="validate"
+                                @click:append="passwordData.current.show = !passwordData.current.show"
+                                @update:model-value="currentPasswordMatch = true"
+                                @blur="$form?.validate"
                             ></v-text-field>
                         </v-col>
-                    </v-row>
 
-                    <v-row>
-                        <v-col cols="12" md="6">
+                        <v-col cols="12">
                             <v-text-field
+                                v-model="passwordData.new.value"
+                                :rules="[
+                                    Validator.password(),
+                                    password => password != passwordData.current.value || `New password can't be the same as old password`
+                                ]"
+                                :append-icon="!passwordData.new.show ? 'mdi-eye' : 'mdi-eye-off'"
+                                :type="passwordData.new.show ? 'text' : 'password'"
+                                variant="underlined"
                                 label="New password"
-                                v-model="data.new_password"
-                                :rules="[
-                                    validation.password(),
-                                    password => password != data.current_password || `New password can't be the same as old password`
-                                ]"
-                                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                                :type="show2 ? 'text' : 'password'"
-                                @click:append="show2 = !show2"
                                 counter
-                                @blur="validate"
+                                @click:append="passwordData.new.show = !passwordData.new.show"
+                                @blur="$form?.validate"
                             ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="6">
+                        <v-col cols="12">
                             <v-text-field
-                                label="Confirm password"
-                                v-model="data.new_password_confirmation"
+                                v-model="passwordData.confirm.value"
                                 :rules="[
-                                    validation.password(),
-                                    password => password == data.new_password || `Passwords don't match`
+                                    Validator.password(),
+                                    password => password == passwordData.new.value || `Passwords don't match`
                                 ]"
-                                :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-                                :type="show3 ? 'text' : 'password'"
-                                @click:append="show3 = !show3"
+                                :append-icon="!passwordData.confirm.show ? 'mdi-eye' : 'mdi-eye-off'"
+                                :type="passwordData.confirm.show ? 'text' : 'password'"
+                                variant="underlined"
+                                label="Confirm password"
                                 counter
-                                @blur="validate"
+                                @click:append="passwordData.confirm.show = !passwordData.confirm.show"
+                                @blur="$form?.validate"
                             ></v-text-field>
                         </v-col>
                     </v-row>
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading">
-                    Update
-                </v-btn>
-            </v-card-actions>
+            <CardActionsSubmitComponent
+                :loading="!!loading.submit"
+                :can-submit="!!canSubmit"
+                @submit="update"
+            ></CardActionsSubmitComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref } from "vue"
+import type { VForm } from "vuetify/components"
 
-import validation from "&/mixins/validation";
+import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
+import CardActionsSubmitComponent from "@components/global/card/CardActionsSubmitComponent.vue"
 
-export default {
-    mixins: [validation],
-    components: {
-        ErrorSnackbarComponent
-    },
-    data() {
-        return {
-            dialog: false,
-            startData: {
-                current_password: "",
-                new_password: "",
-                new_password_confirmation: ""
-            },
-            data: {},
-            show1: false,
-            show2: false,
-            show3: false,
+import type { UpdatePassword } from "@interfaces/User"
+import { useStatusStore } from "@stores/status"
+import { useDialogSettings } from "@composables/useDialogSettings"
+import Validator from "@classes/Validator"
 
-            currentPasswordMatch: true,
-            error: false,
-            loading: false,
-            canSubmit: false
-        }
-    },
-    watch: {
-        'data.current_password'() {
-            this.currentPasswordMatch = true;
-        }
-    },
-    methods: {
-        update() {
-            this.loading = true;
+const $form = ref<VForm | null>(null)
 
-            axios
-                .post("/web-api/profile/password", this.data)
-                .then(() => {
-                    this.data = _.cloneDeep(this.startData);
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    if (err.response.status == 422 && err.response.data.errors.current_password.includes("Current password doesn't match.")) {
-                        this.currentPasswordMatch = false;
-                        this.$refs.form.validate();
-                        this.loading = false;
-                    }
-                    else {
-                        console.error(err);
-                        setTimeout(() => this.error = true, 1000);
-                        setTimeout(() => this.loading = false, 2000);
-                    }
-                })
+const status = useStatusStore()
+
+function useInformation() {
+    const currentPasswordMatch = ref(true)
+
+    const passwordData = ref<UpdatePassword>({
+        current: {
+            value: "",
+            show: false,
         },
-        toggleShow(index) {
-            this.show[index] = !this.show[index];
+        new: {
+            value: "",
+            show: false,
         },
-        validate() {
-            this.$refs.form.validate();
-        }
-    },
-    mounted() {
-        this.data = _.cloneDeep(this.startData);
+        confirm: {
+            value: "",
+            show: false,
+        },
+    })
+
+    function resetFields() {
+        passwordData.value.current.value = ""
+        passwordData.value.new.value = ""
+        passwordData.value.confirm.value = ""
     }
+
+    async function update() {
+        await $form.value?.validate()
+        if (!canSubmit.value) return
+
+        loading.value.submit = true
+
+        axios.post("/web-api/profile/password", {
+            current_password: passwordData.value.current.value,
+            new_password: passwordData.value.new.value,
+            new_password_confirmation: passwordData.value.confirm.value,
+        })
+            .then(() => {
+                resetFields()
+                status.showSuccess("updated password")
+                dialog.value = false
+                loading.value.submit = false
+            })
+            .catch(err => {
+                if (
+                    err.response.status == 422 &&
+                    err.response.data.errors?.current_password?.includes("validation.current_password")
+                ) {
+                    currentPasswordMatch.value = false
+                    $form.value?.validate()
+                    loading.value.submit = false
+                } else {
+                    console.error(err)
+                    setTimeout(() => status.showError(), 1000)
+                    setTimeout(() => loading.value.submit = false, 2000)
+                }
+            })
+    }
+
+    return {passwordData, currentPasswordMatch, update}
 }
+
+const {canSubmit, dialog, loading} = useDialogSettings()
+const {passwordData, currentPasswordMatch, update} = useInformation()
 </script>

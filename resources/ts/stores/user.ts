@@ -1,13 +1,5 @@
-import {defineStore} from "pinia"
-
-export interface User {
-    admin: boolean
-    darkmode: boolean
-    hide_all_tutorials: boolean
-    id: number
-    profile_picture_link: string
-    username: string
-}
+import { defineStore } from "pinia"
+import type { User } from "@interfaces/User"
 
 interface State {
     data?: User
@@ -20,7 +12,7 @@ export const useUserStore = defineStore("user", {
     getters: {
         username(state: State): string {
             if (state.data == undefined) return ""
-            
+
             return state.data.username.replaceAll(" ", String.fromCharCode(160))
         },
     },
@@ -39,6 +31,13 @@ export const useUserStore = defineStore("user", {
                 throw new Error("Cannot set theme - user is undefined")
             } else {
                 this.data.darkmode = themeName == "dark"
+            }
+        },
+        updateProfilePicture(profilePicture: string) {
+            if (this.data == undefined) {
+                throw new Error("Cannot set profile picture - user is undefined")
+            } else {
+                this.data.profile_picture_link = profilePicture
             }
         },
     },

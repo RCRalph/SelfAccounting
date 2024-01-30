@@ -1,122 +1,134 @@
 <template>
-    <v-dialog v-model="dialog" max-width="800">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined class="mx-3 my-2" width="145" :block="$vuetify.breakpoint.xs" v-on="on" v-bind="attrs">Information</v-btn>
+    <v-dialog
+        v-model="dialog"
+        max-width="400"
+    >
+        <template v-slot:activator="{ props: dialogProps }: any">
+            <v-btn
+                v-bind="dialogProps"
+                variant="outlined"
+                block
+            >
+                Information
+            </v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Profile Information</v-card-title>
+            <CardTitleWithButtons title="Profile information"></CardTitleWithButtons>
 
             <v-card-text>
-                <v-form v-model="canSubmit" ref="form">
+                <v-form
+                    v-model="canSubmit"
+                    ref="$form"
+                >
                     <v-row>
-                        <v-col cols="12" md="6">
+                        <v-col cols="12">
                             <v-text-field
+                                v-model="userData.username"
+                                :rules="[
+                                    Validator.title('Username', 32)
+                                ]"
+                                variant="underlined"
                                 label="Username"
-                                v-model="data.username"
                                 counter="32"
-                                :rules="[validation.username()]"
                             ></v-text-field>
                         </v-col>
 
-                        <v-col cols="12" md="6">
+                        <v-col cols="12">
                             <v-text-field
+                                v-model="userData.email"
+                                :rules="[
+                                    Validator.email(),
+                                    () => emailIsUnique || 'This E-Mail address has already been taken'
+                                ]"
+                                variant="underlined"
                                 type="email"
                                 label="E-Mail address"
-                                v-model="data.email"
                                 counter="64"
-                                :rules="[
-                                    validation.email(),
-                                    () => emailUnique || 'E-Mail has already been taken'
-                                ]"
+                                @update:model-value="emailIsUnique = true"
                             ></v-text-field>
                         </v-col>
                     </v-row>
                 </v-form>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="error" outlined @click="reset" :disabled="loading" class="mx-1" width="85">
-                    Reset
-                </v-btn>
-
-                <v-btn color="success" outlined :disabled="!canSubmit || loading" @click="update" :loading="loading" class="mx-1" width="85">
-                    Update
-                </v-btn>
-            </v-card-actions>
+            <CardActionsResetUpdateComponent
+                :loading="!!loading.submit"
+                :can-submit="!!canSubmit"
+                @reset="reset"
+                @update="update"
+            ></CardActionsResetUpdateComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref } from "vue"
 
-import validation from "&/mixins/validation";
+import type { VForm } from "vuetify/components"
+import type { UserData } from "@interfaces/User"
 
-export default {
-    mixins: [validation],
-    components: {
-        ErrorSnackbarComponent
-    },
-    props: {
-        value: {
-            required: true,
-            type: Object
-        }
-    },
-    data() {
-        return {
-            dialog: false,
-            data: {},
+import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
+import CardActionsResetUpdateComponent from "@components/global/card/CardActionsResetUpdateComponent.vue"
 
-            emailUnique: true,
-            error: false,
-            loading: false,
-            canSubmit: false
-        }
-    },
-    watch: {
-        'data.email'() {
-            this.emailUnique = true;
-        }
-    },
-    methods: {
-        reset() {
-            this.data = {
-                username: this.value.username,
-                email: this.value.email
-            };
-        },
-        update() {
-            this.loading = true;
+import { useStatusStore } from "@stores/status"
+import { useDialogSettings } from "@composables/useDialogSettings"
+import Validator from "@classes/Validator"
 
-            axios
-                .post("/web-api/profile/information", this.data)
-                .then(() => {
-                    this.value.username = this.data.username;
-                    this.value.email = this.data.email;
+const props = defineProps<{
+    modelValue: UserData
+}>()
 
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    if (err.response.status == 422 && err.response.data.errors.email.includes("The email has already been taken.")) {
-                        this.emailUnique = false;
-                        this.$refs.form.validate();
-                        this.loading = false;
-                    }
-                    else {
-                        console.error(err);
-                        setTimeout(() => this.error = true, 1000);
-                        setTimeout(() => this.loading = false, 2000);
-                    }
-                })
-        }
-    },
-    mounted() {
-        this.reset();
+const $form = ref<VForm | null>(null)
+
+const status = useStatusStore()
+
+function useInformation() {
+    const userData = ref({
+        username: props.modelValue.username,
+        email: props.modelValue.email,
+    })
+
+    const emailIsUnique = ref(true)
+
+    function reset() {
+        userData.value.username = props.modelValue.username
+        userData.value.email = props.modelValue.email
     }
+
+    function update() {
+        loading.value.submit = true
+
+        axios.post("/web-api/profile/information", userData.value)
+            .then(() => {
+                props.modelValue.username = userData.value.username
+                props.modelValue.email = userData.value.email
+
+                status.showSuccess("updated profile information")
+
+                dialog.value = false
+                loading.value.submit = false
+            })
+            .catch(err => {
+                if (
+                    err.response.status == 422 &&
+                    err.response.data.errors.email.includes("The email has already been taken.")
+                ) {
+                    emailIsUnique.value = false
+                    $form.value?.validate()
+                    loading.value.submit = false
+                } else {
+                    console.error(err)
+                    setTimeout(() => status.showError(), 1000)
+                    setTimeout(() => loading.value.submit = false, 2000)
+                }
+            })
+    }
+
+    return {userData, emailIsUnique, reset, update}
 }
+
+const {canSubmit, dialog, loading} = useDialogSettings()
+const {emailIsUnique, userData, reset, update} = useInformation()
 </script>
