@@ -1,12 +1,12 @@
 <template>
     <v-btn
         :icon="true"
-        variant="outlined"
         :loading="loading"
         :disabled="loading"
-        @click="toggleTheme"
+        variant="outlined"
         width="48"
         class="ml-4"
+        @click="toggleTheme"
     >
         <v-icon>mdi-theme-light-dark</v-icon>
     </v-btn>
@@ -14,10 +14,10 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import {ref} from "vue"
+import { ref } from "vue"
 import useThemeSettings from "@composables/useThemeSettings"
-import {useUserStore} from "@stores/user"
-import {useStatusStore} from "@stores/status";
+import { useUserStore } from "@stores/user"
+import { useStatusStore } from "@stores/status"
 
 const {themeIsDark, setTheme} = useThemeSettings()
 const user = useUserStore()

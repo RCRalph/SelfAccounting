@@ -6,10 +6,10 @@
         <v-tabs
             v-model="currentChart"
             :height="60"
-            :center-active="true"
-            :show-arrows="true"
-            :stacked="true"
             align-tabs="center"
+            center-active
+            show-arrows
+            stacked
         >
             <v-tab
                 v-for="item in charts"
@@ -28,7 +28,7 @@
     <v-overlay
         v-else
         :model-value="true"
-        :contained="true"
+        contained
     >
         <v-progress-circular
             indeterminate

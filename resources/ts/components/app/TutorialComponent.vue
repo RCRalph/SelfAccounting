@@ -2,7 +2,7 @@
     <v-dialog
         v-model="dialog"
         max-width="800"
-        :persistent="true"
+        persistent
     >
         <v-card>
             <v-card-text

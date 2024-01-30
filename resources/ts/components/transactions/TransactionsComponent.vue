@@ -10,7 +10,7 @@
                 <v-card class="loading-height">
                     <CardTitleWithButtons
                         :title="props.type"
-                        :large-font="true"
+                        large-font
                     ></CardTitleWithButtons>
 
                     <v-card-text>
@@ -35,7 +35,7 @@
     <v-overlay
         v-else
         :model-value="true"
-        :contained="true"
+        contained
     >
         <v-progress-circular
             indeterminate

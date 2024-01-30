@@ -30,11 +30,11 @@
 
                     <v-date-picker
                         v-model="filteredData.dates"
-                        :multiple="true"
                         min="1970-01-01"
                         color="primary"
                         prev-icon="mdi-skip-previous"
                         next-icon="mdi-skip-next"
+                        multiple
                     ></v-date-picker>
                 </v-menu>
 

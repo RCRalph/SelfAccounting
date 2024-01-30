@@ -2,7 +2,7 @@
     <v-dialog
         :model-value="props.modelValue"
         max-width="550"
-        :persistent="true"
+        persistent
     >
         <v-card>
             <v-card-title class="justify-center text-h5 mt-2 font-weight-bold">
@@ -28,11 +28,11 @@
 
                 <v-btn
                     :block="display.smAndDown.value"
-                    :disabled="true"
                     variant="outlined"
                     class="mx-0 my-1"
                     width="80"
                     color="success"
+                    disabled
                     @click="emit('update:modelValue', false)"
                 >
                     Renew
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import {useDisplay} from "vuetify"
+import { useDisplay } from "vuetify"
 
 const display = useDisplay()
 

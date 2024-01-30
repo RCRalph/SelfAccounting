@@ -6,8 +6,8 @@
                 :expand-on-hover="!display.mobile.value"
                 :permanent="!display.mobile.value"
                 :width="288"
-                :absolute="true"
                 style="position: fixed"
+                absolute
                 @click="navigationForceOpen = true"
             >
                 <v-list-item class="pa-2">
@@ -33,7 +33,11 @@
 
                 <v-divider class="my-1"></v-divider>
 
-                <v-list :lines="false" :nav="true" density="comfortable">
+                <v-list
+                    :lines="false"
+                    density="comfortable"
+                    nav
+                >
                     <div v-for="item in drawerItems">
                         <v-list-item
                             :value="item.title"
@@ -54,13 +58,13 @@
                                 v-model:model-value="currencies.usedCurrency"
                                 v-model:focused="currencySelectFocused"
                                 :items="currencies.currencies"
-                                :hide-details="true"
                                 item-title="ISO"
                                 item-value="id"
                                 variant="underlined"
                                 label="Currency"
                                 density="comfortable"
                                 class="py-3"
+                                hide-details
                             ></v-select>
 
                             <ThemeToggleComponent></ThemeToggleComponent>
@@ -129,7 +133,11 @@
             </v-main>
         </div>
 
-        <v-overlay v-else :model-value="true" opacity="1">
+        <v-overlay
+            v-else
+            :model-value="true"
+            opacity="1"
+        >
             <v-progress-circular
                 indeterminate
                 size="128"

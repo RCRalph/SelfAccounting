@@ -11,7 +11,7 @@
                 <v-card class="loading-height">
                     <CardTitleWithButtons
                         :title="`Accounts: ${currencies.usedCurrencyObject.ISO}`"
-                        :large-font="true"
+                        large-font
                     >
                         <AddAccountDialogComponent @added="getData"></AddAccountDialogComponent>
                     </CardTitleWithButtons>
@@ -41,10 +41,10 @@
                             <template v-slot:[`item.used_in_income`]="{ item }">
                                 <v-checkbox-btn
                                     v-model="item.raw.used_in_income"
-                                    :disabled="true"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
+                                    disabled
                                     hide-details
                                 ></v-checkbox-btn>
                             </template>
@@ -52,10 +52,10 @@
                             <template v-slot:[`item.used_in_expenses`]="{ item }">
                                 <v-checkbox-btn
                                     v-model="item.raw.used_in_expenses"
-                                    :disabled="true"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
+                                    disabled
                                     hide-details
                                 ></v-checkbox-btn>
                             </template>
@@ -63,10 +63,10 @@
                             <template v-slot:[`item.show_on_charts`]="{ item }">
                                 <v-checkbox-btn
                                     v-model="item.raw.show_on_charts"
-                                    :disabled="true"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
+                                    disabled
                                     hide-details
                                 ></v-checkbox-btn>
                             </template>
@@ -74,10 +74,10 @@
                             <template v-slot:[`item.count_to_summary`]="{ item }">
                                 <v-checkbox-btn
                                     v-model="item.raw.count_to_summary"
-                                    :disabled="true"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
+                                    disabled
                                     hide-details
                                 ></v-checkbox-btn>
                             </template>
@@ -115,7 +115,7 @@
     <v-overlay
         v-else
         :model-value="true"
-        :contained="true"
+        contained
     >
         <v-progress-circular
             indeterminate

@@ -3,10 +3,10 @@
         <template v-slot:activator="{ props }: any">
             <v-btn
                 v-bind="props"
-                :block="true"
                 variant="plain"
                 color="primary"
                 class="mb-3"
+                block
             >
                 Supported Icon Sets
             </v-btn>

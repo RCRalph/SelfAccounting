@@ -2,7 +2,7 @@
     <v-dialog
         v-model="dialog"
         max-width="300"
-        :persistent="true"
+        persistent
     >
         <template v-slot:activator="{ props }: any">
             <v-btn

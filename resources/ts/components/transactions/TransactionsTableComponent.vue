@@ -6,15 +6,15 @@
         <v-col cols="12" sm="5" lg="4">
             <v-text-field
                 v-model="search.title"
+                :rules="[
+                    Validator.search(64)
+                ]"
                 variant="underlined"
                 append-inner-icon="mdi-magnify"
                 label="Search"
                 density="compact"
-                :single-line="true"
                 counter="64"
-                :rules="[
-                    Validator.search(64)
-                ]"
+                single-line
             ></v-text-field>
         </v-col>
 

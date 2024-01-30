@@ -103,11 +103,11 @@
                                             <v-select
                                                 v-model="currentChart"
                                                 :items="charts"
-                                                :hide-details="true"
                                                 variant="outlined"
                                                 density="compact"
                                                 item-value="id"
                                                 item-title="name"
+                                                hide-details
                                             ></v-select>
                                         </v-col>
                                     </v-row>
@@ -226,7 +226,7 @@
                 <v-card class="loading-height">
                     <CardTitleWithButtons
                         title="Recent transactions"
-                        :large-font="true"
+                        large-font
                     ></CardTitleWithButtons>
 
                     <v-card-text>
@@ -244,7 +244,7 @@
     <v-overlay
         v-else
         :model-value="true"
-        :contained="true"
+        contained
     >
         <v-progress-circular
             indeterminate

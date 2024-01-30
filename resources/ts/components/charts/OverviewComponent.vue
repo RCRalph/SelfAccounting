@@ -2,7 +2,7 @@
     <v-card class="loading-height overview-block">
         <CardTitleWithButtons
             title="Overview"
-            :large-font="true"
+            large-font
         ></CardTitleWithButtons>
 
         <v-card-text>

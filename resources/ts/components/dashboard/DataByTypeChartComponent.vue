@@ -18,7 +18,7 @@
     <v-overlay
         v-else
         :model-value="true"
-        :contained="true"
+        contained
     >
         <v-progress-circular
             indeterminate

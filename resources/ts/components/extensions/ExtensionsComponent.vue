@@ -5,10 +5,10 @@
     >
         <v-tabs
             :height="60"
-            :center-active="true"
             align-tabs="center"
-            :show-arrows="true"
-            :stacked="true"
+            center-active
+            show-arrows
+            stacked
         >
             <v-tab
                 v-for="item in extensions"
@@ -23,7 +23,7 @@
     <v-overlay
         v-else
         :model-value="true"
-        :contained="true"
+        contained
     >
         <v-progress-circular
             indeterminate

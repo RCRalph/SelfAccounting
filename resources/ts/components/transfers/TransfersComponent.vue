@@ -10,8 +10,8 @@
                 <v-card class="loading-height">
                     <CardTitleWithButtons
                         title="Transfers"
-                        :large-font="true"
-                        :extra-bottom="true"
+                        large-font
+                        extra-bottom
                     >
                         <AddTransferDialogComponent
                             @added="getData"
@@ -38,7 +38,7 @@
     <v-overlay
         v-else
         :model-value="true"
-        :contained="true"
+        contained
     >
         <v-progress-circular
             indeterminate
