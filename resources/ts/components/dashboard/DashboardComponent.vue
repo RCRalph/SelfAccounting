@@ -256,7 +256,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, computed, onMounted } from "vue"
-import type { Ref } from "vue"
 
 import type { CurrentBalance } from "@interfaces/Dashboard"
 import type { Chart } from "@interfaces/Chart"
@@ -278,7 +277,7 @@ const formats = useFormats()
 const {themeIsDark} = useThemeSettings()
 
 function useCurrentBalance() {
-    const currentBalance: Ref<CurrentBalance[]> = ref([])
+    const currentBalance = ref<CurrentBalance[]>([])
 
     const currentBalanceSum = computed(() => {
         if (currentBalance.value.length) {
@@ -310,9 +309,9 @@ function useLast30Days() {
 }
 
 function useCharts() {
-    const currentChart: Ref<number | undefined> = ref(undefined)
+    const currentChart = ref<number | undefined>(undefined)
 
-    const charts: Ref<Chart[]> = ref([])
+    const charts = ref<Chart[]>([])
 
     const chartType = computed(() => {
         if (ready.value) {
@@ -330,8 +329,8 @@ function useCharts() {
 }
 
 function useRecentTransactions() {
-    const accounts: Ref<AccountData[]> = ref([])
-    const categories: Ref<CategoryData[]> = ref([])
+    const accounts = ref<AccountData[]>([])
+    const categories = ref<CategoryData[]>([])
 
     return {accounts, categories}
 }

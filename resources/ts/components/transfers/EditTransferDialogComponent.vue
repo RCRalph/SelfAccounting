@@ -194,7 +194,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, computed, watch } from "vue"
-import type { Ref } from "vue"
 import { isNull, cloneDeep } from "lodash"
 
 import type { AccountData } from "@interfaces/Account"
@@ -220,11 +219,11 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function useData() {
-    const transferData: Ref<Transfer | undefined> = ref(undefined)
-    const transferDataCopy: Ref<Transfer | undefined> = ref(undefined)
+    const transferData = ref<Transfer | undefined>(undefined)
+    const transferDataCopy = ref<Transfer | undefined>(undefined)
 
-    const accounts: Ref<Record<number, AccountData[]>> = ref({})
-    const availableCurrencies: Ref<number[]> = ref([])
+    const accounts = ref<Record<number, AccountData[]>>({})
+    const availableCurrencies = ref<number[]>([])
 
     const availableCurrencyData = computed(() => currencies.selectCurrencies(availableCurrencies.value))
 

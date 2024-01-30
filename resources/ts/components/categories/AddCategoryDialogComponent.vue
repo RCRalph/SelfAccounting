@@ -115,7 +115,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, onMounted } from "vue"
-import type { Ref } from "vue"
 import { cloneDeep } from "lodash"
 
 import type { Category } from "@interfaces/Category"
@@ -136,8 +135,8 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useData() {
-    const categoryData: Ref<Category | undefined> = ref(undefined)
-    const commonValues: Ref<Category> = ref({
+    const categoryData = ref<Category | undefined>(undefined)
+    const commonValues = ref<Category>({
         name: undefined,
         icon: null,
         used_in_income: true,

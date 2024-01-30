@@ -145,7 +145,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, computed, onMounted } from "vue"
-import type { Ref } from "vue"
 import { useDisplay } from "vuetify"
 
 import type { MenuItem } from "@interfaces/App"
@@ -197,14 +196,14 @@ function useNavigationDrawer() {
 }
 
 function useTutorials() {
-    const tutorialPaths: Ref<string[]> = ref([])
-    const disabledTutorials: Ref<string[]> = ref([])
+    const tutorialPaths = ref<string[]>([])
+    const disabledTutorials = ref<string[]>([])
 
     return {disabledTutorials, tutorialPaths}
 }
 
 function useMenuItems() {
-    const profileItems: Ref<MenuItem[]> = ref([{
+    const profileItems = ref<MenuItem[]>([{
         title: "View profile",
         icon: "mdi-account",
         link: "/profile",

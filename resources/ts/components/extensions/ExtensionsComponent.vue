@@ -42,10 +42,9 @@ interface Extension {
 
 import axios from "axios"
 import { onMounted, ref } from "vue"
-import type { Ref } from "vue"
 //import {useRoute} from "vue-router"
 
-const extensions: Ref<Extension[]> = ref([{
+const extensions = ref<Extension[]>([{
     code: "store",
     title: "Store",
     icon: "mdi-shopping",

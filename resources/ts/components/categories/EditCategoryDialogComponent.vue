@@ -123,7 +123,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, watch } from "vue"
-import type { Ref } from "vue"
 import { cloneDeep } from "lodash"
 
 import type { Category } from "@interfaces/Category"
@@ -145,8 +144,8 @@ const emit = defineEmits<{
 const status = useStatusStore()
 
 function useData() {
-    const categoryData: Ref<Category | undefined> = ref(undefined)
-    const categoryDataCopy: Ref<Category | undefined> = ref(undefined)
+    const categoryData = ref<Category | undefined>(undefined)
+    const categoryDataCopy = ref<Category | undefined>(undefined)
 
     function getData() {
         if (!dialog.value) return

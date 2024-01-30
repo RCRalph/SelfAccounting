@@ -54,7 +54,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref } from "vue"
-import type { Ref } from "vue"
 
 import { useStatusStore } from "@stores/status"
 import { useDialogSettings } from "@composables/useDialogSettings"
@@ -74,7 +73,7 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 const {dialog, loading} = useDialogSettings()
 
-const currency: Ref<number | undefined> = ref(undefined)
+const currency = ref<number | undefined>(undefined)
 
 function duplicate() {
     const data: Record<string, any> = {}

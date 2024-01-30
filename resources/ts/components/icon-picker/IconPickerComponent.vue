@@ -75,7 +75,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, watch, computed } from "vue"
-import type { Ref } from "vue"
 
 import SupportedIconSetsComponent from "@components/icon-picker/SupportedIconSetsComponent.vue"
 
@@ -97,7 +96,7 @@ const status = useStatusStore()
 const formats = useFormats()
 
 function useData() {
-    const icons: Ref<string[]> = ref([])
+    const icons = ref<string[]>([])
 
     const icon = computed({
         get() {

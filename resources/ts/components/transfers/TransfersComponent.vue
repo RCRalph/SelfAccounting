@@ -50,7 +50,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { onMounted, ref } from "vue"
-import type { Ref } from "vue"
 
 import type { AccountData } from "@interfaces/Account"
 import type { Chart } from "@interfaces/Chart"
@@ -68,8 +67,8 @@ const status = useStatusStore()
 function useData() {
     const ready = ref(false)
 
-    const accounts: Ref<AccountData[]> = ref([])
-    const charts: Ref<Chart[]> = ref([])
+    const accounts = ref<AccountData[]>([])
+    const charts = ref<Chart[]>([])
 
     function getData() {
         ready.value = false

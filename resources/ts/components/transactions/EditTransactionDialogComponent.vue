@@ -203,7 +203,6 @@ import axios from "axios"
 import { round } from "lodash"
 import { cloneDeep, isNull } from "lodash"
 import { ref, computed, watch } from "vue"
-import type { Ref } from "vue"
 
 import type { Transaction } from "@interfaces/Transaction"
 import type { CategoryData } from "@interfaces/Category"
@@ -233,11 +232,11 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function useData() {
-    const transactionData: Ref<Transaction | undefined> = ref(undefined)
-    const transactionDataCopy: Ref<Transaction | undefined> = ref(undefined)
+    const transactionData = ref<Transaction | undefined>(undefined)
+    const transactionDataCopy = ref<Transaction | undefined>(undefined)
 
-    const categories: Ref<CategoryData[]> = ref([])
-    const accounts: Ref<AccountData[]> = ref([])
+    const categories = ref<CategoryData[]>([])
+    const accounts = ref<AccountData[]>([])
 
     const usedAccount = computed(() => {
         const result = accounts.value.find(item => item.id == transactionData.value?.account_id)

@@ -222,7 +222,6 @@
 import axios from "axios"
 import { isNull, round, cloneDeep } from "lodash"
 import { ref, computed, watch } from "vue"
-import type { Ref } from "vue"
 
 import useFormats from "@composables/useFormats"
 import useTitles from "@composables/useTitles"
@@ -252,7 +251,7 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function usePriceModified() {
-    const priceModified: Ref<boolean[]> = ref([])
+    const priceModified = ref<boolean[]>([])
 
     const allPricesModified = computed(() => {
         if (!priceModified.value.length) return true
@@ -268,8 +267,8 @@ function usePriceModified() {
 }
 
 function useData() {
-    const transactionData: Ref<Transaction[]> = ref([])
-    const commonValues: Ref<Transaction> = ref({
+    const transactionData = ref<Transaction[]>([])
+    const commonValues = ref<Transaction>({
         date: currentTimeZoneDate(),
         title: undefined,
         amount: 1,
@@ -278,8 +277,8 @@ function useData() {
         account_id: null,
         currency_id: currencies.usedCurrency,
     })
-    const categories: Ref<CategoryData[]> = ref([])
-    const accounts: Ref<AccountData[]> = ref([])
+    const categories = ref<CategoryData[]>([])
+    const accounts = ref<AccountData[]>([])
 
     const page = ref(0)
 

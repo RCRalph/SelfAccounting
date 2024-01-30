@@ -124,7 +124,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, watch } from "vue"
-import type { Ref } from "vue"
 import { cloneDeep } from "lodash"
 
 import type { Account } from "@interfaces/Account"
@@ -146,8 +145,8 @@ const emit = defineEmits<{
 const status = useStatusStore()
 
 function useData() {
-    const accountData: Ref<Account | undefined> = ref(undefined)
-    const accountDataCopy: Ref<Account | undefined> = ref(undefined)
+    const accountData = ref<Account | undefined>(undefined)
+    const accountDataCopy = ref<Account | undefined>(undefined)
 
     function getData() {
         if (!dialog.value) return

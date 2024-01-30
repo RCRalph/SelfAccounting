@@ -127,7 +127,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, onMounted } from "vue"
-import type { Ref } from "vue"
 
 import type { Category } from "@interfaces/Category"
 
@@ -143,7 +142,7 @@ const formats = useFormats()
 
 function useData() {
     const ready = ref(false)
-    const categories: Ref<Category[]> = ref([])
+    const categories = ref<Category[]>([])
 
     function getData() {
         ready.value = false
