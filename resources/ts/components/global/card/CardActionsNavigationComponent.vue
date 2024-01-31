@@ -2,10 +2,12 @@
     <v-card-actions class="d-flex justify-space-between">
         <div :class="display.mobile.value && 'd-flex flex-wrap flex-column-reverse'">
             <v-btn
+                :disabled="props.dataLength <= 1"
                 class="ma-1"
                 color="error"
                 variant="outlined"
                 icon="mdi-delete"
+                size="40"
                 @click="emit('remove')"
             ></v-btn>
 
@@ -14,6 +16,7 @@
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-collapse-left"
+                size="40"
                 @click="emit('update:page', 0)"
             ></v-btn>
 
@@ -22,6 +25,7 @@
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-left"
+                size="40"
                 @click="emit('update:page', page - 1)"
             ></v-btn>
         </div>
@@ -36,6 +40,7 @@
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-right"
+                size="40"
                 @click="emit('update:page', page + 1)"
             ></v-btn>
 
@@ -44,6 +49,7 @@
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-collapse-right"
+                size="40"
                 @click="emit('update:page', dataLength - 1)"
             ></v-btn>
 
@@ -52,6 +58,7 @@
                 color="primary"
                 variant="outlined"
                 icon="mdi-plus"
+                size="40"
                 @click="emit('add')"
             ></v-btn>
         </div>
