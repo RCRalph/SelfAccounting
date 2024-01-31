@@ -3,9 +3,9 @@
         v-model="dialog"
         max-width="700"
     >
-        <template v-slot:activator="{ props }: any">
+        <template v-slot:activator="{ props: buttonProps }">
             <v-btn
-                v-bind="props"
+                v-bind="buttonProps"
                 variant="outlined"
             >
                 Set common values
@@ -64,9 +64,9 @@
                             >
                                 <template v-slot:append-inner>
                                     <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }: any">
+                                        <template v-slot:activator="{ props: iconProps }">
                                             <v-icon
-                                                v-bind="props"
+                                                v-bind="iconProps"
                                                 class="ml-1"
                                                 icon="mdi-calculator"
                                             ></v-icon>
@@ -92,9 +92,9 @@
                             >
                                 <template v-slot:append-inner>
                                     <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }: any">
+                                        <template v-slot:activator="{ props: iconProps }">
                                             <v-icon
-                                                v-bind="props"
+                                                v-bind="iconProps"
                                                 class="ml-1"
                                                 icon="mdi-calculator"
                                             ></v-icon>
@@ -120,8 +120,8 @@
                                 label="Category"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props }: any">
-                                    <v-list-item v-bind="props">
+                                <template v-slot:item="{ item, props: listItemProps }">
+                                    <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
                                             <v-icon
                                                 v-if="item.raw.icon"
@@ -142,8 +142,8 @@
                                 label="Category"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props }: any">
-                                    <v-list-item v-bind="props">
+                                <template v-slot:item="{ item, props: listItemProps }">
+                                    <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
                                             <v-icon
                                                 v-if="item.raw.icon"

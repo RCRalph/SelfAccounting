@@ -4,9 +4,9 @@
         max-width="300"
         persistent
     >
-        <template v-slot:activator="{ props }: any">
+        <template v-slot:activator="{ props: buttonProps }">
             <v-btn
-                v-bind="props"
+                v-bind="buttonProps"
                 variant="outlined"
                 :append-icon="formats.iconName(icon)"
             >

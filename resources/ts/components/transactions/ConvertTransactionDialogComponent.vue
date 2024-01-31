@@ -3,9 +3,9 @@
         v-model="dialog"
         width="unset"
     >
-        <template v-slot:activator="{ props }: any">
+        <template v-slot:activator="{ props: buttonProps }">
             <v-btn
-                v-bind="props"
+                v-bind="buttonProps"
                 variant="outlined"
             >
                 Convert to {{ target }}
@@ -31,7 +31,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, computed } from "vue"
-import { useDisplay } from "vuetify"
 import { useStatusStore } from "@stores/status"
 
 const props = defineProps<{
@@ -44,7 +43,6 @@ const emit = defineEmits<{
 }>()
 
 const status = useStatusStore()
-const display = useDisplay()
 
 function useDialogSettings() {
     const dialog = ref(false)

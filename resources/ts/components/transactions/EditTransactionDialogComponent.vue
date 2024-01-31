@@ -3,9 +3,9 @@
         v-model="dialog"
         max-width="800"
     >
-        <template v-slot:activator="{props: dialogProps}: any">
+        <template v-slot:activator="{ props: dialogProps }">
             <v-tooltip location="bottom">
-                <template v-slot:activator="{props: tooltipProps}: any">
+                <template v-slot:activator="{ props: tooltipProps }">
                     <v-icon
                         v-bind="{ ...dialogProps, ...tooltipProps }"
                         class="mx-1 cursor-pointer"
@@ -77,9 +77,9 @@
                             >
                                 <template v-slot:append-inner>
                                     <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }: any">
+                                        <template v-slot:activator="{ props: iconProps }">
                                             <v-icon
-                                                v-bind="props"
+                                                v-bind="iconProps"
                                                 class="ml-1"
                                                 icon="mdi-calculator"
                                             ></v-icon>
@@ -105,9 +105,9 @@
                             >
                                 <template v-slot:append-inner>
                                     <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }: any">
+                                        <template v-slot:activator="{ props: iconProps }">
                                             <v-icon
-                                                v-bind="props"
+                                                v-bind="iconProps"
                                                 class="ml-1"
                                                 icon="mdi-calculator"
                                             ></v-icon>
@@ -143,12 +143,10 @@
                                 label="Category"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props }: any">
-                                    <v-list-item v-bind="props">
+                                <template v-slot:item="{ item, props: listItemProps }">
+                                    <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
-                                            <v-icon
-                                                v-if="item.raw.icon"
-                                            >
+                                            <v-icon v-if="item.raw.icon">
                                                 {{ formats.iconName(item.raw.icon) }}
                                             </v-icon>
                                         </template>
@@ -166,12 +164,10 @@
                                 label="Category"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props }: any">
-                                    <v-list-item v-bind="props">
+                                <template v-slot:item="{ item, props: listItemProps }">
+                                    <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
-                                            <v-icon
-                                                v-if="item.raw.icon"
-                                            >
+                                            <v-icon v-if="item.raw.icon">
                                                 {{ formats.iconName(item.raw.icon) }}
                                             </v-icon>
                                         </template>

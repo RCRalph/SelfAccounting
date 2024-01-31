@@ -3,9 +3,9 @@
         v-model="dialog"
         max-width="700"
     >
-        <template v-slot:activator="{props: dialogProps}: any">
+        <template v-slot:activator="{ props: dialogProps }">
             <v-tooltip location="bottom">
-                <template v-slot:activator="{props: tooltipProps}: any">
+                <template v-slot:activator="{ props: tooltipProps }">
                     <v-icon
                         v-bind="{ ...dialogProps, ...tooltipProps }"
                         class="mx-1 cursor-pointer"

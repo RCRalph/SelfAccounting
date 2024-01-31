@@ -3,9 +3,9 @@
         v-model="dialog"
         max-width="400"
     >
-        <template v-slot:activator="{ props: dialogProps }: any">
+        <template v-slot:activator="{ props: buttonProps }">
             <v-btn
-                v-bind="dialogProps"
+                v-bind="buttonProps"
                 variant="outlined"
                 block
             >

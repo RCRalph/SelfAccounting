@@ -49,10 +49,10 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props: buttonProps }">
                         <div class="d-flex justify-end">
                             <v-btn
-                                v-bind="props"
+                                v-bind="buttonProps"
                                 :color="filterColor(filteredData.dates.length)"
                                 :style="filteredData.dates.length && 'opacity: 1'"
                                 icon="mdi-filter"
@@ -98,10 +98,10 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props: buttonProps }">
                         <div class="d-flex justify-end">
                             <v-btn
-                                v-bind="props"
+                                v-bind="buttonProps"
                                 :color="filterColor(filteredData.categories.length)"
                                 :style="filteredData.categories.length && 'opacity: 1'"
                                 icon="mdi-filter"
@@ -145,10 +145,10 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props: buttonProps }">
                         <div class="d-flex justify-end">
                             <v-btn
-                                v-bind="props"
+                                v-bind="buttonProps"
                                 :color="filterColor(filteredData.accounts.length)"
                                 :style="filteredData.accounts.length && 'opacity: 1'"
                                 icon="mdi-filter"

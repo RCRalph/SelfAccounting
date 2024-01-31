@@ -15,10 +15,10 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props: buttonProps }">
                         <div class="d-flex justify-end">
                             <v-btn
-                                v-bind="props"
+                                v-bind="buttonProps"
                                 :color="filterColor(filteredData.dates.length)"
                                 :style="filteredData.dates.length && 'opacity: 1'"
                                 icon="mdi-filter"
@@ -64,10 +64,10 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props: buttonProps }">
                         <div class="d-flex justify-end">
                             <v-btn
-                                v-bind="props"
+                                v-bind="buttonProps"
                                 :color="filterColor(filteredData.source_accounts.length)"
                                 :style="filteredData.source_accounts.length && 'opacity: 1'"
                                 icon="mdi-filter"
@@ -111,10 +111,10 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props: buttonProps }">
                         <div class="d-flex justify-end">
                             <v-btn
-                                v-bind="props"
+                                v-bind="buttonProps"
                                 :color="filterColor(filteredData.target_accounts.length)"
                                 :style="filteredData.target_accounts.length && 'opacity: 1'"
                                 icon="mdi-filter"

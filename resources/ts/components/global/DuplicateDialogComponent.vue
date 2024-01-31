@@ -3,9 +3,9 @@
         v-model="dialog"
         max-width="300"
     >
-        <template v-slot:activator="{props: dialogProps}: any">
+        <template v-slot:activator="{ props: dialogProps }">
             <v-tooltip location="bottom">
-                <template v-slot:activator="{props: tooltipProps}: any">
+                <template v-slot:activator="{ props: tooltipProps }">
                     <v-icon
                         v-bind="{ ...dialogProps, ...tooltipProps }"
                         class="mx-1 cursor-pointer"
@@ -76,7 +76,7 @@ const {dialog, loading} = useDialogSettings()
 const currency = ref<number | undefined>(undefined)
 
 function duplicate() {
-    const data: Record<string, any> = {}
+    const data: Record<string, unknown> = {}
 
     if (props.specifyCurrency) {
         data.currency = currency.value

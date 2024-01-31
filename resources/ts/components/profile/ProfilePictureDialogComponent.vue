@@ -3,7 +3,7 @@
         v-model="dialog"
         max-width="500"
     >
-        <template v-slot:activator="{props: dialogProps}: any">
+        <template v-slot:activator="{ props: dialogProps }">
             <v-hover v-slot="{ isHovering, props: hoverProps }">
                 <v-avatar
                     v-bind="{ ...dialogProps, ...hoverProps }"

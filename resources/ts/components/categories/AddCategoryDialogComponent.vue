@@ -3,9 +3,9 @@
         v-model="dialog"
         max-width="700"
     >
-        <template v-slot:activator="{ props: dialogProps }: any">
+        <template v-slot:activator="{ props }">
             <v-btn
-                v-bind="dialogProps"
+                v-bind="props"
                 variant="outlined"
             >
                 Add category

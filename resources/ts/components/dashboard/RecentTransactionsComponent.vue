@@ -54,7 +54,7 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props }">
                         <div class="d-flex justify-end">
                             <v-btn
                                 v-bind="props"
@@ -103,7 +103,7 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props }">
                         <div class="d-flex justify-end">
                             <v-btn
                                 v-bind="props"
@@ -150,7 +150,7 @@
                     offset-y
                     :close-on-content-click="false"
                 >
-                    <template v-slot:activator="{ props }: any">
+                    <template v-slot:activator="{ props }">
                         <div class="d-flex justify-end">
                             <v-btn
                                 v-bind="props"

@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="dialog" max-width="375">
-        <template v-slot:activator="{ props }: any">
+        <template v-slot:activator="{ props }">
             <v-btn
                 v-bind="props"
                 variant="plain"

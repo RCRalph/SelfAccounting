@@ -3,9 +3,9 @@
         v-model="dialog"
         max-width="700"
     >
-        <template v-slot:activator="{ props: dialogProps }: any">
+        <template v-slot:activator="{ props }">
             <v-btn
-                v-bind="dialogProps"
+                v-bind="props"
                 variant="outlined"
                 class="mx-0"
             >
@@ -59,7 +59,7 @@
                             >
                                 <template v-slot:append-inner>
                                     <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }: any">
+                                        <template v-slot:activator="{ props }">
                                             <v-icon
                                                 v-bind="props"
                                                 class="ml-1"
@@ -83,7 +83,7 @@
                                 label="Account"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props }: any">
+                                <template v-slot:item="{ item, props }">
                                     <v-list-item v-bind="props">
                                         <template v-slot:prepend>
                                             <v-icon v-if="item.raw.icon">
@@ -125,7 +125,7 @@
                             >
                                 <template v-slot:append-inner>
                                     <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }: any">
+                                        <template v-slot:activator="{ props }">
                                             <v-icon
                                                 v-bind="props"
                                                 class="ml-1"
@@ -149,7 +149,7 @@
                                 label="Account"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props }: any">
+                                <template v-slot:item="{ item, props }">
                                     <v-list-item v-bind="props">
                                         <template v-slot:prepend>
                                             <v-icon v-if="item.raw.icon">
@@ -375,7 +375,7 @@ function useActions() {
             throw new Error("Can't update data when it's undefined")
         }
 
-        const data: any = cloneDeep(transferData.value)
+        const data = cloneDeep(transferData.value)
         data.source.value = sourceValue.value.value
         data.target.value = targetValue.value.value
         delete data.source.currency_id

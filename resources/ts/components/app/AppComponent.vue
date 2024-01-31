@@ -76,10 +76,16 @@
                         location="top"
                         transition="slide-x-transition"
                     >
-                        <template v-slot:activator="{ props }: any">
-                            <v-list-item v-bind="props" class="pa-2">
+                        <template v-slot:activator="{ props }">
+                            <v-list-item
+                                v-bind="props"
+                                class="pa-2"
+                            >
                                 <template v-slot:prepend>
-                                    <v-avatar :image="user.data.profile_picture_link" :size="40"></v-avatar>
+                                    <v-avatar
+                                        :image="user.data.profile_picture_link"
+                                        :size="40"
+                                    ></v-avatar>
                                 </template>
 
                                 <div class="d-flex align-center">
