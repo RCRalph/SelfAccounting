@@ -219,8 +219,8 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function useData() {
-    const transferData = ref<Transfer | undefined>(undefined)
-    const transferDataCopy = ref<Transfer | undefined>(undefined)
+    const transferData = ref<Transfer>()
+    const transferDataCopy = ref<Transfer>()
 
     const accounts = ref<Record<number, AccountData[]>>({})
     const availableCurrencies = ref<number[]>([])

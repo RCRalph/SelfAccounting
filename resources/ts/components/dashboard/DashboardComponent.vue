@@ -309,7 +309,7 @@ function useLast30Days() {
 }
 
 function useCharts() {
-    const currentChart = ref<number | undefined>(undefined)
+    const currentChart = ref<number>()
 
     const charts = ref<Chart[]>([])
 

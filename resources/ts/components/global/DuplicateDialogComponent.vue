@@ -73,7 +73,7 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 const {dialog, loading} = useDialogSettings()
 
-const currency = ref<number | undefined>(undefined)
+const currency = ref<number>()
 
 function duplicate() {
     const data: Record<string, unknown> = {}

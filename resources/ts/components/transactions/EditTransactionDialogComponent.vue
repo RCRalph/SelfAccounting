@@ -228,8 +228,8 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function useData() {
-    const transactionData = ref<Transaction | undefined>(undefined)
-    const transactionDataCopy = ref<Transaction | undefined>(undefined)
+    const transactionData = ref<Transaction>()
+    const transactionDataCopy = ref<Transaction>()
 
     const categories = ref<CategoryData[]>([])
     const accounts = ref<AccountData[]>([])

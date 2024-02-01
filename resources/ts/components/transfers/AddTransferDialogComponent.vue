@@ -217,7 +217,7 @@ function useData() {
     const availableCurrencies = ref<number[]>([])
     const availableCurrencyData = computed(() => currencies.selectCurrencies(availableCurrencies.value))
 
-    const transferData = ref<Transfer | undefined>(undefined)
+    const transferData = ref<Transfer>()
 
     const commonValues = ref<Transfer>({
         date: currentTimeZoneDate(),

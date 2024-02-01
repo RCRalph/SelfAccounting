@@ -132,7 +132,7 @@ const user = useUserStore()
 
 function useData() {
     const ready = ref(false)
-    const userData = ref<UserData | undefined>(undefined)
+    const userData = ref<UserData>()
 
     const userTypeColor = computed(() => {
         switch (userData.value?.account_type) {

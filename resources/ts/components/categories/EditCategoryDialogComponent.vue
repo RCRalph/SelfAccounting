@@ -144,8 +144,8 @@ const emit = defineEmits<{
 const status = useStatusStore()
 
 function useData() {
-    const categoryData = ref<Category | undefined>(undefined)
-    const categoryDataCopy = ref<Category | undefined>(undefined)
+    const categoryData = ref<Category>()
+    const categoryDataCopy = ref<Category>()
 
     function getData() {
         if (!dialog.value) return

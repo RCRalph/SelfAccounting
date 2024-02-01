@@ -135,7 +135,7 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useData() {
-    const categoryData = ref<Category | undefined>(undefined)
+    const categoryData = ref<Category>()
     const commonValues = ref<Category>({
         name: undefined,
         icon: null,

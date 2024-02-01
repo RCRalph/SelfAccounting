@@ -86,7 +86,7 @@ const status = useStatusStore()
 const user = useUserStore()
 
 function usePicture() {
-    const picture = ref<File[] | undefined>(undefined)
+    const picture = ref<File[]>()
 
     const pictureSize = computed(() => display.mobile.value ? 100 : 225)
 

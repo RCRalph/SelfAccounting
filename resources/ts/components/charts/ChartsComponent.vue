@@ -52,7 +52,7 @@ const status = useStatusStore()
 function useData() {
     const ready = ref(false)
     const charts = ref<Chart[]>([])
-    const currentChart = ref<number | undefined>(undefined)
+    const currentChart = ref<number>()
 
     function getData() {
         ready.value = false

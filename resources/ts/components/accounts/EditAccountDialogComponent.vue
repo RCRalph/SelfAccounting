@@ -145,8 +145,8 @@ const emit = defineEmits<{
 const status = useStatusStore()
 
 function useData() {
-    const accountData = ref<Account | undefined>(undefined)
-    const accountDataCopy = ref<Account | undefined>(undefined)
+    const accountData = ref<Account>()
+    const accountDataCopy = ref<Account>()
 
     function getData() {
         if (!dialog.value) return

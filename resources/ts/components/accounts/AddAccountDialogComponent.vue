@@ -136,7 +136,7 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useData() {
-    const accountData = ref<Account | undefined>(undefined)
+    const accountData = ref<Account>()
     const commonValues = ref<Account>({
         name: undefined,
         icon: null,
