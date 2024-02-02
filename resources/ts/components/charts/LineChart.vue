@@ -16,11 +16,13 @@ import {
     LineElement,
     Tooltip,
     Legend,
+    type ChartOptions,
+    type ChartData,
+    type Point,
 } from "chart.js"
 
 import "chartjs-adapter-date-fns"
 import { Line } from "vue-chartjs"
-import type { ChartOptions, ChartData, Point } from "chart.js"
 
 ChartJS.register(CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Tooltip, Legend)
 

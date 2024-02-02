@@ -1,5 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router"
-import type { RouteRecordRaw } from "vue-router"
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from "vue-router"
 
 // Components
 import DashboardComponent from "@components/dashboard/DashboardComponent.vue"

@@ -1,14 +1,13 @@
 import { computed, ref } from "vue"
-import type { ComputedRef, Ref } from "vue"
 import type { ChartData, ChartOptions, Point } from "chart.js"
 import useThemeSettings from "@composables/useThemeSettings"
 
 function useDoughnutChartData() {
     const {chartColors} = useThemeSettings()
 
-    const chartData: Ref<ChartData<"doughnut", number[], string> | undefined> = ref(undefined)
+    const chartData = ref<ChartData<"doughnut", number[], string>>()
 
-    const options: ComputedRef<ChartOptions<"doughnut">> = computed(() => ({
+    const options = computed<ChartOptions<"doughnut">>(() => ({
         responsive: true,
         maintainAspectRatio: false,
         circumference: 180,
@@ -29,9 +28,9 @@ function useDoughnutChartData() {
 function useLineChartData() {
     const {chartColors} = useThemeSettings()
 
-    const chartData: Ref<ChartData<"line", Point[], string> | undefined> = ref(undefined)
+    const chartData = ref<ChartData<"line", Point[], string>>()
 
-    const options: ComputedRef<ChartOptions<"line">> = computed(() => ({
+    const options = computed<ChartOptions<"line">>(() => ({
         responsive: true,
         maintainAspectRatio: false,
         scales: {

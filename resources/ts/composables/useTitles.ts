@@ -8,7 +8,7 @@ import { useStatusStore } from "@stores/status"
 
 export default function useTitles(loading: Ref<Loading>, url: string) {
     const status = useStatusStore()
-    const titles: Ref<string[]> = ref([])
+    const titles = ref<string[]>([])
     const titleMenuShow = ref(false)
 
     const {updateWithOffset: getTitles} = useUpdateWithOffset<string | undefined>((args) => {

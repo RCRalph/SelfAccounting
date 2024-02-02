@@ -7,9 +7,15 @@
 </template>
 
 <script setup lang="ts">
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    type ChartOptions,
+    type ChartData,
+} from "chart.js"
 import { Doughnut } from "vue-chartjs"
-import type { ChartOptions, ChartData } from "chart.js"
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 

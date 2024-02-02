@@ -127,8 +127,6 @@
 <script setup lang="ts">
 import axios from "axios"
 import { ref, onMounted } from "vue"
-import type { Ref } from "vue"
-
 import type { Account } from "@interfaces/Account"
 
 import AddAccountDialogComponent from "@components/accounts/AddAccountDialogComponent.vue"
@@ -143,7 +141,7 @@ const formats = useFormats()
 
 function useData() {
     const ready = ref(false)
-    const accounts: Ref<Account[]> = ref([])
+    const accounts = ref<Account[]>([])
 
     function getData() {
         ready.value = false

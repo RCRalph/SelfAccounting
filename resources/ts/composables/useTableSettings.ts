@@ -1,5 +1,4 @@
 import { computed, ref } from "vue"
-import type { Ref } from "vue"
 import type { VDataTable } from "vuetify/components"
 import type { Loading } from "@interfaces/App"
 import type { DataQuery as TransactionDataQuery } from "@interfaces/Transaction"
@@ -80,11 +79,12 @@ export default function useTableSettings() {
         return tableHeaders(accounts, columns)
     }
 
-    const loading: Ref<Loading> = ref({
+    const loading = ref<Loading>({
         table: false,
     })
 
-    const options: Ref<any> = ref({})
+    // https://vuetifyjs.com/en/api/v-data-table/#events-update:options
+    const options = ref<any>({})
 
     const search = ref({
         title: "",

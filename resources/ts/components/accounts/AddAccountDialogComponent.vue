@@ -117,7 +117,6 @@
 import axios from "axios"
 import { ref, onMounted } from "vue"
 import { cloneDeep } from "lodash"
-
 import type { Account } from "@interfaces/Account"
 
 import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
