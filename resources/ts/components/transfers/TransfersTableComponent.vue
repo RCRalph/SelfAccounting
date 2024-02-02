@@ -9,7 +9,7 @@
         density="comfortable"
         multi-sort
     >
-        <template v-slot:[`column.date`]="{column, getSortIcon, isSorted, sortBy}">
+        <template v-slot:[`header.date`]="{ column, getSortIcon, isSorted, sortBy }">
             <div class="d-flex justify-center align-center">
                 <v-menu
                     offset-y
@@ -58,7 +58,7 @@
             </div>
         </template>
 
-        <template v-slot:[`column.source_account`]="{column}">
+        <template v-slot:[`header.source_account`]="{ column }">
             <div class="d-flex justify-center align-center">
                 <v-menu
                     offset-y
@@ -105,7 +105,7 @@
             </div>
         </template>
 
-        <template v-slot:[`column.target_account`]="{column}">
+        <template v-slot:[`header.target_account`]="{ column }">
             <div class="d-flex justify-center align-center">
                 <v-menu
                     offset-y
@@ -152,93 +152,113 @@
             </div>
         </template>
 
-        <template v-slot:[`item`]="{item, index}">
+        <template v-slot:item="{item, index}: {item: TransactionRow, index: number}">
             <tr class="text-center">
                 <td
-                    v-if="item.raw.date.span"
-                    :rowspan="item.raw.date.span"
-                    :class="tableData.isRowHighlighted(index, item.raw.date.span) && 'table-hover-background'"
+                    v-if="tableData.getSpan(index, 'date')"
+                    :rowspan="tableData.getSpan(index, 'date')"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'date')) && 'table-hover-background'"
                     style="white-space: nowrap;"
-                    @mouseover="tableData.setHoveredRows(index, item.raw.date.span)"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'date'))"
                     @mouseleave="tableData.resetHoveredRows()"
                 >
-                    {{ item.raw.date.value }}
+                    {{ item.date }}
                 </td>
 
                 <td
-                    v-if="item.raw.source_value.span"
-                    :rowspan="item.raw.source_value.span"
-                    :class="tableData.isRowHighlighted(index, item.raw.source_value.span) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, item.raw.source_value.span)"
+                    v-if="tableData.getSpan(index, 'title')"
+                    :rowspan="tableData.getSpan(index, 'title')"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'title')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'title'))"
+                    @mouseleave="tableData.resetHoveredRows()"
+                >
+                    {{ item.title }}
+                </td>
+
+                <td
+                    v-if="tableData.getSpan(index, 'amount')"
+                    :rowspan="tableData.getSpan(index, 'amount')"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'amount')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'amount'))"
+                    @mouseleave="tableData.resetHoveredRows()"
+                >
+                    {{ item.amount }}
+                </td>
+
+                <td
+                    v-if="tableData.getSpan(index, 'price')"
+                    :rowspan="tableData.getSpan(index, 'price')"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'price')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'price'))"
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     {{
                         formats.numberWithCurrency(
-                            item.raw.source_value.value,
+                            item.price,
                             currencies.usedCurrencyObject.ISO,
                         )
                     }}
                 </td>
 
                 <td
-                    v-if="item.raw.source_account.span"
-                    :rowspan="item.raw.source_account.span"
+                    v-if="tableData.getSpan(index, 'value')"
+                    :rowspan="tableData.getSpan(index, 'value')"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'value')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'value'))"
+                    @mouseleave="tableData.resetHoveredRows()"
+                >
+                    {{
+                        formats.numberWithCurrency(
+                            item.value,
+                            currencies.usedCurrencyObject.ISO,
+                        )
+                    }}
+                </td>
+
+                <td
+                    v-if="tableData.getSpan(index, 'category')"
+                    :rowspan="tableData.getSpan(index, 'category')"
                     style="max-width: 200px"
-                    :class="tableData.isRowHighlighted(index, item.raw.source_account.span) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, item.raw.source_account.span)"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'category')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'category'))"
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     <div class="d-flex justify-start align-center">
                         <div class="mr-2">
                             <v-icon
-                                v-if="item.raw.source_account.value.icon"
+                                v-if="item.category.icon"
                                 style="min-width: 24px"
                             >
-                                {{ formats.iconName(item.raw.source_account.value.icon) }}
+                                {{ formats.iconName(item.category.icon) }}
                             </v-icon>
                         </div>
 
                         <div class="d-flex justify-center align-center" style="width: 100%">
-                            {{ item.raw.source_account.value.name }}
+                            {{ item.category.name }}
                         </div>
                     </div>
                 </td>
 
                 <td
-                    v-if="item.raw.target_value.span"
-                    :rowspan="item.raw.target_value.span"
-                    :class="tableData.isRowHighlighted(index, item.raw.target_value.span) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, item.raw.target_value.span)"
-                    @mouseleave="tableData.resetHoveredRows()"
-                >
-                    {{
-                        formats.numberWithCurrency(
-                            item.raw.target_value.value,
-                            currencies.usedCurrencyObject.ISO,
-                        )
-                    }}
-                </td>
-
-                <td
-                    v-if="item.raw.target_account.span"
-                    :rowspan="item.raw.target_account.span"
+                    v-if="tableData.getSpan(index, 'account')"
+                    :rowspan="tableData.getSpan(index, 'account')"
                     style="max-width: 200px"
-                    :class="tableData.isRowHighlighted(index, item.raw.target_account.span) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, item.raw.target_account.span)"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'account')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'account'))"
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     <div class="d-flex justify-start align-center">
                         <div class="mr-2">
                             <v-icon
-                                v-if="item.raw.target_account.value.icon"
+                                v-if="item.account.icon"
                                 style="min-width: 24px"
                             >
-                                {{ formats.iconName(item.raw.target_account.value.icon) }}
+                                {{ formats.iconName(item.account.icon) }}
                             </v-icon>
                         </div>
 
                         <div class="d-flex justify-center align-center" style="width: 100%">
-                            {{ item.raw.target_account.value.name }}
+                            {{ item.account.name }}
                         </div>
                     </div>
                 </td>
@@ -250,13 +270,13 @@
                 >
                     <div class="d-flex flex-nowrap justify-center align-center">
                         <EditTransferDialogComponent
-                            :id="item.raw.id.value"
+                            :id="item.id"
                             @updated="emit('updated')"
                         ></EditTransferDialogComponent>
 
                         <DeleteDialogComponent
                             thing="transfer"
-                            :url="`transfers/${item.raw.id.value}`"
+                            :url="`transfers/${item.id}`"
                             @deleted="emit('updated')"
                         ></DeleteDialogComponent>
                     </div>
@@ -287,6 +307,7 @@ import useFormats from "@composables/useFormats"
 import TableDataMerger from "@classes/TableDataMerger"
 import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
+import type { TransactionRow } from "@interfaces/Transaction"
 
 const props = defineProps<{
     accounts: AccountData[]
@@ -314,9 +335,9 @@ function useTableData() {
                 },
             })
             .then(response => {
-                const data = response.data
+                const data: { items: Record<string, any> } = response.data
 
-                tableData.appendData(data.items.data)
+                tableData.append(data.items.data)
 
                 pagination.value.page++
                 pagination.value.last = data.items.last_page
@@ -328,7 +349,7 @@ function useTableData() {
         loading.value.table = true
         pagination.value.page = 1
         pagination.value.last = Infinity
-        tableData.resetData()
+        tableData.reset()
 
         await getData().then(() => loading.value.table = false)
     }

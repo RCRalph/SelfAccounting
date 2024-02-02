@@ -1,72 +1,74 @@
 import _ from "lodash"
 
-import { ref } from "vue"
-import type { Ref } from "vue"
+import { ref, toRef, type Ref } from "vue"
 
-type TableDataType = Record<string, unknown>
+export default class TableDataMerger<T> {
+    public readonly data = ref<T[]>([]) as Ref<T[]>
 
-export default class TableDataMerger<T extends TableDataType> {
-    public data: Ref<Record<string, { value: unknown, span: number }>[]> = ref([])
+    private readonly spans: Map<keyof T, number>[] = []
 
-    // Has to be public because Vue has to watch for changes of these properties in order to highlight rows
-    public hoveredRows = ref({
+    private readonly keyCounters = new Map<keyof T, { counter: number, value: unknown }>()
+
+    private readonly hoveredRows = ref({
         start: Infinity,
         end: -Infinity,
     })
 
-    private keyCounters: Record<string, { counter: number, value: any }> = {}
-
     constructor(
-        private forcedSeparators: string[],
-        private singleSeparators: string[],
+        private readonly forcedSeparators: Array<keyof T>,
+        private readonly singleSeparators: Array<keyof T>,
     ) {
     }
 
     private setKeyCounters(firstRow: T) {
-        this.keyCounters = {}
+        this.keyCounters.clear()
 
         for (let key in firstRow) {
-            this.keyCounters[key] = {
+            this.keyCounters.set(key, {
                 counter: 1,
                 value: undefined,
-            }
+            })
         }
     }
 
-    private shouldSeparate(mustSeparate: boolean, key: string, row: T) {
+    private shouldSeparate(mustSeparate: boolean, row: T, key: keyof T) {
         if (!this.data.value.length) return false
 
-        return mustSeparate
-            || this.singleSeparators.includes(key)
-            || !_.isEqual(row[key], this.keyCounters[key].value)
+        return mustSeparate ||
+            this.singleSeparators.includes(key) ||
+            !_.isEqual(row[key], this.keyCounters.get(key)?.value)
     }
 
-    private changeDataSpan(key: string, value: any) {
-        const index = Math.max(this.data.value.length - this.keyCounters[key].counter - 1, 0)
-        this.data.value[index][key].span = this.keyCounters[key].counter
+    private changeDataSpan(key: keyof T, value: unknown) {
+        const index = Math.max(
+            0,
+            this.data.value.length - (this.keyCounters.get(key)?.counter ?? 0) - 1,
+        )
 
-        this.keyCounters[key].value = value
-        this.keyCounters[key].counter = 1
+        this.spans[index].set(key, this.keyCounters.get(key)?.counter ?? 0)
+
+        if (this.keyCounters.has(key)) {
+            this.keyCounters.get(key)!.value = value
+            this.keyCounters.get(key)!.counter = 1
+        }
     }
 
     private appendDataRow(row: T) {
-        const index = this.data.value.length
-        this.data.value.push({})
+        this.data.value.push(toRef(row).value)
+        this.spans.push(new Map())
 
         for (let key in row) {
-            this.data.value[index][key] = {
-                value: row[key],
-                span: 0,
-            }
+            this.spans[this.spans.length - 1].set(key, 0)
         }
     }
 
-    resetData() {
-        this.data.value = []
-        this.keyCounters = {}
+    reset() {
+        this.data.value.length = 0
+        this.spans.length = 0
+        this.keyCounters.clear()
     }
 
-    appendData(data: T[]) {
+    append(data: T[]) {
         if (!data.length) return this
         else if (!Object.keys(this.keyCounters).length) {
             this.setKeyCounters(data[0])
@@ -75,64 +77,43 @@ export default class TableDataMerger<T extends TableDataType> {
         for (let item of data) {
             this.appendDataRow(item)
 
-            let forceSeparation = false
-            for (let key of this.forcedSeparators) {
-                if (item[key] !== undefined && !_.isEqual(item[key], this.keyCounters[key].value)) {
-                    forceSeparation = true
-                    break
-                }
-            }
+            let forceSeparation = this.forcedSeparators
+                .map(key => item[key] !== undefined && !_.isEqual(item[key], this.keyCounters.get(key)?.value))
+                .reduce((item1, item2) => item1 || item2, false)
 
-            for (let key in this.keyCounters) {
-                if (this.shouldSeparate(forceSeparation, key, item)) {
+            for (let key of this.keyCounters.keys()) {
+                if (this.shouldSeparate(forceSeparation, item, key)) {
                     this.changeDataSpan(key, item[key])
-                } else if (this.data.value.length) {
-                    this.keyCounters[key].counter++
+                } else if (this.keyCounters.has(key)) {
+                    this.keyCounters.get(key)!.counter++
                 }
             }
         }
 
-        for (let key in this.keyCounters) {
-            const index = this.data.value.length - this.keyCounters[key].counter
-            this.data.value[index][key].span = this.keyCounters[key].counter
+        for (let key of this.keyCounters.keys()) {
+            const index = this.data.value.length - (this.keyCounters.get(key)?.counter ?? 0)
+            this.spans[index].set(key, this.keyCounters.get(key)?.counter ?? 0)
         }
 
         return this
     }
 
-    setHoveredRows(start: number, span: number): void {
+    setHoveredRows(start: number, span: number = 0) {
         this.hoveredRows.value.start = start
         this.hoveredRows.value.end = start + span - 1
     }
 
-    resetHoveredRows(): void {
+    resetHoveredRows() {
         this.hoveredRows.value.start = Infinity
         this.hoveredRows.value.end = -Infinity
     }
 
-    isRowHighlighted(start: number, span: number): boolean {
-        // Check if two intervals intersect in O(1) time
+    isRowHighlighted(start: number, span: number = 0) {
+        // Check if two intervals intersect
         return Math.max(this.hoveredRows.value.start, start) <= Math.min(this.hoveredRows.value.end, start + span - 1)
     }
 
-    get tabulatedData(): T[] {
-        const result: T[] = [], previousRow: TableDataType = {}
-
-        if (!this.data.value.length) return result
-
-        for (let item of this.data.value) {
-            const row: TableDataType = {}
-            for (let key in item) {
-                if (item[key].span) {
-                    previousRow[key] = item[key].value
-                }
-
-                row[key] = previousRow[key]
-            }
-
-            result.push(row as T)
-        }
-
-        return result
+    getSpan(index: number, key: keyof T) {
+        return this.spans[index].get(key) ?? 0
     }
 }

@@ -1,6 +1,6 @@
 import type { Icon } from "@interfaces/App"
 
-interface TransactionRow extends Record<string, any> {
+interface TransactionRow {
     id: number
     date: string
     title: string
