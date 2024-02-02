@@ -423,7 +423,7 @@ const {
     transactionQuery,
 } = useTableSettings()
 const {getStartData, getMoreData, tableData, typeSingular} = useTableData()
-const {updateWithOffset} = useUpdateWithOffset<void>(getStartData)
+const {updateWithOffset} = useUpdateWithOffset(getStartData)
 
 watch(options, (_, oldValue) => {
     if (Object.keys(oldValue).length) {

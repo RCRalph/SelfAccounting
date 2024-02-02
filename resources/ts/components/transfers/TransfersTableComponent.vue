@@ -373,7 +373,7 @@ function useTableData() {
 
 const {filterColor, filteredData, transferHeaders, loading, options, pagination, transferQuery} = useTableSettings()
 const {getStartData, getMoreData, tableData} = useTableData()
-const {updateWithOffset} = useUpdateWithOffset<void>(getStartData)
+const {updateWithOffset} = useUpdateWithOffset(getStartData)
 
 watch(options, (_, oldValue) => {
     if (Object.keys(oldValue).length) {

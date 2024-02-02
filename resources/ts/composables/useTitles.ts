@@ -11,7 +11,7 @@ export default function useTitles(loading: Ref<Loading>, url: string) {
     const titles = ref<string[]>([])
     const titleMenuShow = ref(false)
 
-    const {updateWithOffset: getTitles} = useUpdateWithOffset<string | undefined>((args) => {
+    const {updateWithOffset: getTitles} = useUpdateWithOffset((args) => {
         if (!args) return
 
         loading.value.title = true

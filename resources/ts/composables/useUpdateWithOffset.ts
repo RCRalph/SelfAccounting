@@ -1,10 +1,10 @@
-export default function useUpdateWithOffset<T>(
-    callback: (args: T) => void,
+export default function useUpdateWithOffset(
+    callback: (args: unknown) => void,
     timeOffset = 500,
 ) {
     let lastChange = new Date()
 
-    function updateWithOffset(args: T) {
+    function updateWithOffset(args: unknown) {
         lastChange = new Date()
 
         setTimeout(
