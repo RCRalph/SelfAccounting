@@ -57,7 +57,15 @@ class AppController extends Controller
                 ]);
 
                 return [
-                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
+                    "user" => auth()->user()->only(
+                        "id",
+                        "username",
+                        "darkmode",
+                        "profile_picture_link",
+                        "admin",
+                        "hide_all_tutorials",
+                        "account_type"
+                    ),
                     "tutorials" => Tutorial::pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
                     "extensions" => Extension::select("code", "title", "icon", "directory")->orderBy("title")->get(),

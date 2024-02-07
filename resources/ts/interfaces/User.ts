@@ -1,4 +1,5 @@
 interface User {
+    account_type: string
     admin: boolean
     darkmode: boolean
     hide_all_tutorials: boolean
@@ -9,7 +10,6 @@ interface User {
 
 interface UserData extends User {
     since: string
-    account_type: string
     expiration: string
     email: string
 }

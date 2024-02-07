@@ -15,6 +15,13 @@ export const useUserStore = defineStore("user", {
 
             return state.data.username.replaceAll(" ", String.fromCharCode(160))
         },
+        isPremium(state: State): boolean {
+            if (typeof state.data == "undefined") {
+                return false
+            }
+
+            return ["Admin", "Premium"].includes(state.data.account_type)
+        },
     },
     actions: {
         update(newUser: User): User {
