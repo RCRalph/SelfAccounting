@@ -4,7 +4,10 @@
         max-width="700"
     >
         <template v-slot:activator="{ props: dialogProps }">
-            <v-tooltip location="bottom">
+            <v-tooltip
+                text="Edit account"
+                location="bottom"
+            >
                 <template v-slot:activator="{ props: tooltipProps }">
                     <v-icon
                         v-bind="{ ...dialogProps, ...tooltipProps }"
@@ -12,10 +15,6 @@
                         icon="mdi-pencil"
                     ></v-icon>
                 </template>
-
-                <span>
-                    Edit account
-                </span>
             </v-tooltip>
         </template>
 

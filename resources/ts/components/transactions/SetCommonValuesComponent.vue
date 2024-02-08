@@ -63,17 +63,7 @@
                                 label="Amount"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
                         </v-col>
@@ -91,17 +81,7 @@
                                 label="Price"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
                         </v-col>
@@ -185,6 +165,8 @@ import { useDialogSettings } from "@composables/useDialogSettings"
 import useTitles from "@composables/useTitles"
 import Calculator from "@classes/Calculator"
 import Validator from "@classes/Validator"
+
+import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 const props = defineProps<{
     transactionData: Transaction[],

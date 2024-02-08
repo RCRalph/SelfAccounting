@@ -4,7 +4,10 @@
         max-width="700"
     >
         <template v-slot:activator="{ props: dialogProps }">
-            <v-tooltip location="bottom">
+            <v-tooltip
+                text="Edit transfer"
+                location="bottom"
+            >
                 <template v-slot:activator="{ props: tooltipProps }">
                     <v-icon
                         v-bind="{ ...dialogProps, ...tooltipProps }"
@@ -12,10 +15,6 @@
                         icon="mdi-pencil"
                     ></v-icon>
                 </template>
-
-                <span>
-                    Edit transfer
-                </span>
             </v-tooltip>
         </template>
 
@@ -63,17 +62,7 @@
                                 label="Value"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
 
@@ -127,17 +116,7 @@
                                 label="Value"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
 
@@ -205,6 +184,8 @@ import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
 import Calculator from "@classes/Calculator"
 import Validator from "@classes/Validator"
+
+import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 const props = defineProps<{
     id: number

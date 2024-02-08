@@ -74,17 +74,7 @@
                                 label="Amount"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
                         </v-col>
@@ -103,17 +93,7 @@
                                 @input="priceModified[page] = true"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
                         </v-col>
@@ -232,6 +212,7 @@ import { useCurrenciesStore } from "@stores/currencies"
 import Validator from "@classes/Validator"
 
 import SetCommonValuesComponent from "@components/transactions/SetCommonValuesComponent.vue"
+import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 import type { Transaction } from "@interfaces/Transaction"
 import type { CategoryData } from "@interfaces/Category"

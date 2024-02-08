@@ -4,7 +4,10 @@
         max-width="800"
     >
         <template v-slot:activator="{ props: dialogProps }">
-            <v-tooltip location="bottom">
+            <v-tooltip
+                :text="`Edit ${typeSingular}`"
+                location="bottom"
+            >
                 <template v-slot:activator="{ props: tooltipProps }">
                     <v-icon
                         v-bind="{ ...dialogProps, ...tooltipProps }"
@@ -12,10 +15,6 @@
                         icon="mdi-pencil"
                     ></v-icon>
                 </template>
-
-                <span>
-                    Edit {{ typeSingular }}
-                </span>
             </v-tooltip>
         </template>
 
@@ -76,17 +75,7 @@
                                 label="Amount"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
                         </v-col>
@@ -104,17 +93,7 @@
                                 label="Price"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props: iconProps }">
-                                            <v-icon
-                                                v-bind="iconProps"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
                         </v-col>
@@ -205,6 +184,7 @@ import type { CategoryData } from "@interfaces/Category"
 import type { AccountData } from "@interfaces/Account"
 
 import ConvertTransactionDialogComponent from "@components/transactions/ConvertTransactionDialogComponent.vue"
+import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 import useTitles from "@composables/useTitles"
 import { useDialogSettings } from "@composables/useDialogSettings"

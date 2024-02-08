@@ -58,17 +58,7 @@
                                 @input="valueModified.source = true"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }">
-                                            <v-icon
-                                                v-bind="props"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
 
@@ -124,17 +114,7 @@
                                 @input="valueModified.target = true"
                             >
                                 <template v-slot:append-inner>
-                                    <v-tooltip location="bottom">
-                                        <template v-slot:activator="{ props }">
-                                            <v-icon
-                                                v-bind="props"
-                                                class="ml-1"
-                                                icon="mdi-calculator"
-                                            ></v-icon>
-                                        </template>
-
-                                        Supported operations: <strong>+ - * / ^</strong>
-                                    </v-tooltip>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
                                 </template>
                             </v-text-field>
 
@@ -203,6 +183,8 @@ import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
 import Calculator from "@classes/Calculator"
 import Validator from "@classes/Validator"
+
+import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 const emit = defineEmits<{
     added: []
