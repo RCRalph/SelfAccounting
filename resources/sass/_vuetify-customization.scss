@@ -1,4 +1,7 @@
+@use "./vuetify-settings" as settings;
+
 $sticky-panel-margin: 12px;
+$tabs-height: 60px;
 
 .v-application {
     .text-h6 {
@@ -20,12 +23,26 @@ $sticky-panel-margin: 12px;
 
         &.tabs {
             margin: unset;
-        }
 
-        &.tabs > :not(.v-tabs) {
-            margin: $sticky-panel-margin;
+            .v-tabs {
+                --v-tabs-height: #{$tabs-height};
+            }
+
+            & > div:not(.v-tabs) {
+                margin: $sticky-panel-margin;
+                position: relative;
+                min-height: calc(100dvh - $tabs-height - 2 * $sticky-panel-margin);
+
+                &.v-overlay {
+                    min-height: calc(100dvh - $tabs-height);
+                }
+            }
         }
     }
+}
+
+.v-overlay {
+    margin: unset !important;
 }
 
 .cursor-pointer {

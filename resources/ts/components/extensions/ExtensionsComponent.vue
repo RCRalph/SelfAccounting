@@ -4,7 +4,6 @@
         class="tabs"
     >
         <v-tabs
-            :height="60"
             align-tabs="center"
             center-active
             show-arrows

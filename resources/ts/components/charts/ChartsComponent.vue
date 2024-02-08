@@ -5,7 +5,6 @@
     >
         <v-tabs
             v-model="currentChart"
-            :height="60"
             align-tabs="center"
             center-active
             show-arrows
