@@ -1,8 +1,5 @@
 <template>
-    <div
-        v-if="ready"
-        class="tabs"
-    >
+    <div class="tabs">
         <v-tabs
             align-tabs="center"
             center-active
@@ -10,57 +7,29 @@
             stacked
         >
             <v-tab
-                v-for="item in extensions"
+                value="store"
+                prepend-icon="mdi-shopping"
+                to="/extensions"
+            >
+                Store
+            </v-tab>
+
+            <v-tab
+                v-for="item in extensions.enabledExtensions"
                 :value="item.code"
                 :prepend-icon="item.icon"
+                :to="`/extensions/${item.directory}`"
             >
                 {{ item.title }}
             </v-tab>
         </v-tabs>
-    </div>
 
-    <v-overlay
-        v-else
-        :model-value="true"
-        contained
-    >
-        <v-progress-circular
-            indeterminate
-            size="128"
-        ></v-progress-circular>
-    </v-overlay>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script setup lang="ts">
-interface Extension {
-    code: string,
-    title: string,
-    icon: string,
-    directory: string,
-}
+import { useExtensionsStore } from "@stores/extensions"
 
-import axios from "axios"
-import { onMounted, ref } from "vue"
-//import {useRoute} from "vue-router"
-
-const extensions = ref<Extension[]>([{
-    code: "store",
-    title: "Store",
-    icon: "mdi-shopping",
-    directory: "store",
-}])
-const ready = ref(false)
-
-onMounted(() => {
-    ready.value = false
-
-    axios.get("/web-api/extensions")
-        .then(response => {
-            const data = response.data
-
-            extensions.value = extensions.value.concat(data.extensions)
-
-            ready.value = true
-        })
-})
+const extensions = useExtensionsStore()
 </script>

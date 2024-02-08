@@ -289,7 +289,6 @@ onMounted(() => {
             currencies.setCurrencies(data.currencies)
 
             extensions.setExtensions(data.extensions)
-                .setOwnedExtensions(data.ownedExtensions)
 
             premiumExpired.value = data.premiumExpired
 

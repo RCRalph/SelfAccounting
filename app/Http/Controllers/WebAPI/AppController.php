@@ -18,23 +18,7 @@ class AppController extends Controller
     {
         $this->middleware("auth");
     }
-
-    private function getLastUsedCurrencies()
-    {
-        $income = auth()->user()->income()
-            ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
-            ->groupBy("currency_id");
-
-        $expenses = auth()->user()->expenses()
-            ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
-            ->groupBy("currency_id");
-
-        return $income->union($expenses)->get()
-            ->sortByDesc("last_accessed")
-            ->unique("currency_id")
-            ->pluck("currency_id");
-    }
-
+    
     private function showPremiumExpiredDialog()
     {
         if (auth()->user()->account_type != "Normal") {
@@ -68,10 +52,13 @@ class AppController extends Controller
                     ),
                     "tutorials" => Tutorial::pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
-                    "extensions" => Extension::select("code", "title", "icon", "directory")->orderBy("title")->get(),
-                    "ownedExtensions" => Extension::whereIn("code", auth()->user()->extensionCodes)
+                    "extensions" => Extension::select("code", "title", "icon", "directory")
                         ->orderBy("title")
-                        ->pluck("code")
+                        ->get()
+                        ->map(fn($item) => [
+                            ...$item->toArray(),
+                            "enabled" => auth()->user()->extensionCodes->contains($item["code"])
+                        ])
                 ];
             }
         );

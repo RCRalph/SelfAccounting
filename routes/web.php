@@ -129,8 +129,7 @@ Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
         Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");
 
         Route::group(["prefix" => "/{code}", "middleware" => "extension"], function () {
-            Route::post("/toggle", "WebAPI\Extensions\ExtensionsController@toggle")->name("web-api.extensions.code.toggle");
-            Route::post("/toggle-premium", "WebAPI\Extensions\ExtensionsController@togglePremium")->name("web-api.extensions.code.toggle-premium");
+            Route::post("/toggle-enabled", "WebAPI\Extensions\ExtensionsController@toggle")->name("web-api.extensions.code.toggle-enabled");
         });
 
         Route::prefix("/cash/{currency}")->group(function () {

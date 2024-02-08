@@ -1,4 +1,8 @@
-import { createRouter, createWebHashHistory, type RouteRecordRaw } from "vue-router"
+import {
+    createRouter,
+    createWebHashHistory,
+    type RouteRecordRaw,
+} from "vue-router"
 
 // Components
 import DashboardComponent from "@components/dashboard/DashboardComponent.vue"
@@ -11,6 +15,7 @@ import ProfileComponent from "@components/profile/ProfileComponent.vue"
 
 // Extension components
 import ExtensionsComponent from "@components/extensions/ExtensionsComponent.vue"
+import ExtensionsStoreComponent from "@components/extensions/store/ExtensionsStoreComponent.vue"
 
 // Admin components
 import AdminComponent from "@components/admin/AdminComponent.vue"
@@ -61,7 +66,12 @@ const extensionRoutes: RouteRecordRaw[] = [
     {
         path: "/extensions",
         component: ExtensionsComponent,
-        children: [],
+        children: [
+            {
+                path: "",
+                component: ExtensionsStoreComponent,
+            },
+        ],
     },
 ]
 
@@ -91,10 +101,6 @@ export default createRouter({
         ]),
     /*
     {
-        path: "/profile",
-        component: () => import("@components/profile/ProfileComponent.vue"),
-    },
-    {
         path: "/getting-started",
         component: () => import("@components/GettingStartedComponent.vue"),
     },*/
@@ -103,10 +109,6 @@ export default createRouter({
     /*{
         path: "/charts/:id",
         component: () => import("@components/charts/ChartComponent.vue"),
-    },
-    {
-        path: "/extensions/store",
-        component: () => import("@components/extensions/ExtensionsComponent.vue"),
     },
     {
         path: "/extensions/cash",

@@ -1,28 +1,28 @@
-import {defineStore} from "pinia"
-
-export interface Extension {
-    code: string,
-    title: string,
-    icon: string,
-    directory: string
-}
+import { defineStore } from "pinia"
+import type { Extension } from "@interfaces/Extension"
 
 interface State {
     extensions: Extension[],
-    ownedExtensions: string[]
+    extensionMap: Record<string, Extension>
 }
 
 export const useExtensionsStore = defineStore("extensions", {
     state: (): State => ({
         extensions: [],
-        ownedExtensions: [],
+        extensionMap: {},
     }),
     getters: {
-        ownedExtensionsArray(state: State): Extension[] {
-            return state.extensions.filter(item => state.ownedExtensions.includes(item.code))
+        enabledExtensions(state: State) {
+            return state.extensions.filter(item => item.enabled)
         },
-        hasExtension(state: State): (extensionCode: string) => boolean {
-            return code => state.ownedExtensions.includes(code)
+        hasExtension(state: State): (code: string) => boolean {
+            return code => state.extensions
+                .filter(item => item.enabled)
+                .map(item => item.code)
+                .includes(code)
+        },
+        extensionCodes(state: State) {
+            return Object.keys(state.extensionMap)
         },
     },
     actions: {
@@ -32,15 +32,12 @@ export const useExtensionsStore = defineStore("extensions", {
             }
 
             this.extensions = extensions
-            return this
-        },
-        setOwnedExtensions(ownedExtensions: string[]) {
-            if (new Set(ownedExtensions).size != ownedExtensions.length) {
-                throw new Error("Owned extensions have duplicate values")
+            for (let item of this.extensions) {
+                this.extensionMap[item.code] = item
             }
-
-            this.ownedExtensions = ownedExtensions
-            return this
+        },
+        toggleExtensionEnabled(code: string) {
+            this.extensionMap[code].enabled = !this.extensionMap[code].enabled
         },
     },
 })

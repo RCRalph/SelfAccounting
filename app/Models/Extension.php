@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class Extension extends Model
 {
     protected $guarded = [];
 
-    protected $appends = ["thumbnail_link"];
+    protected $appends = ["thumbnail_link", "description_text"];
 
     public function gallery()
     {
@@ -39,6 +40,19 @@ class Extension extends Model
                     config("constants.directories.public.extensions.thumbnail"),
                     $attributes["thumbnail"]
                 );
+            }
+        );
+    }
+
+    protected function descriptionText(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                if (!array_key_exists("description", $attributes)) {
+                    return "";
+                }
+
+                return Storage::disk("local")->get("/files/extensions/descriptions/" . $attributes["description"]);
             }
         );
     }
