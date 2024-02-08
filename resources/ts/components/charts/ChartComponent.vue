@@ -1,66 +1,64 @@
 <template>
-    <div>
-        <v-card
-            v-if="ready"
-            class="chart-card"
-        >
-            <v-card-text class="d-flex justify-center flex-nowrap align-end">
-                <div class="me-2 ms-0" style="width: 145px">
-                    <v-text-field
-                        v-model="start"
-                        :max="end"
-                        type="date"
-                        label="Start"
-                        min="1970-01-01"
-                        variant="underlined"
-                        hide-details
-                    ></v-text-field>
-                </div>
-
-                <div>
-                    <v-icon
-                        icon="mdi-arrow-right-thick"
-                        class="mb-2"
-                    ></v-icon>
-                </div>
-
-                <div class="ms-2 me-0" style="width: 145px">
-                    <v-text-field
-                        v-model="end"
-                        :min="start || '1970-01-01'"
-                        type="date"
-                        label="End"
-                        variant="underlined"
-                        hide-details
-                    ></v-text-field>
-                </div>
-            </v-card-text>
-
-            <div
-                v-if="chartHasData"
-                class="chart-block"
-            >
-                <LineChart
-                    v-if="chart.type == 'line'"
-                    :options="lineOptions"
-                    :data="lineChartData"
-                ></LineChart>
-
-                <DoughnutChart
-                    v-if="chart.type == 'doughnut'"
-                    :options="doughnutOptions"
-                    :data="doughnutChartData"
-                ></DoughnutChart>
+    <v-card
+        v-if="ready"
+        class="chart-card"
+    >
+        <v-card-text class="d-flex justify-center flex-nowrap align-end">
+            <div class="me-2 ms-0" style="width: 145px">
+                <v-text-field
+                    v-model="start"
+                    :max="end"
+                    type="date"
+                    label="Start"
+                    min="1970-01-01"
+                    variant="underlined"
+                    hide-details
+                ></v-text-field>
             </div>
 
-            <div v-else class="text-h6 text-center">No data</div>
-        </v-card>
+            <div>
+                <v-icon
+                    icon="mdi-arrow-right-thick"
+                    class="mb-2"
+                ></v-icon>
+            </div>
 
-        <CardLoadingComponent
-            v-else
-            card-class="chart-card"
-        ></CardLoadingComponent>
-    </div>
+            <div class="ms-2 me-0" style="width: 145px">
+                <v-text-field
+                    v-model="end"
+                    :min="start || '1970-01-01'"
+                    type="date"
+                    label="End"
+                    variant="underlined"
+                    hide-details
+                ></v-text-field>
+            </div>
+        </v-card-text>
+
+        <div
+            v-if="chartHasData"
+            class="chart-block"
+        >
+            <LineChart
+                v-if="chart.type == 'line'"
+                :options="lineOptions"
+                :data="lineChartData"
+            ></LineChart>
+
+            <DoughnutChart
+                v-if="chart.type == 'doughnut'"
+                :options="doughnutOptions"
+                :data="doughnutChartData"
+            ></DoughnutChart>
+        </div>
+
+        <div v-else class="text-h6 text-center">No data</div>
+    </v-card>
+
+    <CardLoadingComponent
+        v-else
+        card-class="chart-card"
+    ></CardLoadingComponent>
 </template>
 
 <script setup lang="ts">
