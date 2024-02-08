@@ -84,7 +84,7 @@
                                 :text="extension.enabled ? 'Disable' : 'Enable'"
                                 :loading="loading.enabled"
                                 :disabled="loading.enabled"
-                                color="amber"
+                                :color="props.extension.enabled ? 'error' : 'success'"
                                 variant="outlined"
                                 block
                                 @click="toggleEnabled"
@@ -101,7 +101,7 @@
                             <v-btn
                                 v-bind="tooltipProps"
                                 text="Enable"
-                                color="amber"
+                                color="success"
                                 variant="outlined"
                                 block
                                 disabled
