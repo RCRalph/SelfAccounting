@@ -8,6 +8,7 @@ interface Loading {
     submit?: boolean
     table?: boolean
     title?: boolean
+    enabled?: boolean
 }
 
 interface Icon {
