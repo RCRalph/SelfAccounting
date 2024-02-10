@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cash;
 use App\Models\User;
 use App\Models\Currency;
+use App\Models\Backup;
 
 use App\Rules\Extensions\Backup\CorrectTransactionDate;
 use App\Rules\Extensions\Backup\CorrectTransferDate;
@@ -58,7 +59,7 @@ class BackupController extends Controller
             $data["restore"]["tooltip"] = "You can only restore a backup 30 days after creating an account.";
         }
 
-        return response()->json(compact("data"));
+        return response()->json(["backup_information" => $data]);
     }
 
     public function create()
@@ -66,7 +67,7 @@ class BackupController extends Controller
         $this->authorize("create", Backup::class);
 
         // Get currency array as ID: ISO
-        $currencies = Currency::all()->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
+        $currencies = Currency::all()->mapWithKeys(fn($item) => [$item["id"] => $item["ISO"]]);
 
         // Gather categories
         $categories = auth()->user()->categories()
@@ -142,12 +143,12 @@ class BackupController extends Controller
                     ->select("currency_id AS currency", "value", "amount")
                     ->get()
                     ->makeHidden("pivot")
-                    ->map(fn ($item) => [ ...$item->toArray(), "currency" => $currencies[$item["currency"]] ]),
+                    ->map(fn($item) => [...$item->toArray(), "currency" => $currencies[$item["currency"]]]),
 
                 "accounts" => auth()->user()->cashAccounts()
                     ->select("currency_id", "account_id")
                     ->get()
-                    ->map(fn ($item) => [
+                    ->map(fn($item) => [
                         "currency" => $currencies[$item->currency_id],
                         "account_id" => $accountIDs[$item->account_id]
                     ])
@@ -161,7 +162,7 @@ class BackupController extends Controller
             ];
 
             foreach (auth()->user()->reports as $report) {
-                array_push($extensions["report"]["reports"], [
+                $extensions["report"]["reports"][] = [
                     ...$report->only("title", "income_addition", "sort_dates_desc", "calculate_sum", "show_columns"),
 
                     "queries" => $report->queries
@@ -199,7 +200,7 @@ class BackupController extends Controller
                         }),
 
                     "users" => $report->sharedUsers()->pluck("email")
-                ]);
+                ];
             }
         }
 
@@ -283,32 +284,28 @@ class BackupController extends Controller
         auth()->user()->transfers()->delete();
 
         // Get currency array as ID: ISO
-        $currencies = Currency::all()->mapWithKeys(fn ($item) => [$item["ISO"] => $item["id"]]);
+        $currencies = Currency::all()->mapWithKeys(fn($item) => [$item["ISO"] => $item["id"]]);
 
         // $categoryIDs is an array which maps the index in the $categories array to the id of a category.
-        $categoryIDs = [ 0 => null ];
+        $categoryIDs = [0 => null];
 
         // Restore categories
         foreach ($categories as $category) {
-            array_push($categoryIDs,
-                auth()->user()->categories()->create([
-                    ...$category,
-                    "currency_id" => $currencies[$category["currency"]]
-                ])->id
-            );
+            $categoryIDs[] = auth()->user()->categories()->create([
+                ...$category,
+                "currency_id" => $currencies[$category["currency"]]
+            ])->id;
         }
 
         // $accountIDs is an array which maps the index in the $accounts array to the id of a account.
-        $accountIDs = [ 0 => null ];
+        $accountIDs = [0 => null];
 
         // Restore accounts
         foreach ($accounts as $account) {
-            array_push($accountIDs,
-                auth()->user()->accounts()->create([
-                    ...$account,
-                    "currency_id" => $currencies[$account["currency"]]
-                ])->id
-            );
+            $accountIDs[] = auth()->user()->accounts()->create([
+                ...$account,
+                "currency_id" => $currencies[$account["currency"]]
+            ])->id;
         }
 
         // Restore income
@@ -408,7 +405,7 @@ class BackupController extends Controller
                     "extensions.report.reports.*.additionalEntries.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
                     "extensions.report.reports.*.additionalEntries.*.title" => ["required", "string", "max:64"],
                     "extensions.report.reports.*.additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-                    "extensions.report.reports.*.additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+                    "extensions.report.reports.*.additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
                     "extensions.report.reports.*.additionalEntries.*.currency" => ["required", "exists:currencies,ISO"],
                     "extensions.report.reports.*.additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount($categories)],
                     "extensions.report.reports.*.additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount($accounts)],

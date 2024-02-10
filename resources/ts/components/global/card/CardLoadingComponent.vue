@@ -1,6 +1,9 @@
 <template>
     <v-card :class="props.cardClass">
-        <v-card-title v-if="props.title">
+        <v-card-title
+            v-if="props.title"
+            :class="props.titleClass"
+        >
             {{ props.title }}
         </v-card-title>
 
@@ -17,6 +20,7 @@
 const props = defineProps<{
     title?: string,
     cardClass?: string
+    titleClass?: string
 }>()
 </script>
 
