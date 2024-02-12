@@ -26,8 +26,8 @@
                     >
                         <v-btn
                             variant="text"
-                            :color="icon == item ? 'primary' : undefined"
-                            @click="icon = item"
+                            :color="model == item ? 'primary' : undefined"
+                            @click="model = item"
                             density="comfortable"
                             :icon="formats.iconName(item)"
                         ></v-btn>
@@ -38,7 +38,7 @@
 
                 <v-form v-model="canSubmit">
                     <v-text-field
-                        v-model="icon"
+                        v-model="model"
                         :rules="[
                             Validator.title('Icon', 64, true)
                         ]"
@@ -48,10 +48,10 @@
                     >
                         <template v-slot:append>
                             <v-icon
-                                v-if="props.modelValue"
+                                v-if="model"
                                 style="min-width: 26px"
                             >
-                                {{ formats.iconName(props.modelValue) }}
+                                {{ formats.iconName(model) }}
                             </v-icon>
                         </template>
                     </v-text-field>
@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref, watch, computed } from "vue"
+import { ref, watch } from "vue"
 
 import SupportedIconSetsComponent from "@components/icon-picker/SupportedIconSetsComponent.vue"
 
@@ -84,28 +84,18 @@ import useFormats from "@composables/useFormats"
 import Validator from "@classes/Validator"
 
 const props = defineProps<{
-    modelValue: string | null
     type: "categories" | "accounts"
 }>()
 
-const emit = defineEmits<{
-    "update:modelValue": [payload: string | null]
-}>()
+const model = defineModel<string | null>({
+    default: null,
+})
 
 const status = useStatusStore()
 const formats = useFormats()
 
 function useData() {
     const icons = ref<string[]>([])
-
-    const icon = computed({
-        get() {
-            return props.modelValue
-        },
-        set(value) {
-            emit("update:modelValue", value)
-        },
-    })
 
     function getData() {
         if (!dialog.value) return
@@ -126,11 +116,11 @@ function useData() {
             })
     }
 
-    return {getData, icon, icons}
+    return {getData, icons}
 }
 
 const {canSubmit, dialog, ready} = useDialogSettings()
-const {getData, icon, icons} = useData()
+const {getData, icons} = useData()
 
 watch(dialog, getData)
 </script>

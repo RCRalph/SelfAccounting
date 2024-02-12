@@ -1,35 +1,35 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.json",
-    "include": [
-        "resources/**/*"
-    ],
-    "compilerOptions": {
-        "strict": true,
-        "allowJs": false,
-        "baseUrl": ".",
-        "target": "ES2021",
-        "paths": {
-            "@sass/*": [
-                "resources/sass/*"
-            ],
-            "@composables/*": [
-                "resources/ts/composables/*"
-            ],
-            "@components/*": [
-                "resources/ts/components/*"
-            ],
-            "@plugins/*": [
-                "resources/ts/plugins/*"
-            ],
-            "@stores/*": [
-                "resources/ts/stores/*"
-            ],
-            "@classes/*": [
-                "resources/ts/classes/*"
-            ],
-            "@interfaces/*": [
-                "resources/ts/interfaces/*"
-            ]
-        }
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "include": [
+    "resources/**/*"
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": false,
+    "baseUrl": ".",
+    "target": "ES2022",
+    "paths": {
+      "@sass/*": [
+        "resources/sass/*"
+      ],
+      "@composables/*": [
+        "resources/ts/composables/*"
+      ],
+      "@components/*": [
+        "resources/ts/components/*"
+      ],
+      "@plugins/*": [
+        "resources/ts/plugins/*"
+      ],
+      "@stores/*": [
+        "resources/ts/stores/*"
+      ],
+      "@classes/*": [
+        "resources/ts/classes/*"
+      ],
+      "@interfaces/*": [
+        "resources/ts/interfaces/*"
+      ]
     }
+  }
 }
