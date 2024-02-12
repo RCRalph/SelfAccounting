@@ -9,7 +9,7 @@
             <v-tab
                 value="store"
                 prepend-icon="mdi-shopping"
-                to="/extensions"
+                to="/extensions/store"
             >
                 Store
             </v-tab>

@@ -69,7 +69,7 @@ const extensionRoutes: RouteRecordRaw[] = [
         component: ExtensionsComponent,
         children: [
             {
-                path: "",
+                path: "store",
                 component: ExtensionsStoreComponent,
             },
             {

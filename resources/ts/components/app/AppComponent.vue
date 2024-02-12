@@ -232,7 +232,7 @@ function useMenuItems() {
             {title: "Categories", icon: "mdi-tag", link: "/categories"},
             {title: "Accounts", icon: "mdi-wallet", link: "/accounts"},
             {title: "Charts", icon: "mdi-chart-bar", link: "/charts"},
-            {title: "Extensions", icon: "mdi-package-variant", link: "/extensions"},
+            {title: "Extensions", icon: "mdi-package-variant", link: "/extensions/store"},
         ]
 
         // Add user-specific entries
