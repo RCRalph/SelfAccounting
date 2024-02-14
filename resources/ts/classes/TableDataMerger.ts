@@ -1,6 +1,6 @@
 import _ from "lodash"
 
-import { ref, toRef, type Ref } from "vue"
+import { ref, type Ref } from "vue"
 
 export default class TableDataMerger<T> {
     public readonly data = ref<T[]>([]) as Ref<T[]>
@@ -54,7 +54,7 @@ export default class TableDataMerger<T> {
     }
 
     private appendDataRow(row: T) {
-        this.data.value.push(toRef(row).value)
+        this.data.value.push(row)
         this.spans.push(new Map())
 
         for (let key in row) {
@@ -70,7 +70,7 @@ export default class TableDataMerger<T> {
 
     append(data: T[]) {
         if (!data.length) return this
-        else if (!Object.keys(this.keyCounters).length) {
+        else if (!this.keyCounters.size) {
             this.setKeyCounters(data[0])
         }
 
