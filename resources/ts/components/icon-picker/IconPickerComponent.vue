@@ -8,7 +8,7 @@
             <v-btn
                 v-bind="buttonProps"
                 variant="outlined"
-                :append-icon="formats.iconName(icon)"
+                :append-icon="formats.iconName(model)"
             >
                 Select Icon
             </v-btn>
