@@ -1,5 +1,5 @@
 <template>
-    <v-row>
+    <v-row v-if="ready && typeof backupInformation != 'undefined'">
         <v-col
             cols="12"
             md="10"
@@ -9,7 +9,7 @@
             xl="4"
             offset-xl="4"
         >
-            <v-card v-if="ready && typeof backupInformation != 'undefined'">
+            <v-card>
                 <CardTitleWithButtons
                     title="Backup"
                     large-font
@@ -69,14 +69,19 @@
                     </v-table>
                 </v-card-text>
             </v-card>
-
-            <CardLoadingComponent
-                v-else
-                title="Backup"
-                title-class="text-h5 text-center"
-            ></CardLoadingComponent>
         </v-col>
     </v-row>
+
+    <v-overlay
+        v-else
+        :model-value="true"
+        contained
+    >
+        <v-progress-circular
+            indeterminate
+            size="128"
+        ></v-progress-circular>
+    </v-overlay>
 </template>
 
 <script setup lang="ts">
@@ -90,7 +95,6 @@ import { useStatusStore } from "@stores/status"
 import { formatDate } from "@composables/useDates"
 import { downloadJSON } from "@composables/useDownload"
 
-import CardLoadingComponent from "@components/global/card/CardLoadingComponent.vue"
 import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
 import RestoreBackupDialogComponent from "@components/extensions/backup/RestoreBackupDialogComponent.vue"
 
