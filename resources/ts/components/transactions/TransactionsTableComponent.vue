@@ -433,11 +433,11 @@ watch(options, (_, oldValue) => {
     }
 })
 
-watch(search, updateWithOffset as () => void, {
+watch(search, updateWithOffset, {
     deep: true,
 })
 
-watch(filteredData, updateWithOffset as () => void, {
+watch(filteredData, updateWithOffset, {
     deep: true,
 })
 

@@ -4,7 +4,7 @@ export default function useUpdateWithOffset(
 ) {
     let lastChange = new Date()
 
-    function updateWithOffset(args: unknown) {
+    function updateWithOffset(args?: unknown) {
         lastChange = new Date()
 
         setTimeout(

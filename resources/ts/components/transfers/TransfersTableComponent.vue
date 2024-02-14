@@ -309,7 +309,6 @@ import useFormats from "@composables/useFormats"
 import TableDataMerger from "@classes/TableDataMerger"
 import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
-import type { TransactionRow } from "@interfaces/Transaction"
 
 const props = defineProps<{
     accounts: AccountData[]
@@ -383,7 +382,7 @@ watch(options, (_, oldValue) => {
     }
 })
 
-watch(filteredData, updateWithOffset as () => void, {
+watch(filteredData, updateWithOffset, {
     deep: true,
 })
 
