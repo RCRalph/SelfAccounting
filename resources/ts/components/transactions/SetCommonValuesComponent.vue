@@ -119,7 +119,7 @@
                                 :items="accounts"
                                 item-title="name"
                                 item-value="id"
-                                label="Category"
+                                label="Account"
                                 variant="underlined"
                             >
                                 <template v-slot:item="{ item, props: listItemProps }">
