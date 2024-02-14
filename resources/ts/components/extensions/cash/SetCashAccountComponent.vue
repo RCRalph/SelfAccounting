@@ -1,101 +1,86 @@
 <template>
-    <v-dialog v-model="dialog" max-width="500">
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined v-bind="attrs" v-on="on">Set account</v-btn>
+    <v-dialog
+        v-model="dialog"
+        max-width="500"
+        persistent
+    >
+        <template v-slot:activator="{ props: dialogProps }">
+            <v-btn
+                v-bind="dialogProps"
+                variant="outlined"
+                text="Set account"
+            ></v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Set Account Of Payment</v-card-title>
+            <CardTitleWithButtons title="Set Account Of Payment"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-select
-                    v-model="cashAccount"
-                    :items="accounts"
-                    item-text="name"
+                    v-model="model"
+                    :items="props.accounts"
+                    item-title="name"
                     item-value="id"
                     label="Account"
                 >
-                    <template v-slot:item="{ item }">
-                        <v-list-item-icon v-if="item.icon">
-                            <v-icon>{{ item.icon }}</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                            <v-list-item-title>{{ item.name }}</v-list-item-title>
-                        </v-list-item-content>
+                    <template v-slot:item="{ item, props: listItemProps }">
+                        <v-list-item v-bind="listItemProps">
+                            <template v-slot:prepend>
+                                <v-icon v-if="item.raw.icon">
+                                    {{ formats.iconName(item.raw.icon) }}
+                                </v-icon>
+                            </template>
+                        </v-list-item>
                     </template>
                 </v-select>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-around">
-                <v-btn color="success" outlined :disabled="loading" @click="submit" :loading="loading">
-                    Submit
-                </v-btn>
-            </v-card-actions>
+            <CardActionsSubmitComponent
+                :can-submit="true"
+                :loading="loading.submit"
+                @submit="submit"
+            ></CardActionsSubmitComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
 
-import { useCurrenciesStore } from "&/stores/currencies";
+import type { Account } from "@interfaces/Cash"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import { useDialogSettings } from "@composables/useDialogSettings"
+import { useCurrenciesStore } from "@stores/currencies"
+import { useStatusStore } from "@stores/status"
+import useFormats from "@composables/useFormats"
 
-        return { currencies };
-    },
-    components: {
-        ErrorSnackbarComponent
-    },
-    props: {
-        value: {
-            required: false,
-            type: Number
-        },
-        accounts: {
-            required: true,
-            type: Array
-        }
-    },
-    data() {
-        return {
-            dialog: false,
-            cashAccount: null,
-            error: false,
-            loading: false
-        }
-    },
-    watch: {
-        value() {
-            this.cashAccount = this.value;
-        }
-    },
-    methods: {
-        submit() {
-            this.loading = true;
+const model = defineModel<number>()
 
-            axios
-                .post(`/web-api/extensions/cash/${this.currencies.usedCurrency}`, { account: this.cashAccount })
-                .then(() => {
-                    this.$emit("input", this.cashAccount)
-                    this.$emit("updated");
-                    this.dialog = false;
-                    this.loading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                    setTimeout(() => this.error = true, 1000);
-                    setTimeout(() => this.loading = false, 2000);
-                })
-        }
-    },
-    mounted() {
-        this.cashAccount = this.value;
-    }
+const props = defineProps<{
+    accounts: Account[]
+}>()
+
+const currencies = useCurrenciesStore()
+const status = useStatusStore()
+
+function submit() {
+    loading.value.submit = true
+
+    axios.post(`/web-api/extensions/cash/${currencies.usedCurrency}`, {
+        account: model.value,
+    })
+        .then(() => {
+            dialog.value = false
+            loading.value.submit = false
+            status.showSuccess("updated account")
+        })
+        .catch(err => {
+            console.error(err)
+            setTimeout(() => status.showError(), 1000)
+            setTimeout(() => loading.value.submit = false, 2000)
+        })
 }
+
+const formats = useFormats()
+const {dialog, loading} = useDialogSettings()
 </script>
