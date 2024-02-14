@@ -11,16 +11,43 @@ interface HeaderData {
     sortable?: boolean,
 }
 
+interface TableHeadersParameters {
+    excludedColumns?: Set<string>
+    appendActions?: boolean
+    prependCurrency?: boolean,
+    disableSort?: boolean
+}
+
 export default function useTableSettings() {
-    function tableHeaders(
-        headers: HeaderData[],
-        columns: string[] | true,
-    ): VDataTable["headers"] {
-        return (
-            columns === true ?
-                headers :
-                headers.filter(item => columns.includes(item.key))
-        ) as VDataTable["headers"]
+    function tableHeaders(headers: HeaderData[], parameters: TableHeadersParameters) {
+        headers = headers.filter(item => !parameters.excludedColumns?.has(item.key))
+
+        if (parameters.disableSort) {
+            headers = headers.map(item => ({
+                ...item,
+                sortable: false,
+            }))
+        }
+
+        if (parameters.prependCurrency) {
+            headers.unshift({
+                title: "Currency",
+                key: "currency",
+                align: "center",
+                sortable: false,
+            })
+        }
+
+        if (parameters.appendActions) {
+            headers.push({
+                title: "Actions",
+                key: "actions",
+                align: "center",
+                sortable: false,
+            })
+        }
+
+        return headers as VDataTable["headers"]
     }
 
     const transactions: HeaderData[] = [
@@ -31,11 +58,10 @@ export default function useTableSettings() {
         {title: "Value", key: "value", align: "center"},
         {title: "Category", key: "category", align: "center", sortable: false},
         {title: "Account", key: "account", align: "center", sortable: false},
-        {title: "Actions", key: "actions", align: "center", sortable: false},
     ]
 
-    function transactionHeaders(columns: string[] | true = true): VDataTable["headers"] {
-        return tableHeaders(transactions, columns)
+    function transactionHeaders(parameters: TableHeadersParameters = {}): VDataTable["headers"] {
+        return tableHeaders(transactions, parameters)
     }
 
     const transfers: HeaderData[] = [
@@ -44,11 +70,10 @@ export default function useTableSettings() {
         {title: "Source account", key: "source_account", align: "center", sortable: false},
         {title: "Target value", key: "target_value", align: "center"},
         {title: "Target account", key: "target_account", align: "center", sortable: false},
-        {title: "Actions", key: "actions", align: "center", sortable: false},
     ]
 
-    function transferHeaders(columns: string[] | true = true): VDataTable["headers"] {
-        return tableHeaders(transfers, columns)
+    function transferHeaders(parameters: TableHeadersParameters = {}): VDataTable["headers"] {
+        return tableHeaders(transfers, parameters)
     }
 
     const categories: HeaderData[] = [
@@ -58,11 +83,12 @@ export default function useTableSettings() {
         {title: "Show in expenses", key: "used_in_expenses", align: "center", sortable: false},
         {title: "Show on charts", key: "show_on_charts", align: "center", sortable: false},
         {title: "Count to summary", key: "count_to_summary", align: "center", sortable: false},
-        {title: "Actions", key: "actions", align: "center", sortable: false},
+        {title: "Start date", key: "start_date", align: "center", sortable: false},
+        {title: "End date", key: "end_date", align: "center", sortable: false},
     ]
 
-    function categoryHeaders(columns: string[] | true = true): VDataTable["headers"] {
-        return tableHeaders(categories, columns)
+    function categoryHeaders(parameters: TableHeadersParameters = {}): VDataTable["headers"] {
+        return tableHeaders(categories, parameters)
     }
 
     const accounts: HeaderData[] = [
@@ -72,11 +98,12 @@ export default function useTableSettings() {
         {title: "Show in expenses", key: "used_in_expenses", align: "center", sortable: false},
         {title: "Show on charts", key: "show_on_charts", align: "center", sortable: false},
         {title: "Count to summary", key: "count_to_summary", align: "center", sortable: false},
-        {title: "Actions", key: "actions", align: "center", sortable: false},
+        {title: "Start date", key: "start_date", align: "center", sortable: false},
+        {title: "Start balance", key: "start_balance", align: "center", sortable: false},
     ]
 
-    function accountHeaders(columns: string[] | true = true): VDataTable["headers"] {
-        return tableHeaders(accounts, columns)
+    function accountHeaders(parameters: TableHeadersParameters = {}): VDataTable["headers"] {
+        return tableHeaders(accounts, parameters)
     }
 
     const loading = ref<Loading>({

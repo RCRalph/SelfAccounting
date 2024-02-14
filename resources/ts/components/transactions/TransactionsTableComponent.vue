@@ -35,7 +35,9 @@
 
     <v-data-table
         v-model:options="options"
-        :headers="transactionHeaders()"
+        :headers="transactionHeaders({
+            appendActions: true
+        })"
         :items="tableData.data.value"
         :loading="loading.table"
         :items-per-page="-1"

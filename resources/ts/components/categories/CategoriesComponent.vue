@@ -19,14 +19,17 @@
                     <v-card-text>
                         <v-data-table
                             v-model:options="options"
-                            :headers="categoryHeaders()"
+                            :headers="categoryHeaders({
+                                excludedColumns: new Set(['start_date', 'end_date']),
+                                appendActions: true
+                            })"
                             :items="categories"
                             :items-per-page="-1"
                             density="comfortable"
                         >
                             <template v-slot:[`item.icon`]="{ item }">
-                                <v-icon v-if="item.raw.icon">
-                                    {{ formats.iconName(item.raw.icon) }}
+                                <v-icon v-if="item.icon">
+                                    {{ formats.iconName(item.icon) }}
                                 </v-icon>
 
                                 <span v-else>
@@ -35,12 +38,12 @@
                             </template>
 
                             <template v-slot:[`item.name`]="{ item }">
-                                <span style="white-space: nowrap">{{ item.raw.name }}</span>
+                                <span style="white-space: nowrap">{{ item.name }}</span>
                             </template>
 
                             <template v-slot:[`item.used_in_income`]="{ item }">
                                 <v-checkbox-btn
-                                    v-model="item.raw.used_in_income"
+                                    v-model="item.used_in_income"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
@@ -51,7 +54,7 @@
 
                             <template v-slot:[`item.used_in_expenses`]="{ item }">
                                 <v-checkbox-btn
-                                    v-model="item.raw.used_in_expenses"
+                                    v-model="item.used_in_expenses"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
@@ -62,7 +65,7 @@
 
                             <template v-slot:[`item.show_on_charts`]="{ item }">
                                 <v-checkbox-btn
-                                    v-model="item.raw.show_on_charts"
+                                    v-model="item.show_on_charts"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
@@ -73,7 +76,7 @@
 
                             <template v-slot:[`item.count_to_summary`]="{ item }">
                                 <v-checkbox-btn
-                                    v-model="item.raw.count_to_summary"
+                                    v-model="item.count_to_summary"
                                     direction="vertical"
                                     class="d-flex justify-center"
                                     false-icon="mdi-close"
@@ -85,19 +88,19 @@
                             <template v-slot:[`item.actions`]="{ item }">
                                 <div class="d-flex flex-nowrap justify-center align-center">
                                     <EditCategoryDialogComponent
-                                        :id="item.raw.id"
+                                        :id="item.id"
                                         @updated="getData"
                                     ></EditCategoryDialogComponent>
 
                                     <DuplicateDialogComponent
-                                        :url="`categories/category/${item.raw.id}/duplicate`"
+                                        :url="`categories/category/${item.id}/duplicate`"
                                         thing="category"
                                         :specify-currency="true"
                                         @duplicated="getData"
                                     ></DuplicateDialogComponent>
 
                                     <DeleteDialogComponent
-                                        :url="`categories/category/${item.raw.id}`"
+                                        :url="`categories/category/${item.id}`"
                                         thing="category"
                                         @deleted="getData"
                                     ></DeleteDialogComponent>

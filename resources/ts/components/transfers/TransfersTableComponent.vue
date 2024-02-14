@@ -1,7 +1,9 @@
 <template>
     <v-data-table
         v-model:options="options"
-        :headers="transferHeaders()"
+        :headers="transferHeaders({
+            appendActions: true
+        })"
         :items="tableData.data.value"
         :loading="loading.table"
         :items-per-page="-1"
@@ -152,7 +154,7 @@
             </div>
         </template>
 
-        <template v-slot:item="{item, index}: {item: TransactionRow, index: number}">
+        <template v-slot:item="{item, index}">
             <tr class="text-center">
                 <td
                     v-if="tableData.getSpan(index, 'date')"
