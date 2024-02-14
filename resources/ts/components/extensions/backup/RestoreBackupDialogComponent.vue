@@ -241,6 +241,7 @@ function useRestore() {
                 emit("restore")
                 dialog.value = false
                 file.value.length = 0
+                status.showSuccess("restored backup")
             })
             .catch(err => {
                 console.error(err)
