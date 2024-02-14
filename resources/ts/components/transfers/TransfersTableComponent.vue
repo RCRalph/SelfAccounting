@@ -168,99 +168,79 @@
                 </td>
 
                 <td
-                    v-if="tableData.getSpan(index, 'title')"
-                    :rowspan="tableData.getSpan(index, 'title')"
-                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'title')) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'title'))"
-                    @mouseleave="tableData.resetHoveredRows()"
-                >
-                    {{ item.title }}
-                </td>
-
-                <td
-                    v-if="tableData.getSpan(index, 'amount')"
-                    :rowspan="tableData.getSpan(index, 'amount')"
-                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'amount')) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'amount'))"
-                    @mouseleave="tableData.resetHoveredRows()"
-                >
-                    {{ item.amount }}
-                </td>
-
-                <td
-                    v-if="tableData.getSpan(index, 'price')"
-                    :rowspan="tableData.getSpan(index, 'price')"
-                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'price')) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'price'))"
+                    v-if="tableData.getSpan(index, 'source_value')"
+                    :rowspan="tableData.getSpan(index, 'source_value')"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'source_value')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'source_value'))"
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     {{
                         formats.numberWithCurrency(
-                            item.price,
-                            currencies.usedCurrencyObject.ISO,
+                            item.source_value,
+                            item.source_account.currency,
                         )
                     }}
                 </td>
 
                 <td
-                    v-if="tableData.getSpan(index, 'value')"
-                    :rowspan="tableData.getSpan(index, 'value')"
-                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'value')) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'value'))"
-                    @mouseleave="tableData.resetHoveredRows()"
-                >
-                    {{
-                        formats.numberWithCurrency(
-                            item.value,
-                            currencies.usedCurrencyObject.ISO,
-                        )
-                    }}
-                </td>
-
-                <td
-                    v-if="tableData.getSpan(index, 'category')"
-                    :rowspan="tableData.getSpan(index, 'category')"
+                    v-if="tableData.getSpan(index, 'source_account')"
+                    :rowspan="tableData.getSpan(index, 'source_account')"
                     style="max-width: 200px"
-                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'category')) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'category'))"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'source_account')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'source_account'))"
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     <div class="d-flex justify-start align-center">
                         <div class="mr-2">
                             <v-icon
-                                v-if="item.category.icon"
+                                v-if="item.source_account.icon"
                                 style="min-width: 24px"
                             >
-                                {{ formats.iconName(item.category.icon) }}
+                                {{ formats.iconName(item.source_account.icon) }}
                             </v-icon>
                         </div>
 
                         <div class="d-flex justify-center align-center" style="width: 100%">
-                            {{ item.category.name }}
+                            {{ item.source_account.name }}
                         </div>
                     </div>
                 </td>
 
                 <td
-                    v-if="tableData.getSpan(index, 'account')"
-                    :rowspan="tableData.getSpan(index, 'account')"
+                    v-if="tableData.getSpan(index, 'target_value')"
+                    :rowspan="tableData.getSpan(index, 'target_value')"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'target_value')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'target_value'))"
+                    @mouseleave="tableData.resetHoveredRows()"
+                >
+                    {{
+                        formats.numberWithCurrency(
+                            item.target_value,
+                            item.target_account.currency,
+                        )
+                    }}
+                </td>
+
+                <td
+                    v-if="tableData.getSpan(index, 'target_account')"
+                    :rowspan="tableData.getSpan(index, 'target_account')"
                     style="max-width: 200px"
-                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'account')) && 'table-hover-background'"
-                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'account'))"
+                    :class="tableData.isRowHighlighted(index, tableData.getSpan(index, 'target_account')) && 'table-hover-background'"
+                    @mouseover="tableData.setHoveredRows(index, tableData.getSpan(index, 'target_account'))"
                     @mouseleave="tableData.resetHoveredRows()"
                 >
                     <div class="d-flex justify-start align-center">
                         <div class="mr-2">
                             <v-icon
-                                v-if="item.account.icon"
+                                v-if="item.target_account.icon"
                                 style="min-width: 24px"
                             >
-                                {{ formats.iconName(item.account.icon) }}
+                                {{ formats.iconName(item.target_account.icon) }}
                             </v-icon>
                         </div>
 
                         <div class="d-flex justify-center align-center" style="width: 100%">
-                            {{ item.account.name }}
+                            {{ item.target_account.name }}
                         </div>
                     </div>
                 </td>
