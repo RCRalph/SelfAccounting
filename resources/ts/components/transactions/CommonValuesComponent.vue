@@ -8,12 +8,12 @@
                 v-bind="buttonProps"
                 variant="outlined"
             >
-                Set common values
+                Common values
             </v-btn>
         </template>
 
         <v-card>
-            <CardTitleWithButtons title="Set common values"></CardTitleWithButtons>
+            <CardTitleWithButtons title="Common values"></CardTitleWithButtons>
 
             <v-card-text>
                 <v-form v-model="canUpdate">

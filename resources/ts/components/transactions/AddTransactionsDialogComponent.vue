@@ -14,7 +14,7 @@
 
         <v-card v-if="ready">
             <CardTitleWithButtons :title="`Add ${props.type}`">
-                <SetCommonValuesComponent
+                <CommonValuesComponent
                     v-model:transaction-data="transactionData"
                     v-model:common-values="commonValues"
                     :categories="categories"
@@ -23,7 +23,7 @@
                     :disable-update="!!loading.submit"
                     :titles="titles"
                     @price-change="commonValuesPriceChange"
-                ></SetCommonValuesComponent>
+                ></CommonValuesComponent>
             </CardTitleWithButtons>
 
             <v-card-text v-if="transactionData.length">
@@ -211,7 +211,7 @@ import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import Validator from "@classes/Validator"
 
-import SetCommonValuesComponent from "@components/transactions/SetCommonValuesComponent.vue"
+import CommonValuesComponent from "@components/transactions/CommonValuesComponent.vue"
 import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 import type { Transaction } from "@interfaces/Transaction"
