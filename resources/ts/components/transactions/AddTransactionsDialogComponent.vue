@@ -394,7 +394,10 @@ function useActions() {
 
         axios.post(`/web-api/${props.type}/currency/${currencies.usedCurrency}`, {
             data,
-            //cash: cashArray
+            cash: Object.keys(cash.value).map(key => ({
+                id: key,
+                amount: cash.value[key],
+            })),
         })
             .then(() => {
                 emit("added")
