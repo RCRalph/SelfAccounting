@@ -48,12 +48,8 @@
                                 <v-text-field
                                     v-model="model[id]"
                                     :rules="[
-                                        Validator.cash(
-                                        model[id],
-                                        props.type,
-                                        true,
-                                        true
-                                    )]"
+                                        Validator.cash(ownedCash[id], props.type)
+                                    ]"
                                     label="Amount"
                                     variant="underlined"
                                 ></v-text-field>
@@ -241,13 +237,13 @@ function useCash() {
             })
     }
 
-    return {ready, cash, cashAccount, sum, differenceColor, getData}
+    return {ready, cash, cashAccount, ownedCash, sum, differenceColor, getData}
 }
 
 const format = useFormats()
 const {xs, smAndUp} = useDisplay()
 const {dialog, loading, canSubmit} = useDialogSettings()
-const {ready, cash, cashAccount, sum, differenceColor, getData} = useCash()
+const {ready, cash, cashAccount, ownedCash, sum, differenceColor, getData} = useCash()
 
 watch(() => props.sumByAccount, () => {
     if (typeof props.sumByAccount[cashAccount.value] == "undefined") {

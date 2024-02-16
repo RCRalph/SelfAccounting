@@ -54,12 +54,7 @@
                                     >
                                         <v-text-field
                                             v-model="ownedCash[id]"
-                                            :rules="[Validator.cash(
-                                                ownedCash[id],
-                                                'income',
-                                                true,
-                                                true
-                                            )]"
+                                            :rules="[Validator.cash(ownedCash[id])]"
                                             label="Amount"
                                             variant="underlined"
                                         ></v-text-field>

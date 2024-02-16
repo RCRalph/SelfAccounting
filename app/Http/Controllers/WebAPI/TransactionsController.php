@@ -210,15 +210,19 @@ class TransactionsController extends Controller
             $cash = request()->validate([
                 "cash" => ["required", "array"],
                 "cash.*.id" => ["required", "integer", new CorrectCashCurrency($currency)],
-                "cash.*.amount" => ["required", "integer", "min:0", new ValidCashAmount(request()->type == "income")]
+                "cash.*.amount" => ["required", "integer", new ValidCashAmount(request()->type)]
             ])["cash"];
 
             foreach ($cash as $item) {
-                $attachedCash = auth()->user()->cash()->find($item["id"]);
+                $ownedCash = auth()->user()->cash()->find($item["id"])->pivot->amount ?? 0;
 
-                if ($attachedCash) {
-                    $cashAmount = $attachedCash->pivot->amount + $item["amount"] * (request()->type == "income" ? 1 : -1);
+                $cashAmount = match (request()->type) {
+                    "income" => $ownedCash + $item["amount"],
+                    "expenses" => $ownedCash - $item["amount"],
+                    default => 0,
+                };
 
+                if ($ownedCash) {
                     if ($cashAmount) {
                         auth()->user()->cash()->updateExistingPivot(
                             $item["id"],
@@ -227,16 +231,10 @@ class TransactionsController extends Controller
                     } else {
                         auth()->user()->cash()->detach($item["id"]);
                     }
-                } else {
-                    /*
-                        This can only be reached if request()->type is "income",
-                        in expenses cash has to be already attached and this
-                        is checked inside ValidCashAmount rule.
-                    */
-
+                } else if ($cashAmount) {
                     auth()->user()->cash()->attach(
                         $item["id"],
-                        ["amount" => $item["amount"]]
+                        ["amount" => $cashAmount]
                     );
                 }
             }

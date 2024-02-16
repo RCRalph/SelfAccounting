@@ -142,9 +142,9 @@ export default class Validator {
 
     static cash(
         owned = 0,
-        type: "income" | "expenses" = "income",
-        allowNull = false,
-        allowUndefined = false,
+        type: "value" | "income" | "expenses" = "value",
+        allowNull = true,
+        allowUndefined = true,
     ): (amount: string | number | undefined) => boolean | string {
         return (amount) => {
             if (allowNull && !amount || allowUndefined && typeof amount == "undefined") return true
@@ -153,12 +153,20 @@ export default class Validator {
 
             if (!Number.isInteger(amountNumber)) {
                 return "Amount has to be an integer"
-            } else if (amountNumber < 0) {
-                return "Amount cannot be negative"
-            } else if (amountNumber >= Number.MAX_SAFE_INTEGER) {
+            } else if (!Number.isSafeInteger(amountNumber)) {
                 return `Amount has to be less than ${Number.MAX_SAFE_INTEGER}`
-            } else if (type == "expenses" && owned < amountNumber) {
-                return "Amount cannot be greater than currently owned amount"
+            }
+
+            switch (type) {
+                case "value":
+                    if (amountNumber < 0) return "Amount cannot be negative"
+                    break
+                case "income":
+                    if (owned + amountNumber < 0) return "Amount cannot be greater than currently owned amount"
+                    break
+                case "expenses":
+                    if (owned - amountNumber < 0) return "Amount cannot be greater than currently owned amount"
+                    break
             }
 
             return true
