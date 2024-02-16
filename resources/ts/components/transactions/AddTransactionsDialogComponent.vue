@@ -14,6 +14,15 @@
 
         <v-card v-if="ready">
             <CardTitleWithButtons :title="`Add ${props.type}`">
+                <CashTransactionsDialogComponent
+                    v-if="extensions.hasExtension('cashan')"
+                    v-model="cash"
+                    :accountIDs="transactionData.map(item => item.account_id)"
+                    :sum-by-account="sumByAccounts"
+                    :disabled="loading.submit"
+                    :type="type"
+                ></CashTransactionsDialogComponent>
+
                 <CommonValuesComponent
                     v-model:transaction-data="transactionData"
                     v-model:common-values="commonValues"
@@ -168,15 +177,6 @@
                 @add="add"
                 @remove="remove"
             >
-                <!--<CashTransactionsDialogComponent
-                    v-if="extensions.hasExtension('cashan')"
-                    v-model="cash"
-                    :accountIDs="accountIDs"
-                    :disabled="loading"
-                    :sumByAccounts="sumByAccounts"
-                    :type="type"
-                ></CashTransactionsDialogComponent>-->
-
                 <v-btn
                     color="success"
                     class="mx-1"
@@ -209,10 +209,12 @@ import { useDialogSettings } from "@composables/useDialogSettings"
 import { currentTimeZoneDate } from "@composables/useDates"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
+import { useExtensionsStore } from "@stores/extensions"
 import Validator from "@classes/Validator"
 
 import CommonValuesComponent from "@components/transactions/CommonValuesComponent.vue"
 import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
+import CashTransactionsDialogComponent from "@components/extensions/cash/CashTransactionsDialogComponent.vue"
 
 import type { Transaction } from "@interfaces/Transaction"
 import type { CategoryData } from "@interfaces/Category"
@@ -229,6 +231,7 @@ const emit = defineEmits<{
 
 const status = useStatusStore()
 const currencies = useCurrenciesStore()
+const extensions = useExtensionsStore()
 const formats = useFormats()
 
 function usePriceModified() {
@@ -260,6 +263,7 @@ function useData() {
     })
     const categories = ref<CategoryData[]>([])
     const accounts = ref<AccountData[]>([])
+    const cash = ref<Record<string, number>>({})
 
     const page = ref(0)
 
@@ -305,7 +309,7 @@ function useData() {
             })
     }
 
-    return {accounts, appendData, categories, commonValues, getData, page, transactionData, usedAccount}
+    return {accounts, appendData, categories, commonValues, getData, page, transactionData, usedAccount, cash}
 }
 
 function useCalculatedValues() {
@@ -329,19 +333,42 @@ function useCalculatedValues() {
 
     const value = computed(() => round(amount.value.value * price.value.value, 2) || 0)
 
-    const sum = computed(() => {
-        if (!transactionData.value.length) return 0
+    const sum = computed(() => transactionData.value
+        .map(item => round(
+            new Calculator(item.amount, "amount").resultValue *
+            new Calculator(item.price, "price").resultValue,
+            2,
+        ))
+        .reduce((item1, item2) => item1 + item2, 0),
+    )
 
-        return transactionData.value.map(item => {
-            return round(
-                new Calculator(item.amount, "amount").resultValue *
-                new Calculator(item.price, "price").resultValue,
-                2,
-            )
-        }).reduce((item1, item2) => item1 + item2)
+    const sumByAccounts = computed(() => {
+        const result: Record<number, number> = {}
+
+        const transactions = transactionData.value
+            .map(item => ({
+                account_id: item.account_id,
+                value: round(
+                    new Calculator(item.amount, "amount").resultValue *
+                    new Calculator(item.price, "price").resultValue,
+                    2,
+                ),
+            }))
+
+        for (const item of transactions) {
+            if (item.account_id === null) continue
+
+            if (item.account_id in result) {
+                result[item.account_id] += item.value
+            } else {
+                result[item.account_id] = item.value
+            }
+        }
+
+        return result
     })
 
-    return {amount, price, value, sum}
+    return {amount, price, value, sum, sumByAccounts}
 }
 
 function useActions() {
@@ -388,8 +415,8 @@ function useActions() {
 
 const {allPricesModified, priceModified, commonValuesPriceChange} = usePriceModified()
 const {dialog, ready, canSubmit, loading} = useDialogSettings()
-const {accounts, appendData, categories, commonValues, getData, page, transactionData, usedAccount} = useData()
-const {amount, price, value, sum} = useCalculatedValues()
+const {accounts, appendData, categories, commonValues, getData, page, transactionData, usedAccount, cash} = useData()
+const {amount, price, value, sum, sumByAccounts} = useCalculatedValues()
 const {add, remove, submit} = useActions()
 const {getTitles, titleMenuShow, titles} = useTitles(
     loading,
