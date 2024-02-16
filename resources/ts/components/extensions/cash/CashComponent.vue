@@ -159,7 +159,11 @@
                                 :class="differenceColor"
                             >
                                 {{
-                                    format.numberWithCurrency(sum - currentBalance, currencies.usedCurrencyObject.ISO)
+                                    format.numberWithCurrency(
+                                        sum - currentBalance,
+                                        currencies.usedCurrencyObject.ISO,
+                                        true,
+                                    )
                                 }}
                             </div>
                         </v-col>
