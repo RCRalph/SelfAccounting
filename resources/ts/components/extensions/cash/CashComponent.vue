@@ -230,18 +230,10 @@ function useCash() {
         ?.balance ?? 0,
     )
 
-    const differenceColor = computed(() => {
-        const difference = sum.value - currentBalance.value
-
-        switch (Math.sign(difference)) {
-            case 1:
-                return "text-success"
-            case 0:
-                return ""
-            case -1:
-                return "text-error"
-        }
-    })
+    const differenceColor = computed(() =>
+        sum.value - currentBalance.value == 0 ?
+            "text-success" : "text-error",
+    )
 
     function getData() {
         ready.value = false
