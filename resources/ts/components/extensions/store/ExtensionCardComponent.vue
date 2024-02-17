@@ -1,7 +1,7 @@
 <template>
     <v-card style="padding: 0">
         <router-link
-            :to="`/extensions/${props.extension.directory}`"
+            :to="extension.enabled ? `/extensions/${props.extension.directory}` : ''"
             style="text-decoration: none; color: inherit;"
         >
             <v-img
