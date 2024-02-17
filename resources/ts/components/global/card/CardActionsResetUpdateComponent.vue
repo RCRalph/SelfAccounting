@@ -27,8 +27,8 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-    canSubmit: boolean
     loading: boolean
+    canSubmit: boolean | null
 }>()
 
 const emit = defineEmits<{
