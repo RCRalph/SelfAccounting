@@ -44,9 +44,20 @@
                             md="6"
                             class="pt-sm-0"
                         >
-                            <div class="text-h5 text-center">
-                                Source
-                            </div>
+                            <CardTitleWithButtons
+                                title="Source"
+                                large-font
+                                no-horizontal
+                            >
+                                <CashTransferDialogComponent
+                                    v-if="extensions.hasExtension('cashan')"
+                                    v-model="transferData.source.cash"
+                                    :accountIDs="[transferData.source.account_id]"
+                                    :sum-by-account="sumByAccount"
+                                    :disabled="loading.submit"
+                                    type="source"
+                                ></CashTransferDialogComponent>
+                            </CardTitleWithButtons>
 
                             <v-text-field
                                 v-model="transferData.source.value"
@@ -100,9 +111,20 @@
                             md="6"
                             class="pt-sm-0"
                         >
-                            <div class="text-h5 text-center">
-                                Target
-                            </div>
+                            <CardTitleWithButtons
+                                title="Target"
+                                large-font
+                                no-horizontal
+                            >
+                                <CashTransferDialogComponent
+                                    v-if="extensions.hasExtension('cashan')"
+                                    v-model="transferData.target.cash"
+                                    :accountIDs="[transferData.target.account_id]"
+                                    :sum-by-account="sumByAccount"
+                                    :disabled="loading.submit"
+                                    type="target"
+                                ></CashTransferDialogComponent>
+                            </CardTitleWithButtons>
 
                             <v-text-field
                                 v-model="transferData.target.value"
@@ -180,11 +202,13 @@ import { useDialogSettings } from "@composables/useDialogSettings"
 import { currentTimeZoneDate } from "@composables/useDates"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
+import { useExtensionsStore } from "@stores/extensions"
 import useFormats from "@composables/useFormats"
 import Calculator from "@classes/Calculator"
 import Validator from "@classes/Validator"
 
 import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
+import CashTransferDialogComponent from "@components/extensions/cash/CashTransactionsDialogComponent.vue"
 
 const emit = defineEmits<{
     added: []
@@ -192,6 +216,7 @@ const emit = defineEmits<{
 
 const status = useStatusStore()
 const currencies = useCurrenciesStore()
+const extensions = useExtensionsStore()
 const formats = useFormats()
 
 function useData() {
@@ -207,11 +232,13 @@ function useData() {
             value: "",
             account_id: undefined,
             currency_id: currencies.usedCurrency,
+            cash: {},
         },
         target: {
             value: "",
             account_id: undefined,
             currency_id: currencies.usedCurrency,
+            cash: {},
         },
     })
 
@@ -346,7 +373,21 @@ function useCalculatedValues() {
         calculatorAllowObject,
     ).resultObject)
 
-    return {sourceValue, targetValue}
+    const sumByAccount = computed(() => {
+        const result: Record<number, number> = {}
+
+        if (transferData.value?.source.account_id) {
+            result[transferData.value.source.account_id] = sourceValue.value.value
+        }
+
+        if (transferData.value?.target.account_id) {
+            result[transferData.value.target.account_id] = targetValue.value.value
+        }
+
+        return result
+    })
+
+    return {sourceValue, targetValue, sumByAccount}
 }
 
 function useActions() {
@@ -358,12 +399,32 @@ function useActions() {
         }
 
         const data = cloneDeep(transferData.value)
+
         data.source.value = sourceValue.value.value
-        data.target.value = targetValue.value.value
         delete data.source.currency_id
+
+        data.target.value = targetValue.value.value
         delete data.target.currency_id
 
-        axios.post(`/web-api/transfers`, data)
+        axios.post(`/web-api/transfers`, {
+            ...data,
+            ...{
+                source: {
+                    ...data.source,
+                    cash: Object.keys(transferData.value.source.cash).map(key => ({
+                        id: key,
+                        amount: transferData.value?.source.cash[key],
+                    })),
+                },
+                target: {
+                    ...data.target,
+                    cash: Object.keys(transferData.value.target.cash).map(key => ({
+                        id: key,
+                        amount: transferData.value?.target.cash[key],
+                    })),
+                },
+            },
+        })
             .then(() => {
                 emit("added")
                 status.showSuccess("added transfer")
@@ -390,7 +451,7 @@ const {
     availableCurrencyData,
     resetAccount,
 } = useData()
-const {sourceValue, targetValue} = useCalculatedValues()
+const {sourceValue, targetValue, sumByAccount} = useCalculatedValues()
 const {submit} = useActions()
 
 watch(dialog, getData)

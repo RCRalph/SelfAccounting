@@ -4,6 +4,7 @@ interface Account {
     account_id?: number
     currency_id?: number
     value: string | number
+    cash: Record<string, number>
 }
 
 interface Transfer {

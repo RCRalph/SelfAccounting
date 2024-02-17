@@ -22,10 +22,11 @@ class TransfersController extends Controller
         $this->middleware("auth");
     }
 
-    private function addNamesToPaginatedItems($items) {
+    private function addNamesToPaginatedItems($items)
+    {
         $paginatedData = $items->getCollection()->toArray();
 
-        $currencies = Currency::all()->mapWithKeys(fn ($item) => [$item["id"] => $item["ISO"]]);
+        $currencies = Currency::all()->mapWithKeys(fn($item) => [$item["id"] => $item["ISO"]]);
 
         $accounts = auth()->user()->accounts()
             ->select("id", "name", "icon", "currency_id")
@@ -34,7 +35,7 @@ class TransfersController extends Controller
                     ->orWhereIn("id", array_column($paginatedData, "target_account_id"));
             })
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => [
+            ->mapWithKeys(fn($item) => [$item["id"] => [
                 "name" => $item["name"],
                 "icon" => $item["icon"],
                 "currency" => $currencies[$item["currency_id"]]
@@ -233,19 +234,19 @@ class TransfersController extends Controller
         ]);
 
         if (auth()->user()->extensionCodes->contains("cashan")) {
-            if (request()->has("source.cash")) {
+            if (request("source.cash")) {
                 $sourceCash = request()->validate([
                     "source.cash" => ["required", "array"],
                     "source.cash.*.id" => ["required", "integer", new CorrectTransferCashCurrency],
-                    "source.cash.*.amount" => ["required", "integer", "min:0", new ValidCashAmount(false, "source.cash")]
+                    "source.cash.*.amount" => ["required", "integer", new ValidCashAmount("expenses", "source.cash")]
                 ])["source"]["cash"];
             }
 
-            if (request()->has("target.cash")) {
+            if (request("target.cash")) {
                 $targetCash = request()->validate([
                     "target.cash" => ["required", "array"],
                     "target.cash.*.id" => ["required", "integer", new CorrectTransferCashCurrency],
-                    "target.cash.*.amount" => ["required", "integer", "min:0", new ValidCashAmount(true, "target.cash")]
+                    "target.cash.*.amount" => ["required", "integer", new ValidCashAmount("income", "target.cash")]
                 ])["target"]["cash"];
             }
         }
@@ -265,10 +266,9 @@ class TransfersController extends Controller
                 if ($cashAmount) {
                     auth()->user()->cash()->updateExistingPivot(
                         $item["id"],
-                        [ "amount" => $cashAmount ]
+                        ["amount" => $cashAmount]
                     );
-                }
-                else {
+                } else {
                     auth()->user()->cash()->detach($item["id"]);
                 }
             }
@@ -281,13 +281,12 @@ class TransfersController extends Controller
                 if ($attachedCash) {
                     auth()->user()->cash()->updateExistingPivot(
                         $item["id"],
-                        [ "amount" => $attachedCash->pivot->amount + $item["amount"] ]
+                        ["amount" => $attachedCash->pivot->amount + $item["amount"]]
                     );
-                }
-                else {
+                } else {
                     auth()->user()->cash()->attach(
                         $item["id"],
-                        [ "amount" => $item["amount"] ]
+                        ["amount" => $item["amount"]]
                     );
                 }
             }

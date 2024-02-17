@@ -142,7 +142,7 @@ export default class Validator {
 
     static cash(
         owned = 0,
-        type: "value" | "income" | "expenses" = "value",
+        type: "value" | "income" | "expenses" | "source" | "target" = "value",
         allowNull = true,
         allowUndefined = true,
     ): (amount: string | number | undefined) => boolean | string {
@@ -162,11 +162,15 @@ export default class Validator {
                     if (amountNumber < 0) return "Amount cannot be negative"
                     break
                 case "income":
+                case "target":
                     if (owned + amountNumber < 0) return "Amount cannot be greater than currently owned amount"
                     break
                 case "expenses":
+                case "source":
                     if (owned - amountNumber < 0) return "Amount cannot be greater than currently owned amount"
                     break
+                default:
+                    return "Invalid cash validation type"
             }
 
             return true
