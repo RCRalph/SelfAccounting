@@ -17,14 +17,18 @@ import { useDisplay } from "vuetify"
 const props = defineProps<{
     title: string,
     largeFont?: boolean,
-    extraBottom?: boolean
+    extraBottom?: boolean,
+    noHorizontal?: boolean
 }>()
 
 const display = useDisplay()
 const slots = useSlots()
 
 const titleCardClasses = computed(() => {
-    const result = ["d-flex", "px-4"]
+    const result = [
+        "d-flex",
+        `px-${props.noHorizontal ? 0 : 4}`,
+    ]
 
     if (!slots.default) {
         result.push("justify-center")
