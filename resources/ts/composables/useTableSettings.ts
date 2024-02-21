@@ -2,6 +2,7 @@ import { computed, ref } from "vue"
 import type { Loading } from "@interfaces/App"
 import type { DataQuery as TransactionDataQuery } from "@interfaces/Transaction"
 import type { DataQuery as TransferDataQuery } from "@interfaces/Transfer"
+import type { OwnedDataQuery as OwnedReportsDataQuery } from "@interfaces/Reports"
 
 export default function useTableSettings() {
     const loading = ref<Loading>({
@@ -94,7 +95,7 @@ export default function useTableSettings() {
     })
 
     const ownedReportsQuery = computed(() => {
-        const result: Record<string, string | number> = {
+        const result: OwnedReportsDataQuery = {
             page: options.value.page,
             items: options.value.itemsPerPage,
         }
@@ -124,5 +125,6 @@ export default function useTableSettings() {
         search,
         transactionQuery,
         transferQuery,
+        ownedReportsQuery,
     }
 }
