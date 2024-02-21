@@ -360,7 +360,7 @@ const {updateWithOffset} = useUpdateWithOffset(getStartData)
 
 watch(options, (_, oldValue) => {
     if (Object.keys(oldValue).length) {
-        updateWithOffset()
+        getStartData()
     }
 })
 
