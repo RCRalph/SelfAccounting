@@ -270,7 +270,7 @@ function logout() {
     axios.post("/logout")
         .then(() => window.location.href = "/")
         .catch(err => {
-            console.log(err)
+            console.error(err)
             status.showError()
         })
 }
@@ -298,7 +298,7 @@ onMounted(() => {
             ready.value = true
         })
         .catch(err => {
-            console.log(err)
+            console.error(err)
             status.showError()
         })
 })
