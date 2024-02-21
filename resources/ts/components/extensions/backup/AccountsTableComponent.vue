@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import useTableSettings from "@composables/useTableSettings"
+import useTableHeaders from "@composables/useTableHeaders"
 import type { VDataTable } from "vuetify/components"
 import useFormats from "@composables/useFormats"
 
@@ -78,5 +78,5 @@ const props = defineProps<{
 
 const formats = useFormats()
 
-const {accountHeaders} = useTableSettings()
+const {accountHeaders} = useTableHeaders()
 </script>

@@ -343,6 +343,7 @@ import EditTransactionDialogComponent from "@components/transactions/EditTransac
 
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
+import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import TableDataMerger from "@classes/TableDataMerger"
@@ -414,16 +415,8 @@ function useTableData() {
     return {getStartData, getMoreData, tableData, typeSingular}
 }
 
-const {
-    filterColor,
-    filteredData,
-    transactionHeaders,
-    loading,
-    options,
-    search,
-    pagination,
-    transactionQuery,
-} = useTableSettings()
+const {transactionHeaders} = useTableHeaders()
+const {filterColor, filteredData, loading, options, search, pagination, transactionQuery} = useTableSettings()
 const {getStartData, getMoreData, tableData, typeSingular} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)
 

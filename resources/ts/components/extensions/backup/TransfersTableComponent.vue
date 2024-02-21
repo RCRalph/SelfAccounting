@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import type { VDataTable } from "vuetify/components"
-import useTableSettings from "@composables/useTableSettings"
+import useTableHeaders from "@composables/useTableHeaders"
 
 import type { AccountRestoreData } from "@interfaces/Backup"
 
@@ -36,5 +36,5 @@ const props = defineProps<{
     accounts: Map<number, AccountRestoreData>
 }>()
 
-const {transferHeaders} = useTableSettings()
+const {transferHeaders} = useTableHeaders()
 </script>

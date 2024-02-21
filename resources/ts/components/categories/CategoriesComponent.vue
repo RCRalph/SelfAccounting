@@ -137,6 +137,7 @@ import AddCategoryDialogComponent from "@components/categories/AddCategoryDialog
 import EditCategoryDialogComponent from "@components/categories/EditCategoryDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
+import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
 import useFormats from "@composables/useFormats"
 
@@ -161,7 +162,8 @@ function useData() {
     return {categories, getData, ready}
 }
 
-const {categoryHeaders, options} = useTableSettings()
+const {categoryHeaders} = useTableHeaders()
+const {options} = useTableSettings()
 const {categories, getData, ready} = useData()
 
 onMounted(() => {

@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import type { VDataTable } from "vuetify/components"
-import useTableSettings from "@composables/useTableSettings"
+import useTableHeaders from "@composables/useTableHeaders"
 import useFormats from "@composables/useFormats"
 
 import type { CategoryRestoreData, AccountRestoreData } from "@interfaces/Backup"
@@ -43,5 +43,5 @@ const props = defineProps<{
 
 const formats = useFormats()
 
-const {transactionHeaders} = useTableSettings()
+const {transactionHeaders} = useTableHeaders()
 </script>

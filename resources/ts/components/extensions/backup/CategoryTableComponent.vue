@@ -72,11 +72,11 @@
 </template>
 
 <script setup lang="ts">
-import useTableSettings from "@composables/useTableSettings"
+import useTableHeaders from "@composables/useTableHeaders"
 
 const props = defineProps<{
     items: unknown[]
 }>()
 
-const {categoryHeaders} = useTableSettings()
+const {categoryHeaders} = useTableHeaders()
 </script>

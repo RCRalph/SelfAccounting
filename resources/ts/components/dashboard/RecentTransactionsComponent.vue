@@ -350,6 +350,7 @@ import { useCurrenciesStore } from "@stores/currencies"
 import TableDataMerger from "@classes/TableDataMerger"
 import Validator from "@classes/Validator"
 import useFormats from "@composables/useFormats"
+import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 
@@ -414,16 +415,8 @@ function useTableData() {
     return {getStartData, getMoreData, tableData, search}
 }
 
-const {
-    filterColor,
-    filteredData,
-    loading,
-    options,
-    search,
-    pagination,
-    transactionQuery,
-    transactionHeaders,
-} = useTableSettings()
+const {transactionHeaders} = useTableHeaders()
+const {filterColor, filteredData, loading, options, search, pagination, transactionQuery} = useTableSettings()
 const {getStartData, getMoreData, tableData} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)
 

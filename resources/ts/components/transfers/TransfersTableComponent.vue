@@ -287,6 +287,7 @@ import EditTransferDialogComponent from "@components/transfers/EditTransferDialo
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
 import TableDataMerger from "@classes/TableDataMerger"
+import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 
@@ -352,7 +353,8 @@ function useTableData() {
     return {getStartData, getMoreData, tableData}
 }
 
-const {filterColor, filteredData, transferHeaders, loading, options, pagination, transferQuery} = useTableSettings()
+const {transferHeaders} = useTableHeaders()
+const {filterColor, filteredData, loading, options, pagination, transferQuery} = useTableSettings()
 const {getStartData, getMoreData, tableData} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)
 
