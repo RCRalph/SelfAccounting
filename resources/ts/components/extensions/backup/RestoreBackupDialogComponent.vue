@@ -210,7 +210,7 @@ function useRestore() {
 
                 validateTransfers(content.transfers, accounts.value)
 
-                missingExtensions.value = new Set(extensions.extensionCodes)
+                missingExtensions.value = new Set(extensions.extensionCodes.filter(item => item != "backup"))
 
                 if (typeof content.extensions == "object" && content.extensions != null) {
                     if ("cashan" in content.extensions) {
