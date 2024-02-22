@@ -59,6 +59,11 @@ const ownedReports: HeaderData[] = [
     {title: "Title", key: "title", align: "center", sortable: true},
 ]
 
+const sharedReports: HeaderData[] = [
+    ...ownedReports,
+    {title: "Owner", key: "owner", align: "center", sortable: false},
+]
+
 export default function useTableHeaders() {
     function tableHeaders(headers: HeaderData[], parameters: TableHeadersParameters) {
         headers = headers.filter(item => !parameters.excludedColumns?.has(item.key))
@@ -111,11 +116,16 @@ export default function useTableHeaders() {
         return tableHeaders(ownedReports, parameters)
     }
 
+    function sharedReportsHeaders(parameters: TableHeadersParameters = {}): VDataTable["headers"] {
+        return tableHeaders(sharedReports, parameters)
+    }
+
     return {
         transactionHeaders,
         transferHeaders,
         categoryHeaders,
         accountHeaders,
         ownedReportsHeaders,
+        sharedReportsHeaders,
     }
 }

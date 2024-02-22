@@ -2,7 +2,7 @@ import { computed, ref } from "vue"
 import type { Loading } from "@interfaces/App"
 import type { DataQuery as TransactionDataQuery } from "@interfaces/Transaction"
 import type { DataQuery as TransferDataQuery } from "@interfaces/Transfer"
-import type { OwnedDataQuery as OwnedReportsDataQuery } from "@interfaces/Reports"
+import type { OwnedReportsDataQuery, SharedReportsDataQuery } from "@interfaces/Reports"
 
 export default function useTableSettings() {
     const loading = ref<Loading>({
@@ -22,6 +22,7 @@ export default function useTableSettings() {
         accounts: [] as number[],
         source_accounts: [] as number[],
         target_accounts: [] as number[],
+        owners: [] as number[],
     })
 
     const pagination = ref({
@@ -38,14 +39,9 @@ export default function useTableSettings() {
                 result.title = search.value.title
             }
 
-            if (options.value.sortBy.length) {
-                result.orderFields = []
-                result.orderDirections = []
-
-                for (let item of options.value.sortBy) {
-                    result.orderFields.push(item.key)
-                    result.orderDirections.push(item.order)
-                }
+            if (options.value.sortBy?.length) {
+                result.orderFields = options.value.sortBy.map((item: any) => item.key)
+                result.orderDirections = options.value.sortBy.map((item: any) => item.order)
             }
 
             if (filteredData.value.accounts.length) {
@@ -68,14 +64,9 @@ export default function useTableSettings() {
         const result: TransferDataQuery = {}
 
         if (Object.keys(options.value).length) {
-            if (options.value.sortBy.length) {
-                result.orderFields = []
-                result.orderDirections = []
-
-                for (let item of options.value.sortBy) {
-                    result.orderFields.push(item.key)
-                    result.orderDirections.push(item.order)
-                }
+            if (options.value.sortBy?.length) {
+                result.orderFields = options.value.sortBy.map((item: any) => item.key)
+                result.orderDirections = options.value.sortBy.map((item: any) => item.order)
             }
 
             if (filteredData.value.source_accounts.length) {
@@ -112,6 +103,28 @@ export default function useTableSettings() {
         return result
     })
 
+    const sharedReportsQuery = computed(() => {
+        const result: SharedReportsDataQuery = {
+            page: options.value.page,
+            items: options.value.itemsPerPage,
+        }
+
+        if (search.value.title) {
+            result.search = search.value.title
+        }
+
+        if (filteredData.value.owners.length) {
+            result.owners = filteredData.value.owners
+        }
+
+        if (options.value.sortBy?.length) {
+            result.orderFields = options.value.sortBy.map((item: any) => item.key)
+            result.orderDirections = options.value.sortBy.map((item: any) => item.order)
+        }
+
+        return result
+    })
+
     function filterColor(length: number): string | undefined {
         return length ? "rgba(var(--v-theme-on-surface))" : undefined
     }
@@ -126,5 +139,6 @@ export default function useTableSettings() {
         transactionQuery,
         transferQuery,
         ownedReportsQuery,
+        sharedReportsQuery,
     }
 }

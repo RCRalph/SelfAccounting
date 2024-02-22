@@ -1,276 +1,231 @@
 <template>
-    <v-card v-if="ready" class="loading-height">
-        <v-card-title class="justify-center text-capitalize pb-lg-0 text-h5">Shared reports</v-card-title>
+    <v-card v-if="ready">
+        <CardTitleWithButtons
+            title="Reports shared with me"
+            large-font
+        ></CardTitleWithButtons>
 
         <v-card-text>
-            <v-data-table
-                :headers="headers"
-                :items="reports"
-                :mobile-breakpoint="0"
-                :loading="tableLoading"
-                :server-items-length="total"
-                :options.sync="options"
-                :footer-props="{
-                    'items-per-page-options': [10, 15, 20, 25, 30]
-                }"
+            <v-row
+                class="align-center"
+                no-gutters
             >
-                <template v-slot:top>
-                    <v-row class="align-center mb-0">
-                        <v-col cols="12" sm="6" lg="5">
-                            <v-form v-model="canRefresh">
-                                <v-text-field
-                                    v-model="search"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    dense
-                                    single-line
-                                    counter="64"
-                                    :rules="[validation.search(64)]"
-                                ></v-text-field>
-                            </v-form>
-                        </v-col>
-                    </v-row>
-                </template>
+                <v-col cols="12" sm="5" lg="4">
+                    <v-text-field
+                        v-model="search.title"
+                        :rules="[
+                            Validator.search(64)
+                        ]"
+                        variant="underlined"
+                        append-inner-icon="mdi-magnify"
+                        label="Search"
+                        density="compact"
+                        counter="64"
+                        single-line
+                    ></v-text-field>
+                </v-col>
+            </v-row>
 
-                <template v-slot:[`header.owner`]="{ header }">
-                    {{ header.text }}
-                    <v-menu offset-y :close-on-content-click="false">
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn small icon v-bind="attrs" v-on="on">
-                                <v-icon small :color="filteredData.owners.length ? 'primary' : ''">
-                                    mdi-filter
-                                </v-icon>
-                            </v-btn>
-                        </template>
+            <v-data-table-server
+                v-model:options="options"
+                :headers="sharedReportsHeaders({
+                    appendActions: true
+                })"
+                :items="reports"
+                :items-length="total"
+                :loading="loading.table"
+                :items-per-page-options="[10, 15, 20, 25, 30]"
+                density="comfortable"
+            >
+                <template v-slot:[`header.owner`]="{ column }">
+                    <div class="d-flex justify-center align-center">
+                        <v-menu
+                            offset-y
+                            :close-on-content-click="false"
+                        >
+                            <template v-slot:activator="{ props }">
+                                <div class="d-flex justify-end">
+                                    <v-btn
+                                        v-bind="props"
+                                        :color="filterColor(filteredData.owners.length)"
+                                        :style="filteredData.owners.length && 'opacity: 1'"
+                                        icon="mdi-filter"
+                                        size="x-small"
+                                        variant="plain"
+                                    ></v-btn>
+                                </div>
+                            </template>
 
-                        <v-card max-width="350">
-                            <v-card-text>
-                                <v-select
-                                    v-model="filteredData.owners"
-                                    :items="owners"
-                                    item-text="username"
-                                    item-value="id"
-                                    multiple
-                                    hide-details
-                                    filled
-                                >
-                                    <template v-slot:selection="{ item, index }">
-                                        <v-chip v-if="index === 0" small>
-                                            <span>{{ item.username }}</span>
-                                        </v-chip>
+                            <v-card class="filtered-list">
+                                <v-card-text class="py-0 px-2">
+                                    <v-checkbox
+                                        v-for="(item, i) in owners"
+                                        v-model="filteredData.owners"
+                                        :value="item.id"
+                                        :class="i == 0 && 'mt-0 pt-0'"
+                                        :label="item.username"
+                                        density="comfortable"
+                                        hide-details
+                                    ></v-checkbox>
+                                </v-card-text>
+                            </v-card>
+                        </v-menu>
 
-                                        <span
-                                            v-if="index === 1"
-                                            class="grey--text text-caption"
-                                        >(+{{ filteredData.owners.length - 1 }} other{{ filteredData.owners.length > 2 ? "s" : "" }})</span>
-                                    </template>
-                                </v-select>
-                            </v-card-text>
-                        </v-card>
-                    </v-menu>
+                        <span class="mx-1">{{ column.title }}</span>
+                    </div>
                 </template>
 
                 <template v-slot:[`item.title`]="{ item }">
                     <span style="white-space: nowrap">{{ item.title }}</span>
                 </template>
 
-                <template v-slot:[`item.username`]="{ item }">
-                    <span style="white-space: nowrap">{{ item.username }}</span>
+                <template v-slot:[`item.owner`]="{ item }">
+                    <span style="white-space: nowrap">{{ item.owner }}</span>
                 </template>
 
                 <template v-slot:[`item.actions`]="{ item }">
-                    <td>
-                        <div class="d-flex flex-nowrap justify-center align-center">
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <router-link :to="`/extensions/reports/${item.id}`">
-                                        <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs">mdi-open-in-app</v-icon>
-                                    </router-link>
-                                </template>
+                    <div class="d-flex flex-nowrap justify-center align-center">
+                        <v-tooltip
+                            text="View report"
+                            location="bottom"
+                        >
+                            <template v-slot:activator="{ props: tooltipProps }">
+                                <router-link
+                                    :to="`/extensions/reports/${item.id}`"
+                                    style="color: inherit"
+                                >
+                                    <v-icon
+                                        v-bind="tooltipProps"
+                                        class="mx-1 cursor-pointer"
+                                        icon="mdi-open-in-app"
+                                    ></v-icon>
+                                </router-link>
+                            </template>
+                        </v-tooltip>
 
-                                <span>View report</span>
-                            </v-tooltip>
+                        <v-tooltip
+                            text="Share report"
+                            location="bottom"
+                        >
+                            <template v-slot:activator="{ props: tooltipProps }">
+                                <v-icon
+                                    v-bind="tooltipProps"
+                                    class="mx-1 cursor-pointer"
+                                    icon="mdi-share"
+                                    @click="share(item.id)"
+                                ></v-icon>
+                            </template>
+                        </v-tooltip>
 
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-icon class="mx-1 cursor-pointer" v-on="on" v-bind="attrs" @click="share(item.id)">mdi-share</v-icon>
-                                </template>
-
-                                <span>Share report</span>
-                            </v-tooltip>
-
-                            <DeleteDialogComponent
-                                thing="report"
-                                :url="`extensions/reports/${item.id}`"
-                                @deleted="deleted"
-                            ></DeleteDialogComponent>
-                        </div>
-                    </td>
+                        <DeleteDialogComponent
+                            thing="report"
+                            :url="`extensions/reports/${item.id}`"
+                            @deleted="getData"
+                        ></DeleteDialogComponent>
+                    </div>
                 </template>
-            </v-data-table>
-        </v-card-text>
-
-        <SuccessSnackbarComponent v-model="success" :thing="thing"></SuccessSnackbarComponent>
-    </v-card>
-
-    <v-card v-else>
-        <v-card-title class="justify-center text-capitalize pb-lg-3 text-h5">Shared reports</v-card-title>
-
-        <v-card-text class="d-flex justify-center">
-            <v-progress-circular
-                indeterminate
-                size="96"
-            ></v-progress-circular>
+            </v-data-table-server>
         </v-card-text>
     </v-card>
+
+    <CardLoadingComponent
+        v-else
+        title="Reports shared with me"
+        title-class="text-h5 text-center"
+    ></CardLoadingComponent>
 </template>
 
-<script>
-import { useCurrenciesStore } from "&/stores/currencies";
-import main from "&/mixins/main";
-import validation from "&/mixins/validation";
+<script setup lang="ts">
+import axios from "axios"
+import { onMounted, ref, watch } from "vue"
 
-import DeleteDialogComponent from "@/DeleteDialogComponent.vue";
-import SuccessSnackbarComponent from "@/SuccessSnackbarComponent.vue";
+import type { ReportOwners, SharedReport } from "@interfaces/Reports"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import useUpdateWithOffset from "@composables/useUpdateWithOffset"
+import useTableHeaders from "@composables/useTableHeaders"
+import useTableSettings from "@composables/useTableSettings"
+import { useDialogSettings } from "@composables/useDialogSettings"
+import { useStatusStore } from "@stores/status"
+import Validator from "@classes/Validator"
 
-        return { currencies };
-    },
-    mixins: [main, validation],
-    components: {
-        DeleteDialogComponent,
-        SuccessSnackbarComponent
-    },
-    props: {
-        owners: {
-            required: true,
-            type: Array
-        }
-    },
-    data() {
-        return {
-            headers: [
-                { text: "ID", value: "id", align: "center" },
-                { text: "Title", value: "title", align: "center" },
-                { text: "Owner", value: "owner", align: "center", sortable: false },
-                { text: "Actions", value: "actions", align: "center", sortable: false }
-            ],
-            search: "",
-            reports: [],
-            options: {},
-            filteredData: {
-                owners: []
-            },
-            total: null,
-            lastChange: new Date(),
+import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
 
-            canRefresh: true,
-            tableLoading: false,
-            ready: false,
-            success: false,
-            thing: ""
-        }
-    },
-    computed: {
-        dataQuery() {
-            if (!Object.keys(this.options).length) {
-                return {
-                    page: 1,
-                    items: 10
-                };
-            }
+const status = useStatusStore()
 
-            let query = {
-                page: this.options.page,
-                items: this.options.itemsPerPage
-            }
+function useSharedReports() {
+    const ready = ref(true)
 
-            if (this.search != "") {
-                query.search = this.search;
-            }
+    const total = ref(0)
 
-            Object.keys(this.filteredData).forEach(key => {
-                if (this.filteredData[key]) {
-                    query[key] = this.filteredData[key];
-                }
-            })
+    const reports = ref<SharedReport[]>()
 
-            if (this.options.sortBy.length) {
-                query.orderFields = [];
-                query.orderDirections = [];
+    const owners = ref<ReportOwners[]>([])
 
-                this.options.sortBy.forEach((item, index) => {
-                    query.orderFields.push(item)
-                    query.orderDirections.push(this.options.sortDesc[index] ? "desc" : "asc");
-                });
-            }
-
-            return query;
-        }
-    },
-    methods: {
-        getData() {
-            if (!this.canRefresh) {
-                return;
-            }
-
-            this.tableLoading = true;
-
-            axios
-                .get(`/web-api/extensions/reports/shared-reports`, { params: this.dataQuery })
-                .then(response => {
-                    const data = response.data;
-
-                    this.reports = data.reports.data;
-                    this.total = data.reports.total;
-
-                    this.tableLoading = false;
-                    this.ready = true;
-                })
-        },
-        updateWithOffset() {
-            const timeOffset = 250;
-            this.lastChange = new Date();
-
-            setTimeout(() => {
-                if (new Date() - this.lastChange >= timeOffset) {
-                    this.getData();
-                }
-            }, timeOffset + 1);
-        },
-        updated() {
-            this.thing = `updated report`;
-            this.success = true;
-            this.getData();
-        },
-        deleted() {
-            this.thing = `deleted report`;
-            this.success = true;
-            this.getData();
-        },
-        async share(id) {
-            await navigator.clipboard.writeText(`${window.location.href}/${id}`)
-            this.thing = `copied report link`;
-            this.success = true;
-        }
-    },
-    watch: {
-        options: {
-            handler: function (options, oldOptions) {
-                if (Object.keys(oldOptions).length) {
-                    this.getData();
-                }
-            },
-            deep: true
-        },
-
-        search: "updateWithOffset"
-    },
-    mounted() {
-        this.getData();
+    async function share(id: number) {
+        await navigator.clipboard.writeText(`${window.location.href}/${id}`)
+        status.showSuccess("copied report link")
     }
+
+    function getOwners() {
+        ready.value = false
+
+        axios.get("/web-api/extensions/reports")
+            .then(response => {
+                const data = response.data
+
+                owners.value = data.owners
+
+                ready.value = true
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+            })
+    }
+
+    function getData() {
+        loading.value.table = true
+
+        axios.get("web-api/extensions/reports/shared-reports", {
+            params: sharedReportsQuery.value,
+        })
+            .then(response => {
+                const data = response.data
+
+                reports.value = data.reports.data
+                total.value = data.reports.total
+
+                loading.value.table = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value.table = false, 2000)
+            })
+    }
+
+    return {ready, total, reports, owners, share, getOwners, getData}
 }
+
+const {loading} = useDialogSettings()
+const {sharedReportsHeaders} = useTableHeaders()
+const {search, options, filterColor, filteredData, sharedReportsQuery} = useTableSettings()
+const {ready, total, reports, owners, share, getOwners, getData} = useSharedReports()
+const {updateWithOffset} = useUpdateWithOffset(getData)
+
+watch(options, (_, oldValue) => {
+    if (Object.keys(oldValue).length) {
+        getData()
+    }
+})
+
+watch(filteredData, updateWithOffset, {
+    deep: true,
+})
+
+watch(search, updateWithOffset, {
+    deep: true,
+})
+
+onMounted(getOwners)
 </script>
