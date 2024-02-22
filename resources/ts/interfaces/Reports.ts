@@ -1,4 +1,9 @@
-interface OwnedDataQuery {
+interface OwnedReport {
+    id: number
+    title: string
+}
+
+interface OwnedReportsDataQuery {
     page: number
     items: number
     search?: string
@@ -8,4 +13,6 @@ interface OwnedDataQuery {
 
 export type {
     OwnedDataQuery,
+    OwnedReport,
+    OwnedReportsDataQuery,
 }

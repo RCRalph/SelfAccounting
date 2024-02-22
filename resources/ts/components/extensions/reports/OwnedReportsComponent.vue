@@ -1,5 +1,5 @@
 <template>
-    <v-card v-if="ready">
+    <v-card>
         <CardTitleWithButtons
             title="Owned reports"
             large-font
@@ -121,18 +121,14 @@
             </v-data-table-server>
         </v-card-text>
     </v-card>
-
-    <CardLoadingComponent
-        v-else
-        title="Owned reports"
-        title-class="text-h5 text-center"
-    ></CardLoadingComponent>
 </template>
 
 <script setup lang="ts">
 import axios from "axios"
 import { onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
+
+import type { OwnedReport } from "@interfaces/Reports"
 
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"
@@ -147,11 +143,9 @@ const router = useRouter()
 const status = useStatusStore()
 
 function useOwnedReports() {
-    const ready = ref(true)
-
     const total = ref(0)
 
-    const reports = ref<Record<string, unknown>>()
+    const reports = ref<OwnedReport[]>([])
 
     function getData() {
         loading.value.table = true
@@ -165,17 +159,16 @@ function useOwnedReports() {
                 reports.value = data.reports.data
                 total.value = data.reports.total
 
-                ready.value = true
+                loading.value.table = false
             })
             .catch(err => {
                 console.error(err)
                 setTimeout(() => status.showError(), 1000)
-                setTimeout(() => loading.value.submit = false, 2000)
+                setTimeout(() => loading.value.table = false, 2000)
             })
-            .then(() => loading.value.table = false)
     }
 
-    return {ready, total, reports, getData}
+    return {total, reports, getData}
 }
 
 function useActions() {
@@ -204,7 +197,7 @@ function useActions() {
 const {loading} = useDialogSettings()
 const {ownedReportsHeaders} = useTableHeaders()
 const {search, options, ownedReportsQuery} = useTableSettings()
-const {ready, total, reports, getData} = useOwnedReports()
+const {total, reports, getData} = useOwnedReports()
 const {duplicatedReportID, duplicate, share} = useActions()
 const {updateWithOffset} = useUpdateWithOffset(getData)
 
