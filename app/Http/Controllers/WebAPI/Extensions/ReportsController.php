@@ -18,16 +18,16 @@ class ReportsController extends Controller
     private $columns = ["date", "title", "amount", "price", "value", "category_id", "account_id"];
 
     private $queryFields = [
-        [ "column" => "date", "operator" => ">=", "name" => "min_date" ],
-        [ "column" => "amount", "operator" => ">=", "name" => "min_amount" ],
-        [ "column" => "price", "operator" => ">=", "name" => "min_price" ],
-        [ "column" => "date", "operator" => "<=", "name" => "max_date" ],
-        [ "column" => "amount", "operator" => "<=", "name" => "max_amount" ],
-        [ "column" => "price", "operator" => "<=", "name" => "max_price" ],
-        [ "column" => "title", "operator" => "=" ],
-        [ "column" => "currency_id", "operator" => "=" ],
-        [ "column" => "category_id", "operator" => "=" ],
-        [ "column" => "account_id", "operator" => "=" ]
+        ["column" => "date", "operator" => ">=", "name" => "min_date"],
+        ["column" => "amount", "operator" => ">=", "name" => "min_amount"],
+        ["column" => "price", "operator" => ">=", "name" => "min_price"],
+        ["column" => "date", "operator" => "<=", "name" => "max_date"],
+        ["column" => "amount", "operator" => "<=", "name" => "max_amount"],
+        ["column" => "price", "operator" => "<=", "name" => "max_price"],
+        ["column" => "title", "operator" => "="],
+        ["column" => "currency_id", "operator" => "="],
+        ["column" => "category_id", "operator" => "="],
+        ["column" => "account_id", "operator" => "="]
     ];
 
     public function __construct()
@@ -65,8 +65,7 @@ class ReportsController extends Controller
             if ($show) {
                 if ($column == "value") {
                     $data->addSelect(DB::raw("round(amount * price * $valueFieldMultiplier, 2) AS value"));
-                }
-                else {
+                } else {
                     $data->addSelect($column);
                 }
             }
@@ -87,10 +86,6 @@ class ReportsController extends Controller
 
     public function ownedReports()
     {
-        $reports = auth()->user()->reports()
-            ->select("users.username AS owner")
-            ->select("id", "title");
-
         $data = request()->validate([
             "items" => ["required", "integer", "in:10,15,20,25,30"],
             "search" => ["nullable", "string", "min:1", "max:64"],
@@ -100,6 +95,9 @@ class ReportsController extends Controller
             "orderDirections.*" => ["required", "string", "in:asc,desc"]
         ]);
 
+        $reports = auth()->user()->reports()
+            ->select("id", "title");
+
         if (isset($data["search"])) {
             $reports->where("title", "ilike", "%" . $data["search"] . "%");
         }
@@ -108,8 +106,7 @@ class ReportsController extends Controller
             foreach ($data["orderFields"] as $i => $item) {
                 $reports = $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
             }
-        }
-        else {
+        } else {
             $reports = $reports->orderBy("id", "desc");
         }
 
@@ -120,10 +117,6 @@ class ReportsController extends Controller
 
     public function sharedReports()
     {
-        $reports = auth()->user()->sharedReports()
-            ->select("reports.id", "reports.title", "users.username AS owner")
-            ->join("users", "reports.user_id", "=", "users.id");
-
         $data = request()->validate([
             "items" => ["required", "integer", "in:10,15,20,25,30"],
             "search" => ["nullable", "string", "min:1", "max:64"],
@@ -135,24 +128,27 @@ class ReportsController extends Controller
             "orderDirections.*" => ["required", "string", "in:asc,desc"]
         ]);
 
+        $reports = auth()->user()->sharedReports()
+            ->join("users", "reports.user_id", "=", "users.id");
+
         if (isset($data["search"])) {
             $reports->where("title", "ilike", "%" . $data["search"] . "%");
         }
 
         if (isset($data["owners"])) {
-            $reports->whereIn("users.user_id", $data["owners"]);
+            $reports->whereIn("users.id", $data["owners"]);
         }
 
         if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
             foreach ($data["orderFields"] as $i => $item) {
-                $reports = $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
+                $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
             }
-        }
-        else {
-            $reports = $reports->orderBy("id", "desc");
+        } else {
+            $reports->orderBy("id", "desc");
         }
 
-        $reports = $reports->paginate($data["items"]);
+        $reports = $reports
+            ->paginate($data["items"], ["reports.title", "reports.id", "users.username AS owner"]);
 
         return response()->json(compact("reports"));
     }
@@ -172,7 +168,6 @@ class ReportsController extends Controller
             "owner" => $report->user->only("username", "profile_picture_link")
         ];
 
-        $valueSign = 1;
         $rows = $report->additionalEntries();
         $this->addFields($rows, $report->show_columns);
 
@@ -204,8 +199,7 @@ class ReportsController extends Controller
             foreach ($items as $row) {
                 if (isset($information["sum"][$row["currency_id"]])) {
                     $information["sum"][$row["currency_id"]] += $row["value"];
-                }
-                else {
+                } else {
                     $information["sum"][$row["currency_id"]] = $row["value"];
                 }
             }
@@ -218,7 +212,7 @@ class ReportsController extends Controller
         $categories = $report->user->categories()
             ->select("id", "name", "icon")
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => [
+            ->mapWithKeys(fn($item) => [$item["id"] => [
                 "name" => $item["name"],
                 "icon" => $item["icon"]
             ]])
@@ -227,7 +221,7 @@ class ReportsController extends Controller
         $accounts = $report->user->accounts()
             ->select("id", "name", "icon")
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => [
+            ->mapWithKeys(fn($item) => [$item["id"] => [
                 "name" => $item["name"],
                 "icon" => $item["icon"]
             ]])
@@ -340,7 +334,7 @@ class ReportsController extends Controller
             "additionalEntries.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
             "additionalEntries.*.title" => ["required", "string", "max:64"],
             "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
             "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
             "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
             "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
@@ -373,8 +367,7 @@ class ReportsController extends Controller
 
         if ($report->user_id == auth()->user()->id) {
             $report->delete();
-        }
-        else {
+        } else {
             $report->sharedUsers()->detach(auth()->user()->id);
         }
 
@@ -409,7 +402,7 @@ class ReportsController extends Controller
         $data["columns"] = $this->getColumnsToShow($report->show_columns);
 
         $data["users"] = $report->sharedUsers
-            ->map(fn ($item) => $item->only("username", "email", "profile_picture_link"));
+            ->map(fn($item) => $item->only("username", "email", "profile_picture_link"));
 
         $data["queries"] = $report->queries
             ->makeHidden(["report_id", "created_at", "updated_at"])
@@ -492,7 +485,7 @@ class ReportsController extends Controller
             "additionalEntries.*.date" => ["required", "date"],
             "additionalEntries.*.title" => ["required", "string", "max:64"],
             "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
             "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
             "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
             "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
@@ -514,8 +507,7 @@ class ReportsController extends Controller
         foreach ($queries as $query) {
             if (isset($query["id"])) {
                 $report->queries()->find($query["id"])->update($query);
-            }
-            else {
+            } else {
                 $report->queries()->create($query);
             }
         }
@@ -528,8 +520,7 @@ class ReportsController extends Controller
         foreach ($additionalEntries as $entry) {
             if (isset($entry["id"])) {
                 $report->additionalEntries()->find($entry["id"])->update($entry);
-            }
-            else {
+            } else {
                 $report->additionalEntries()->create($entry);
             }
         }
