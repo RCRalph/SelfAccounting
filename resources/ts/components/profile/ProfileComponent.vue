@@ -127,11 +127,11 @@ import ProfileDeleteDialogComponent from "@components/profile/ProfileDeleteDialo
 
 import { currentTimeZoneDate } from "@composables/useDates"
 import { useUserStore } from "@stores/user"
+import useComponentState from "@composables/useComponentState"
 
 const user = useUserStore()
 
 function useData() {
-    const ready = ref(false)
     const userData = ref<UserData>()
 
     const userTypeColor = computed(() => {
@@ -156,10 +156,11 @@ function useData() {
             })
     }
 
-    return {userTypeColor, getData, ready, userData}
+    return {userTypeColor, getData, userData}
 }
 
-const {userTypeColor, getData, ready, userData} = useData()
+const {ready} = useComponentState()
+const {userTypeColor, getData, userData} = useData()
 
 onMounted(getData)
 </script>

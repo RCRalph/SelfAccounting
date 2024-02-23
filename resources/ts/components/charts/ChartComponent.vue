@@ -71,6 +71,7 @@ import LineChart from "@components/charts/LineChart.vue"
 import DoughnutChart from "@components/charts/DoughnutChart.vue"
 
 import { useStatusStore } from "@stores/status"
+import useComponentState from "@composables/useComponentState"
 import { useDoughnutChartData, useLineChartData } from "@composables/useChartData"
 import { queryWithDates } from "@composables/useChartQueryParameters"
 import { useCurrenciesStore } from "@stores/currencies"
@@ -83,8 +84,8 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useData() {
-    const ready = ref(true)
     const start = ref("")
+
     const end = ref("")
 
     const chartHasData = computed(() =>
@@ -121,10 +122,11 @@ function useData() {
             })
     }
 
-    return {chartHasData, end, getChartData, ready, start}
+    return {chartHasData, end, getChartData, start}
 }
 
-const {chartHasData, end, getChartData, ready, start} = useData()
+const {ready} = useComponentState()
+const {chartHasData, end, getChartData, start} = useData()
 const {chartData: lineChartData, options: lineOptions} = useLineChartData()
 const {chartData: doughnutChartData, options: doughnutOptions} = useDoughnutChartData()
 

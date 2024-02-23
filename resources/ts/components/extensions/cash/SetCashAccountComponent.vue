@@ -49,7 +49,7 @@ import axios from "axios"
 
 import type { Account } from "@interfaces/Cash"
 
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import useFormats from "@composables/useFormats"
@@ -82,5 +82,5 @@ function submit() {
 }
 
 const formats = useFormats()
-const {dialog, loading} = useDialogSettings()
+const {dialog, loading} = useComponentState()
 </script>

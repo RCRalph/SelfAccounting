@@ -42,11 +42,11 @@
 
 <script setup lang="ts">
 import type { Extension, ExtensionData } from "@interfaces/Extension"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 
 const props = defineProps<{
     extension: Extension & ExtensionData
 }>()
 
-const {dialog} = useDialogSettings()
+const {dialog} = useComponentState()
 </script>

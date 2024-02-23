@@ -269,12 +269,12 @@ import RecentTransactionsComponent from "@components/dashboard/RecentTransaction
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import useFormats from "@composables/useFormats"
+import useComponentState from "@composables/useComponentState"
 import useThemeSettings from "@composables/useThemeSettings"
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
 const formats = useFormats()
-const {themeIsDark} = useThemeSettings()
 
 function useCurrentBalance() {
     const currentBalance = ref<CurrentBalance[]>([])
@@ -361,7 +361,8 @@ function getBalanceData() {
         })
 }
 
-const ready = ref(false)
+const {ready} = useComponentState()
+const {themeIsDark} = useThemeSettings()
 const {currentBalance, currentBalanceSum} = useCurrentBalance()
 const {last30Days, last30DaysTotal} = useLast30Days()
 const {chartType, charts, currentChart} = useCharts()

@@ -124,7 +124,7 @@ import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import { currentTimeZoneDate } from "@composables/useDates"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
 
 const emit = defineEmits<{
@@ -172,7 +172,7 @@ function useData() {
     return {accountData, setData, submit}
 }
 
-const {canSubmit, dialog, loading} = useDialogSettings()
+const {canSubmit, dialog, loading} = useComponentState()
 const {accountData, setData, submit} = useData()
 
 onMounted(setData)

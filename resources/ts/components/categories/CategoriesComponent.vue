@@ -137,6 +137,7 @@ import AddCategoryDialogComponent from "@components/categories/AddCategoryDialog
 import EditCategoryDialogComponent from "@components/categories/EditCategoryDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
+import useComponentState from "@composables/useComponentState"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
 import useFormats from "@composables/useFormats"
@@ -145,7 +146,6 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function useData() {
-    const ready = ref(false)
     const categories = ref<Category[]>([])
 
     function getData() {
@@ -159,12 +159,13 @@ function useData() {
             })
     }
 
-    return {categories, getData, ready}
+    return {categories, getData}
 }
 
+const {ready} = useComponentState()
 const {categoryHeaders} = useTableHeaders()
 const {options} = useTableSettings()
-const {categories, getData, ready} = useData()
+const {categories, getData} = useData()
 
 onMounted(() => {
     getData()

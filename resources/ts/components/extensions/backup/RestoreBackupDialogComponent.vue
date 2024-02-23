@@ -120,7 +120,7 @@ import axios from "axios"
 import { ref, watch } from "vue"
 
 import type { CategoryRestoreData, AccountRestoreData } from "@interfaces/Backup"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useBackupValidation } from "@composables/useBackupValidation"
 import { useStatusStore } from "@stores/status"
 import { useExtensionsStore } from "@stores/extensions"
@@ -253,6 +253,6 @@ function useRestore() {
     return {file, data, submit, categories, accounts, missingExtensions}
 }
 
-const {dialog, loading} = useDialogSettings()
+const {dialog, loading} = useComponentState()
 const {file, data, submit, categories, accounts, missingExtensions} = useRestore()
 </script>

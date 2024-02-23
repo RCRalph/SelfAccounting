@@ -124,7 +124,7 @@ import CardLoadingComponent from "@components/global/card/CardLoadingComponent.v
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
 
 const emit = defineEmits<{
@@ -172,7 +172,7 @@ function useData() {
     return {categoryData, setData, submit}
 }
 
-const {canSubmit, dialog, loading} = useDialogSettings()
+const {canSubmit, dialog, loading} = useComponentState()
 const {categoryData, setData, submit} = useData()
 
 onMounted(setData)

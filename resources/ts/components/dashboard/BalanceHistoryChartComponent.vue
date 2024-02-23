@@ -29,12 +29,13 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref, onMounted, watch } from "vue"
+import { onMounted, watch } from "vue"
 
 import LineChart from "@components/charts/LineChart.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
+import useComponentState from "@composables/useComponentState"
 import { useLineChartData } from "@composables/useChartData"
 import { last30DaysQuery } from "@composables/useChartQueryParameters"
 
@@ -44,8 +45,9 @@ const props = defineProps<{
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
+
+const {ready} = useComponentState()
 const {chartData, options} = useLineChartData()
-const ready = ref(false)
 
 function getChartData() {
     ready.value = false

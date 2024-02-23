@@ -31,13 +31,12 @@ import { computed, onMounted, ref } from "vue"
 import type { ExtensionData } from "@interfaces/Extension"
 
 import { useExtensionsStore } from "@stores/extensions"
+import useComponentState from "@composables/useComponentState"
 import ExtensionCardComponent from "@components/extensions/store/ExtensionCardComponent.vue"
 
 const extensions = useExtensionsStore()
 
 function useData() {
-    const ready = ref(false)
-
     const extensionData = ref<Record<string, ExtensionData>>({})
 
     function getExtensionData() {
@@ -60,10 +59,11 @@ function useData() {
         ...extensions.extensionMap[code],
     })))
 
-    return {ready, getExtensionData, extensionItems}
+    return {getExtensionData, extensionItems}
 }
 
-const {ready, getExtensionData, extensionItems} = useData()
+const {ready} = useComponentState()
+const {getExtensionData, extensionItems} = useData()
 
 onMounted(getExtensionData)
 </script>

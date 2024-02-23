@@ -92,6 +92,7 @@ import type { BackupAndRestore } from "@interfaces/Backup"
 import type { Loading } from "@interfaces/App"
 
 import { useStatusStore } from "@stores/status"
+import useComponentState from "@composables/useComponentState"
 import { formatDate } from "@composables/useDates"
 import { downloadJSON } from "@composables/useDownload"
 
@@ -101,8 +102,6 @@ import RestoreBackupDialogComponent from "@components/extensions/backup/RestoreB
 const status = useStatusStore()
 
 function useData() {
-    const ready = ref(true)
-
     const backupInformation = ref<BackupAndRestore>()
 
     function getData() {
@@ -122,7 +121,7 @@ function useData() {
             })
     }
 
-    return {ready, getData, backupInformation}
+    return {getData, backupInformation}
 }
 
 function useBackup() {
@@ -161,7 +160,8 @@ function useBackup() {
     return {loading, showTable, onCreate}
 }
 
-const {ready, getData, backupInformation} = useData()
+const {ready} = useComponentState()
+const {getData, backupInformation} = useData()
 const {loading, showTable, onCreate} = useBackup()
 
 onMounted(getData)

@@ -79,7 +79,7 @@ import { ref, watch } from "vue"
 import SupportedIconSetsComponent from "@components/icon-picker/SupportedIconSetsComponent.vue"
 
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import useFormats from "@composables/useFormats"
 import Validator from "@classes/Validator"
 
@@ -119,7 +119,7 @@ function useData() {
     return {getData, icons}
 }
 
-const {canSubmit, dialog, ready} = useDialogSettings()
+const {canSubmit, dialog, ready} = useComponentState()
 const {getData, icons} = useData()
 
 watch(dialog, getData)

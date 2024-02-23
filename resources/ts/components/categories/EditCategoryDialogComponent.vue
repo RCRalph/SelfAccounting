@@ -127,7 +127,7 @@ import { cloneDeep } from "lodash"
 import type { Category } from "@interfaces/Category"
 
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 
 import Validator from "@classes/Validator"
 import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
@@ -195,7 +195,7 @@ function useActions() {
     return {reset, update}
 }
 
-const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {canSubmit, dialog, loading, ready} = useComponentState()
 const {categoryData, categoryDataCopy, getData} = useData()
 const {reset, update} = useActions()
 

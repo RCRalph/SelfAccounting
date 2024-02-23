@@ -68,7 +68,7 @@ import { computed, ref } from "vue"
 import { useDisplay } from "vuetify"
 import { useStatusStore } from "@stores/status"
 import { useUserStore } from "@stores/user"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 
 import CardActionsSubmitComponent from "@components/global/card/CardActionsSubmitComponent.vue"
 import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
@@ -131,6 +131,6 @@ function usePicture() {
     return {imageStyles, picture, pictureSize, submit}
 }
 
-const {dialog, loading} = useDialogSettings()
+const {dialog, loading} = useComponentState()
 const {imageStyles, picture, pictureSize, submit} = usePicture()
 </script>

@@ -187,7 +187,7 @@ import ConvertTransactionDialogComponent from "@components/transactions/ConvertT
 import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 import useTitles from "@composables/useTitles"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
@@ -307,7 +307,7 @@ function useActions() {
 }
 
 const typeSingular = computed(() => props.type == "expenses" ? "expense" : "income")
-const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {canSubmit, dialog, loading, ready} = useComponentState()
 const {accounts, categories, getData, transactionData, transactionDataCopy, usedAccount} = useData()
 const {amount, price, value} = useCalculatedValues()
 const {reset, update} = useActions()

@@ -136,6 +136,7 @@ import AddAccountDialogComponent from "@components/accounts/AddAccountDialogComp
 import EditAccountDialogComponent from "@components/accounts/EditAccountDialogComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
+import useComponentState from "@composables/useComponentState"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
 import useFormats from "@composables/useFormats"
@@ -144,7 +145,6 @@ const currencies = useCurrenciesStore()
 const formats = useFormats()
 
 function useData() {
-    const ready = ref(false)
     const accounts = ref<Account[]>([])
 
     function getData() {
@@ -158,12 +158,13 @@ function useData() {
             })
     }
 
-    return {accounts, getData, ready}
+    return {accounts, getData}
 }
 
+const {ready} = useComponentState()
 const {accountHeaders} = useTableHeaders()
 const {options} = useTableSettings()
-const {accounts, getData, ready} = useData()
+const {accounts, getData} = useData()
 
 onMounted(() => {
     getData()

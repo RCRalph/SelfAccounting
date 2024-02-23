@@ -1,10 +1,13 @@
 import { ref } from "vue"
 import type { Loading } from "@interfaces/App"
 
-function useDialogSettings() {
+export default function useComponentState() {
     const dialog = ref(false)
-    const ready = ref(true)
+
+    const ready = ref(false)
+
     const canSubmit = ref<boolean | null>(null)
+
     const loading = ref<Loading>({
         submit: false,
         table: false,
@@ -12,8 +15,4 @@ function useDialogSettings() {
     })
 
     return {canSubmit, dialog, loading, ready}
-}
-
-export {
-    useDialogSettings,
 }

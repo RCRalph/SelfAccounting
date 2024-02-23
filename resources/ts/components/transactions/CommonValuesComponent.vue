@@ -161,7 +161,7 @@ import type { AccountData } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 
 import { useCurrenciesStore } from "@stores/currencies"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import useTitles from "@composables/useTitles"
 import Calculator from "@classes/Calculator"
 import Validator from "@classes/Validator"
@@ -246,7 +246,7 @@ function useCalculatedValues() {
     return {amount, price}
 }
 
-const {dialog, canSubmit: canUpdate, loading} = useDialogSettings()
+const {dialog, canSubmit: canUpdate, loading} = useComponentState()
 const {commonValues, usedAccount, update} = useCommonValues()
 const {amount, price} = useCalculatedValues()
 const {titles, getTitles, titleMenuShow} = useTitles(

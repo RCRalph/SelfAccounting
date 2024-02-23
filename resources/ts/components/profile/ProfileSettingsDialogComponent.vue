@@ -45,7 +45,7 @@ import type { UserData } from "@interfaces/User"
 import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
 import CardActionsResetUpdateComponent from "@components/global/card/CardActionsResetUpdateComponent.vue"
 
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 
 const props = defineProps<{
@@ -89,6 +89,6 @@ function useInformation() {
     return {userData, reset, update}
 }
 
-const {canSubmit, dialog, loading} = useDialogSettings()
+const {canSubmit, dialog, loading} = useComponentState()
 const {userData, reset, update} = useInformation()
 </script>

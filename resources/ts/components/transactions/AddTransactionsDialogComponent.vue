@@ -205,7 +205,7 @@ import { ref, computed, watch } from "vue"
 
 import useFormats from "@composables/useFormats"
 import useTitles from "@composables/useTitles"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { currentTimeZoneDate } from "@composables/useDates"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
@@ -417,7 +417,7 @@ function useActions() {
 }
 
 const {allPricesModified, priceModified, commonValuesPriceChange} = usePriceModified()
-const {dialog, ready, canSubmit, loading} = useDialogSettings()
+const {dialog, ready, canSubmit, loading} = useComponentState()
 const {accounts, appendData, categories, commonValues, getData, page, transactionData, usedAccount, cash} = useData()
 const {amount, price, value, sum, sumByAccounts} = useCalculatedValues()
 const {add, remove, submit} = useActions()

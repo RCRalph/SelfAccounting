@@ -130,7 +130,7 @@ import type { Account } from "@interfaces/Account"
 import IconPickerComponent from "@components/icon-picker/IconPickerComponent.vue"
 
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
 
 const props = defineProps<{
@@ -196,7 +196,7 @@ function useActions() {
     return {reset, update}
 }
 
-const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {canSubmit, dialog, loading, ready} = useComponentState()
 const {accountData, accountDataCopy, getData} = useData()
 const {reset, update} = useActions()
 

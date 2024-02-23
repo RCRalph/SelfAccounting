@@ -96,7 +96,7 @@ import CardActionsSubmitComponent from "@components/global/card/CardActionsSubmi
 
 import type { UpdatePassword } from "@interfaces/User"
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
 
 const $form = ref<VForm | null>(null)
@@ -163,6 +163,6 @@ function useInformation() {
     return {passwordData, currentPasswordMatch, update}
 }
 
-const {canSubmit, dialog, loading} = useDialogSettings()
+const {canSubmit, dialog, loading} = useComponentState()
 const {passwordData, currentPasswordMatch, update} = useInformation()
 </script>

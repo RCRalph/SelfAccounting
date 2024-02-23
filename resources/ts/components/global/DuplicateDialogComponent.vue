@@ -56,7 +56,7 @@ import axios from "axios"
 import { ref } from "vue"
 
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useCurrenciesStore } from "@stores/currencies"
 
 const props = defineProps<{
@@ -71,7 +71,7 @@ const emit = defineEmits<{
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
-const {dialog, loading} = useDialogSettings()
+const {dialog, loading} = useComponentState()
 
 const currency = ref<number>()
 

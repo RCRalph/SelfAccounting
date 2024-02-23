@@ -57,6 +57,7 @@ import OverviewComponent from "@components/charts/OverviewComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
+import useComponentState from "@composables/useComponentState"
 
 const props = defineProps<{
     type: "income" | "expenses"
@@ -66,10 +67,10 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useData() {
-    const ready = ref(false)
-
     const accounts = ref<AccountData[]>([])
+
     const categories = ref<CategoryData[]>([])
+
     const charts = ref<Chart[]>([])
 
     function getData() {
@@ -91,10 +92,11 @@ function useData() {
             })
     }
 
-    return {ready, getData, accounts, categories, charts}
+    return {getData, accounts, categories, charts}
 }
 
-const {getData, ready, accounts, categories, charts} = useData()
+const {ready} = useComponentState()
+const {getData, accounts, categories, charts} = useData()
 
 watch(() => props.type, getData)
 

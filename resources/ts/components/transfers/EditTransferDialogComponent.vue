@@ -178,7 +178,7 @@ import { isNull, cloneDeep } from "lodash"
 import type { AccountData } from "@interfaces/Account"
 import type { Transfer } from "@interfaces/Transfer"
 
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
@@ -356,7 +356,7 @@ function useActions() {
     return {reset, update}
 }
 
-const {canSubmit, dialog, loading, ready} = useDialogSettings()
+const {canSubmit, dialog, loading, ready} = useComponentState()
 const {
     getData, minDate,
     sourceAccounts, sourceData,

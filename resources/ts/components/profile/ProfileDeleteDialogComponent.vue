@@ -36,7 +36,7 @@ import axios from "axios"
 import CardActionsNoYesComponent from "@components/global/card/CardActionsNoYesComponent.vue"
 import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
 
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 
 const status = useStatusStore()
@@ -58,5 +58,5 @@ function remove() {
         })
 }
 
-const {dialog, loading} = useDialogSettings()
+const {dialog, loading} = useComponentState()
 </script>

@@ -170,6 +170,7 @@ import ErrorSnackbarComponent from "@components/app/ErrorSnackbarComponent.vue"
 import SuccessSnackbarComponent from "@components/app/SuccessSnackbarComponent.vue"
 
 import useThemeSettings from "@composables/useThemeSettings"
+import useComponentState from "@composables/useComponentState"
 import { useCurrenciesStore } from "@stores/currencies"
 import { useExtensionsStore } from "@stores/extensions"
 import { useUserStore } from "@stores/user"
@@ -182,7 +183,6 @@ const status = useStatusStore()
 const display = useDisplay()
 
 function useAppSettings() {
-    const ready = ref(false)
     const premiumExpired = ref(false)
 
     const VMainStyle = computed(() =>
@@ -191,7 +191,7 @@ function useAppSettings() {
             "margin-left: 56px",
     )
 
-    return {VMainStyle, premiumExpired, ready}
+    return {VMainStyle, premiumExpired}
 }
 
 function useNavigationDrawer() {
@@ -260,8 +260,9 @@ function useMenuItems() {
     return {drawerItems, profileItems}
 }
 
+const {ready} = useComponentState()
 const {logoTextImage, setTheme} = useThemeSettings()
-const {VMainStyle, premiumExpired, ready} = useAppSettings()
+const {VMainStyle, premiumExpired} = useAppSettings()
 const {currencySelectFocused, navigationForceOpen, navigationRail, profileMenuFocused} = useNavigationDrawer()
 const {disabledTutorials, tutorialPaths} = useTutorials()
 const {drawerItems, profileItems} = useMenuItems()

@@ -133,7 +133,7 @@ import type { OwnedReport } from "@interfaces/Reports"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import Validator from "@classes/Validator"
 
@@ -194,7 +194,7 @@ function useActions() {
     return {duplicatedReportID, duplicate, share}
 }
 
-const {loading} = useDialogSettings()
+const {loading} = useComponentState()
 const {ownedReportsHeaders} = useTableHeaders()
 const {search, options, ownedReportsQuery} = useTableSettings()
 const {total, reports, getData} = useOwnedReports()

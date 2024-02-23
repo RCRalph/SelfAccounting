@@ -30,15 +30,16 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref, onMounted, watch } from "vue"
+import { onMounted, watch } from "vue"
 
 import type { Chart } from "@interfaces/Chart"
 
 import DoughnutChart from "@components/charts/DoughnutChart.vue"
 
-import { useDoughnutChartData } from "@composables/useChartData"
 import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
+import useComponentState from "@composables/useComponentState"
+import { useDoughnutChartData } from "@composables/useChartData"
 import { queryWithDates } from "@composables/useChartQueryParameters"
 
 const props = defineProps<{
@@ -49,7 +50,8 @@ const props = defineProps<{
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
-const ready = ref(true)
+
+const {ready} = useComponentState()
 const {chartData, options} = useDoughnutChartData()
 
 function getChartData() {

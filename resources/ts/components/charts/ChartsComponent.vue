@@ -45,11 +45,11 @@ import type { Chart } from "@interfaces/Chart"
 import ChartComponent from "@components/charts/ChartComponent.vue"
 
 import { useStatusStore } from "@stores/status"
+import useComponentState from "@composables/useComponentState"
 
 const status = useStatusStore()
 
 function useData() {
-    const ready = ref(false)
     const charts = ref<Chart[]>([])
     const currentChart = ref<number>()
 
@@ -72,10 +72,11 @@ function useData() {
 
     const currentChartData = computed(() => charts.value.find(item => item.id == currentChart.value))
 
-    return {charts, currentChart, currentChartData, getData, ready}
+    return {charts, currentChart, currentChartData, getData}
 }
 
-const {charts, currentChart, currentChartData, getData, ready} = useData()
+const {ready} = useComponentState()
+const {charts, currentChart, currentChartData, getData} = useData()
 
 onMounted(getData)
 </script>

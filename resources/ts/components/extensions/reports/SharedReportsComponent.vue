@@ -144,7 +144,7 @@ import type { ReportOwners, SharedReport } from "@interfaces/Reports"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import Validator from "@classes/Validator"
 
@@ -153,8 +153,6 @@ import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsCo
 const status = useStatusStore()
 
 function useSharedReports() {
-    const ready = ref(true)
-
     const total = ref(0)
 
     const reports = ref<SharedReport[]>()
@@ -207,10 +205,10 @@ function useSharedReports() {
     return {ready, total, reports, owners, share, getOwners, getData}
 }
 
-const {loading} = useDialogSettings()
+const {loading, ready} = useComponentState()
 const {sharedReportsHeaders} = useTableHeaders()
 const {search, options, filterColor, filteredData, sharedReportsQuery} = useTableSettings()
-const {ready, total, reports, owners, share, getOwners, getData} = useSharedReports()
+const {total, reports, owners, share, getOwners, getData} = useSharedReports()
 const {updateWithOffset} = useUpdateWithOffset(getData)
 
 watch(options, (_, oldValue) => {

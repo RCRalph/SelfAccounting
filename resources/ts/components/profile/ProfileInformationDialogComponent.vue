@@ -73,7 +73,7 @@ import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsCo
 import CardActionsResetUpdateComponent from "@components/global/card/CardActionsResetUpdateComponent.vue"
 
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
 
 const props = defineProps<{
@@ -129,6 +129,6 @@ function useInformation() {
     return {userData, emailIsUnique, reset, update}
 }
 
-const {canSubmit, dialog, loading} = useDialogSettings()
+const {canSubmit, dialog, loading} = useComponentState()
 const {emailIsUnique, userData, reset, update} = useInformation()
 </script>

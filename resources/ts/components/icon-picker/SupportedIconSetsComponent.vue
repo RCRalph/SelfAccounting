@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 
 const iconSets = ref([
     {
@@ -91,5 +91,5 @@ const iconSets = ref([
     },
 ])
 
-const {dialog} = useDialogSettings()
+const {dialog} = useComponentState()
 </script>

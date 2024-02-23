@@ -60,14 +60,14 @@ import OverviewComponent from "@components/charts/OverviewComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
+import useComponentState from "@composables/useComponentState"
 
 const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useData() {
-    const ready = ref(false)
-
     const accounts = ref<AccountData[]>([])
+
     const charts = ref<Chart[]>([])
 
     function getData() {
@@ -88,10 +88,11 @@ function useData() {
             })
     }
 
-    return {ready, getData, accounts, charts}
+    return {getData, accounts, charts}
 }
 
-const {getData, ready, accounts, charts} = useData()
+const {ready} = useComponentState()
+const {getData, accounts, charts} = useData()
 
 onMounted(() => {
     getData()

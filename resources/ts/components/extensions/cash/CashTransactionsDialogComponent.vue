@@ -178,7 +178,7 @@ import axios from "axios"
 import { computed, onMounted, ref, watch } from "vue"
 import { useDisplay } from "vuetify"
 
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import useFormats from "@composables/useFormats"
@@ -199,8 +199,6 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useCash() {
-    const ready = ref(false)
-
     const cash = ref<Record<string, number>>({})
 
     const cashAccount = ref<number>(0)
@@ -237,13 +235,13 @@ function useCash() {
             })
     }
 
-    return {ready, cash, cashAccount, ownedCash, sum, differenceColor, getData}
+    return {cash, cashAccount, ownedCash, sum, differenceColor, getData}
 }
 
 const format = useFormats()
 const {xs, smAndUp} = useDisplay()
-const {dialog, loading, canSubmit} = useDialogSettings()
-const {ready, cash, cashAccount, ownedCash, sum, differenceColor, getData} = useCash()
+const {dialog, loading, canSubmit, ready} = useComponentState()
+const {cash, cashAccount, ownedCash, sum, differenceColor, getData} = useCash()
 
 watch(() => props.sumByAccount, () => {
     if (typeof props.sumByAccount[cashAccount.value] == "undefined") {

@@ -195,7 +195,7 @@ import { useDisplay } from "vuetify"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 import useFormats from "@composables/useFormats"
 import Validator from "@classes/Validator"
 
@@ -207,12 +207,14 @@ const currencies = useCurrenciesStore()
 const status = useStatusStore()
 
 function useCash() {
-    const ready = ref(false)
-
     const cash = ref<Record<string, number>>({})
+
     const cashAccount = ref<string>()
+
     const ownedCash = ref<Record<string, number>>({})
+
     const ownedCashCopy = ref<Record<string, number>>({})
+
     const accounts = ref<Account[]>([])
 
     const sum = computed(() => Object.keys(cash.value)
@@ -284,7 +286,6 @@ function useCash() {
         differenceColor,
         getData,
         ownedCash,
-        ready,
         reset,
         submit,
         sum,
@@ -293,7 +294,7 @@ function useCash() {
 
 const format = useFormats()
 const {xs, smAndUp} = useDisplay()
-const {canSubmit, loading} = useDialogSettings()
+const {canSubmit, loading, ready} = useComponentState()
 const {
     accounts,
     cash,
@@ -302,7 +303,6 @@ const {
     differenceColor,
     getData,
     ownedCash,
-    ready,
     reset,
     submit,
     sum,

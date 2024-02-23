@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import axios from "axios"
 import { useStatusStore } from "@stores/status"
-import { useDialogSettings } from "@composables/useDialogSettings"
+import useComponentState from "@composables/useComponentState"
 
 const props = defineProps<{
     url: string,
@@ -52,7 +52,7 @@ const emit = defineEmits<{
 }>()
 
 const status = useStatusStore()
-const {dialog, loading} = useDialogSettings()
+const {dialog, loading} = useComponentState()
 
 function remove() {
     loading.value.submit = true
