@@ -186,8 +186,8 @@ const model = defineModel<Record<string, number>>({
 })
 
 const props = defineProps<{
-    currency: Currency
-    type: "source" | "target"
+    currency: Currency,
+    type: "source" | "target",
     accountIDs: number[],
     disabled: boolean,
     sumByAccount: Record<number, number>,

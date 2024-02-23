@@ -53,6 +53,7 @@
                                     v-if="extensions.hasExtension('cashan')"
                                     v-model="transferData.source.cash"
                                     :accountIDs="[transferData.source.account_id]"
+                                    :currency="transferData.source.currency_id"
                                     :sum-by-account="sumByAccount"
                                     :disabled="loading.submit"
                                     type="source"
@@ -120,6 +121,7 @@
                                     v-if="extensions.hasExtension('cashan')"
                                     v-model="transferData.target.cash"
                                     :accountIDs="[transferData.target.account_id]"
+                                    :currency="transferData.target.currency_id"
                                     :sum-by-account="sumByAccount"
                                     :disabled="loading.submit"
                                     type="target"
@@ -208,7 +210,7 @@ import Calculator from "@classes/Calculator"
 import Validator from "@classes/Validator"
 
 import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
-import CashTransferDialogComponent from "@components/extensions/cash/CashTransactionsDialogComponent.vue"
+import CashTransferDialogComponent from "@components/extensions/cash/CashTransferDialogComponent.vue"
 
 const emit = defineEmits<{
     added: []
