@@ -37,13 +37,16 @@
 
             <v-card-text v-if="transactionData.length">
                 <v-form v-model="canSubmit">
-                    <v-row>
+                    <v-row
+                        v-for="(item, i) in transactionData"
+                        v-show="page == i"
+                    >
                         <v-col
                             cols="12"
                             md="4"
                         >
                             <v-text-field
-                                v-model="transactionData[page].date"
+                                v-model="item.date"
                                 :min="usedAccount?.start_date"
                                 :rules="[
                                     Validator.date(false, usedAccount?.date)
@@ -56,7 +59,7 @@
 
                         <v-col cols="12" md="8">
                             <v-combobox
-                                v-model="transactionData[page].title"
+                                v-model="item.title"
                                 v-model:menu="titleMenuShow"
                                 :items="titles"
                                 :loading="loading.title"
@@ -68,15 +71,13 @@
                                 counter="64"
                             ></v-combobox>
                         </v-col>
-                    </v-row>
 
-                    <v-row>
                         <v-col
                             cols="12"
                             md="4"
                         >
                             <v-text-field
-                                v-model="transactionData[page].amount"
+                                v-model="item.amount"
                                 :error-messages="amount.error"
                                 :hint="amount.hint"
                                 variant="underlined"
@@ -93,7 +94,7 @@
                             md="4"
                         >
                             <v-text-field
-                                v-model="transactionData[page].price"
+                                v-model="item.price"
                                 :suffix="currencies.usedCurrencyObject.ISO"
                                 :error-messages="priceModified[page] ? price.error : undefined"
                                 :hint="price.hint"
@@ -116,27 +117,26 @@
                                 :iso="currencies.usedCurrencyObject.ISO"
                             ></ValueFieldComponent>
                         </v-col>
-                    </v-row>
 
-                    <v-row>
                         <v-col
                             cols="12"
                             md="6"
                         >
                             <v-select
-                                v-model="transactionData[page].category_id"
+                                v-model="item.category_id"
                                 :items="categories"
                                 item-title="name"
                                 item-value="id"
                                 label="Category"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props: listItemProps }">
+                                <template v-slot:item="{ item: listItem, props: listItemProps }">
                                     <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
-                                            <v-icon v-if="item.raw.icon">
-                                                {{ formats.iconName(item.raw.icon) }}
-                                            </v-icon>
+                                            <v-icon
+                                                v-if="listItem.raw.icon"
+                                                :icon="formats.iconName(listItem.raw.icon)"
+                                            ></v-icon>
                                         </template>
                                     </v-list-item>
                                 </template>
@@ -145,19 +145,20 @@
 
                         <v-col cols="12" md="6">
                             <v-select
-                                v-model="transactionData[page].account_id"
+                                v-model="item.account_id"
                                 :items="accounts"
                                 item-title="name"
                                 item-value="id"
                                 label="Account"
                                 variant="underlined"
                             >
-                                <template v-slot:item="{ item, props: listItemProps }">
+                                <template v-slot:item="{ item: listItem, props: listItemProps }">
                                     <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
-                                            <v-icon v-if="item.raw.icon">
-                                                {{ formats.iconName(item.raw.icon) }}
-                                            </v-icon>
+                                            <v-icon
+                                                v-if="listItem.raw.icon"
+                                                :icon="formats.iconName(listItem.raw.icon)"
+                                            ></v-icon>
                                         </template>
                                     </v-list-item>
                                 </template>
@@ -182,12 +183,11 @@
                     class="mx-1"
                     width="90"
                     variant="outlined"
+                    text="Submit"
                     :disabled="!canSubmit || !allPricesModified || loading.submit"
                     :loading="loading.submit"
                     @click="submit"
-                >
-                    Submit
-                </v-btn>
+                ></v-btn>
             </CardActionsNavigationComponent>
         </v-card>
 
