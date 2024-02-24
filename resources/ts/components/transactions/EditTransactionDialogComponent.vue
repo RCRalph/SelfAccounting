@@ -260,13 +260,13 @@ function useCalculatedValues() {
     }
 
     const amount = computed(() => new Calculator(
-        transactionData.value?.amount || "",
+        transactionData.value?.amount,
         "amount",
         calculatorAllowObject,
     ).resultObject)
 
     const price = computed(() => new Calculator(
-        transactionData.value?.price || "",
+        transactionData.value?.price,
         "price",
         calculatorAllowObject,
     ).resultObject)

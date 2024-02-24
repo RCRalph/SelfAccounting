@@ -364,13 +364,13 @@ function useCalculatedValues() {
     }
 
     const sourceValue = computed(() => new Calculator(
-        transferData.value?.source.value || "",
+        transferData.value?.source.value,
         "price",
         calculatorAllowObject,
     ).resultObject)
 
     const targetValue = computed(() => new Calculator(
-        transferData.value?.target.value || "",
+        transferData.value?.target.value,
         "price",
         calculatorAllowObject,
     ).resultObject)

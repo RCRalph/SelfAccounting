@@ -24,16 +24,17 @@ export default class Calculator {
     private readonly errorMargin: number
 
     constructor(
-        operation: string | number,
+        operation: string | number | null | undefined,
         fieldType: keyof typeof Calculator.FIELDS | undefined,
         private readonly allow: Allow = {null: true, zero: true, negative: true},
+        private readonly additionalValidation: ((value: number) => string | true)[] = [],
     ) {
         if (typeof operation == "string") {
             this.operation = operation.trim()
                 .replaceAll(" ", "")
                 .replaceAll(",", ".")
         } else {
-            this.operation = operation
+            this.operation = operation || ""
         }
 
         if (fieldType != undefined) {
@@ -112,7 +113,7 @@ export default class Calculator {
         return operation
     }
 
-    validate(value: string | number) {
+    private validate(value: string | number) {
         if (this.allow.null && typeof value == "string" && !value.length) {
             return undefined
         }
@@ -131,10 +132,16 @@ export default class Calculator {
             return `${name} is invalid`
         }
 
+        value = Number(value)
+        for (const item of this.additionalValidation) {
+            const message = item(value)
+            if (typeof message == "string") return message
+        }
+
         return undefined
     }
 
-    calculate(operation: string | number) {
+    private calculate(operation: string | number) {
         if (typeof operation == "number") {
             return String(operation)
         }

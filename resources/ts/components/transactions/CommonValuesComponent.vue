@@ -232,13 +232,13 @@ function useCalculatedValues() {
     }
 
     const amount = computed(() => new Calculator(
-        commonValues.value?.amount || "",
+        commonValues.value?.amount,
         "amount",
         calculatorAllowObject,
     ).resultObject)
 
     const price = computed(() => new Calculator(
-        commonValues.value?.price || "",
+        commonValues.value?.price,
         "price",
         calculatorAllowObject,
     ).resultObject)
