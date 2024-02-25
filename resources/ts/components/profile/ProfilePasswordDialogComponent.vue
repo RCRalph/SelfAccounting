@@ -99,7 +99,7 @@ import { useStatusStore } from "@stores/status"
 import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
 
-const $form = ref<VForm | null>(null)
+const $form = ref<VForm>()
 
 const status = useStatusStore()
 

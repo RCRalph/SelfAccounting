@@ -80,7 +80,7 @@ const props = defineProps<{
     modelValue: UserData
 }>()
 
-const $form = ref<VForm | null>(null)
+const $form = ref<VForm>()
 
 const status = useStatusStore()
 
