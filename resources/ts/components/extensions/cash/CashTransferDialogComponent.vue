@@ -7,16 +7,15 @@
         <template v-slot:activator="{ props: dialogProps }">
             <v-btn
                 v-bind="dialogProps"
-                :disabled="props.disabled || !(cashAccount && props.accountIDs.includes(cashAccount))"
+                :disabled="props.disabled || !props.accountIDs.includes(cashAccount)"
                 class="mx-1"
                 width="90"
                 variant="outlined"
-            >
-                Cash
-            </v-btn>
+                text="Cash"
+            ></v-btn>
         </template>
 
-        <v-card v-if="ready">
+        <v-card v-if="ready && props.currency">
             <CardTitleWithButtons title="Set cash"></CardTitleWithButtons>
 
             <v-card-text>
@@ -186,7 +185,7 @@ const model = defineModel<Record<string, number>>({
 })
 
 const props = defineProps<{
-    currency: Currency,
+    currency: Currency | undefined,
     type: "source" | "target",
     accountIDs: number[],
     disabled: boolean,
@@ -214,6 +213,8 @@ function useCash() {
     )
 
     function getData() {
+        if (!props.currency) return
+
         ready.value = false
 
         axios.get(`/web-api/extensions/cash/${props.currency.id}`)
