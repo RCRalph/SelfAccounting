@@ -49,7 +49,6 @@
                         <v-col cols="12" md="8">
                             <v-combobox
                                 v-model="transactionData.title"
-                                v-model:menu="titleMenuShow"
                                 :items="titles"
                                 :loading="loading.title"
                                 :rules="[
@@ -311,7 +310,7 @@ const {canSubmit, dialog, loading, ready} = useComponentState()
 const {accounts, categories, getData, transactionData, transactionDataCopy, usedAccount} = useData()
 const {amount, price, value} = useCalculatedValues()
 const {reset, update} = useActions()
-const {getTitles, titleMenuShow, titles} = useTitles(
+const {getTitles, titles} = useTitles(
     loading,
     `/web-api/${props.type}/currency/${currencies.usedCurrency}/titles`,
 )

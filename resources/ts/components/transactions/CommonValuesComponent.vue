@@ -37,7 +37,6 @@
                         <v-col cols="12" md="8">
                             <v-combobox
                                 v-model="commonValues.title"
-                                v-model:menu="titleMenuShow"
                                 :items="titles"
                                 :loading="loading.title"
                                 :rules="[
@@ -249,7 +248,7 @@ function useCalculatedValues() {
 const {dialog, canSubmit: canUpdate, loading} = useComponentState()
 const {commonValues, usedAccount, update} = useCommonValues()
 const {amount, price} = useCalculatedValues()
-const {titles, getTitles, titleMenuShow} = useTitles(
+const {titles, getTitles} = useTitles(
     loading,
     `/web-api/${props.type}/currency/${currencies.usedCurrency}/titles`,
 )

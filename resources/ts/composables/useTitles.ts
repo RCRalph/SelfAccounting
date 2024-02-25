@@ -9,7 +9,6 @@ import { useStatusStore } from "@stores/status"
 export default function useTitles(loading: Ref<Loading>, url: string) {
     const status = useStatusStore()
     const titles = ref<string[]>([])
-    const titleMenuShow = ref(false)
 
     const {updateWithOffset: getTitles} = useUpdateWithOffset((args) => {
         if (!args) return
@@ -27,7 +26,6 @@ export default function useTitles(loading: Ref<Loading>, url: string) {
                 titles.value = data.titles
 
                 loading.value.title = false
-                titleMenuShow.value = true
             })
             .catch(err => {
                 console.error(err)
@@ -36,5 +34,5 @@ export default function useTitles(loading: Ref<Loading>, url: string) {
             })
     })
 
-    return {getTitles, titleMenuShow, titles}
+    return {getTitles, titles}
 }
