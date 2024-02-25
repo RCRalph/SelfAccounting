@@ -182,17 +182,9 @@ tr {
     }
 }
 
-.large-chip-avatar {
-    .v-avatar {
-        height: 48px !important;
-        min-width: 48px !important;
-        width: 48px !important;
-        margin-right: 12px !important;
-        margin-left: -8px !important
-    }
-
-    .v-chip__close {
-        margin-left: 12px !important;
+.disable-row-margin {
+    .v-row + .v-row {
+        margin-top: -12px;
     }
 }
 

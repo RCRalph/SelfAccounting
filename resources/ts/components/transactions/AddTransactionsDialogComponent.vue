@@ -36,7 +36,10 @@
             </CardTitleWithButtons>
 
             <v-card-text v-if="transactionData.length">
-                <v-form v-model="canSubmit">
+                <v-form
+                    v-model="canSubmit"
+                    class="disable-row-margin"
+                >
                     <v-row
                         v-for="(item, i) in transactionData"
                         v-show="page == i"
@@ -95,11 +98,11 @@
                             <v-text-field
                                 v-model="item.price"
                                 :suffix="currencies.usedCurrencyObject.ISO"
-                                :error-messages="priceModified[page] ? price.error : undefined"
+                                :error-messages="priceModified[i] ? price.error : undefined"
                                 :hint="price.hint"
                                 variant="underlined"
                                 label="Price"
-                                @input="priceModified[page] = true"
+                                @input="priceModified[i] = true"
                             >
                                 <template v-slot:append-inner>
                                     <CalculatorTooltipComponent></CalculatorTooltipComponent>
@@ -210,6 +213,7 @@ import { useStatusStore } from "@stores/status"
 import { useCurrenciesStore } from "@stores/currencies"
 import { useExtensionsStore } from "@stores/extensions"
 import Validator from "@classes/Validator"
+import Calculator from "@classes/Calculator"
 
 import CommonValuesComponent from "@components/transactions/CommonValuesComponent.vue"
 import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
@@ -218,7 +222,6 @@ import CashTransactionsDialogComponent from "@components/extensions/cash/CashTra
 import type { Transaction } from "@interfaces/Transaction"
 import type { CategoryData } from "@interfaces/Category"
 import type { AccountData } from "@interfaces/Account"
-import Calculator from "@classes/Calculator"
 
 const props = defineProps<{
     type: "income" | "expenses"
@@ -236,11 +239,7 @@ const formats = useFormats()
 function usePriceModified() {
     const priceModified = ref<boolean[]>([])
 
-    const allPricesModified = computed(() => {
-        if (!priceModified.value.length) return true
-
-        return priceModified.value.reduce((item1, item2) => item1 && item2)
-    })
+    const allPricesModified = computed(() => priceModified.value.every(item => item))
 
     function commonValuesPriceChange() {
         priceModified.value = priceModified.value.map(() => true)
