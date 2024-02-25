@@ -4,7 +4,7 @@ export default class Validator {
     static date(
         allowNull = false,
         minDate = new Date("1970-01-01"),
-    ): (date: string | undefined) => boolean | string {
+    ): (date: string | null | undefined) => boolean | string {
         return (date) => {
             if (allowNull && !date && typeof date != "undefined") return true
 
@@ -23,7 +23,7 @@ export default class Validator {
         name: string,
         maxLength: number,
         allowNull = false,
-    ): (title: string | undefined) => boolean | string {
+    ): (title: string | null | undefined) => boolean | string {
         name = name.slice(0, 1).toUpperCase() + name.slice(1)
 
         return (title) => {
@@ -42,7 +42,7 @@ export default class Validator {
     static amount(
         allowNull = false,
         allowZero = false,
-    ): (amount: string | number | undefined) => boolean | string {
+    ): (amount: string | number | null | undefined) => boolean | string {
         return (amount) => {
             if (allowNull && !amount && typeof amount != "undefined") return true
 
@@ -68,7 +68,7 @@ export default class Validator {
         allowNull = false,
         allowNegative = false,
         allowZero = false,
-    ): (price: string | number | undefined) => boolean | string {
+    ): (price: string | number | null | undefined) => boolean | string {
         return (price) => {
             if (allowNull && !price && typeof price != "undefined") return true
 
@@ -106,7 +106,7 @@ export default class Validator {
 
     static email(
         allowNull = false,
-    ): (email: string | undefined) => boolean | string {
+    ): (email: string | null | undefined) => boolean | string {
         return (email) => {
             if (allowNull && !email && typeof email != "undefined") {
                 return true
@@ -124,7 +124,7 @@ export default class Validator {
 
     static password(
         allowNull = false,
-    ): (password: string | undefined) => boolean | string {
+    ): (password: string | null | undefined) => boolean | string {
         return (password) => {
             if (allowNull && !password && typeof password != "undefined") {
                 return true
@@ -145,7 +145,7 @@ export default class Validator {
         type: "value" | "income" | "expenses" | "source" | "target" = "value",
         allowNull = true,
         allowUndefined = true,
-    ): (amount: string | number | undefined) => boolean | string {
+    ): (amount: string | number | null | undefined) => boolean | string {
         return (amount) => {
             if (allowNull && !amount || allowUndefined && typeof amount == "undefined") return true
 
