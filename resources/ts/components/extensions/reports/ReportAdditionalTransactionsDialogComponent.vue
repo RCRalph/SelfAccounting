@@ -9,13 +9,13 @@
                 v-bind="dialogProps"
                 variant="outlined"
                 class="ma-1"
-                text="Queries"
+                text="Transactions"
                 block
             ></v-btn>
         </template>
 
         <v-card>
-            <CardTitleWithButtons title="Queries"></CardTitleWithButtons>
+            <CardTitleWithButtons title="Additional transactions"></CardTitleWithButtons>
 
             <v-card-text v-if="model.length">
                 <v-form
@@ -28,49 +28,27 @@
                     >
                         <v-col
                             cols="12"
-                            sm="6"
-                            md="3"
+                            md="4"
                         >
                             <v-text-field
-                                v-model="item.min_date"
-                                :max="item.max_date"
+                                v-model="item.date"
                                 :rules="[
-                                    Validator.date(true)
+                                    Validator.date(false)
                                 ]"
+                                variant="underlined"
+                                label="Date"
+                                type="date"
                                 min="1970-01-01"
-                                variant="underlined"
-                                label="Minimal date"
-                                type="date"
                             ></v-text-field>
                         </v-col>
 
-                        <v-col
-                            cols="12"
-                            sm="6"
-                            md="3"
-                        >
-                            <v-text-field
-                                v-model="item.max_date"
-                                :min="item.min_date || '1970-01-01'"
-                                :rules="[
-                                    Validator.date(true)
-                                ]"
-                                variant="underlined"
-                                label="Maximal date"
-                                type="date"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col
-                            cols="12"
-                            md="6"
-                        >
+                        <v-col cols="12" md="8">
                             <v-combobox
                                 v-model="item.title"
                                 :items="titles"
                                 :loading="loading.title"
                                 :rules="[
-                                    Validator.title('Title', 64, true)
+                                    Validator.title('Title', 64)
                                 ]"
                                 variant="underlined"
                                 label="Title"
@@ -80,15 +58,14 @@
 
                         <v-col
                             cols="12"
-                            sm="6"
-                            md="3"
+                            md="4"
                         >
                             <v-text-field
-                                v-model="item.min_amount"
-                                :error-messages="minAmount[i].error"
-                                :hint="minAmount[i].hint"
-                                label="Minimal amount"
+                                v-model="item.amount"
+                                :error-messages="amounts[i].error"
+                                :hint="amounts[i].hint"
                                 variant="underlined"
+                                label="Amount"
                             >
                                 <template v-slot:append-inner>
                                     <CalculatorTooltipComponent></CalculatorTooltipComponent>
@@ -98,15 +75,16 @@
 
                         <v-col
                             cols="12"
-                            sm="6"
-                            md="3"
+                            md="4"
                         >
                             <v-text-field
-                                v-model="item.max_amount"
-                                :error-messages="maxAmount[i].error"
-                                :hint="maxAmount[i].hint"
-                                label="Maximal amount"
+                                v-model="item.price"
+                                :suffix="currencies.usedCurrencyObject.ISO"
+                                :error-messages="priceModified[i] ? prices[i].error : undefined"
+                                :hint="prices[i].hint"
                                 variant="underlined"
+                                label="Price"
+                                @input="priceModified[i] = true"
                             >
                                 <template v-slot:append-inner>
                                     <CalculatorTooltipComponent></CalculatorTooltipComponent>
@@ -116,47 +94,21 @@
 
                         <v-col
                             cols="12"
-                            sm="6"
-                            md="3"
+                            md="4"
                         >
-                            <v-text-field
-                                v-model="item.min_price"
-                                :error-messages="minPrice[i].error"
-                                :hint="minPrice[i].hint"
-                                label="Minimal price"
-                                variant="underlined"
-                            >
-                                <template v-slot:append-inner>
-                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
-                                </template>
-                            </v-text-field>
+                            <ValueFieldComponent
+                                :value="values[i]"
+                                :iso="currencies.findCurrency(item.currency_id)?.ISO"
+                            ></ValueFieldComponent>
                         </v-col>
 
                         <v-col
                             cols="12"
-                            sm="6"
-                            md="3"
-                        >
-                            <v-text-field
-                                v-model="item.max_price"
-                                :error-messages="maxPrice[i].error"
-                                :hint="maxPrice[i].hint"
-                                label="Maximal price"
-                                variant="underlined"
-                            >
-                                <template v-slot:append-inner>
-                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
-                                </template>
-                            </v-text-field>
-                        </v-col>
-
-                        <v-col
-                            cols="12"
-                            md="3"
+                            md="4"
                         >
                             <v-select
                                 v-model="item.currency_id"
-                                :items="currencyItems"
+                                :items="currencies.currencies"
                                 item-title="ISO"
                                 item-value="id"
                                 label="Currency"
@@ -167,7 +119,7 @@
 
                         <v-col
                             cols="12"
-                            md="3"
+                            md="4"
                         >
                             <v-select
                                 v-model="item.category_id"
@@ -193,7 +145,7 @@
 
                         <v-col
                             cols="12"
-                            md="3"
+                            md="4"
                         >
                             <v-select
                                 v-model="item.account_id"
@@ -216,18 +168,6 @@
                                 </template>
                             </v-select>
                         </v-col>
-
-                        <v-col
-                            cols="12"
-                            md="3"
-                        >
-                            <v-select
-                                v-model="item.query_data"
-                                :items="queryItems"
-                                label="Query type"
-                                variant="underlined"
-                            ></v-select>
-                        </v-col>
                     </v-row>
                 </v-form>
             </v-card-text>
@@ -247,7 +187,7 @@
                 @remove="remove"
             >
                 <v-btn
-                    :disabled="!canSubmit || loading.submit"
+                    :disabled="canSubmit === false || loading.submit || !allPricesModified"
                     :loading="loading.submit"
                     text="Submit"
                     color="success"
@@ -263,21 +203,25 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
+import { round } from "lodash"
 
-import type { ReportQuery } from "@interfaces/Reports"
+import type { VForm } from "vuetify/components"
+
+import type { ReportTransaction } from "@interfaces/Reports"
 import type { CategoryData } from "@interfaces/Category"
 import type { AccountData } from "@interfaces/Account"
 
 import { useCurrenciesStore } from "@stores/currencies"
+import { currentTimeZoneDate } from "@composables/useDates"
 import useComponentState from "@composables/useComponentState"
-import useTitles from "@composables/useTitles"
 import useFormats from "@composables/useFormats"
+import useTitles from "@composables/useTitles"
 import Validator from "@classes/Validator"
 import Calculator from "@classes/Calculator"
 
 import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
-const model = defineModel<ReportQuery[]>({default: []})
+const model = defineModel<ReportTransaction[]>({default: []})
 
 const props = defineProps<{
     categories: Record<number, CategoryData[]>
@@ -292,24 +236,22 @@ function useActions() {
 
     function add() {
         model.value.push({
-            query_data: "income",
-            min_date: null,
-            max_date: null,
-            title: null,
-            min_amount: null,
-            max_amount: null,
-            min_price: null,
-            max_price: null,
-            currency_id: null,
+            date: currentTimeZoneDate(),
+            title: undefined,
+            amount: 1,
+            price: "",
             category_id: null,
             account_id: null,
+            currency_id: currencies.usedCurrency,
         })
 
+        priceModified.value.push(false)
         page.value = model.value.length - 1
     }
 
     function remove() {
         model.value.splice(page.value, 1)
+        priceModified.value.splice(page.value, 1)
         page.value = Math.min(model.value.length - 1, page.value)
     }
 
@@ -320,76 +262,50 @@ function useActions() {
     return {page, add, remove, submit}
 }
 
+function usePriceModified() {
+    const priceModified = ref<boolean[]>([])
+
+    const allPricesModified = computed(() => priceModified.value.every(item => item))
+
+    return {priceModified, allPricesModified}
+}
+
 function useCalculatedValues() {
     const calculatorAllowObject = {
-        null: true,
-        negative: false,
+        null: false,
+        negative: true,
         zero: true,
     }
 
-    const minAmount = computed(() => Array.from(
+    const amounts = computed(() => Array.from(
         model.value,
         item => new Calculator(
-            item.min_amount,
+            item.amount,
             "amount",
             calculatorAllowObject,
-            [
-                value => value <= new Calculator(item.max_amount, "amount").resultValue ||
-                    "Maximal amount has to be greater than minimal amount",
-            ],
         ).resultObject,
     ))
 
-    const maxAmount = computed(() => Array.from(
+    const prices = computed(() => Array.from(
         model.value,
         item => new Calculator(
-            item.max_amount,
-            "amount",
-            calculatorAllowObject,
-            [
-                value => new Calculator(item.min_amount, "amount").resultValue <= value ||
-                    "Maximal amount has to be greater than minimal amount",
-            ],
-        ).resultObject,
-    ))
-
-    const minPrice = computed(() => Array.from(
-        model.value,
-        item => new Calculator(
-            item.min_price,
+            item.price,
             "price",
             calculatorAllowObject,
-            [
-                value => value <= new Calculator(item.max_price, "price").resultValue ||
-                    "Maximal price has to be greater than minimal price",
-            ],
         ).resultObject,
     ))
 
-    const maxPrice = computed(() => Array.from(
+    const values = computed(() => Array.from(
         model.value,
-        item => new Calculator(
-            item.max_price,
-            "price",
-            calculatorAllowObject,
-            [
-                value => new Calculator(item.min_price, "price").resultValue <= value ||
-                    "Maximal price has to be greater than minimal price",
-            ],
-        ).resultObject,
+        (_, i) => round(amounts.value[i].value * prices.value[i].value, 2) || 0,
     ))
 
-    return {minAmount, maxAmount, minPrice, maxPrice}
+    return {amounts, prices, values}
 }
 
 function useSelects() {
-    const currencyItems = ref([
-        {id: null, ISO: "All currencies"},
-        ...currencies.currencies,
-    ])
-
     const categoryItems = computed(() => {
-        const result: CategoryData[] = [{id: null, name: "All categories"}]
+        const result: CategoryData[] = [{id: null, name: "N/A"}]
 
         if (props.categories[Number(model.value[page.value].currency_id)]) {
             result.push(...props.categories[Number(model.value[page.value].currency_id)])
@@ -401,7 +317,7 @@ function useSelects() {
     const accountItems = computed(() => {
         const result: AccountData[] = [{
             id: null,
-            name: "All accounts",
+            name: "N/A",
             start_date: "1970-01-01",
         }]
 
@@ -412,23 +328,19 @@ function useSelects() {
         return result
     })
 
-    const queryItems = ref([
-        {value: "income", title: "Income"},
-        {value: "expenses", title: "Expenses"},
-    ])
-
     function resetSelects() {
         model.value[page.value].category_id = null
         model.value[page.value].account_id = null
     }
 
-    return {currencyItems, categoryItems, accountItems, queryItems, resetSelects}
+    return {categoryItems, accountItems, resetSelects}
 }
 
 const {dialog, canSubmit, loading} = useComponentState()
+const {priceModified, allPricesModified} = usePriceModified()
 const {page, add, remove, submit} = useActions()
-const {minAmount, maxAmount, minPrice, maxPrice} = useCalculatedValues()
-const {currencyItems, categoryItems, accountItems, queryItems, resetSelects} = useSelects()
+const {amounts, prices, values} = useCalculatedValues()
+const {categoryItems, accountItems, resetSelects} = useSelects()
 const {titles, getTitles} = useTitles(loading, "/web-api/extensions/reports/titles")
 
 watch(() => model.value[page.value]?.title, (newValue, oldValue) => {

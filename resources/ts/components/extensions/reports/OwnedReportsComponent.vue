@@ -86,11 +86,10 @@
                             </template>
                         </v-tooltip>
 
-                        <!--<EditReportDialogComponent
+                        <EditReportDialogComponent
                             :id="item.id"
-                            icon
-                            @updated="updated"
-                        ></EditReportDialogComponent>-->
+                            show-icon
+                        ></EditReportDialogComponent>
 
                         <v-tooltip
                             :text="duplicatedReportID == item.id ? 'Duplicating...' : 'Duplicate report'"
@@ -137,7 +136,7 @@ import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import Validator from "@classes/Validator"
 
-import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
+import EditReportDialogComponent from "@components/extensions/reports/EditReportDialogComponent.vue"
 
 const router = useRouter()
 const status = useStatusStore()

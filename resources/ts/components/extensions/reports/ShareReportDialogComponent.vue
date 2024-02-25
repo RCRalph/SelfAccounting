@@ -1,138 +1,160 @@
 <template>
-    <v-dialog v-model="dialog" max-width="500" persistent>
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined v-bind="attrs" v-on="on">Share</v-btn>
+    <v-dialog
+        v-model="dialog"
+        max-width="500"
+        persistent
+    >
+        <template v-slot:activator="{ props: dialogProps }">
+            <v-btn
+                v-bind="dialogProps"
+                variant="outlined"
+                text="Share"
+            ></v-btn>
         </template>
 
         <v-card>
-            <v-card-title>Share</v-card-title>
+            <CardTitleWithButtons title="Share"></CardTitleWithButtons>
 
-            <v-card-text v-if="users.length" class="d-flex justify-center flex-wrap">
+            <v-card-text
+                v-if="model.length"
+                class="d-flex justify-center flex-wrap"
+            >
                 <v-chip
-                    v-for="(item, i) in users"
-                    :key="i"
-                    pill close outlined large
+                    v-for="item in model"
+                    :prepend-avatar="item.profile_picture_link"
+                    :text="item.username"
+                    size="x-large"
+                    variant="outlined"
                     class="large-chip-avatar"
+                    closable
                     @click:close="removeUser(item.email)"
-                >
-                    <v-avatar left>
-                        <v-img :src="item.profile_picture_link"></v-img>
-                    </v-avatar>
-
-                    {{ item.username }}
-                </v-chip>
+                ></v-chip>
             </v-card-text>
 
-            <v-card-text v-else class="text-center text-h6 pb-0">Add a user by entering an e-mail&nbsp;address&nbsp;below</v-card-text>
+            <v-card-text
+                v-else
+                class="text-center text-h6 pb-0"
+            >
+                Add a user by entering an e-mail&nbsp;address&nbsp;below
+            </v-card-text>
 
             <v-card-text>
-                <v-row no-gutters>
-                    <v-col cols="12" sm="6" offset-sm="2">
-                        <v-form ref="form" v-model="canAdd">
+                <v-row>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                        offset-sm="2"
+                    >
+                        <v-form
+                            v-model="canSubmit"
+                            ref="$form"
+                        >
                             <v-text-field
+                                v-model="email"
+                                :rules="[
+                                    Validator.email(),
+                                    () => !emailExists || `This user doesn't exist`,
+                                    value => !model.map(item => item.email).includes(value) || `This user is already added`
+                                ]"
                                 type="email"
                                 label="E-Mail address"
-                                v-model="email"
                                 counter="64"
-                                :rules="[
-                                    validation.email(),
-                                    () => emailExists || `This user doesn't exist`,
-                                    email => !users.map(item => item.email).includes(email) || `This user is already added`
-                                ]"
+                                variant="underlined"
+                                @update:model-value="emailExists = false"
                             ></v-text-field>
                         </v-form>
                     </v-col>
 
-                    <v-col cols="12" sm="4">
-                        <div class="d-flex justify-sm-start justify-center align-center mx-3 my-1" style="height: 100%">
-                            <v-btn outlined @click="addUser" :loading="loading" :disabled="!canAdd">Add</v-btn>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                        <div
+                            class="d-flex justify-sm-start justify-center align-center mx-3 my-1"
+                            style="height: 100%"
+                        >
+                            <v-btn
+                                :disabled="!canSubmit"
+                                :loading="loading.submit"
+                                variant="outlined"
+                                text="Add"
+                                @click="addUser"
+                            ></v-btn>
                         </div>
                     </v-col>
                 </v-row>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-center">
-                <v-btn color="success" class="mx-1" outlined :disabled="loading" @click="update">
-                    Submit
-                </v-btn>
-            </v-card-actions>
+            <CardActionsSubmitComponent
+                :loading="loading.submit"
+                :can-submit="true"
+                @submit="update"
+            ></CardActionsSubmitComponent>
         </v-card>
-
-        <ErrorSnackbarComponent v-model="error"></ErrorSnackbarComponent>
     </v-dialog>
 </template>
 
-<script>
-import ErrorSnackbarComponent from "@/ErrorSnackbarComponent.vue";
+<script setup lang="ts">
+import axios from "axios"
+import { ref } from "vue"
 
-import { useCurrenciesStore } from "&/stores/currencies";
-import validation from "&/mixins/validation";
-import main from "&/mixins/main";
+import type { ReportUser } from "@interfaces/Reports"
 
-export default {
-    setup() {
-        const currencies = useCurrenciesStore();
+import useComponentState from "@composables/useComponentState"
+import Validator from "@classes/Validator"
+import { VForm } from "vuetify/components"
+import { useStatusStore } from "@stores/status"
 
-        return { currencies };
-    },
-    mixins: [validation, main],
-    components: {
-        ErrorSnackbarComponent
-    },
-    props: {
-        value: {
-            required: true,
-            type: Array
-        }
-    },
-    data() {
-        return {
-            users: [],
-            dialog: false,
-            error: false,
-            loading: false,
-            email: null,
-            emailExists: true,
-            canAdd: true
-        }
-    },
-    methods: {
-        update() {
-            this.$emit("input", this.users);
-            this.dialog = false;
-        },
-        addUser() {
-            this.loading = true;
+const model = defineModel<ReportUser[]>({default: []})
 
-            axios
-                .post("/web-api/extensions/reports/user-info", { email: this.email })
-                .then(response => {
-                    const data = response.data;
+const status = useStatusStore()
 
-                    this.$refs.form.reset();
-                    this.users.push(data.user);
+const $form = ref<VForm>()
 
-                    this.loading = false;
-                })
-                .catch(err => {
-                    if (err.response.status == 422 && err.response.data.errors.email.includes("The selected email is invalid.")) {
-                        this.emailExists = false;
-                        this.$refs.form.validate();
-                        this.loading = false;
-                    }
-                    else {
-                        console.error(err);
-                        setTimeout(() => this.error = true, 1000);
-                        setTimeout(() => this.loading = false, 2000);
-                    }
-                })
-        },
-        removeUser(email) {
-            this.users = this.users.filter(item => item.email != email);
-        }
-    },
-    mounted() {
-        this.users = _.cloneDeep(this.value);
+function useUsers() {
+    const email = ref<string>("")
+
+    const emailExists = ref(false)
+
+    function addUser() {
+        loading.value.submit = true
+
+        axios.post("/web-api/extensions/reports/user-info", {email: email.value})
+            .then(response => {
+                const data = response.data
+
+                $form.value?.reset()
+                model.value.push(data.user)
+
+                loading.value.submit = false
+            })
+            .catch(async err => {
+                if (
+                    err.response.status == 422 &&
+                    err.response.data.errors.email.includes("The selected email is invalid.")
+                ) {
+                    emailExists.value = true
+                    await $form.value?.validate()
+                    loading.value.submit = false
+                } else {
+                    console.error(err)
+                    setTimeout(() => status.showError(), 1000)
+                    setTimeout(() => loading.value.submit = false, 2000)
+                }
+            })
     }
+
+    function removeUser(email: string) {
+        model.value = model.value.filter(item => item.email != email)
+    }
+
+    function update() {
+        dialog.value = false
+    }
+
+    return {email, emailExists, addUser, removeUser, update}
 }
+
+const {dialog, loading, canSubmit} = useComponentState()
+const {email, emailExists, addUser, removeUser, update} = useUsers()
 </script>
