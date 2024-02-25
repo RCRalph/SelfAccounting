@@ -19,7 +19,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function addNamesToPaginatedTransactionsItems($items, Currency $currency)
+    protected function addNamesToPaginatedTransactionsItems($items, Currency $currency)
     {
         $paginatedData = $items->getCollection()->toArray();
 
@@ -27,7 +27,7 @@ class Controller extends BaseController
             ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => [
+            ->mapWithKeys(fn($item) => [$item["id"] => [
                 "name" => $item["name"],
                 "icon" => $item["icon"]
             ]]);
@@ -36,7 +36,7 @@ class Controller extends BaseController
             ->select("id", "name", "icon")
             ->where("currency_id", $currency->id)
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => [
+            ->mapWithKeys(fn($item) => [$item["id"] => [
                 "name" => $item["name"],
                 "icon" => $item["icon"]
             ]]);
@@ -64,9 +64,9 @@ class Controller extends BaseController
         return $items;
     }
 
-    public function getTypeRelation($type = null)
+    protected function getTypeRelation($type = null)
     {
-        $type = $type ? $type : request()->type;
+        $type = $type ?: request()->type;
 
         switch ($type) {
             case "income":
@@ -78,12 +78,12 @@ class Controller extends BaseController
         }
     }
 
-    public function removeFile($disk, $directory, $name)
+    protected function removeFile($disk, $directory, $name)
     {
         Storage::disk($disk)->delete("$directory/$name");
     }
 
-    public function saveImage($disk, $image, $directory, $fileToRemove = null, $fitResolution = [])
+    protected function saveImage($disk, $image, $directory, $fileToRemove = null, $fitResolution = [])
     {
         $img = Image::make($image);
         if (count($fitResolution) == 2) {
@@ -101,5 +101,27 @@ class Controller extends BaseController
         Storage::disk($disk)->put("$directory/$filename", $img->stream());
 
         return $filename;
+    }
+
+    protected function getTitles(string $title, int $currencyID = null)
+    {
+        $incomeTitles = auth()->user()->income()
+            ->select("title")
+            ->where("title", "ilike", "%" . $title . "%");
+
+        $expensesTitles = auth()->user()->expenses()
+            ->select("title")
+            ->where("title", "ilike", "%" . $title . "%");
+
+        if ($currencyID != null) {
+            $incomeTitles->where("currency_id", $currencyID);
+            $expensesTitles->where("currency_id", $currencyID);
+        }
+
+        return $incomeTitles
+            ->union($expensesTitles) // Unions ensure unique rows
+            ->orderBy("title")
+            ->get()
+            ->pluck("title");
     }
 }

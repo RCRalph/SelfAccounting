@@ -294,6 +294,17 @@ class ReportsController extends Controller
         return response()->json(compact("user"));
     }
 
+    public function titles()
+    {
+        $title = request()->validate([
+            "title" => ["required", "string", "max:64"],
+        ])["title"];
+
+        return response()->json([
+            "titles" => $this->getTitles($title)
+        ]);
+    }
+
     public function store()
     {
         $data = request()->validate([
@@ -416,7 +427,7 @@ class ReportsController extends Controller
                 return $item;
             });
 
-        $data["additionalEntries"] = $report->additionalEntries
+        $data["additionalTransactions"] = $report->additionalEntries
             ->makeHidden(["report_id", "created_at", "updated_at"])
             ->map(function ($item) {
                 foreach (["amount", "price"] as $key) {
@@ -479,17 +490,17 @@ class ReportsController extends Controller
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["queries"];
 
-        $additionalEntries = request()->validate([
-            "additionalEntries" => ["present", "array"],
-            "additionalEntries.*.id" => ["nullable", "integer", "distinct", "exists:report_additional_entries,id", new BelongsToReport($report)],
-            "additionalEntries.*.date" => ["required", "date"],
-            "additionalEntries.*.title" => ["required", "string", "max:64"],
-            "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
-            "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-            "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-        ])["additionalEntries"];
+        $additionalTransactions = request()->validate([
+            "additionalTransactions" => ["present", "array"],
+            "additionalTransactions.*.id" => ["nullable", "integer", "distinct", "exists:report_additional_entries,id", new BelongsToReport($report)],
+            "additionalTransactions.*.date" => ["required", "date"],
+            "additionalTransactions.*.title" => ["required", "string", "max:64"],
+            "additionalTransactions.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "additionalTransactions.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalTransactions.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "additionalTransactions.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "additionalTransactions.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+        ])["additionalTransactions"];
 
         $users = request()->validate([
             "users" => ["present", "array"],
@@ -497,7 +508,10 @@ class ReportsController extends Controller
         ])["users"];
 
         // Update report
-        $report->update($data);
+        $report->update([
+            ...$data,
+            "show_columns" => $this->getColumnBinary($columns)
+        ]);
 
         // Save queries
         $report->queries()
@@ -514,14 +528,14 @@ class ReportsController extends Controller
 
         // Save additional entries
         $report->additionalEntries()
-            ->whereNotIn("id", array_column($additionalEntries, "id"))
+            ->whereNotIn("id", array_column($additionalTransactions, "id"))
             ->delete();
 
-        foreach ($additionalEntries as $entry) {
-            if (isset($entry["id"])) {
-                $report->additionalEntries()->find($entry["id"])->update($entry);
+        foreach ($additionalTransactions as $transaction) {
+            if (isset($transaction["id"])) {
+                $report->additionalEntries()->find($transaction["id"])->update($transaction);
             } else {
-                $report->additionalEntries()->create($entry);
+                $report->additionalEntries()->create($transaction);
             }
         }
 

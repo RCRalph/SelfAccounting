@@ -44,25 +44,6 @@ class TransactionsController extends Controller
         return compact("categories", "accounts");
     }
 
-    private function getTitles(int $currencyID, string $title)
-    {
-        $incomeTitles = auth()->user()->income()
-            ->select("title")
-            ->where("currency_id", $currencyID)
-            ->where("title", "ilike", "%" . $title . "%");
-
-        $expensesTitles = auth()->user()->expenses()
-            ->select("title")
-            ->where("currency_id", $currencyID)
-            ->where("title", "ilike", "%" . $title . "%");
-
-        return $incomeTitles
-            ->union($expensesTitles) // Unions ensure unique rows
-            ->orderBy("title")
-            ->get()
-            ->pluck("title");
-    }
-
     public function show($id)
     {
         $data = $this->getTypeRelation()
@@ -275,7 +256,7 @@ class TransactionsController extends Controller
         ])["title"];
 
         return response()->json([
-            "titles" => $this->getTitles($currency->id, $title)
+            "titles" => $this->getTitles($title, $currency->id)
         ]);
     }
 }
