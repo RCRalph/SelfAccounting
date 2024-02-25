@@ -2,7 +2,7 @@
     <v-card-actions class="d-flex justify-space-between">
         <div :class="display.mobile.value && 'd-flex flex-wrap flex-column-reverse'">
             <v-btn
-                :disabled="props.dataLength <= 1"
+                :disabled="disableDelete"
                 class="ma-1"
                 color="error"
                 variant="outlined"
@@ -12,7 +12,7 @@
             ></v-btn>
 
             <v-btn
-                :disabled="page == 0"
+                :disabled="page <= 0"
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-collapse-left"
@@ -21,7 +21,7 @@
             ></v-btn>
 
             <v-btn
-                :disabled="page == 0"
+                :disabled="page <= 0"
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-left"
@@ -36,7 +36,7 @@
 
         <div :class="display.mobile.value && 'd-flex flex-wrap flex-column'">
             <v-btn
-                :disabled="page == dataLength - 1"
+                :disabled="page >= dataLength - 1"
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-right"
@@ -45,7 +45,7 @@
             ></v-btn>
 
             <v-btn
-                :disabled="page == dataLength - 1"
+                :disabled="page >= dataLength - 1"
                 class="ma-1"
                 variant="outlined"
                 icon="mdi-arrow-collapse-right"
@@ -73,13 +73,15 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue"
 import { useDisplay } from "vuetify"
 
 const display = useDisplay()
 
 const props = defineProps<{
     page: number,
-    dataLength: number
+    dataLength: number,
+    canBeEmpty?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -87,4 +89,6 @@ const emit = defineEmits<{
     "add": [],
     "remove": [],
 }>()
+
+const disableDelete = computed(() => props.dataLength <= 1 && props.canBeEmpty && props.dataLength == 0)
 </script>
