@@ -35,7 +35,7 @@
 
     <v-data-table
         v-model:options="options"
-        :headers="transactionHeaders({
+        :headers="tableHeaders(headers.transactions, {
             appendActions: true
         })"
         :items="tableData.data.value"
@@ -415,7 +415,7 @@ function useTableData() {
     return {getStartData, getMoreData, tableData, typeSingular}
 }
 
-const {transactionHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 const {filterColor, filteredData, loading, options, search, pagination, transactionQuery} = useTableSettings()
 const {getStartData, getMoreData, tableData, typeSingular} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)

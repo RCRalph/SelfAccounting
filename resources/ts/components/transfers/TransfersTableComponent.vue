@@ -1,7 +1,7 @@
 <template>
     <v-data-table
         v-model:options="options"
-        :headers="transferHeaders({
+        :headers="tableHeaders(headers.transfers, {
             appendActions: true
         })"
         :items="tableData.data.value"
@@ -353,7 +353,7 @@ function useTableData() {
     return {getStartData, getMoreData, tableData}
 }
 
-const {transferHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 const {filterColor, filteredData, loading, options, pagination, transferQuery} = useTableSettings()
 const {getStartData, getMoreData, tableData} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)

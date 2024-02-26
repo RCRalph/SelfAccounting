@@ -2,7 +2,7 @@
     <CardTitleWithButtons title="Transfers"></CardTitleWithButtons>
 
     <v-data-table
-        :headers="transferHeaders({
+        :headers="tableHeaders(headers.transfers, {
             disableSort: true
         })"
         :items="props.items"
@@ -36,5 +36,5 @@ const props = defineProps<{
     accounts: Map<number, AccountRestoreData>
 }>()
 
-const {transferHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 </script>

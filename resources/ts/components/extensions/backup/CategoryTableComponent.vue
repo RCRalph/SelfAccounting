@@ -2,7 +2,7 @@
     <CardTitleWithButtons title="Categories"></CardTitleWithButtons>
 
     <v-data-table
-        :headers="categoryHeaders({
+        :headers="tableHeaders(headers.categories, {
             prependCurrency: true
         })"
         :items="props.items"
@@ -78,5 +78,5 @@ const props = defineProps<{
     items: unknown[]
 }>()
 
-const {categoryHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 </script>

@@ -39,7 +39,7 @@
 
             <v-data-table-server
                 v-model:options="options"
-                :headers="ownedReportsHeaders({
+                :headers="tableHeaders(headers.ownedReports, {
                     appendActions: true
                 })"
                 :items="reports"
@@ -195,7 +195,7 @@ function useActions() {
 }
 
 const {loading} = useComponentState()
-const {ownedReportsHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 const {search, options, ownedReportsQuery} = useTableSettings()
 const {total, reports, getData} = useOwnedReports()
 const {duplicatedReportID, duplicate, share} = useActions()

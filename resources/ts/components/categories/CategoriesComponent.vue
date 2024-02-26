@@ -19,7 +19,7 @@
                     <v-card-text>
                         <v-data-table
                             v-model:options="options"
-                            :headers="categoryHeaders({
+                            :headers="tableHeaders(headers.categories, {
                                 excludedColumns: new Set(['start_date', 'end_date']),
                                 appendActions: true
                             })"
@@ -163,7 +163,7 @@ function useData() {
 }
 
 const {ready} = useComponentState()
-const {categoryHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 const {options} = useTableSettings()
 const {categories, getData} = useData()
 

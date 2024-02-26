@@ -2,7 +2,7 @@
     <CardTitleWithButtons :title="props.title"></CardTitleWithButtons>
 
     <v-data-table
-        :headers="transactionHeaders({
+        :headers="tableHeaders(headers.transactions, {
             excludedColumns: new Set(['value']),
             prependCurrency: true,
             disableSort: true
@@ -43,5 +43,5 @@ const props = defineProps<{
 
 const formats = useFormats()
 
-const {transactionHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 </script>

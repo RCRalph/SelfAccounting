@@ -19,7 +19,7 @@
                     <v-card-text>
                         <v-data-table
                             v-model:options="options"
-                            :headers="accountHeaders({
+                            :headers="tableHeaders(headers.accounts,{
                                 excludedColumns: new Set(['start_date', 'start_balance']),
                                 appendActions: true
                             })"
@@ -162,7 +162,7 @@ function useData() {
 }
 
 const {ready} = useComponentState()
-const {accountHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 const {options} = useTableSettings()
 const {accounts, getData} = useData()
 

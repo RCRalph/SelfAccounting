@@ -28,7 +28,7 @@
 
             <v-data-table-server
                 v-model:options="options"
-                :headers="sharedReportsHeaders({
+                :headers="tableHeaders(headers.sharedReports, {
                     appendActions: true
                 })"
                 :items="reports"
@@ -206,7 +206,7 @@ function useSharedReports() {
 }
 
 const {loading, ready} = useComponentState()
-const {sharedReportsHeaders} = useTableHeaders()
+const {headers, tableHeaders} = useTableHeaders()
 const {search, options, filterColor, filteredData, sharedReportsQuery} = useTableSettings()
 const {total, reports, owners, share, getOwners, getData} = useSharedReports()
 const {updateWithOffset} = useUpdateWithOffset(getData)
