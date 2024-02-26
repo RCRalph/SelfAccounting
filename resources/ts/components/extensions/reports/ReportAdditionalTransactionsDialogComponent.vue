@@ -207,7 +207,7 @@ import { round } from "lodash"
 
 import type { VForm } from "vuetify/components"
 
-import type { ReportTransaction } from "@interfaces/Reports"
+import type { ReportTransaction } from "@interfaces/Report"
 import type { CategoryData } from "@interfaces/Category"
 import type { AccountData } from "@interfaces/Account"
 

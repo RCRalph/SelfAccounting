@@ -214,7 +214,7 @@ import { cloneDeep } from "lodash"
 import { ref, watch } from "vue"
 import { useRouter } from "vue-router"
 
-import type { Report } from "@interfaces/Reports"
+import type { Report } from "@interfaces/Report"
 import type { CategoryData } from "@interfaces/Category"
 import type { AccountData } from "@interfaces/Account"
 

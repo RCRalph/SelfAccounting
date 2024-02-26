@@ -229,7 +229,7 @@ import axios from "axios"
 import { cloneDeep } from "lodash"
 import { onMounted, ref, watch } from "vue"
 
-import type { Report } from "@interfaces/Reports"
+import type { Report } from "@interfaces/Report"
 import type { CategoryData } from "@interfaces/Category"
 import type { AccountData } from "@interfaces/Account"
 
@@ -245,7 +245,7 @@ import Calculator from "@classes/Calculator"
 
 const props = defineProps<{
     id: number
-    showIcon: boolean
+    showIcon?: boolean
 }>()
 
 const emit = defineEmits<{

@@ -139,7 +139,7 @@
 import axios from "axios"
 import { onMounted, ref, watch } from "vue"
 
-import type { ReportOwners, SharedReport } from "@interfaces/Reports"
+import type { ReportOwners, SharedReport } from "@interfaces/Report"
 
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"

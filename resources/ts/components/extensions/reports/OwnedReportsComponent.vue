@@ -127,7 +127,7 @@ import axios from "axios"
 import { onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 
-import type { OwnedReport } from "@interfaces/Reports"
+import type { OwnedReport } from "@interfaces/Report"
 
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"

@@ -264,7 +264,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 
-import type { ReportQuery } from "@interfaces/Reports"
+import type { ReportQuery } from "@interfaces/Report"
 import type { CategoryData } from "@interfaces/Category"
 import type { AccountData } from "@interfaces/Account"
 

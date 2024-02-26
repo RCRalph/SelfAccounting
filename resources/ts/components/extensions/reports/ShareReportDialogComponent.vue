@@ -91,7 +91,7 @@
 import axios from "axios"
 import { computed, ref, watch } from "vue"
 
-import type { ReportUser } from "@interfaces/Reports"
+import type { ReportUser } from "@interfaces/Report"
 
 import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"

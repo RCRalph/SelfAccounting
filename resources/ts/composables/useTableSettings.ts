@@ -2,7 +2,7 @@ import { computed, ref } from "vue"
 import type { Loading } from "@interfaces/App"
 import type { DataQuery as TransactionDataQuery } from "@interfaces/Transaction"
 import type { DataQuery as TransferDataQuery } from "@interfaces/Transfer"
-import type { OwnedReportsDataQuery, SharedReportsDataQuery } from "@interfaces/Reports"
+import type { OwnedReportsDataQuery, SharedReportsDataQuery } from "@interfaces/Report"
 
 export default function useTableSettings() {
     const loading = ref<Loading>({
