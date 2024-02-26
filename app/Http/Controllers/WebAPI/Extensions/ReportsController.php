@@ -340,16 +340,16 @@ class ReportsController extends Controller
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["queries"];
 
-        $additionalEntries = request()->validate([
-            "additionalEntries" => ["present", "array"],
-            "additionalEntries.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
-            "additionalEntries.*.title" => ["required", "string", "max:64"],
-            "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "additionalEntries.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
-            "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-            "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-        ])["additionalEntries"];
+        $additionalTransactions = request()->validate([
+            "additionalTransactions" => ["present", "array"],
+            "additionalTransactions.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
+            "additionalTransactions.*.title" => ["required", "string", "max:64"],
+            "additionalTransactions.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "additionalTransactions.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalTransactions.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "additionalTransactions.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "additionalTransactions.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+        ])["additionalTransactions"];
 
         $users = request()->validate([
             "users" => ["present", "array"],
@@ -363,8 +363,8 @@ class ReportsController extends Controller
             $report->queries()->create($query);
         }
 
-        foreach ($additionalEntries as $entry) {
-            $report->additionalEntries()->create($entry);
+        foreach ($additionalTransactions as $transaction) {
+            $report->additionalEntries()->create($transaction);
         }
 
         $report->sharedUsers()->attach(User::whereIn("email", $users)->pluck("id"));

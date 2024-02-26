@@ -33,7 +33,7 @@
                     lg="8"
                     class="multi-button-table-top"
                 >
-                    <!---->
+                    <CreateReportDialogComponent></CreateReportDialogComponent>
                 </v-col>
             </v-row>
 
@@ -136,6 +136,7 @@ import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import Validator from "@classes/Validator"
 
+import CreateReportDialogComponent from "@components/extensions/reports/CreateReportDialogComponent.vue"
 import EditReportDialogComponent from "@components/extensions/reports/EditReportDialogComponent.vue"
 
 const router = useRouter()
