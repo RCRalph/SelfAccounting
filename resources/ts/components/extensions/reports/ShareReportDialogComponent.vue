@@ -45,17 +45,10 @@
                         sm="6"
                         offset-sm="2"
                     >
-                        <v-form
-                            v-model="canSubmit"
-                            ref="$form"
-                        >
+                        <v-form v-model="canSubmit">
                             <v-text-field
                                 v-model="email"
-                                :rules="[
-                                    Validator.email(),
-                                    () => !emailExists || `This user doesn't exist`,
-                                    value => !model.map(item => item.email).includes(value) || `This user is already added`
-                                ]"
+                                :error-messages="emailValidation"
                                 type="email"
                                 label="E-Mail address"
                                 counter="64"
@@ -74,7 +67,7 @@
                             style="height: 100%"
                         >
                             <v-btn
-                                :disabled="!canSubmit"
+                                :disabled="!canSubmit || !email"
                                 :loading="loading.submit"
                                 variant="outlined"
                                 text="Add"
@@ -96,25 +89,34 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref } from "vue"
+import { computed, ref, watch } from "vue"
 
 import type { ReportUser } from "@interfaces/Reports"
 
 import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
-import { VForm } from "vuetify/components"
 import { useStatusStore } from "@stores/status"
 
 const model = defineModel<ReportUser[]>({default: []})
 
 const status = useStatusStore()
 
-const $form = ref<VForm>()
-
 function useUsers() {
     const email = ref<string>("")
 
     const emailExists = ref(false)
+
+    const emailValidation = computed(() => {
+        if (emailExists.value) {
+            return "This user doesn't exist"
+        } else if (model.value.map(item => item.email).includes(email.value)) {
+            return "This user is already added"
+        }
+
+        const validationMessage = Validator.email(true)(email.value)
+
+        return typeof validationMessage == "string" ? validationMessage : undefined
+    })
 
     function addUser() {
         loading.value.submit = true
@@ -123,9 +125,9 @@ function useUsers() {
             .then(response => {
                 const data = response.data
 
-                $form.value?.reset()
                 model.value.push(data.user)
 
+                email.value = ""
                 loading.value.submit = false
             })
             .catch(async err => {
@@ -134,7 +136,6 @@ function useUsers() {
                     err.response.data.errors.email.includes("The selected email is invalid.")
                 ) {
                     emailExists.value = true
-                    await $form.value?.validate()
                     loading.value.submit = false
                 } else {
                     console.error(err)
@@ -152,9 +153,11 @@ function useUsers() {
         dialog.value = false
     }
 
-    return {email, emailExists, addUser, removeUser, update}
+    return {email, emailExists, emailValidation, addUser, removeUser, update}
 }
 
 const {dialog, loading, canSubmit} = useComponentState()
-const {email, emailExists, addUser, removeUser, update} = useUsers()
+const {email, emailExists, emailValidation, addUser, removeUser, update} = useUsers()
+
+watch(dialog, () => email.value = "")
 </script>

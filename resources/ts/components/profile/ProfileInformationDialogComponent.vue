@@ -17,10 +17,7 @@
             <CardTitleWithButtons title="Profile information"></CardTitleWithButtons>
 
             <v-card-text>
-                <v-form
-                    v-model="canSubmit"
-                    ref="$form"
-                >
+                <v-form v-model="canSubmit">
                     <v-row>
                         <v-col cols="12">
                             <v-text-field
@@ -37,10 +34,7 @@
                         <v-col cols="12">
                             <v-text-field
                                 v-model="userData.email"
-                                :rules="[
-                                    Validator.email(),
-                                    () => emailIsUnique || 'This E-Mail address has already been taken'
-                                ]"
+                                :error-messages="emailValidation"
                                 variant="underlined"
                                 type="email"
                                 label="E-Mail address"
@@ -53,8 +47,8 @@
             </v-card-text>
 
             <CardActionsResetUpdateComponent
-                :loading="!!loading.submit"
-                :can-submit="!!canSubmit"
+                :loading="loading.submit"
+                :can-submit="canSubmit"
                 @reset="reset"
                 @update="update"
             ></CardActionsResetUpdateComponent>
@@ -64,9 +58,8 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 
-import type { VForm } from "vuetify/components"
 import type { UserData } from "@interfaces/User"
 
 import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
@@ -80,8 +73,6 @@ const props = defineProps<{
     modelValue: UserData
 }>()
 
-const $form = ref<VForm>()
-
 const status = useStatusStore()
 
 function useInformation() {
@@ -92,9 +83,19 @@ function useInformation() {
 
     const emailIsUnique = ref(true)
 
+    const emailValidation = computed(() => {
+        if (!emailIsUnique.value) {
+            return "This E-Mail address has already been taken"
+        }
+
+        const validationMessage = Validator.email()(userData.value.email)
+        return typeof validationMessage == "string" ? validationMessage : undefined
+    })
+
     function reset() {
         userData.value.username = props.modelValue.username
         userData.value.email = props.modelValue.email
+        emailIsUnique.value = true
     }
 
     function update() {
@@ -116,7 +117,6 @@ function useInformation() {
                     err.response.data.errors.email.includes("The email has already been taken.")
                 ) {
                     emailIsUnique.value = false
-                    $form.value?.validate()
                     loading.value.submit = false
                 } else {
                     console.error(err)
@@ -126,9 +126,9 @@ function useInformation() {
             })
     }
 
-    return {userData, emailIsUnique, reset, update}
+    return {userData, emailIsUnique, emailValidation, reset, update}
 }
 
 const {canSubmit, dialog, loading} = useComponentState()
-const {emailIsUnique, userData, reset, update} = useInformation()
+const {emailIsUnique, userData, emailValidation, reset, update} = useInformation()
 </script>

@@ -17,18 +17,12 @@
             <CardTitleWithButtons title="Password update"></CardTitleWithButtons>
 
             <v-card-text>
-                <v-form
-                    v-model="canSubmit"
-                    ref="$form"
-                >
+                <v-form v-model="canSubmit">
                     <v-row no-gutters>
                         <v-col cols="12">
                             <v-text-field
                                 v-model="passwordData.current.value"
-                                :rules="[
-                                    Validator.password(),
-                                    () => currentPasswordMatch || `Password doesn't match our records`,
-                                ]"
+                                :error-messages="validateCurrentPassword"
                                 :append-icon="!passwordData.current.show ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="passwordData.current.show ? 'text' : 'password'"
                                 variant="underlined"
@@ -36,41 +30,32 @@
                                 counter
                                 @click:append="passwordData.current.show = !passwordData.current.show"
                                 @update:model-value="currentPasswordMatch = true"
-                                @blur="$form?.validate"
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12">
                             <v-text-field
                                 v-model="passwordData.new.value"
-                                :rules="[
-                                    Validator.password(),
-                                    password => password != passwordData.current.value || `New password can't be the same as old password`
-                                ]"
+                                :error-messages="validateNewPassword"
                                 :append-icon="!passwordData.new.show ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="passwordData.new.show ? 'text' : 'password'"
                                 variant="underlined"
                                 label="New password"
                                 counter
                                 @click:append="passwordData.new.show = !passwordData.new.show"
-                                @blur="$form?.validate"
                             ></v-text-field>
                         </v-col>
 
                         <v-col cols="12">
                             <v-text-field
                                 v-model="passwordData.confirm.value"
-                                :rules="[
-                                    Validator.password(),
-                                    password => password == passwordData.new.value || `Passwords don't match`
-                                ]"
+                                :error-messages="validateConfirmPassword"
                                 :append-icon="!passwordData.confirm.show ? 'mdi-eye' : 'mdi-eye-off'"
                                 :type="passwordData.confirm.show ? 'text' : 'password'"
                                 variant="underlined"
                                 label="Confirm password"
                                 counter
                                 @click:append="passwordData.confirm.show = !passwordData.confirm.show"
-                                @blur="$form?.validate"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -78,8 +63,8 @@
             </v-card-text>
 
             <CardActionsSubmitComponent
-                :loading="!!loading.submit"
-                :can-submit="!!canSubmit"
+                :loading="loading.submit"
+                :can-submit="canSubmit"
                 @submit="update"
             ></CardActionsSubmitComponent>
         </v-card>
@@ -88,8 +73,7 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref } from "vue"
-import type { VForm } from "vuetify/components"
+import { computed, ref } from "vue"
 
 import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
 import CardActionsSubmitComponent from "@components/global/card/CardActionsSubmitComponent.vue"
@@ -99,13 +83,9 @@ import { useStatusStore } from "@stores/status"
 import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
 
-const $form = ref<VForm>()
-
 const status = useStatusStore()
 
 function useInformation() {
-    const currentPasswordMatch = ref(true)
-
     const passwordData = ref<UpdatePassword>({
         current: {
             value: "",
@@ -121,14 +101,16 @@ function useInformation() {
         },
     })
 
+    const currentPasswordMatch = ref(true)
+
     function resetFields() {
+        currentPasswordMatch.value = true
         passwordData.value.current.value = ""
         passwordData.value.new.value = ""
         passwordData.value.confirm.value = ""
     }
 
-    async function update() {
-        await $form.value?.validate()
+    function update() {
         if (!canSubmit.value) return
 
         loading.value.submit = true
@@ -150,7 +132,6 @@ function useInformation() {
                     err.response.data.errors?.current_password?.includes("validation.current_password")
                 ) {
                     currentPasswordMatch.value = false
-                    $form.value?.validate()
                     loading.value.submit = false
                 } else {
                     console.error(err)
@@ -163,6 +144,38 @@ function useInformation() {
     return {passwordData, currentPasswordMatch, update}
 }
 
+function usePasswordValidation() {
+    const validateCurrentPassword = computed(() => {
+        if (!currentPasswordMatch.value) {
+            return "Password doesn't match our records"
+        }
+
+        const validationMessage = Validator.password()(passwordData.value.current.value)
+        return typeof validationMessage == "string" ? validationMessage : undefined
+    })
+
+    const validateNewPassword = computed(() => {
+        if (passwordData.value.current.value == passwordData.value.new.value) {
+            return "New password can't be the same as old password"
+        }
+
+        const validationMessage = Validator.password()(passwordData.value.new.value)
+        return typeof validationMessage == "string" ? validationMessage : undefined
+    })
+
+    const validateConfirmPassword = computed(() => {
+        if (passwordData.value.new.value != passwordData.value.confirm.value) {
+            return "Passwords don't match"
+        }
+
+        const validationMessage = Validator.password()(passwordData.value.confirm.value)
+        return typeof validationMessage == "string" ? validationMessage : undefined
+    })
+
+    return {validateCurrentPassword, validateNewPassword, validateConfirmPassword}
+}
+
 const {canSubmit, dialog, loading} = useComponentState()
 const {passwordData, currentPasswordMatch, update} = useInformation()
+const {validateCurrentPassword, validateNewPassword, validateConfirmPassword} = usePasswordValidation()
 </script>
