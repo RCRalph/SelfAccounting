@@ -88,7 +88,7 @@ class ReportsController extends Controller
     {
         $data = request()->validate([
             "items" => ["required", "integer", "in:10,15,20,25,30"],
-            "search" => ["nullable", "string", "min:1", "max:64"],
+            "title" => ["nullable", "string", "min:1", "max:64"],
             "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:id,title", "distinct"],
             "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
@@ -98,8 +98,8 @@ class ReportsController extends Controller
         $reports = auth()->user()->reports()
             ->select("id", "title");
 
-        if (isset($data["search"])) {
-            $reports->where("title", "ilike", "%" . $data["search"] . "%");
+        if (isset($data["title"])) {
+            $reports->where("title", "ilike", "%" . $data["title"] . "%");
         }
 
         if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
@@ -119,7 +119,7 @@ class ReportsController extends Controller
     {
         $data = request()->validate([
             "items" => ["required", "integer", "in:10,15,20,25,30"],
-            "search" => ["nullable", "string", "min:1", "max:64"],
+            "title" => ["nullable", "string", "min:1", "max:64"],
             "owners" => ["nullable", "array"],
             "owners.*" => ["required", "integer", "exists:users,id"],
             "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
@@ -131,8 +131,8 @@ class ReportsController extends Controller
         $reports = auth()->user()->sharedReports()
             ->join("users", "reports.user_id", "=", "users.id");
 
-        if (isset($data["search"])) {
-            $reports->where("title", "ilike", "%" . $data["search"] . "%");
+        if (isset($data["title"])) {
+            $reports->where("title", "ilike", "%" . $data["title"] . "%");
         }
 
         if (isset($data["owners"])) {
