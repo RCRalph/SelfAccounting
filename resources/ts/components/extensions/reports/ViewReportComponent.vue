@@ -174,7 +174,10 @@
                 xl="3"
                 order-xl="last"
             >
-                <v-row :no-gutters="xl">
+                <v-row
+                    :no-gutters="xl"
+                    class="overview-block"
+                >
                     <v-col
                         cols="12"
                         md="4"
