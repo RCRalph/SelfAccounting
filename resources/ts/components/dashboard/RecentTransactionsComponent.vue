@@ -353,6 +353,7 @@ import useFormats from "@composables/useFormats"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
+import useTableQuery from "@composables/useTableQuery"
 
 const props = defineProps<{
     accounts: AccountData[]
@@ -377,7 +378,7 @@ function useTableData() {
             .get(`/web-api/dashboard/${currencies.usedCurrency}/recent-transactions`, {
                 params: {
                     page: pagination.value.page,
-                    ...transactionQuery.value,
+                    ...query.value,
                 },
             })
             .then(response => {
@@ -416,7 +417,10 @@ function useTableData() {
 }
 
 const {headers, tableHeaders} = useTableHeaders()
-const {filterColor, filteredData, loading, options, search, pagination, transactionQuery} = useTableSettings()
+const {filterColor, loading, pagination} = useTableSettings()
+const {options, search, filteredData, query} = useTableQuery([
+    "title", "orderFields", "orderDirections", "dates", "categories", "accounts",
+])
 const {getStartData, getMoreData, tableData} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)
 

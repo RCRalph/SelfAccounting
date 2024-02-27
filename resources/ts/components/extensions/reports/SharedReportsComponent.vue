@@ -144,6 +144,7 @@ import type { ReportOwners, SharedReport } from "@interfaces/Report"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
+import useTableQuery from "@composables/useTableQuery"
 import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import Validator from "@classes/Validator"
@@ -185,7 +186,7 @@ function useSharedReports() {
         loading.value.table = true
 
         axios.get("web-api/extensions/reports/shared-reports", {
-            params: sharedReportsQuery.value,
+            params: query.value,
         })
             .then(response => {
                 const data = response.data
@@ -207,7 +208,10 @@ function useSharedReports() {
 
 const {loading, ready} = useComponentState()
 const {headers, tableHeaders} = useTableHeaders()
-const {search, options, filterColor, filteredData, sharedReportsQuery} = useTableSettings()
+const {filterColor} = useTableSettings()
+const {options, search, filteredData, query} = useTableQuery([
+    "page", "items", "title", "orderFields", "orderDirections",
+])
 const {total, reports, owners, share, getOwners, getData} = useSharedReports()
 const {updateWithOffset} = useUpdateWithOffset(getData)
 

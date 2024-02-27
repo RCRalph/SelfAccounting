@@ -58,14 +58,6 @@ interface OwnedReport {
     title: string
 }
 
-interface OwnedReportsDataQuery {
-    page: number
-    items: number
-    search?: string
-    orderFields?: string[]
-    orderDirections?: ("asc" | "desc")[]
-}
-
 interface ReportOwners {
     id: number
     username: string
@@ -75,15 +67,6 @@ interface SharedReport {
     id: number
     title: string
     owner: string
-}
-
-interface SharedReportsDataQuery {
-    page: number
-    items: number
-    search?: string
-    owners?: number[]
-    orderFields?: string[]
-    orderDirections?: ("asc" | "desc")[]
 }
 
 interface ReportTransactionRow {
@@ -113,10 +96,8 @@ export type {
     ReportTransaction,
     ReportUser,
     OwnedReport,
-    OwnedReportsDataQuery,
     ReportOwners,
     SharedReport,
-    SharedReportsDataQuery,
     ReportTransactionRow,
     ReportInformation,
 }

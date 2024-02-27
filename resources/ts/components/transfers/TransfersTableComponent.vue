@@ -286,10 +286,11 @@ import EditTransferDialogComponent from "@components/transfers/EditTransferDialo
 
 import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
-import TableDataMerger from "@classes/TableDataMerger"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
+import useTableQuery from "@composables/useTableQuery"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
+import TableDataMerger from "@classes/TableDataMerger"
 
 const props = defineProps<{
     accounts: AccountData[]
@@ -313,7 +314,7 @@ function useTableData() {
             .get(`/web-api/transfers/currency/${currencies.usedCurrency}/list`, {
                 params: {
                     page: pagination.value.page,
-                    ...transferQuery.value,
+                    ...query.value,
                 },
             })
             .then(response => {
@@ -354,7 +355,10 @@ function useTableData() {
 }
 
 const {headers, tableHeaders} = useTableHeaders()
-const {filterColor, filteredData, loading, options, pagination, transferQuery} = useTableSettings()
+const {filterColor, loading, pagination} = useTableSettings()
+const {options, filteredData, query} = useTableQuery([
+    "orderFields", "orderDirections", "dates", "source_accounts", "target_accounts",
+])
 const {getStartData, getMoreData, tableData} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)
 

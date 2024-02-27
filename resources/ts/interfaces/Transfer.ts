@@ -23,16 +23,7 @@ interface TransferRow extends Record<string, any> {
     target_account: Icon
 }
 
-interface DataQuery {
-    orderFields?: string[]
-    orderDirections?: ("asc" | "desc")[]
-    dates?: string[]
-    source_accounts?: number[]
-    target_accounts?: number[]
-}
-
 export type {
     Transfer,
     TransferRow,
-    DataQuery,
 }

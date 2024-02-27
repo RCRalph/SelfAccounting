@@ -131,7 +131,7 @@ import type { OwnedReport } from "@interfaces/Report"
 
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"
-import useTableSettings from "@composables/useTableSettings"
+import useTableQuery from "@composables/useTableQuery"
 import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
 import Validator from "@classes/Validator"
@@ -151,7 +151,7 @@ function useOwnedReports() {
         loading.value.table = true
 
         axios.get(`/web-api/extensions/reports/owned-reports`, {
-            params: ownedReportsQuery.value,
+            params: query.value,
         })
             .then(response => {
                 const data = response.data
@@ -196,7 +196,7 @@ function useActions() {
 
 const {loading} = useComponentState()
 const {headers, tableHeaders} = useTableHeaders()
-const {search, options, ownedReportsQuery} = useTableSettings()
+const {options, search, query} = useTableQuery(["page", "items", "owners", "orderFields", "orderDirections"])
 const {total, reports, getData} = useOwnedReports()
 const {duplicatedReportID, duplicate, share} = useActions()
 const {updateWithOffset} = useUpdateWithOffset(getData)

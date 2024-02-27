@@ -22,17 +22,7 @@ interface Transaction {
     currency_id: number
 }
 
-interface DataQuery {
-    title?: string
-    orderFields?: string[]
-    orderDirections?: ("asc" | "desc")[]
-    dates?: string[]
-    categories?: number[]
-    accounts?: number[]
-}
-
 export type {
     Transaction,
     TransactionRow,
-    DataQuery,
 }

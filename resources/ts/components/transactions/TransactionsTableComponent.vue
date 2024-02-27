@@ -66,11 +66,11 @@
 
                     <v-date-picker
                         v-model="filteredData.dates"
-                        :multiple="true"
                         min="1970-01-01"
                         color="primary"
                         prev-icon="mdi-skip-previous"
                         next-icon="mdi-skip-next"
+                        multiple
                     ></v-date-picker>
                 </v-menu>
 
@@ -345,6 +345,7 @@ import { useCurrenciesStore } from "@stores/currencies"
 import useFormats from "@composables/useFormats"
 import useTableHeaders from "@composables/useTableHeaders"
 import useTableSettings from "@composables/useTableSettings"
+import useTableQuery from "@composables/useTableQuery"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import TableDataMerger from "@classes/TableDataMerger"
 import Validator from "@classes/Validator"
@@ -375,7 +376,7 @@ function useTableData() {
             .get(`/web-api/${props.type}/currency/${currencies.usedCurrency}/list`, {
                 params: {
                     page: pagination.value.page,
-                    ...transactionQuery.value,
+                    ...query.value,
                 },
             })
             .then(response => {
@@ -416,7 +417,10 @@ function useTableData() {
 }
 
 const {headers, tableHeaders} = useTableHeaders()
-const {filterColor, filteredData, loading, options, search, pagination, transactionQuery} = useTableSettings()
+const {filterColor, loading, pagination} = useTableSettings()
+const {options, search, filteredData, query} = useTableQuery([
+    "title", "orderFields", "orderDirections", "dates", "categories", "accounts",
+])
 const {getStartData, getMoreData, tableData, typeSingular} = useTableData()
 const {updateWithOffset} = useUpdateWithOffset(getStartData)
 
