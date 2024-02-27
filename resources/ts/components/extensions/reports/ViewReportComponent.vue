@@ -234,7 +234,7 @@
                             >
                                 {{
                                     formats.numberWithCurrency(
-                                        reportInformation?.sum[Number(Object.keys(reportInformation?.sum)[0])],
+                                        reportInformation?.sum[Number(Object.keys(reportInformation?.sum)[0])] ?? 0,
                                         currencies.findCurrency(Number(Object.keys(reportInformation!.sum)[0]))?.ISO ?? "",
                                     )
                                 }}
