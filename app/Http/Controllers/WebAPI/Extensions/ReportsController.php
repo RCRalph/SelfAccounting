@@ -227,22 +227,22 @@ class ReportsController extends Controller
             ]])
             ->toArray();
 
-        $showColumns = $this->getColumnsToShow($report->show_columns);
+        $columns = $this->getColumnsToShow($report->show_columns);
 
         foreach ($items as $i => $item) {
-            if ($showColumns["amount"]) {
+            if ($columns["amount"]) {
                 $items[$i]["amount"] *= 1;
             }
 
-            if ($showColumns["price"]) {
+            if ($columns["price"]) {
                 $items[$i]["price"] *= 1;
             }
 
-            if ($showColumns["value"]) {
+            if ($columns["value"]) {
                 $items[$i]["value"] *= 1;
             }
 
-            if ($showColumns["category_id"]) {
+            if ($columns["category_id"]) {
                 $items[$i]["category"] = [
                     "name" => $categories[$item["category_id"]]["name"] ?? "N/A",
                     "icon" => $categories[$item["category_id"]]["icon"] ?? null
@@ -251,7 +251,7 @@ class ReportsController extends Controller
                 unset($items[$i]["category_id"]);
             }
 
-            if ($showColumns["account_id"]) {
+            if ($columns["account_id"]) {
                 $items[$i]["account"] = [
                     "name" => $accounts[$item["account_id"]]["name"] ?? "N/A",
                     "icon" => $accounts[$item["account_id"]]["icon"] ?? null
@@ -261,7 +261,26 @@ class ReportsController extends Controller
             }
         }
 
-        return response()->json(compact("information", "items", "reports", "canEdit"));
+        $excludedColumns = array_values(array_map(
+            fn($item) => str_ends_with($item, "_id") ? substr($item, 0, -3) : $item,
+            array_filter(array_keys($columns), fn($item) => !$columns[$item])
+        ));
+
+        if (in_array("category_id", $excludedColumns)) {
+            $excludedColumns[array_search("category_id", $excludedColumns)] = "category";
+        }
+
+        if (in_array("account_id", $excludedColumns)) {
+            $excludedColumns[array_search("account_id", $excludedColumns)] = "account";
+        }
+
+        return response()->json(compact(
+            "information",
+            "items",
+            "reports",
+            "canEdit",
+            "excludedColumns"
+        ));
     }
 
     public function create()

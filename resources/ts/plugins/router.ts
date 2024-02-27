@@ -19,6 +19,7 @@ import ExtensionsStoreComponent from "@components/extensions/store/ExtensionsSto
 import BackupComponent from "@components/extensions/backup/BackupComponent.vue"
 import CashComponent from "@components/extensions/cash/CashComponent.vue"
 import ReportsComponent from "@components/extensions/reports/ReportsComponent.vue"
+import ViewReportComponent from "@components/extensions/reports/ViewReportComponent.vue"
 
 // Admin components
 import AdminComponent from "@components/admin/AdminComponent.vue"
@@ -86,6 +87,10 @@ const extensionRoutes: RouteRecordRaw[] = [
                 path: "reports",
                 component: ReportsComponent,
             },
+            {
+                path: "reports/:id",
+                component: ViewReportComponent,
+            },
         ],
     },
 ]
@@ -118,12 +123,5 @@ export default createRouter({
     {
         path: "/getting-started",
         component: () => import("@components/GettingStartedComponent.vue"),
-    },*/
-
-
-    /*
-    {
-        path: "/extensions/reports/:id",
-        component: () => import("@components/extensions/reports/ViewReportComponent.vue"),
     },*/
 })

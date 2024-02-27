@@ -1,3 +1,5 @@
+import type { Icon } from "@interfaces/App"
+
 interface Columns {
     date: boolean
     title: boolean
@@ -84,6 +86,27 @@ interface SharedReportsDataQuery {
     orderDirections?: ("asc" | "desc")[]
 }
 
+interface ReportTransactionRow {
+    id?: number
+    date?: string
+    title?: string
+    amount?: number
+    price?: number
+    value?: number
+    category?: Icon
+    account?: Icon
+    currency_id: number
+}
+
+interface ReportInformation {
+    title: string,
+    owner: {
+        username: string,
+        profile_picture_link: string,
+    },
+    sum: Record<number, number>
+}
+
 export type {
     Report,
     ReportQuery,
@@ -94,4 +117,6 @@ export type {
     ReportOwners,
     SharedReport,
     SharedReportsDataQuery,
+    ReportTransactionRow,
+    ReportInformation,
 }

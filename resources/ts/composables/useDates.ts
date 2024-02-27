@@ -26,7 +26,16 @@ function currentTimeZoneDate(date: string | undefined = undefined) {
     }
 }
 
+function dateToUTC(date: Date) {
+    return new Date(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+    )
+}
+
 export {
     formatDate,
     currentTimeZoneDate,
+    dateToUTC,
 }
