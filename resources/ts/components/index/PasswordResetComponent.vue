@@ -39,8 +39,8 @@
 
                                 <v-col cols="12" sm="6" offset-sm="3">
                                     <v-text-field
-                                        v-model="confirm"
-                                        :error-messages="confirmValidation"
+                                        v-model="confirmation"
+                                        :error-messages="confirmationValidation"
                                         :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                         :type="showPassword ? 'text' : 'password'"
                                         variant="underlined"
@@ -55,7 +55,7 @@
 
                         <CardActionsSubmitComponent
                             :loading="loading.submit"
-                            :can-submit="canSubmit && !!password && !!confirm"
+                            :can-submit="canSubmit && !!password && !!confirmation"
                             text="Reset password"
                             @submit="submit"
                         ></CardActionsSubmitComponent>
@@ -83,7 +83,7 @@ const status = useStatusStore()
 function useUserData() {
     const password = ref("")
 
-    const confirm = ref("")
+    const confirmation = ref("")
 
     const showPassword = ref(false)
 
@@ -92,7 +92,7 @@ function useUserData() {
 
         axios.post("/password/reset", {
             password: password.value,
-            password_confirm: confirm.value,
+            password_confirmation: confirmation.value,
             token: route.params.token,
             email: route.query.email,
         })
@@ -104,12 +104,12 @@ function useUserData() {
             })
     }
 
-    return {password, confirm, showPassword, submit}
+    return {password, confirmation, showPassword, submit}
 }
 
 function useValidation() {
     const passwordValidation = computed(() => {
-        if (password.value != confirm.value) {
+        if (password.value != confirmation.value) {
             return "Passwords don't match"
         }
 
@@ -117,19 +117,19 @@ function useValidation() {
         return typeof validationMessage == "string" ? validationMessage : undefined
     })
 
-    const confirmValidation = computed(() => {
-        if (password.value != confirm.value) {
+    const confirmationValidation = computed(() => {
+        if (password.value != confirmation.value) {
             return "Passwords don't match"
         }
 
-        const validationMessage = Validator.password(true)(confirm.value)
+        const validationMessage = Validator.password(true)(confirmation.value)
         return typeof validationMessage == "string" ? validationMessage : undefined
     })
 
-    return {passwordValidation, confirmValidation}
+    return {passwordValidation, confirmationValidation}
 }
 
 const {canSubmit, loading} = useComponentState()
-const {password, confirm, showPassword, submit} = useUserData()
-const {passwordValidation, confirmValidation} = useValidation()
+const {password, confirmation, showPassword, submit} = useUserData()
+const {passwordValidation, confirmationValidation} = useValidation()
 </script>
