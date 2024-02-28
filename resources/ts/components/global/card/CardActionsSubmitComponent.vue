@@ -3,20 +3,19 @@
         <v-btn
             :disabled="props.loading || !props.canSubmit"
             :loading="props.loading"
+            :text="props.text ?? 'Submit'"
             color="success"
             variant="outlined"
-            width="85"
             @click="emit('submit')"
-        >
-            Submit
-        </v-btn>
+        ></v-btn>
     </v-card-actions>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
     loading: boolean,
-    canSubmit: boolean | null
+    canSubmit: boolean | null,
+    text?: string
 }>()
 
 const emit = defineEmits<{
