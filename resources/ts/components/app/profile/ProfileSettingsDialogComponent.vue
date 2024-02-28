@@ -47,21 +47,21 @@ import CardActionsResetUpdateComponent from "@components/global/card/CardActions
 
 import useComponentState from "@composables/useComponentState"
 import { useStatusStore } from "@stores/status"
+import { useUserStore } from "@stores/user"
 
 const props = defineProps<{
     modelValue: UserData
 }>()
 
+const user = useUserStore()
 const status = useStatusStore()
 
 function useInformation() {
     const userData = ref({
-        darkmode: props.modelValue.darkmode,
         show_tutorials: !props.modelValue.hide_all_tutorials,
     })
 
     function reset() {
-        userData.value.darkmode = props.modelValue.darkmode
         userData.value.show_tutorials = !props.modelValue.hide_all_tutorials
     }
 
@@ -71,8 +71,8 @@ function useInformation() {
         axios
             .post("/web-api/profile/settings", userData.value)
             .then(() => {
-                props.modelValue.darkmode = userData.value.darkmode
                 props.modelValue.hide_all_tutorials = !userData.value.show_tutorials
+                user.updateTutorials(props.modelValue.hide_all_tutorials)
 
                 status.showSuccess("updated profile settings")
 

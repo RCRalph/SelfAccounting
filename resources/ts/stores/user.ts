@@ -47,5 +47,12 @@ export const useUserStore = defineStore("user", {
                 this.data.profile_picture_link = profilePicture
             }
         },
+        updateTutorials(hideAllTutorials: boolean) {
+            if (this.data == undefined) {
+                throw new Error("Cannot set tutorials - user is undefined")
+            } else {
+                this.data.hide_all_tutorials = hideAllTutorials
+            }
+        },
     },
 })

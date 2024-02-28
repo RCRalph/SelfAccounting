@@ -8,6 +8,7 @@ import CategoriesComponent from "@components/app/categories/CategoriesComponent.
 import AccountsComponent from "@components/app/accounts/AccountsComponent.vue"
 import ChartsComponent from "@components/app/charts/ChartsComponent.vue"
 import ProfileComponent from "@components/app/profile/ProfileComponent.vue"
+import GettingStartedComponent from "@components/app/getting-started/GettingStartedComponent.vue"
 
 // Extension components
 import ExtensionsComponent from "@components/app/extensions/ExtensionsComponent.vue"
@@ -59,6 +60,10 @@ const routes: RouteRecordRaw[] = [
     {
         path: "/profile",
         component: ProfileComponent,
+    },
+    {
+        path: "/getting-started",
+        component: GettingStartedComponent,
     },
 ]
 
@@ -115,9 +120,4 @@ export default createRouter({
                 redirect: to => window.location.href = "/payment/extensions/" + to.params.id,
             },
         ]),
-    /*
-    {
-        path: "/getting-started",
-        component: () => import("@components/GettingStartedComponent.vue"),
-    },*/
 })
