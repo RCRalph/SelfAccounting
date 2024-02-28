@@ -1,26 +1,27 @@
-import {defineConfig} from "vite";
-import laravel from "laravel-vite-plugin";
-import vue from "@vitejs/plugin-vue";
+import { defineConfig } from "vite"
+import laravel from "laravel-vite-plugin"
+import vue from "@vitejs/plugin-vue"
 import vuetify from "vite-plugin-vuetify"
 
 export default defineConfig({
     plugins: [
         laravel([
-            "resources/ts/app.ts"
+            "resources/ts/app.ts",
+            "resources/ts/index.ts",
         ]),
         vue({
             template: {
                 transformAssetUrls: {
                     base: null,
                     includeAbsolute: false,
-                }
-            }
+                },
+            },
         }),
         vuetify({
             styles: {
-                configFile: "/resources/sass/_vuetify-settings.scss"
-            }
-        })
+                configFile: "/resources/sass/_vuetify-settings.scss",
+            },
+        }),
     ],
     resolve: {
         alias: {
@@ -31,6 +32,6 @@ export default defineConfig({
             "@stores": "/resources/ts/stores",
             "@classes": "/resources/ts/classes",
             "@interfaces": "/resources/ts/interfaces",
-        }
-    }
-});
+        },
+    },
+})

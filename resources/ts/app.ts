@@ -14,7 +14,7 @@ library.add(fas, far, fab)
 // Settings
 import { createApp } from "vue"
 import vuetify from "@plugins/vuetify"
-import router from "@plugins/router"
+import router from "@plugins/app-router"
 import { createPinia } from "pinia"
 
 // Root component
