@@ -64,7 +64,12 @@
 
             <CardActionsSubmitComponent
                 :loading="loading.submit"
-                :can-submit="canSubmit"
+                :can-submit="
+                    canSubmit &&
+                    !!passwordData.current.value &&
+                    !!passwordData.new.value &&
+                    !!passwordData.confirm.value
+                "
                 @submit="update"
             ></CardActionsSubmitComponent>
         </v-card>
@@ -150,16 +155,16 @@ function usePasswordValidation() {
             return "Password doesn't match our records"
         }
 
-        const validationMessage = Validator.password()(passwordData.value.current.value)
+        const validationMessage = Validator.password(true)(passwordData.value.current.value)
         return typeof validationMessage == "string" ? validationMessage : undefined
     })
 
     const validateNewPassword = computed(() => {
-        if (passwordData.value.current.value == passwordData.value.new.value) {
+        if (passwordData.value.new.value && passwordData.value.current.value == passwordData.value.new.value) {
             return "New password can't be the same as old password"
         }
 
-        const validationMessage = Validator.password()(passwordData.value.new.value)
+        const validationMessage = Validator.password(true)(passwordData.value.new.value)
         return typeof validationMessage == "string" ? validationMessage : undefined
     })
 
@@ -168,7 +173,7 @@ function usePasswordValidation() {
             return "Passwords don't match"
         }
 
-        const validationMessage = Validator.password()(passwordData.value.confirm.value)
+        const validationMessage = Validator.password(true)(passwordData.value.confirm.value)
         return typeof validationMessage == "string" ? validationMessage : undefined
     })
 
