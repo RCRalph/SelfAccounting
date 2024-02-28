@@ -41,6 +41,7 @@ Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
                 Route::post("/", "WebAPI\TransactionsController@store")->name("web-api.$type.store");
                 Route::get("/data", "WebAPI\TransactionsController@data")->name("web-api.$type.data");
                 Route::get("/list", "WebAPI\TransactionsController@list")->name("web-api.$type.list");
+                Route::get("/titles", "WebAPI\TransactionsController@titles")->name("web-api.$type.titles");
             });
 
             Route::prefix("/{id}")->group(function () use ($type) {
@@ -119,14 +120,16 @@ Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
         Route::post("/hide-all", "WebAPI\TutorialController@hideAll")->name("web-api.tutorials.hideAll");
     });
 
-    Route::get("/charts/{chart}/currency/{currency}", "WebAPI\ChartsController@index")->name("web-api.charts");
+    Route::prefix("/charts")->group(function () {
+        Route::get("/", "WebAPI\ChartsController@index")->name("web-api.charts");
+        Route::get("/{chart}/currency/{currency}", "WebAPI\ChartsController@show")->name("web-api.charts.show");
+    });
 
     Route::prefix("/extensions")->group(function () {
         Route::get("/", "WebAPI\Extensions\ExtensionsController@index")->name("web-api.extensions");
 
-        Route::group([ "prefix" => "/{code}", "middleware" => "extension" ], function () {
-            Route::post("/toggle", "WebAPI\Extensions\ExtensionsController@toggle")->name("web-api.extensions.code.toggle");
-            Route::post("/toggle-premium", "WebAPI\Extensions\ExtensionsController@togglePremium")->name("web-api.extensions.code.toggle-premium");
+        Route::group(["prefix" => "/{code}", "middleware" => "extension"], function () {
+            Route::post("/toggle-enabled", "WebAPI\Extensions\ExtensionsController@toggle")->name("web-api.extensions.code.toggle-enabled");
         });
 
         Route::prefix("/cash/{currency}")->group(function () {
@@ -144,6 +147,7 @@ Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
             Route::post("/create", "WebAPI\Extensions\ReportsController@store")->name("web-api.extensions.reports.store");
 
             Route::post("/user-info", "WebAPI\Extensions\ReportsController@userInfo")->name("web-api.extensions.reports.user-info");
+            Route::get("/titles", "WebAPI\Extensions\ReportsController@titles")->name("web-api.extensions.reports.titles");
 
             Route::prefix("/{report}")->group(function () {
                 Route::get("/", "WebAPI\Extensions\ReportsController@show")->name("web-api.extensions.reports.show");

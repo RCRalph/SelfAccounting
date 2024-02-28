@@ -8,7 +8,7 @@ use App\Models\Currency;
 
 class ValidCategoryOrAccount implements Rule
 {
-    private $currency_id;
+    private $currency_id, $data;
 
     /**
      * Create a new rule instance.
@@ -30,20 +30,17 @@ class ValidCategoryOrAccount implements Rule
      */
     public function passes($attribute, $value)
     {
-        if ($value == null) {
-            return true;
-        }
+        if ($value == null) return true;
 
-        $data = null;
         if (str_contains($attribute, "account")) {
-            $data = auth()->user()->accounts();
+            $this->data = auth()->user()->accounts();
         } else if (str_contains($attribute, "category")) {
-            $data = auth()->user()->categories();
+            $this->data = auth()->user()->categories();
         } else {
             abort(500, "Invalid data type for transactions");
         }
 
-        return $data
+        return $this->data
             ->where("id", $value)
             ->where("currency_id", $this->currency_id)
             ->where("used_in_" . request()->type, true)

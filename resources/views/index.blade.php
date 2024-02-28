@@ -1,5 +1,10 @@
-@extends('layouts.home')
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    @include("layouts.head")
 
-@section('content')
-    <home-component></home-component>
-@endsection
+    <body>
+        <div id="app"></div>
+
+        @vite(["resources/ts/index.ts"])
+    </body>
+</html>

@@ -2,108 +2,14 @@
 
 namespace App\Http\Controllers\WebAPI;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
-use Carbon\Carbon;
+use App\Utils\AccountBalanceHistory;
 
 use App\Models\Currency;
 use App\Models\Chart;
 
-
-class AccountBalanceHistory
-{
-    private $data, $lastDate, $accounts, $colors, $datasetsConfig;
-
-    public function __construct(Collection $accounts, string|null $lastDate)
-    {
-        $this->data = [];
-        $this->lastDate = null;
-        $this->accounts = [];
-        $this->lastDate = $lastDate;
-
-        $this->datasetsConfig = [
-            "steppedLine" => true,
-            "fill" => false,
-            "borderWidth" => 5,
-        ];
-
-        $this->colors = ChartsController::getColors($accounts->count() + 1);
-        foreach ($accounts as $i => $account) {
-            $this->accounts[$account->id] = [
-                "name" => $account->name,
-                "color" => $this->colors[$i]
-            ];
-        }
-    }
-
-    private function addEntry(int $account, string $date, float $value)
-    {
-        if (!array_key_exists($account, $this->data)) {
-            $this->data[$account] = [];
-        }
-
-        array_push($this->data[$account], [
-            "t" => $date,
-            "y" => round($value + ($this->data[$account] ? end($this->data[$account])["y"] : 0), 2)
-        ]);
-
-        if (is_null($this->lastDate) || strtotime($this->lastDate) < strtotime($date)) {
-            $this->lastDate = $date;
-        }
-    }
-
-    public function addStartBalance(string $startDate, array $startBalance)
-    {
-        foreach ($startBalance as $balance) {
-            $this->addEntry($balance["account_id"], $startDate, $balance["balance"]);
-            $this->addEntry(0, $startDate, $balance["balance"]);
-        }
-    }
-
-    public function addEntries(Collection $data)
-    {
-        foreach ($data as $entry) {
-            $this->addEntry($entry->account_id, $entry->date, $entry->value);
-        }
-    }
-
-    public function addSum(Collection $data)
-    {
-        $this->accounts[0] = [
-            "name" => "Sum",
-            "color" => end($this->colors)
-        ];
-
-        foreach ($data as $entry) {
-            $this->addEntry(0, $entry->date, $entry->value);
-        }
-    }
-
-    public function getChartData()
-    {
-        $result = [ "datasets" => [] ];
-
-        foreach ($this->accounts as $id => $data) {
-            if ($this->data[$id] && end($this->data[$id])["t"] != $this->lastDate) {
-                array_push($this->data[$id], [
-                    "t" => $this->lastDate,
-                    "y" => end($this->data[$id])["y"]
-                ]);
-            }
-
-            array_push($result["datasets"], [
-                ...$this->datasetsConfig,
-                "label" => $data["name"],
-                "data" => $this->data[$id],
-                "borderColor" => $data["color"]
-            ]);
-        }
-
-        return $result;
-    }
-}
 
 class ChartsController extends Controller
 {
@@ -112,7 +18,7 @@ class ChartsController extends Controller
         $this->middleware("auth");
     }
 
-    static function getColors($numberOfColors)
+    static function getColors($numberOfColors): array
     {
         if (!$numberOfColors) {
             return [];
@@ -126,13 +32,13 @@ class ChartsController extends Controller
             $h = ($circleShift + $i * $step) % 360;
             $s = rand(80, 100);
             $l = rand(40, 60);
-            array_push($result, "hsl($h, $s%, $l%)");
+            $result[] = "hsl($h, $s%, $l%)";
         }
 
         return $result;
     }
 
-    private function dataByType($transactionType, $type, Currency $currency, $limits)
+    private function dataByType($transactionType, $type, Currency $currency, $limits): array
     {
         // Get type data
         $typeData = $type == "category" ?
@@ -165,7 +71,7 @@ class ChartsController extends Controller
             ->whereIn($type . "_id", $toShow)
             ->get()
             ->groupBy($type . "_id")
-            ->map(fn ($item) => $item->sum("value"));
+            ->map(fn($item) => $item->sum("value"));
 
         $count = $typeData->count();
         $colors = $this->getColors($count);
@@ -180,43 +86,15 @@ class ChartsController extends Controller
         ];
 
         foreach ($transactionsData as $typeID => $amount) {
-            array_push(
-                $data["datasets"][0]["data"],
-                round($amount, 2)
-            );
-
-            array_push(
-                $data["datasets"][0]["backgroundColor"],
-                $colors[--$count]
-            );
-
-            array_push(
-                $data["labels"],
-                $typeData->firstWhere("id", $typeID)["name"]
-            );
+            $data["datasets"][0]["data"][] = round($amount, 2);
+            $data["datasets"][0]["backgroundColor"][] = $colors[--$count];
+            $data["labels"][] = $typeData->firstWhere("id", $typeID)["name"];
         }
 
-        $theme = [
-            "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"]
-        ];
-
-        $options = [
-            "responsive" => true,
-            "maintainAspectRatio" => false,
-            "legend" => [
-                "display" => true,
-                "labels" => [
-                    "fontColor" => null
-                ]
-            ],
-            "circumference" => pi(),
-            "rotation" => -pi()
-        ];
-
-        return compact("data", "options", "theme");
+        return compact("data");
     }
 
-    private function transfersByAccount($type, Currency $currency, $limits)
+    private function transfersByAccount($type, Currency $currency, $limits): array
     {
         if (!in_array($type, ["source", "target"])) {
             abort(500, "Invalid type");
@@ -241,7 +119,7 @@ class ChartsController extends Controller
 
         $items = $items->get()
             ->groupBy($type . "_account_id")
-            ->map(fn ($item) => $item->sum($type . "_value"));
+            ->map(fn($item) => $item->sum($type . "_value"));
 
         $count = $accounts->count();
         $colors = $this->getColors($count);
@@ -257,43 +135,15 @@ class ChartsController extends Controller
         ];
 
         foreach ($items as $accountID => $value) {
-            array_push(
-                $data["datasets"][0]["data"],
-                round($value, 2)
-            );
-
-            array_push(
-                $data["datasets"][0]["backgroundColor"],
-                $colors[--$count]
-            );
-
-            array_push(
-                $data["labels"],
-                $accounts->firstWhere("id", $accountID)->name
-            );
+            $data["datasets"][0]["data"][] = round($value, 2);
+            $data["datasets"][0]["backgroundColor"][] = $colors[--$count];
+            $data["labels"][] = $accounts->firstWhere("id", $accountID)->name;
         }
 
-        $theme = [
-            "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"]
-        ];
-
-        $options = [
-            "responsive" => true,
-            "maintainAspectRatio" => false,
-            "legend" => [
-                "display" => true,
-                "labels" => [
-                    "fontColor" => null
-                ]
-            ],
-            "circumference" => pi(),
-            "rotation" => -pi()
-        ];
-
-        return compact("data", "options", "theme");
+        return compact("data");
     }
 
-    private function balanceHistory(Currency $currency, $limits)
+    private function balanceHistory(Currency $currency, $limits): array
     {
         $accounts = auth()->user()->accounts()
             ->select("id", "icon", "name", "start_date", "start_balance")
@@ -314,7 +164,7 @@ class ChartsController extends Controller
             This list also includes first entries for accounts, which simplifies the process of adding these values
             later in the process and avoids issues with start date being after the start limit of the chart.
         */
-        $dataSubquery = auth()->user()->income()
+        $dataSubQuery = auth()->user()->income()
             ->select("account_id", "date", DB::raw("sum(round(amount * price, 2)) AS value"))
             ->whereIn("account_id", $accountIDs)
             ->groupBy("account_id", "date")
@@ -339,13 +189,13 @@ class ChartsController extends Controller
                     ->whereIn("id", $accountIDs)
             );
 
-        $data = DB::query()->fromSub($dataSubquery, "data")
+        $data = DB::query()->fromSub($dataSubQuery, "data")
             ->select("date", "account_id", DB::raw("sum(value) as value"))
             ->groupBy("date", "account_id")
             ->orderBy("date")
             ->orderBy("account_id");
 
-        $sumData = DB::query()->fromSub($dataSubquery, "data")
+        $sumData = DB::query()->fromSub($dataSubQuery, "data")
             ->select("date", DB::raw("sum(value) as value"))
             ->groupBy("date")
             ->orderBy("date");
@@ -371,62 +221,11 @@ class ChartsController extends Controller
         $accountHistory->addEntries($data->get());
         $accountHistory->addSum($sumData->get());
 
-        return [
-            "data" => $accountHistory->getChartData($limits["end"]),
-            "theme" => [
-                "fontColor" => ["rgba(0, 0, 0, 0.87)", "rgba(255, 255, 255, 0.87)"],
-                "color" => ["rgba(0, 0, 0, 0.1)", "rgba(255, 255, 255, 0.1)"]
-            ],
-            "options" => [
-                "responsive" => true,
-                "maintainAspectRatio" => false,
-                "elements" => [
-                    "line" => [
-                        "tension" => 0
-                    ]
-                ],
-                "scales" => [
-                    "xAxes" => [
-                        [
-                            "type" => "time",
-                            "time" => [
-                                "displayFormats" => [
-                                    "day" => "DD MMM",
-                                    "year" => "YYYY-MM-DD"
-                                ],
-                                "minUnit" => "day"
-                            ],
-                            "ticks" => [
-                                "fontColor" => null
-                            ],
-                            "gridLines" => [
-                                "color" => null,
-                            ]
-                        ]
-                    ],
-                    "yAxes" => [
-                        [
-                            "ticks" => [
-                                "fontColor" => null,
-                                "beginAtZero" => true
-                            ],
-                            "gridLines" => [
-                                "color" => "#fff"
-                            ]
-                        ]
-                    ]
-                ],
-                "legend" => [
-                    "display" => true,
-                    "labels" => [
-                        "fontColor" => null
-                    ]
-                ]
-            ]
-        ];
+        return ["data" => $accountHistory->getChartData()];
     }
 
-    public function index(Chart $chart, Currency $currency) {
+    public function show(Chart $chart, Currency $currency): JsonResponse
+    {
         $limits = request()->validate([
             "start" => ["present", "nullable", "date", "after_or_equal:1970-01-01"],
             "end" => ["present", "nullable", "date", "after_or_equal:1970-01-01"]
@@ -466,5 +265,12 @@ class ChartsController extends Controller
         }
 
         return response()->json(["info" => $chart->only("id", "name", "type"), ...$result]);
+    }
+
+    public function index(): JsonResponse
+    {
+        $charts = Chart::route("/");
+
+        return response()->json(compact("charts"));
     }
 }

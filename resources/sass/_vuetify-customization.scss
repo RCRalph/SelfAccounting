@@ -1,12 +1,9 @@
-$font-family: "Nunito";
+@use "./vuetify-settings" as settings;
+
+$sticky-panel-margin: 12px;
+$tabs-height: 60px;
 
 .v-application {
-    font-family: $font-family, sans-serif !important;
-
-    [class*="text-"] {
-        font-family: $font-family, sans-serif !important;
-    }
-
     .text-h6 {
         font-size: 1.125rem !important;
     }
@@ -16,8 +13,36 @@ $font-family: "Nunito";
     }
 }
 
-.menu-margin {
-    margin-left: 56px;
+.v-main {
+    position: relative;
+    min-height: 100dvh;
+    padding-left: 0 !important;
+
+    & > div {
+        margin: $sticky-panel-margin;
+
+        &.tabs {
+            margin: unset;
+
+            .v-tabs {
+                --v-tabs-height: #{$tabs-height};
+            }
+
+            & > div:not(.v-tabs) {
+                margin: $sticky-panel-margin;
+                position: relative;
+                min-height: calc(100dvh - $tabs-height - 2 * $sticky-panel-margin);
+
+                &.v-overlay {
+                    min-height: calc(100dvh - $tabs-height);
+                }
+            }
+        }
+    }
+}
+
+.v-overlay {
+    margin: unset !important;
 }
 
 .cursor-pointer {
@@ -25,6 +50,7 @@ $font-family: "Nunito";
 }
 
 tr {
+    height: 48px;
     transition: background-color 0.1s ease-in-out !important;
 
     th, td {
@@ -32,19 +58,20 @@ tr {
     }
 
     &:hover {
+        background-color: rgb(var(--v-theme-on-surface-variant)) !important;
         transition: background-color 0.1s ease-in-out !important;
     }
 }
 
 .table-bordered {
     th, td {
-        border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+        border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
     }
 
     table {
-        border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-left: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+        border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
     }
 
     tr:hover {
@@ -52,14 +79,20 @@ tr {
     }
 }
 
+.table-two-columns-same-width {
+    th, td {
+        width: 50%;
+    }
+}
+
 .table-hover-background {
-    background-color: #616161;
+    background-color: rgb(var(--v-theme-on-surface-variant)) !important;
     transition: background-color 0.1s ease-in-out !important;
 }
 
 .sticky-panel {
-    position: sticky;
-    top: 16px;
+    position: sticky !important;
+    top: $sticky-panel-margin;
 }
 
 .loading-height {
@@ -69,8 +102,8 @@ tr {
 .hover-icon {
     padding: 7.5px;
     border-radius: 50% !important;
-    background: white  !important;
-    color: black  !important;
+    background: white !important;
+    color: black !important;
     transition: opacity 0.25s ease-in-out !important;
 }
 
@@ -84,10 +117,6 @@ tr {
 
         border-radius: 50%;
     }
-}
-
-.v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
-    padding-left: 54px;
 }
 
 .add-income-buttons {
@@ -153,17 +182,9 @@ tr {
     }
 }
 
-.large-chip-avatar {
-    .v-avatar {
-        height: 48px !important;
-        min-width: 48px !important;
-        width: 48px !important;
-        margin-right: 12px !important;
-        margin-left: -8px !important
-    }
-
-    .v-chip__close {
-        margin-left: 12px !important;
+.disable-row-margin {
+    .v-row + .v-row {
+        margin-top: -12px;
     }
 }
 
@@ -175,7 +196,7 @@ tr {
     justify-content: center;
 
     &-margin {
-        margin-bottom: 65px;
+        margin-bottom: #{65px + 12px} !important;
     }
 }
 
@@ -185,12 +206,12 @@ tr {
 }
 
 .overview-block {
-    position: sticky;
-    top: 16px;
-    overflow-y: auto;
-    max-height: calc(100vh - 32px);
+    @extend .sticky-panel;
+    overflow-y: auto !important;
+    max-height: calc(100dvh - #{2 * $sticky-panel-margin});
 
     -ms-overflow-style: none;
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -200,14 +221,8 @@ tr {
     }
 
     .charts {
-        max-height: calc(100vh - #{32px + 64px + 48px + 16px + 16px});
-
-        .chart-size {
-            max-width: calc(100% - 16px);
-            margin-left: 8px;
-            margin-bottom: 16px;
-            height: 335px;
-        }
+        position: relative;
+        max-height: calc(100dvh - #{32px + 64px + 48px + 16px + 16px});
     }
 }
 
@@ -219,11 +234,17 @@ tr {
 }
 
 .chart-card {
-    min-height: calc(100vh - 32px);
+    $card-content-height: calc(100dvh - #{24px + 60px + 84px + 32px});
+
+    min-height: calc(100dvh - #{24px + 60px});
 
     .chart-block {
         padding: 16px;
-        min-height: calc(100vh - #{32px + 64px + 64px});
+        min-height: $card-content-height;
+    }
+
+    .card-loading {
+        min-height: $card-content-height;
     }
 }
 
@@ -232,6 +253,10 @@ tr {
     justify-content: end;
 
     button {
-        margin: 0px 4px;
+        margin: 0 4px;
     }
+}
+
+.list-without-bullets {
+    list-style-type: none;
 }

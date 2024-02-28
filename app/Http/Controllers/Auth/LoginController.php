@@ -4,7 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -26,7 +32,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected string $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -41,24 +47,23 @@ class LoginController extends Controller
     /**
      * Handle an authentication attempt.
      *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return Response
+     * @return Application|ResponseFactory|Response
      */
-    public function authenticate()
+    public function authenticate(): Response|Application|ResponseFactory
     {
-        if (Auth::attempt(["email" => request("email"), "password" => request("password")], request("remember"))) {
-            return response("");
-        }
-        else {
-            return response("", 422);
-        }
+        $success = Auth::attempt(
+            [
+                "email" => request("email"),
+                "password" => request("password")
+            ],
+            request("remember")
+        );
+
+        return $success ? response("") : response("", 422);
     }
 
-    public function showLoginForm()
+    public function showLoginForm(): Factory|View|Application
     {
-        $intended = redirect()->intended("/login")->getTargetUrl();
-
-        return view("auth.login", compact("intended"));
+        return view("index");
     }
 }

@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="3131.3533"
-   height="421.88651"
-   viewBox="0 0 3131.3532 421.88651"
+   width="3131.353"
+   height="512"
+   viewBox="0 0 3131.353 512"
    version="1.1"
    id="svg5"
    xmlns="http://www.w3.org/2000/svg"
@@ -19,8 +19,7 @@
        id="rect49888" />
   </defs>
   <g
-     id="layer1"
-     transform="translate(-2.9334368e-5,-76.430412)">
+     id="layer1">
     <g
        aria-label="SelfAccounting"
        transform="matrix(2.1444795,0,0,2.1444795,-1173.5887,20.20602)"

@@ -27,7 +27,7 @@ class CashController extends Controller
             ->orderBy("value", "DESC")->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["value"] * 1]);
 
-        // Accounts used as cash
+        // Account used as cash
         $cashAccount = auth()->user()->cashAccounts()
             ->where("currency_id", $currency->id)
             ->pluck("accounts.id")
@@ -43,20 +43,24 @@ class CashController extends Controller
 
     public function list(Currency $currency)
     {
+        // Cash as id: value array
         $cash = $currency->cash()->select("id", "value")
             ->orderBy("value", "DESC")->get()
             ->mapWithKeys(fn ($item) => [$item["id"] => $item["value"] * 1]);
 
+        // Account used as cash
         $cashAccount = auth()->user()->cashAccounts()
             ->where("currency_id", $currency->id)
             ->pluck("accounts.id")
             ->first();
 
+        // Owned cash as id: amount array
         $ownedCash = auth()->user()->cash()
             ->where("currency_id", $currency->id)
             ->get()
             ->mapWithKeys(fn ($item) => [$item->id => $item->pivot->amount]);
 
+        // Accounts for given currency
         $accounts = auth()->user()->accounts()
             ->select("id", "name", "icon", "start_balance")
             ->where("currency_id", $currency->id)

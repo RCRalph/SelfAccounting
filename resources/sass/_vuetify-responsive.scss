@@ -1,6 +1,6 @@
-@import '~vuetify/src/styles/settings/_variables';
+@use "vuetify/settings";
 
-@media (max-width: #{map-get($grid-breakpoints, "sm") - 0.02px}) {
+@media (max-width: #{map-get(settings.$grid-breakpoints, "sm") - 0.02px}) {
     .v-application {
         .text-h6 {
             font-size: 0.85rem !important;
@@ -16,12 +16,12 @@
         justify-content: center;
 
         button {
-            margin: 4px 0px;
+            margin: 4px 0;
         }
     }
 }
 
-@media (max-width: #{map-get($grid-breakpoints, "xl") - 0.02px}) {
+@media (max-width: #{map-get(settings.$grid-breakpoints, "xl") - 0.02px}) {
     .overview-block {
         max-height: unset;
         overflow-y: unset;
@@ -41,10 +41,6 @@
 }
 
 @media (hover: none) {
-    .menu-margin {
-        margin-left: 0;
-    }
-
     .pagination-fixed {
         width: calc(100vw - 16px - 16px);
     }

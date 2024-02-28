@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Chart;
 use App\Models\Extension;
 use App\Models\Tutorial;
 use App\Models\Currency;
@@ -19,24 +18,9 @@ class AppController extends Controller
     {
         $this->middleware("auth");
     }
-
-    private function getLastUsedCurrencies()
+    
+    private function showPremiumExpiredDialog()
     {
-        $income = auth()->user()->income()
-            ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
-            ->groupBy("currency_id");
-
-        $expenses = auth()->user()->expenses()
-            ->select("currency_id", DB::raw("MAX(updated_at) AS last_accessed"))
-            ->groupBy("currency_id");
-
-        return $income->union($expenses)->get()
-            ->sortByDesc("last_accessed")
-            ->unique("currency_id")
-            ->pluck("currency_id");
-    }
-
-    private function showPremiumExpiredDialog() {
         if (auth()->user()->account_type != "Normal") {
             return false;
         }
@@ -57,14 +41,24 @@ class AppController extends Controller
                 ]);
 
                 return [
-                    "user" => auth()->user()->only("id", "username", "darkmode", "profile_picture_link", "admin", "hide_all_tutorials"),
-                    "charts" => $this->getCharts("/"),
-                    "tutorials" => Tutorial::select("route")->pluck("route"),
+                    "user" => auth()->user()->only(
+                        "id",
+                        "username",
+                        "darkmode",
+                        "profile_picture_link",
+                        "admin",
+                        "hide_all_tutorials",
+                        "account_type"
+                    ),
+                    "tutorials" => Tutorial::pluck("route"),
                     "disabledTutorials" => auth()->user()->disabledTutorials->pluck("route"),
-                    "extensions" => Extension::select("code", "title", "icon", "directory")->orderBy("title")->get(),
-                    "ownedExtensions" => Extension::whereIn("code", auth()->user()->extensionCodes)
+                    "extensions" => Extension::select("code", "title", "icon", "directory")
                         ->orderBy("title")
-                        ->pluck("code")
+                        ->get()
+                        ->map(fn($item) => [
+                            ...$item->toArray(),
+                            "enabled" => auth()->user()->extensionCodes->contains($item["code"])
+                        ])
                 ];
             }
         );

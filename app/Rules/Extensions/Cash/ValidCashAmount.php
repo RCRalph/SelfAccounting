@@ -6,24 +6,24 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidCashAmount implements Rule
 {
-    private $addition, $directory;
+    private $type, $directory;
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($addition = true, $directory = "cash")
+    public function __construct($type, $directory = "cash")
     {
-        $this->addition = $addition;
+        $this->type = $type;
         $this->directory = $directory;
     }
 
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
@@ -31,15 +31,13 @@ class ValidCashAmount implements Rule
         $index = explode(".", $attribute)[substr_count($attribute, ".") - 1];
         $id = request("$this->directory.$index.id");
 
-        $ownedCash = auth()->user()->cash()->find($id);
+        $ownedCash = auth()->user()->cash()->find($id)->pivot->amount ?? 0;
 
-        if ($ownedCash) {
-            return $this->addition ?
-                $ownedCash->pivot->amount + $value <= PHP_INT_MAX :
-                $ownedCash->pivot->amount >= $value;
-        }
-
-        return $this->addition ? $value <= PHP_INT_MAX : false;
+        return match ($this->type) {
+            "income" => 0 <= $ownedCash + $value && $ownedCash + $value <= PHP_INT_MAX,
+            "expenses" => 0 <= $ownedCash - $value && $ownedCash - $value <= PHP_INT_MAX,
+            default => false,
+        };
     }
 
     /**

@@ -18,16 +18,16 @@ class ReportsController extends Controller
     private $columns = ["date", "title", "amount", "price", "value", "category_id", "account_id"];
 
     private $queryFields = [
-        [ "column" => "date", "operator" => ">=", "name" => "min_date" ],
-        [ "column" => "amount", "operator" => ">=", "name" => "min_amount" ],
-        [ "column" => "price", "operator" => ">=", "name" => "min_price" ],
-        [ "column" => "date", "operator" => "<=", "name" => "max_date" ],
-        [ "column" => "amount", "operator" => "<=", "name" => "max_amount" ],
-        [ "column" => "price", "operator" => "<=", "name" => "max_price" ],
-        [ "column" => "title", "operator" => "=" ],
-        [ "column" => "currency_id", "operator" => "=" ],
-        [ "column" => "category_id", "operator" => "=" ],
-        [ "column" => "account_id", "operator" => "=" ]
+        ["column" => "date", "operator" => ">=", "name" => "min_date"],
+        ["column" => "amount", "operator" => ">=", "name" => "min_amount"],
+        ["column" => "price", "operator" => ">=", "name" => "min_price"],
+        ["column" => "date", "operator" => "<=", "name" => "max_date"],
+        ["column" => "amount", "operator" => "<=", "name" => "max_amount"],
+        ["column" => "price", "operator" => "<=", "name" => "max_price"],
+        ["column" => "title", "operator" => "="],
+        ["column" => "currency_id", "operator" => "="],
+        ["column" => "category_id", "operator" => "="],
+        ["column" => "account_id", "operator" => "="]
     ];
 
     public function __construct()
@@ -65,8 +65,7 @@ class ReportsController extends Controller
             if ($show) {
                 if ($column == "value") {
                     $data->addSelect(DB::raw("round(amount * price * $valueFieldMultiplier, 2) AS value"));
-                }
-                else {
+                } else {
                     $data->addSelect($column);
                 }
             }
@@ -87,29 +86,27 @@ class ReportsController extends Controller
 
     public function ownedReports()
     {
-        $reports = auth()->user()->reports()
-            ->select("users.username AS owner")
-            ->select("id", "title");
-
         $data = request()->validate([
             "items" => ["required", "integer", "in:10,15,20,25,30"],
-            "search" => ["nullable", "string", "min:1", "max:64"],
+            "title" => ["nullable", "string", "min:1", "max:64"],
             "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
             "orderFields.*" => ["required", "string", "in:id,title", "distinct"],
             "orderDirections" => ["nullable", "array", new EqualArrayLength("orderFields")],
             "orderDirections.*" => ["required", "string", "in:asc,desc"]
         ]);
 
-        if (isset($data["search"])) {
-            $reports->where("title", "ilike", "%" . $data["search"] . "%");
+        $reports = auth()->user()->reports()
+            ->select("id", "title");
+
+        if (isset($data["title"])) {
+            $reports->where("title", "ilike", "%" . $data["title"] . "%");
         }
 
         if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
             foreach ($data["orderFields"] as $i => $item) {
                 $reports = $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
             }
-        }
-        else {
+        } else {
             $reports = $reports->orderBy("id", "desc");
         }
 
@@ -120,13 +117,9 @@ class ReportsController extends Controller
 
     public function sharedReports()
     {
-        $reports = auth()->user()->sharedReports()
-            ->select("reports.id", "reports.title", "users.username AS owner")
-            ->join("users", "reports.user_id", "=", "users.id");
-
         $data = request()->validate([
             "items" => ["required", "integer", "in:10,15,20,25,30"],
-            "search" => ["nullable", "string", "min:1", "max:64"],
+            "title" => ["nullable", "string", "min:1", "max:64"],
             "owners" => ["nullable", "array"],
             "owners.*" => ["required", "integer", "exists:users,id"],
             "orderFields" => ["nullable", "array", new EqualArrayLength("orderDirections")],
@@ -135,24 +128,27 @@ class ReportsController extends Controller
             "orderDirections.*" => ["required", "string", "in:asc,desc"]
         ]);
 
-        if (isset($data["search"])) {
-            $reports->where("title", "ilike", "%" . $data["search"] . "%");
+        $reports = auth()->user()->sharedReports()
+            ->join("users", "reports.user_id", "=", "users.id");
+
+        if (isset($data["title"])) {
+            $reports->where("title", "ilike", "%" . $data["title"] . "%");
         }
 
         if (isset($data["owners"])) {
-            $reports->whereIn("users.user_id", $data["owners"]);
+            $reports->whereIn("users.id", $data["owners"]);
         }
 
         if (isset($data["orderFields"]) && isset($data["orderDirections"])) {
             foreach ($data["orderFields"] as $i => $item) {
-                $reports = $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
+                $reports->orderBy($item, $data["orderDirections"][$i] ?? "asc");
             }
-        }
-        else {
-            $reports = $reports->orderBy("id", "desc");
+        } else {
+            $reports->orderBy("id", "desc");
         }
 
-        $reports = $reports->paginate($data["items"]);
+        $reports = $reports
+            ->paginate($data["items"], ["reports.title", "reports.id", "users.username AS owner"]);
 
         return response()->json(compact("reports"));
     }
@@ -172,7 +168,6 @@ class ReportsController extends Controller
             "owner" => $report->user->only("username", "profile_picture_link")
         ];
 
-        $valueSign = 1;
         $rows = $report->additionalEntries();
         $this->addFields($rows, $report->show_columns);
 
@@ -204,8 +199,7 @@ class ReportsController extends Controller
             foreach ($items as $row) {
                 if (isset($information["sum"][$row["currency_id"]])) {
                     $information["sum"][$row["currency_id"]] += $row["value"];
-                }
-                else {
+                } else {
                     $information["sum"][$row["currency_id"]] = $row["value"];
                 }
             }
@@ -218,7 +212,7 @@ class ReportsController extends Controller
         $categories = $report->user->categories()
             ->select("id", "name", "icon")
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => [
+            ->mapWithKeys(fn($item) => [$item["id"] => [
                 "name" => $item["name"],
                 "icon" => $item["icon"]
             ]])
@@ -227,28 +221,28 @@ class ReportsController extends Controller
         $accounts = $report->user->accounts()
             ->select("id", "name", "icon")
             ->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => [
+            ->mapWithKeys(fn($item) => [$item["id"] => [
                 "name" => $item["name"],
                 "icon" => $item["icon"]
             ]])
             ->toArray();
 
-        $showColumns = $this->getColumnsToShow($report->show_columns);
+        $columns = $this->getColumnsToShow($report->show_columns);
 
         foreach ($items as $i => $item) {
-            if ($showColumns["amount"]) {
+            if ($columns["amount"]) {
                 $items[$i]["amount"] *= 1;
             }
 
-            if ($showColumns["price"]) {
+            if ($columns["price"]) {
                 $items[$i]["price"] *= 1;
             }
 
-            if ($showColumns["value"]) {
+            if ($columns["value"]) {
                 $items[$i]["value"] *= 1;
             }
 
-            if ($showColumns["category_id"]) {
+            if ($columns["category_id"]) {
                 $items[$i]["category"] = [
                     "name" => $categories[$item["category_id"]]["name"] ?? "N/A",
                     "icon" => $categories[$item["category_id"]]["icon"] ?? null
@@ -257,7 +251,7 @@ class ReportsController extends Controller
                 unset($items[$i]["category_id"]);
             }
 
-            if ($showColumns["account_id"]) {
+            if ($columns["account_id"]) {
                 $items[$i]["account"] = [
                     "name" => $accounts[$item["account_id"]]["name"] ?? "N/A",
                     "icon" => $accounts[$item["account_id"]]["icon"] ?? null
@@ -267,12 +261,31 @@ class ReportsController extends Controller
             }
         }
 
-        return response()->json(compact("information", "items", "reports", "canEdit"));
+        $excludedColumns = array_values(array_map(
+            fn($item) => str_ends_with($item, "_id") ? substr($item, 0, -3) : $item,
+            array_filter(array_keys($columns), fn($item) => !$columns[$item])
+        ));
+
+        if (in_array("category_id", $excludedColumns)) {
+            $excludedColumns[array_search("category_id", $excludedColumns)] = "category";
+        }
+
+        if (in_array("account_id", $excludedColumns)) {
+            $excludedColumns[array_search("account_id", $excludedColumns)] = "account";
+        }
+
+        return response()->json(compact(
+            "information",
+            "items",
+            "reports",
+            "canEdit",
+            "excludedColumns"
+        ));
     }
 
     public function create()
     {
-        $titles = $this->getTitles();
+        $titles = auth()->user()->transactionTitles;
 
         $categories = auth()->user()->categories()
             ->select("id", "name", "icon", "currency_id")
@@ -298,6 +311,17 @@ class ReportsController extends Controller
             ->only("email", "username", "profile_picture_link");
 
         return response()->json(compact("user"));
+    }
+
+    public function titles()
+    {
+        $title = request()->validate([
+            "title" => ["required", "string", "max:64"],
+        ])["title"];
+
+        return response()->json([
+            "titles" => $this->getTitles($title)
+        ]);
     }
 
     public function store()
@@ -335,16 +359,16 @@ class ReportsController extends Controller
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["queries"];
 
-        $additionalEntries = request()->validate([
-            "additionalEntries" => ["present", "array"],
-            "additionalEntries.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
-            "additionalEntries.*.title" => ["required", "string", "max:64"],
-            "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
-            "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-            "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-        ])["additionalEntries"];
+        $additionalTransactions = request()->validate([
+            "additionalTransactions" => ["present", "array"],
+            "additionalTransactions.*.date" => ["required", "date", "after_or_equal:1970-01-01"],
+            "additionalTransactions.*.title" => ["required", "string", "max:64"],
+            "additionalTransactions.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "additionalTransactions.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalTransactions.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "additionalTransactions.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "additionalTransactions.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+        ])["additionalTransactions"];
 
         $users = request()->validate([
             "users" => ["present", "array"],
@@ -358,8 +382,8 @@ class ReportsController extends Controller
             $report->queries()->create($query);
         }
 
-        foreach ($additionalEntries as $entry) {
-            $report->additionalEntries()->create($entry);
+        foreach ($additionalTransactions as $transaction) {
+            $report->additionalEntries()->create($transaction);
         }
 
         $report->sharedUsers()->attach(User::whereIn("email", $users)->pluck("id"));
@@ -373,8 +397,7 @@ class ReportsController extends Controller
 
         if ($report->user_id == auth()->user()->id) {
             $report->delete();
-        }
-        else {
+        } else {
             $report->sharedUsers()->detach(auth()->user()->id);
         }
 
@@ -409,7 +432,7 @@ class ReportsController extends Controller
         $data["columns"] = $this->getColumnsToShow($report->show_columns);
 
         $data["users"] = $report->sharedUsers
-            ->map(fn ($item) => $item->only("username", "email", "profile_picture_link"));
+            ->map(fn($item) => $item->only("username", "email", "profile_picture_link"));
 
         $data["queries"] = $report->queries
             ->makeHidden(["report_id", "created_at", "updated_at"])
@@ -423,7 +446,7 @@ class ReportsController extends Controller
                 return $item;
             });
 
-        $data["additionalEntries"] = $report->additionalEntries
+        $data["additionalTransactions"] = $report->additionalEntries
             ->makeHidden(["report_id", "created_at", "updated_at"])
             ->map(function ($item) {
                 foreach (["amount", "price"] as $key) {
@@ -435,7 +458,7 @@ class ReportsController extends Controller
                 return $item;
             });
 
-        $titles = $this->getTitles();
+        $titles = auth()->user()->transactionTitles;
 
         $categories = auth()->user()->categories()
             ->select("id", "name", "icon", "currency_id")
@@ -486,17 +509,17 @@ class ReportsController extends Controller
             "queries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
         ])["queries"];
 
-        $additionalEntries = request()->validate([
-            "additionalEntries" => ["present", "array"],
-            "additionalEntries.*.id" => ["nullable", "integer", "distinct", "exists:report_additional_entries,id", new BelongsToReport($report)],
-            "additionalEntries.*.date" => ["required", "date"],
-            "additionalEntries.*.title" => ["required", "string", "max:64"],
-            "additionalEntries.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
-            "additionalEntries.*.price" => ["required", "numeric",  "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
-            "additionalEntries.*.currency_id" => ["required", "integer", "exists:currencies,id"],
-            "additionalEntries.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-            "additionalEntries.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
-        ])["additionalEntries"];
+        $additionalTransactions = request()->validate([
+            "additionalTransactions" => ["present", "array"],
+            "additionalTransactions.*.id" => ["nullable", "integer", "distinct", "exists:report_additional_entries,id", new BelongsToReport($report)],
+            "additionalTransactions.*.date" => ["required", "date"],
+            "additionalTransactions.*.title" => ["required", "string", "max:64"],
+            "additionalTransactions.*.amount" => ["required", "numeric", "max:1e7", "min:0", "not_in:1e7"],
+            "additionalTransactions.*.price" => ["required", "numeric", "max:1e11", "min:-1e11", "not_in:1e11,-1e11"],
+            "additionalTransactions.*.currency_id" => ["required", "integer", "exists:currencies,id"],
+            "additionalTransactions.*.category_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+            "additionalTransactions.*.account_id" => ["present", "nullable", "integer", new ValidCategoryOrAccount],
+        ])["additionalTransactions"];
 
         $users = request()->validate([
             "users" => ["present", "array"],
@@ -504,7 +527,10 @@ class ReportsController extends Controller
         ])["users"];
 
         // Update report
-        $report->update($data);
+        $report->update([
+            ...$data,
+            "show_columns" => $this->getColumnBinary($columns)
+        ]);
 
         // Save queries
         $report->queries()
@@ -514,23 +540,21 @@ class ReportsController extends Controller
         foreach ($queries as $query) {
             if (isset($query["id"])) {
                 $report->queries()->find($query["id"])->update($query);
-            }
-            else {
+            } else {
                 $report->queries()->create($query);
             }
         }
 
         // Save additional entries
         $report->additionalEntries()
-            ->whereNotIn("id", array_column($additionalEntries, "id"))
+            ->whereNotIn("id", array_column($additionalTransactions, "id"))
             ->delete();
 
-        foreach ($additionalEntries as $entry) {
-            if (isset($entry["id"])) {
-                $report->additionalEntries()->find($entry["id"])->update($entry);
-            }
-            else {
-                $report->additionalEntries()->create($entry);
+        foreach ($additionalTransactions as $transaction) {
+            if (isset($transaction["id"])) {
+                $report->additionalEntries()->find($transaction["id"])->update($transaction);
+            } else {
+                $report->additionalEntries()->create($transaction);
             }
         }
 

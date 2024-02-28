@@ -21,20 +21,17 @@ class BelongsToReport implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
     {
-        if (!$value) {
-            return true;
-        }
+        if (!$value) return true;
 
-        $data = null;
         if (str_contains($attribute, "queries")) {
             $data = $this->report->queries();
-        } else if (str_contains($attribute, "additionalEntries")) {
+        } else if (str_contains($attribute, "additionalTransactions")) {
             $data = $this->report->additionalEntries();
         } else {
             abort(500, "Invalid data type for attribute check");

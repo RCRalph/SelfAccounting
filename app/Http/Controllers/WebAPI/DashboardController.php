@@ -131,14 +131,13 @@ class DashboardController extends Controller
         $categories = auth()->user()->categories()
             ->select("id", "name", "icon", "count_to_summary", "start_date", "end_date")
             ->where("currency_id", $currency->id)
-            ->where("count_to_summary", true)
             ->orderBy("name")
             ->get();
 
         $currentBalance = auth()->user()->balance($accounts, $categories);
         $last30Days = $this->getLast30DaysBalance($currency, $accounts->pluck("id"), $categories->pluck("id"));
 
-        $charts = $this->getCharts("/dashboard");
+        $charts = Chart::route("/dashboard");
 
         return response()->json(compact("categories", "accounts", "currentBalance", "last30Days", "charts"));
     }

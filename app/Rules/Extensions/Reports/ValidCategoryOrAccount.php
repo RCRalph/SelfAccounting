@@ -19,17 +19,14 @@ class ValidCategoryOrAccount implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
     {
-        if ($value == null) {
-            return true;
-        }
+        if ($value == null) return true;
 
-        $query = null;
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
 
         if (str_contains($attribute, "account")) {
@@ -40,7 +37,8 @@ class ValidCategoryOrAccount implements Rule
             abort(500, "Invalid data type");
         }
 
-        $query = $query->where("currency_id", request("$prefix.currency_id"))
+        $query = $query
+            ->where("currency_id", request("$prefix.currency_id"))
             ->where("id", $value);
 
         if (request("$prefix.query_data")) {

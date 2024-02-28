@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Models\Extension;
 
@@ -18,49 +19,58 @@ class ExtensionsController extends Controller
 
     public function index()
     {
-        $extensions = Extension::all()
-            ->load("gallery")
-            ->makeHidden(["thumbnail", "created_at", "updated_at", "icon"])
-            ->sortBy("title")
-            ->values()
-            ->toArray();
-
-        foreach ($extensions as $key => $item) {
-            $extensions[$key]["description"] = Storage::disk("local")->get("/files/extensions/descriptions/" . $item["description"]);
-            $extensions[$key]["gallery"] = array_column($item["gallery"], "image_link");
-        }
-
-        $ownedExtensions = auth()->user()->extensions()
-            ->select("code", "enabled")->get()
-            ->makeHidden(["thumbnail_link", "pivot"])
-            ->mapWithKeys(fn ($item) => [$item["code"] => $item["enabled"]]);
+        $boughtExtensions = auth()->user()->extensions()
+            ->select("code", "enabled")
+            ->get()
+            ->mapWithKeys(fn($item) => [$item["code"] => $item["enabled"]]);
 
         $premiumExtensions = auth()->user()->premiumExtensions->pluck("code");
 
-        $isPremium = in_array(strtolower(auth()->user()->account_type), ["admin", "premium"]);
+        $extensions = Extension::select(
+            "id", "code", "title", "icon", "directory", "thumbnail", "short_description", "description", "price"
+        )
+            ->with("gallery")
+            ->orderBy("title")
+            ->get()
+            ->map(fn($item) => [
+                "id" => $item->id,
+                "code" => $item->code,
+                "title" => $item->title,
+                "icon" => $item->icon,
+                "directory" => $item->directory,
+                "thumbnail" => $item->thumbnail_link,
+                "short_description" => $item->short_description,
+                "description" => Str::markdown($item->description_text),
+                "bought" => $boughtExtensions->has($item->code),
+                "enabled" => $boughtExtensions->has($item->code) ?
+                    $boughtExtensions->get($item->code) :
+                    $premiumExtensions->contains($item->code),
+                "price" => $item->price * 1,
+                "gallery" => $item->gallery->pluck("image_link"),
+            ]);
 
-        return response()->json(compact("extensions", "ownedExtensions", "premiumExtensions", "isPremium"));
+        return response()->json(compact("extensions"));
     }
 
     public function toggle()
     {
         $this->authorize("toggle", request()->extension);
 
-        $currentlyEnabled = auth()->user()->extensions()
-            ->find(request()->extension)->pivot->enabled;
+        // When user owns given extension
+        if (auth()->user()->extensions()->pluck("id")->contains(request()->extension->id)) {
+            $currentlyEnabled = auth()->user()->extensions()
+                ->find(request()->extension)
+                ->pivot->enabled;
 
-        auth()->user()->extensions()
-            ->updateExistingPivot(request()->extension, ["enabled" => !$currentlyEnabled]);
+            auth()->user()->extensions()
+                ->updateExistingPivot(
+                    request()->extension,
+                    ["enabled" => !$currentlyEnabled]
+                );
+        } else {
+            auth()->user()->premiumExtensions()->toggle(request()->extension);
+        }
 
-        return response()->json(["extensions" => auth()->user()->refresh()->extensionCodes]);
-    }
-
-    public function togglePremium()
-    {
-        $this->authorize("togglePremium", request()->extension);
-
-        auth()->user()->premiumExtensions()->toggle(request()->extension);
-
-        return response()->json(["extensions" => auth()->user()->refresh()->extensionCodes]);
+        return response("");
     }
 }

@@ -3,14 +3,8 @@
     @include("layouts.head")
 
     <body>
-        <div id="app">
-            <app-component></app-component>
-        </div>
+        <div id="app"></div>
 
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
-
-        <script src="{{ mix('js/app.js') }}"></script>
+        @vite(["resources/ts/app.ts"])
     </body>
 </html>

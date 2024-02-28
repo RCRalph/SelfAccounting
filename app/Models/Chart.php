@@ -13,6 +13,14 @@ class Chart extends Model
 
     public $timestamps = false;
 
+    public static function route($route)
+    {
+        return self::select("charts.id", "charts.name", "charts.type")
+            ->join("chart_routes", "chart_routes.chart_id", "=", "charts.id")
+            ->where("chart_routes.route", $route)
+            ->get();
+    }
+
     public function routes()
     {
         return $this->hasMany(ChartRoute::class);

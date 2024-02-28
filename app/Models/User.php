@@ -53,7 +53,7 @@ class User extends Authenticatable
         'premium_expiration' => 'date:Y-m-d'
     ];
 
-    protected $appends = ["profile_picture_link", "account_type", "extension_codes", "last_used_currencies"];
+    protected $appends = ["profile_picture_link", "account_type", "extension_codes", "last_used_currencies", "transaction_titles"];
 
     public function currencies()
     {
@@ -140,12 +140,12 @@ class User extends Authenticatable
                     }
                 }
 
-                array_push($result, [
+                $result[] = [
                     "icon" => $account->icon,
                     "account_id" => $account->id,
                     "name" => $account->name,
                     "balance" => $balance
-                ]);
+                ];
             }
         }
 
@@ -160,12 +160,12 @@ class User extends Authenticatable
                     }
                 }
 
-                array_push($result, [
+                $result[] = [
                     "icon" => $category->icon,
                     "category_id" => $category->id,
                     "name" => $category->name,
                     "balance" => $balance
-                ]);
+                ];
             }
         }
 

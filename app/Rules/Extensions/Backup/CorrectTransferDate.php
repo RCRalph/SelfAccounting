@@ -29,19 +29,15 @@ class CorrectTransferDate implements Rule
     public function passes($attribute, $value)
     {
         $prefix = substr($attribute, 0, strrpos($attribute, "."));
-        $source_account_id = request("$prefix.source_account_id");
-        $target_account_id = request("$prefix.target_account_id");
+        $sourceAccountID = request("$prefix.source_account_id");
+        $targetAccountID = request("$prefix.target_account_id");
 
-        if (count($this->accounts) < max($source_account_id, $target_account_id)) {
-            return false;
-        }
+        if (count($this->accounts) < max($sourceAccountID, $targetAccountID)) return false;
 
-        $maxAccountDate = max(
-            strtotime($this->accounts[$source_account_id - 1]["start_date"]),
-            strtotime($this->accounts[$target_account_id - 1]["start_date"])
-        );
-
-        return $maxAccountDate <= strtotime($value);
+        return max(
+            strtotime($this->accounts[$sourceAccountID - 1]["start_date"]),
+            strtotime($this->accounts[$targetAccountID - 1]["start_date"])
+        ) <= strtotime($value);
     }
 
     /**
