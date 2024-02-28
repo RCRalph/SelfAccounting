@@ -2,14 +2,7 @@ import { createVuetify } from "vuetify"
 import { fa } from "vuetify/iconsets/fa"
 import { mdi } from "vuetify/iconsets/mdi"
 
-import * as components from "vuetify/components"
-import * as labsComponents from "vuetify/labs/components"
-
 export default createVuetify({
-    components: {
-        ...components,
-        ...labsComponents,
-    },
     theme: {
         themes: {
             light: {
