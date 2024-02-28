@@ -339,7 +339,7 @@ import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import useComponentState from "@composables/useComponentState"
 import useTableHeaders from "@composables/useTableHeaders"
-import useTableSettings from "@composables/useTableSettings"
+import useTableQuery from "@composables/useTableQuery"
 import useFormats from "@composables/useFormats"
 import { downloadCSV } from "@composables/useDownload"
 import { dateToUTC } from "@composables/useDates"
@@ -492,7 +492,7 @@ function useDataExports() {
 
 const {ready} = useComponentState()
 const {headers, tableHeaders} = useTableHeaders()
-const {search} = useTableSettings()
+const {search} = useTableQuery()
 const {currentReportIndex, reportIDs} = useNavigation()
 const {reportInformation, tableData, canEdit, excludedColumns, getData} = useReportData()
 const {exportToCSV, exportToXLSX} = useDataExports()
