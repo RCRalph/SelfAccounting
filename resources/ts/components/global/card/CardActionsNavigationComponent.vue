@@ -90,5 +90,5 @@ const emit = defineEmits<{
     "remove": [],
 }>()
 
-const disableDelete = computed(() => props.dataLength <= 1 && props.canBeEmpty && props.dataLength == 0)
+const disableDelete = computed(() => props.dataLength <= Number(!props.canBeEmpty))
 </script>
