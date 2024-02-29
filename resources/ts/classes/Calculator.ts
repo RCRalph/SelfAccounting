@@ -157,7 +157,7 @@ export default class Calculator {
         /*
             Next few lines require extensive explanation.
 
-            By doing operation.split(/(\d(\+|-|\*|\/|\^))/) we divide the array into following elements:
+            By doing operation.split(/(\d([+\-*\/^]))/) we divide the array into following elements:
                 - numbers without their last digit
                 - last digit of a previous number combined with the operator to the right of the number
                 - the operator itself
@@ -174,7 +174,7 @@ export default class Calculator {
             Example: "12345*-5^-3" -> ["12345", "*", "-5", "^", "-3"]
         */
 
-        let operationArray = operation.split(/(\d[+\-*/^])/)
+        let operationArray = operation.split(/(\d([+\-*\/^]))/)
         for (let i = 1; i < operationArray.length; i++) {
             if (/\d[+\-*/^]/.test(operationArray[i])) {
                 operationArray[i - 1] += operationArray[i][0]
