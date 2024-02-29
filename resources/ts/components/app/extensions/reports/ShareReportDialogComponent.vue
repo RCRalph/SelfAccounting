@@ -133,7 +133,7 @@ function useUsers() {
             .catch(async err => {
                 if (
                     err.response.status == 422 &&
-                    err.response.data.errors.email.includes("The selected email is invalid.")
+                    err.response.data?.errors?.email?.includes("The selected email is invalid.")
                 ) {
                     emailExists.value = true
                     loading.value.submit = false
