@@ -134,7 +134,7 @@ function useInformation() {
             .catch(err => {
                 if (
                     err.response.status == 422 &&
-                    err.response.data.errors?.current_password?.includes("validation.current_password")
+                    err.response.data?.errors?.current_password?.includes("validation.current_password")
                 ) {
                     currentPasswordMatch.value = false
                     loading.value.submit = false

@@ -82,7 +82,7 @@ function useUserData() {
             .catch(err => {
                 if (
                     err.response.status == 422 &&
-                    err.response.data.errors.email.includes("We can't find a user with that email address.")
+                    err.response.data?.errors?.email?.includes("We can't find a user with that email address.")
                 ) {
                     correctCredentials.value = false
                     loading.value.submit = false

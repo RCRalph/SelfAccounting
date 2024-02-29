@@ -129,7 +129,7 @@ function useUserData() {
             .catch(err => {
                 if (
                     err.response.status == 422 &&
-                    err.response.data.errors.email.includes("The email has already been taken.")
+                    err.response.data?.errors?.email?.includes("The email has already been taken.")
                 ) {
                     emailUnique.value = false
                     loading.value.submit = false

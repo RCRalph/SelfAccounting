@@ -111,7 +111,7 @@ function useUserData() {
             .catch(err => {
                 if (
                     err.response.status == 422 &&
-                    err.response.data.errors.email.includes("These credentials do not match our records.")
+                    err.response.data?.errors?.email?.includes("These credentials do not match our records.")
                 ) {
                     correctCredentials.value = false
                     loading.value.submit = false
