@@ -93,6 +93,7 @@
 <script setup lang="ts">
 import axios from "axios"
 import { computed, ref } from "vue"
+import { useTheme } from "vuetify"
 
 import { useStatusStore } from "@stores/status"
 import useComponentState from "@composables/useComponentState"
@@ -100,6 +101,7 @@ import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsCo
 import CardActionsSubmitComponent from "@components/global/card/CardActionsSubmitComponent.vue"
 import Validator from "@classes/Validator"
 
+const theme = useTheme()
 const status = useStatusStore()
 
 function useUserData() {
@@ -121,6 +123,7 @@ function useUserData() {
             email: email.value,
             password: password.value,
             password_confirmation: confirm.value,
+            darkmode: theme.current.value.dark,
         })
             .then(() => window.location.href = "/app")
             .catch(err => {
