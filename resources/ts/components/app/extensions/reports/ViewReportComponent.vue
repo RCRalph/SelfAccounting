@@ -394,6 +394,7 @@ function useReportData() {
 
                 reportInformation.value = data.information
                 excludedColumns.value = new Set(data.excludedColumns)
+                canEdit.value = data.canEdit
 
                 reportIDs.value = data.reports
                 currentReportIndex.value = reportIDs.value.findIndex(item => item == Number(route.params.id)) + 1
@@ -492,7 +493,7 @@ function useDataExports() {
 
 const {ready} = useComponentState()
 const {headers, tableHeaders} = useTableHeaders()
-const {search} = useTableQuery()
+const {search} = useTableQuery([])
 const {currentReportIndex, reportIDs} = useNavigation()
 const {reportInformation, tableData, canEdit, excludedColumns, getData} = useReportData()
 const {exportToCSV, exportToXLSX} = useDataExports()
