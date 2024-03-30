@@ -102,10 +102,9 @@
                                 <template v-slot:item="{ item, props: listItemProps }">
                                     <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
-                                            <v-icon
-                                                v-if="item.raw.icon"
-                                                :icon="item.raw.icon"
-                                            ></v-icon>
+                                            <v-icon v-if="item.raw.icon">
+                                                {{ formats.iconName(item.raw.icon) }}
+                                            </v-icon>
                                         </template>
                                     </v-list-item>
                                 </template>
@@ -124,10 +123,9 @@
                                 <template v-slot:item="{ item, props: listItemProps }">
                                     <v-list-item v-bind="listItemProps">
                                         <template v-slot:prepend>
-                                            <v-icon
-                                                v-if="item.raw.icon"
-                                                :icon="item.raw.icon"
-                                            ></v-icon>
+                                            <v-icon v-if="item.raw.icon">
+                                                {{ formats.iconName(item.raw.icon) }}
+                                            </v-icon>
                                         </template>
                                     </v-list-item>
                                 </template>
@@ -160,6 +158,7 @@ import type { AccountData } from "@interfaces/Account"
 import type { CategoryData } from "@interfaces/Category"
 
 import { useCurrenciesStore } from "@stores/currencies"
+import useFormats from "@composables/useFormats"
 import useComponentState from "@composables/useComponentState"
 import useTitles from "@composables/useTitles"
 import Calculator from "@classes/Calculator"
@@ -182,6 +181,7 @@ const emit = defineEmits<{
 }>()
 
 const currencies = useCurrenciesStore()
+const formats = useFormats()
 
 function useCommonValues() {
     const commonValues = ref(cloneDeep(props.commonValues))
