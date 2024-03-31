@@ -279,7 +279,7 @@ function useData() {
 
     function appendData() {
         transactionData.value.push(cloneDeep(commonValues.value))
-        priceModified.value.push(false)
+        priceModified.value.push(commonValues.value.price !== "")
     }
 
     function getData() {
