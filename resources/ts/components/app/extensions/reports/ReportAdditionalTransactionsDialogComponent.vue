@@ -263,7 +263,7 @@ function useActions() {
 }
 
 function usePriceModified() {
-    const priceModified = ref<boolean[]>([])
+    const priceModified = ref<boolean[]>(model.value.map(() => true))
 
     const allPricesModified = computed(() => priceModified.value.every(item => item))
 
