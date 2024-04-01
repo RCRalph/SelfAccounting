@@ -403,6 +403,7 @@ function useActions() {
                 dialog.value = false
                 loading.value.submit = false
                 transactionData.value = []
+                priceModified.value = []
             })
             .catch(err => {
                 console.error(err)
