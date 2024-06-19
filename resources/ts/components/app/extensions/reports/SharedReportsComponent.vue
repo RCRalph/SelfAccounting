@@ -185,7 +185,7 @@ function useSharedReports() {
     function getData() {
         loading.value.table = true
 
-        axios.get("web-api/extensions/reports/shared-reports", {
+        axios.get("/web-api/extensions/reports/shared-reports", {
             params: query.value,
         })
             .then(response => {
@@ -215,11 +215,7 @@ const {options, search, filteredData, query} = useTableQuery([
 const {total, reports, owners, share, getOwners, getData} = useSharedReports()
 const {updateWithOffset} = useUpdateWithOffset(getData)
 
-watch(options, (_, oldValue) => {
-    if (Object.keys(oldValue).length) {
-        getData()
-    }
-})
+watch(options, getData)
 
 watch(filteredData, updateWithOffset, {
     deep: true,

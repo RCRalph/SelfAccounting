@@ -157,11 +157,11 @@ class ReportsController extends Controller
     {
         $this->authorize("view", $report);
 
-        $reports = auth()->user()->reports()
+        $canEdit = $report->user_id == auth()->user()->id;
+
+        $reports = ($canEdit ? auth()->user()->reports() : auth()->user()->sharedReports())
             ->orderBy("id", "asc")
             ->pluck("id");
-
-        $canEdit = $report->user_id == auth()->user()->id;
 
         $information = [
             "title" => $report->title,
