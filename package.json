@@ -34,6 +34,6 @@
     "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.4",
     "vuetify": "^3.5.1",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   }
 }
