@@ -28,12 +28,12 @@
         >
             <AddTransactionsDialogComponent
                 type="income"
-                @added="getStartData"
+                @added="emit('updated')"
             ></AddTransactionsDialogComponent>
 
             <AddTransactionsDialogComponent
                 type="expenses"
-                @added="getStartData"
+                @added="emit('updated')"
             ></AddTransactionsDialogComponent>
         </v-col>
     </v-row>
