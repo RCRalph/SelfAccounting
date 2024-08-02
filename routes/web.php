@@ -163,6 +163,10 @@ Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
             Route::get("/create", "WebAPI\Extensions\BackupController@create")->name("web-api.extensions.backup.create");
             Route::post("/restore", "WebAPI\Extensions\BackupController@restore")->name("web-api.extensions.backup.restore");
         });
+
+        Route::prefix("/budgets")->group(function () {
+            Route::get("/", "WebAPI\Extensions\BudgetController@index")->name("web-api.budgets");
+        });
     });
 });
 

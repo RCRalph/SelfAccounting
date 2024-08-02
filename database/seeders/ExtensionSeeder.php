@@ -62,6 +62,19 @@ class ExtensionSeeder extends Seeder
                 "jLmMHGijbc7KVR5Foi2D7sL6Zbdaa6hCq95ECYXKt3jooF6HVn.png",
                 "u7NI2CEX7lbAYzhhOyzl4d549H5soMHu2R7xbizsJwktfr3CUk.png"
             ]
+        ],
+        [
+            "title" => "Budget creator",
+            "code" => "budget",
+            "stripe_product_code" => "price_1PiiMxAmJbobJ1GsFXZLpg2y",
+            "icon" => "mdi-home-analytics",
+            "directory" => "budgets",
+            "price" => 5,
+            "thumbnail" => "test.png",
+            "short_description" => "Budget your cashflow with ease",
+            "description" => "budget-creator.md",
+            "gallery" => [
+            ]
         ]
     ];
 
@@ -76,7 +89,7 @@ class ExtensionSeeder extends Seeder
             $gallery = $extension["gallery"];
             unset($extension["gallery"]);
 
-            $extensionInDB = Extension::updateOrCreate([ "code" => $extension["code"] ], $extension);
+            $extensionInDB = Extension::updateOrCreate(["code" => $extension["code"]], $extension);
 
             foreach ($gallery as $image) {
                 if ($extensionInDB->gallery()->where("image", $image)->doesntExist()) {
