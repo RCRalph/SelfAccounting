@@ -253,9 +253,9 @@ function useData() {
 
     const reportData = ref<Report>()
 
-    const categories = ref<Record<number, CategoryData[]>>([])
+    const categories = ref<Record<number, CategoryData[]>>({})
 
-    const accounts = ref<Record<number, AccountData[]>>([])
+    const accounts = ref<Record<number, AccountData[]>>({})
 
     function submit() {
         if (!reportData.value) return

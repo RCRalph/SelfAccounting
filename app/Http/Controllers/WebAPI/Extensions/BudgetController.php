@@ -41,4 +41,17 @@ class BudgetController extends Controller
 
         return response()->json(compact("budgets"));
     }
+
+    public function store()
+    {
+        $data = request()->validate([
+            "title" => ["required", "string", "max:64"],
+            "start_date" => ["required", "date", "date_format:Y-m-d", "before_or_equal:end_date"],
+            "end_date" => ["required", "date", "date_format:Y-m-d", "after_or_equal:start_date"],
+        ]);
+
+        $budget = auth()->user()->budgets()->create($data);
+
+        return response()->json(["id" => $budget->id]);
+    }
 }

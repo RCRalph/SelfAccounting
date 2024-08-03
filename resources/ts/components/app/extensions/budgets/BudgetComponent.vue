@@ -43,7 +43,7 @@
                             lg="8"
                             class="multi-button-table-top"
                         >
-                            <!--<CreateReportDialogComponent></CreateReportDialogComponent>-->
+                            <CreateBudgetDialogComponent></CreateBudgetDialogComponent>
                         </v-col>
                     </v-row>
 
@@ -158,7 +158,7 @@ import axios from "axios"
 import { onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 
-import type { Budget } from "@interfaces/Budget"
+import type { BudgetInformation } from "@interfaces/Budget"
 
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import useTableHeaders from "@composables/useTableHeaders"
@@ -168,14 +168,14 @@ import Validator from "@classes/Validator"
 import useTableSettings from "@composables/useTableSettings"
 import useComponentState from "@composables/useComponentState"
 
-// import CreateReportDialogComponent from "@components/app/extensions/reports/CreateReportDialogComponent.vue"
+import CreateBudgetDialogComponent from "@components/app/extensions/budgets/CreateBudgetDialogComponent.vue"
 // import EditReportDialogComponent from "@components/app/extensions/reports/EditReportDialogComponent.vue"
 
 const router = useRouter()
 const status = useStatusStore()
 
 function useBudgets() {
-    const budgets = ref<Budget[]>([])
+    const budgets = ref<BudgetInformation[]>([])
 
     async function getData() {
         return axios
