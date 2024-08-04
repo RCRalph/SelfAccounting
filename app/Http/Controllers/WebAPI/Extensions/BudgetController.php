@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\WebAPI\Extensions;
 
 use App\Http\Controllers\Controller;
+use App\Models\Budget;
 use App\Rules\EqualArrayLength;
 
 class BudgetController extends Controller
@@ -53,5 +54,42 @@ class BudgetController extends Controller
         $budget = auth()->user()->budgets()->create($data);
 
         return response()->json(["id" => $budget->id]);
+    }
+
+    public function duplicate(Budget $budget)
+    {
+        $this->authorize("duplicate", $budget);
+
+        $duplicate = Budget::create($budget->makeHidden(["id", "created_at", "updated_at"])->toArray());
+
+        foreach ($budget->entries as $entry) {
+            $duplicate->entries()->create($entry->makeHidden(["id", "budget_id", "created_at", "updated_at"])->toArray());
+        }
+
+        return response()->json(["id" => $duplicate->id]);
+    }
+
+    public function edit(Budget $budget)
+    {
+        $this->authorize("update", $budget);
+
+        $data = $budget->only("title", "start_date", "end_date");
+
+        return response()->json(compact("data"));
+    }
+
+    public function update(Budget $budget)
+    {
+        $this->authorize("update", $budget);
+
+        $data = request()->validate([
+            "title" => ["required", "string", "max:64"],
+            "start_date" => ["required", "date", "date_format:Y-m-d", "before_or_equal:end_date"],
+            "end_date" => ["required", "date", "date_format:Y-m-d", "after_or_equal:start_date"],
+        ]);
+
+        $budget->update($data);
+
+        return response("");
     }
 }

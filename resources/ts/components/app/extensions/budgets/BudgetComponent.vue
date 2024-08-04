@@ -55,7 +55,6 @@
                         :items="budgets"
                         :loading="loading.table"
                         :items-per-page="-1"
-                        class="table-bordered"
                         density="comfortable"
                         multi-sort
                     >
@@ -64,14 +63,17 @@
                         </template>
 
                         <template v-slot:[`item.actions`]="{ item }">
-                            <div class="d-flex flex-nowrap justify-center align-center">
-                                <!--<v-tooltip
+                            <div
+                                v-if="item.id"
+                                class="d-flex flex-nowrap justify-center align-center"
+                            >
+                                <v-tooltip
                                     text="View report"
                                     location="bottom"
                                 >
                                     <template v-slot:activator="{ props: tooltipProps }">
                                         <router-link
-                                            :to="`/extensions/reports/${item.id}`"
+                                            :to="`/extensions/budgets/${item.id}`"
                                             style="color: inherit"
                                         >
                                             <v-icon
@@ -83,34 +85,21 @@
                                     </template>
                                 </v-tooltip>
 
-                                <v-tooltip
-                                    text="Share report"
-                                    location="bottom"
-                                >
-                                    <template v-slot:activator="{ props: tooltipProps }">
-                                        <v-icon
-                                            v-bind="tooltipProps"
-                                            class="mx-1 cursor-pointer"
-                                            icon="mdi-share"
-                                            @click="share(item.id)"
-                                        ></v-icon>
-                                    </template>
-                                </v-tooltip>
-
-                                <EditReportDialogComponent
+                                <EditBudgetDialogComponent
                                     :id="item.id"
                                     show-icon
-                                ></EditReportDialogComponent>
+                                    @updated="getStartData"
+                                ></EditBudgetDialogComponent>
 
                                 <v-tooltip
-                                    :text="duplicatedReportID == item.id ? 'Duplicating...' : 'Duplicate report'"
+                                    :text="duplicatedBudgetID == item.id ? 'Duplicating...' : 'Duplicate report'"
                                     location="bottom"
                                 >
                                     <template v-slot:activator="{ props: tooltipProps }">
                                         <v-btn
                                             v-bind="tooltipProps"
-                                            :loading="duplicatedReportID == item.id"
-                                            :disabled="!!duplicatedReportID"
+                                            :loading="duplicatedBudgetID == item.id"
+                                            :disabled="!!duplicatedBudgetID"
                                             class="mx-1 cursor-pointer"
                                             icon="mdi-content-duplicate"
                                             variant="text"
@@ -119,7 +108,7 @@
                                             @click="duplicate(item.id)"
                                         ></v-btn>
                                     </template>
-                                </v-tooltip>-->
+                                </v-tooltip>
 
                                 <DeleteDialogComponent
                                     thing="report"
@@ -169,7 +158,7 @@ import useTableSettings from "@composables/useTableSettings"
 import useComponentState from "@composables/useComponentState"
 
 import CreateBudgetDialogComponent from "@components/app/extensions/budgets/CreateBudgetDialogComponent.vue"
-// import EditReportDialogComponent from "@components/app/extensions/reports/EditReportDialogComponent.vue"
+import EditBudgetDialogComponent from "@components/app/extensions/budgets/EditBudgetDialogComponent.vue"
 
 const router = useRouter()
 const status = useStatusStore()
@@ -237,11 +226,13 @@ function useBudgets() {
 function useActions() {
     const duplicatedBudgetID = ref<number>()
 
-    function duplicate(id: number) {
+    function duplicate(id?: number) {
+        if (!id) return
+
         duplicatedBudgetID.value = id
 
         axios.post(`/web-api/extensions/budgets/${id}/duplicate`)
-            .then(response => router.push(`/extensions/reports/${response.data.id}`))
+            .then(response => router.push(`/extensions/budgets/${response.data.id}`))
             .catch(err => {
                 console.error(err)
                 setTimeout(() => status.showError(), 1000)

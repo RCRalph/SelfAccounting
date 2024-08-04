@@ -89,6 +89,7 @@
                         <EditReportDialogComponent
                             :id="item.id"
                             show-icon
+                            @updated="getData"
                         ></EditReportDialogComponent>
 
                         <v-tooltip
