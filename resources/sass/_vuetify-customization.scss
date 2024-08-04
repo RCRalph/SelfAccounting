@@ -41,8 +41,10 @@ $tabs-height: 60px;
     }
 }
 
-.v-overlay {
+.v-overlay:not(.v-snackbar) {
     margin: unset !important;
+    justify-content: center;
+    align-items: center;
 }
 
 .cursor-pointer {
