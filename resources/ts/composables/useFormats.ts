@@ -26,13 +26,13 @@ export default function useFormats() {
         return text.replaceAll(" ", nbsp)
     }
 
-    function iconName(icon: string | null) {
-        if (typeof icon == "string") {
-            if (icon.startsWith("mdi")) {
-                return icon
-            } else if (icon.startsWith("fa")) {
-                return `fa:${icon}`
-            }
+    function iconName(icon: string | null | undefined) {
+        if (typeof icon != "string") return undefined
+
+        if (icon.startsWith("mdi")) {
+            return icon
+        } else if (icon.startsWith("fa")) {
+            return `fa:${icon}`
         }
 
         return undefined

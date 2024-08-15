@@ -4,10 +4,9 @@
             cols="12"
             md="10"
             offset-md="1"
-            lg="12"
-            offset-lg="0"
             xl="8"
             offset-xl="2"
+            class="pa-0"
         >
             <v-card>
                 <CardTitleWithButtons
@@ -68,7 +67,7 @@
                                 class="d-flex flex-nowrap justify-center align-center"
                             >
                                 <v-tooltip
-                                    text="View report"
+                                    text="View budget"
                                     location="bottom"
                                 >
                                     <template v-slot:activator="{ props: tooltipProps }">
@@ -86,13 +85,14 @@
                                 </v-tooltip>
 
                                 <EditBudgetDialogComponent
+                                    v-if="item.id"
                                     :id="item.id"
                                     show-icon
                                     @updated="getStartData"
                                 ></EditBudgetDialogComponent>
 
                                 <v-tooltip
-                                    :text="duplicatedBudgetID == item.id ? 'Duplicating...' : 'Duplicate report'"
+                                    :text="duplicatedBudgetID == item.id ? 'Duplicating...' : 'Duplicate budget'"
                                     location="bottom"
                                 >
                                     <template v-slot:activator="{ props: tooltipProps }">
@@ -111,7 +111,7 @@
                                 </v-tooltip>
 
                                 <DeleteDialogComponent
-                                    thing="report"
+                                    thing="budget"
                                     :url="`extensions/budgets/${item.id}`"
                                     @deleted="getStartData"
                                 ></DeleteDialogComponent>

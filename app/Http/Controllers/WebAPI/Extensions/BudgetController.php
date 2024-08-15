@@ -92,4 +92,13 @@ class BudgetController extends Controller
 
         return response("");
     }
+
+    public function destroy(Budget $budget)
+    {
+        $this->authorize("delete", $budget);
+
+        $budget->delete();
+
+        return response("");
+    }
 }

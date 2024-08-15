@@ -8,6 +8,7 @@
             offset-lg="3"
             xl="4"
             offset-xl="4"
+            class="pa-0"
         >
             <v-card>
                 <CardTitleWithButtons
