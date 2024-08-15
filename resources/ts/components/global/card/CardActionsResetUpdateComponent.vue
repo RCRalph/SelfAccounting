@@ -26,10 +26,16 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-    loading: boolean
-    canSubmit: boolean | null
-}>()
+const props = withDefaults(
+    defineProps<{
+        loading?: boolean
+        canSubmit?: boolean | null
+    }>(),
+    {
+        loading: false,
+        canSubmit: true,
+    },
+)
 
 const emit = defineEmits<{
     reset: [],

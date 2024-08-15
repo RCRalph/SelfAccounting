@@ -5,6 +5,7 @@ namespace App\Http\Controllers\WebAPI\Extensions;
 use App\Http\Controllers\Controller;
 use App\Models\Budget;
 use App\Rules\EqualArrayLength;
+use Illuminate\Support\Facades\DB;
 
 class BudgetController extends Controller
 {
@@ -100,5 +101,43 @@ class BudgetController extends Controller
         $budget->delete();
 
         return response("");
+    }
+
+    public function show(Budget $budget)
+    {
+        $this->authorize("view", $budget);
+
+        $budget_entries = $budget
+            ->entries()
+            ->select("id", "category_id", "transaction_type", "value")
+            ->orderBy("id")
+            ->get();
+
+        $current_income_values = auth()->user()->income()
+            ->select("category_id", DB::raw("SUM(ROUND(amount * price, 2)) as total_value"))
+            ->whereBetween("date", [$budget->start_date, $budget->end_date])
+            ->whereNotNull("category_id")
+            ->groupBy("category_id")
+            ->get()
+            ->mapWithKeys(fn($item) => [$item->category_id => $item->total_value * 1]);
+
+        $current_expenses_values = auth()->user()->expenses()
+            ->select("category_id", DB::raw("SUM(ROUND(amount * price, 2)) as total_value"))
+            ->whereBetween("date", [$budget->start_date, $budget->end_date])
+            ->whereNotNull("category_id")
+            ->groupBy("category_id")
+            ->get()
+            ->mapWithKeys(fn($item) => [$item->category_id => $item->total_value * 1]);
+
+        $categories = auth()->user()->categories()
+            ->select("id", "name", "icon", "currency_id", "used_in_income", "used_in_expenses")
+            ->get()
+            ->groupBy("currency_id");
+
+        $budgets = auth()->user()->budgets()
+            ->orderBy("id", "asc")
+            ->pluck("id");
+
+        return response()->json(compact("budget", "budget_entries", "categories", "current_income_values", "current_expenses_values", "budgets"));
     }
 }
