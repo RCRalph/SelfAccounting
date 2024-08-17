@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->decimal("value", 13, 2);
             $table->timestamps();
 
-            $table->unique(["budget_id", "category_id"]);
+            $table->unique(["budget_id", "category_id", "transaction_type"]);
         });
     }
 

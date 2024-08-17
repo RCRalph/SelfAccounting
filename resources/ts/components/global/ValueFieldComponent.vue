@@ -1,6 +1,6 @@
 <template>
     <div class="text-caption">
-        Value
+        {{ props.title }}
     </div>
 
     <div
@@ -16,10 +16,16 @@
 <script setup lang="ts">
 import useFormats from "@composables/useFormats"
 
-const props = defineProps<{
-    value: number,
-    iso: string
-}>()
+const props = withDefaults(
+    defineProps<{
+        title?: string
+        value: number,
+        iso: string
+    }>(),
+    {
+        title: "Value",
+    },
+)
 
 const formats = useFormats()
 </script>

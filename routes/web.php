@@ -174,6 +174,7 @@ Route::group(["prefix" => "/web-api", "middleware" => "currency"], function () {
                 Route::get("/edit", "WebAPI\Extensions\BudgetController@edit")->name("web-api.extensions.budgets.edit");
                 Route::post("/update", "WebAPI\Extensions\BudgetController@update")->name("web-api.extensions.budgets.update");
                 Route::post("/duplicate", "WebAPI\Extensions\BudgetController@duplicate")->name("web-api.extensions.budgets.duplicate");
+                Route::patch("/entries", "WebAPI\Extensions\BudgetController@updateEntries")->name("web-api.extensions.budgets.updateEntries");
             });
         });
     });

@@ -1,6 +1,6 @@
 <template>
     <div v-if="ready && budgetInformation">
-        <v-card class="mb-3">
+        <v-card class="pagination-fixed-margin">
             <CardTitleWithButtons
                 :title="budgetInformation.title"
                 large-font
@@ -19,58 +19,60 @@
             </CardTitleWithButtons>
 
             <v-card-text>
-                <v-row
+                <v-form
                     v-if="budgetEntries.length"
-                    class="pagination-fixed-margin"
+                    v-model="canSubmit"
                 >
-                    <v-col
-                        cols="12"
-                        lg="6"
-                        class="pr-lg-7"
-                    >
-                        <h4 class="text-h4 text-center">
-                            Income
-                        </h4>
+                    <v-row>
+                        <v-col
+                            cols="12"
+                            lg="6"
+                            class="pr-lg-7"
+                        >
+                            <h4 class="text-h4 text-center">
+                                Income
+                            </h4>
 
-                        <v-row>
-                            <v-col
-                                v-for="item in budgetEntries.filter(x => x.transaction_type == 'income')"
-                                cols="12"
-                                lg="6"
-                            >
-                                <BudgetEntryComponent
-                                    :entry="item"
-                                    :current-value="currentIncomeValues[item.category_id] || 0"
-                                    :category="categoryByID[item.category_id]"
-                                ></BudgetEntryComponent>
-                            </v-col>
-                        </v-row>
-                    </v-col>
+                            <v-row>
+                                <v-col
+                                    v-for="item in budgetEntries.filter(x => x.transaction_type == 'income')"
+                                    cols="12"
+                                    lg="6"
+                                >
+                                    <BudgetEntryComponent
+                                        :entry="item"
+                                        :current-value="currentIncomeValues[item.category_id] || 0"
+                                        :category="categoryByID[item.category_id]"
+                                    ></BudgetEntryComponent>
+                                </v-col>
+                            </v-row>
+                        </v-col>
 
-                    <v-col
-                        cols="12"
-                        lg="6"
-                        class="pl-lg-7"
-                    >
-                        <h4 class="text-h4 text-center">
-                            Expenses
-                        </h4>
+                        <v-col
+                            cols="12"
+                            lg="6"
+                            class="pl-lg-7"
+                        >
+                            <h4 class="text-h4 text-center">
+                                Expenses
+                            </h4>
 
-                        <v-row>
-                            <v-col
-                                v-for="item in budgetEntries.filter(x => x.transaction_type == 'expenses')"
-                                cols="12"
-                                xl="6"
-                            >
-                                <BudgetEntryComponent
-                                    :entry="item"
-                                    :current-value="currentExpenseValues[item.category_id] || 0"
-                                    :category="categoryByID[item.category_id]"
-                                ></BudgetEntryComponent>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                            <v-row>
+                                <v-col
+                                    v-for="item in budgetEntries.filter(x => x.transaction_type == 'expenses')"
+                                    cols="12"
+                                    xl="6"
+                                >
+                                    <BudgetEntryComponent
+                                        :entry="item"
+                                        :current-value="currentExpenseValues[item.category_id] || 0"
+                                        :category="categoryByID[item.category_id]"
+                                    ></BudgetEntryComponent>
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                    </v-row>
+                </v-form>
 
                 <div v-else>
                     <h4 class="text-h4 text-center py-4">
@@ -82,6 +84,13 @@
                     </h5>
                 </div>
             </v-card-text>
+
+            <CardActionsResetUpdateComponent
+                :loading="loading.submit"
+                :can-submit="canSubmit"
+                @reset="reset"
+                @update="update"
+            ></CardActionsResetUpdateComponent>
         </v-card>
 
         <div class="pagination-fixed">
@@ -112,6 +121,7 @@
 </template>
 
 <script setup lang="ts">
+import _ from "lodash"
 import axios from "axios"
 import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
@@ -121,15 +131,15 @@ import type { Category } from "@interfaces/Category"
 
 import EditBudgetDialogComponent from "@components/app/extensions/budgets/EditBudgetDialogComponent.vue"
 import AddBudgetEntriesDialogComponent from "@components/app/extensions/budgets/ManageBudgetEntriesDialogComponent.vue"
+import BudgetEntryComponent from "@components/app/extensions/budgets/BudgetEntryComponent.vue"
+import CardActionsResetUpdateComponent from "@components/global/card/CardActionsResetUpdateComponent.vue"
 
 import { useStatusStore } from "@stores/status"
 import useComponentState from "@composables/useComponentState"
-import BudgetEntryComponent from "@components/app/extensions/budgets/BudgetEntryComponent.vue"
-
-const status = useStatusStore()
 
 const route = useRoute()
 const router = useRouter()
+const status = useStatusStore()
 
 function useNavigation() {
     const budgetIDs = ref<number[]>([])
@@ -150,6 +160,7 @@ function useBudgetData() {
     const budgetInformation = ref<BudgetInformation>()
 
     const budgetEntries = ref<BudgetEntry[]>([])
+    const budgetEntriesCopy = ref<BudgetEntry[]>([])
 
     const categories = ref<Record<number, Category[]>>({})
 
@@ -179,8 +190,11 @@ function useBudgetData() {
             .then(data => {
                 budgetInformation.value = data.budget
                 budgetEntries.value = data.budget_entries
+                budgetEntriesCopy.value = _.cloneDeep(budgetEntries.value)
+
                 categories.value = data.categories
                 budgetIDs.value = data.budgets
+
                 currentIncomeValues.value = data.current_income_values
                 currentExpenseValues.value = data.current_expenses_values
 
@@ -194,6 +208,29 @@ function useBudgetData() {
             })
     }
 
+    function reset() {
+        budgetEntries.value = _.cloneDeep(budgetEntriesCopy.value)
+    }
+
+    function update() {
+        loading.value.submit = true
+
+        axios
+            .patch(`/web-api/extensions/budgets/${route.params.id}/entries`, {
+                entries: budgetEntries.value,
+            })
+            .then(() => {
+                budgetEntriesCopy.value = _.cloneDeep(budgetEntries.value)
+                status.showSuccess("updated budget")
+                loading.value.submit = false
+            })
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value.submit = false, 2000)
+            })
+    }
+
     return {
         budgetEntries,
         budgetInformation,
@@ -202,10 +239,12 @@ function useBudgetData() {
         currentExpenseValues,
         categoryByID,
         getData,
+        reset,
+        update,
     }
 }
 
-const {ready} = useComponentState()
+const {loading, canSubmit, ready} = useComponentState()
 const {currentBudgetIndex, budgetIDs} = useNavigation()
 const {
     budgetEntries,
@@ -215,6 +254,8 @@ const {
     currentExpenseValues,
     categoryByID,
     getData,
+    reset,
+    update,
 } = useBudgetData()
 
 onMounted(getData)
