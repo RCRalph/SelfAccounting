@@ -302,7 +302,10 @@
         </v-row>
 
         <div class="pagination-fixed">
-            <v-card class="pa-1 flex-grow-1">
+            <v-card
+                class="pa-1 flex-grow-1"
+                elevation="6"
+            >
                 <v-pagination
                     v-model="currentReportIndex"
                     :length="reportIDs.length"

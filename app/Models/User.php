@@ -125,6 +125,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Tutorial::class, 'tutorial_user', 'user_id', 'tutorial_id');
     }
 
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
+    }
+
     public function balance($accounts, $categories, $endDate = null)
     {
         $result = [];

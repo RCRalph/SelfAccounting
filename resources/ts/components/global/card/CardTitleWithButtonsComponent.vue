@@ -28,12 +28,13 @@ const titleCardClasses = computed(() => {
     const result = [
         "d-flex",
         `px-${props.noHorizontal ? 0 : 4}`,
+        "align-center",
     ]
 
     if (!slots.default) {
         result.push("justify-center")
     } else if (display.mobile.value) {
-        result.push("flex-wrap", "flex-column", "justify-center", "align-center")
+        result.push("flex-wrap", "flex-column", "justify-center")
     } else {
         result.push("justify-space-between")
     }

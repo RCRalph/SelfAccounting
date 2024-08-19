@@ -64,6 +64,13 @@ const sharedReports: HeaderData[] = [
     {title: "Owner", key: "owner", align: "center", sortable: false},
 ]
 
+const budgets: HeaderData[] = [
+    {title: "ID", key: "id", align: "center", sortable: true},
+    {title: "Title", key: "title", align: "center", sortable: true},
+    {title: "Start date", key: "start_date", align: "center", sortable: false},
+    {title: "End date", key: "end_date", align: "center", sortable: false},
+]
+
 export default function useTableHeaders() {
     const headers = {
         transactions,
@@ -72,6 +79,7 @@ export default function useTableHeaders() {
         accounts,
         ownedReports,
         sharedReports,
+        budgets,
     }
 
     function tableHeaders(headers: HeaderData[], parameters: TableHeadersParameters) {

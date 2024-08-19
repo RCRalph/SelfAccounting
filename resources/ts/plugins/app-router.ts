@@ -17,6 +17,8 @@ import BackupComponent from "@components/app/extensions/backup/BackupComponent.v
 import CashComponent from "@components/app/extensions/cash/CashComponent.vue"
 import ReportsComponent from "@components/app/extensions/reports/ReportsComponent.vue"
 import ViewReportComponent from "@components/app/extensions/reports/ViewReportComponent.vue"
+import BudgetComponent from "@components/app/extensions/budgets/BudgetComponent.vue"
+import ViewBudgetComponent from "@components/app/extensions/budgets/ViewBudgetComponent.vue"
 
 // Admin components
 import AdminComponent from "@components/app/admin/AdminComponent.vue"
@@ -91,6 +93,14 @@ const extensionRoutes: RouteRecordRaw[] = [
             {
                 path: "reports/:id",
                 component: ViewReportComponent,
+            },
+            {
+                path: "budgets",
+                component: BudgetComponent,
+            },
+            {
+                path: "budgets/:id",
+                component: ViewBudgetComponent,
             },
         ],
     },

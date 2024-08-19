@@ -349,6 +349,7 @@ import useTableQuery from "@composables/useTableQuery"
 import useUpdateWithOffset from "@composables/useUpdateWithOffset"
 import TableDataMerger from "@classes/TableDataMerger"
 import Validator from "@classes/Validator"
+import { useStatusStore } from "@stores/status"
 
 const props = defineProps<{
     type: "income" | "expenses"
@@ -362,6 +363,7 @@ const emit = defineEmits<{
 
 const formats = useFormats()
 const currencies = useCurrenciesStore()
+const status = useStatusStore()
 
 function useTableData() {
     const typeSingular = computed(() => props.type == "expenses" ? "expense" : "income")
@@ -396,7 +398,13 @@ function useTableData() {
         pagination.value.last = Infinity
         tableData.reset()
 
-        await getData().then(() => loading.value.table = false)
+        await getData()
+            .then(() => loading.value.table = false)
+            .catch(err => {
+                console.error(err)
+                setTimeout(() => status.showError(), 1000)
+                setTimeout(() => loading.value.table = false, 2000)
+            })
     }
 
     async function getMoreData(state: {

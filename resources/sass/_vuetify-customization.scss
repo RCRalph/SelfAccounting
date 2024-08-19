@@ -41,8 +41,10 @@ $tabs-height: 60px;
     }
 }
 
-.v-overlay {
+.v-overlay:not(.v-snackbar) {
     margin: unset !important;
+    justify-content: center;
+    align-items: center;
 }
 
 .cursor-pointer {
@@ -196,7 +198,7 @@ tr {
     justify-content: center;
 
     &-margin {
-        margin-bottom: #{65px + 12px} !important;
+        padding-bottom: #{65px + 12px} !important;
     }
 }
 

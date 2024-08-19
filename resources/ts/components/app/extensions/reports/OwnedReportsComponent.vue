@@ -89,6 +89,7 @@
                         <EditReportDialogComponent
                             :id="item.id"
                             show-icon
+                            @updated="getData"
                         ></EditReportDialogComponent>
 
                         <v-tooltip
@@ -99,7 +100,7 @@
                                 <v-btn
                                     v-bind="tooltipProps"
                                     :loading="duplicatedReportID == item.id"
-                                    :disabled="duplicatedReportID"
+                                    :disabled="!!duplicatedReportID"
                                     class="mx-1 cursor-pointer"
                                     icon="mdi-content-duplicate"
                                     variant="text"
