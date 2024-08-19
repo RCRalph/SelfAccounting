@@ -198,7 +198,7 @@ tr {
     justify-content: center;
 
     &-margin {
-        margin-bottom: #{65px + 12px + 12px} !important;
+        padding-bottom: #{65px + 12px} !important;
     }
 }
 

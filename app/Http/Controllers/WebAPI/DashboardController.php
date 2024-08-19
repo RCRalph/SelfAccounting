@@ -31,10 +31,6 @@ class DashboardController extends Controller
             "expenses" => auth()->user()->expenses()
                 ->whereBetween("date", [Carbon::today()->subDays(29), Carbon::today()])
                 ->whereIn("account_id", $accounts)
-                ->where(function ($query) use ($categories) {
-                    $query->whereNotIn("category_id", $categories)
-                        ->orWhere("category_id", null);
-                })
                 ->sum(DB::raw("round(amount * price, 2)")),
 
             "transfersIn" => auth()->user()->transfers()

@@ -22,6 +22,16 @@ export default function useFormats() {
         return valueString + nbsp + ISO
     }
 
+    function numberColorClass(value: number): string {
+        if (value < 0) {
+            return "text-error"
+        } else if (value > 0) {
+            return "text-success"
+        }
+
+        return ""
+    }
+
     function textWithNBSP(text: string) {
         return text.replaceAll(" ", nbsp)
     }
@@ -38,5 +48,5 @@ export default function useFormats() {
         return undefined
     }
 
-    return {iconName, numberWithCurrency, textWithNBSP}
+    return {iconName, numberColorClass, numberWithCurrency, textWithNBSP}
 }

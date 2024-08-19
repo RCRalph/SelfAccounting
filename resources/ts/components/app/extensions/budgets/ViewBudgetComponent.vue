@@ -1,10 +1,9 @@
 <template>
-    <div v-if="ready && budgetInformation">
-        <v-card class="pagination-fixed-margin">
+    <div v-if="ready && budgetInformation" class="pagination-fixed-margin">
+        <v-card>
             <CardTitleWithButtons
                 :title="budgetInformation.title"
                 large-font
-                extra-bottom
             >
                 <EditBudgetDialogComponent
                     v-if="budgetInformation.id"
@@ -19,6 +18,80 @@
             </CardTitleWithButtons>
 
             <v-card-text>
+                <v-row class="mb-3">
+                    <v-col
+                        cols="12"
+                        md="8" offset-md="2"
+                        lg="6" offset-lg="3"
+                        xl="4" offset-xl="4"
+                    >
+                        <div class="text-h5 text-center mb-2">
+                            Budget balance ({{ budgetInformation.start_date }} &rarr; {{ budgetInformation.end_date }})
+                        </div>
+
+                        <v-table>
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        Current value
+                                    </th>
+
+                                    <th class="text-center">
+                                        Target value
+                                    </th>
+
+                                    <th class="text-center">
+                                        Difference
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr v-for="item in budgetBalance">
+                                    <td
+                                        class="text-center"
+                                        :class="formats.numberColorClass(item.current)"
+                                    >
+                                        {{
+                                            formats.numberWithCurrency(
+                                                item.current,
+                                                item.currency,
+                                                true,
+                                            )
+                                        }}
+                                    </td>
+
+                                    <td
+                                        class="text-center"
+                                        :class="formats.numberColorClass(item.target)"
+                                    >
+                                        {{
+                                            formats.numberWithCurrency(
+                                                item.target,
+                                                item.currency,
+                                                true,
+                                            )
+                                        }}
+                                    </td>
+
+                                    <td
+                                        class="text-center"
+                                        :class="formats.numberColorClass(item.current - item.target)"
+                                    >
+                                        {{
+                                            formats.numberWithCurrency(
+                                                item.current - item.target,
+                                                item.currency,
+                                                true,
+                                            )
+                                        }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </v-table>
+                    </v-col>
+                </v-row>
+
                 <v-form
                     v-if="budgetEntries.length"
                     v-model="canSubmit"
@@ -29,9 +102,68 @@
                             lg="6"
                             class="pr-lg-7"
                         >
-                            <h4 class="text-h4 text-center">
+                            <h5 class="text-h5 text-center">
+                                <v-icon icon="mdi-trending-up"></v-icon>
+
                                 Income
-                            </h4>
+                            </h5>
+
+                            <v-table class="mt-3 mb-4">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            Current value
+                                        </th>
+
+                                        <th class="text-center">
+                                            Target value
+                                        </th>
+
+                                        <th class="text-center">
+                                            Difference
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr v-for="item in incomeBalance">
+                                        <td
+                                            class="text-center"
+                                        >
+                                            {{
+                                                formats.numberWithCurrency(
+                                                    item.current,
+                                                    item.currency,
+                                                )
+                                            }}
+                                        </td>
+
+                                        <td
+                                            class="text-center"
+                                        >
+                                            {{
+                                                formats.numberWithCurrency(
+                                                    item.target,
+                                                    item.currency,
+                                                )
+                                            }}
+                                        </td>
+
+                                        <td
+                                            class="text-center"
+                                            :class="formats.numberColorClass(item.current - item.target)"
+                                        >
+                                            {{
+                                                formats.numberWithCurrency(
+                                                    item.current - item.target,
+                                                    item.currency,
+                                                    true,
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-table>
 
                             <v-row>
                                 <v-col
@@ -40,6 +172,7 @@
                                     lg="6"
                                 >
                                     <BudgetEntryComponent
+                                        :currency="currencyByCategory[Number(item.id)]"
                                         :entry="item"
                                         :current-value="currentIncomeValues[item.category_id] || 0"
                                         :category="categoryByID[item.category_id]"
@@ -53,9 +186,68 @@
                             lg="6"
                             class="pl-lg-7"
                         >
-                            <h4 class="text-h4 text-center">
+                            <h5 class="text-h5 text-center">
+                                <v-icon icon="mdi-trending-down"></v-icon>
+
                                 Expenses
-                            </h4>
+                            </h5>
+
+                            <v-table class="mt-3 mb-4">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            Current value
+                                        </th>
+
+                                        <th class="text-center">
+                                            Target value
+                                        </th>
+
+                                        <th class="text-center">
+                                            Difference
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr v-for="item in expenseBalance">
+                                        <td
+                                            class="text-center"
+                                        >
+                                            {{
+                                                formats.numberWithCurrency(
+                                                    item.current,
+                                                    item.currency,
+                                                )
+                                            }}
+                                        </td>
+
+                                        <td
+                                            class="text-center"
+                                        >
+                                            {{
+                                                formats.numberWithCurrency(
+                                                    item.target,
+                                                    item.currency,
+                                                )
+                                            }}
+                                        </td>
+
+                                        <td
+                                            class="text-center"
+                                            :class="formats.numberColorClass(item.target - item.current)"
+                                        >
+                                            {{
+                                                formats.numberWithCurrency(
+                                                    item.target - item.current,
+                                                    item.currency,
+                                                    true,
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-table>
 
                             <v-row>
                                 <v-col
@@ -64,6 +256,7 @@
                                     xl="6"
                                 >
                                     <BudgetEntryComponent
+                                        :currency="currencyByCategory[Number(item.id)]"
                                         :entry="item"
                                         :current-value="currentExpenseValues[item.category_id] || 0"
                                         :category="categoryByID[item.category_id]"
@@ -133,13 +326,18 @@ import EditBudgetDialogComponent from "@components/app/extensions/budgets/EditBu
 import AddBudgetEntriesDialogComponent from "@components/app/extensions/budgets/ManageBudgetEntriesDialogComponent.vue"
 import BudgetEntryComponent from "@components/app/extensions/budgets/BudgetEntryComponent.vue"
 import CardActionsResetUpdateComponent from "@components/global/card/CardActionsResetUpdateComponent.vue"
+import CardTitleWithButtons from "@components/global/card/CardTitleWithButtonsComponent.vue"
 
+import { type Currency, useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import useComponentState from "@composables/useComponentState"
+import useFormats from "@composables/useFormats"
 
 const route = useRoute()
 const router = useRouter()
 const status = useStatusStore()
+const currencies = useCurrenciesStore()
+const formats = useFormats()
 
 function useNavigation() {
     const budgetIDs = ref<number[]>([])
@@ -176,6 +374,21 @@ function useBudgetData() {
                 if (!item.id) continue
 
                 result[item.id] = item
+            }
+        }
+
+        return result
+    })
+
+    const currencyByCategory = computed(() => {
+        const result: Record<number, Currency> = {}
+
+        for (const [currencyID, categoriesByCurrency] of Object.entries(categories.value)) {
+            const currency = currencies.findCurrency(Number(currencyID))
+            if (!currency) continue
+
+            for (const item of categoriesByCurrency) {
+                result[Number(item.id)] = currency
             }
         }
 
@@ -238,10 +451,117 @@ function useBudgetData() {
         currentIncomeValues,
         currentExpenseValues,
         categoryByID,
+        currencyByCategory,
         getData,
         reset,
         update,
     }
+}
+
+function useStatistics() {
+    interface BudgetBalance {
+        currency: string
+        current: number
+        target: number
+    }
+
+    const usedCategoriesByCurrency = computed(() => {
+        const usedCategoryIDs = new Set<number>()
+        for (const item of budgetEntries.value) {
+            if (item.category_id) {
+                usedCategoryIDs.add(item.category_id)
+            }
+        }
+
+        const result: Record<number, Set<number>> = {}
+        for (const [currencyID, categoriesForCurrency] of Object.entries(categories.value)) {
+            for (const item of categoriesForCurrency) {
+                if (!item.id || !usedCategoryIDs.has(item.id)) continue
+
+                if (Number(currencyID) in result) {
+                    result[Number(currencyID)].add(item.id)
+                } else {
+                    result[Number(currencyID)] = new Set([item.id])
+                }
+            }
+        }
+
+        return result
+    })
+
+    const budgetBalance = computed(() => {
+        const result: BudgetBalance[] = []
+
+        for (const [currencyID, categoriesForCurrency] of Object.entries(usedCategoriesByCurrency.value)) {
+            const entries = budgetEntries.value
+                .filter(item => categoriesForCurrency.has(item.category_id))
+
+            result.push({
+                currency: currencies.findCurrency(Number(currencyID))?.ISO ?? "",
+                current: entries
+                    .map(
+                        item => item.transaction_type == "income" ?
+                            currentIncomeValues.value[item.category_id] :
+                            -currentExpenseValues.value[item.category_id],
+                    )
+                    .map(item => item || 0)
+                    .reduce((carry, item) => carry + item, 0),
+                target: entries
+                    .map(item => item.value * (item.transaction_type == "income" ? 1 : -1))
+                    .reduce((carry, item) => carry + item, 0),
+            })
+        }
+
+        return result
+    })
+
+    const incomeBalance = computed(() => {
+        const result: BudgetBalance[] = []
+
+        for (const [currencyID, categoriesForCurrency] of Object.entries(usedCategoriesByCurrency.value)) {
+            const entries = budgetEntries.value
+                .filter(item => categoriesForCurrency.has(item.category_id))
+                .filter(item => item.transaction_type == "income")
+
+            result.push({
+                currency: currencies.findCurrency(Number(currencyID))?.ISO ?? "",
+                current: entries
+                    .map(item => currentIncomeValues.value[item.category_id])
+                    .map(item => item || 0)
+                    .reduce((carry, item) => carry + item, 0),
+                target: entries
+                    .map(item => Number(item.value))
+                    .reduce((carry, item) => carry + item, 0),
+            })
+        }
+
+        return result
+    })
+
+    const expenseBalance = computed(() => {
+        const result: BudgetBalance[] = []
+
+        for (const [currencyID, categoriesForCurrency] of Object.entries(usedCategoriesByCurrency.value)) {
+            const entries = budgetEntries.value
+                .filter(item => categoriesForCurrency.has(item.category_id))
+                .filter(item => item.transaction_type == "expenses")
+
+            result.push({
+                currency: currencies.findCurrency(Number(currencyID))?.ISO ?? "",
+                current: entries
+                    .map(item => currentExpenseValues.value[item.category_id])
+                    .map(item => item || 0)
+                    .reduce((carry, item) => carry + item, 0),
+                target: entries
+                    .map(item => Number(item.value))
+                    .reduce((carry, item) => carry + item, 0),
+            })
+        }
+
+        return result
+    })
+
+    return {budgetBalance, incomeBalance, expenseBalance}
 }
 
 const {loading, canSubmit, ready} = useComponentState()
@@ -253,10 +573,12 @@ const {
     currentIncomeValues,
     currentExpenseValues,
     categoryByID,
+    currencyByCategory,
     getData,
     reset,
     update,
 } = useBudgetData()
+const {budgetBalance, incomeBalance, expenseBalance} = useStatistics()
 
 onMounted(getData)
 </script>

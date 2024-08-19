@@ -199,11 +199,10 @@
                                                     Total
                                                 </td>
 
-                                                <td :class="[
-                                                    'text-h6',
-                                                    last30DaysTotal > 0 && 'text-success',
-                                                    last30DaysTotal < 0 && 'text-error'
-                                                ]">
+                                                <td
+                                                    class="text-h6"
+                                                    :class="formats.numberColorClass(last30DaysTotal)"
+                                                >
                                                     {{
                                                         formats.numberWithCurrency(
                                                             last30DaysTotal,

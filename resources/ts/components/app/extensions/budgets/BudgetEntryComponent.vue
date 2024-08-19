@@ -6,18 +6,18 @@
             {{ props.category.name }}
         </v-col>
 
-        <v-col cols="7">
+        <v-col cols="6">
             <ValueFieldComponent
                 title="Current value"
-                iso="PLN"
+                :iso="currency.ISO"
                 :value="props.currentValue"
             ></ValueFieldComponent>
         </v-col>
 
-        <v-col cols="5">
+        <v-col cols="6">
             <v-text-field
                 v-model="props.entry.value"
-                suffix="PLN"
+                :suffix="currency.ISO"
                 variant="underlined"
                 label="Target value"
             ></v-text-field>
@@ -45,12 +45,14 @@
 <script setup lang="ts">
 import type { Category } from "@interfaces/Category"
 import type { BudgetEntry } from "@interfaces/Budget"
+import type { Currency } from "@stores/currencies"
 
 import useFormats from "@composables/useFormats"
 import ValueFieldComponent from "@components/global/ValueFieldComponent.vue"
 import { computed } from "vue"
 
 const props = defineProps<{
+    currency: Currency,
     category: Category,
     entry: BudgetEntry,
     currentValue: number,
