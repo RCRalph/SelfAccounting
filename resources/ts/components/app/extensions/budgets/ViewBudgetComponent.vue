@@ -177,7 +177,7 @@
                                     <v-col
                                         v-for="item in budgetEntries.filter(x => x.transaction_type == 'expenses')"
                                         cols="12"
-                                        xl="6"
+                                        lg="6"
                                     >
                                         <BudgetEntryComponent
                                             :currency="currencyByCategory[Number(item.category_id)]"
