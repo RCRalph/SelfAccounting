@@ -70,10 +70,13 @@ class ExtensionSeeder extends Seeder
             "icon" => "mdi-home-analytics",
             "directory" => "budgets",
             "price" => 5,
-            "thumbnail" => "test.png",
+            "thumbnail" => "8OqgP3iC2VGgCTPmk0CIYbOUzDMGDQdG51yv9jcg98oZbd0jqm.png",
             "short_description" => "Budget your cashflow with ease",
             "description" => "budget-creator.md",
             "gallery" => [
+                "PfqvbtCxzxbnFP3F2SAVbBUQUImrVxdRSklxJ9YQaUPpkAelKa.png",
+                "DpKzBkRV7FDUYhoyLYTej2d05GpCcaTuXSVUVrAc0a8pLmWM8A.png",
+                "I7E05iMFY6Sf3SqydIvtJokHvrJAs7tPnBU5JrFQmQajIVuhpl.png"
             ]
         ]
     ];

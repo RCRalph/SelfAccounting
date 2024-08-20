@@ -18,254 +18,249 @@
             </CardTitleWithButtons>
 
             <v-card-text>
-                <v-row class="mb-3">
-                    <v-col
-                        cols="12"
-                        md="8" offset-md="2"
-                        lg="6" offset-lg="3"
-                        xl="4" offset-xl="4"
-                    >
-                        <div class="text-h5 text-center mb-2">
-                            Budget balance ({{ budgetInformation.start_date }} &rarr; {{ budgetInformation.end_date }})
-                        </div>
+                <div v-if="budgetEntries.length">
+                    <v-form v-model="canSubmit">
+                        <v-row class="mt-2">
+                            <v-col
+                                cols="12"
+                                lg="6"
+                                class="pr-lg-7"
+                            >
+                                <h5 class="text-h5 text-center">
+                                    <v-icon icon="mdi-trending-up"></v-icon>
 
-                        <v-table>
-                            <thead>
-                                <tr>
-                                    <th class="text-center">
-                                        Current value
-                                    </th>
+                                    Income
+                                </h5>
 
-                                    <th class="text-center">
-                                        Target value
-                                    </th>
+                                <v-table class="mt-3 mb-4">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                Current value
+                                            </th>
 
-                                    <th class="text-center">
-                                        Difference
-                                    </th>
-                                </tr>
-                            </thead>
+                                            <th class="text-center">
+                                                Target value
+                                            </th>
 
-                            <tbody>
-                                <tr v-for="item in budgetBalance">
-                                    <td
-                                        class="text-center"
-                                        :class="formats.numberColorClass(item.current)"
+                                            <th class="text-center">
+                                                Difference
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr v-for="item in incomeBalance">
+                                            <td
+                                                class="text-center"
+                                            >
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        item.current,
+                                                        item.currency,
+                                                    )
+                                                }}
+                                            </td>
+
+                                            <td
+                                                class="text-center"
+                                            >
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        item.target,
+                                                        item.currency,
+                                                    )
+                                                }}
+                                            </td>
+
+                                            <td
+                                                class="text-center"
+                                                :class="formats.numberColorClass(item.current - item.target)"
+                                            >
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        item.current - item.target,
+                                                        item.currency,
+                                                        true,
+                                                    )
+                                                }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </v-table>
+
+                                <v-row>
+                                    <v-col
+                                        v-for="item in budgetEntries.filter(x => x.transaction_type == 'income')"
+                                        cols="12"
+                                        lg="6"
                                     >
-                                        {{
-                                            formats.numberWithCurrency(
-                                                item.current,
-                                                item.currency,
-                                                true,
-                                            )
-                                        }}
-                                    </td>
+                                        <BudgetEntryComponent
+                                            :currency="currencyByCategory[Number(item.category_id)]"
+                                            :entry="item"
+                                            :current-value="currentIncomeValues[item.category_id] || 0"
+                                            :category="categoryByID[item.category_id]"
+                                        ></BudgetEntryComponent>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
 
-                                    <td
-                                        class="text-center"
-                                        :class="formats.numberColorClass(item.target)"
+                            <v-col
+                                cols="12"
+                                lg="6"
+                                class="pl-lg-7"
+                            >
+                                <h5 class="text-h5 text-center">
+                                    <v-icon icon="mdi-trending-down"></v-icon>
+
+                                    Expenses
+                                </h5>
+
+                                <v-table class="mt-3 mb-4">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                Current value
+                                            </th>
+
+                                            <th class="text-center">
+                                                Target value
+                                            </th>
+
+                                            <th class="text-center">
+                                                Difference
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr v-for="item in expenseBalance">
+                                            <td
+                                                class="text-center"
+                                            >
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        item.current,
+                                                        item.currency,
+                                                    )
+                                                }}
+                                            </td>
+
+                                            <td
+                                                class="text-center"
+                                            >
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        item.target,
+                                                        item.currency,
+                                                    )
+                                                }}
+                                            </td>
+
+                                            <td
+                                                class="text-center"
+                                                :class="formats.numberColorClass(item.target - item.current)"
+                                            >
+                                                {{
+                                                    formats.numberWithCurrency(
+                                                        item.target - item.current,
+                                                        item.currency,
+                                                        true,
+                                                    )
+                                                }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </v-table>
+
+                                <v-row>
+                                    <v-col
+                                        v-for="item in budgetEntries.filter(x => x.transaction_type == 'expenses')"
+                                        cols="12"
+                                        lg="6"
                                     >
-                                        {{
-                                            formats.numberWithCurrency(
-                                                item.target,
-                                                item.currency,
-                                                true,
-                                            )
-                                        }}
-                                    </td>
+                                        <BudgetEntryComponent
+                                            :currency="currencyByCategory[Number(item.category_id)]"
+                                            :entry="item"
+                                            :current-value="currentExpenseValues[item.category_id] || 0"
+                                            :category="categoryByID[item.category_id]"
+                                        ></BudgetEntryComponent>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-form>
 
-                                    <td
-                                        class="text-center"
-                                        :class="formats.numberColorClass(item.current - item.target)"
-                                    >
-                                        {{
-                                            formats.numberWithCurrency(
-                                                item.current - item.target,
-                                                item.currency,
-                                                true,
-                                            )
-                                        }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-col>
-                </v-row>
+                    <v-divider class="mt-6 mb-3"></v-divider>
 
-                <v-form
-                    v-if="budgetEntries.length"
-                    v-model="canSubmit"
-                >
                     <v-row>
                         <v-col
                             cols="12"
-                            lg="6"
-                            class="pr-lg-7"
+                            sm="4"
+                            class="d-flex flex-wrap flex-column align-center"
+                            style="overflow-x: hidden"
                         >
-                            <h5 class="text-h5 text-center">
-                                <v-icon icon="mdi-trending-up"></v-icon>
+                            <div class="text-caption">
+                                Current budget balance
+                            </div>
 
-                                Income
-                            </h5>
-
-                            <v-table class="mt-3 mb-4">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">
-                                            Current value
-                                        </th>
-
-                                        <th class="text-center">
-                                            Target value
-                                        </th>
-
-                                        <th class="text-center">
-                                            Difference
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <tr v-for="item in incomeBalance">
-                                        <td
-                                            class="text-center"
-                                        >
-                                            {{
-                                                formats.numberWithCurrency(
-                                                    item.current,
-                                                    item.currency,
-                                                )
-                                            }}
-                                        </td>
-
-                                        <td
-                                            class="text-center"
-                                        >
-                                            {{
-                                                formats.numberWithCurrency(
-                                                    item.target,
-                                                    item.currency,
-                                                )
-                                            }}
-                                        </td>
-
-                                        <td
-                                            class="text-center"
-                                            :class="formats.numberColorClass(item.current - item.target)"
-                                        >
-                                            {{
-                                                formats.numberWithCurrency(
-                                                    item.current - item.target,
-                                                    item.currency,
-                                                    true,
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </v-table>
-
-                            <v-row>
-                                <v-col
-                                    v-for="item in budgetEntries.filter(x => x.transaction_type == 'income')"
-                                    cols="12"
-                                    lg="6"
-                                >
-                                    <BudgetEntryComponent
-                                        :currency="currencyByCategory[Number(item.id)]"
-                                        :entry="item"
-                                        :current-value="currentIncomeValues[item.category_id] || 0"
-                                        :category="categoryByID[item.category_id]"
-                                    ></BudgetEntryComponent>
-                                </v-col>
-                            </v-row>
+                            <div
+                                v-for="item in budgetBalance"
+                                class="text-h5"
+                                style="overflow-x: hidden"
+                                :class="formats.numberColorClass(item.current)"
+                            >
+                                {{
+                                    formats.numberWithCurrency(item.current, item.currency, true)
+                                }}
+                            </div>
                         </v-col>
 
                         <v-col
                             cols="12"
-                            lg="6"
-                            class="pl-lg-7"
+                            sm="4"
+                            class="d-flex flex-wrap flex-column align-center"
+                            style="overflow-x: hidden"
                         >
-                            <h5 class="text-h5 text-center">
-                                <v-icon icon="mdi-trending-down"></v-icon>
+                            <div class="text-caption">
+                                Target budget balance
+                            </div>
 
-                                Expenses
-                            </h5>
+                            <div
+                                v-for="item in budgetBalance"
+                                class="text-h5"
+                                style="overflow-x: hidden"
+                                :class="formats.numberColorClass(item.target)"
+                            >
+                                {{
+                                    formats.numberWithCurrency(item.target, item.currency, true)
+                                }}
+                            </div>
+                        </v-col>
 
-                            <v-table class="mt-3 mb-4">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">
-                                            Current value
-                                        </th>
+                        <v-col
+                            cols="12"
+                            sm="4"
+                            class="d-flex flex-wrap flex-column align-center"
+                            style="overflow-x: hidden"
+                        >
+                            <div class="text-caption">
+                                Difference
+                            </div>
 
-                                        <th class="text-center">
-                                            Target value
-                                        </th>
-
-                                        <th class="text-center">
-                                            Difference
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <tr v-for="item in expenseBalance">
-                                        <td
-                                            class="text-center"
-                                        >
-                                            {{
-                                                formats.numberWithCurrency(
-                                                    item.current,
-                                                    item.currency,
-                                                )
-                                            }}
-                                        </td>
-
-                                        <td
-                                            class="text-center"
-                                        >
-                                            {{
-                                                formats.numberWithCurrency(
-                                                    item.target,
-                                                    item.currency,
-                                                )
-                                            }}
-                                        </td>
-
-                                        <td
-                                            class="text-center"
-                                            :class="formats.numberColorClass(item.target - item.current)"
-                                        >
-                                            {{
-                                                formats.numberWithCurrency(
-                                                    item.target - item.current,
-                                                    item.currency,
-                                                    true,
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </v-table>
-
-                            <v-row>
-                                <v-col
-                                    v-for="item in budgetEntries.filter(x => x.transaction_type == 'expenses')"
-                                    cols="12"
-                                    xl="6"
-                                >
-                                    <BudgetEntryComponent
-                                        :currency="currencyByCategory[Number(item.id)]"
-                                        :entry="item"
-                                        :current-value="currentExpenseValues[item.category_id] || 0"
-                                        :category="categoryByID[item.category_id]"
-                                    ></BudgetEntryComponent>
-                                </v-col>
-                            </v-row>
+                            <div
+                                v-for="item in budgetBalance"
+                                class="text-h5"
+                                style="overflow-x: hidden"
+                                :class="formats.numberColorClass(item.current - item.target)"
+                            >
+                                {{
+                                    formats.numberWithCurrency(item.current - item.target, item.currency, true)
+                                }}
+                            </div>
                         </v-col>
                     </v-row>
-                </v-form>
+                </div>
 
                 <div v-else>
                     <h4 class="text-h4 text-center py-4">
