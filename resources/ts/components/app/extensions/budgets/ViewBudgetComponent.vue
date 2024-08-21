@@ -19,6 +19,74 @@
 
             <v-card-text>
                 <div v-if="budgetEntries.length">
+                    <v-row class="mt-3">
+                        <v-col
+                            cols="12"
+                            sm="4"
+                            class="d-flex flex-wrap flex-column align-center"
+                            style="overflow-x: hidden"
+                        >
+                            <div class="text-caption">
+                                Current budget balance
+                            </div>
+
+                            <div
+                                v-for="item in budgetBalance"
+                                class="text-h5"
+                                style="overflow-x: hidden"
+                                :class="formats.numberColorClass(item.current)"
+                            >
+                                {{
+                                    formats.numberWithCurrency(item.current, item.currency, true)
+                                }}
+                            </div>
+                        </v-col>
+
+                        <v-col
+                            cols="12"
+                            sm="4"
+                            class="d-flex flex-wrap flex-column align-center"
+                            style="overflow-x: hidden"
+                        >
+                            <div class="text-caption">
+                                Target budget balance
+                            </div>
+
+                            <div
+                                v-for="item in budgetBalance"
+                                class="text-h5"
+                                style="overflow-x: hidden"
+                                :class="formats.numberColorClass(item.target)"
+                            >
+                                {{
+                                    formats.numberWithCurrency(item.target, item.currency, true)
+                                }}
+                            </div>
+                        </v-col>
+
+                        <v-col
+                            cols="12"
+                            sm="4"
+                            class="d-flex flex-wrap flex-column align-center"
+                            style="overflow-x: hidden"
+                        >
+                            <div class="text-caption">
+                                Difference
+                            </div>
+
+                            <div
+                                v-for="item in budgetBalance"
+                                class="text-h5"
+                                style="overflow-x: hidden"
+                                :class="formats.numberColorClass(item.current - item.target)"
+                            >
+                                {{
+                                    formats.numberWithCurrency(item.current - item.target, item.currency, true)
+                                }}
+                            </div>
+                        </v-col>
+                    </v-row>
+
                     <v-form v-model="canSubmit">
                         <v-row class="mt-2">
                             <v-col
@@ -190,76 +258,6 @@
                             </v-col>
                         </v-row>
                     </v-form>
-
-                    <v-divider class="mt-6 mb-3"></v-divider>
-
-                    <v-row>
-                        <v-col
-                            cols="12"
-                            sm="4"
-                            class="d-flex flex-wrap flex-column align-center"
-                            style="overflow-x: hidden"
-                        >
-                            <div class="text-caption">
-                                Current budget balance
-                            </div>
-
-                            <div
-                                v-for="item in budgetBalance"
-                                class="text-h5"
-                                style="overflow-x: hidden"
-                                :class="formats.numberColorClass(item.current)"
-                            >
-                                {{
-                                    formats.numberWithCurrency(item.current, item.currency, true)
-                                }}
-                            </div>
-                        </v-col>
-
-                        <v-col
-                            cols="12"
-                            sm="4"
-                            class="d-flex flex-wrap flex-column align-center"
-                            style="overflow-x: hidden"
-                        >
-                            <div class="text-caption">
-                                Target budget balance
-                            </div>
-
-                            <div
-                                v-for="item in budgetBalance"
-                                class="text-h5"
-                                style="overflow-x: hidden"
-                                :class="formats.numberColorClass(item.target)"
-                            >
-                                {{
-                                    formats.numberWithCurrency(item.target, item.currency, true)
-                                }}
-                            </div>
-                        </v-col>
-
-                        <v-col
-                            cols="12"
-                            sm="4"
-                            class="d-flex flex-wrap flex-column align-center"
-                            style="overflow-x: hidden"
-                        >
-                            <div class="text-caption">
-                                Difference
-                            </div>
-
-                            <div
-                                v-for="item in budgetBalance"
-                                class="text-h5"
-                                style="overflow-x: hidden"
-                                :class="formats.numberColorClass(item.current - item.target)"
-                            >
-                                {{
-                                    formats.numberWithCurrency(item.current - item.target, item.currency, true)
-                                }}
-                            </div>
-                        </v-col>
-                    </v-row>
                 </div>
 
                 <div v-else>
