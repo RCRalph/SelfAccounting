@@ -40,12 +40,6 @@
     }
 }
 
-@media (hover: none) {
-    .pagination-fixed {
-        width: calc(100vw - 16px - 16px);
-    }
-}
-
 @media (max-width: 475px) {
     .add-income-buttons {
         flex-wrap: wrap;
