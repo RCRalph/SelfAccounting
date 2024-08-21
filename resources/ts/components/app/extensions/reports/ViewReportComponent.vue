@@ -1,6 +1,6 @@
 <template>
     <div v-if="ready">
-        <v-row class="pagination-fixed-margin">
+        <v-row class="page-pagination-fixed-margin">
             <v-col xl="9" cols="12" order="last" order-xl="first">
                 <v-card>
                     <CardTitleWithButtons :title="reportInformation?.title"></CardTitleWithButtons>
@@ -301,19 +301,10 @@
             </v-col>
         </v-row>
 
-        <div class="pagination-fixed">
-            <v-card
-                class="pa-1 flex-grow-1"
-                elevation="6"
-            >
-                <v-pagination
-                    v-model="currentReportIndex"
-                    :length="reportIDs.length"
-                    variant="elevated"
-                    class="flex-grow-1"
-                ></v-pagination>
-            </v-card>
-        </div>
+        <FixedPagePaginationComponent
+            v-model="currentReportIndex"
+            :length="reportIDs.length"
+        ></FixedPagePaginationComponent>
     </div>
 
     <v-overlay
@@ -338,6 +329,7 @@ import { useDisplay } from "vuetify"
 import type { ReportInformation, ReportTransactionRow } from "@interfaces/Report"
 
 import EditReportDialogComponent from "@components/app/extensions/reports/EditReportDialogComponent.vue"
+import FixedPagePaginationComponent from "@components/global/FixedPagePaginationComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
