@@ -39,7 +39,7 @@ function useLineChartData() {
                 time: {
                     displayFormats: {
                         day: "dd MMM",
-                        year: "YYYY-MM-dd",
+                        year: "yyyy-MM-dd",
                     },
                     minUnit: "day",
                 },
