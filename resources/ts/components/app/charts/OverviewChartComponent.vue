@@ -45,7 +45,8 @@ import { queryWithDates } from "@composables/useChartQueryParameters"
 const props = defineProps<{
     chart: Chart,
     start: string,
-    end: string
+    end: string,
+    focused: boolean,
 }>()
 
 const currencies = useCurrenciesStore()
@@ -55,6 +56,8 @@ const {ready} = useComponentState()
 const {chartData, options} = useDoughnutChartData()
 
 function getChartData() {
+    if (props.focused) return
+
     ready.value = false
 
     axios.get(

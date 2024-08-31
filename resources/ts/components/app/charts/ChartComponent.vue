@@ -7,6 +7,7 @@
             <div class="me-2 ms-0" style="width: 145px">
                 <v-text-field
                     v-model="start"
+                    v-model:focused="startFocused"
                     :max="end"
                     type="date"
                     label="Start"
@@ -26,6 +27,7 @@
             <div class="ms-2 me-0" style="width: 145px">
                 <v-text-field
                     v-model="end"
+                    v-model:focused="endFocused"
                     :min="start || '1970-01-01'"
                     type="date"
                     label="End"
@@ -85,8 +87,10 @@ const status = useStatusStore()
 
 function useData() {
     const start = ref("")
+    const startFocused = ref(false)
 
     const end = ref("")
+    const endFocused = ref(false)
 
     const chartHasData = computed(() =>
         lineChartData.value?.datasets.length ||
@@ -94,6 +98,8 @@ function useData() {
     )
 
     function getChartData() {
+        if (startFocused.value || endFocused.value) return
+
         ready.value = false
 
         axios.get(
@@ -122,16 +128,16 @@ function useData() {
             })
     }
 
-    return {chartHasData, end, getChartData, start}
+    return {chartHasData, end, endFocused, getChartData, start, startFocused}
 }
 
 const {ready} = useComponentState()
-const {chartHasData, end, getChartData, start} = useData()
+const {chartHasData, end, endFocused, getChartData, start, startFocused} = useData()
 const {chartData: lineChartData, options: lineOptions} = useLineChartData()
 const {chartData: doughnutChartData, options: doughnutOptions} = useDoughnutChartData()
 
-watch(start, getChartData)
-watch(end, getChartData)
+watch(startFocused, getChartData)
+watch(endFocused, getChartData)
 watch(() => props.chart, getChartData)
 
 onMounted(() => {
