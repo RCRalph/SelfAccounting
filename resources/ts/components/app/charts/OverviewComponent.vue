@@ -13,6 +13,7 @@
                 >
                     <v-text-field
                         v-model="start"
+                        v-model:focused="startFocused"
                         :max="end"
                         min="1970-01-01"
                         type="date"
@@ -35,6 +36,7 @@
                 >
                     <v-text-field
                         v-model="end"
+                        v-model:focused="endFocused"
                         :min="start || '1970-01-01'"
                         type="date"
                         label="End"
@@ -56,6 +58,7 @@
                             :chart="chart"
                             :start="start"
                             :end="end"
+                            :focued="startFocused || endFocused"
                         ></OverviewChartComponent>
                     </v-col>
                 </v-row>
@@ -75,5 +78,8 @@ const props = defineProps<{
 }>()
 
 const start = ref("")
+const startFocused = ref(false)
+
 const end = ref("")
+const endFocused = ref(false)
 </script>
