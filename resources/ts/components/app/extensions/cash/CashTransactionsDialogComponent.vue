@@ -21,7 +21,7 @@
 
             <v-card-text>
                 <v-form v-model="canSubmit">
-                    <div v-for="id in Object.keys(cash)">
+                    <div v-for="id in cashIDs">
                         <v-row>
                             <v-col
                                 cols="12"
@@ -205,6 +205,12 @@ function useCash() {
 
     const ownedCash = ref<Record<string, number>>({})
 
+    const cashIDs = computed(
+        () => Object.keys(cash).sort(
+            (a: string, b: string) => Number(b) - Number(a),
+        ),
+    )
+
     const sum = computed(() => Object.keys(cash.value)
         .map(item => cash.value[item] * model.value[item] || 0)
         .reduce((carry, item) => carry + item, 0),
@@ -235,13 +241,13 @@ function useCash() {
             })
     }
 
-    return {cash, cashAccount, ownedCash, sum, differenceColor, getData}
+    return {cash, cashIDs, cashAccount, ownedCash, sum, differenceColor, getData}
 }
 
 const format = useFormats()
 const {xs, smAndUp} = useDisplay()
 const {dialog, loading, canSubmit, ready} = useComponentState()
-const {cash, cashAccount, ownedCash, sum, differenceColor, getData} = useCash()
+const {cash, cashIDs, cashAccount, ownedCash, sum, differenceColor, getData} = useCash()
 
 watch(() => props.sumByAccount, () => {
     if (typeof props.sumByAccount[cashAccount.value] == "undefined") {
