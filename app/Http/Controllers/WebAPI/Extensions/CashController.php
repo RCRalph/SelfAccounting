@@ -25,7 +25,7 @@ class CashController extends Controller
         // Cash as id: value array
         $cash = $currency->cash()->select("id", "value")
             ->orderBy("value", "DESC")->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => $item["value"] * 1]);
+            ->mapWithKeys(fn($item) => [$item["id"] => $item["value"] * 1]);
 
         // Account used as cash
         $cashAccount = auth()->user()->cashAccounts()
@@ -36,7 +36,7 @@ class CashController extends Controller
         // Owned cash as id: amount array
         $ownedCash = auth()->user()->cash()
             ->where("currency_id", $currency->id)->get()
-            ->mapWithKeys(fn ($item) => [$item->id => $item->pivot->amount]);
+            ->mapWithKeys(fn($item) => [$item->id => $item->pivot->amount]);
 
         return response()->json(compact("cash", "cashAccount", "ownedCash"));
     }
@@ -45,8 +45,8 @@ class CashController extends Controller
     {
         // Cash as id: value array
         $cash = $currency->cash()->select("id", "value")
-            ->orderBy("value", "DESC")->get()
-            ->mapWithKeys(fn ($item) => [$item["id"] => $item["value"] * 1]);
+            ->get()
+            ->mapWithKeys(fn($item) => [$item["id"] => $item["value"] * 1]);
 
         // Account used as cash
         $cashAccount = auth()->user()->cashAccounts()
@@ -58,7 +58,7 @@ class CashController extends Controller
         $ownedCash = auth()->user()->cash()
             ->where("currency_id", $currency->id)
             ->get()
-            ->mapWithKeys(fn ($item) => [$item->id => $item->pivot->amount]);
+            ->mapWithKeys(fn($item) => [$item->id => $item->pivot->amount]);
 
         // Accounts for given currency
         $accounts = auth()->user()->accounts()
@@ -72,7 +72,7 @@ class CashController extends Controller
 
         $accounts = $accounts
             ->prepend(["id" => null, "icon" => null, "name" => "N/A", "value" => 0])
-            ->map(fn ($item) => [
+            ->map(fn($item) => [
                 "id" => $item["id"],
                 "icon" => $item["icon"],
                 "name" => $item["name"],
@@ -137,8 +137,7 @@ class CashController extends Controller
                     auth()->user()->cash()->updateExistingPivot($item["id"], [
                         "amount" => $item["amount"]
                     ]);
-                }
-                else {
+                } else {
                     auth()->user()->cash()->attach($item["id"], [
                         "amount" => $item["amount"]
                     ]);

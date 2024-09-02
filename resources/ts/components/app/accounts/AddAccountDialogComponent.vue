@@ -142,7 +142,7 @@ function useData() {
         used_in_income: true,
         used_in_expenses: true,
         show_on_charts: true,
-        count_to_summary: false,
+        count_to_summary: true,
         start_date: currentTimeZoneDate(),
         start_balance: 0,
     })
