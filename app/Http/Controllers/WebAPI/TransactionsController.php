@@ -171,9 +171,37 @@ class TransactionsController extends Controller
     public function data(Currency $currency)
     {
         $accountsAndCategories = $this->getCategoriesAndAccounts($currency);
+
+        $accountIDsQuery = $this->getTypeRelation()
+            ->select("account_id")
+            ->whereBetween("date", [now()->subDays(30)->startOfDay(), now()->endOfDay()]);
+
+        $mostUsedAccountID = DB::query()
+            ->select("account_id", DB::raw("COUNT(*) AS count"))
+            ->fromSub($accountIDsQuery, "accounts")
+            ->orderBy("count", "desc")
+            ->groupBy("account_id")
+            ->first()
+            ->account_id ?? null;
+
+        $categoryIDsQuery = $this->getTypeRelation()
+            ->select("category_id")
+            ->whereBetween("date", [now()->subDays(30)->startOfDay(), now()->endOfDay()]);
+
+        $mostUsedCategoryID = DB::query()
+            ->select("category_id", DB::raw("COUNT(*) AS count"))
+            ->fromSub($categoryIDsQuery, "categories")
+            ->orderBy("count", "desc")
+            ->groupBy("category_id")
+            ->first()
+            ->category_id ?? null;
+
         $titles = auth()->user()->transactionTitles;
 
-        return response()->json([...compact("titles"), ...$accountsAndCategories]);
+        return response()->json([
+            ...compact("titles", "mostUsedCategoryID", "mostUsedAccountID"),
+            ...$accountsAndCategories
+        ]);
     }
 
     public function store(Currency $currency)
