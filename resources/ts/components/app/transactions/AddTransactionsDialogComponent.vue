@@ -294,6 +294,9 @@ function useData() {
                 accounts.value = data.accounts
                 categories.value = data.categories
 
+                commonValues.value.category_id = data.mostUsedCategoryID
+                commonValues.value.account_id = data.mostUsedAccountID
+
                 if (!transactionData.value.length) {
                     page.value = 0
                     appendData()
