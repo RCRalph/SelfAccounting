@@ -346,9 +346,10 @@ function useData() {
     }
 
     watch(() => transferData.value?.source?.value, () => {
-        if (transferData.value && !valueModified.value.target) {
-            transferData.value.target.value = transferData.value.source.value
-        }
+        if (!transferData.value) return
+
+        transferData.value.target.value = transferData.value.source.value
+        valueModified.value.target = true
     })
 
     return {
