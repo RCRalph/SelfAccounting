@@ -86,14 +86,14 @@ const status = useStatusStore()
 const user = useUserStore()
 
 function usePicture() {
-    const picture = ref<File[]>()
+    const picture = ref<File>()
 
     const pictureSize = computed(() => display.mobile.value ? 100 : 225)
 
     const imageStyles = computed(() => ({
         width: pictureSize.value + "px",
         height: pictureSize.value + "px",
-        backgroundImage: `url(${picture.value ? URL.createObjectURL(picture.value[0]) : ""})`,
+        backgroundImage: `url(${picture.value ? URL.createObjectURL(picture.value) : ""})`,
     }))
 
     function submit() {
@@ -104,7 +104,7 @@ function usePicture() {
         loading.value.submit = true
 
         const formData = new FormData()
-        formData.append("picture", picture.value[0])
+        formData.append("picture", picture.value)
 
         axios.post(
             "/web-api/profile/picture",
