@@ -7,7 +7,7 @@ interface Account {
     show_on_charts: boolean
     count_to_summary: boolean
     start_date: string
-    start_balance: number
+    start_balance: number | string
     max_date?: string
 }
 

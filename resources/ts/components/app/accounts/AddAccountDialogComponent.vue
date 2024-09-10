@@ -84,16 +84,15 @@
                         <v-col cols="12" sm="4">
                             <v-text-field
                                 v-model="accountData.start_balance"
-                                :rules="[
-                                    Validator.price(
-                                        false,
-                                        true,
-                                        true
-                                    )
-                                ]"
+                                :error-messages="startBalance.error"
+                                :hint="startBalance.hint"
                                 label="Start balance"
                                 variant="underlined"
-                            ></v-text-field>
+                            >
+                                <template v-slot:append-inner>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
+                                </template>
+                            </v-text-field>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -115,17 +114,19 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { cloneDeep } from "lodash"
 import type { Account } from "@interfaces/Account"
 
 import IconPickerComponent from "@components/app/icon-picker/IconPickerComponent.vue"
+import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 import { useCurrenciesStore } from "@stores/currencies"
 import { useStatusStore } from "@stores/status"
 import { currentTimeZoneDate } from "@composables/useDates"
 import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
+import Calculator from "@classes/Calculator"
 
 const emit = defineEmits<{
     added: []
@@ -147,6 +148,16 @@ function useData() {
         start_balance: 0,
     })
 
+    const startBalance = computed(() => new Calculator(
+        accountData.value?.start_balance,
+        "value",
+        {
+            null: false,
+            negative: true,
+            zero: true,
+        },
+    ).resultObject)
+
     function setData() {
         accountData.value = cloneDeep(commonValues.value)
     }
@@ -155,7 +166,10 @@ function useData() {
         loading.value.submit = true
 
         axios
-            .post(`/web-api/accounts/${currencies.usedCurrency}`, accountData.value)
+            .post(`/web-api/accounts/${currencies.usedCurrency}`, {
+                ...accountData.value,
+                start_balance: startBalance.value.value,
+            })
             .then(() => {
                 emit("added")
                 setData()
@@ -169,11 +183,11 @@ function useData() {
             })
     }
 
-    return {accountData, setData, submit}
+    return {accountData, startBalance, setData, submit}
 }
 
 const {canSubmit, dialog, loading} = useComponentState()
-const {accountData, setData, submit} = useData()
+const {accountData, startBalance, setData, submit} = useData()
 
 onMounted(setData)
 </script>

@@ -90,16 +90,15 @@
                         <v-col cols="12" sm="4">
                             <v-text-field
                                 v-model="accountData.start_balance"
-                                :rules="[
-                                    Validator.price(
-                                        false,
-                                        true,
-                                        true
-                                    )
-                                ]"
+                                :error-messages="startBalance.error"
+                                :hint="startBalance.hint"
                                 label="Start balance"
                                 variant="underlined"
-                            ></v-text-field>
+                            >
+                                <template v-slot:append-inner>
+                                    <CalculatorTooltipComponent></CalculatorTooltipComponent>
+                                </template>
+                            </v-text-field>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -122,16 +121,18 @@
 
 <script setup lang="ts">
 import axios from "axios"
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { cloneDeep } from "lodash"
 
 import type { Account } from "@interfaces/Account"
 
 import IconPickerComponent from "@components/app/icon-picker/IconPickerComponent.vue"
+import CalculatorTooltipComponent from "@components/global/CalculatorTooltipComponent.vue"
 
 import { useStatusStore } from "@stores/status"
 import useComponentState from "@composables/useComponentState"
 import Validator from "@classes/Validator"
+import Calculator from "@classes/Calculator"
 
 const props = defineProps<{
     id: number
@@ -146,6 +147,16 @@ const status = useStatusStore()
 function useData() {
     const accountData = ref<Account>()
     const accountDataCopy = ref<Account>()
+
+    const startBalance = computed(() => new Calculator(
+        accountData.value?.start_balance,
+        "value",
+        {
+            null: false,
+            negative: true,
+            zero: true,
+        },
+    ).resultObject)
 
     function getData() {
         if (!dialog.value) return
@@ -167,10 +178,6 @@ function useData() {
             })
     }
 
-    return {accountData, accountDataCopy, getData}
-}
-
-function useActions() {
     function reset() {
         accountData.value = cloneDeep(accountDataCopy.value)
     }
@@ -178,7 +185,10 @@ function useActions() {
     function update() {
         loading.value.submit = true
 
-        axios.patch(`/web-api/accounts/account/${props.id}`, accountData.value)
+        axios.patch(`/web-api/accounts/account/${props.id}`, {
+            ...accountData.value,
+            start_balance: startBalance.value.value,
+        })
             .then(() => {
                 emit("updated")
                 status.showSuccess("updated account")
@@ -193,12 +203,11 @@ function useActions() {
             })
     }
 
-    return {reset, update}
+    return {accountData, startBalance, getData, reset, update}
 }
 
 const {canSubmit, dialog, loading, ready} = useComponentState()
-const {accountData, accountDataCopy, getData} = useData()
-const {reset, update} = useActions()
+const {accountData, startBalance, getData, reset, update} = useData()
 
 watch(dialog, getData)
 </script>
