@@ -33,8 +33,10 @@ export default class Calculator {
             this.operation = operation.trim()
                 .replaceAll(" ", "")
                 .replaceAll(",", ".")
+        } else if (typeof operation == "number") {
+            this.operation = operation
         } else {
-            this.operation = operation || ""
+            this.operation = ""
         }
 
         if (fieldType != undefined) {
