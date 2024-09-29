@@ -202,7 +202,7 @@ function useCash() {
     const ownedCash = ref<Record<string, number>>({})
 
     const cashIDs = computed(
-        () => Object.keys(cash).sort(
+        () => Object.keys(cash.value).sort(
             (a: string, b: string) => Number(b) - Number(a),
         ),
     )
