@@ -202,9 +202,9 @@ function useCash() {
     const ownedCash = ref<Record<string, number>>({})
 
     const cashIDs = computed(
-        () => Object.keys(cash.value).sort(
-            (a: string, b: string) => Number(b) - Number(a),
-        ),
+        () => Object.entries(cash.value)
+            .sort((a, b) => Number(b[1]) - Number(a[1]))
+            .map(item => item[0]),
     )
 
     const sum = computed(() => Object.keys(cash.value)
@@ -245,7 +245,7 @@ function useCash() {
 const format = useFormats()
 const {xs, smAndUp} = useDisplay()
 const {dialog, loading, canSubmit, ready} = useComponentState()
-const {cash, cashAccount, ownedCash, sum, differenceColor, getData} = useCash()
+const {cash, cashIDs, cashAccount, ownedCash, sum, differenceColor, getData} = useCash()
 
 watch(() => props.sumByAccount, () => {
     if (typeof props.sumByAccount[cashAccount.value] == "undefined") {
