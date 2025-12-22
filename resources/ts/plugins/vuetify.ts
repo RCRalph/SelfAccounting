@@ -23,7 +23,7 @@ export default createVuetify({
     },
     icons: {
         defaultSet: "mdi",
-        sets: {mdi, fa},
+        sets: { mdi, fa },
     },
     defaults: {
         VOverlay: {
@@ -43,4 +43,9 @@ export default createVuetify({
             },
         },
     },
+    display: {
+        thresholds: {
+            xl: 1600
+        }
+    }
 })
