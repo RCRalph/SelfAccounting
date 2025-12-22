@@ -3,4 +3,12 @@
     $overlay-opacity: 0.5,
     $overlay-scrim-background: rgb(var(--v-theme-surface)),
     $tab-min-width: 120px,
+    $grid-breakpoints: (
+        'xs': 0,
+        'sm': 600px,
+        'md': 960px,
+        'lg': 1280px,
+        'xl': 1600px,
+        'xxl': 2000px
+    )
 );
